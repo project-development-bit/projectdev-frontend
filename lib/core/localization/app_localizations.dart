@@ -7,10 +7,16 @@ class AppLocalizations {
   final Locale locale;
 
   static AppLocalizations? of(BuildContext context) {
-    return Localizations.of<AppLocalizations>(context, AppLocalizations);
+    final localizations =
+        Localizations.of<AppLocalizations>(context, AppLocalizations);
+    debugPrint(
+        'AppLocalizations.of() called - returning locale: ${localizations?.locale.languageCode}');
+    return localizations;
   }
 
   String translate(String key, {List<String>? args}) {
+    debugPrint(
+        'AppLocalizations.translate() called for key: $key in locale: ${locale.languageCode}');
     return localizationService.translate(key, args: args);
   }
 }
@@ -25,10 +31,15 @@ class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
 
   @override
   Future<AppLocalizations> load(Locale locale) async {
+    debugPrint(
+        'AppLocalizationsDelegate.load() called for locale: ${locale.languageCode}');
     await localizationService.load(locale);
-    return AppLocalizations(locale);
+    final appLocalizations = AppLocalizations(locale);
+    debugPrint(
+        'AppLocalizationsDelegate.load() completed for locale: ${locale.languageCode}');
+    return appLocalizations;
   }
 
   @override
-  bool shouldReload(AppLocalizationsDelegate old) => false;
+  bool shouldReload(AppLocalizationsDelegate old) => true;
 }

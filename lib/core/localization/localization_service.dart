@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 
 class LocalizationService {
   static const String _localizationPath = 'assets/l10n';
-  static const List<String> supportedLocales = ['en', 'es'];
+  static const List<String> supportedLocales = ['en', 'my'];
   
   Locale? _locale;
   Map<String, String>? _localizedStrings;
@@ -14,6 +14,8 @@ class LocalizationService {
 
   Future<bool> load(Locale locale) async {
     _locale = locale;
+    debugPrint(
+        'LocalizationService.load() called for locale: ${locale.languageCode}');
     try {
       String jsonString = await rootBundle
           .loadString('$_localizationPath/${locale.languageCode}.json');
@@ -22,6 +24,8 @@ class LocalizationService {
       jsonMap.forEach((key, value) {
         _localizedStrings![key] = value.toString();
       });
+      debugPrint(
+          'Successfully loaded ${_localizedStrings!.length} strings for locale: ${locale.languageCode}');
       return true;
     } catch (e) {
       debugPrint('Failed to load localization: $e');
@@ -31,13 +35,19 @@ class LocalizationService {
 
   String translate(String key, {List<String>? args}) {
     if (_localizedStrings == null) {
+      debugPrint('Translation failed: No localized strings loaded');
       return key;
     }
     
     String? value = _localizedStrings![key];
     if (value == null) {
+      debugPrint(
+          'Translation failed: Key "$key" not found in locale ${_locale?.languageCode}');
       return key;
     }
+    
+    debugPrint(
+        'Translating "$key" to "$value" in locale ${_locale?.languageCode}');
     
     // If arguments are provided, format the string
     if (args != null && args.isNotEmpty) {
