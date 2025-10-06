@@ -1,0 +1,58 @@
+{
+    "recommendations": [
+        // 🎯 Core Flutter & Dart Extensions
+        "dart-code.dart-code",
+        "dart-code.flutter",
+        
+        // 🎨 UI & Theme Extensions
+        "pkief.material-icon-theme",
+        "zhuangtongfa.material-theme",
+        "bradlc.vscode-tailwindcss",
+        
+        // 🔧 Development Tools
+        "ms-vscode.vscode-json",
+        "redhat.vscode-yaml",
+        "christian-kohler.path-intellisense",
+        "formulahendry.auto-rename-tag",
+        "streetsidesoftware.code-spell-checker",
+        
+        // 🐛 Debugging & Testing
+        "ms-vscode.test-adapter-converter",
+        "hbenl.vscode-test-explorer",
+        "ryanluker.vscode-coverage-gutters",
+        
+        // 📱 Mobile Development
+        "ms-vscode.vscode-gradle",
+        "vscjava.vscode-gradle",
+        "ms-vscode.vscode-typescript-next",
+        
+        // 🔀 Version Control
+        "eamodio.gitlens",
+        "donjayamanne.githistory",
+        "mhutchie.git-graph",
+        
+        // 📝 Documentation & Comments
+        "aaron-bond.better-comments",
+        "wayou.vscode-todo-highlight",
+        "gruntfuggly.todo-tree",
+        
+        // 🎨 Code Formatting & Quality
+        "esbenp.prettier-vscode",
+        "ms-vscode.vscode-eslint",
+        "bradlc.vscode-tailwindcss",
+        
+        // 🚀 Productivity
+        "ms-vscode.vscode-typescript-next",
+        "ms-vscode.hexeditor",
+        "ms-vscode.vscode-json",
+        
+        // 📊 Analytics & Monitoring
+        "ms-vscode.vscode-github-issue-notebooks",
+        "github.vscode-pull-request-github",
+        
+        // 🎭 Flavor-Specific Utilities
+        "ms-vscode.vscode-tasks",
+        "ms-vscode.remote-containers",
+        "ms-vscode.remote-ssh"
+    ]
+}

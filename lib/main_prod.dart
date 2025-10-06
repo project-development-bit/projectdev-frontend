@@ -6,9 +6,9 @@ import 'core/config/flavor_manager.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-  // Initialize development flavor (default)
-  FlavorManager.initialize(AppFlavor.dev);
+  // Initialize production flavor
+  FlavorManager.initialize(AppFlavor.prod);
   
   // Run the common app initialization
-  await runAppWithFlavor(AppFlavor.dev);
+  await runAppWithFlavor(AppFlavor.prod);
 }

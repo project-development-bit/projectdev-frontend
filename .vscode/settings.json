@@ -1,0 +1,151 @@
+{
+    // 🎯 Flutter & Dart Configuration
+    "dart.flutterSdkPath": null,
+    "dart.debugExternalPackageLibraries": false,
+    "dart.debugSdkLibraries": false,
+    
+    // 📁 File Associations
+    "files.associations": {
+        "*.dart": "dart",
+        "pubspec.yaml": "yaml",
+        "pubspec.lock": "yaml",
+        "analysis_options.yaml": "yaml"
+    },
+    
+    // 🎨 Editor Configuration
+    "editor.formatOnSave": true,
+    "editor.formatOnType": true,
+    "editor.rulers": [80, 120],
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": false,
+    
+    // 🔍 Search Configuration
+    "search.exclude": {
+        "**/build/**": true,
+        "**/.dart_tool/**": true,
+        "**/.gradle/**": true,
+        "**/ios/Pods/**": true,
+        "**/ios/.symlinks/**": true,
+        "**/android/.gradle/**": true,
+        "**/android/build/**": true,
+        "**/android/app/build/**": true
+    },
+    
+    // 📁 File Explorer Configuration
+    "files.exclude": {
+        "**/.git": true,
+        "**/.DS_Store": true,
+        "**/build": true,
+        "**/.dart_tool": true,
+        "**/*.g.dart": false,
+        "**/*.freezed.dart": false
+    },
+    
+    // 🎭 Flavor-Specific Configuration
+    "dart.flutterRunAdditionalArgs": [
+        "--flavor=dev"
+    ],
+    
+    // 🐛 Debug Configuration
+    "dart.showInspectorNotificationsForWidgetErrors": true,
+    "dart.previewFlutterUiGuides": true,
+    "dart.previewFlutterUiGuidesCustomTracking": true,
+    "dart.flutterHotReloadOnSave": "all",
+    
+    // 📝 Emmet Configuration
+    "emmet.includeLanguages": {
+        "dart": "html"
+    },
+    
+    // 🎨 Bracket Configuration
+    "editor.guides.bracketPairs": true,
+    "editor.bracketPairColorization.enabled": true,
+    
+    // 📊 Problem Matchers
+    "dart.analysisExcludedFolders": [
+        "build",
+        ".dart_tool",
+        "ios/Pods",
+        "android/.gradle"
+    ],
+    
+    // 🔧 Terminal Configuration
+    "terminal.integrated.defaultProfile.osx": "zsh",
+    "terminal.integrated.profiles.osx": {
+        "zsh": {
+            "path": "zsh",
+            "args": ["-l"]
+        }
+    },
+    
+    // 🎯 Language Specific Settings
+    "[dart]": {
+        "editor.defaultFormatter": "Dart-Code.dart-code",
+        "editor.formatOnSave": true,
+        "editor.formatOnType": true,
+        "editor.rulers": [80],
+        "editor.selectionHighlight": false,
+        "editor.suggest.snippetsPreventQuickSuggestions": false,
+        "editor.suggestSelection": "first",
+        "editor.tabCompletion": "onlySnippets",
+        "editor.wordBasedSuggestions": "off"
+    },
+    
+    "[yaml]": {
+        "editor.defaultFormatter": "redhat.vscode-yaml",
+        "editor.formatOnSave": true,
+        "editor.insertSpaces": true,
+        "editor.tabSize": 2
+    },
+    
+    "[json]": {
+        "editor.defaultFormatter": "vscode.json-language-features",
+        "editor.formatOnSave": true
+    },
+    
+    "[jsonc]": {
+        "editor.defaultFormatter": "vscode.json-language-features",
+        "editor.formatOnSave": true
+    },
+    
+    // 🚀 Flutter Specific
+    "flutter.flutterPath": null,
+    "flutter.sdkPath": null,
+    
+    // 📱 Device Configuration
+    "dart.flutterCreatePlatforms": [
+        "android",
+        "ios"
+    ],
+    
+    // 🎭 Flavor Environment Variables
+    "terminal.integrated.env.osx": {
+        "FLUTTER_FLAVOR": "dev"
+    },
+    
+    // 🔗 Auto-linking
+    "dart.automaticCommentSlashes": "tripleSlash",
+    "dart.includeDependenciesInWorkspaceSymbols": true,
+    
+    // 📈 Performance
+    "dart.analysisServerFolding": true,
+    "dart.lineLength": 80,
+    
+    // 🎨 UI Enhancements
+    "workbench.iconTheme": "material-icon-theme",
+    "material-icon-theme.folders.associations": {
+        "flavors": "config",
+        "config": "settings",
+        "providers": "controller",
+        "widgets": "component",
+        "models": "interface",
+        "services": "api",
+        "repositories": "database",
+        "extensions": "tools"
+    },
+    
+    // 🔥 Hot Reload Configuration
+    "dart.hotReloadOnSave": "all",
+    "dart.hotReloadProgress": "notification"
+}

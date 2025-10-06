@@ -4,23 +4,74 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-    
+        // 🟢 Development Flavor Configurations
         {
-            "name": "flutter-movie-clean-architecture",
-            "request": "launch",
-            "type": "dart"
+          "name": "🟢 Burger Eats (Dev)",
+          "request": "launch",
+          "type": "dart",
+          "program": "lib/main_dev.dart"
         },
         {
-            "name": "flutter-movie-clean-architecture (profile mode)",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "profile"
+          "name": "🟢 Burger Eats (Dev - Profile)",
+          "request": "launch",
+          "type": "dart",
+          "program": "lib/main_dev.dart",
+          "flutterMode": "profile"
+        },
+        // 🟠 Staging Flavor Configurations
+        {
+          "name": "🟠 Burger Eats (Staging)",
+          "request": "launch",
+          "type": "dart",
+          "program": "lib/main_staging.dart"
         },
         {
-            "name": "flutter-movie-clean-architecture (release mode)",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "release"
+          "name": "🟠 Burger Eats (Staging - Profile)",
+          "request": "launch",
+          "type": "dart",
+          "program": "lib/main_staging.dart",
+          "flutterMode": "profile"
+        },
+        // 🔴 Production Flavor Configurations
+        {
+          "name": "🔴 Burger Eats (Production)",
+          "request": "launch",
+          "type": "dart",
+          "program": "lib/main_prod.dart"
+        },
+        {
+          "name": "🔴 Burger Eats (Production - Profile)",
+          "request": "launch",
+          "type": "dart",
+          "program": "lib/main_prod.dart",
+          "flutterMode": "profile"
+        },
+        {
+          "name": "🔴 Burger Eats (Production - Release)",
+          "request": "launch",
+          "type": "dart",
+          "program": "lib/main_prod.dart",
+          "flutterMode": "release"
+        },
+        // 📱 Platform-Specific Configurations
+        {
+          "name": "🟢 Burger Eats (Dev - Android)",
+          "request": "launch",
+          "type": "dart",
+          "program": "lib/main_dev.dart"
+        },
+        {
+          "name": "🟢 Burger Eats (Dev - iOS)",
+          "request": "launch",
+          "type": "dart",
+          "program": "lib/main_dev.dart"
+        },
+        // 🎯 Default Configuration (Dev)
+        {
+          "name": "🎯 Burger Eats (Default)",
+          "request": "launch",
+          "type": "dart",
+          "program": "lib/main.dart"
         }
     ]
 }

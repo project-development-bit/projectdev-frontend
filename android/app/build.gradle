@@ -30,6 +30,39 @@ android {
         versionName = flutter.versionName
     }
 
+    // 🎭 Product Flavors Configuration
+    flavorDimensions "default"
+    productFlavors {
+        dev {
+            dimension "default"
+            applicationIdSuffix ".dev"
+            versionNameSuffix "-dev"
+            resValue "string", "app_name", "Burger Eats Dev"
+            manifestPlaceholders = [
+                appName: "Burger Eats Dev",
+                appIcon: "@mipmap/ic_launcher"
+            ]
+        }
+        staging {
+            dimension "default"
+            applicationIdSuffix ".staging"
+            versionNameSuffix "-staging"
+            resValue "string", "app_name", "Burger Eats Staging"
+            manifestPlaceholders = [
+                appName: "Burger Eats Staging",
+                appIcon: "@mipmap/ic_launcher"
+            ]
+        }
+        prod {
+            dimension "default"
+            resValue "string", "app_name", "Burger Eats"
+            manifestPlaceholders = [
+                appName: "Burger Eats",
+                appIcon: "@mipmap/ic_launcher"
+            ]
+        }
+    }
+
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.

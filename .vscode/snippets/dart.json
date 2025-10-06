@@ -1,0 +1,146 @@
+{
+    "Flavor Manager Check": {
+        "prefix": "flavor-check",
+        "body": [
+            "if (FlavorManager.is${1|Dev,Staging,Prod|}) {",
+            "  ${2:// Development/Staging/Production specific code}",
+            "}"
+        ],
+        "description": "Check current flavor with FlavorManager"
+    },
+    
+    "Flavor Configuration Access": {
+        "prefix": "flavor-config",
+        "body": [
+            "final config = FlavorManager.currentConfig;",
+            "final ${1:configValue} = config.${2|apiBaseUrl,appName,enableLogging,enableDebugFeatures|};"
+        ],
+        "description": "Access flavor configuration"
+    },
+    
+    "Flavor Provider Watch": {
+        "prefix": "flavor-watch",
+        "body": [
+            "final ${1:flavor} = ref.watch(flavorProvider);",
+            "final ${2:config} = ref.watch(configProvider);"
+        ],
+        "description": "Watch flavor providers with Riverpod"
+    },
+    
+    "Flavor Conditional Widget": {
+        "prefix": "flavor-widget",
+        "body": [
+            "if (!FlavorManager.isProd) ...[",
+            "  ${1:// Debug widget}",
+            "] else ...[",
+            "  ${2:// Production widget}",
+            "]"
+        ],
+        "description": "Conditional widget based on flavor"
+    },
+    
+    "Flavor Debug Print": {
+        "prefix": "flavor-debug",
+        "body": [
+            "if (FlavorManager.areDebugFeaturesEnabled) {",
+            "  debugPrint('${1:Debug message}: \\${${2:variable}}');",
+            "}"
+        ],
+        "description": "Debug print that only shows in debug-enabled flavors"
+    },
+    
+    "Flavor API URL": {
+        "prefix": "flavor-api",
+        "body": [
+            "final apiUrl = FlavorManager.fullApiUrl;",
+            "final endpoint = '\\$apiUrl/${1:endpoint}';"
+        ],
+        "description": "Get flavor-specific API URL"
+    },
+    
+    "Flavor Feature Flag": {
+        "prefix": "flavor-feature",
+        "body": [
+            "if (FlavorManager.isFeatureEnabled('${1:featureName}')) {",
+            "  ${2:// Feature enabled code}",
+            "} else {",
+            "  ${3:// Feature disabled code}",
+            "}"
+        ],
+        "description": "Check feature flag for current flavor"
+    },
+    
+    "New Flavor Entry Point": {
+        "prefix": "flavor-main",
+        "body": [
+            "import 'package:flutter/material.dart';",
+            "import 'main_common.dart';",
+            "import 'core/config/app_flavor.dart';",
+            "import 'core/config/flavor_manager.dart';",
+            "",
+            "void main() async {",
+            "  WidgetsFlutterBinding.ensureInitialized();",
+            "  ",
+            "  // Initialize ${1|development,staging,production|} flavor",
+            "  FlavorManager.initialize(AppFlavor.${2|dev,staging,prod|});",
+            "  ",
+            "  // Run the common app initialization",
+            "  await runAppWithFlavor(AppFlavor.${2|dev,staging,prod|});",
+            "}"
+        ],
+        "description": "Create new flavor entry point file"
+    },
+    
+    "Flavor Consumer Widget": {
+        "prefix": "flavor-consumer",
+        "body": [
+            "class ${1:WidgetName} extends ConsumerWidget {",
+            "  const ${1:WidgetName}({super.key});",
+            "",
+            "  @override",
+            "  Widget build(BuildContext context, WidgetRef ref) {",
+            "    final flavor = ref.watch(flavorProvider);",
+            "    final config = ref.watch(configProvider);",
+            "    ",
+            "    return ${2:Widget}(",
+            "      ${3:// Widget properties}",
+            "    );",
+            "  }",
+            "}"
+        ],
+        "description": "Create Consumer Widget with flavor access"
+    },
+    
+    "Flavor Network Provider": {
+        "prefix": "flavor-network",
+        "body": [
+            "final ${1:networkProvider} = Provider<${2:ServiceClass}>((ref) {",
+            "  final dio = ref.watch(dioProvider);",
+            "  return ${2:ServiceClass}(dio);",
+            "});"
+        ],
+        "description": "Create network provider that uses flavor-aware Dio"
+    },
+    
+    "Flavor Environment Info": {
+        "prefix": "flavor-info",
+        "body": [
+            "debugPrint('🚀 App started with:');",
+            "debugPrint('   Flavor: \\${FlavorManager.flavorDisplayName}');",
+            "debugPrint('   API URL: \\${FlavorManager.fullApiUrl}');",
+            "debugPrint('   Debug: \\${FlavorManager.areDebugFeaturesEnabled}');",
+            "debugPrint('   Logging: \\${FlavorManager.isLoggingEnabled}');"
+        ],
+        "description": "Print comprehensive flavor information"
+    },
+    
+    "Flavor Banner Widget": {
+        "prefix": "flavor-banner",
+        "body": [
+            "FlavorBanner(",
+            "  child: ${1:childWidget},",
+            ")"
+        ],
+        "description": "Wrap widget with flavor banner"
+    }
+}
