@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:cointiply_app/core/database/database_service.dart';
+// import 'package:cointiply_app/core/database/database_service.dart';
 import 'package:cointiply_app/core/config/app_flavor.dart';
 import 'package:cointiply_app/core/config/flavor_manager.dart';
 
@@ -42,7 +42,7 @@ class TestInitializer {
     FlavorManager.initialize(AppFlavor.dev);
     
     // Initialize Hive for testing (in-memory)
-    await DatabaseService.init();
+    // await DatabaseService.init();
     
     _isInitialized = true;
   }

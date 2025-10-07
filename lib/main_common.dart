@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:cointiply_app/core/database/database_service.dart';
+// import 'package:cointiply_app/core/database/database_service.dart';
 import 'package:cointiply_app/core/localization/app_localizations.dart';
 import 'core/providers/locale_provider.dart';
 import 'core/providers/theme_provider.dart';
@@ -14,7 +14,7 @@ import 'routing/app_router.dart';
 /// Common app initialization function for all flavors
 Future<void> runAppWithFlavor(AppFlavor flavor) async {
   // Initialize Drift database
-  await DatabaseService.init();
+  // await DatabaseService.init();
   
   // Print flavor information for debugging
   debugPrint('🚀 Starting app with flavor: ${flavor.displayName}');

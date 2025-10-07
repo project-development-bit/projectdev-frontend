@@ -1,6 +1,6 @@
+import 'package:cointiply_app/features/home/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../presentation/pages/main_tab_page.dart';
 import '../features/auth/presentation/pages/login_page.dart';
 import '../features/auth/presentation/pages/signup_page.dart';
 import '../features/auth/presentation/pages/forgot_password_page.dart';
@@ -19,7 +19,7 @@ final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
 
 final router = GoRouter(
   navigatorKey: _rootNavigatorKey,
-  initialLocation: AppRoutes.login, // Start with login page
+  initialLocation: AppRoutes.home, // Start with login page
   debugLogDiagnostics: true,
   routes: [
     // Auth Routes
@@ -45,7 +45,7 @@ final router = GoRouter(
     GoRoute(
       path: AppRoutes.home,
       name: 'home',
-      builder: (context, state) => const MainTabPage(),
+      builder: (context, state) => const HomePage(),
       routes: [
         // Nested routes under main tab page
         GoRoute(
