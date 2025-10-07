@@ -9,7 +9,8 @@ class MainTabPage extends ConsumerStatefulWidget {
   ConsumerState<MainTabPage> createState() => _MainTabPageState();
 }
 
-class _MainTabPageState extends ConsumerState<MainTabPage> with SingleTickerProviderStateMixin {
+class _MainTabPageState extends ConsumerState<MainTabPage>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
   bool _isSearching = false;
 
@@ -54,9 +55,7 @@ class _MainTabPageState extends ConsumerState<MainTabPage> with SingleTickerProv
         children: [
           TabBarView(
             controller: _tabController,
-            children: const [
-              SizedBox(), SizedBox()
-            ],
+            children: const [SizedBox(), SizedBox()],
           ),
         ],
       ),

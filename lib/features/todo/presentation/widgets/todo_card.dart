@@ -9,11 +9,8 @@ class TodoCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        
-      },
-      child: 
-          Card(
+      onTap: () {},
+      child: Card(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -21,8 +18,8 @@ class TodoCardWidget extends StatelessWidget {
             children: [
               Text(
                 todo.title,
-                style: const TextStyle(
-                    fontSize: 18, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
               Text(

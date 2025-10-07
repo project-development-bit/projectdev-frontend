@@ -1,5 +1,1 @@
-
-
-abstract class TodoRepository {
- 
-}
+abstract class TodoRepository {}

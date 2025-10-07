@@ -7,6 +7,6 @@ class GetTodos {
   GetTodos(this.repository);
 
   Future<List<Todo>> call(int page) async {
-    return [];// await repository.getTodos(page); --- IGNORE ---
+    return []; // await repository.getTodos(page); --- IGNORE ---
   }
 }

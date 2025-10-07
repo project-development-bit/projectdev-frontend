@@ -10,8 +10,6 @@ class TodoMainPage extends ConsumerStatefulWidget {
 }
 
 class _TodoMainPageState extends ConsumerState<TodoMainPage> {
-  
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

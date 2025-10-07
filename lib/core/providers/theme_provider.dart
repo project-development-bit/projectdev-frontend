@@ -22,7 +22,7 @@ class ThemeNotifier extends StateNotifier<AppThemeMode> {
     try {
       final prefs = await SharedPreferences.getInstance();
       final themeIndex = prefs.getInt(_themeKey);
-      
+
       if (themeIndex != null && themeIndex < AppThemeMode.values.length) {
         state = AppThemeMode.values[themeIndex];
         debugPrint('Loaded theme mode: ${state.name}');
@@ -53,9 +53,8 @@ class ThemeNotifier extends StateNotifier<AppThemeMode> {
 
   /// Toggle between light and dark mode (ignores system)
   Future<void> toggleTheme() async {
-    final newTheme = state == AppThemeMode.light 
-        ? AppThemeMode.dark 
-        : AppThemeMode.light;
+    final newTheme =
+        state == AppThemeMode.light ? AppThemeMode.dark : AppThemeMode.light;
     await setThemeMode(newTheme);
   }
 
@@ -128,7 +127,7 @@ final themeProvider = StateNotifierProvider<ThemeNotifier, AppThemeMode>((ref) {
 final effectiveThemeModeProvider = Provider<ThemeMode>((ref) {
   final themeMode = ref.watch(themeProvider);
   final notifier = ref.read(themeProvider.notifier);
-  
+
   // You might need to get system brightness from MediaQuery in a widget
   // For now, we'll default to light when system is selected
   return notifier.getEffectiveThemeMode(null);
@@ -138,7 +137,7 @@ final effectiveThemeModeProvider = Provider<ThemeMode>((ref) {
 final isDarkThemeProvider = Provider<bool>((ref) {
   final themeMode = ref.watch(themeProvider);
   final notifier = ref.read(themeProvider.notifier);
-  
+
   // You might need to get system brightness from MediaQuery in a widget
   // For now, we'll default to light when system is selected
   return notifier.isDark(null);

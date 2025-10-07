@@ -10,4 +10,3 @@ final todoRemoteDataSourceProvider = Provider(
 final todoRepositoryProvider = Provider(
   (ref) => TodoRepositoryImpl(ref.watch(todoRemoteDataSourceProvider)),
 );
-

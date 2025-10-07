@@ -6,7 +6,6 @@ part 'todo_model.g.dart';
 @freezed
 class TodoModel with _$TodoModel {
   const factory TodoModel({
-    
     @JsonKey(name: 'title') required String title,
     @JsonKey(name: 'id') required int id,
     @JsonKey(name: 'description') required String description,
