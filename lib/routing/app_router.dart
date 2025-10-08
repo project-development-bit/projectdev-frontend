@@ -8,6 +8,7 @@ import '../features/auth/presentation/pages/login_page.dart';
 import '../features/auth/presentation/pages/signup_page.dart';
 import '../features/auth/presentation/pages/forgot_password_page.dart';
 import '../features/home/pages/home_page.dart';
+import '../features/profile/presentation/pages/profile_page.dart';
 import '../core/providers/auth_provider.dart';
 import '../core/widgets/shell_route_wrapper.dart';
 
@@ -182,12 +183,9 @@ class BurgerEatsAppRoutes {
               // Profile Routes
               GoRoute(
                 path: AppRoutes.profile,
+                name: 'profile',
                 pageBuilder: (context, state) => const NoTransitionPage(
-                  child: Scaffold(
-                    body: Center(
-                      child: Text('Profile Page - Coming Soon'),
-                    ),
-                  ),
+                  child: ProfilePage(),
                 ),
               ),
 
@@ -352,6 +350,10 @@ final router = GoRouter(
     GoRoute(
       path: '/home',
       builder: (context, state) => const HomePage(),
+    ),
+    GoRoute(
+      path: '/profile',
+      builder: (context, state) => const ProfilePage(),
     ),
   ],
 );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/widgets/locale_switch_widget.dart';
 import '../../../core/widgets/theme_switch_widget.dart';
 import '../../../core/extensions/context_extensions.dart';
@@ -68,6 +69,12 @@ class HomePage extends ConsumerWidget {
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    // Profile button
+                    IconButton(
+                      onPressed: () => context.go('/profile'),
+                      icon: const Icon(Icons.person),
+                      tooltip: 'Profile',
+                    ),
                     const ThemeSwitchWidget(),
                     const SizedBox(width: 8),
                     const LocaleSwitchWidget(),
