@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../localization/app_localizations.dart';
 
 /// Extension on BuildContext to provide easy access to text styles
 extension TextThemeExtension on BuildContext {
@@ -324,5 +325,16 @@ extension DialogExtension on BuildContext {
       shape: shape,
       builder: (context) => child,
     );
+  }
+}
+
+/// Extension on BuildContext to provide easy access to localized strings
+extension LocalizationExtension on BuildContext {
+  /// Get the current app localizations instance
+  AppLocalizations? get l10n => AppLocalizations.of(this);
+
+  /// Translate a key with optional arguments
+  String translate(String key, {List<String>? args}) {
+    return l10n?.translate(key, args: args) ?? key;
   }
 }

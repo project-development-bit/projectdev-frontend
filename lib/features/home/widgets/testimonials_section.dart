@@ -23,12 +23,12 @@ class TestimonialsSection extends ConsumerWidget {
         children: [
           // Section header
           CommonText.headlineMedium(
-            'What Our Users Say',
+            context.translate('what_users_say'),
             fontWeight: FontWeight.bold,
           ),
           const SizedBox(height: 8),
           CommonText.bodyMedium(
-            'Real earnings from real people',
+            context.translate('real_earnings'),
             color: context.onSurfaceVariant,
           ),
           const SizedBox(height: 32),
@@ -150,7 +150,7 @@ class _TestimonialCard extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                   decoration: BoxDecoration(
-                    color: Colors.green.withOpacity(0.1),
+                    color: Colors.green.withAlpha(26), // 0.1 * 255
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: CommonText.bodySmall(

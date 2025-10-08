@@ -15,7 +15,7 @@ class OfferWallsSection extends ConsumerWidget {
 
     return Container(
       width: double.infinity,
-      color: context.surfaceContainer.withOpacity(0.3),
+      color: context.surfaceContainer.withAlpha(77), // 0.3 * 255
       padding: EdgeInsets.symmetric(
         horizontal: context.isMobile ? 16 : 32,
         vertical: 40,
@@ -30,12 +30,12 @@ class OfferWallsSection extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CommonText.headlineMedium(
-                    'Offer Walls',
+                    context.translate('offer_walls'),
                     fontWeight: FontWeight.bold,
                   ),
                   const SizedBox(height: 4),
                   CommonText.bodyMedium(
-                    'Trusted partner networks',
+                    context.translate('trusted_networks'),
                     color: context.onSurfaceVariant,
                   ),
                 ],
@@ -43,7 +43,7 @@ class OfferWallsSection extends ConsumerWidget {
               const Spacer(),
               if (!context.isMobile)
                 CommonButton(
-                  text: 'Explore Offer Walls',
+                  text: context.translate('explore_offer_walls'),
                   onPressed: () {
                     // TODO: Navigate to offer walls
                   },
@@ -60,7 +60,7 @@ class OfferWallsSection extends ConsumerWidget {
               color: context.surface,
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: context.outline.withOpacity(0.2),
+                color: context.outline.withAlpha(51), // 0.2 * 255
               ),
             ),
             child: Row(
@@ -68,15 +68,15 @@ class OfferWallsSection extends ConsumerWidget {
               children: [
                 _TrustBadge(
                   icon: Icons.verified_user,
-                  text: 'Verified\nPartners',
+                  text: context.translate('verified_partners'),
                 ),
                 _TrustBadge(
                   icon: Icons.track_changes,
-                  text: 'Instant\nTracking',
+                  text: context.translate('instant_tracking'),
                 ),
                 _TrustBadge(
                   icon: Icons.trending_up,
-                  text: 'High\nPayouts',
+                  text: context.translate('high_payouts'),
                 ),
               ],
             ),
@@ -120,7 +120,7 @@ class OfferWallsSection extends ConsumerWidget {
           if (context.isMobile)
             Center(
               child: CommonButton(
-                text: 'Explore Offer Walls',
+                text: context.translate('explore_offer_walls'),
                 onPressed: () {
                   // TODO: Navigate to offer walls
                 },

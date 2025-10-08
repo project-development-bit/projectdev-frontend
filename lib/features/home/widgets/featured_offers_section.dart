@@ -28,24 +28,31 @@ class FeaturedOffersSection extends ConsumerWidget {
           // Section header
           Row(
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CommonText.headlineMedium(
-                    'Featured Offers',
-                    fontWeight: FontWeight.bold,
-                  ),
-                  const SizedBox(height: 4),
-                  CommonText.bodyMedium(
-                    'Handpicked high-paying tasks',
-                    color: context.onSurfaceVariant,
-                  ),
-                ],
+              Flexible(
+                child: Column(
+                  crossAxisAlignment: context.isMobile
+                      ? CrossAxisAlignment.stretch
+                      : CrossAxisAlignment.start,
+                  children: [
+                    CommonText.headlineMedium(
+                      context.translate('featured_offers'),
+                      fontWeight: FontWeight.bold,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 4),
+                    CommonText.bodyMedium(
+                      context.translate('handpicked_tasks'),
+                      overflow: TextOverflow.ellipsis,
+                      color: context.onSurfaceVariant,
+                    ),
+                  ],
+                ),
               ),
+              if (!context.isMobile)
               const Spacer(),
               if (!context.isMobile)
                 CommonButton(
-                  text: 'View All Offers',
+                  text: context.translate('view_all_offers'),
                   onPressed: () {
                     // TODO: Navigate to all offers
                   },
@@ -59,23 +66,23 @@ class FeaturedOffersSection extends ConsumerWidget {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: context.primaryContainer.withOpacity(0.3),
+              color: context.primaryContainer.withAlpha(77), // 0.3 * 255
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: context.primary.withOpacity(0.2),
+                color: context.primary.withAlpha(51), // 0.2 * 255
               ),
             ),
             child: Row(
               children: [
                 _StatItem(
-                  title: 'Available offers',
+                  title: context.translate('available_offers'),
                   value: _formatNumber(totalOffers),
                   icon: Icons.local_offer,
                 ),
                 if (!context.isMobile) ...[
                   const SizedBox(width: 32),
                   _StatItem(
-                    title: 'Highest payout',
+                    title: context.translate('highest_payout'),
                     value: '\$${highestPayout.toStringAsFixed(0)}',
                     icon: Icons.trending_up,
                   ),

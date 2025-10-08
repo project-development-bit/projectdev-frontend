@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../core/widgets/locale_switch_widget.dart';
+import '../../../core/widgets/theme_switch_widget.dart';
+import '../../../core/extensions/context_extensions.dart';
 import '../widgets/hero_section.dart';
 import '../widgets/featured_offers_section.dart';
 import '../widgets/how_it_works_section.dart';
@@ -14,31 +17,93 @@ class HomePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            // Hero section with main value proposition
-            const HeroSection(),
-            
-            // Featured offers section
-            const FeaturedOffersSection(),
-            
-            // How it works section
-            const HowItWorksSection(),
-            
-            // Offer walls section
-            const OfferWallsSection(),
-            
-            // User testimonials
-            const TestimonialsSection(),
-            
-            // Platform statistics and level progression
-            const StatisticsSection(),
-            
-            // Footer call-to-action
-            _buildFooterCTA(context),
-          ],
-        ),
+      body: CustomScrollView(
+        slivers: [
+          // Sliver app bar that hides/shows on scroll
+          SliverAppBar(
+            expandedHeight: 80.0,
+            floating: true,
+            pinned: false,
+            snap: true,
+            backgroundColor: context.surface.withAlpha(242), // 0.95 * 255
+            surfaceTintColor: Colors.transparent,
+            elevation: 0,
+            scrolledUnderElevation: 1,
+            flexibleSpace: FlexibleSpaceBar(
+              background: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      context.surface.withAlpha(250), // 0.98 * 255
+                      context.surface.withAlpha(235), // 0.92 * 255
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // App logo/title
+                Row(
+                  children: [
+                    Icon(
+                      Icons.monetization_on,
+                      color: context.primary,
+                      size: 28,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      context.translate('app_name'),
+                      style: context.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: context.onSurface,
+                      ),
+                    ),
+                  ],
+                ),
+                // Theme and locale switches
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const ThemeSwitchWidget(),
+                    const SizedBox(width: 8),
+                    const LocaleSwitchWidget(),
+                  ],
+                ),
+              ],
+            ),
+            titleSpacing: 16,
+          ),
+
+          // Main content
+          SliverList(
+            delegate: SliverChildListDelegate([
+              // Hero section with main value proposition
+              const HeroSection(),
+
+              // Featured offers section
+              const FeaturedOffersSection(),
+
+              // How it works section
+              const HowItWorksSection(),
+
+              // Offer walls section
+              const OfferWallsSection(),
+
+              // User testimonials
+              const TestimonialsSection(),
+
+              // Platform statistics and level progression
+              const StatisticsSection(),
+
+              // Footer call-to-action
+              _buildFooterCTA(context),
+            ]),
+          ),
+        ],
       ),
     );
   }
@@ -54,7 +119,7 @@ class HomePage extends ConsumerWidget {
       child: Column(
         children: [
           Text(
-            'Ready to see what you can earn?',
+            context.translate('ready_to_earn'),
             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
               color: Colors.white,
               fontWeight: FontWeight.bold,
@@ -63,9 +128,9 @@ class HomePage extends ConsumerWidget {
           ),
           const SizedBox(height: 12),
           Text(
-            'Join thousands of users already earning free Bitcoin',
+            context.translate('join_thousands'),
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-              color: Colors.white.withOpacity(0.9),
+                  color: Colors.white.withAlpha(230), // 0.9 * 255
             ),
             textAlign: TextAlign.center,
           ),
@@ -85,9 +150,9 @@ class HomePage extends ConsumerWidget {
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
-            child: const Text(
-              'Start Earning Now',
-              style: TextStyle(
+            child: Text(
+              context.translate('start_earning_now'),
+              style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
               ),

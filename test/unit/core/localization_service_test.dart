@@ -6,6 +6,10 @@ void main() {
   group('LocalizationService Tests', () {
     late LocalizationService localizationService;
 
+    setUpAll(() {
+      TestWidgetsFlutterBinding.ensureInitialized();
+    });
+
     setUp(() {
       localizationService = LocalizationService();
     });
@@ -78,9 +82,10 @@ void main() {
 
     group('Load Method Tests', () {
       test('should handle load request for supported locale', () async {
-        // This will fail to load the actual file, but tests the method signature
+        // This will load the actual file since assets exist in test environment
         final result = await localizationService.load(const Locale('en'));
-        expect(result, isFalse); // Will be false because assets don't exist in test
+        expect(result,
+            isTrue); // Will be true because assets are loaded successfully
       });
 
       test('should handle load request for unsupported locale', () async {

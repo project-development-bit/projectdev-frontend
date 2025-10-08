@@ -30,25 +30,25 @@ class StatisticsSection extends ConsumerWidget {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-                  context.primary.withOpacity(0.1),
-                  context.secondary.withOpacity(0.1),
+                  context.primary.withAlpha(26), // 0.1 * 255
+                  context.secondary.withAlpha(26), // 0.1 * 255
                 ],
               ),
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: context.primary.withOpacity(0.2),
+                color: context.primary.withAlpha(51), // 0.2 * 255
               ),
             ),
             child: Column(
               children: [
                 CommonText.headlineMedium(
-                  'Level Up While You Earn',
+                  context.translate('level_up_heading'),
                   textAlign: TextAlign.center,
                   fontWeight: FontWeight.bold,
                 ),
                 const SizedBox(height: 12),
                 CommonText.bodyLarge(
-                  'Climb ranks. Unlock crypto rewards. From Hodler to Cryptolord, you\'ll earn spins, boosts, and more.',
+                  context.translate('level_up_desc'),
                   textAlign: TextAlign.center,
                   color: context.onSurfaceVariant,
                 ),
@@ -66,19 +66,21 @@ class StatisticsSection extends ConsumerWidget {
             Column(
               children: [
                 _StatCard(
-                  title: 'Fastest payout today.',
+                  title: context.translate('fastest_payout_today'),
                   value: stats.fastestPayoutTime,
                   icon: Icons.flash_on,
                 ),
                 const SizedBox(height: 16),
                 _StatCard(
-                  title: 'Avg. cash out for new users this month.',
+                  title: context.translate('avg_cashout_month'),
                   value: '\$${stats.averageEarnings.toStringAsFixed(0)} USD',
                   icon: Icons.account_balance_wallet,
                 ),
                 const SizedBox(height: 16),
                 _StatCard(
-                  title: 'Users in ${stats.countriesCount} countries.',
+                  title: context
+                      .translate('users_in_countries')
+                      .replaceAll('{0}', stats.countriesCount.toString()),
                   value: '${stats.countriesCount} Countries',
                   icon: Icons.public,
                 ),
@@ -90,7 +92,7 @@ class StatisticsSection extends ConsumerWidget {
               children: [
                 Expanded(
                   child: _StatCard(
-                    title: 'Fastest payout today.',
+                    title: context.translate('fastest_payout_today'),
                     value: stats.fastestPayoutTime,
                     icon: Icons.flash_on,
                   ),
@@ -98,7 +100,7 @@ class StatisticsSection extends ConsumerWidget {
                 const SizedBox(width: 20),
                 Expanded(
                   child: _StatCard(
-                    title: 'Avg. cash out for new users this month.',
+                    title: context.translate('avg_cashout_month'),
                     value: '\$${stats.averageEarnings.toStringAsFixed(0)} USD',
                     icon: Icons.account_balance_wallet,
                   ),
@@ -106,7 +108,9 @@ class StatisticsSection extends ConsumerWidget {
                 const SizedBox(width: 20),
                 Expanded(
                   child: _StatCard(
-                    title: 'Users in ${stats.countriesCount} countries.',
+                    title: context
+                        .translate('users_in_countries')
+                        .replaceAll('{0}', stats.countriesCount.toString()),
                     value: '${stats.countriesCount} Countries',
                     icon: Icons.public,
                   ),
@@ -119,7 +123,12 @@ class StatisticsSection extends ConsumerWidget {
   }
 
   Widget _buildLevelProgression(BuildContext context) {
-    final levels = ['Hodler', 'Trader', 'Investor', 'Cryptolord'];
+    final levels = [
+      context.translate('level_hodler'),
+      context.translate('level_trader'),
+      context.translate('level_investor'),
+      context.translate('level_cryptolord')
+    ];
     
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,

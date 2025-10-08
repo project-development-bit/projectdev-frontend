@@ -14,7 +14,8 @@ void main() {
   });
 
   group('App Initialization Tests', () {
-    testWidgets('App should initialize and show login page', (WidgetTester tester) async {
+    testWidgets('App should initialize and show home page',
+        (WidgetTester tester) async {
       // Build our app and trigger a frame
       await tester.pumpWidget(
         const ProviderScope(
@@ -24,16 +25,18 @@ void main() {
         ),
       );
 
-      // Wait for the app to settle
-      await tester.pumpAndSettle();
+      // Wait for the app to load with timeout
+      await tester.pump();
+      await tester.pump(const Duration(seconds: 1));
 
-      // Verify that the login page is displayed
-      expect(find.text('Welcome Back!'), findsOneWidget);
-      expect(find.text('Sign in to continue to Burger Eats'), findsOneWidget);
+      // Verify that the home page is displayed (app starts on home page, not login)
+      expect(
+          find.text('Turn your free time into free Bitcoin'), findsOneWidget);
+      expect(find.text('Earn up to \$596 USD per offer'), findsOneWidget);
       
-      // Verify login form elements are present
-      expect(find.byType(TextFormField), findsAtLeastNWidgets(2)); // Email and password fields
-      expect(find.text('Sign In'), findsOneWidget);
+      // Verify home page elements are present
+      expect(find.text('Start Earning Now'),
+          findsAtLeastNWidgets(1)); // CTA buttons
     });
 
     testWidgets('App should show flavor banner in development', (WidgetTester tester) async {
@@ -48,7 +51,8 @@ void main() {
         ),
       );
 
-      await tester.pumpAndSettle();
+      await tester.pump();
+      await tester.pump(const Duration(seconds: 1));
 
       // Verify that the dev flavor banner is present
       expect(find.byType(Banner), findsOneWidget);
@@ -61,7 +65,8 @@ void main() {
         ),
       );
 
-      await tester.pumpAndSettle();
+      await tester.pump();
+      await tester.pump(const Duration(seconds: 1));
 
       // App should initialize and show the main content
       // Since MyApp contains MaterialApp, we should find at least one
@@ -75,7 +80,8 @@ void main() {
         ),
       );
 
-      await tester.pumpAndSettle();
+      await tester.pump();
+      await tester.pump(const Duration(seconds: 1));
 
       // App should initialize with proper locale support
       // Since MyApp contains MaterialApp, we should find at least one

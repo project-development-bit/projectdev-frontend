@@ -24,7 +24,7 @@ class ThemeSwitchWidget extends ConsumerWidget {
           color: context.surfaceContainer,
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
-            color: context.outline.withOpacity(0.3),
+            color: context.outline.withAlpha(77), // 0.3 * 255
           ),
         ),
         child: Icon(
@@ -43,7 +43,7 @@ class ThemeSwitchWidget extends ConsumerWidget {
               padding: const EdgeInsets.symmetric(vertical: 4),
               decoration: isSelected
                   ? BoxDecoration(
-                      color: context.primary.withOpacity(0.1),
+                      color: context.primary.withAlpha(26), // 0.1 * 255
                       borderRadius: BorderRadius.circular(6),
                     )
                   : null,
@@ -124,10 +124,10 @@ class CompactThemeSwitcher extends ConsumerWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         decoration: BoxDecoration(
-          color: context.surfaceContainerHighest.withOpacity(0.5),
+          color: context.surfaceContainerHighest.withAlpha(128), // 0.5 * 255
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: context.outline.withOpacity(0.3),
+            color: context.outline.withAlpha(77), // 0.3 * 255
           ),
         ),
         child: Row(
@@ -240,11 +240,11 @@ class ThemeSelectorCard extends ConsumerWidget {
                       border: Border.all(
                         color: isSelected 
                             ? context.primary 
-                            : context.outline.withOpacity(0.3),
+                            : context.outline.withAlpha(77), // 0.3 * 255
                         width: isSelected ? 2 : 1,
                       ),
                       color: isSelected 
-                          ? context.primaryContainer.withOpacity(0.3)
+                          ? context.primaryContainer.withAlpha(77) // 0.3 * 255
                           : null,
                     ),
                     child: Row(

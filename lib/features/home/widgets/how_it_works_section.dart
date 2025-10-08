@@ -19,13 +19,13 @@ class HowItWorksSection extends StatelessWidget {
         children: [
           // Section header
           CommonText.headlineMedium(
-            'Start earning free crypto within minutes!',
+            context.translate('how_it_works_heading'),
             textAlign: TextAlign.center,
             fontWeight: FontWeight.bold,
           ),
           const SizedBox(height: 16),
           CommonText.headlineSmall(
-            'Here\'s how...',
+            context.translate('how_it_works_subheading'),
             textAlign: TextAlign.center,
             color: context.onSurfaceVariant,
           ),
@@ -36,14 +36,14 @@ class HowItWorksSection extends StatelessWidget {
             // Mobile: Vertical layout
             Column(
               children: [
-                _buildStep(context, 1, 'Choose an offer', 
-                  'Take your pick from the tasks on the earn page. We list the best offers from companies who want to advertise their apps, surveys, and products.'),
+                _buildStep(context, 1, context.translate('choose_offer'),
+                    context.translate('choose_offer_desc')),
                 const SizedBox(height: 40),
-                _buildStep(context, 2, 'Complete the offer', 
-                  'Most offers are very simple and have already earned money for thousands of people. Most offers payout their first rewards within a few minutes.'),
+                _buildStep(context, 2, context.translate('complete_offer'),
+                    context.translate('complete_offer_desc')),
                 const SizedBox(height: 40),
-                _buildStep(context, 3, 'Get paid instantly', 
-                  'Once verified, your earnings are added to your account instantly. Withdraw via Bitcoin, LiteCoin, Doge or Dash.'),
+                _buildStep(context, 3, context.translate('get_paid_instantly'),
+                    context.translate('get_paid_instantly_desc')),
               ],
             )
           else
@@ -52,18 +52,27 @@ class HowItWorksSection extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
-                  child: _buildStep(context, 1, 'Choose an offer', 
-                    'Take your pick from the tasks on the earn page. We list the best offers from companies who want to advertise their apps, surveys, and products.'),
+                  child: _buildStep(
+                      context,
+                      1,
+                      context.translate('choose_offer'),
+                      context.translate('choose_offer_desc')),
                 ),
                 const SizedBox(width: 32),
                 Expanded(
-                  child: _buildStep(context, 2, 'Complete the offer', 
-                    'Most offers are very simple and have already earned money for thousands of people. Most offers payout their first rewards within a few minutes.'),
+                  child: _buildStep(
+                      context,
+                      2,
+                      context.translate('complete_offer'),
+                      context.translate('complete_offer_desc')),
                 ),
                 const SizedBox(width: 32),
                 Expanded(
-                  child: _buildStep(context, 3, 'Get paid instantly', 
-                    'Once verified, your earnings are added to your account instantly. Withdraw via Bitcoin, LiteCoin, Doge or Dash.'),
+                  child: _buildStep(
+                      context,
+                      3,
+                      context.translate('get_paid_instantly'),
+                      context.translate('get_paid_instantly_desc')),
                 ),
               ],
             ),
@@ -85,7 +94,7 @@ class HowItWorksSection extends StatelessWidget {
             color: context.primary,
             boxShadow: [
               BoxShadow(
-                color: context.primary.withOpacity(0.3),
+                color: context.primary.withAlpha(77), // 0.3 * 255
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),

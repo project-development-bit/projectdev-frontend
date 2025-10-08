@@ -38,7 +38,7 @@ class HeroSection extends ConsumerWidget {
           children: [
             // Main heading
             CommonText.headlineLarge(
-              'Turn your free time into free Bitcoin',
+              context.translate('hero_main_heading'),
               textAlign: TextAlign.center,
               color: context.onPrimary,
             ),
@@ -46,7 +46,7 @@ class HeroSection extends ConsumerWidget {
             
             // Subheading with earning potential
             CommonText.headlineSmall(
-              'Earn up to \$596 USD per offer',
+              context.translate('hero_subheading'),
               textAlign: TextAlign.center,
               color: context.onPrimary.withOpacity(0.9),
             ),
@@ -54,7 +54,9 @@ class HeroSection extends ConsumerWidget {
             
             // Call to action button
             CommonButton(
-              text: isLoggedIn ? 'Continue Earning' : 'Start Earning Now',
+              text: isLoggedIn
+                  ? context.translate('continue_earning')
+                  : context.translate('start_earning_now'),
               onPressed: () {
                 // TODO: Navigate to offers or login
               },
@@ -85,7 +87,10 @@ class HeroSection extends ConsumerWidget {
                   ),
                   const SizedBox(width: 8),
                   CommonText.bodySmall(
-                    'Last payout: \$${lastPayout['amount']} — ${lastPayout['timeAgo']}',
+                    context
+                        .translate('last_payout')
+                        .replaceAll('{amount}', lastPayout['amount'].toString())
+                        .replaceAll('{timeAgo}', lastPayout['timeAgo']),
                     color: context.onPrimary,
                   ),
                 ],
@@ -97,15 +102,17 @@ class HeroSection extends ConsumerWidget {
             Column(
               children: [
                 CommonText.bodyMedium(
-                  'Trusted by over ${_formatNumber(totalUsers)} users worldwide.',
+                  context
+                      .translate('trusted_by_users')
+                      .replaceAll('{0}', _formatNumber(totalUsers)),
                   textAlign: TextAlign.center,
-                  color: context.onPrimary.withOpacity(0.9),
+                  color: context.onPrimary.withAlpha(229),
                 ),
                 const SizedBox(height: 8),
                 CommonText.bodyMedium(
-                  'Paying out free crypto since 2018.',
+                  context.translate('paying_since_2018'),
                   textAlign: TextAlign.center,
-                  color: context.onPrimary.withOpacity(0.9),
+                  color: context.onPrimary.withAlpha(229),
                 ),
               ],
             ),
@@ -117,14 +124,14 @@ class HeroSection extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   _AppStoreBadge(
-                    text: 'Get it on\nGoogle Play',
+                    text: context.translate('get_on_google_play'),
                     onTap: () {
                       // TODO: Open Google Play Store
                     },
                   ),
                   const SizedBox(width: 16),
                   _AppStoreBadge(
-                    text: 'Download on\nApp Store',
+                    text: context.translate('download_app_store'),
                     onTap: () {
                       // TODO: Open App Store
                     },
@@ -146,15 +153,15 @@ class HeroSection extends ConsumerWidget {
                   ),
                   const SizedBox(width: 8),
                   CommonText.bodySmall(
-                    'Rated 4.6 out of 5',
-                    color: context.onPrimary.withOpacity(0.9),
+                    context.translate('rated_4_6'),
+                    color: context.onPrimary.withAlpha(229),
                   ),
                 ],
               ),
               const SizedBox(height: 4),
               CommonText.bodySmall(
-                'Over 35,000 reviews.',
-                color: context.onPrimary.withOpacity(0.9),
+                context.translate('over_reviews'),
+                color: context.onPrimary.withAlpha(229),
               ),
             ],
           ],

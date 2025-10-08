@@ -71,7 +71,7 @@ class FlavorDebugInfo extends ConsumerWidget {
       margin: const EdgeInsets.all(16),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: context.surface.withOpacity(0.9),
+        color: context.surface.withAlpha(230), // 0.9 * 255
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: context.outline, width: 1),
       ),
