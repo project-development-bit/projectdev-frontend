@@ -27,12 +27,13 @@ class FeaturedOffersSection extends ConsumerWidget {
         children: [
           // Section header
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Flexible(
                 child: Column(
                   crossAxisAlignment: context.isMobile
                       ? CrossAxisAlignment.stretch
-                      : CrossAxisAlignment.start,
+                      : CrossAxisAlignment.center,
                   children: [
                     CommonText.headlineMedium(
                       context.translate('featured_offers'),
@@ -119,7 +120,7 @@ class FeaturedOffersSection extends ConsumerWidget {
                 crossAxisCount: context.isTablet ? 2 : 3,
                 crossAxisSpacing: 16,
                 mainAxisSpacing: 16,
-                childAspectRatio: 1.1,
+                childAspectRatio: 16 / 12,
               ),
               itemCount: offers.length,
               itemBuilder: (context, index) {
