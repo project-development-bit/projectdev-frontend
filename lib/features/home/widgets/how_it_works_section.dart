@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/extensions/context_extensions.dart';
 import '../../../core/common/common_text.dart';
+import '../../../core/widgets/responsive_container.dart';
 
 /// Section explaining how the platform works
 class HowItWorksSection extends StatelessWidget {
@@ -8,13 +9,9 @@ class HowItWorksSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      color: context.surface,
-      padding: EdgeInsets.symmetric(
-        horizontal: context.isMobile ? 16 : 32,
-        vertical: 60,
-      ),
+    return ResponsiveSection(
+      backgroundColor: context.surface,
+      padding: const EdgeInsets.symmetric(vertical: 60),
       child: Column(
         children: [
           // Section header

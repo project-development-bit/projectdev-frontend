@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/extensions/context_extensions.dart';
 import '../../../core/common/common_text.dart';
+import '../../../core/widgets/responsive_container.dart';
 import '../providers/home_providers.dart';
 
 /// Section displaying user testimonials
@@ -12,12 +13,8 @@ class TestimonialsSection extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final testimonials = ref.watch(testimonialsProvider);
 
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.symmetric(
-        horizontal: context.isMobile ? 16 : 32,
-        vertical: 40,
-      ),
+    return ResponsiveSection(
+      padding: const EdgeInsets.symmetric(vertical: 40),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

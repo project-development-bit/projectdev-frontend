@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/extensions/context_extensions.dart';
 import '../../../core/common/common_text.dart';
 import '../../../core/common/common_button.dart';
+import '../../../core/widgets/responsive_container.dart';
 import '../providers/home_providers.dart';
 
 /// Hero section widget displaying the main value proposition
@@ -28,9 +29,8 @@ class HeroSection extends ConsumerWidget {
           ],
         ),
       ),
-      child: Padding(
+      child: ResponsiveContainer(
         padding: EdgeInsets.symmetric(
-          horizontal: context.isMobile ? 16 : 32,
           vertical: context.isMobile ? 40 : 80,
         ),
         child: Column(

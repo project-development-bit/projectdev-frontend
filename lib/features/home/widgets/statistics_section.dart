@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/extensions/context_extensions.dart';
 import '../../../core/common/common_text.dart';
+import '../../../core/widgets/responsive_container.dart';
 import '../providers/home_providers.dart';
 
 /// Section displaying platform statistics
@@ -12,13 +13,9 @@ class StatisticsSection extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final stats = ref.watch(platformStatsProvider);
 
-    return Container(
-      width: double.infinity,
-      color: context.surfaceContainer,
-      padding: EdgeInsets.symmetric(
-        horizontal: context.isMobile ? 16 : 32,
-        vertical: 40,
-      ),
+    return ResponsiveSection(
+      backgroundColor: context.surfaceContainer,
+      padding: const EdgeInsets.symmetric(vertical: 40),
       child: Column(
         children: [
           // Level up section

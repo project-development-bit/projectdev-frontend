@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/extensions/context_extensions.dart';
 import '../../../core/common/common_text.dart';
 import '../../../core/common/common_button.dart';
+import '../../../core/widgets/responsive_container.dart';
 import '../providers/home_providers.dart';
 
 /// Section displaying offer walls and partner networks
@@ -13,13 +14,9 @@ class OfferWallsSection extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final offerWalls = ref.watch(offerWallsProvider);
 
-    return Container(
-      width: double.infinity,
-      color: context.surfaceContainer.withAlpha(77), // 0.3 * 255
-      padding: EdgeInsets.symmetric(
-        horizontal: context.isMobile ? 16 : 32,
-        vertical: 40,
-      ),
+    return ResponsiveSection(
+      backgroundColor: context.surfaceContainer.withAlpha(77), // 0.3 * 255
+      padding: const EdgeInsets.symmetric(vertical: 40),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
