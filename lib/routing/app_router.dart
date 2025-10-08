@@ -1,128 +1,357 @@
-import 'package:cointiply_app/features/home/pages/home_page.dart';
+// 📦 Package imports
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+// 🌎 Project imports
 import '../features/auth/presentation/pages/login_page.dart';
 import '../features/auth/presentation/pages/signup_page.dart';
 import '../features/auth/presentation/pages/forgot_password_page.dart';
+import '../features/home/pages/home_page.dart';
+import '../core/providers/auth_provider.dart';
+import '../core/widgets/shell_route_wrapper.dart';
 
 // Route names for type safety
 class AppRoutes {
-  static const String login = '/login';
-  static const String home = '/';
-  static const String signUp = '/signup';
-  static const String forgotPassword = '/forgot-password';
+  static const String initial = '/';
+  static const String home = '/home';
+  static const String login = '/auth/login';
+  static const String signUp = '/auth/signup';
+  static const String forgotPassword = '/auth/forgot-password';
+  static const String auth = '/auth';
   static const String profile = '/profile';
   static const String settings = '/settings';
+  static const String offers = '/offers';
+  static const String dashboard = '/dashboard';
 }
 
-final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
-
-final router = GoRouter(
-  navigatorKey: _rootNavigatorKey,
-  initialLocation: AppRoutes.home, // Start with login page
-  debugLogDiagnostics: true,
-  routes: [
-    // Auth Routes
-    GoRoute(
-      path: AppRoutes.login,
-      name: 'login',
-      builder: (context, state) => const LoginPage(),
-    ),
-
-    GoRoute(
-      path: AppRoutes.signUp,
-      name: 'signUp',
-      builder: (context, state) => const SignUpPage(),
-    ),
-
-    GoRoute(
-      path: AppRoutes.forgotPassword,
-      name: 'forgotPassword',
-      builder: (context, state) => const ForgotPasswordPage(),
-    ),
-
-    // Main App Routes
-    GoRoute(
-      path: AppRoutes.home,
-      name: 'home',
-      builder: (context, state) => const HomePage(),
-      routes: [
-        // Nested routes under main tab page
-        GoRoute(
-          path: 'profile',
-          name: 'profile',
-          builder: (context, state) => const Scaffold(
-            body: Center(
-              child: Text('Profile Page - Coming Soon'),
-            ),
-          ),
-        ),
-
-        GoRoute(
-          path: 'settings',
-          name: 'settings',
-          builder: (context, state) => const Scaffold(
-            body: Center(
-              child: Text('Settings Page - Coming Soon'),
-            ),
-          ),
-        ),
-      ],
-    ),
-  ],
-
-  // Error handling
-  errorBuilder: (context, state) => Scaffold(
-    body: Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(
-            Icons.error_outline,
-            size: 64,
-            color: Colors.red,
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'Page Not Found',
-            style: Theme.of(context).textTheme.headlineSmall,
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'The page you are looking for does not exist.',
-            style: Theme.of(context).textTheme.bodyMedium,
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 24),
-          ElevatedButton(
-            onPressed: () => context.go(AppRoutes.home),
-            child: const Text('Go Home'),
-          ),
-        ],
-      ),
-    ),
+// Router provider for dependency injection
+final routerProvider = Provider<BurgerEatsAppRoutes>(
+  (ref) => BurgerEatsAppRoutes(
+    authProvider: ref.read(authProvider.notifier),
   ),
-
-  // Redirect logic (optional)
-  redirect: (context, state) {
-    // Add authentication logic here
-    // For now, allow all routes
-    return null;
-  },
 );
 
-// Navigation helper extensions
-extension GoRouterExtension on BuildContext {
-  void goToLogin() => go(AppRoutes.login);
-  void goToHome() => go(AppRoutes.home);
-  void goToSignUp() => go(AppRoutes.signUp);
-  void goToForgotPassword() => go(AppRoutes.forgotPassword);
-  void goToProfile() => go('${AppRoutes.home}/profile');
-  void goToSettings() => go('${AppRoutes.home}/settings');
+class BurgerEatsAppRoutes {
+  final AuthProvider authProvider;
 
-  void pushLogin() => push(AppRoutes.login);
-  void pushSignUp() => push(AppRoutes.signUp);
-  void pushForgotPassword() => push(AppRoutes.forgotPassword);
-  void pushProfile() => push('${AppRoutes.home}/profile');
-  void pushSettings() => push('${AppRoutes.home}/settings');
+  BurgerEatsAppRoutes({
+    required this.authProvider,
+  });
+
+  //--------------Navigator Keys--------------//
+  static final _rootNavigatorKey = GlobalKey<NavigatorState>();
+  static final _shellNavigatorKey = GlobalKey<NavigatorState>();
+  //--------------Navigator Keys--------------//
+
+  static const _initialPath = '/';
+
+  GoRouter get routerConfig => GoRouter(
+        navigatorKey: _rootNavigatorKey,
+        initialLocation: _initialPath,
+        debugLogDiagnostics: true,
+        routes: [
+          // Landing Route Handler
+          GoRoute(
+            name: AppRoutes.initial,
+            path: AppRoutes.initial,
+            redirect: (context, state) async {
+              final isAuthenticated = await authProvider.isAuthenticated();
+
+              debugPrint(
+                  '🔄 Landing redirect - authenticated: $isAuthenticated');
+              debugPrint(
+                  '🔄 Landing redirect - current path: ${state.fullPath}');
+
+              if (isAuthenticated) {
+                return AppRoutes.home;
+              } else {
+                return AppRoutes.auth;
+              }
+            },
+          ),
+
+          // Authentication Routes
+          GoRoute(
+            path: AppRoutes.auth,
+            redirect: (context, state) async {
+              final isAuthenticated = await authProvider.isAuthenticated();
+          
+              if (isAuthenticated) {
+                return AppRoutes.home;
+              }
+
+              // Only redirect to login if the exact path is /auth
+              if (state.fullPath == AppRoutes.auth || state.fullPath == '/auth') {
+                return AppRoutes.login;
+              }
+              
+              // Allow sub-routes like forgot-password to proceed
+              return null;
+            },
+            routes: [
+              GoRoute(
+                path: 'login',
+                name: 'login',
+                pageBuilder: (context, state) {
+                  debugPrint(
+                      '🔄 Building LoginPage for path: ${state.fullPath}');
+                  return const NoTransitionPage(
+                    child: LoginPage(),
+                  );
+                },
+              ),
+              GoRoute(
+                path: 'signup',
+                name: 'signup',
+                pageBuilder: (context, state) => const NoTransitionPage(
+                  child: SignUpPage(),
+                ),
+              ),
+              GoRoute(
+                path: 'forgot-password',
+                name: 'forgot-password',
+                pageBuilder: (context, state) => const NoTransitionPage(
+                  child: ForgotPasswordPage(),
+                ),
+              ),
+            ],
+          ),
+
+          // Main App Shell Route
+          ShellRoute(
+            navigatorKey: _shellNavigatorKey,
+            pageBuilder: (context, state, child) {
+              return NoTransitionPage(
+                child: ShellRouteWrapper(child: child),
+              );
+            },
+            routes: [
+              // Home/Dashboard Routes
+              GoRoute(
+                path: AppRoutes.home,
+                name: 'home',
+                pageBuilder: (context, state) => const NoTransitionPage(
+                  child: HomePage(),
+                ),
+              ),
+
+              // Offers Routes
+              GoRoute(
+                path: AppRoutes.offers,
+                redirect: (context, state) async {
+                  if (state.fullPath == AppRoutes.offers) {
+                    return '${AppRoutes.offers}/browse';
+                  }
+                  return null;
+                },
+                routes: [
+                  GoRoute(
+                    path: 'browse',
+                    pageBuilder: (context, state) => const NoTransitionPage(
+                      child: Scaffold(
+                        body: Center(
+                          child: Text('Browse Offers - Coming Soon'),
+                        ),
+                      ),
+                    ),
+                  ),
+                  GoRoute(
+                    path: 'completed',
+                    pageBuilder: (context, state) => const NoTransitionPage(
+                      child: Scaffold(
+                        body: Center(
+                          child: Text('Completed Offers - Coming Soon'),
+                        ),
+                      ),
+                    ),
+                  ),
+                  GoRoute(
+                    path: 'pending',
+                    pageBuilder: (context, state) => const NoTransitionPage(
+                      child: Scaffold(
+                        body: Center(
+                          child: Text('Pending Offers - Coming Soon'),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+              // Profile Routes
+              GoRoute(
+                path: AppRoutes.profile,
+                pageBuilder: (context, state) => const NoTransitionPage(
+                  child: Scaffold(
+                    body: Center(
+                      child: Text('Profile Page - Coming Soon'),
+                    ),
+                  ),
+                ),
+              ),
+
+              // Settings Routes
+              GoRoute(
+                path: AppRoutes.settings,
+                pageBuilder: (context, state) => const NoTransitionPage(
+                  child: Scaffold(
+                    body: Center(
+                      child: Text('Settings Page - Coming Soon'),
+                    ),
+                  ),
+                ),
+              ),
+
+              // Dashboard Routes (for admin/advanced features)
+              GoRoute(
+                path: AppRoutes.dashboard,
+                redirect: (context, state) async {
+                  if (state.fullPath == AppRoutes.dashboard) {
+                    return '${AppRoutes.dashboard}/overview';
+                  }
+                  return null;
+                },
+                routes: [
+                  GoRoute(
+                    path: 'overview',
+                    pageBuilder: (context, state) => const NoTransitionPage(
+                      child: Scaffold(
+                        body: Center(
+                          child: Text('Dashboard Overview - Coming Soon'),
+                        ),
+                      ),
+                    ),
+                  ),
+                  GoRoute(
+                    path: 'earnings',
+                    pageBuilder: (context, state) => const NoTransitionPage(
+                      child: Scaffold(
+                        body: Center(
+                          child: Text('Earnings Dashboard - Coming Soon'),
+                        ),
+                      ),
+                    ),
+                  ),
+                  GoRoute(
+                    path: 'analytics',
+                    pageBuilder: (context, state) => const NoTransitionPage(
+                      child: Scaffold(
+                        body: Center(
+                          child: Text('Analytics Dashboard - Coming Soon'),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ],
+
+        // Error handling
+        errorPageBuilder: (context, state) => const NoTransitionPage(
+          child: Scaffold(
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.error_outline,
+                    size: 64,
+                    color: Colors.red,
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    'Page Not Found',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    'The page you are looking for does not exist.',
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+
+        // Global redirect logic for authentication
+        redirect: (context, state) async {
+          final currentPath = state.fullPath ?? '';
+          final matchedLocation = state.matchedLocation;
+
+          debugPrint('🔄 Global redirect - current location: $currentPath');
+          debugPrint('🔄 Global redirect - target location: $matchedLocation');
+
+          // Allow access to auth routes without authentication
+          if (currentPath.startsWith('/auth')) {
+            return null;
+          }
+
+          final isAuthenticated = await authProvider.isAuthenticated();
+
+          if (!isAuthenticated && !currentPath.startsWith('/auth')) {
+            debugPrint('🔄 Redirecting to auth - user not authenticated');
+            return AppRoutes.auth;
+          }
+      
+          return null;
+        },
+      );
 }
+
+// Navigation helper extensions - using context_extensions.dart
+// Removed duplicate methods to avoid ambiguous extension member access
+extension GoRouterExtension on BuildContext {
+  void go(String location, {Object? extra}) =>
+      GoRouter.of(this).go(location, extra: extra);
+  void push(String location, {Object? extra}) =>
+      GoRouter.of(this).push(location, extra: extra);
+  void pop<T extends Object?>([T? result]) => GoRouter.of(this).pop(result);
+  void replace(String location, {Object? extra}) =>
+      GoRouter.of(this).pushReplacement(location, extra: extra);
+}
+
+// Legacy router for backward compatibility
+final router = GoRouter(
+  navigatorKey: GlobalKey<NavigatorState>(),
+  initialLocation: AppRoutes.initial,
+  debugLogDiagnostics: true,
+  routes: [
+    // Simple route structure for basic functionality
+    GoRoute(
+      path: AppRoutes.initial,
+      redirect: (context, state) => AppRoutes.home,
+    ),
+    GoRoute(
+      path: '/login',
+      builder: (context, state) => const LoginPage(),
+    ),
+    GoRoute(
+      path: '/signup',
+      builder: (context, state) => const SignUpPage(),
+    ),
+    GoRoute(
+      path: '/forgot-password',
+      builder: (context, state) => const ForgotPasswordPage(),
+    ),
+    GoRoute(
+      path: '/auth/login',
+      builder: (context, state) => const LoginPage(),
+    ),
+    GoRoute(
+      path: '/auth/signup',
+      builder: (context, state) => const SignUpPage(),
+    ),
+    GoRoute(
+      path: '/auth/forgot-password',
+      builder: (context, state) => const ForgotPasswordPage(),
+    ),
+    GoRoute(
+      path: '/home',
+      builder: (context, state) => const HomePage(),
+    ),
+  ],
+);

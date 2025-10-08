@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../localization/app_localizations.dart';
+import '../../routing/app_router.dart';
 
 /// Extension on BuildContext to provide easy access to text styles
 extension TextThemeExtension on BuildContext {
@@ -157,8 +159,8 @@ extension NavigationExtension on BuildContext {
   /// Navigator
   NavigatorState get navigator => Navigator.of(this);
 
-  /// Pop the current route
-  void pop<T>([T? result]) => navigator.pop(result);
+  /// Pop the current route (using Navigator)
+  void popRoute<T>([T? result]) => navigator.pop(result);
 
   /// Push a new route
   Future<T?> push<T>(Route<T> route) => navigator.push(route);
@@ -177,6 +179,16 @@ extension NavigationExtension on BuildContext {
 
   /// Check if can pop
   bool get canPop => navigator.canPop();
+
+  // GoRouter navigation extensions
+  void goToHome() => GoRouter.of(this).go(AppRoutes.home);
+  void goToLogin() => GoRouter.of(this).go(AppRoutes.login);
+  void goToSignUp() => GoRouter.of(this).go(AppRoutes.signUp);
+  void goToProfile() => GoRouter.of(this).go(AppRoutes.profile);
+  void goToSettings() => GoRouter.of(this).go(AppRoutes.settings);
+  void goToOffers() => GoRouter.of(this).go(AppRoutes.offers);
+  void goToDashboard() => GoRouter.of(this).go(AppRoutes.dashboard);
+  void goToForgotPassword() => GoRouter.of(this).go(AppRoutes.forgotPassword);
 }
 
 /// Extension on BuildContext for showing dialogs and snackbars
@@ -212,11 +224,11 @@ extension DialogExtension on BuildContext {
         actions: [
           if (cancelText != null)
             TextButton(
-              onPressed: () => pop(false),
+              onPressed: () => GoRouter.of(this).pop(false),
               child: Text(cancelText),
             ),
           TextButton(
-            onPressed: () => pop(true),
+            onPressed: () => GoRouter.of(this).pop(true),
             child: Text(confirmText),
           ),
         ],

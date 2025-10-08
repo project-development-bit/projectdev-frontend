@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/foundation.dart';
+import 'package:url_strategy/url_strategy.dart';
 // import 'package:cointiply_app/core/database/database_service.dart';
 import 'package:cointiply_app/core/localization/app_localizations.dart';
 import 'core/providers/locale_provider.dart';
@@ -13,6 +15,13 @@ import 'routing/app_router.dart';
 
 /// Common app initialization function for all flavors
 Future<void> runAppWithFlavor(AppFlavor flavor) async {
+  // Configure URL strategy for web
+  if (kIsWeb) {
+    // This enables the use of clean URLs on web (without #)
+    setPathUrlStrategy();
+    debugPrint('🌐 Configuring web URL strategy for clean URLs');
+  }
+  
   // Initialize Drift database
   // await DatabaseService.init();
   
@@ -36,6 +45,9 @@ class MyApp extends ConsumerWidget {
     final currentThemeMode = ref.watch(themeProvider);
     final themeNotifier = ref.read(themeProvider.notifier);
     final currentFlavor = ref.watch(flavorProvider);
+    
+    // Use the new router provider (fallback to simple router for now)
+    // final appRouter = router; // ref.read(routerProvider).routerConfig;
 
     debugPrint(
         'MyApp building with locale: ${currentLocale.languageCode}-${currentLocale.countryCode}');
@@ -45,7 +57,7 @@ class MyApp extends ConsumerWidget {
     return FlavorBanner(
       child: MaterialApp.router(
         debugShowCheckedModeBanner: !FlavorManager.isProd, // Hide debug banner in production
-        routerConfig: router,
+        routerConfig: router, // Using the simple router for now
         locale: currentLocale,
         title: FlavorManager.appName, // Use flavor-specific app name
 

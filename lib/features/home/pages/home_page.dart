@@ -137,7 +137,8 @@ class HomePage extends ConsumerWidget {
           const SizedBox(height: 24),
           ElevatedButton(
             onPressed: () {
-              // TODO: Navigate to signup/login
+              // Navigate to login page
+              context.goToLogin();
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.white,

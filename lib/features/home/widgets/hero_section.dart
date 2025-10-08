@@ -58,7 +58,11 @@ class HeroSection extends ConsumerWidget {
                   ? context.translate('continue_earning')
                   : context.translate('start_earning_now'),
               onPressed: () {
-                // TODO: Navigate to offers or login
+                if (isLoggedIn) {
+                  context.goToOffers();
+                } else {
+                  context.goToLogin();
+                }
               },
               backgroundColor: context.onPrimary,
               textColor: context.primary,

@@ -5,6 +5,14 @@ import 'text_theme.dart';
 
 class AppTheme {
   static const String fontFamily = 'Roboto';
+  static const List<String> fontFamilyFallback = [
+    'Roboto',
+    '-apple-system',
+    'BlinkMacSystemFont',
+    'Segoe UI',
+    'system-ui',
+    'sans-serif'
+  ];
 
   // Light Theme
   static ThemeData get lightTheme {

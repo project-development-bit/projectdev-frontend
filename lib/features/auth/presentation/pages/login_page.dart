@@ -7,7 +7,6 @@ import '../../../../core/providers/translation_provider.dart';
 import '../../../../core/widgets/locale_switch_widget.dart';
 import '../../../../core/widgets/theme_switch_widget.dart';
 import '../../../../core/extensions/context_extensions.dart';
-import '../../../../routing/app_router.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
