@@ -180,7 +180,7 @@ extension NavigationExtension on BuildContext {
   /// Check if can pop
   bool get canPop => navigator.canPop();
 
-  // GoRouter navigation extensions
+  // GoRouter navigation extensions - Go (replace current route)
   void goToHome() => GoRouter.of(this).go(AppRoutes.home);
   void goToLogin() => GoRouter.of(this).go(AppRoutes.login);
   void goToSignUp() => GoRouter.of(this).go(AppRoutes.signUp);
@@ -189,6 +189,24 @@ extension NavigationExtension on BuildContext {
   void goToOffers() => GoRouter.of(this).go(AppRoutes.offers);
   void goToDashboard() => GoRouter.of(this).go(AppRoutes.dashboard);
   void goToForgotPassword() => GoRouter.of(this).go(AppRoutes.forgotPassword);
+
+  // GoRouter navigation extensions - Push (add to navigation stack)
+  Future<T?> pushToHome<T extends Object?>() =>
+      GoRouter.of(this).push<T>(AppRoutes.home);
+  Future<T?> pushToLogin<T extends Object?>() =>
+      GoRouter.of(this).push<T>(AppRoutes.login);
+  Future<T?> pushToSignUp<T extends Object?>() =>
+      GoRouter.of(this).push<T>(AppRoutes.signUp);
+  Future<T?> pushToProfile<T extends Object?>() =>
+      GoRouter.of(this).push<T>(AppRoutes.profile);
+  Future<T?> pushToSettings<T extends Object?>() =>
+      GoRouter.of(this).push<T>(AppRoutes.settings);
+  Future<T?> pushToOffers<T extends Object?>() =>
+      GoRouter.of(this).push<T>(AppRoutes.offers);
+  Future<T?> pushToDashboard<T extends Object?>() =>
+      GoRouter.of(this).push<T>(AppRoutes.dashboard);
+  Future<T?> pushToForgotPassword<T extends Object?>() =>
+      GoRouter.of(this).push<T>(AppRoutes.forgotPassword);
 }
 
 /// Extension on BuildContext for showing dialogs and snackbars

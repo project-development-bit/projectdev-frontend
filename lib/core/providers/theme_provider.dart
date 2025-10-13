@@ -125,7 +125,6 @@ final themeProvider = StateNotifierProvider<ThemeNotifier, AppThemeMode>((ref) {
 
 /// Provider for getting the effective theme mode
 final effectiveThemeModeProvider = Provider<ThemeMode>((ref) {
-  final themeMode = ref.watch(themeProvider);
   final notifier = ref.read(themeProvider.notifier);
 
   // You might need to get system brightness from MediaQuery in a widget
@@ -135,7 +134,6 @@ final effectiveThemeModeProvider = Provider<ThemeMode>((ref) {
 
 /// Provider for checking if current theme is dark
 final isDarkThemeProvider = Provider<bool>((ref) {
-  final themeMode = ref.watch(themeProvider);
   final notifier = ref.read(themeProvider.notifier);
 
   // You might need to get system brightness from MediaQuery in a widget

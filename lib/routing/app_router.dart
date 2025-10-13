@@ -8,7 +8,7 @@ import '../features/auth/presentation/pages/login_page.dart';
 import '../features/auth/presentation/pages/signup_page.dart';
 import '../features/auth/presentation/pages/forgot_password_page.dart';
 import '../features/home/pages/home_page.dart';
-import '../features/profile/presentation/pages/profile_page.dart';
+import '../features/user_profile/presentation/pages/profile_page.dart';
 import '../core/providers/auth_provider.dart';
 import '../core/widgets/shell_route_wrapper.dart';
 
@@ -67,7 +67,7 @@ class BurgerEatsAppRoutes {
               if (isAuthenticated) {
                 return AppRoutes.home;
               } else {
-                return AppRoutes.auth;
+                return AppRoutes.login;
               }
             },
           ),
@@ -291,8 +291,8 @@ class BurgerEatsAppRoutes {
           final isAuthenticated = await authProvider.isAuthenticated();
 
           if (!isAuthenticated && !currentPath.startsWith('/auth')) {
-            debugPrint('🔄 Redirecting to auth - user not authenticated');
-            return AppRoutes.auth;
+            debugPrint('🔄 Redirecting to login - user not authenticated');
+            return AppRoutes.login;
           }
       
           return null;
@@ -312,48 +312,3 @@ extension GoRouterExtension on BuildContext {
       GoRouter.of(this).pushReplacement(location, extra: extra);
 }
 
-// Legacy router for backward compatibility
-final router = GoRouter(
-  navigatorKey: GlobalKey<NavigatorState>(),
-  initialLocation: AppRoutes.initial,
-  debugLogDiagnostics: true,
-  routes: [
-    // Simple route structure for basic functionality
-    GoRoute(
-      path: AppRoutes.initial,
-      redirect: (context, state) => AppRoutes.home,
-    ),
-    GoRoute(
-      path: '/login',
-      builder: (context, state) => const LoginPage(),
-    ),
-    GoRoute(
-      path: '/signup',
-      builder: (context, state) => const SignUpPage(),
-    ),
-    GoRoute(
-      path: '/forgot-password',
-      builder: (context, state) => const ForgotPasswordPage(),
-    ),
-    GoRoute(
-      path: '/auth/login',
-      builder: (context, state) => const LoginPage(),
-    ),
-    GoRoute(
-      path: '/auth/signup',
-      builder: (context, state) => const SignUpPage(),
-    ),
-    GoRoute(
-      path: '/auth/forgot-password',
-      builder: (context, state) => const ForgotPasswordPage(),
-    ),
-    GoRoute(
-      path: '/home',
-      builder: (context, state) => const HomePage(),
-    ),
-    GoRoute(
-      path: '/profile',
-      builder: (context, state) => const ProfilePage(),
-    ),
-  ],
-);

@@ -160,5 +160,11 @@
   "view_referrals": "View Referrals",
   "_error_messages": "Error Messages",
   "retry": "Retry",
-  "profile_not_found": "Profile not found"
+  "profile_not_found": "Profile not found",
+  "sign_up_subtitle": "Fill in your details to get started",
+  "enter_full_name": "Enter your full name",
+  "full_name_required": "Full name is required",
+  "invalid_email": "Please enter a valid email address",
+  "confirm_password_required": "Please confirm your password",
+  "role": "Role"
 }

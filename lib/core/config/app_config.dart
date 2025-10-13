@@ -158,4 +158,6 @@ class AppConfig {
   int get hashCode {
     return flavor.hashCode ^ appName.hashCode ^ apiBaseUrl.hashCode;
   }
+
+  static String get appUrl => "http://13.250.102.238/api/v1/";
 }

@@ -52,6 +52,7 @@ dependencies:
   url_strategy: ^0.3.0
   equatable: ^2.0.5
   dartz: ^0.10.1
+  flutter_secure_storage: ^9.2.2
 
 
 dev_dependencies:

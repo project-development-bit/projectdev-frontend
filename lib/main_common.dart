@@ -57,7 +57,9 @@ class MyApp extends ConsumerWidget {
     return FlavorBanner(
       child: MaterialApp.router(
         debugShowCheckedModeBanner: !FlavorManager.isProd, // Hide debug banner in production
-        routerConfig: router, // Using the simple router for now
+        routerConfig: ref
+            .read(routerProvider)
+            .routerConfig, // Using the simple router for now
         locale: currentLocale,
         title: FlavorManager.appName, // Use flavor-specific app name
 

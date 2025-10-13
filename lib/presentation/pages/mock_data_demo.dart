@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../features/profile/data/datasources/profile_mock_data_source.dart';
 
 /// Demo page to showcase all available mock data for the profile module
 /// 

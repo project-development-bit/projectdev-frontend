@@ -4,6 +4,8 @@ import '../../../../core/common/common_textfield.dart';
 import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/widgets/locale_switch_widget.dart';
 import '../../../../core/extensions/context_extensions.dart';
+import '../../../../core/enum/user_role.dart';
+import '../providers/register_provider.dart';
 
 class SignUpPage extends ConsumerStatefulWidget {
   const SignUpPage({super.key});
@@ -26,7 +28,6 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
   final _confirmPasswordFocusNode = FocusNode();
   final _phoneFocusNode = FocusNode();
   
-  bool _isLoading = false;
   bool _agreeToTerms = false;
 
   @override
@@ -71,43 +72,16 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
       return;
     }
 
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      // TODO: Implement sign up logic
-      await Future.delayed(const Duration(seconds: 2)); // Simulate API call
-      
-      if (mounted) {
-        final localizations = AppLocalizations.of(context);
-        // Navigate to main page on successful sign up
-        context.goToHome();
-        
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(localizations?.translate('account_created_successfully') ?? 'Account created successfully!'),
-            backgroundColor: Colors.green,
-          ),
-        );
-      }
-    } catch (error) {
-      if (mounted) {
-        final localizations = AppLocalizations.of(context);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(localizations?.translate('sign_up_failed', args: [error.toString()]) ?? 'Sign up failed: $error'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    }
+    // Use the new register state notifier
+    final registerNotifier = ref.read(registerNotifierProvider.notifier);
+    
+    await registerNotifier.register(
+      name: _nameController.text.trim(),
+      email: _emailController.text.trim(),
+      password: _passwordController.text,
+      confirmPassword: _confirmPasswordController.text,
+      role: UserRole.normalUser, // Default to normal user
+    );
   }
 
   @override
@@ -115,6 +89,36 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final localizations = AppLocalizations.of(context);
+    final isLoading = ref.watch(isRegisterLoadingProvider);
+    
+    // Watch register state for navigation and error handling
+    ref.listen<RegisterState>(registerNotifierProvider, (previous, next) {
+      if (!mounted) return;
+
+      switch (next) {
+        case RegisterSuccess():
+          // Navigate to login page on successful registration
+          context.goToLogin();
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(next.message),
+              backgroundColor: Colors.green,
+            ),
+          );
+          break;
+        case RegisterError():
+          // Show error message
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(next.message),
+              backgroundColor: Colors.red,
+            ),
+          );
+          break;
+        default:
+          break;
+      }
+    });
     
     return Scaffold(
       backgroundColor: colorScheme.surface,
@@ -287,7 +291,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                 SizedBox(
                   height: 56,
                   child: ElevatedButton(
-                    onPressed: _isLoading ? null : _handleSignUp,
+                    onPressed: isLoading ? null : _handleSignUp,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: colorScheme.primary,
                       foregroundColor: colorScheme.onPrimary,
@@ -296,7 +300,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    child: _isLoading
+                    child: isLoading
                         ? SizedBox(
                             width: 24,
                             height: 24,

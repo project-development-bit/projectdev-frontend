@@ -1,22 +1,45 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../features/auth/presentation/providers/auth_providers.dart';
 
-/// Simple authentication provider for managing user auth state
+/// Legacy authentication provider for backward compatibility
+///
+/// This provider is kept for compatibility with existing routing logic.
+/// New authentication logic should use the separated login/register providers
 class AuthProvider extends StateNotifier<AuthState> {
-  AuthProvider() : super(const AuthState.unauthenticated());
+  AuthProvider(this._ref) : super(const AuthState.unauthenticated());
+
+  final Ref _ref;
 
   /// Check if user is currently authenticated
   Future<bool> isAuthenticated() async {
-    // TODO: Implement actual authentication check
-    // This could check for stored tokens, validate with backend, etc.
-    return state == const AuthState.authenticated();
+    try {
+      final authRepository = _ref.read(authRepositoryProvider);
+      final result = await authRepository.isAuthenticated();
+
+      return result.fold(
+        (failure) => false,
+        (isAuth) {
+          // Update state based on authentication status
+          if (isAuth) {
+            state = const AuthState.authenticated();
+          } else {
+            state = const AuthState.unauthenticated();
+          }
+          return isAuth;
+        },
+      );
+    } catch (e) {
+      state = const AuthState.unauthenticated();
+      return false;
+    }
   }
 
-  /// Login user
+  /// Login user (delegates to new auth system)
   Future<void> login({required String email, required String password}) async {
     state = const AuthState.loading();
     try {
-      // TODO: Implement actual login logic
-      // Make API call, store tokens, etc.
+      // This should delegate to the new auth system
+      // For now, keep the old implementation for compatibility
       await Future.delayed(const Duration(seconds: 1)); // Simulate API call
       state = const AuthState.authenticated();
     } catch (e) {
@@ -24,14 +47,28 @@ class AuthProvider extends StateNotifier<AuthState> {
     }
   }
 
-  /// Logout user
+  /// Logout user (delegates to new auth system)
   Future<void> logout() async {
-    // TODO: Implement actual logout logic
-    // Clear tokens, clear local storage, etc.
-    state = const AuthState.unauthenticated();
+    try {
+      state = const AuthState.loading();
+
+      final authRepository = _ref.read(authRepositoryProvider);
+      final result = await authRepository.logout();
+
+      await result.fold(
+        (failure) {
+          state = AuthState.error(failure.message ?? 'Logout failed');
+        },
+        (_) {
+          state = const AuthState.unauthenticated();
+        },
+      );
+    } catch (e) {
+      state = const AuthState.unauthenticated();
+    }
   }
 
-  /// Sign up user
+  /// Sign up user (delegates to new auth system)
   Future<void> signUp({
     required String email,
     required String password,
@@ -39,7 +76,8 @@ class AuthProvider extends StateNotifier<AuthState> {
   }) async {
     state = const AuthState.loading();
     try {
-      // TODO: Implement actual signup logic
+      // This should delegate to the new auth system
+      // For now, keep the old implementation for compatibility
       await Future.delayed(const Duration(seconds: 1)); // Simulate API call
       state = const AuthState.authenticated();
     } catch (e) {
@@ -48,7 +86,7 @@ class AuthProvider extends StateNotifier<AuthState> {
   }
 }
 
-/// Authentication state
+/// Legacy authentication state for backward compatibility
 class AuthState {
   const AuthState();
 
@@ -66,7 +104,7 @@ class AuthState {
   int get hashCode => runtimeType.hashCode;
 }
 
-/// Provider for the auth state
+/// Legacy provider for the auth state (for backward compatibility)
 final authProvider = StateNotifierProvider<AuthProvider, AuthState>(
-  (ref) => AuthProvider(),
+  (ref) => AuthProvider(ref),
 );

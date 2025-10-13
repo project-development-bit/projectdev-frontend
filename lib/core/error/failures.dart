@@ -17,9 +17,9 @@ abstract class Failure extends Equatable {
 /// Server failure - when the API returns an error
 class ServerFailure extends Failure {
   const ServerFailure({
-    String? message,
+    super.message,
     this.statusCode,
-  }) : super(message: message);
+  });
 
   /// HTTP status code from the server
   final int? statusCode;
@@ -30,17 +30,17 @@ class ServerFailure extends Failure {
 
 /// Cache failure - when local storage operations fail
 class CacheFailure extends Failure {
-  const CacheFailure({String? message}) : super(message: message);
+  const CacheFailure({super.message});
 }
 
 /// Network failure - when there's no internet connection
 class NetworkFailure extends Failure {
-  const NetworkFailure({String? message}) : super(message: message);
+  const NetworkFailure({super.message});
 }
 
 /// Validation failure - when input validation fails
 class ValidationFailure extends Failure {
-  const ValidationFailure({String? message, this.field}) : super(message: message);
+  const ValidationFailure({super.message, this.field});
 
   /// The field that failed validation
   final String? field;
@@ -51,20 +51,25 @@ class ValidationFailure extends Failure {
 
 /// Authentication failure - when authentication is required or fails
 class AuthenticationFailure extends Failure {
-  const AuthenticationFailure({String? message}) : super(message: message);
+  const AuthenticationFailure({super.message});
 }
 
 /// Authorization failure - when user doesn't have permission
 class AuthorizationFailure extends Failure {
-  const AuthorizationFailure({String? message}) : super(message: message);
+  const AuthorizationFailure({super.message});
 }
 
 /// File operation failure - when file operations fail
 class FileFailure extends Failure {
-  const FileFailure({String? message}) : super(message: message);
+  const FileFailure({super.message});
+}
+
+/// Database failure - when database operations fail
+class DatabaseFailure extends Failure {
+  const DatabaseFailure({super.message});
 }
 
 /// General unexpected failure
 class UnexpectedFailure extends Failure {
-  const UnexpectedFailure({String? message}) : super(message: message);
+  const UnexpectedFailure({super.message});
 }

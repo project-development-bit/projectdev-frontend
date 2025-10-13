@@ -1,1 +1,1 @@
-const BASE_URL = "";
+const baseUrl = "";

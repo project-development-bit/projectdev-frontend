@@ -1,0 +1,358 @@
+import 'dart:io';
+import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:flutter/foundation.dart';
+import '../error/failures.dart';
+import '../../features/auth/domain/entities/user.dart';
+import '../../features/auth/data/models/user_model.dart';
+
+// Flag to disable database operations in test environment
+bool _isTestEnvironment = false;
+
+/// Set whether we're in a test environment
+void setTestEnvironment(bool isTest) {
+  _isTestEnvironment = isTest;
+}
+
+/// Database service for managing local SQLite database operations
+class DatabaseService {
+  static Database? _database;
+  static const String _databaseName = 'burger_eats.db';
+  static const int _databaseVersion = 1;
+
+  // Table names
+  static const String _usersTable = 'users';
+
+  // User table columns
+  static const String _columnId = 'id';
+  static const String _columnName = 'name';
+  static const String _columnEmail = 'email';
+  static const String _columnRole = 'role';
+  static const String _columnCreatedAt = 'created_at';
+  static const String _columnUpdatedAt = 'updated_at';
+
+  /// Get database instance (singleton pattern)
+  static Future<Database> get database async {
+    if (_database != null) return _database!;
+    
+    _database = await _initDatabase();
+    return _database!;
+  }
+
+  /// Initialize the database
+  static Future<Database> _initDatabase() async {
+    try {
+      final documentsDirectory = await getDatabasesPath();
+      final path = join(documentsDirectory, _databaseName);
+      
+      debugPrint('📊 Initializing database at: $path');
+      
+      return await openDatabase(
+        path,
+        version: _databaseVersion,
+        onCreate: _createTables,
+        onUpgrade: _onUpgrade,
+        onOpen: (db) {
+          debugPrint('📊 Database opened successfully');
+        },
+      );
+    } catch (e) {
+      debugPrint('❌ Error initializing database: $e');
+      throw DatabaseFailure(message: 'Failed to initialize database: $e');
+    }
+  }
+
+  /// Create database tables
+  static Future<void> _createTables(Database db, int version) async {
+    try {
+      debugPrint('📊 Creating database tables...');
+      
+      // Create users table
+      await db.execute('''
+        CREATE TABLE $_usersTable (
+          $_columnId INTEGER PRIMARY KEY,
+          $_columnName TEXT NOT NULL,
+          $_columnEmail TEXT NOT NULL UNIQUE,
+          $_columnRole TEXT NOT NULL,
+          $_columnCreatedAt TEXT NOT NULL,
+          $_columnUpdatedAt TEXT NOT NULL
+        )
+      ''');
+      
+      debugPrint('✅ Database tables created successfully');
+    } catch (e) {
+      debugPrint('❌ Error creating database tables: $e');
+      throw DatabaseFailure(message: 'Failed to create database tables: $e');
+    }
+  }
+
+  /// Handle database upgrades
+  static Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    debugPrint('📊 Upgrading database from version $oldVersion to $newVersion');
+    
+    // Handle database migrations here in future versions
+    // For now, we'll just recreate the tables
+    if (oldVersion < newVersion) {
+      // Drop existing tables
+      await db.execute('DROP TABLE IF EXISTS $_usersTable');
+      
+      // Recreate tables with new schema
+      await _createTables(db, newVersion);
+    }
+  }
+
+  /// Insert or update user data
+  static Future<void> saveUser(User user) async {
+    // Skip database operations in test environment
+    if (_isTestEnvironment) {
+      debugPrint('🧪 Test mode: Skipping database save for user: ${user.email}');
+      return;
+    }
+    
+    try {
+      final db = await database;
+      final userData = {
+        _columnId: user.id,
+        _columnName: user.name,
+        _columnEmail: user.email,
+        _columnRole: user.role.name,
+        _columnCreatedAt: DateTime.now().toIso8601String(),
+        _columnUpdatedAt: DateTime.now().toIso8601String(),
+      };
+
+      debugPrint('📊 Saving user to database: ${user.email}');
+
+      await db.insert(
+        _usersTable,
+        userData,
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+
+      debugPrint('✅ User saved successfully: ${user.email}');
+    } catch (e) {
+      debugPrint('❌ Error saving user: $e');
+      throw DatabaseFailure(message: 'Failed to save user: $e');
+    }
+  }
+
+  /// Get user by ID
+  static Future<UserModel?> getUserById(int userId) async {
+    try {
+      final db = await database;
+      
+      debugPrint('📊 Getting user by ID: $userId');
+      
+      final List<Map<String, dynamic>> results = await db.query(
+        _usersTable,
+        where: '$_columnId = ?',
+        whereArgs: [userId],
+        limit: 1,
+      );
+
+      if (results.isNotEmpty) {
+        final userData = results.first;
+        final user = UserModel.fromDatabaseJson(userData);
+        debugPrint('✅ User found: ${user.email}');
+        return user;
+      }
+
+      debugPrint('🔍 No user found with ID: $userId');
+      return null;
+    } catch (e) {
+      debugPrint('❌ Error getting user by ID: $e');
+      throw DatabaseFailure(message: 'Failed to get user: $e');
+    }
+  }
+
+  /// Get user by email
+  static Future<UserModel?> getUserByEmail(String email) async {
+    try {
+      final db = await database;
+      
+      debugPrint('📊 Getting user by email: $email');
+      
+      final List<Map<String, dynamic>> results = await db.query(
+        _usersTable,
+        where: '$_columnEmail = ?',
+        whereArgs: [email],
+        limit: 1,
+      );
+
+      if (results.isNotEmpty) {
+        final userData = results.first;
+        final user = UserModel.fromDatabaseJson(userData);
+        debugPrint('✅ User found: ${user.email}');
+        return user;
+      }
+
+      debugPrint('🔍 No user found with email: $email');
+      return null;
+    } catch (e) {
+      debugPrint('❌ Error getting user by email: $e');
+      throw DatabaseFailure(message: 'Failed to get user: $e');
+    }
+  }
+
+  /// Get all users
+  static Future<List<UserModel>> getAllUsers() async {
+    try {
+      final db = await database;
+      
+      debugPrint('📊 Getting all users');
+      
+      final List<Map<String, dynamic>> results = await db.query(
+        _usersTable,
+        orderBy: '$_columnCreatedAt DESC',
+      );
+
+      final users = results.map((userData) => UserModel.fromDatabaseJson(userData)).toList();
+      
+      debugPrint('✅ Found ${users.length} users');
+      return users;
+    } catch (e) {
+      debugPrint('❌ Error getting all users: $e');
+      throw DatabaseFailure(message: 'Failed to get users: $e');
+    }
+  }
+
+  /// Update user data
+  static Future<void> updateUser(User user) async {
+    try {
+      final db = await database;
+      
+      debugPrint('📊 Updating user: ${user.email}');
+      
+      final userData = {
+        _columnName: user.name,
+        _columnEmail: user.email,
+        _columnRole: user.role.name,
+        _columnUpdatedAt: DateTime.now().toIso8601String(),
+      };
+
+      final rowsAffected = await db.update(
+        _usersTable,
+        userData,
+        where: '$_columnId = ?',
+        whereArgs: [user.id],
+      );
+
+      if (rowsAffected > 0) {
+        debugPrint('✅ User updated successfully: ${user.email}');
+      } else {
+        debugPrint('⚠️ No user found to update with ID: ${user.id}');
+        throw DatabaseFailure(message: 'No user found to update');
+      }
+    } catch (e) {
+      debugPrint('❌ Error updating user: $e');
+      throw DatabaseFailure(message: 'Failed to update user: $e');
+    }
+  }
+
+  /// Delete user by ID
+  static Future<void> deleteUser(int userId) async {
+    try {
+      final db = await database;
+      
+      debugPrint('📊 Deleting user with ID: $userId');
+      
+      final rowsAffected = await db.delete(
+        _usersTable,
+        where: '$_columnId = ?',
+        whereArgs: [userId],
+      );
+
+      if (rowsAffected > 0) {
+        debugPrint('✅ User deleted successfully: $userId');
+      } else {
+        debugPrint('⚠️ No user found to delete with ID: $userId');
+      }
+    } catch (e) {
+      debugPrint('❌ Error deleting user: $e');
+      throw DatabaseFailure(message: 'Failed to delete user: $e');
+    }
+  }
+
+  /// Clear all user data
+  static Future<void> clearAllUsers() async {
+    try {
+      final db = await database;
+      
+      debugPrint('📊 Clearing all users');
+      
+      await db.delete(_usersTable);
+      
+      debugPrint('✅ All users cleared successfully');
+    } catch (e) {
+      debugPrint('❌ Error clearing users: $e');
+      throw DatabaseFailure(message: 'Failed to clear users: $e');
+    }
+  }
+
+  /// Check if database has any users
+  static Future<bool> hasUsers() async {
+    try {
+      final db = await database;
+      
+      final List<Map<String, dynamic>> results = await db.rawQuery(
+        'SELECT COUNT(*) as count FROM $_usersTable',
+      );
+      
+      final count = Sqflite.firstIntValue(results) ?? 0;
+      return count > 0;
+    } catch (e) {
+      debugPrint('❌ Error checking if database has users: $e');
+      return false;
+    }
+  }
+
+  /// Close database connection
+  static Future<void> closeDatabase() async {
+    try {
+      if (_database != null) {
+        await _database!.close();
+        _database = null;
+        debugPrint('📊 Database connection closed');
+      }
+    } catch (e) {
+      debugPrint('❌ Error closing database: $e');
+    }
+  }
+
+  /// Delete database file (for testing purposes)
+  static Future<void> deleteDatabase() async {
+    try {
+      final documentsDirectory = await getDatabasesPath();
+      final path = join(documentsDirectory, _databaseName);
+      
+      if (await File(path).exists()) {
+        await File(path).delete();
+        debugPrint('📊 Database file deleted: $path');
+      }
+      
+      _database = null;
+    } catch (e) {
+      debugPrint('❌ Error deleting database: $e');
+    }
+  }
+
+  /// Get database info for debugging
+  static Future<Map<String, dynamic>> getDatabaseInfo() async {
+    try {
+      final db = await database;
+      final userCount = await db.rawQuery('SELECT COUNT(*) as count FROM $_usersTable');
+      final dbSize = await db.rawQuery('PRAGMA page_count');
+      
+      return {
+        'database_name': _databaseName,
+        'database_version': _databaseVersion,
+        'user_count': Sqflite.firstIntValue(userCount) ?? 0,
+        'page_count': Sqflite.firstIntValue(dbSize) ?? 0,
+      };
+    } catch (e) {
+      debugPrint('❌ Error getting database info: $e');
+      return {
+        'error': e.toString(),
+      };
+    }
+  }
+}

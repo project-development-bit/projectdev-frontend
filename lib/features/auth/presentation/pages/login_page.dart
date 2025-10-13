@@ -7,6 +7,7 @@ import '../../../../core/providers/translation_provider.dart';
 import '../../../../core/widgets/locale_switch_widget.dart';
 import '../../../../core/widgets/theme_switch_widget.dart';
 import '../../../../core/extensions/context_extensions.dart';
+import '../providers/login_provider.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
@@ -22,7 +23,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   final _emailFocusNode = FocusNode();
   final _passwordFocusNode = FocusNode();
   
-  bool _isLoading = false;
   bool _rememberMe = false;
 
   @override
@@ -34,47 +34,14 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     super.dispose();
   }
 
-  Future<void> _handleLogin() async {
-    if (!_formKey.currentState!.validate()) {
-      return;
-    }
+  void _handleLogin() async {
+    if (_formKey.currentState!.validate()) {
+      final loginNotifier = ref.read(loginNotifierProvider.notifier);
 
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      // TODO: Implement login logic
-      await Future.delayed(const Duration(seconds: 2)); // Simulate API call
-      
-      if (mounted) {
-        final localizations = AppLocalizations.of(context);
-        // Navigate to main page on successful login
-        context.goToHome();
-        
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(localizations?.translate('login_successful') ?? 'Login successful!'),
-            backgroundColor: Colors.green,
-          ),
-        );
-      }
-    } catch (error) {
-      if (mounted) {
-        final localizations = AppLocalizations.of(context);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(localizations?.translate('login_failed', args: [error.toString()]) ?? 'Login failed: $error'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
+      await loginNotifier.login(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
     }
   }
 
@@ -91,6 +58,37 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context);
+    final isLoading = ref.watch(isLoginLoadingProvider);
+
+    // Watch login state for navigation and error handling
+    ref.listen<LoginState>(loginNotifierProvider, (previous, next) {
+      if (!mounted) return;
+
+      switch (next) {
+        case LoginSuccess():
+          // Navigate to home on successful login
+          context.goToHome();
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(localizations?.translate('login_successful') ??
+                  'Login successful!'),
+              backgroundColor: Colors.green,
+            ),
+          );
+          break;
+        case LoginError():
+          // Show error message
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(next.message),
+              backgroundColor: Colors.red,
+            ),
+          );
+          break;
+        default:
+          break;
+      }
+    });
     
     // Also watch the locale provider to force rebuilds when locale changes
     final currentLocale = ref.watch(localeProvider);
@@ -227,7 +225,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 SizedBox(
                   height: 56,
                   child: ElevatedButton(
-                    onPressed: _isLoading ? null : _handleLogin,
+                        onPressed: isLoading ? null : _handleLogin,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: context.primary,
                       foregroundColor: context.onPrimary,
@@ -236,7 +234,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    child: _isLoading
+                        child: isLoading
                         ? SizedBox(
                             width: 24,
                             height: 24,
