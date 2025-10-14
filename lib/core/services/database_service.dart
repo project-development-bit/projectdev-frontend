@@ -3,6 +3,8 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:flutter/foundation.dart';
 import '../error/failures.dart';
+import '../enum/user_role.dart';
+import 'secure_storage_service.dart';
 import '../../features/auth/domain/entities/user.dart';
 import '../../features/auth/data/models/user_model.dart';
 
@@ -19,6 +21,8 @@ class DatabaseService {
   static Database? _database;
   static const String _databaseName = 'burger_eats.db';
   static const int _databaseVersion = 1;
+  static bool _isInitialized = false;
+  static Map<int, UserModel> _webUsers = {}; // In-memory storage for web
 
   // Table names
   static const String _usersTable = 'users';
@@ -31,16 +35,59 @@ class DatabaseService {
   static const String _columnCreatedAt = 'created_at';
   static const String _columnUpdatedAt = 'updated_at';
 
+  /// Initialize the database service - call this during app startup
+  static Future<void> init() async {
+    if (_isInitialized) return;
+
+    try {
+      debugPrint('📊 Initializing Database Service...');
+
+      if (kIsWeb) {
+        // For web platform, use in-memory storage
+        debugPrint('🌐 Web platform detected - using in-memory storage');
+        _isInitialized = true;
+      } else {
+        // For mobile platforms, use SQLite
+        _database = await _initDatabase();
+        _isInitialized = true;
+      }
+
+      // Insert sample users if database is empty (for testing)
+      await insertSampleUsers();
+
+      // Set up test authentication for development
+      await setupTestAuth();
+
+      debugPrint('✅ Database Service initialized successfully');
+    } catch (e) {
+      debugPrint('❌ Failed to initialize Database Service: $e');
+      rethrow;
+    }
+  }
+
   /// Get database instance (singleton pattern)
   static Future<Database> get database async {
+    if (kIsWeb) {
+      throw DatabaseFailure(
+          message: 'SQLite database not available on web platform');
+    }
+    
     if (_database != null) return _database!;
     
-    _database = await _initDatabase();
+    if (!_isInitialized) {
+      await init();
+    }
+    
     return _database!;
   }
 
   /// Initialize the database
   static Future<Database> _initDatabase() async {
+    if (kIsWeb) {
+      throw DatabaseFailure(
+          message: 'SQLite database initialization called on web platform');
+    }
+
     try {
       final documentsDirectory = await getDatabasesPath();
       final path = join(documentsDirectory, _databaseName);
@@ -110,6 +157,14 @@ class DatabaseService {
     }
     
     try {
+      if (kIsWeb) {
+        // For web, store in memory
+        final userModel = user is UserModel ? user : UserModel.fromEntity(user);
+        _webUsers[user.id] = userModel;
+        debugPrint('🌐 User saved to web storage: ${user.email}');
+        return;
+      }
+
       final db = await database;
       final userData = {
         _columnId: user.id,
@@ -138,6 +193,17 @@ class DatabaseService {
   /// Get user by ID
   static Future<UserModel?> getUserById(int userId) async {
     try {
+      if (kIsWeb) {
+        // For web, get from memory
+        final user = _webUsers[userId];
+        if (user != null) {
+          debugPrint('🌐 User found in web storage: ${user.email}');
+        } else {
+          debugPrint('🔍 No user found with ID: $userId in web storage');
+        }
+        return user;
+      }
+
       final db = await database;
       
       debugPrint('📊 Getting user by ID: $userId');
@@ -291,6 +357,10 @@ class DatabaseService {
   /// Check if database has any users
   static Future<bool> hasUsers() async {
     try {
+      if (kIsWeb) {
+        return _webUsers.isNotEmpty;
+      }
+
       final db = await database;
       
       final List<Map<String, dynamic>> results = await db.rawQuery(
@@ -302,6 +372,69 @@ class DatabaseService {
     } catch (e) {
       debugPrint('❌ Error checking if database has users: $e');
       return false;
+    }
+  }
+
+  /// Insert sample users for testing (only if database is empty)
+  static Future<void> insertSampleUsers() async {
+    try {
+      if (await hasUsers()) {
+        debugPrint(
+            '📊 Database already has users, skipping sample data insertion');
+        return;
+      }
+
+      debugPrint('📊 Inserting sample users for testing...');
+
+      final sampleUsers = [
+        UserModel(
+          id: 1,
+          name: 'John Doe',
+          email: 'john.doe@example.com',
+          role: UserRole.normalUser,
+        ),
+        UserModel(
+          id: 2,
+          name: 'Jane Smith',
+          email: 'jane.smith@example.com',
+          role: UserRole.normalUser,
+        ),
+        UserModel(
+          id: 3,
+          name: 'Admin User',
+          email: 'admin@burgerears.com',
+          role: UserRole.admin,
+        ),
+      ];
+
+      for (final user in sampleUsers) {
+        await saveUser(user);
+      }
+
+      debugPrint('✅ Sample users inserted successfully');
+    } catch (e) {
+      debugPrint('❌ Error inserting sample users: $e');
+    }
+  }
+
+  /// Set up test authentication for development
+  static Future<void> setupTestAuth() async {
+    try {
+      final secureStorage = SecureStorageService();
+      final currentUserId = await secureStorage.getUserId();
+      final currentToken = await secureStorage.getAuthToken();
+
+      if (currentUserId == null || currentToken == null) {
+        // Set user ID to 1 (John Doe) for testing
+        await secureStorage.saveUserId('1');
+        // Set a test auth token for development
+        await secureStorage.saveAuthToken('dev_test_token_123');
+        debugPrint('🧪 Test authentication set up with user ID: 1');
+      } else {
+        debugPrint('🧪 User already authenticated with ID: $currentUserId');
+      }
+    } catch (e) {
+      debugPrint('❌ Error setting up test auth: $e');
     }
   }
 

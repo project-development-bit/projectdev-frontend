@@ -57,18 +57,31 @@ class LoginNotifier extends StateNotifier<LoginState> {
     required String email,
     required String password,
   }) async {
+    debugPrint('🔄 Starting login process for: $email');
+    debugPrint('🔄 Current state before login: ${state.runtimeType}');
+
+    // Ensure we start with loading state and clear any previous state
+    state = const LoginLoading();
+    debugPrint('🔄 State set to LoginLoading');
+    
     try {
-      state = const LoginLoading();
-      
       final loginRequest = LoginRequest(
         email: email,
         password: password,
       );
       
-      final authRepository = _ref.read(authRepositoryProvider);
-      final result = await authRepository.login(loginRequest);
+      final loginUseCase = _ref.read(loginUseCaseProvider);
       
-      await result.fold(
+      // Add timeout to prevent infinite loading
+      final result = await loginUseCase(loginRequest).timeout(
+        const Duration(seconds: 30),
+        onTimeout: () {
+          throw Exception(
+              'Login timeout: Please check your internet connection and try again');
+        },
+      );
+
+      result.fold(
         (failure) {
           debugPrint('❌ Login failed: ${failure.message}');
           state = LoginError(
@@ -76,6 +89,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
             isNetworkError: failure.toString().contains('network') || 
                            failure.toString().contains('connection'),
           );
+          debugPrint('🔄 State set to LoginError');
         },
         (loginResponse) async {
           debugPrint('✅ Login successful for: $email');
@@ -93,14 +107,20 @@ class LoginNotifier extends StateNotifier<LoginState> {
             user: loginResponse.user,
             loginResponse: loginResponse,
           );
+          debugPrint('🔄 State set to LoginSuccess');
         },
       );
     } catch (e) {
       debugPrint('❌ Unexpected login error: $e');
       state = LoginError(
-        message: 'An unexpected error occurred during login: $e',
+        message: e.toString().contains('timeout')
+            ? 'Login timeout: Please check your connection and try again'
+            : 'An unexpected error occurred during login. Please try again.',
       );
+      debugPrint('🔄 State set to LoginError (catch block)');
     }
+    
+    debugPrint('🔄 Login process completed. Final state: ${state.runtimeType}');
   }
 
   /// Clear error state
@@ -113,6 +133,19 @@ class LoginNotifier extends StateNotifier<LoginState> {
   /// Reset to initial state
   void reset() {
     state = const LoginInitial();
+  }
+
+  /// Reset to initial state (alias for reset)
+  void resetToInitial() {
+    reset();
+  }
+
+  /// Get current state type for debugging
+  String get currentStateType => state.runtimeType.toString();
+
+  /// Force set error state (for debugging)
+  void setErrorState(String message) {
+    state = LoginError(message: message);
   }
 
   /// Check if login is in progress

@@ -5,70 +5,103 @@ import '../../domain/entities/user_profile.dart';
 import '../../domain/repositories/profile_repository.dart';
 import '../datasources/profile_local_data_source.dart';
 import '../datasources/profile_remote_data_source.dart';
+import '../datasources/profile_database_data_source.dart';
 import '../models/user_profile_model.dart';
 
 /// Implementation of [ProfileRepository]
 /// 
 /// This class implements the profile repository interface and coordinates
-/// between remote and local data sources. It handles caching, error handling,
-/// and data transformation between domain entities and data models.
+/// between remote, local, and database data sources. It prioritizes database
+/// data for current user profile and handles caching and error handling.
 class ProfileRepositoryImpl implements ProfileRepository {
   final ProfileRemoteDataSource remoteDataSource;
   final ProfileLocalDataSource localDataSource;
-  
-  // TODO: Get current user ID from authentication provider
-  final String _currentUserId = '1'; // Temporary - should come from auth
+  final ProfileDatabaseDataSource databaseDataSource;
 
   ProfileRepositoryImpl({
     required this.remoteDataSource,
     required this.localDataSource,
+    required this.databaseDataSource,
   });
 
   @override
   Future<Either<Failure, UserProfile>> getUserProfile() async {
     try {
-      // Try to get cached profile first
-      final cachedProfile = await localDataSource.getCachedUserProfile(_currentUserId);
+      // First, try to get profile from database (current user)
+      final databaseResult = await databaseDataSource.getCurrentUserProfile();
       
-      // Check if cache is valid (less than 5 minutes old)
-      if (cachedProfile != null) {
-        final cacheTimestamp = await localDataSource.getCacheTimestamp(_currentUserId);
-        if (cacheTimestamp != null && 
-            DateTime.now().difference(cacheTimestamp).inMinutes < 5) {
-          return Right(cachedProfile);
-        }
-      }
+      return databaseResult.fold(
+        (failure) async {
+          // If database fails, try cached data
+          final cachedProfile =
+              await localDataSource.getCachedUserProfile('current');
 
-      // Fetch from remote
-      final remoteProfile = await remoteDataSource.getUserProfile(_currentUserId);
-      
-      // Cache the fresh data
-      await localDataSource.cacheUserProfile(remoteProfile);
-      
-      return Right(remoteProfile);
+          if (cachedProfile != null) {
+            final cacheTimestamp =
+                await localDataSource.getCacheTimestamp('current');
+            if (cacheTimestamp != null &&
+                DateTime.now().difference(cacheTimestamp).inMinutes < 5) {
+              return Right(cachedProfile);
+            }
+          }
+
+          // If cache is old or missing, try remote (fallback)
+          try {
+            final remoteProfile =
+                await remoteDataSource.getUserProfile('current');
+            await localDataSource.cacheUserProfile(remoteProfile);
+            return Right(remoteProfile);
+          } catch (e) {
+            // If everything fails but we have any cached data, return it
+            if (cachedProfile != null) {
+              return Right(cachedProfile);
+            }
+            return Left(
+                ServerFailure(message: 'Failed to get user profile: $e'));
+          }
+        },
+        (profile) async {
+          // Cache the database result for offline use
+          await localDataSource.cacheUserProfile(profile);
+          return Right(profile);
+        },
+      );
     } catch (e) {
-      // If remote fails and we have cached data, return cached data
-      final cachedProfile = await localDataSource.getCachedUserProfile(_currentUserId);
-      if (cachedProfile != null) {
-        return Right(cachedProfile);
-      }
-      
-      return Left(ServerFailure(message: e.toString()));
+      return Left(ServerFailure(message: 'Failed to get user profile: $e'));
     }
   }
 
   @override
   Future<Either<Failure, UserProfile>> updateUserProfile(UserProfile profile) async {
     try {
-      final updatedProfile = await remoteDataSource.updateUserProfile(
-        _currentUserId,
-        _profileToMap(profile),
+      // Try to update via database first
+      final profileModel = UserProfileModel.fromEntity(profile);
+      final databaseResult =
+          await databaseDataSource.updateUserProfile(profileModel);
+
+      return databaseResult.fold(
+        (failure) async {
+          // If database update fails, try remote
+          try {
+            final updatedProfile = await remoteDataSource.updateUserProfile(
+              'current',
+              _profileToMap(profile),
+            );
+
+            // Update cache with new data
+            await localDataSource.cacheUserProfile(updatedProfile);
+
+            return Right(updatedProfile);
+          } catch (e) {
+            return Left(ServerFailure(message: e.toString()));
+          }
+        },
+        (updatedProfile) async {
+          // Cache the updated profile
+          await localDataSource.cacheUserProfile(updatedProfile);
+          return Right(updatedProfile);
+        },
       );
-      
-      // Update cache with new data
-      await localDataSource.cacheUserProfile(updatedProfile);
-      
-      return Right(updatedProfile);
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));
     }
@@ -79,12 +112,13 @@ class ProfileRepositoryImpl implements ProfileRepository {
     try {
       final imageFile = File(imagePath);
       final imageUrl = await remoteDataSource.uploadProfilePicture(
-        _currentUserId,
+        'current',
         imageFile,
       );
       
       // Update cached profile with new image URL if it exists
-      final cachedProfile = await localDataSource.getCachedUserProfile(_currentUserId);
+      final cachedProfile =
+          await localDataSource.getCachedUserProfile('current');
       if (cachedProfile != null) {
         final updatedProfile = UserProfileModel.fromEntity(
           cachedProfile.copyWith(profilePictureUrl: imageUrl),
@@ -146,7 +180,8 @@ class ProfileRepositoryImpl implements ProfileRepository {
     required String newPassword,
   }) async {
     try {
-      await remoteDataSource.updatePassword(_currentUserId, currentPassword, newPassword);
+      await remoteDataSource.updatePassword(
+          'current', currentPassword, newPassword);
       return const Right(unit);
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));
@@ -159,7 +194,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
     required String password,
   }) async {
     try {
-      await remoteDataSource.updateEmail(_currentUserId, newEmail);
+      await remoteDataSource.updateEmail('current', newEmail);
       return const Right(unit);
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));
@@ -169,10 +204,11 @@ class ProfileRepositoryImpl implements ProfileRepository {
   @override
   Future<Either<Failure, Unit>> verifyEmail(String verificationCode) async {
     try {
-      await remoteDataSource.verifyEmail(_currentUserId, verificationCode);
+      await remoteDataSource.verifyEmail('current', verificationCode);
       
-      // Update cached profile verification status
-      final cachedProfile = await localDataSource.getCachedUserProfile(_currentUserId);
+      // Update cached profile to mark email as verified
+      final cachedProfile =
+          await localDataSource.getCachedUserProfile('current');
       if (cachedProfile != null) {
         final updatedProfile = UserProfileModel.fromEntity(
           cachedProfile.copyWith(isEmailVerified: true),
@@ -192,10 +228,11 @@ class ProfileRepositoryImpl implements ProfileRepository {
     required String verificationCode,
   }) async {
     try {
-      await remoteDataSource.verifyPhone(_currentUserId, verificationCode);
+      await remoteDataSource.verifyPhone('current', verificationCode);
       
       // Update cached profile verification status
-      final cachedProfile = await localDataSource.getCachedUserProfile(_currentUserId);
+      final cachedProfile =
+          await localDataSource.getCachedUserProfile('current');
       if (cachedProfile != null) {
         final updatedProfile = UserProfileModel.fromEntity(
           cachedProfile.copyWith(isPhoneVerified: true),
@@ -212,7 +249,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
   @override
   Future<Either<Failure, Unit>> deleteAccount(String password) async {
     try {
-      await remoteDataSource.deleteAccount(_currentUserId, password);
+      await remoteDataSource.deleteAccount('current', password);
       
       // Clear all cached data
       await localDataSource.clearCache();

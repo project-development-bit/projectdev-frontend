@@ -207,6 +207,128 @@ extension NavigationExtension on BuildContext {
       GoRouter.of(this).push<T>(AppRoutes.dashboard);
   Future<T?> pushToForgotPassword<T extends Object?>() =>
       GoRouter.of(this).push<T>(AppRoutes.forgotPassword);
+
+  // GoRouter navigation extensions - PushNamed (using named routes)
+  Future<T?> pushNamedHome<T extends Object?>({
+    Map<String, String> pathParameters = const <String, String>{},
+    Map<String, dynamic> queryParameters = const <String, dynamic>{},
+    Object? extra,
+  }) =>
+      GoRouter.of(this).pushNamed<T>(
+        'home',
+        pathParameters: pathParameters,
+        queryParameters: queryParameters,
+        extra: extra,
+      );
+
+  Future<T?> pushNamedLogin<T extends Object?>({
+    Map<String, String> pathParameters = const <String, String>{},
+    Map<String, dynamic> queryParameters = const <String, dynamic>{},
+    Object? extra,
+  }) =>
+      GoRouter.of(this).pushNamed<T>(
+        'login',
+        pathParameters: pathParameters,
+        queryParameters: queryParameters,
+        extra: extra,
+      );
+
+  Future<T?> pushNamedSignUp<T extends Object?>({
+    Map<String, String> pathParameters = const <String, String>{},
+    Map<String, dynamic> queryParameters = const <String, dynamic>{},
+    Object? extra,
+  }) =>
+      GoRouter.of(this).pushNamed<T>(
+        'signup',
+        pathParameters: pathParameters,
+        queryParameters: queryParameters,
+        extra: extra,
+      );
+
+  Future<T?> pushNamedProfile<T extends Object?>({
+    Map<String, String> pathParameters = const <String, String>{},
+    Map<String, dynamic> queryParameters = const <String, dynamic>{},
+    Object? extra,
+  }) =>
+      GoRouter.of(this).pushNamed<T>(
+        'profile',
+        pathParameters: pathParameters,
+        queryParameters: queryParameters,
+        extra: extra,
+      );
+
+  Future<T?> pushNamedForgotPassword<T extends Object?>({
+    Map<String, String> pathParameters = const <String, String>{},
+    Map<String, dynamic> queryParameters = const <String, dynamic>{},
+    Object? extra,
+  }) =>
+      GoRouter.of(this).pushNamed<T>(
+        'forgot-password',
+        pathParameters: pathParameters,
+        queryParameters: queryParameters,
+        extra: extra,
+      );
+
+  // GoNamed navigation extensions (using named routes with go)
+  void goNamedHome({
+    Map<String, String> pathParameters = const <String, String>{},
+    Map<String, dynamic> queryParameters = const <String, dynamic>{},
+    Object? extra,
+  }) =>
+      GoRouter.of(this).goNamed(
+        'home',
+        pathParameters: pathParameters,
+        queryParameters: queryParameters,
+        extra: extra,
+      );
+
+  void goNamedLogin({
+    Map<String, String> pathParameters = const <String, String>{},
+    Map<String, dynamic> queryParameters = const <String, dynamic>{},
+    Object? extra,
+  }) =>
+      GoRouter.of(this).goNamed(
+        'login',
+        pathParameters: pathParameters,
+        queryParameters: queryParameters,
+        extra: extra,
+      );
+
+  void goNamedSignUp({
+    Map<String, String> pathParameters = const <String, String>{},
+    Map<String, dynamic> queryParameters = const <String, dynamic>{},
+    Object? extra,
+  }) =>
+      GoRouter.of(this).goNamed(
+        'signup',
+        pathParameters: pathParameters,
+        queryParameters: queryParameters,
+        extra: extra,
+      );
+
+  void goNamedProfile({
+    Map<String, String> pathParameters = const <String, String>{},
+    Map<String, dynamic> queryParameters = const <String, dynamic>{},
+    Object? extra,
+  }) =>
+      GoRouter.of(this).goNamed(
+        'profile',
+        pathParameters: pathParameters,
+        queryParameters: queryParameters,
+        extra: extra,
+      );
+
+  void goNamedForgotPassword({
+    Map<String, String> pathParameters = const <String, String>{},
+    Map<String, dynamic> queryParameters = const <String, dynamic>{},
+    Object? extra,
+  }) =>
+      GoRouter.of(this).goNamed(
+        'forgot-password',
+        pathParameters: pathParameters,
+        queryParameters: queryParameters,
+        extra: extra,
+      );
 }
 
 /// Extension on BuildContext for showing dialogs and snackbars

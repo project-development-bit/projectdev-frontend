@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/widgets/locale_switch_widget.dart';
 import '../../../core/widgets/theme_switch_widget.dart';
 import '../../../core/extensions/context_extensions.dart';
+import '../../auth/presentation/providers/logout_provider.dart';
+import '../../user_profile/presentation/providers/profile_providers.dart';
 import '../widgets/hero_section.dart';
 import '../widgets/featured_offers_section.dart';
 import '../widgets/how_it_works_section.dart';
@@ -16,6 +18,11 @@ class HomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // Load profile data when the page builds
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(profileNotifierProvider.notifier).loadProfile();
+    });
+
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -46,7 +53,7 @@ class HomePage extends ConsumerWidget {
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // App logo/title
+                // App logo/title with user name
                 Row(
                   children: [
                     Icon(
@@ -55,12 +62,34 @@ class HomePage extends ConsumerWidget {
                       size: 28,
                     ),
                     const SizedBox(width: 8),
-                    Text(
-                      context.translate('app_name'),
-                      style: context.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: context.onSurface,
-                      ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          context.translate('app_name'),
+                          style: context.titleLarge?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: context.onSurface,
+                          ),
+                        ),
+                        // User name from profile
+                        Consumer(
+                          builder: (context, ref, child) {
+                            final profile =
+                                ref.watch(currentUserProfileProvider);
+                            if (profile != null) {
+                              return Text(
+                                'Welcome, ${profile.displayName ?? profile.username}!',
+                                style: context.bodySmall?.copyWith(
+                                  color: context.onSurface.withOpacity(0.7),
+                                ),
+                              );
+                            }
+                            return const SizedBox.shrink();
+                          },
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -70,9 +99,33 @@ class HomePage extends ConsumerWidget {
                   children: [
                     // Profile button
                     IconButton(
-                      onPressed: () => context.pushToProfile(),
+                      onPressed: () => context.goToProfile(),
                       icon: const Icon(Icons.person),
                       tooltip: 'Profile',
+                    ),
+                    // Logout button
+                    Consumer(
+                      builder: (context, ref, child) {
+                        final isLoading = ref.watch(isLogoutLoadingProvider);
+                        return IconButton(
+                          onPressed: isLoading
+                              ? null
+                              : () => _handleLogout(context, ref),
+                          icon: isLoading
+                              ? SizedBox(
+                                  width: 16,
+                                  height: 16,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                      context.primary,
+                                    ),
+                                  ),
+                                )
+                              : const Icon(Icons.logout),
+                          tooltip: isLoading ? 'Logging out...' : 'Logout',
+                        );
+                      },
                     ),
                     const ThemeSwitchWidget(),
                     const SizedBox(width: 8),
@@ -114,6 +167,68 @@ class HomePage extends ConsumerWidget {
     );
   }
 
+  /// Handle logout functionality
+  Future<void> _handleLogout(BuildContext context, WidgetRef ref) async {
+    // Show confirmation dialog
+    final shouldLogout = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(context.translate('logout')),
+        content: Text(context.translate('logout_confirmation')),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text(context.translate('cancel')),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            style: TextButton.styleFrom(
+              foregroundColor: context.error,
+            ),
+            child: Text(context.translate('logout')),
+          ),
+        ],
+      ),
+    );
+
+    if (shouldLogout == true) {
+      try {
+        // Perform logout
+        await ref.read(logoutNotifierProvider.notifier).logout();
+
+        // Check the final state after logout
+        final logoutState = ref.read(logoutNotifierProvider);
+
+        if (logoutState is LogoutSuccess) {
+          // Navigate to login page after successful logout
+          if (context.mounted) {
+            context.goToLogin();
+          }
+        } else if (logoutState is LogoutError) {
+          // Show error message
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(logoutState.message),
+                backgroundColor: context.error,
+              ),
+            );
+          }
+        }
+      } catch (e) {
+        // Handle any unexpected errors
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Logout failed: $e'),
+              backgroundColor: context.error,
+            ),
+          );
+        }
+      }
+    }
+  }
+
   Widget _buildFooterCTA(BuildContext context) {
     return Container(
       width: double.infinity,
@@ -127,9 +242,9 @@ class HomePage extends ConsumerWidget {
           Text(
             context.translate('ready_to_earn'),
             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 12),
@@ -137,7 +252,7 @@ class HomePage extends ConsumerWidget {
             context.translate('join_thousands'),
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   color: Colors.white.withAlpha(230), // 0.9 * 255
-            ),
+                ),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 24),

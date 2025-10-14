@@ -56,8 +56,8 @@ class LogoutNotifier extends StateNotifier<LogoutState> {
     try {
       state = const LogoutLoading();
       
-      final authRepository = _ref.read(authRepositoryProvider);
-      final result = await authRepository.logout();
+      final logoutUseCase = _ref.read(logoutUseCaseProvider);
+      final result = await logoutUseCase.call();
       
       await result.fold(
         (failure) {

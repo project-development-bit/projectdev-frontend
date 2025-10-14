@@ -166,5 +166,6 @@
   "full_name_required": "Full name is required",
   "invalid_email": "Please enter a valid email address",
   "confirm_password_required": "Please confirm your password",
-  "role": "Role"
+  "role": "Role",
+  "logout_confirmation": "Are you sure you want to logout?"
 }

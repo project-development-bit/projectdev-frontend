@@ -3,7 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/foundation.dart';
 import 'package:url_strategy/url_strategy.dart';
-// import 'package:cointiply_app/core/database/database_service.dart';
+import 'package:cointiply_app/core/services/database_service.dart';
 import 'package:cointiply_app/core/localization/app_localizations.dart';
 import 'core/providers/locale_provider.dart';
 import 'core/providers/theme_provider.dart';
@@ -22,8 +22,8 @@ Future<void> runAppWithFlavor(AppFlavor flavor) async {
     debugPrint('🌐 Configuring web URL strategy for clean URLs');
   }
   
-  // Initialize Drift database
-  // await DatabaseService.init();
+  // Initialize SQLite database
+  await DatabaseService.init();
   
   // Print flavor information for debugging
   debugPrint('🚀 Starting app with flavor: ${flavor.displayName}');

@@ -37,6 +37,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   void _handleLogin() async {
     if (_formKey.currentState!.validate()) {
       final loginNotifier = ref.read(loginNotifierProvider.notifier);
+      
+      // Reset any previous state before attempting new login
+      loginNotifier.reset();
 
       await loginNotifier.login(
         email: _emailController.text.trim(),
