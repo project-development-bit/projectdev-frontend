@@ -1,93 +1,128 @@
-name: Deploy Flutter Web to EC2
+name: Flutter Web CI/CD Pipeline
 
 on:
   push:
     branches: [ main ]
-
-# prevent overlapping deploys
-concurrency:
-  group: deploy-flutter-web
-  cancel-in-progress: true
+  pull_request:
+    branches: [ main ]
 
 jobs:
-  build-and-deploy:
+  test:
+    name: Test Flutter App
     runs-on: ubuntu-latest
-    timeout-minutes: 30
-
-    env:
-      HOST: ${{ secrets.EC2_HOST }}
-      USER: ${{ secrets.EC2_USER }}
-      KEY:  ${{ secrets.EC2_KEY }}
-      ROOT: ${{ secrets.WEB_ROOT }}
-
+    
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+    - uses: actions/checkout@v3
+    
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.x'
+        channel: 'stable'
+    
+    - name: Get dependencies
+      run: flutter pub get
+    
+  build:
+    name: Build Flutter Web
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'  # Only build on main branch
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.x'
+        channel: 'stable'
+    
+    - name: Get dependencies
+      run: flutter pub get
+    
+    - name: Build web
+      run: flutter build web --release --web-renderer=canvaskit
+    
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: web-build
+        path: build/web/
 
-      # Cache pub packages for faster builds
-      - name: Cache pub
-        uses: actions/cache@v4
-        with:
-          path: ~/.pub-cache
-          key: pub-${{ runner.os }}-${{ hashFiles('**/pubspec.lock') }}
-          restore-keys: pub-${{ runner.os }}-
-
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.x'
-          channel: stable
-
-      - name: Flutter pub get
-        run: flutter pub get
-
-      - name: Run build_runner when present
-        shell: bash
-        run: |
-          if grep -q "build_runner" pubspec.yaml; then
-            flutter pub run build_runner build --delete-conflicting-outputs
-          else
-            echo "build_runner not found in pubspec.yaml, skipping code generation."
+  deploy:
+    name: Deploy to EC2
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    steps:
+    - name: Download build artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: web-build
+        path: build/web/
+    
+    - name: Setup SSH
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.EC2_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
+    
+    - name: Create deployment package
+      run: |
+        cd build/web
+        tar -czf deploy.tar.gz *
+    
+    - name: Copy files to EC2
+      run: |
+        scp -i ~/.ssh/id_rsa build/web/deploy.tar.gz \
+          ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/tmp/deploy.tar.gz
+    
+    - name: Deploy on EC2
+      run: |
+        ssh -i ~/.ssh/id_rsa ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+          # Backup current deployment
+          if [ -d "${{ secrets.WEB_ROOT }}" ]; then
+            sudo rm -rf ${{ secrets.WEB_ROOT }}.backup
+            sudo mv ${{ secrets.WEB_ROOT }} ${{ secrets.WEB_ROOT }}.backup
           fi
+          
+          # Create new deployment directory
+          sudo mkdir -p ${{ secrets.WEB_ROOT }}
+          
+          # Extract new deployment
+          sudo tar -xzf /tmp/deploy.tar.gz -C ${{ secrets.WEB_ROOT }}
+          
+          # Set proper permissions
+          sudo chown -R www-data:www-data ${{ secrets.WEB_ROOT }}
+          sudo chmod -R 755 ${{ secrets.WEB_ROOT }}
+          
+          # Clean up
+          rm /tmp/deploy.tar.gz
+          
+          # Restart nginx (optional, usually not needed for static files)
+          sudo systemctl reload nginx
+          
+          echo "Deployment completed successfully!"
+        EOF
+    
+    - name: Clean up SSH
+      if: always()
+      run: rm -rf ~/.ssh/id_rsa
 
-      - name: Build web (release)
-        run: |
-          flutter clean
-          # Choose renderer you prefer; html is broadly compatible.
-          flutter build web --release
-
-      - name: Prepare SSH key
-        run: |
-          set -euo pipefail
-          mkdir -p ~/.ssh
-          chmod 700 ~/.ssh
-
-          # Write your *private* key (supports ED25519 or RSA)
-          echo "$KEY" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-
-          # Avoid MITM prompt in a non-interactive job
-          ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts
-
-      - name: Create target dir (if needed)
-        run: |
-          set -euo pipefail
-          ssh -o IdentitiesOnly=yes -i ~/.ssh/id_ed25519 "$USER@$HOST" \
-            "sudo mkdir -p '$ROOT' && sudo chown -R $USER:$USER '$ROOT'"
-
-      - name: Copy files to EC2 with rsync
-        run: |
-          set -euo pipefail
-          # Trailing slashes:
-          #   source `build/web/`  -> copies *contents*
-          #   dest   `$ROOT/`      -> into that directory
-          rsync -az --delete \
-            -e "ssh -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -i ~/.ssh/id_ed25519" \
-            build/web/ "$USER@$HOST:$ROOT/"
-
-      - name: Fix ownership & reload NGINX (if installed)
-        run: |
-          set -euo pipefail
-          ssh -o IdentitiesOnly=yes -i ~/.ssh/id_ed25519 "$USER@$HOST" \
-            "sudo chown -R www-data:www-data '$ROOT' || true; \
-             sudo systemctl reload nginx || true"
+  notify:
+    name: Deployment Notification
+    needs: deploy
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+    - name: Deployment Status
+      run: |
+        if [ "${{ needs.deploy.result }}" == "success" ]; then
+          echo "✅ Deployment successful!"
+        else
+          echo "❌ Deployment failed!"
+        fi
