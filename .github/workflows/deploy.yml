@@ -35,8 +35,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          # pin to the major/minor you use locally (example shown)
-          flutter-version: '3.24.3'
+          flutter-version: '3.x'
           channel: stable
 
       - name: Flutter pub get
@@ -64,8 +63,8 @@ jobs:
           chmod 700 ~/.ssh
 
           # Write your *private* key (supports ED25519 or RSA)
-          echo "$KEY" > ~/.ssh/id_key
-          chmod 600 ~/.ssh/id_key
+          echo "$KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
 
           # Avoid MITM prompt in a non-interactive job
           ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts
@@ -73,7 +72,7 @@ jobs:
       - name: Create target dir (if needed)
         run: |
           set -euo pipefail
-          ssh -o IdentitiesOnly=yes -i ~/.ssh/id_key "$USER@$HOST" \
+          ssh -o IdentitiesOnly=yes -i ~/.ssh/id_ed25519 "$USER@$HOST" \
             "sudo mkdir -p '$ROOT' && sudo chown -R $USER:$USER '$ROOT'"
 
       - name: Copy files to EC2 with rsync
@@ -83,12 +82,12 @@ jobs:
           #   source `build/web/`  -> copies *contents*
           #   dest   `$ROOT/`      -> into that directory
           rsync -az --delete \
-            -e "ssh -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -i ~/.ssh/id_key" \
+            -e "ssh -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -i ~/.ssh/id_ed25519" \
             build/web/ "$USER@$HOST:$ROOT/"
 
       - name: Fix ownership & reload NGINX (if installed)
         run: |
           set -euo pipefail
-          ssh -o IdentitiesOnly=yes -i ~/.ssh/id_key "$USER@$HOST" \
+          ssh -o IdentitiesOnly=yes -i ~/.ssh/id_ed25519 "$USER@$HOST" \
             "sudo chown -R www-data:www-data '$ROOT' || true; \
              sudo systemctl reload nginx || true"
