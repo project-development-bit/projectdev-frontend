@@ -54,7 +54,7 @@ jobs:
         run: |
           flutter clean
           # Choose renderer you prefer; html is broadly compatible.
-          flutter build web --release --web-renderer html
+          flutter build web --release
 
       - name: Prepare SSH key
         run: |
