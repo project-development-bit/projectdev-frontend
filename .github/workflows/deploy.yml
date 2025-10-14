@@ -6,123 +6,114 @@ on:
   pull_request:
     branches: [ main ]
 
+concurrency:
+  group: flutter-web-deploy
+  cancel-in-progress: false
+
 jobs:
   test:
     name: Test Flutter App
     runs-on: ubuntu-latest
-    
     steps:
-    - uses: actions/checkout@v3
-    
-    - name: Setup Flutter
-      uses: subosito/flutter-action@v2
-      with:
-        flutter-version: '3.x'
-        channel: 'stable'
-    
-    - name: Get dependencies
-      run: flutter pub get
-    
+      - uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.x'
+          channel: stable
+
+      - name: Get dependencies
+        run: flutter pub get
+
   build:
     name: Build Flutter Web
     needs: test
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'  # Only build on main branch
-    
+    if: github.ref == 'refs/heads/main'
     steps:
-    - uses: actions/checkout@v3
-    
-    - name: Setup Flutter
-      uses: subosito/flutter-action@v2
-      with:
-        flutter-version: '3.x'
-        channel: 'stable'
-    
-    - name: Get dependencies
-      run: flutter pub get
-    
-    - name: Build web
-      run: flutter build web --release --web-renderer=canvaskit
-    
-    - name: Upload build artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: web-build
-        path: build/web/
+      - uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.x'
+          channel: stable
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Build web
+        run: flutter build web --release --web-renderer canvaskit
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-build
+          path: build/web/
+          if-no-files-found: error
+          retention-days: 7
 
   deploy:
     name: Deploy to EC2
     needs: build
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    
     steps:
-    - name: Download build artifacts
-      uses: actions/download-artifact@v3
-      with:
-        name: web-build
-        path: build/web/
-    
-    - name: Setup SSH
-      run: |
-        mkdir -p ~/.ssh
-        echo "${{ secrets.EC2_KEY }}" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
-        ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
-    
-    - name: Create deployment package
-      run: |
-        cd build/web
-        tar -czf deploy.tar.gz *
-    
-    - name: Copy files to EC2
-      run: |
-        scp -i ~/.ssh/id_rsa build/web/deploy.tar.gz \
-          ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/tmp/deploy.tar.gz
-    
-    - name: Deploy on EC2
-      run: |
-        ssh -i ~/.ssh/id_rsa ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-          # Backup current deployment
-          if [ -d "${{ secrets.WEB_ROOT }}" ]; then
-            sudo rm -rf ${{ secrets.WEB_ROOT }}.backup
-            sudo mv ${{ secrets.WEB_ROOT }} ${{ secrets.WEB_ROOT }}.backup
-          fi
-          
-          # Create new deployment directory
-          sudo mkdir -p ${{ secrets.WEB_ROOT }}
-          
-          # Extract new deployment
-          sudo tar -xzf /tmp/deploy.tar.gz -C ${{ secrets.WEB_ROOT }}
-          
-          # Set proper permissions
-          sudo chown -R www-data:www-data ${{ secrets.WEB_ROOT }}
-          sudo chmod -R 755 ${{ secrets.WEB_ROOT }}
-          
-          # Clean up
-          rm /tmp/deploy.tar.gz
-          
-          # Restart nginx (optional, usually not needed for static files)
-          sudo systemctl reload nginx
-          
-          echo "Deployment completed successfully!"
-        EOF
-    
-    - name: Clean up SSH
-      if: always()
-      run: rm -rf ~/.ssh/id_rsa
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: web-build
+          path: build/web/
 
-  notify:
-    name: Deployment Notification
-    needs: deploy
-    runs-on: ubuntu-latest
-    if: always()
-    
-    steps:
-    - name: Deployment Status
-      run: |
-        if [ "${{ needs.deploy.result }}" == "success" ]; then
-          echo "✅ Deployment successful!"
-        else
-          echo "❌ Deployment failed!"
-        fi
+      - name: Setup SSH
+        run: |
+          set -euo pipefail
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          echo "${{ secrets.EC2_KEY }}" > ~/.ssh/id_key
+          chmod 600 ~/.ssh/id_key
+          ssh-keyscan -H "${{ secrets.EC2_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Create deployment package
+        run: |
+          cd build/web
+          tar -czf deploy.tar.gz .
+
+      - name: Copy files to EC2
+        run: |
+          scp -o IdentitiesOnly=yes -i ~/.ssh/id_key \
+            build/web/deploy.tar.gz \
+            "${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/tmp/deploy.tar.gz"
+
+      - name: Deploy on EC2
+        run: |
+          ssh -o IdentitiesOnly=yes -i ~/.ssh/id_key \
+            "${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}" << 'EOF'
+            set -euo pipefail
+            ROOT="${{ secrets.WEB_ROOT }}"
+
+            # Backup current deployment
+            if [ -d "$ROOT" ]; then
+              sudo rm -rf "${ROOT}.backup"
+              sudo mv "$ROOT" "${ROOT}.backup"
+            fi
+
+            # Create new deployment directory
+            sudo mkdir -p "$ROOT"
+
+            # Extract new deployment
+            sudo tar -xzf /tmp/deploy.tar.gz -C "$ROOT"
+
+            # Set proper permissions
+            sudo chown -R www-data:www-data "$ROOT"
+            sudo chmod -R 755 "$ROOT"
+
+            # Clean up & reload nginx (if present)
+            sudo rm -f /tmp/deploy.tar.gz
+            sudo systemctl reload nginx || true
+            echo "Deployment completed successfully!"
+          EOF
+
+      - name: Clean up SSH
+        if: always()
+        run: rm -f ~/.ssh/id_key
