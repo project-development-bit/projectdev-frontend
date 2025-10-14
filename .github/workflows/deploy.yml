@@ -43,8 +43,11 @@ jobs:
       - name: Get dependencies
         run: flutter pub get
 
+      - name: Run code generation
+        run: flutter pub run build_runner build --delete-conflicting-outputs
+
       - name: Build web
-        run: flutter build web --release
+        run: flutter build web --release --web-renderer canvaskit --no-wasm-dry-run
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
