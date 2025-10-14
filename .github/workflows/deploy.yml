@@ -4,42 +4,91 @@ on:
   push:
     branches: [ main ]
 
+# prevent overlapping deploys
+concurrency:
+  group: deploy-flutter-web
+  cancel-in-progress: true
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    env:
+      HOST: ${{ secrets.EC2_HOST }}
+      USER: ${{ secrets.EC2_USER }}
+      KEY:  ${{ secrets.EC2_KEY }}
+      ROOT: ${{ secrets.WEB_ROOT }}
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Cache pub packages for faster builds
+      - name: Cache pub
+        uses: actions/cache@v4
+        with:
+          path: ~/.pub-cache
+          key: pub-${{ runner.os }}-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: pub-${{ runner.os }}-
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.x'
-          channel: 'stable'
+          # pin to the major/minor you use locally (example shown)
+          flutter-version: '3.24.3'
+          channel: stable
 
-      - name: Build web
+      - name: Flutter pub get
+        run: flutter pub get
+
+      - name: Run build_runner when present
+        shell: bash
+        run: |
+          if grep -q "build_runner" pubspec.yaml; then
+            flutter pub run build_runner build --delete-conflicting-outputs
+          else
+            echo "build_runner not found in pubspec.yaml, skipping code generation."
+          fi
+
+      - name: Build web (release)
         run: |
           flutter clean
-          flutter build web --release
+          # Choose renderer you prefer; html is broadly compatible.
+          flutter build web --release --web-renderer html
 
-      - name: Copy files to EC2
-        env:
-          HOST: ${{ secrets.EC2_HOST }}
-          USER: ${{ secrets.EC2_USER }}
-          KEY:  ${{ secrets.EC2_KEY }}
-          ROOT: ${{ secrets.WEB_ROOT }}
+      - name: Prepare SSH key
         run: |
           set -euo pipefail
-
           mkdir -p ~/.ssh
-          echo "$KEY" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
+          chmod 700 ~/.ssh
+
+          # Write your *private* key (supports ED25519 or RSA)
+          echo "$KEY" > ~/.ssh/id_key
+          chmod 600 ~/.ssh/id_key
+
+          # Avoid MITM prompt in a non-interactive job
           ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts
 
-          # Sync build to server
-          rsync -az --delete -e "ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_ed25519" \
+      - name: Create target dir (if needed)
+        run: |
+          set -euo pipefail
+          ssh -o IdentitiesOnly=yes -i ~/.ssh/id_key "$USER@$HOST" \
+            "sudo mkdir -p '$ROOT' && sudo chown -R $USER:$USER '$ROOT'"
+
+      - name: Copy files to EC2 with rsync
+        run: |
+          set -euo pipefail
+          # Trailing slashes:
+          #   source `build/web/`  -> copies *contents*
+          #   dest   `$ROOT/`      -> into that directory
+          rsync -az --delete \
+            -e "ssh -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -i ~/.ssh/id_key" \
             build/web/ "$USER@$HOST:$ROOT/"
-          
-          # Fix ownership / reload nginx (ignore reload failure if nginx isn't present)
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_ed25519 "$USER@$HOST" \
-            "sudo chown -R www-data:www-data '$ROOT' && sudo systemctl reload nginx || true"
+
+      - name: Fix ownership & reload NGINX (if installed)
+        run: |
+          set -euo pipefail
+          ssh -o IdentitiesOnly=yes -i ~/.ssh/id_key "$USER@$HOST" \
+            "sudo chown -R www-data:www-data '$ROOT' || true; \
+             sudo systemctl reload nginx || true"
