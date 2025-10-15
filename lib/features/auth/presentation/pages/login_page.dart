@@ -77,13 +77,13 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         case LoginSuccess():
           // Add a small delay to ensure all async operations complete
           Future.delayed(const Duration(milliseconds: 100), () {
-            if (mounted) {
+            if (context.mounted) {
               // Log auth state before navigation
               debugNotifier
                   .logAuthState('LoginPage: before navigation to home');
               
               // Navigate to home on successful login
-              context.goToHome();
+              context.pushNamedHome();
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(localizations?.translate('login_successful') ??
