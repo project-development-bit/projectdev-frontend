@@ -1,6 +1,7 @@
 import 'package:cointiply_app/core/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/common/common_textfield.dart';
 import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/providers/locale_provider.dart';
@@ -9,6 +10,7 @@ import '../../../../core/providers/auth_debug_provider.dart';
 import '../../../../core/widgets/locale_switch_widget.dart';
 import '../../../../core/widgets/theme_switch_widget.dart';
 import '../../../../core/extensions/context_extensions.dart';
+import '../../../../routing/app_router.dart';
 import '../providers/login_provider.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
@@ -85,7 +87,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 ),
               );
 
-              context.pushNamedHome();
+              // Use GoRouter.of(context).go() to replace the current route
+              GoRouter.of(context).go(AppRoutes.home);
             }
           });
           break;
