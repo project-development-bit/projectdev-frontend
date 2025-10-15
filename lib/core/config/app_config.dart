@@ -58,7 +58,7 @@ class AppConfig {
   static const AppConfig staging = AppConfig(
     flavor: AppFlavor.staging,
     appName: 'Project Dev (Staging)',
-    apiBaseUrl: 'https://api-staging.burgereats.com',
+    apiBaseUrl: 'http://13.250.102.238/api/v1/',
     apiVersion: 'v1',
     enableLogging: true,
     enableCrashReporting: true,
@@ -82,7 +82,7 @@ class AppConfig {
   static const AppConfig prod = AppConfig(
     flavor: AppFlavor.prod,
     appName: 'Project Dev',
-    apiBaseUrl: 'https://api.burgereats.com',
+    apiBaseUrl: 'http://13.250.102.238/api/v1/',
     apiVersion: 'v1',
     enableLogging: false,
     enableCrashReporting: true,

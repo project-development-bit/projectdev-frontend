@@ -1,5 +1,5 @@
 // core/network/dio_client.dart
-import 'package:cointiply_app/core/config/app_config.dart';
+import 'package:cointiply_app/core/config/flavor_manager.dart';
 import 'package:cointiply_app/core/network/auth_interceptor.dart';
 import 'package:cointiply_app/core/services/secure_storage_service.dart';
 import 'package:dio/dio.dart';
@@ -14,7 +14,7 @@ class DioClient {
 
   DioClient(SecureStorageService tokenService) {
     BaseOptions options = BaseOptions(
-      baseUrl: AppConfig.appUrl,
+      baseUrl: FlavorManager.currentConfig.fullApiUrl,
       connectTimeout: const Duration(seconds: 10),
       receiveTimeout: const Duration(seconds: 10),
       headers: {

@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:developer' as logger show log;
 import 'dart:io';
-import 'package:cointiply_app/core/config/app_config.dart';
+import 'package:cointiply_app/core/config/flavor_manager.dart';
 import 'package:cointiply_app/core/services/secure_storage_service.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -81,7 +81,7 @@ class TokenInterceptor extends Interceptor {
   ) async {
     Dio retryDio = Dio(
       BaseOptions(
-        baseUrl: AppConfig.appUrl,
+        baseUrl: FlavorManager.currentConfig.fullApiUrl,
         headers: <String, String>{'Content-Type': 'application/json'},
       ),
     );
@@ -118,7 +118,7 @@ class TokenInterceptor extends Interceptor {
   Future retryRequests(token) async {
     Dio retryDio = Dio(
       BaseOptions(
-        baseUrl: AppConfig.appUrl,
+        baseUrl: FlavorManager.currentConfig.fullApiUrl,
         headers: <String, String>{'Content-Type': 'application/json'},
       ),
     );
