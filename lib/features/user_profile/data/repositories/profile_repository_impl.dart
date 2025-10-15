@@ -1,5 +1,5 @@
-import 'dart:io';
 import 'package:dartz/dartz.dart';
+import 'package:universal_io/io.dart';
 import '../../../../core/error/failures.dart';
 import '../../domain/entities/user_profile.dart';
 import '../../domain/repositories/profile_repository.dart';
@@ -110,7 +110,14 @@ class ProfileRepositoryImpl implements ProfileRepository {
   @override
   Future<Either<Failure, String>> uploadProfilePicture(String imagePath) async {
     try {
+      // Create File object using universal_io which works on both mobile and web
       final imageFile = File(imagePath);
+      
+      // Check if file exists (this works for both platforms)
+      if (!await imageFile.exists()) {
+        return Left(ServerFailure(message: 'Image file not found: $imagePath'));
+      }
+      
       final imageUrl = await remoteDataSource.uploadProfilePicture(
         'current',
         imageFile,

@@ -99,7 +99,7 @@ class HomePage extends ConsumerWidget {
                   children: [
                     // Profile button
                     IconButton(
-                      onPressed: () => context.pushNamedHome(),
+                      onPressed: () => context.pushNamedProfile(),
                       icon: const Icon(Icons.person),
                       tooltip: 'Profile',
                     ),

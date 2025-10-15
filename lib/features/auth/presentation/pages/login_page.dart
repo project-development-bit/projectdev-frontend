@@ -26,6 +26,58 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   
   bool _rememberMe = false;
 
+
+  @override
+  void initState() {
+    super.initState();
+   
+    ref.listenManual<LoginState>(loginNotifierProvider, (previous, next) {
+      if (!mounted) return;
+
+      // Debug logging
+      final debugNotifier = ref.read(authDebugProvider.notifier);
+      debugNotifier
+          .logAuthState('LoginPage: state changed to ${next.runtimeType}');
+
+      switch (next) {
+        case LoginSuccess():
+          // Add a small delay to ensure all async operations complete
+          Future.delayed(const Duration(milliseconds: 100), () {
+            
+            if (mounted) {
+              final localizations = AppLocalizations.of(context);
+              // Log auth state before navigation
+              debugNotifier
+                  .logAuthState('LoginPage: before navigation to home');
+
+              // Navigate to home on successful login
+              context.goNamedHome();
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(localizations?.translate('login_successful') ??
+                      'Login successful!'),
+                  backgroundColor: Colors.green,
+                ),
+              );
+            }
+          });
+          break;
+        case LoginError():
+          // Show error message
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(next.message),
+              backgroundColor: Colors.red,
+            ),
+          );
+          break;
+        default:
+          break;
+      }
+    });
+    
+  }
+
   @override
   void dispose() {
     _emailController.dispose();
@@ -38,7 +90,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   void _handleLogin() async {
     if (_formKey.currentState!.validate()) {
       final loginNotifier = ref.read(loginNotifierProvider.notifier);
-      
+
       // Reset any previous state before attempting new login
       loginNotifier.reset();
 
@@ -65,49 +117,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     final isLoading = ref.watch(isLoginLoadingProvider);
 
     // Watch login state for navigation and error handling
-    ref.listen<LoginState>(loginNotifierProvider, (previous, next) {
-      if (!mounted) return;
-
-      // Debug logging
-      final debugNotifier = ref.read(authDebugProvider.notifier);
-      debugNotifier
-          .logAuthState('LoginPage: state changed to ${next.runtimeType}');
-
-      switch (next) {
-        case LoginSuccess():
-          // Add a small delay to ensure all async operations complete
-          Future.delayed(const Duration(milliseconds: 100), () {
-            if (context.mounted) {
-              // Log auth state before navigation
-              debugNotifier
-                  .logAuthState('LoginPage: before navigation to home');
-              
-              // Navigate to home on successful login
-              context.pushNamedHome();
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(localizations?.translate('login_successful') ??
-                      'Login successful!'),
-                  backgroundColor: Colors.green,
-                ),
-              );
-            }
-          });
-          break;
-        case LoginError():
-          // Show error message
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(next.message),
-              backgroundColor: Colors.red,
-            ),
-          );
-          break;
-        default:
-          break;
-      }
-    });
-    
+   
     // Also watch the locale provider to force rebuilds when locale changes
     final currentLocale = ref.watch(localeProvider);
     final translate = ref.watch(translationProvider);

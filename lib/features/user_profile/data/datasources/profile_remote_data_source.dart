@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'package:universal_io/io.dart';
 import '../models/user_profile_model.dart';
 
 /// Abstract class for profile remote data source

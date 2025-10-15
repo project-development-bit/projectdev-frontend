@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'package:universal_io/io.dart';
 import '../../domain/entities/user_profile.dart';
 import '../models/user_profile_model.dart';
 import '../models/user_profile_stats_model.dart';
