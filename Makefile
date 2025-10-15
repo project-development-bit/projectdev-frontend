@@ -1,4 +1,4 @@
-# Test configuration for the Burger Eats app
+# Test configuration for the Project Dev app
 
 # Run all tests
 test:

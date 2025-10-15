@@ -33,7 +33,7 @@ class AppConfig {
   /// Development configuration
   static const AppConfig dev = AppConfig(
     flavor: AppFlavor.dev,
-    appName: 'Burger Eats (Dev)',
+    appName: 'Project Dev (Dev)',
     apiBaseUrl: 'https://api-dev.burgereats.com',
     apiVersion: 'v1',
     enableLogging: true,
@@ -57,7 +57,7 @@ class AppConfig {
   /// Staging configuration
   static const AppConfig staging = AppConfig(
     flavor: AppFlavor.staging,
-    appName: 'Burger Eats (Staging)',
+    appName: 'Project Dev (Staging)',
     apiBaseUrl: 'https://api-staging.burgereats.com',
     apiVersion: 'v1',
     enableLogging: true,
@@ -81,7 +81,7 @@ class AppConfig {
   /// Production configuration
   static const AppConfig prod = AppConfig(
     flavor: AppFlavor.prod,
-    appName: 'Burger Eats',
+    appName: 'Project Dev',
     apiBaseUrl: 'https://api.burgereats.com',
     apiVersion: 'v1',
     enableLogging: false,

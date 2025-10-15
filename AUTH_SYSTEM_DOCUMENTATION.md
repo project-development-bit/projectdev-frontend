@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes the comprehensive authentication system implemented for the Burger Eats Flutter application. The system follows clean architecture principles with proper state management, error handling, navigation flow, and local data persistence.
+This document describes the comprehensive authentication system implemented for the Project Dev Flutter application. The system follows clean architecture principles with proper state management, error handling, navigation flow, and local data persistence.
 
 ## Architecture
 
@@ -433,6 +433,6 @@ flutter test test/unit/features/auth/
 
 ## Conclusion
 
-This authentication system provides a robust, secure, and user-friendly foundation for the Burger Eats application. It follows Flutter best practices, implements clean architecture principles, and provides comprehensive error handling with proper memory management.
+This authentication system provides a robust, secure, and user-friendly foundation for the Project Dev application. It follows Flutter best practices, implements clean architecture principles, and provides comprehensive error handling with proper memory management.
 
 The system is thoroughly tested, well-documented, and ready for production use while being easily extensible for future enhancements.

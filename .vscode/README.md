@@ -1,4 +1,4 @@
-# VS Code Integration for Burger Eats Flavor System
+# VS Code Integration for Project Dev Flavor System
 
 ## 🚀 Quick Start
 
@@ -11,22 +11,22 @@ This VS Code workspace is fully configured for Flutter development with our mult
 Open the **Run and Debug** panel (`Cmd+Shift+D` on macOS, `Ctrl+Shift+D` on Windows/Linux) and select from:
 
 #### 🟢 Development Flavor
-- **🟢 Burger Eats (Dev)** - Debug mode with full logging
-- **🟢 Burger Eats (Dev - Profile)** - Profile mode for performance testing
-- **🟢 Burger Eats (Dev - Android)** - Android-specific debug
-- **🟢 Burger Eats (Dev - iOS)** - iOS-specific debug
+- **🟢 Project Dev (Dev)** - Debug mode with full logging
+- **🟢 Project Dev (Dev - Profile)** - Profile mode for performance testing
+- **🟢 Project Dev (Dev - Android)** - Android-specific debug
+- **🟢 Project Dev (Dev - iOS)** - iOS-specific debug
 
 #### 🟠 Staging Flavor
-- **🟠 Burger Eats (Staging)** - Pre-production testing
-- **🟠 Burger Eats (Staging - Profile)** - Profile mode for staging
+- **🟠 Project Dev (Staging)** - Pre-production testing
+- **🟠 Project Dev (Staging - Profile)** - Profile mode for staging
 
 #### 🔴 Production Flavor
-- **🔴 Burger Eats (Production)** - Production environment
-- **🔴 Burger Eats (Production - Profile)** - Production profile mode
-- **🔴 Burger Eats (Production - Release)** - Full release build
+- **🔴 Project Dev (Production)** - Production environment
+- **🔴 Project Dev (Production - Profile)** - Production profile mode
+- **🔴 Project Dev (Production - Release)** - Full release build
 
 #### 🎯 Default
-- **🎯 Burger Eats (Default)** - Uses main.dart (dev flavor)
+- **🎯 Project Dev (Default)** - Uses main.dart (dev flavor)
 
 ### How to Use
 
@@ -208,17 +208,17 @@ The workspace recommends these extensions (install via **Extensions** panel):
 
 ### Daily Development
 1. Open VS Code in project root
-2. Select **🟢 Burger Eats (Dev)** configuration
+2. Select **🟢 Project Dev (Dev)** configuration
 3. Press `F5` to start debugging
 4. Make changes and save for hot reload
 
 ### Testing & QA
-1. Use **🟠 Burger Eats (Staging)** for feature testing
+1. Use **🟠 Project Dev (Staging)** for feature testing
 2. Use **Profile mode** configurations for performance testing
 3. Run **🔍 Analyze Code** task before commits
 
 ### Release Preparation
-1. Test with **🔴 Burger Eats (Production)** configuration
+1. Test with **🔴 Project Dev (Production)** configuration
 2. Run **🔴 Build APK (Production)** task
 3. Verify all features work without debug tools
 
@@ -238,4 +238,4 @@ The workspace recommends these extensions (install via **Extensions** panel):
 
 ---
 
-Happy coding with your fully configured Burger Eats development environment! 🍔✨
+Happy coding with your fully configured Project Dev development environment! 🍔✨

@@ -1,8 +1,8 @@
-# Burger Eats - Flavor System Documentation
+# Project Dev - Flavor System Documentation
 
 ## Overview
 
-The Burger Eats app uses a comprehensive flavor system that allows for different configurations across development, staging, and production environments. This enables environment-specific API endpoints, feature flags, and debugging options.
+The Project Dev app uses a comprehensive flavor system that allows for different configurations across development, staging, and production environments. This enables environment-specific API endpoints, feature flags, and debugging options.
 
 ## Available Flavors
 
@@ -134,17 +134,17 @@ android {
             dimension "default"
             applicationIdSuffix ".dev"
             versionNameSuffix "-dev"
-            resValue "string", "app_name", "Burger Eats Dev"
+            resValue "string", "app_name", "Project Dev Dev"
         }
         staging {
             dimension "default"
             applicationIdSuffix ".staging"
             versionNameSuffix "-staging"
-            resValue "string", "app_name", "Burger Eats Staging"
+            resValue "string", "app_name", "Project Dev Staging"
         }
         prod {
             dimension "default"
-            resValue "string", "app_name", "Burger Eats"
+            resValue "string", "app_name", "Project Dev"
         }
     }
 }

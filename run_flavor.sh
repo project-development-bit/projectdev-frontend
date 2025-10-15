@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Burger Eats App Flavor Runner Script
+# Project Dev App Flavor Runner Script
 # Usage: ./run_flavor.sh [dev|staging|prod] [android|ios]
 
 set -e
@@ -32,7 +32,7 @@ if [[ ! "$PLATFORM" =~ ^(android|ios)$ ]]; then
     exit 1
 fi
 
-echo "🚀 Running Burger Eats with flavor: $FLAVOR on platform: $PLATFORM"
+echo "🚀 Running Project Dev with flavor: $FLAVOR on platform: $PLATFORM"
 
 # Set the main dart file based on flavor
 case $FLAVOR in

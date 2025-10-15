@@ -19,7 +19,7 @@ class ShellRouteWrapper extends StatelessWidget {
       
       // Example: Add a common app bar
       // appBar: AppBar(
-      //   title: const Text('Burger Eats'),
+      //   title: const Text('Project Dev'),
       //   actions: [
       //     IconButton(
       //       icon: const Icon(Icons.logout),
