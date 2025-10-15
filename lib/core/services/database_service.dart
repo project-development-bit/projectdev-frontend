@@ -341,6 +341,13 @@ class DatabaseService {
   /// Clear all user data
   static Future<void> clearAllUsers() async {
     try {
+      if (kIsWeb) {
+        // For web, clear in-memory storage
+        _webUsers.clear();
+        debugPrint('🌐 Web user storage cleared successfully');
+        return;
+      }
+
       final db = await database;
       
       debugPrint('📊 Clearing all users');
@@ -417,24 +424,42 @@ class DatabaseService {
     }
   }
 
-  /// Set up test authentication for development
+  /// Set up test authentication for development (only if needed for testing)
   static Future<void> setupTestAuth() async {
     try {
       final secureStorage = SecureStorageService();
       final currentUserId = await secureStorage.getUserId();
       final currentToken = await secureStorage.getAuthToken();
-
-      if (currentUserId == null || currentToken == null) {
-        // Set user ID to 1 (John Doe) for testing
-        await secureStorage.saveUserId('1');
-        // Set a test auth token for development
-        await secureStorage.saveAuthToken('dev_test_token_123');
-        debugPrint('🧪 Test authentication set up with user ID: 1');
+      
+      // Only set up test auth if explicitly needed for development and no auth exists
+      // This prevents automatic login after logout
+      if (currentUserId == null && currentToken == null) {
+        // For now, don't automatically set up test auth
+        // This should be manually triggered only when needed for testing
+        debugPrint(
+            '🧪 No existing authentication found - not setting up test auth automatically');
+        debugPrint(
+            '🧪 Use manual login or call setupTestAuthForced() if testing is needed');
       } else {
-        debugPrint('🧪 User already authenticated with ID: $currentUserId');
+        debugPrint(
+            '🧪 Existing authentication found - user ID: $currentUserId');
       }
     } catch (e) {
-      debugPrint('❌ Error setting up test auth: $e');
+      debugPrint('❌ Error checking auth state: $e');
+    }
+  }
+
+  /// Force set up test authentication (for manual testing only)
+  static Future<void> setupTestAuthForced() async {
+    try {
+      final secureStorage = SecureStorageService();
+      // Set user ID to 1 (John Doe) for testing
+      await secureStorage.saveUserId('1');
+      // Set a test auth token for development
+      await secureStorage.saveAuthToken('dev_test_token_123');
+      debugPrint('🧪 Test authentication forcefully set up with user ID: 1');
+    } catch (e) {
+      debugPrint('❌ Error setting up forced test auth: $e');
     }
   }
 
