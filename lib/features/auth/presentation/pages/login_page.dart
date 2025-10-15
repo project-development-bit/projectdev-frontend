@@ -51,7 +51,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
               // Navigate to home on successful login
 
-              context.pushNamedHome();
+              
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(localizations?.translate('login_successful') ??
@@ -75,6 +75,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               debugNotifier.logAuthState('Error checking authentication: $e');
               message = 'Error checking authentication: $e';
             }
+
+            debugPrint(message);
             if (mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
@@ -82,6 +84,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   backgroundColor: Colors.red,
                 ),
               );
+
+              context.pushNamedHome();
             }
           });
           break;

@@ -299,6 +299,14 @@ class BurgerEatsAppRoutes {
             final isAuthenticated = await authProvider.isAuthenticated();
             debugPrint('🔄 Authentication check result: $isAuthenticated');
 
+            // If authenticated and trying to access root or auth, redirect to home
+            if (isAuthenticated &&
+                (currentPath == '/' || currentPath.startsWith('/auth'))) {
+              debugPrint('🔄 Redirecting authenticated user to home');
+              return AppRoutes.home;
+            }
+
+            // If not authenticated and not on auth route, redirect to login
             if (!isAuthenticated && !currentPath.startsWith('/auth')) {
               debugPrint('🔄 Redirecting to login - user not authenticated');
               return AppRoutes.login;
