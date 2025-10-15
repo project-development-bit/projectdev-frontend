@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/widgets/locale_switch_widget.dart';
 import '../../../core/widgets/theme_switch_widget.dart';
 import '../../../core/extensions/context_extensions.dart';
+import '../../../core/providers/auth_provider.dart';
 import '../../auth/presentation/providers/logout_provider.dart';
 import '../../user_profile/presentation/providers/profile_providers.dart';
 import '../widgets/hero_section.dart';
@@ -73,60 +75,114 @@ class HomePage extends ConsumerWidget {
                             color: context.onSurface,
                           ),
                         ),
-                        // User name from profile
+                        // User name from profile (only show if authenticated)
                         Consumer(
                           builder: (context, ref, child) {
-                            final profile =
-                                ref.watch(currentUserProfileProvider);
-                            if (profile != null) {
-                              return Text(
-                                'Welcome, ${profile.displayName ?? profile.username}!',
-                                style: context.bodySmall?.copyWith(
-                                  color: context.onSurface.withOpacity(0.7),
-                                ),
-                              );
-                            }
-                            return const SizedBox.shrink();
+                            return FutureBuilder<bool>(
+                              future: ref
+                                  .read(authProvider.notifier)
+                                  .isAuthenticated(),
+                              builder: (context, snapshot) {
+                                final isAuthenticated = snapshot.data ?? false;
+                                final profile =
+                                    ref.watch(currentUserProfileProvider);
+
+                                if (isAuthenticated && profile != null) {
+                                  return Text(
+                                    'Welcome, ${profile.displayName ?? profile.username}!',
+                                    style: context.bodySmall?.copyWith(
+                                      color: context.onSurface.withOpacity(0.7),
+                                    ),
+                                  );
+                                } else {
+                                  return Text(
+                                    'Welcome to Project Dev!',
+                                    style: context.bodySmall?.copyWith(
+                                      color: context.onSurface.withOpacity(0.7),
+                                    ),
+                                  );
+                                }
+                              },
+                            );
                           },
                         ),
                       ],
                     ),
                   ],
                 ),
-                // Theme and locale switches
+                // Theme and locale switches + Auth buttons
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    // Profile button
-                    IconButton(
-                      onPressed: () => context.pushNamedProfile(),
-                      icon: const Icon(Icons.person),
-                      tooltip: 'Profile',
-                    ),
-                    // Logout button
+                    // Authentication-dependent buttons
                     Consumer(
                       builder: (context, ref, child) {
-                        final isLoading = ref.watch(isLogoutLoadingProvider);
-                        return IconButton(
-                          onPressed: isLoading
-                              ? null
-                              : () => _handleLogout(context, ref),
-                          icon: isLoading
-                              ? SizedBox(
-                                  width: 16,
-                                  height: 16,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                      context.primary,
-                                    ),
+                        return FutureBuilder<bool>(
+                          future:
+                              ref.read(authProvider.notifier).isAuthenticated(),
+                          builder: (context, snapshot) {
+                            final isAuthenticated = snapshot.data ?? false;
+
+                            if (isAuthenticated) {
+                              // Show profile and logout buttons for authenticated users
+                              return Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  // Profile button
+                                  IconButton(
+                                    onPressed: () => context.pushNamedProfile(),
+                                    icon: const Icon(Icons.person),
+                                    tooltip: 'Profile',
                                   ),
-                                )
-                              : const Icon(Icons.logout),
-                          tooltip: isLoading ? 'Logging out...' : 'Logout',
+                                  // Logout button
+                                  Consumer(
+                                    builder: (context, ref, child) {
+                                      final isLoading =
+                                          ref.watch(isLogoutLoadingProvider);
+                                      return IconButton(
+                                        onPressed: isLoading
+                                            ? null
+                                            : () => _handleLogout(context, ref),
+                                        icon: isLoading
+                                            ? SizedBox(
+                                                width: 16,
+                                                height: 16,
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  strokeWidth: 2,
+                                                  valueColor:
+                                                      AlwaysStoppedAnimation<
+                                                          Color>(
+                                                    context.primary,
+                                                  ),
+                                                ),
+                                              )
+                                            : const Icon(Icons.logout),
+                                        tooltip: isLoading
+                                            ? 'Logging out...'
+                                            : 'Logout',
+                                      );
+                                    },
+                                  ),
+                                ],
+                              );
+                            } else {
+                              // Show login button for unauthenticated users
+                              return ElevatedButton.icon(
+                                onPressed: () => context.go('/auth/login'),
+                                icon: const Icon(Icons.login),
+                                label: const Text('Login'),
+                                style: ElevatedButton.styleFrom(
+                                  foregroundColor: context.onPrimary,
+                                  backgroundColor: context.primary,
+                                ),
+                              );
+                            }
+                          },
                         );
                       },
                     ),
+                    const SizedBox(width: 8),
                     const ThemeSwitchWidget(),
                     const SizedBox(width: 8),
                     const LocaleSwitchWidget(),

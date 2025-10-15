@@ -64,11 +64,8 @@ class BurgerEatsAppRoutes {
               debugPrint(
                   '🔄 Landing redirect - current path: ${state.fullPath}');
 
-              if (isAuthenticated) {
-                return AppRoutes.home;
-              } else {
-                return AppRoutes.login;
-              }
+              // Always redirect to home page regardless of auth state
+              return AppRoutes.home;
             },
           ),
 
@@ -289,9 +286,9 @@ class BurgerEatsAppRoutes {
             return null;
           }
 
-          // Skip redirect if already on home page to prevent loops
+          // Allow access to home page regardless of authentication state
           if (currentPath == AppRoutes.home) {
-            debugPrint('🔄 Already on home page, skipping redirect');
+            debugPrint('🔄 Allowing access to home page');
             return null;
           }
 
@@ -299,22 +296,26 @@ class BurgerEatsAppRoutes {
             final isAuthenticated = await authProvider.isAuthenticated();
             debugPrint('🔄 Authentication check result: $isAuthenticated');
 
-            // If authenticated and trying to access root or auth, redirect to home
-            if (isAuthenticated &&
-                (currentPath == '/' || currentPath.startsWith('/auth'))) {
+            // If authenticated and trying to access root, redirect to home
+            if (isAuthenticated && currentPath == '/') {
               debugPrint('🔄 Redirecting authenticated user to home');
               return AppRoutes.home;
             }
 
-            // If not authenticated and not on auth route, redirect to login
-            if (!isAuthenticated && !currentPath.startsWith('/auth')) {
-              debugPrint('🔄 Redirecting to login - user not authenticated');
+            // If not authenticated and trying to access protected routes (profile, settings, etc.)
+            if (!isAuthenticated &&
+                (currentPath.startsWith('/profile') ||
+                    currentPath.startsWith('/settings') ||
+                    currentPath.startsWith('/dashboard'))) {
+              debugPrint('🔄 Redirecting to login - accessing protected route');
               return AppRoutes.login;
             }
           } catch (e) {
             debugPrint('🔄 Error checking authentication: $e');
-            // On error, redirect to login for safety
-            if (!currentPath.startsWith('/auth')) {
+            // On error, only redirect if accessing protected routes
+            if (currentPath.startsWith('/profile') ||
+                currentPath.startsWith('/settings') ||
+                currentPath.startsWith('/dashboard')) {
               return AppRoutes.login;
             }
           }

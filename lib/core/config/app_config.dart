@@ -5,7 +5,6 @@ class AppConfig {
   final AppFlavor flavor;
   final String appName;
   final String apiBaseUrl;
-  final String apiVersion;
   final bool enableLogging;
   final bool enableCrashReporting;
   final bool enableAnalytics;
@@ -19,7 +18,6 @@ class AppConfig {
     required this.flavor,
     required this.appName,
     required this.apiBaseUrl,
-    this.apiVersion = 'v1',
     required this.enableLogging,
     required this.enableCrashReporting,
     required this.enableAnalytics,
@@ -34,8 +32,7 @@ class AppConfig {
   static const AppConfig dev = AppConfig(
     flavor: AppFlavor.dev,
     appName: 'Project Dev (Dev)',
-    apiBaseUrl: 'https://api-dev.burgereats.com',
-    apiVersion: 'v1',
+    apiBaseUrl: 'http://13.250.102.238/api/v1/',
     enableLogging: true,
     enableCrashReporting: false,
     enableAnalytics: false,
@@ -59,7 +56,6 @@ class AppConfig {
     flavor: AppFlavor.staging,
     appName: 'Project Dev (Staging)',
     apiBaseUrl: 'http://13.250.102.238/api/v1/',
-    apiVersion: 'v1',
     enableLogging: true,
     enableCrashReporting: true,
     enableAnalytics: false,
@@ -83,7 +79,6 @@ class AppConfig {
     flavor: AppFlavor.prod,
     appName: 'Project Dev',
     apiBaseUrl: 'http://13.250.102.238/api/v1/',
-    apiVersion: 'v1',
     enableLogging: false,
     enableCrashReporting: true,
     enableAnalytics: true,
@@ -126,7 +121,7 @@ class AppConfig {
   }
 
   /// Get the full API URL with version
-  String get fullApiUrl => '$apiBaseUrl/$apiVersion';
+  String get fullApiUrl => apiBaseUrl;
 
   /// Get the app display name
   String get displayName => appName;

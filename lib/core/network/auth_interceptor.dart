@@ -69,6 +69,7 @@ class TokenInterceptor extends Interceptor {
       } else {
         log("ADDING ERROR REQUEST TO FAILED QUEUE");
         failedRequests.add({'err': err, 'handler': handler});
+        return handler.next(err);
       }
     } else {
       return handler.next(err);
