@@ -4,6 +4,7 @@ import '../../../../core/common/common_textfield.dart';
 import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/providers/locale_provider.dart';
 import '../../../../core/providers/translation_provider.dart';
+import '../../../../core/providers/auth_debug_provider.dart';
 import '../../../../core/widgets/locale_switch_widget.dart';
 import '../../../../core/widgets/theme_switch_widget.dart';
 import '../../../../core/extensions/context_extensions.dart';
@@ -67,17 +68,31 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     ref.listen<LoginState>(loginNotifierProvider, (previous, next) {
       if (!mounted) return;
 
+      // Debug logging
+      final debugNotifier = ref.read(authDebugProvider.notifier);
+      debugNotifier
+          .logAuthState('LoginPage: state changed to ${next.runtimeType}');
+
       switch (next) {
         case LoginSuccess():
-          // Navigate to home on successful login
-          context.goToHome();
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(localizations?.translate('login_successful') ??
-                  'Login successful!'),
-              backgroundColor: Colors.green,
-            ),
-          );
+          // Add a small delay to ensure all async operations complete
+          Future.delayed(const Duration(milliseconds: 100), () {
+            if (mounted) {
+              // Log auth state before navigation
+              debugNotifier
+                  .logAuthState('LoginPage: before navigation to home');
+              
+              // Navigate to home on successful login
+              context.goToHome();
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(localizations?.translate('login_successful') ??
+                      'Login successful!'),
+                  backgroundColor: Colors.green,
+                ),
+              );
+            }
+          });
           break;
         case LoginError():
           // Show error message

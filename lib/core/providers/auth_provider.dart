@@ -1,23 +1,44 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../features/auth/presentation/providers/auth_providers.dart';
+import '../../features/auth/presentation/providers/login_provider.dart';
 
 /// Legacy authentication provider for backward compatibility
 ///
 /// This provider is kept for compatibility with existing routing logic.
 /// New authentication logic should use the separated login/register providers
 class AuthProvider extends StateNotifier<AuthState> {
-  AuthProvider(this._ref) : super(const AuthState.unauthenticated());
+  AuthProvider(this._ref) : super(const AuthState.unauthenticated()) {
+    // Listen to login state changes to keep auth state in sync
+    _ref.listen<LoginState>(loginNotifierProvider, (previous, next) {
+      if (next is LoginSuccess) {
+        state = const AuthState.authenticated();
+      } else if (next is LoginError) {
+        state = const AuthState.unauthenticated();
+      }
+    });
+  }
 
   final Ref _ref;
 
   /// Check if user is currently authenticated
   Future<bool> isAuthenticated() async {
     try {
+      // First check if we have a successful login state
+      final loginState = _ref.read(loginNotifierProvider);
+      if (loginState is LoginSuccess) {
+        state = const AuthState.authenticated();
+        return true;
+      }
+
+      // Fallback to checking stored tokens
       final authRepository = _ref.read(authRepositoryProvider);
       final result = await authRepository.isAuthenticated();
 
       return result.fold(
-        (failure) => false,
+        (failure) {
+          state = const AuthState.unauthenticated();
+          return false;
+        },
         (isAuth) {
           // Update state based on authentication status
           if (isAuth) {

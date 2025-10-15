@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/services/database_service.dart';
+import '../../../../core/services/secure_storage_service.dart';
 import '../../domain/entities/user.dart';
 import '../../domain/entities/login_response.dart';
 import '../../data/models/login_request.dart';
@@ -93,6 +94,10 @@ class LoginNotifier extends StateNotifier<LoginState> {
         },
         (loginResponse) async {
           debugPrint('✅ Login successful for: $email');
+          debugPrint(
+              '✅ Access token length: ${loginResponse.tokens.accessToken.length}');
+          debugPrint(
+              '✅ Refresh token length: ${loginResponse.tokens.refreshToken.length}');
           
           // Store user data in local database
           try {
@@ -103,11 +108,24 @@ class LoginNotifier extends StateNotifier<LoginState> {
             // Don't fail the login process if database save fails
           }
           
+          // Ensure state is set after all async operations
+          await Future.delayed(const Duration(milliseconds: 50));
+          
           state = LoginSuccess(
             user: loginResponse.user,
             loginResponse: loginResponse,
           );
           debugPrint('🔄 State set to LoginSuccess');
+          
+          // Verify tokens were stored properly
+          try {
+            final secureStorage = _ref.read(secureStorageServiceProvider);
+            final storedToken = await secureStorage.getAuthToken();
+            debugPrint(
+                '✅ Token verification - stored token length: ${storedToken?.length ?? 0}');
+          } catch (e) {
+            debugPrint('⚠️ Token verification failed: $e');
+          }
         },
       );
     } catch (e) {

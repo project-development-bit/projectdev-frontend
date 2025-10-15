@@ -20,27 +20,46 @@ enum UserRole {
 
   /// Create UserRole from string value
   static UserRole fromString(String value) {
-    switch (value) {
+    // Handle case variations and common server response formats
+    final normalizedValue = value.trim();
+
+    switch (normalizedValue) {
       case 'Dev':
+      case 'dev':
         return UserRole.dev;
       case 'Admin':
+      case 'admin':
         return UserRole.admin;
       case 'SuperUser':
+      case 'superUser':
+      case 'super_user':
+      case 'SUPER_USER':
         return UserRole.superUser;
       case 'NormalUser':
+      case 'normalUser':
+      case 'normal_user':
+      case 'NORMAL_USER':
+      case 'user':
+      case 'User':
         return UserRole.normalUser;
       default:
-        throw ArgumentError('Invalid user role: $value');
+        // Log the invalid value for debugging
+        print(
+            '⚠️ Invalid user role received: "$value". Defaulting to normalUser.');
+        return UserRole
+            .normalUser; // Default to normal user instead of throwing
     }
   }
 
   /// Try to create UserRole from string value, returns null if invalid
   static UserRole? tryFromString(String? value) {
-    if (value == null) return null;
+    if (value == null || value.trim().isEmpty) return null;
     try {
       return fromString(value);
     } catch (e) {
-      return null;
+      // Log the error for debugging
+      print('⚠️ Failed to parse user role: "$value". Error: $e');
+      return UserRole.normalUser; // Default to normal user instead of null
     }
   }
 

@@ -18,7 +18,8 @@ class UserModel extends User {
       id: json['id'] as int,
       name: json['name'] as String,
       email: json['email'] as String,
-      role: UserRole.fromString(json['role'] as String),
+      role: UserRole.tryFromString(json['role'] as String?) ??
+          UserRole.normalUser,
     );
   }
 
@@ -48,7 +49,8 @@ class UserModel extends User {
       id: json['id'] as int,
       name: json['name'] as String,
       email: json['email'] as String,
-      role: UserRole.fromString(json['role'] as String),
+      role: UserRole.tryFromString(json['role'] as String?) ??
+          UserRole.normalUser,
     );
   }
 

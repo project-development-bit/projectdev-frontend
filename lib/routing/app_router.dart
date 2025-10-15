@@ -285,14 +285,30 @@ class BurgerEatsAppRoutes {
 
           // Allow access to auth routes without authentication
           if (currentPath.startsWith('/auth')) {
+            debugPrint('🔄 Allowing access to auth route: $currentPath');
             return null;
           }
 
-          final isAuthenticated = await authProvider.isAuthenticated();
+          // Skip redirect if already on home page to prevent loops
+          if (currentPath == AppRoutes.home) {
+            debugPrint('🔄 Already on home page, skipping redirect');
+            return null;
+          }
 
-          if (!isAuthenticated && !currentPath.startsWith('/auth')) {
-            debugPrint('🔄 Redirecting to login - user not authenticated');
-            return AppRoutes.login;
+          try {
+            final isAuthenticated = await authProvider.isAuthenticated();
+            debugPrint('🔄 Authentication check result: $isAuthenticated');
+
+            if (!isAuthenticated && !currentPath.startsWith('/auth')) {
+              debugPrint('🔄 Redirecting to login - user not authenticated');
+              return AppRoutes.login;
+            }
+          } catch (e) {
+            debugPrint('🔄 Error checking authentication: $e');
+            // On error, redirect to login for safety
+            if (!currentPath.startsWith('/auth')) {
+              return AppRoutes.login;
+            }
           }
       
           return null;
