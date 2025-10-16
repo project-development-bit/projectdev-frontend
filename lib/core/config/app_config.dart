@@ -32,7 +32,7 @@ class AppConfig {
   static const AppConfig dev = AppConfig(
     flavor: AppFlavor.dev,
     appName: 'Project Dev (Dev)',
-    apiBaseUrl: 'http://13.250.102.238/api/v1/',
+    apiBaseUrl: 'https://api.gigafaucet.com/api/v1/',
     enableLogging: true,
     enableCrashReporting: false,
     enableAnalytics: false,
@@ -55,7 +55,7 @@ class AppConfig {
   static const AppConfig staging = AppConfig(
     flavor: AppFlavor.staging,
     appName: 'Project Dev (Staging)',
-    apiBaseUrl: 'http://13.250.102.238/api/v1/',
+    apiBaseUrl: 'https://api.gigafaucet.com/api/v1/',
     enableLogging: true,
     enableCrashReporting: true,
     enableAnalytics: false,
@@ -78,7 +78,7 @@ class AppConfig {
   static const AppConfig prod = AppConfig(
     flavor: AppFlavor.prod,
     appName: 'Project Dev',
-    apiBaseUrl: 'http://13.250.102.238/api/v1/',
+    apiBaseUrl: 'https://api.gigafaucet.com/api/v1/',
     enableLogging: false,
     enableCrashReporting: true,
     enableAnalytics: true,
