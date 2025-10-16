@@ -167,5 +167,16 @@
   "invalid_email": "Please enter a valid email address",
   "confirm_password_required": "Please confirm your password",
   "role": "Role",
-  "logout_confirmation": "Are you sure you want to logout?"
+  "logout_confirmation": "Are you sure you want to logout?",
+  "_verification_section": "Email Verification Section",
+  "verify_email": "Verify Your Email",
+  "verification_description": "We have sent a 4-digit verification code to",
+  "enter_verification_code": "Enter verification code",
+  "verify_code": "Verify Code",
+  "didnt_receive_code": "Didn't receive the code?",
+  "resend_code": "Resend Code",
+  "verification_successful": "Email verified successfully!",
+  "verification_failed": "Invalid verification code. Please try again.",
+  "resend_successful": "Verification code sent successfully!",
+  "resend_failed": "Failed to resend verification code. Please try again."
 }

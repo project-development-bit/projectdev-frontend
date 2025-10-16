@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../features/auth/presentation/pages/login_page.dart';
 import '../features/auth/presentation/pages/signup_page.dart';
 import '../features/auth/presentation/pages/forgot_password_page.dart';
+import '../features/auth/presentation/pages/verification_page.dart';
 import '../features/home/pages/home_page.dart';
 import '../features/user_profile/presentation/pages/profile_page.dart';
 import '../core/providers/auth_provider.dart';
@@ -19,6 +20,7 @@ class AppRoutes {
   static const String login = '/auth/login';
   static const String signUp = '/auth/signup';
   static const String forgotPassword = '/auth/forgot-password';
+  static const String verification = '/auth/verification';
   static const String auth = '/auth';
   static const String profile = '/profile';
   static const String settings = '/settings';
@@ -105,6 +107,16 @@ class BurgerEatsAppRoutes {
                 pageBuilder: (context, state) => const NoTransitionPage(
                   child: SignUpPage(),
                 ),
+              ),
+              GoRoute(
+                path: 'verification',
+                name: 'verification',
+                pageBuilder: (context, state) {
+                  final email = state.uri.queryParameters['email'] ?? '';
+                  return NoTransitionPage(
+                    child: VerificationPage(email: email),
+                  );
+                },
               ),
               GoRoute(
                 path: 'forgot-password',
