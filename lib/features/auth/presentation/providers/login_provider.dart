@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/error/error_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/services/database_service.dart';
@@ -37,10 +38,12 @@ class LoginSuccess extends LoginState {
 
 /// Login error occurred
 class LoginError extends LoginState {
-  const LoginError({required this.message, this.isNetworkError = false});
+  const LoginError(
+      {required this.message, this.isNetworkError = false, this.errorModel});
   
   final String message;
   final bool isNetworkError;
+  final ErrorModel? errorModel;
 }
 
 // =============================================================================
@@ -89,6 +92,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
             message: failure.message ?? 'Login failed',
             isNetworkError: failure.toString().contains('network') || 
                            failure.toString().contains('connection'),
+            errorModel: failure.errorModel,
           );
           debugPrint('🔄 State set to LoginError');
         },

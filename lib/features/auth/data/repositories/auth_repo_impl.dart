@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/error/error_model.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,6 +9,10 @@ import '../../domain/repositories/auth_repository.dart';
 import '../../domain/entities/login_response.dart';
 import '../models/login_request.dart';
 import '../models/register_request.dart';
+import '../models/resend_code_request.dart';
+import '../models/resend_code_response.dart';
+import '../models/verify_code_request.dart';
+import '../models/verify_code_response.dart';
 import '../models/login_response_model.dart';
 import '../datasources/remote/auth_remote.dart';
 
@@ -57,9 +62,14 @@ class AuthRepositoryImpl implements AuthRepository {
       
       return Right(loginResponseModel.toEntity());
     } on DioException catch (e) {
+      ErrorModel? errorModel;
+      if (e.response?.data != null) {
+        errorModel = ErrorModel.fromJson(e.response!.data);
+      }
       return Left(ServerFailure(
         message: e.message,
         statusCode: e.response?.statusCode,
+          errorModel: errorModel
       ));
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));
@@ -123,12 +133,60 @@ class AuthRepositoryImpl implements AuthRepository {
     }
   }
 
+  @override
+  Future<Either<Failure, ResendCodeResponse>> resendCode(
+      ResendCodeRequest request) async {
+    try {
+      final response = await remoteDataSource.resendCode(request);
+      return Right(response);
+    } on DioException catch (e) {
+      return Left(ServerFailure(
+        message: e.message,
+        statusCode: e.response?.statusCode,
+      ));
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, VerifyCodeResponse>> verifyCode(
+      VerifyCodeRequest request) async {
+    try {
+      final response = await remoteDataSource.verifyCode(request);
+
+      // Store the authentication tokens if verification is successful
+      if (response.success && response.data != null) {
+        await _storeVerificationTokens(response.data!);
+      }
+
+      return Right(response);
+    } on DioException catch (e) {
+      return Left(ServerFailure(
+        message: e.message,
+        statusCode: e.response?.statusCode,
+      ));
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
   /// Store authentication tokens in secure storage
   Future<void> _storeTokens(LoginResponseModel loginResponse) async {
     await secureStorage.saveAuthToken(loginResponse.tokens.accessToken);
     await secureStorage.saveRefreshToken(loginResponse.tokens.refreshToken);
     await secureStorage.saveUserId(loginResponse.user.id.toString());
     
+    // Store additional user info if needed
+    // You could also store user role, email, etc.
+  }
+
+  /// Store authentication tokens from verification response
+  Future<void> _storeVerificationTokens(VerifyCodeData data) async {
+    await secureStorage.saveAuthToken(data.tokens.accessToken);
+    await secureStorage.saveRefreshToken(data.tokens.refreshToken);
+    await secureStorage.saveUserId(data.user.id.toString());
+
     // Store additional user info if needed
     // You could also store user role, email, etc.
   }

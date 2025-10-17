@@ -13,8 +13,13 @@ class DioClient {
   late final Dio _dio;
 
   DioClient(SecureStorageService tokenService) {
+    // TEMPORARY: Switch URLs for debugging endpoint issues
+    // TODO: Remove this after confirming correct endpoint
+    final baseUrl = FlavorManager.currentConfig.fullApiUrl;
+    debugPrint('🌐 DioClient using base URL: $baseUrl');
+    
     BaseOptions options = BaseOptions(
-      baseUrl: FlavorManager.currentConfig.fullApiUrl,
+      baseUrl: baseUrl,
       connectTimeout: const Duration(seconds: 10),
       receiveTimeout: const Duration(seconds: 10),
       headers: {

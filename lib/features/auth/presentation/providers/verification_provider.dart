@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../data/models/verification_request.dart';
+import '../../data/models/resend_code_request.dart';
+import '../../data/models/verify_code_request.dart';
+import '../../domain/usecases/resend_code_usecase.dart';
+import '../../domain/usecases/verify_code_usecase.dart';
+import '../../data/repositories/auth_repo_impl.dart';
 
 // =============================================================================
 // VERIFICATION STATE CLASSES
@@ -50,7 +54,11 @@ class ResendCodeSuccess extends VerificationState {
 
 /// StateNotifier for managing email verification operations
 class VerificationNotifier extends StateNotifier<VerificationState> {
-  VerificationNotifier() : super(const VerificationInitial());
+  final ResendCodeUseCase _resendCodeUseCase;
+  final VerifyCodeUseCase _verifyCodeUseCase;
+
+  VerificationNotifier(this._resendCodeUseCase, this._verifyCodeUseCase)
+      : super(const VerificationInitial());
 
   /// Verify email with the provided code
   Future<void> verifyCode({
@@ -60,22 +68,30 @@ class VerificationNotifier extends StateNotifier<VerificationState> {
     try {
       state = const VerificationLoading();
       
-      final verificationRequest = VerificationRequest(
-        email: email,
-        code: code,
-      );
+      // Create request with email and code
+      final request = VerifyCodeRequest(email: email, code: code);
       
-      // For now, we'll simulate the verification
-      // TODO: Replace with actual API call when backend is ready
-      await _simulateVerification(verificationRequest);
-      
-      debugPrint('✅ Email verification successful for: $email');
-      state = const VerificationSuccess(
-        message: 'Email verified successfully! You can now log in.',
+      // Call use case to verify code
+      final result = await _verifyCodeUseCase(request);
+
+      result.fold(
+        (failure) {
+          debugPrint('❌ Email verification error: ${failure.message}');
+          state = VerificationError(
+            message: failure.message ??
+                'Invalid verification code. Please try again.',
+          );
+        },
+        (response) {
+          debugPrint('✅ Email verification successful for: $email');
+          state = VerificationSuccess(
+            message: response.message,
+          );
+        },
       );
     } catch (e) {
-      debugPrint('❌ Email verification error: $e');
-      state = VerificationError(
+      debugPrint('❌ Unexpected verification error: $e');
+      state = const VerificationError(
         message: 'Invalid verification code. Please try again.',
       );
     }
@@ -88,17 +104,30 @@ class VerificationNotifier extends StateNotifier<VerificationState> {
     try {
       state = const VerificationLoading();
       
-      // For now, we'll simulate the resend
-      // TODO: Replace with actual API call when backend is ready
-      await _simulateResendCode(email);
+      // Create request with email
+      final request = ResendCodeRequest(email: email);
       
-      debugPrint('✅ Verification code resent to: $email');
-      state = const ResendCodeSuccess(
-        message: 'Verification code sent successfully! Please check your email.',
+      // Call use case to resend code
+      final result = await _resendCodeUseCase(request);
+
+      result.fold(
+        (failure) {
+          debugPrint('❌ Resend code error: ${failure.message}');
+          state = VerificationError(
+            message: failure.message ??
+                'Failed to resend verification code. Please try again.',
+          );
+        },
+        (response) {
+          debugPrint('✅ Verification code resent to: $email');
+          state = ResendCodeSuccess(
+            message: response.message,
+          );
+        },
       );
     } catch (e) {
-      debugPrint('❌ Resend code error: $e');
-      state = VerificationError(
+      debugPrint('❌ Unexpected resend code error: $e');
+      state = const VerificationError(
         message: 'Failed to resend verification code. Please try again.',
       );
     }
@@ -115,44 +144,28 @@ class VerificationNotifier extends StateNotifier<VerificationState> {
   void reset() {
     state = const VerificationInitial();
   }
-
-  // =============================================================================
-  // PRIVATE METHODS (SIMULATION - REPLACE WITH ACTUAL API CALLS)
-  // =============================================================================
-
-  /// Simulate email verification (replace with actual API call)
-  Future<void> _simulateVerification(VerificationRequest request) async {
-    await Future.delayed(const Duration(seconds: 2));
-    
-    // Simple validation for demo purposes
-    if (request.code.length != 4) {
-      throw Exception('Invalid code length');
-    }
-    
-    // For demo: accept "1234" as valid code, reject others
-    if (request.code != "1234") {
-      throw Exception('Invalid verification code');
-    }
-  }
-
-  /// Simulate resend code (replace with actual API call)
-  Future<void> _simulateResendCode(String email) async {
-    await Future.delayed(const Duration(seconds: 1));
-    
-    // Simple email validation
-    if (!email.contains('@')) {
-      throw Exception('Invalid email address');
-    }
-  }
 }
 
 // =============================================================================
 // PROVIDERS
 // =============================================================================
 
+/// Provider for ResendCodeUseCase
+final resendCodeUseCaseProvider = Provider<ResendCodeUseCase>((ref) {
+  return ResendCodeUseCase(ref.watch(authRepositoryProvider));
+});
+
+/// Provider for VerifyCodeUseCase
+final verifyCodeUseCaseProvider = Provider<VerifyCodeUseCase>((ref) {
+  return VerifyCodeUseCase(ref.watch(authRepositoryProvider));
+});
+
 /// Provider for verification state notifier
 final verificationNotifierProvider = StateNotifierProvider<VerificationNotifier, VerificationState>(
-  (ref) => VerificationNotifier(),
+  (ref) => VerificationNotifier(
+    ref.watch(resendCodeUseCaseProvider),
+    ref.watch(verifyCodeUseCaseProvider),
+  ),
 );
 
 /// Provider for checking if verification is loading

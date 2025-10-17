@@ -6,14 +6,17 @@ import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/widgets/locale_switch_widget.dart';
 import '../providers/verification_provider.dart';
+import '../providers/resend_timer_provider.dart';
 import '../widgets/verification_code_input.dart';
 
 class VerificationPage extends ConsumerStatefulWidget {
   final String email;
-  
+  final bool isSendCode;
+
   const VerificationPage({
     super.key,
     required this.email,
+    this.isSendCode = false,
   });
 
   @override
@@ -29,6 +32,22 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
     4,
     (index) => FocusNode(),
   );
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Start timer when page loads
+      ref.read(resendTimerProvider.notifier).startTimer();
+
+      if (widget.isSendCode) {
+        ref
+            .read(verificationNotifierProvider.notifier)
+            .resendCode(email: widget.email);
+      }
+    });
+  }
 
   @override
   void dispose() {
@@ -57,15 +76,20 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
 
   void _verifyCode(String code) {
     ref.read(verificationNotifierProvider.notifier).verifyCode(
-      email: widget.email,
-      code: code,
-    );
+          email: widget.email,
+          code: code,
+        );
   }
 
   void _resendCode() {
-    ref.read(verificationNotifierProvider.notifier).resendCode(
-      email: widget.email,
-    );
+    final canResend = ref.read(canResendProvider);
+    if (canResend && mounted) {
+      ref.read(verificationNotifierProvider.notifier).resendCode(
+            email: widget.email,
+          );
+      // Restart timer after resending
+      ref.read(resendTimerProvider.notifier).startTimer();
+    }
   }
 
   void _clearCode() {
@@ -79,9 +103,12 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context);
     final verificationState = ref.watch(verificationNotifierProvider);
+    final canResend = ref.watch(canResendProvider);
+    final countdown = ref.watch(countdownProvider);
 
     // Listen to state changes for navigation
-    ref.listen<VerificationState>(verificationNotifierProvider, (previous, next) {
+    ref.listen<VerificationState>(verificationNotifierProvider,
+        (previous, next) {
       if (next is VerificationSuccess) {
         // Show success message and navigate to login
         ScaffoldMessenger.of(context).showSnackBar(
@@ -100,6 +127,15 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
           ),
         );
         _clearCode();
+      } else if (next is ResendCodeSuccess) {
+        // Show success message for resend code
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(next.message),
+            backgroundColor: Colors.green,
+          ),
+        );
+        // Timer is restarted in _resendCode method
       }
     });
 
@@ -109,7 +145,7 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: context.onSurface),
-          onPressed: () => context.go('/auth/signup'),
+          onPressed: () => context.pop(),
         ),
         actions: const [
           LocaleSwitchWidget(),
@@ -123,22 +159,23 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const SizedBox(height: 32),
-              
+
               // Header Icon
-                Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                    color: context.primary.withAlpha(26), // 0.1 * 255 = 26
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                    Icons.email_outlined,
-                    size: 40,
-                    color: context.primary,
-                  ),
-                ),              const SizedBox(height: 24),
-              
+              Container(
+                width: 80,
+                height: 80,
+                decoration: BoxDecoration(
+                  color: context.primary.withAlpha(26), // 0.1 * 255 = 26
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.email_outlined,
+                  size: 40,
+                  color: context.primary,
+                ),
+              ),
+              const SizedBox(height: 24),
+
               // Title
               CommonText.headlineMedium(
                 localizations?.translate('verify_email') ?? 'Verify Your Email',
@@ -146,19 +183,19 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
                 color: context.onSurface,
                 textAlign: TextAlign.center,
               ),
-              
+
               const SizedBox(height: 16),
-              
+
               // Description
               CommonText.bodyLarge(
-                localizations?.translate('verification_description') ?? 
-                'We have sent a 4-digit verification code to',
+                localizations?.translate('verification_description') ??
+                    'We have sent a 4-digit verification code to',
                 color: context.onSurface.withAlpha(179), // 0.7 * 255 = 179
                 textAlign: TextAlign.center,
               ),
-              
+
               const SizedBox(height: 8),
-              
+
               // Email display
               CommonText.bodyLarge(
                 widget.email,
@@ -166,9 +203,9 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
                 color: context.primary,
                 textAlign: TextAlign.center,
               ),
-              
+
               const SizedBox(height: 32),
-              
+
               // Verification Code Input
               VerificationCodeInput(
                 controllers: _controllers,
@@ -176,9 +213,9 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
                 onChanged: _onCodeChanged,
                 enabled: verificationState is! VerificationLoading,
               ),
-              
+
               const SizedBox(height: 24),
-              
+
               // Loading indicator or error state
               if (verificationState is VerificationLoading)
                 const CircularProgressIndicator()
@@ -197,33 +234,37 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
                     ),
                   ],
                 ),
-              
+
               const Spacer(),
-              
+
               // Resend code section
               Column(
                 children: [
                   CommonText.bodyMedium(
-                    localizations?.translate('didnt_receive_code') ?? 
-                    "Didn't receive the code?",
+                    localizations?.translate('didnt_receive_code') ??
+                        "Didn't receive the code?",
                     color: context.onSurface.withAlpha(179), // 0.7 * 255 = 179
                   ),
-                  
                   const SizedBox(height: 8),
-                  
                   TextButton(
-                    onPressed: verificationState is VerificationLoading 
-                        ? null 
+                    onPressed:
+                        (verificationState is VerificationLoading || !canResend)
+                            ? null
                         : _resendCode,
                     child: CommonText.bodyMedium(
-                      localizations?.translate('resend_code') ?? 'Resend Code',
-                      color: context.primary,
+                      canResend
+                          ? (localizations?.translate('resend_code') ??
+                              'Resend Code')
+                          : '${localizations?.translate('resend_in') ?? 'Resend in'} ${countdown}s',
+                      color: canResend
+                          ? context.primary
+                          : context.onSurface.withAlpha(128), // 0.5 * 255 = 128
                       fontWeight: FontWeight.w600,
                     ),
                   ),
                 ],
               ),
-              
+
               const SizedBox(height: 32),
             ],
           ),

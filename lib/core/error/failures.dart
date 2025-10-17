@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/error/error_model.dart';
 import 'package:equatable/equatable.dart';
 
 /// Base class for all failures in the application
@@ -5,10 +6,12 @@ import 'package:equatable/equatable.dart';
 /// This abstract class is the foundation for all error handling
 /// in the clean architecture. All failures should extend this class.
 abstract class Failure extends Equatable {
-  const Failure({this.message});
+  const Failure({this.message, this.errorModel});
 
   /// Optional error message
   final String? message;
+
+  final ErrorModel? errorModel;
 
   @override
   List<Object?> get props => [message];
@@ -19,6 +22,7 @@ class ServerFailure extends Failure {
   const ServerFailure({
     super.message,
     this.statusCode,
+    super.errorModel,
   });
 
   /// HTTP status code from the server
@@ -30,17 +34,17 @@ class ServerFailure extends Failure {
 
 /// Cache failure - when local storage operations fail
 class CacheFailure extends Failure {
-  const CacheFailure({super.message});
+  const CacheFailure({super.message, super.errorModel});
 }
 
 /// Network failure - when there's no internet connection
 class NetworkFailure extends Failure {
-  const NetworkFailure({super.message});
+  const NetworkFailure({super.message, super.errorModel});
 }
 
 /// Validation failure - when input validation fails
 class ValidationFailure extends Failure {
-  const ValidationFailure({super.message, this.field});
+  const ValidationFailure({super.message, this.field, super.errorModel});
 
   /// The field that failed validation
   final String? field;
@@ -51,25 +55,25 @@ class ValidationFailure extends Failure {
 
 /// Authentication failure - when authentication is required or fails
 class AuthenticationFailure extends Failure {
-  const AuthenticationFailure({super.message});
+  const AuthenticationFailure({super.message, super.errorModel});
 }
 
 /// Authorization failure - when user doesn't have permission
 class AuthorizationFailure extends Failure {
-  const AuthorizationFailure({super.message});
+  const AuthorizationFailure({super.message, super.errorModel});
 }
 
 /// File operation failure - when file operations fail
 class FileFailure extends Failure {
-  const FileFailure({super.message});
+  const FileFailure({super.message, super.errorModel});
 }
 
 /// Database failure - when database operations fail
 class DatabaseFailure extends Failure {
-  const DatabaseFailure({super.message});
+  const DatabaseFailure({super.message, super.errorModel});
 }
 
 /// General unexpected failure
 class UnexpectedFailure extends Failure {
-  const UnexpectedFailure({super.message});
+  const UnexpectedFailure({super.message, super.errorModel});
 }

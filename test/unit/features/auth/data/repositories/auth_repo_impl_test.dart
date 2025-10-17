@@ -6,6 +6,10 @@ import 'package:cointiply_app/features/auth/data/models/login_request.dart';
 import 'package:cointiply_app/features/auth/data/models/login_response_model.dart';
 import 'package:cointiply_app/features/auth/data/models/user_model.dart';
 import 'package:cointiply_app/features/auth/data/models/auth_tokens_model.dart';
+import 'package:cointiply_app/features/auth/data/models/resend_code_request.dart';
+import 'package:cointiply_app/features/auth/data/models/resend_code_response.dart';
+import 'package:cointiply_app/features/auth/data/models/verify_code_request.dart';
+import 'package:cointiply_app/features/auth/data/models/verify_code_response.dart';
 import 'package:cointiply_app/features/auth/domain/entities/login_response.dart';
 import 'package:cointiply_app/core/enum/user_role.dart';
 import 'package:dartz/dartz.dart';
@@ -24,6 +28,8 @@ void main() {
 
     setUpAll(() {
       registerFallbackValue(const LoginRequest(email: '', password: ''));
+      registerFallbackValue(const ResendCodeRequest(email: ''));
+      registerFallbackValue(const VerifyCodeRequest(email: '', code: ''));
     });
 
     setUp(() {
@@ -237,6 +243,262 @@ void main() {
           (failure) => fail('Expected Right, got Left: $failure'),
           (isAuthenticated) => expect(isAuthenticated, false),
         );
+      });
+    });
+
+    group('resendCode', () {
+      late ResendCodeRequest resendCodeRequest;
+      late ResendCodeResponse resendCodeResponse;
+
+      setUp(() {
+        resendCodeRequest = const ResendCodeRequest(email: 'test@example.com');
+        resendCodeResponse = const ResendCodeResponse(
+          success: true,
+          message: 'Verification code sent successfully',
+          data: ResendCodeData(
+            email: 'test@example.com',
+            securityCode: 1234,
+          ),
+        );
+      });
+
+      test('should return Right when resend code succeeds', () async {
+        // Arrange
+        when(() => mockRemoteDataSource.resendCode(any()))
+            .thenAnswer((_) async => resendCodeResponse);
+
+        // Act
+        final result = await authRepository.resendCode(resendCodeRequest);
+
+        // Assert
+        expect(result, isA<Right<Failure, ResendCodeResponse>>());
+
+        result.fold(
+          (failure) => fail('Expected Right, got Left: $failure'),
+          (response) {
+            expect(response.success, true);
+            expect(response.message, 'Verification code sent successfully');
+          },
+        );
+
+        verify(() => mockRemoteDataSource.resendCode(resendCodeRequest))
+            .called(1);
+      });
+
+      test('should return Left when resend code fails with DioException',
+          () async {
+        // Arrange
+        final dioException = DioException(
+          requestOptions: RequestOptions(path: ''),
+          message: 'Email not found',
+          response: Response(
+            requestOptions: RequestOptions(path: ''),
+            statusCode: 404,
+          ),
+        );
+
+        when(() => mockRemoteDataSource.resendCode(any()))
+            .thenThrow(dioException);
+
+        // Act
+        final result = await authRepository.resendCode(resendCodeRequest);
+
+        // Assert
+        expect(result, isA<Left<Failure, ResendCodeResponse>>());
+
+        result.fold(
+          (failure) {
+            expect(failure, isA<ServerFailure>());
+            expect(failure.message, 'Email not found');
+            expect((failure as ServerFailure).statusCode, 404);
+          },
+          (response) => fail('Expected Left, got Right: $response'),
+        );
+      });
+
+      test('should return Left when resend code fails with generic exception',
+          () async {
+        // Arrange
+        when(() => mockRemoteDataSource.resendCode(any()))
+            .thenThrow(Exception('Network error'));
+
+        // Act
+        final result = await authRepository.resendCode(resendCodeRequest);
+
+        // Assert
+        expect(result, isA<Left<Failure, ResendCodeResponse>>());
+
+        result.fold(
+          (failure) {
+            expect(failure, isA<ServerFailure>());
+            expect(failure.message, contains('Exception: Network error'));
+          },
+          (response) => fail('Expected Left, got Right: $response'),
+        );
+      });
+    });
+
+    group('verifyCode', () {
+      late VerifyCodeRequest verifyCodeRequest;
+      late VerifyCodeResponse verifyCodeResponse;
+
+      setUp(() {
+        verifyCodeRequest = const VerifyCodeRequest(
+          email: 'test@example.com',
+          code: '1234',
+        );
+
+        verifyCodeResponse = const VerifyCodeResponse(
+          success: true,
+          message: 'Verified successfully.',
+          data: VerifyCodeData(
+            user: User(
+              id: 23,
+              name: 'Test User',
+              email: 'test@example.com',
+              role: 'NormalUser',
+            ),
+            tokens: Tokens(
+              accessToken: 'access-token-123',
+              refreshToken: 'refresh-token-123',
+              tokenType: 'Bearer',
+              accessTokenExpiresIn: '15m',
+              refreshTokenExpiresIn: '7d',
+            ),
+          ),
+        );
+      });
+
+      test('should return Right and store tokens when verification succeeds',
+          () async {
+        // Arrange
+        when(() => mockRemoteDataSource.verifyCode(any()))
+            .thenAnswer((_) async => verifyCodeResponse);
+
+        when(() => mockSecureStorage.saveAuthToken(any()))
+            .thenAnswer((_) async {});
+        when(() => mockSecureStorage.saveRefreshToken(any()))
+            .thenAnswer((_) async {});
+        when(() => mockSecureStorage.saveUserId(any()))
+            .thenAnswer((_) async {});
+
+        // Act
+        final result = await authRepository.verifyCode(verifyCodeRequest);
+
+        // Assert
+        expect(result, isA<Right<Failure, VerifyCodeResponse>>());
+
+        result.fold(
+          (failure) => fail('Expected Right, got Left: $failure'),
+          (response) {
+            expect(response.success, true);
+            expect(response.message, 'Verified successfully.');
+            expect(response.data?.user.id, 23);
+            expect(response.data?.tokens.tokenType, 'Bearer');
+          },
+        );
+
+        verify(() => mockRemoteDataSource.verifyCode(verifyCodeRequest))
+            .called(1);
+        verify(() => mockSecureStorage.saveAuthToken('access-token-123'))
+            .called(1);
+        verify(() => mockSecureStorage.saveRefreshToken('refresh-token-123'))
+            .called(1);
+        verify(() => mockSecureStorage.saveUserId('23')).called(1);
+      });
+
+      test(
+          'should return Right without storing tokens when verification succeeds but has no data',
+          () async {
+        // Arrange
+        final responseWithoutData = const VerifyCodeResponse(
+          success: true,
+          message: 'Verified successfully.',
+          data: null,
+        );
+
+        when(() => mockRemoteDataSource.verifyCode(any()))
+            .thenAnswer((_) async => responseWithoutData);
+
+        // Act
+        final result = await authRepository.verifyCode(verifyCodeRequest);
+
+        // Assert
+        expect(result, isA<Right<Failure, VerifyCodeResponse>>());
+
+        result.fold(
+          (failure) => fail('Expected Right, got Left: $failure'),
+          (response) {
+            expect(response.success, true);
+            expect(response.data, null);
+          },
+        );
+
+        verify(() => mockRemoteDataSource.verifyCode(verifyCodeRequest))
+            .called(1);
+        verifyNever(() => mockSecureStorage.saveAuthToken(any()));
+        verifyNever(() => mockSecureStorage.saveRefreshToken(any()));
+        verifyNever(() => mockSecureStorage.saveUserId(any()));
+      });
+
+      test('should return Left when verification fails with DioException',
+          () async {
+        // Arrange
+        final dioException = DioException(
+          requestOptions: RequestOptions(path: ''),
+          message: 'Invalid verification code',
+          response: Response(
+            requestOptions: RequestOptions(path: ''),
+            statusCode: 400,
+          ),
+        );
+
+        when(() => mockRemoteDataSource.verifyCode(any()))
+            .thenThrow(dioException);
+
+        // Act
+        final result = await authRepository.verifyCode(verifyCodeRequest);
+
+        // Assert
+        expect(result, isA<Left<Failure, VerifyCodeResponse>>());
+
+        result.fold(
+          (failure) {
+            expect(failure, isA<ServerFailure>());
+            expect(failure.message, 'Invalid verification code');
+            expect((failure as ServerFailure).statusCode, 400);
+          },
+          (response) => fail('Expected Left, got Right: $response'),
+        );
+
+        verifyNever(() => mockSecureStorage.saveAuthToken(any()));
+        verifyNever(() => mockSecureStorage.saveRefreshToken(any()));
+        verifyNever(() => mockSecureStorage.saveUserId(any()));
+      });
+
+      test('should return Left when verification fails with generic exception',
+          () async {
+        // Arrange
+        when(() => mockRemoteDataSource.verifyCode(any()))
+            .thenThrow(Exception('Network error'));
+
+        // Act
+        final result = await authRepository.verifyCode(verifyCodeRequest);
+
+        // Assert
+        expect(result, isA<Left<Failure, VerifyCodeResponse>>());
+
+        result.fold(
+          (failure) {
+            expect(failure, isA<ServerFailure>());
+            expect(failure.message, contains('Exception: Network error'));
+          },
+          (response) => fail('Expected Left, got Right: $response'),
+        );
+
+        verifyNever(() => mockSecureStorage.saveAuthToken(any()));
+        verifyNever(() => mockSecureStorage.saveRefreshToken(any()));
+        verifyNever(() => mockSecureStorage.saveUserId(any()));
       });
     });
   });

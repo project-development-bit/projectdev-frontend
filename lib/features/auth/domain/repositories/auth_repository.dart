@@ -3,6 +3,10 @@ import '../../../../core/error/failures.dart';
 import '../entities/login_response.dart';
 import '../../data/models/login_request.dart';
 import '../../data/models/register_request.dart';
+import '../../data/models/resend_code_request.dart';
+import '../../data/models/resend_code_response.dart';
+import '../../data/models/verify_code_request.dart';
+import '../../data/models/verify_code_response.dart';
 
 /// Authentication repository interface
 /// 
@@ -25,4 +29,12 @@ abstract class AuthRepository {
   
   /// Refresh authentication token
   Future<Either<Failure, LoginResponse>> refreshToken();
+  
+  /// Resend verification code to user's email
+  Future<Either<Failure, ResendCodeResponse>> resendCode(
+      ResendCodeRequest request);
+
+  /// Verify email with verification code
+  Future<Either<Failure, VerifyCodeResponse>> verifyCode(
+      VerifyCodeRequest request);
 }

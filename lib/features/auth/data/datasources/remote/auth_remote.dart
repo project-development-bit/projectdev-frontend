@@ -3,7 +3,12 @@ import 'package:cointiply_app/core/network/base_dio_client.dart';
 import 'package:cointiply_app/features/auth/data/models/register_request.dart';
 import 'package:cointiply_app/features/auth/data/models/login_request.dart';
 import 'package:cointiply_app/features/auth/data/models/login_response_model.dart';
+import 'package:cointiply_app/features/auth/data/models/resend_code_request.dart';
+import 'package:cointiply_app/features/auth/data/models/resend_code_response.dart';
+import 'package:cointiply_app/features/auth/data/models/verify_code_request.dart';
+import 'package:cointiply_app/features/auth/data/models/verify_code_response.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Provider for the authentication remote data source
@@ -20,6 +25,12 @@ abstract class AuthRemoteDataSource {
   
   /// Login user with email and password
   Future<LoginResponseModel> login(LoginRequest request);
+  
+  /// Resend verification code to user's email
+  Future<ResendCodeResponse> resendCode(ResendCodeRequest request);
+
+  /// Verify email with verification code
+  Future<VerifyCodeResponse> verifyCode(VerifyCodeRequest request);
 }
 
 /// Implementation of [AuthRemoteDataSource] that handles HTTP requests
@@ -88,6 +99,116 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     } catch (e) {
       // Handle any other unexpected exceptions
       throw Exception('Unexpected error during login: $e');
+    }
+  }
+
+  @override
+  Future<ResendCodeResponse> resendCode(ResendCodeRequest request) async {
+    try {
+      debugPrint('📤 Resending code to: ${request.email}');
+      debugPrint('📤 Request URL: $resendCodeEndpoints');
+      debugPrint(
+          '📤 Base URL from DioClient: ${dioClient.client.options.baseUrl}');
+      debugPrint('📤 Request data: ${request.toJson()}');
+
+      final response = await dioClient.post(
+        resendCodeEndpoints,
+        data: request.toJson(),
+      );
+
+      return ResendCodeResponse.fromJson(response.data as Map<String, dynamic>);
+    } on DioException catch (e) {
+      debugPrint('❌ Resend code DioException: ${e.message}');
+      debugPrint('❌ Request URL: ${e.requestOptions.uri}');
+      debugPrint('❌ Response status: ${e.response?.statusCode}');
+      debugPrint('❌ Response data: ${e.response?.data}');
+
+      // Extract server error message from response data
+      final serverMessage = _extractServerErrorMessage(e.response?.data);
+
+      // Create new DioException with server message or appropriate fallback
+      throw DioException(
+        requestOptions: e.requestOptions,
+        response: e.response,
+        message: serverMessage ?? _getFallbackMessage(e),
+      );
+    } catch (e) {
+      // Handle any other unexpected exceptions
+      throw Exception('Unexpected error during resend code: $e');
+    }
+  }
+
+  @override
+  Future<VerifyCodeResponse> verifyCode(VerifyCodeRequest request) async {
+    try {
+      // Option 1: Try with path parameters (current implementation)
+      final encodedEmail = Uri.encodeComponent(request.email);
+      final encodedCode = Uri.encodeComponent(request.code);
+      final url = '$verifyCodeEndpoints/$encodedEmail/$encodedCode';
+
+      debugPrint('🔍 Verifying code with URL: $url');
+      debugPrint(
+          '🔍 Base URL from DioClient: ${dioClient.client.options.baseUrl}');
+      debugPrint(
+          '🔍 Full URL will be: ${dioClient.client.options.baseUrl}$url');
+
+      final response = await dioClient.post(url);
+
+      return VerifyCodeResponse.fromJson(response.data as Map<String, dynamic>);
+    } on DioException catch (e) {
+      debugPrint('❌ Verify code DioException (path params): ${e.message}');
+      debugPrint('❌ Request URL: ${e.requestOptions.uri}');
+      debugPrint('❌ Response status: ${e.response?.statusCode}');
+      debugPrint('❌ Response data: ${e.response?.data}');
+
+      // If path parameter approach fails with 404, try with request body
+      if (e.response?.statusCode == 404) {
+        debugPrint('🔄 Trying alternative approach with request body...');
+        try {
+          final response = await dioClient.post(
+            verifyCodeEndpoints,
+            data: request.toJson(),
+          );
+
+          debugPrint('✅ Alternative approach with request body succeeded!');
+          return VerifyCodeResponse.fromJson(
+              response.data as Map<String, dynamic>);
+        } on DioException catch (bodyException) {
+          debugPrint(
+              '❌ Alternative approach also failed: ${bodyException.message}');
+
+          // Try third approach: different endpoint format
+          debugPrint('🔄 Trying third approach with verify-email endpoint...');
+          try {
+            final response = await dioClient.post(
+              'verify-email',
+              data: request.toJson(),
+            );
+
+            debugPrint(
+                '✅ Third approach with verify-email endpoint succeeded!');
+            return VerifyCodeResponse.fromJson(
+                response.data as Map<String, dynamic>);
+          } on DioException catch (thirdException) {
+            debugPrint(
+                '❌ Third approach also failed: ${thirdException.message}');
+            // Continue with original error handling
+          }
+        }
+      }
+
+      // Extract server error message from response data
+      final serverMessage = _extractServerErrorMessage(e.response?.data);
+
+      // Create new DioException with server message or appropriate fallback
+      throw DioException(
+        requestOptions: e.requestOptions,
+        response: e.response,
+        message: serverMessage ?? _getFallbackMessage(e),
+      );
+    } catch (e) {
+      // Handle any other unexpected exceptions
+      throw Exception('Unexpected error during verification: $e');
     }
   }
 

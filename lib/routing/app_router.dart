@@ -114,7 +114,9 @@ class BurgerEatsAppRoutes {
                 pageBuilder: (context, state) {
                   final email = state.uri.queryParameters['email'] ?? '';
                   return NoTransitionPage(
-                    child: VerificationPage(email: email),
+                    child: VerificationPage(
+                        email: email,
+                        isSendCode: state.extra as bool? ?? false),
                   );
                 },
               ),

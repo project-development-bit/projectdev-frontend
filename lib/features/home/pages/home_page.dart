@@ -117,13 +117,10 @@ class HomePage extends ConsumerWidget {
                     // Authentication-dependent buttons
                     Consumer(
                       builder: (context, ref, child) {
-                        return FutureBuilder<bool>(
-                          future:
-                              ref.read(authProvider.notifier).isAuthenticated(),
-                          builder: (context, snapshot) {
-                            final isAuthenticated = snapshot.data ?? false;
+                        // Use the observable authentication provider for real-time updates
+                        final isAuthenticated = ref.watch(isAuthenticatedObservableProvider);
 
-                            if (isAuthenticated) {
+                        if (isAuthenticated) {
                               // Show profile and logout buttons for authenticated users
                               return Row(
                                 mainAxisSize: MainAxisSize.min,
@@ -178,8 +175,6 @@ class HomePage extends ConsumerWidget {
                                 ),
                               );
                             }
-                          },
-                        );
                       },
                     ),
                     const SizedBox(width: 8),
@@ -249,16 +244,21 @@ class HomePage extends ConsumerWidget {
 
     if (shouldLogout == true) {
       try {
-        // Perform logout
+        // Perform logout - the UI should automatically update via the observable provider
         await ref.read(logoutNotifierProvider.notifier).logout();
 
         // Check the final state after logout
         final logoutState = ref.read(logoutNotifierProvider);
 
         if (logoutState is LogoutSuccess) {
-          // Navigate to login page after successful logout
+          // Show success message but don't navigate - let UI update naturally
           if (context.mounted) {
-            context.goToLogin();
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Logged out successfully'),
+                backgroundColor: Colors.green,
+              ),
+            );
           }
         } else if (logoutState is LogoutError) {
           // Show error message

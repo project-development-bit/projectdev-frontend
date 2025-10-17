@@ -1,2 +1,4 @@
 const registerEndpoints = 'users';
 const loginEndpoints = 'users/login';
+const resendCodeEndpoints = 'users/resend-code';
+const verifyCodeEndpoints = 'users/verify'; // POST with /{email}/{code}

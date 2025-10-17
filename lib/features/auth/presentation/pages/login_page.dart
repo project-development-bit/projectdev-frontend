@@ -1,8 +1,11 @@
+import 'package:cointiply_app/core/error/error_model.dart';
 import 'package:cointiply_app/core/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/common/common_textfield.dart';
+import '../../../../core/common/common_text.dart';
+import '../../../../core/common/common_button.dart';
 import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/providers/locale_provider.dart';
 import '../../../../core/providers/translation_provider.dart';
@@ -62,30 +65,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 ),
               );
             }
-            String message = '';
-            try {
-              final isAuthenticated =
-                  await ref.read(authProvider.notifier).isAuthenticated();
-              if (isAuthenticated) {
-                debugNotifier.logAuthState('User is authenticated.');
-                message = 'User is authenticated.';
-              } else {
-                debugNotifier.logAuthState('User is NOT authenticated!');
-                message = 'User is NOT authenticated!';
-              }
-            } catch (e) {
-              debugNotifier.logAuthState('Error checking authentication: $e');
-              message = 'Error checking authentication: $e';
-            }
-
-            debugPrint(message);
+            
             if (mounted) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(message),
-                  backgroundColor: Colors.red,
-                ),
-              );
 
               // Use GoRouter.of(context).go() to replace the current route
               GoRouter.of(context).go(AppRoutes.home);
@@ -100,6 +81,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               backgroundColor: Colors.red,
             ),
           );
+          _checkVerifyCode(next.errorModel);
           break;
         default:
           break;
@@ -191,25 +173,18 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     const SizedBox(height: 20),
 
                     // Welcome Text - Testing direct translation provider
-                    Text(
+                    CommonText.headlineMedium(
                       translate('welcome_back'),
-                      style: context.headlineMedium?.copyWith(
-                        // Using context extension
-                        fontWeight: FontWeight.bold,
-                        color: context.onSurface, // Using context extension
-                      ),
+                      fontWeight: FontWeight.bold,
+                      color: context.onSurface,
                       textAlign: TextAlign.center,
                     ),
 
                     const SizedBox(height: 8),
 
-                    Text(
+                    CommonText.bodyLarge(
                       translate('sign_in_subtitle'),
-                      style: context.bodyLarge?.copyWith(
-                        // Using context extension
-                        color:
-                            context.onSurfaceVariant, // Using context extension
-                      ),
+                      color: context.onSurfaceVariant,
                       textAlign: TextAlign.center,
                     ),
 
@@ -266,24 +241,20 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                 });
                               },
                             ),
-                            Text(
+                            CommonText.bodyMedium(
                               localizations?.translate('remember_me') ??
                                   'Remember me',
-                              style: context.bodyMedium?.copyWith(
-                                color: context.onSurfaceVariant,
-                              ),
+                              color: context.onSurfaceVariant,
                             ),
                           ],
                         ),
                         TextButton(
                           onPressed: _handleForgotPassword,
-                          child: Text(
+                          child: CommonText.bodyMedium(
                             localizations?.translate('forgot_password') ??
                                 'Forgot Password?',
-                            style: TextStyle(
-                              color: context.primary,
-                              fontWeight: FontWeight.w500,
-                            ),
+                            color: context.primary,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                       ],
@@ -292,38 +263,15 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     const SizedBox(height: 32),
 
                     // Login Button
-                    SizedBox(
+                    CommonButton(
+                      text: localizations?.translate('sign_in') ?? 'Sign In',
+                      onPressed: isLoading ? null : _handleLogin,
+                      backgroundColor: context.primary,
+                      textColor: context.onPrimary,
                       height: 56,
-                      child: ElevatedButton(
-                        onPressed: isLoading ? null : _handleLogin,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: context.primary,
-                          foregroundColor: context.onPrimary,
-                          elevation: 2,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                        child: isLoading
-                            ? SizedBox(
-                                width: 24,
-                                height: 24,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                    context.onPrimary,
-                                  ),
-                                ),
-                              )
-                            : Text(
-                                localizations?.translate('sign_in') ??
-                                    'Sign In',
-                                style: context.titleMedium?.copyWith(
-                                  fontWeight: FontWeight.w600,
-                                  color: context.onPrimary,
-                                ),
-                              ),
-                      ),
+                      borderRadius: 12,
+                      isLoading: isLoading,
+                      fontSize: context.titleMedium?.fontSize,
                     ),
 
                     const SizedBox(height: 24),
@@ -338,12 +286,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Text(
+                          child: CommonText.bodySmall(
                             localizations?.translate('or') ?? 'OR',
-                            style: context.bodySmall?.copyWith(
-                              color: context.onSurfaceVariant,
-                              fontWeight: FontWeight.w500,
-                            ),
+                            color: context.onSurfaceVariant,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                         Expanded(
@@ -417,12 +363,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
+                        CommonText.bodyMedium(
                           localizations?.translate('no_account') ??
                               "Don't have an account? ",
-                          style: context.bodyMedium?.copyWith(
-                            color: context.onSurfaceVariant,
-                          ),
+                          color: context.onSurfaceVariant,
                         ),
                         TextButton(
                           onPressed: _handleSignUp,
@@ -431,12 +375,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                             minimumSize: Size.zero,
                             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           ),
-                          child: Text(
+                          child: CommonText.bodyMedium(
                             localizations?.translate('sign_up') ?? 'Sign Up',
-                            style: TextStyle(
-                              color: context.primary,
-                              fontWeight: FontWeight.w600,
-                            ),
+                            color: context.primary,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ],
@@ -464,6 +406,113 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           ],
         ),
       ),
+    );
+  }
+  
+  void _checkVerifyCode(ErrorModel? errorModel) {
+    /// If the error model indicates that email verification is required,
+    /// show verification dialog
+    if (errorModel?.isUnverifiedAccount == true) {
+      _showVerificationDialog();
+    }
+  }
+
+  void _showVerificationDialog() {
+    final localizations = AppLocalizations.of(context);
+
+    showDialog(
+      context: context,
+      barrierDismissible: false, // User must tap verify or cancel
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          title: Row(
+            children: [
+              Icon(
+                Icons.email_outlined,
+                color: context.primary,
+                size: 24,
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: CommonText.titleLarge(
+                  localizations?.translate('verify_email') ??
+                      'Verify Your Email',
+                  fontWeight: FontWeight.bold,
+                  color: context.onSurface,
+                ),
+              ),
+            ],
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CommonText.bodyLarge(
+                localizations?.translate('verification_required_title') ??
+                    'Account Verification Required',
+                fontWeight: FontWeight.w600,
+                color: context.onSurface,
+              ),
+              const SizedBox(height: 12),
+              CommonText.bodyMedium(
+                localizations?.translate('verification_required_message') ??
+                    'Your account needs to be verified before you can log in. We\'ll send a verification code to your email address.',
+                color: context.onSurface.withAlpha(179), // 0.7 opacity
+              ),
+              const SizedBox(height: 16),
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: context.primary.withAlpha(26), // 0.1 opacity
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.info_outline,
+                      color: context.primary,
+                      size: 20,
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: CommonText.bodySmall(
+                        _emailController.text.trim(),
+                        fontWeight: FontWeight.w600,
+                        color: context.primary,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            CommonButton(
+              text: localizations?.translate('cancel') ?? 'Cancel',
+              onPressed: () => Navigator.of(context).pop(),
+              isOutlined: true,
+              textColor: context.onSurface.withAlpha(153), // 0.6 opacity
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            ),
+            CommonButton(
+              text: localizations?.translate('verify_now') ?? 'Verify Now',
+              onPressed: () {
+                Navigator.of(context).pop();
+                // Navigate to verification page with email
+                GoRouter.of(context).push(
+                    '/auth/verification?email=${Uri.encodeComponent(_emailController.text.trim())}',
+                    extra: true);
+              },
+              backgroundColor: context.primary,
+              textColor: context.onPrimary,
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            ),
+          ],
+        );
+      },
     );
   }
 }

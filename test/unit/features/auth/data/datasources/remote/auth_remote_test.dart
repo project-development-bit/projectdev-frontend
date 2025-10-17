@@ -4,6 +4,10 @@ import 'package:cointiply_app/features/auth/data/datasources/remote/auth_remote.
 import 'package:cointiply_app/features/auth/data/models/register_request.dart';
 import 'package:cointiply_app/features/auth/data/models/login_request.dart';
 import 'package:cointiply_app/features/auth/data/models/login_response_model.dart';
+import 'package:cointiply_app/features/auth/data/models/resend_code_request.dart';
+import 'package:cointiply_app/features/auth/data/models/resend_code_response.dart';
+import 'package:cointiply_app/features/auth/data/models/verify_code_request.dart';
+import 'package:cointiply_app/features/auth/data/models/verify_code_response.dart';
 import 'package:cointiply_app/core/enum/user_role.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -569,6 +573,259 @@ void main() {
           loginEndpoints,
           data: expectedData,
         )).called(1);
+      });
+    });
+
+    group('resendCode', () {
+      late ResendCodeRequest resendCodeRequest;
+
+      setUp(() {
+        resendCodeRequest = ResendCodeRequest(
+          email: 'test@example.com',
+        );
+      });
+
+      test('should return ResendCodeResponse when API returns success',
+          () async {
+        // Arrange
+        final responseData = {
+          'success': true,
+          'message': 'Verification code sent successfully',
+          'data': {
+            'email': 'test@example.com',
+            'securityCode': 1234,
+          },
+        };
+
+        final response = Response(
+          requestOptions: RequestOptions(path: resendCodeEndpoints),
+          statusCode: 200,
+          data: responseData,
+        );
+
+        when(() => mockDioClient.post(
+              resendCodeEndpoints,
+              data: resendCodeRequest.toJson(),
+            )).thenAnswer((_) async => response);
+
+        // Act
+        final result = await authRemoteDataSource.resendCode(resendCodeRequest);
+
+        // Assert
+        expect(result, isA<ResendCodeResponse>());
+        expect(result.success, true);
+        expect(result.message, 'Verification code sent successfully');
+        expect(result.data.email, 'test@example.com');
+        expect(result.data.securityCode, 1234);
+
+        verify(() => mockDioClient.post(
+              resendCodeEndpoints,
+              data: resendCodeRequest.toJson(),
+            )).called(1);
+      });
+
+      test('should throw DioException when API returns error', () async {
+        // Arrange
+        final errorData = {
+          'message': 'Email not found',
+        };
+
+        final dioException = DioException(
+          requestOptions: RequestOptions(path: resendCodeEndpoints),
+          response: Response(
+            requestOptions: RequestOptions(path: resendCodeEndpoints),
+            statusCode: 404,
+            data: errorData,
+          ),
+          message: 'Email not found',
+        );
+
+        when(() => mockDioClient.post(
+              resendCodeEndpoints,
+              data: resendCodeRequest.toJson(),
+            )).thenThrow(dioException);
+
+        // Act & Assert
+        expect(
+          () async => await authRemoteDataSource.resendCode(resendCodeRequest),
+          throwsA(isA<DioException>().having(
+            (e) => e.message,
+            'message',
+            'Email not found',
+          )),
+        );
+
+        verify(() => mockDioClient.post(
+              resendCodeEndpoints,
+              data: resendCodeRequest.toJson(),
+            )).called(1);
+      });
+
+      test('should handle unexpected errors', () async {
+        // Arrange
+        when(() => mockDioClient.post(
+              resendCodeEndpoints,
+              data: resendCodeRequest.toJson(),
+            )).thenThrow(Exception('Network error'));
+
+        // Act & Assert
+        expect(
+          () async => await authRemoteDataSource.resendCode(resendCodeRequest),
+          throwsA(isA<Exception>().having(
+            (e) => e.toString(),
+            'message',
+            contains('Unexpected error during resend code'),
+          )),
+        );
+      });
+    });
+
+    group('verifyCode', () {
+      late VerifyCodeRequest verifyCodeRequest;
+
+      setUp(() {
+        verifyCodeRequest = VerifyCodeRequest(
+          email: 'test@example.com',
+          code: '1234',
+        );
+      });
+
+      test('should return VerifyCodeResponse when API returns success',
+          () async {
+        // Arrange
+        final responseData = {
+          'success': true,
+          'message': 'Verified successfully.',
+          'data': {
+            'user': {
+              'id': 23,
+              'name': 'Test User',
+              'email': 'test@example.com',
+              'role': 'NormalUser',
+            },
+            'tokens': {
+              'accessToken': 'access-token-123',
+              'refreshToken': 'refresh-token-123',
+              'tokenType': 'Bearer',
+              'accessTokenExpiresIn': '15m',
+              'refreshTokenExpiresIn': '7d',
+            },
+          },
+        };
+
+        final response = Response(
+          requestOptions: RequestOptions(
+              path: '$verifyCodeEndpoints/test@example.com/1234'),
+          statusCode: 200,
+          data: responseData,
+        );
+
+        when(() => mockDioClient.post(
+              '$verifyCodeEndpoints/test@example.com/1234',
+            )).thenAnswer((_) async => response);
+
+        // Act
+        final result = await authRemoteDataSource.verifyCode(verifyCodeRequest);
+
+        // Assert
+        expect(result, isA<VerifyCodeResponse>());
+        expect(result.success, true);
+        expect(result.message, 'Verified successfully.');
+        expect(result.data?.user.id, 23);
+        expect(result.data?.user.email, 'test@example.com');
+        expect(result.data?.tokens.tokenType, 'Bearer');
+
+        verify(() => mockDioClient.post(
+              '$verifyCodeEndpoints/test@example.com/1234',
+            )).called(1);
+      });
+
+      test('should throw DioException when verification fails', () async {
+        // Arrange
+        final errorData = {
+          'message': 'Invalid verification code',
+        };
+
+        final dioException = DioException(
+          requestOptions: RequestOptions(
+              path: '$verifyCodeEndpoints/test@example.com/1234'),
+          response: Response(
+            requestOptions: RequestOptions(
+                path: '$verifyCodeEndpoints/test@example.com/1234'),
+            statusCode: 400,
+            data: errorData,
+          ),
+          message: 'Invalid verification code',
+        );
+
+        when(() => mockDioClient.post(
+              '$verifyCodeEndpoints/test@example.com/1234',
+            )).thenThrow(dioException);
+
+        // Act & Assert
+        expect(
+          () async => await authRemoteDataSource.verifyCode(verifyCodeRequest),
+          throwsA(isA<DioException>().having(
+            (e) => e.message,
+            'message',
+            'Invalid verification code',
+          )),
+        );
+
+        verify(() => mockDioClient.post(
+              '$verifyCodeEndpoints/test@example.com/1234',
+            )).called(1);
+      });
+
+      test('should construct correct URL with email and code parameters',
+          () async {
+        // Arrange
+        final responseData = {
+          'success': true,
+          'message': 'Verified successfully.',
+          'data': null,
+        };
+
+        final response = Response(
+          requestOptions:
+              RequestOptions(path: '$verifyCodeEndpoints/user@test.com/5678'),
+          statusCode: 200,
+          data: responseData,
+        );
+
+        final requestWithSpecialChars = VerifyCodeRequest(
+          email: 'user@test.com',
+          code: '5678',
+        );
+
+        when(() => mockDioClient.post(
+              '$verifyCodeEndpoints/user@test.com/5678',
+            )).thenAnswer((_) async => response);
+
+        // Act
+        await authRemoteDataSource.verifyCode(requestWithSpecialChars);
+
+        // Assert
+        verify(() => mockDioClient.post(
+              '$verifyCodeEndpoints/user@test.com/5678',
+            )).called(1);
+      });
+
+      test('should handle unexpected errors', () async {
+        // Arrange
+        when(() => mockDioClient.post(
+              '$verifyCodeEndpoints/test@example.com/1234',
+            )).thenThrow(Exception('Network error'));
+
+        // Act & Assert
+        expect(
+          () async => await authRemoteDataSource.verifyCode(verifyCodeRequest),
+          throwsA(isA<Exception>().having(
+            (e) => e.toString(),
+            'message',
+            contains('Unexpected error during verification'),
+          )),
+        );
       });
     });
   });
