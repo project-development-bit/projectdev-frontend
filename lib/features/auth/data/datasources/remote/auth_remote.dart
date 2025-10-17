@@ -152,7 +152,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       debugPrint(
           '🔍 Full URL will be: ${dioClient.client.options.baseUrl}$url');
 
-      final response = await dioClient.post(url);
+      final response = await dioClient.get(url);
 
       return VerifyCodeResponse.fromJson(response.data as Map<String, dynamic>);
     } on DioException catch (e) {
