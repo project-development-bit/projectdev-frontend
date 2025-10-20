@@ -12,6 +12,7 @@ import '../features/home/pages/home_page.dart';
 import '../features/user_profile/presentation/pages/profile_page.dart';
 import '../core/providers/auth_provider.dart';
 import '../core/widgets/shell_route_wrapper.dart';
+import '../core/widgets/app_with_login_popup.dart';
 
 // Route names for type safety
 class AppRoutes {
@@ -53,6 +54,7 @@ class BurgerEatsAppRoutes {
         navigatorKey: _rootNavigatorKey,
         initialLocation: _initialPath,
         debugLogDiagnostics: true,
+        
         routes: [
           // Landing Route Handler
           GoRoute(
@@ -130,12 +132,14 @@ class BurgerEatsAppRoutes {
             ],
           ),
 
-          // Main App Shell Route
+          // Main App Shell Route - Wraps non-auth routes with login popup
           ShellRoute(
             navigatorKey: _shellNavigatorKey,
             pageBuilder: (context, state, child) {
               return NoTransitionPage(
-                child: ShellRouteWrapper(child: child),
+                child: ShellRouteWrapper(
+                  child: AppWithLoginPopup(child: child),
+                ),
               );
             },
             routes: [
@@ -287,55 +291,56 @@ class BurgerEatsAppRoutes {
         ),
 
         // Global redirect logic for authentication
-        redirect: (context, state) async {
-          final currentPath = state.fullPath ?? '';
-          final matchedLocation = state.matchedLocation;
+        // redirect: (context, state) async {
+        //   final currentPath = state.fullPath ?? '';
+        //   final matchedLocation = state.matchedLocation;
 
-          debugPrint('🔄 Global redirect - current location: $currentPath');
-          debugPrint('🔄 Global redirect - target location: $matchedLocation');
+        //   debugPrint('🔄 Global redirect - current location: $currentPath');
+        //   debugPrint('🔄 Global redirect - target location: $matchedLocation');
 
-          // Allow access to auth routes without authentication
-          if (currentPath.startsWith('/auth')) {
-            debugPrint('🔄 Allowing access to auth route: $currentPath');
-            return null;
-          }
+        //   // Allow access to auth routes without authentication
+        //   if (currentPath.startsWith('/auth')) {
+        //     debugPrint('🔄 Allowing access to auth route: $currentPath');
+        //     return null;
+        //   }
 
-          // Allow access to home page regardless of authentication state
-          if (currentPath == AppRoutes.home) {
-            debugPrint('🔄 Allowing access to home page');
-            return null;
-          }
+        //   // Allow access to home page regardless of authentication state
+        //   if (currentPath == AppRoutes.home) {
+        //     debugPrint('🔄 Allowing access to home page');
+        //     return null;
+        //   }
 
-          try {
-            final isAuthenticated = await authProvider.isAuthenticated();
-            debugPrint('🔄 Authentication check result: $isAuthenticated');
+        //   try {
+        //     final isAuthenticated = await authProvider.isAuthenticated();
+        //     debugPrint('🔄 Authentication check result: $isAuthenticated');
 
-            // If authenticated and trying to access root, redirect to home
-            if (isAuthenticated && currentPath == '/') {
-              debugPrint('🔄 Redirecting authenticated user to home');
-              return AppRoutes.home;
-            }
+        //     // If authenticated and trying to access root, redirect to home
+        //     if (isAuthenticated && currentPath == '/') {
+        //       debugPrint('🔄 Redirecting authenticated user to home');
+        //       return AppRoutes.home;
+        //     }
 
-            // If not authenticated and trying to access protected routes (profile, settings, etc.)
-            if (!isAuthenticated &&
-                (currentPath.startsWith('/profile') ||
-                    currentPath.startsWith('/settings') ||
-                    currentPath.startsWith('/dashboard'))) {
-              debugPrint('🔄 Redirecting to login - accessing protected route');
-              return AppRoutes.login;
-            }
-          } catch (e) {
-            debugPrint('🔄 Error checking authentication: $e');
-            // On error, only redirect if accessing protected routes
-            if (currentPath.startsWith('/profile') ||
-                currentPath.startsWith('/settings') ||
-                currentPath.startsWith('/dashboard')) {
-              return AppRoutes.login;
-            }
-          }
+        //     // If not authenticated and trying to access protected routes (profile, settings, etc.)
+        //     if (!isAuthenticated &&
+        //         (currentPath.startsWith('/profile') ||
+        //             currentPath.startsWith('/settings') ||
+        //             currentPath.startsWith('/dashboard'))) {
+        //       debugPrint('🔄 Redirecting to login - accessing protected route');
+        //       return AppRoutes.login;
+        //     }
+        //   } catch (e) {
+        //     debugPrint('🔄 Error checking authentication: $e');
+        //     // On error, only redirect if accessing protected routes
+        //     if (currentPath.startsWith('/profile') ||
+        //         currentPath.startsWith('/settings') ||
+        //         currentPath.startsWith('/dashboard')) {
+        //       return AppRoutes.login;
+        //     }
+        //   }
       
-          return null;
-        },
+        //   return null;
+        // },
+      
       );
 }
 

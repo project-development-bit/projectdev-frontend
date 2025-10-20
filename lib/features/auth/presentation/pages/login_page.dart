@@ -1,11 +1,8 @@
 import 'package:cointiply_app/core/error/error_model.dart';
-import 'package:cointiply_app/core/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../core/common/common_textfield.dart';
 import '../../../../core/common/common_text.dart';
-import '../../../../core/common/common_button.dart';
 import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/providers/locale_provider.dart';
 import '../../../../core/providers/translation_provider.dart';
@@ -15,6 +12,7 @@ import '../../../../core/widgets/theme_switch_widget.dart';
 import '../../../../core/extensions/context_extensions.dart';
 import '../../../../routing/app_router.dart';
 import '../providers/login_provider.dart';
+import '../widgets/login_form_widget.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
@@ -24,14 +22,6 @@ class LoginPage extends ConsumerStatefulWidget {
 }
 
 class _LoginPageState extends ConsumerState<LoginPage> {
-  final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _emailFocusNode = FocusNode();
-  final _passwordFocusNode = FocusNode();
-
-  bool _rememberMe = false;
-
   @override
   void initState() {
     super.initState();
@@ -55,8 +45,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   .logAuthState('LoginPage: before navigation to home');
 
               // Navigate to home on successful login
-
-              
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(localizations?.translate('login_successful') ??
@@ -67,7 +55,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             }
             
             if (mounted) {
-
               // Use GoRouter.of(context).go() to replace the current route
               GoRouter.of(context).go(AppRoutes.home);
             }
@@ -89,29 +76,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     });
   }
 
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    _emailFocusNode.dispose();
-    _passwordFocusNode.dispose();
-    super.dispose();
-  }
-
-  void _handleLogin() async {
-    if (_formKey.currentState!.validate()) {
-      final loginNotifier = ref.read(loginNotifierProvider.notifier);
-
-      // Reset any previous state before attempting new login
-      loginNotifier.reset();
-
-      await loginNotifier.login(
-        email: _emailController.text.trim(),
-        password: _passwordController.text.trim(),
-      );
-    }
-  }
-
   void _handleForgotPassword() {
     // Navigate to forgot password page
     context.goToForgotPassword();
@@ -124,11 +88,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context);
-    final isLoading = ref.watch(isLoginLoadingProvider);
-
-    // Watch login state for navigation and error handling
-
     // Also watch the locale provider to force rebuilds when locale changes
     final currentLocale = ref.watch(localeProvider);
     final translate = ref.watch(translationProvider);
@@ -138,255 +97,69 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         'Testing direct translation for "welcome_back": ${translate('welcome_back')}');
 
     return Scaffold(
-      backgroundColor: context
-          .surface, // Using extension instead of theme.colorScheme.surface
+      backgroundColor: context.surface,
       body: SafeArea(
         child: Stack(
           children: [
             // Main login content
             SingleChildScrollView(
               padding: const EdgeInsets.all(24.0),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const SizedBox(height: 60),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const SizedBox(height: 60),
 
-                    // App Logo/Icon
-                    Center(
-                      child: Container(
-                        width: 120,
-                        height: 120,
-                        decoration: BoxDecoration(
-                          color: context.primary.withAlpha(25),
-                          borderRadius: BorderRadius.circular(60),
-                        ),
-                        child: Icon(
-                          Icons.fastfood_rounded,
-                          size: 64,
-                          color: context.primary,
-                        ),
+                  // App Logo/Icon
+                  Center(
+                    child: Container(
+                      width: 120,
+                      height: 120,
+                      decoration: BoxDecoration(
+                        color: context.primary.withAlpha(25),
+                        borderRadius: BorderRadius.circular(60),
+                      ),
+                      child: Icon(
+                        Icons.fastfood_rounded,
+                        size: 64,
+                        color: context.primary,
                       ),
                     ),
+                  ),
 
-                    const SizedBox(height: 20),
+                  const SizedBox(height: 20),
 
-                    // Welcome Text - Testing direct translation provider
-                    CommonText.headlineMedium(
-                      translate('welcome_back'),
-                      fontWeight: FontWeight.bold,
-                      color: context.onSurface,
-                      textAlign: TextAlign.center,
-                    ),
+                  // Welcome Text - Testing direct translation provider
+                  CommonText.headlineMedium(
+                    translate('welcome_back'),
+                    fontWeight: FontWeight.bold,
+                    color: context.onSurface,
+                    textAlign: TextAlign.center,
+                  ),
 
-                    const SizedBox(height: 8),
+                  const SizedBox(height: 8),
 
-                    CommonText.bodyLarge(
-                      translate('sign_in_subtitle'),
-                      color: context.onSurfaceVariant,
-                      textAlign: TextAlign.center,
-                    ),
+                  CommonText.bodyLarge(
+                    translate('sign_in_subtitle'),
+                    color: context.onSurfaceVariant,
+                    textAlign: TextAlign.center,
+                  ),
 
-                    const SizedBox(height: 40),
+                  const SizedBox(height: 40),
 
-                    // Email Field
-                    CommonTextField(
-                      controller: _emailController,
-                      focusNode: _emailFocusNode,
-                      hintText: localizations?.translate('email_hint') ??
-                          'Enter your email',
-                      labelText: localizations?.translate('email') ?? 'Email',
-                      keyboardType: TextInputType.emailAddress,
-                      textInputAction: TextInputAction.next,
-                      prefixIcon: const Icon(Icons.email_outlined),
-                      validator: (value) =>
-                          TextFieldValidators.email(value, context),
-                      onSubmitted: (_) => _passwordFocusNode.requestFocus(),
-                    ),
+                  // Login Form Widget
+                  LoginFormWidget(
+                    onLoginSuccess: () {
+                      // Navigation is handled in the login listener above
+                    },
+                    onForgotPassword: _handleForgotPassword,
+                    onSignUp: _handleSignUp,
+                    showSocialLogin: true,
+                    showSignUpLink: true,
+                    showRememberMe: true,
+                  ),
 
-                    const SizedBox(height: 20),
-
-                    // Password Field
-                    CommonTextField(
-                      controller: _passwordController,
-                      focusNode: _passwordFocusNode,
-                      hintText: localizations?.translate('password_hint') ??
-                          'Enter your password',
-                      labelText:
-                          localizations?.translate('password') ?? 'Password',
-                      obscureText: true,
-                      textInputAction: TextInputAction.done,
-                      prefixIcon: const Icon(Icons.lock_outlined),
-                      validator: (value) => TextFieldValidators.minLength(
-                          value, 6, context,
-                          fieldName: localizations?.translate('password') ??
-                              'Password'),
-                      onSubmitted: (_) => _handleLogin(),
-                    ),
-
-                    const SizedBox(height: 16),
-
-                    // Remember Me & Forgot Password Row
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Checkbox(
-                              value: _rememberMe,
-                              onChanged: (value) {
-                                setState(() {
-                                  _rememberMe = value ?? false;
-                                });
-                              },
-                            ),
-                            CommonText.bodyMedium(
-                              localizations?.translate('remember_me') ??
-                                  'Remember me',
-                              color: context.onSurfaceVariant,
-                            ),
-                          ],
-                        ),
-                        TextButton(
-                          onPressed: _handleForgotPassword,
-                          child: CommonText.bodyMedium(
-                            localizations?.translate('forgot_password') ??
-                                'Forgot Password?',
-                            color: context.primary,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 32),
-
-                    // Login Button
-                    CommonButton(
-                      text: localizations?.translate('sign_in') ?? 'Sign In',
-                      onPressed: isLoading ? null : _handleLogin,
-                      backgroundColor: context.primary,
-                      textColor: context.onPrimary,
-                      height: 56,
-                      borderRadius: 12,
-                      isLoading: isLoading,
-                      fontSize: context.titleMedium?.fontSize,
-                    ),
-
-                    const SizedBox(height: 24),
-
-                    // Divider with OR
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Divider(
-                            color: context.outline.withAlpha(15),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: CommonText.bodySmall(
-                            localizations?.translate('or') ?? 'OR',
-                            color: context.onSurfaceVariant,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        Expanded(
-                          child: Divider(
-                            color: context.outline.withAlpha(15),
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 24),
-
-                    // Social Login Buttons
-                    Row(
-                      children: [
-                        Expanded(
-                          child: OutlinedButton.icon(
-                            onPressed: () {
-                              // TODO: Implement Google login
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(localizations?.translate(
-                                          'google_login_coming_soon') ??
-                                      'Google login coming soon!'),
-                                ),
-                              );
-                            },
-                            icon: const Icon(Icons.g_mobiledata, size: 24),
-                            label: Text(
-                                localizations?.translate('google') ?? 'Google'),
-                            style: OutlinedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(vertical: 12),
-                              side: BorderSide(color: context.outline),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: OutlinedButton.icon(
-                            onPressed: () {
-                              // TODO: Implement Facebook login
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(localizations?.translate(
-                                          'facebook_login_coming_soon') ??
-                                      'Facebook login coming soon!'),
-                                ),
-                              );
-                            },
-                            icon: const Icon(Icons.facebook, size: 24),
-                            label: Text(localizations?.translate('facebook') ??
-                                'Facebook'),
-                            style: OutlinedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(vertical: 12),
-                              side: BorderSide(color: context.outline),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 32),
-
-                    // Sign Up Link
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CommonText.bodyMedium(
-                          localizations?.translate('no_account') ??
-                              "Don't have an account? ",
-                          color: context.onSurfaceVariant,
-                        ),
-                        TextButton(
-                          onPressed: _handleSignUp,
-                          style: TextButton.styleFrom(
-                            padding: EdgeInsets.zero,
-                            minimumSize: Size.zero,
-                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          ),
-                          child: CommonText.bodyMedium(
-                            localizations?.translate('sign_up') ?? 'Sign Up',
-                            color: context.primary,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 24),
-                  ],
-                ),
+                  const SizedBox(height: 24),
+                ],
               ),
             ),
 
@@ -479,7 +252,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     const SizedBox(width: 8),
                     Expanded(
                       child: CommonText.bodySmall(
-                        _emailController.text.trim(),
+                        'User Email', // This would need to be passed from the form
                         fontWeight: FontWeight.w600,
                         color: context.primary,
                       ),
@@ -490,25 +263,18 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             ],
           ),
           actions: [
-            CommonButton(
-              text: localizations?.translate('cancel') ?? 'Cancel',
+            TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              isOutlined: true,
-              textColor: context.onSurface.withAlpha(153), // 0.6 opacity
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Text(localizations?.translate('cancel') ?? 'Cancel'),
             ),
-            CommonButton(
-              text: localizations?.translate('verify_now') ?? 'Verify Now',
+            ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pop();
-                // Navigate to verification page with email
-                GoRouter.of(context).push(
-                    '/auth/verification?email=${Uri.encodeComponent(_emailController.text.trim())}',
-                    extra: true);
+                // Navigate to verification page
+                GoRouter.of(context).push('/auth/verification');
               },
-              backgroundColor: context.primary,
-              textColor: context.onPrimary,
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              child:
+                  Text(localizations?.translate('verify_now') ?? 'Verify Now'),
             ),
           ],
         );

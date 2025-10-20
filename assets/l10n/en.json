@@ -2,6 +2,8 @@
   "app_title": "Gigafaucet",
   "welcome_back": "Welcome Back!",
   "sign_in_subtitle": "Sign in to continue to Project Dev",
+  "sign_in_to_continue": "Sign in to continue",
+  "secure_login": "Your information is secure",
   "email": "Email",
   "email_hint": "Enter your email",
   "password": "Password",
