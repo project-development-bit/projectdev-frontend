@@ -1,4 +1,4 @@
-# Test configuration for the Project Dev app
+# Test configuration for the Gigafaucet app
 
 # Run all tests
 test:

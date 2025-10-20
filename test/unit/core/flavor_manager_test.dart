@@ -14,7 +14,7 @@ void main() {
       FlavorManager.initialize(AppFlavor.dev);
       
       expect(FlavorManager.currentFlavor, AppFlavor.dev);
-      expect(FlavorManager.appName, 'Project Dev (Dev)');
+      expect(FlavorManager.appName, 'Gigafaucet (Dev)');
       expect(FlavorManager.apiBaseUrl, 'https://api-dev.burgereats.com');
       expect(FlavorManager.areDebugFeaturesEnabled, true);
       expect(FlavorManager.isLoggingEnabled, true);
@@ -24,7 +24,7 @@ void main() {
       FlavorManager.initialize(AppFlavor.staging);
       
       expect(FlavorManager.currentFlavor, AppFlavor.staging);
-      expect(FlavorManager.appName, 'Project Dev (Staging)');
+      expect(FlavorManager.appName, 'Gigafaucet (Staging)');
       expect(FlavorManager.apiBaseUrl, 'https://api-staging.burgereats.com');
       expect(FlavorManager.areDebugFeaturesEnabled, true); // Staging has debug features enabled
       expect(FlavorManager.isLoggingEnabled, true);
@@ -34,7 +34,7 @@ void main() {
       FlavorManager.initialize(AppFlavor.prod);
       
       expect(FlavorManager.currentFlavor, AppFlavor.prod);
-      expect(FlavorManager.appName, 'Project Dev');
+      expect(FlavorManager.appName, 'Gigafaucet');
       expect(FlavorManager.apiBaseUrl, 'https://api.burgereats.com');
       expect(FlavorManager.areDebugFeaturesEnabled, false);
       expect(FlavorManager.isLoggingEnabled, false);

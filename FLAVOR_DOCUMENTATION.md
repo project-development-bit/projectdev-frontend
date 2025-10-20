@@ -1,8 +1,8 @@
-# Project Dev - Flavor System Documentation
+# Gigafaucet - Flavor System Documentation
 
 ## Overview
 
-The Project Dev app uses a comprehensive flavor system that allows for different configurations across development, staging, and production environments. This enables environment-specific API endpoints, feature flags, and debugging options.
+The Gigafaucet app uses a comprehensive flavor system that allows for different configurations across development, staging, and production environments. This enables environment-specific API endpoints, feature flags, and debugging options.
 
 ## Available Flavors
 
@@ -134,17 +134,17 @@ android {
             dimension "default"
             applicationIdSuffix ".dev"
             versionNameSuffix "-dev"
-            resValue "string", "app_name", "Project Dev Dev"
+            resValue "string", "app_name", "Gigafaucet Dev"
         }
         staging {
             dimension "default"
             applicationIdSuffix ".staging"
             versionNameSuffix "-staging"
-            resValue "string", "app_name", "Project Dev Staging"
+            resValue "string", "app_name", "Gigafaucet Staging"
         }
         prod {
             dimension "default"
-            resValue "string", "app_name", "Project Dev"
+            resValue "string", "app_name", "Gigafaucet"
         }
     }
 }

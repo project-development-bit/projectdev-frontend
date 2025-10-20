@@ -1,6 +1,6 @@
 # Test-Driven Development (TDD) Setup
 
-This document outlines the comprehensive Test-Driven Development setup for the Project Dev Flutter application.
+This document outlines the comprehensive Test-Driven Development setup for the Gigafaucet Flutter application.
 
 ## 📋 Table of Contents
 

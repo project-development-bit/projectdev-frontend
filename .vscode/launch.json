@@ -6,13 +6,13 @@
     "configurations": [
         // 🟢 Development Flavor Configurations
         {
-          "name": "🟢 Project Dev (Dev)",
+          "name": "🟢 Gigafaucet (Dev)",
           "request": "launch",
           "type": "dart",
           "program": "lib/main_dev.dart"
         },
         {
-          "name": "🟢 Project Dev (Dev - Profile)",
+          "name": "🟢 Gigafaucet (Dev - Profile)",
           "request": "launch",
           "type": "dart",
           "program": "lib/main_dev.dart",
@@ -20,13 +20,13 @@
         },
         // 🟠 Staging Flavor Configurations
         {
-          "name": "🟠 Project Dev (Staging)",
+          "name": "🟠 Gigafaucet (Staging)",
           "request": "launch",
           "type": "dart",
           "program": "lib/main_staging.dart"
         },
         {
-          "name": "🟠 Project Dev (Staging - Profile)",
+          "name": "🟠 Gigafaucet (Staging - Profile)",
           "request": "launch",
           "type": "dart",
           "program": "lib/main_staging.dart",
@@ -34,20 +34,20 @@
         },
         // 🔴 Production Flavor Configurations
         {
-          "name": "🔴 Project Dev (Production)",
+          "name": "🔴 Gigafaucet (Production)",
           "request": "launch",
           "type": "dart",
           "program": "lib/main_prod.dart"
         },
         {
-          "name": "🔴 Project Dev (Production - Profile)",
+          "name": "🔴 Gigafaucet (Production - Profile)",
           "request": "launch",
           "type": "dart",
           "program": "lib/main_prod.dart",
           "flutterMode": "profile"
         },
         {
-          "name": "🔴 Project Dev (Production - Release)",
+          "name": "🔴 Gigafaucet (Production - Release)",
           "request": "launch",
           "type": "dart",
           "program": "lib/main_prod.dart",
@@ -55,20 +55,20 @@
         },
         // 📱 Platform-Specific Configurations
         {
-          "name": "🟢 Project Dev (Dev - Android)",
+          "name": "🟢 Gigafaucet (Dev - Android)",
           "request": "launch",
           "type": "dart",
           "program": "lib/main_dev.dart"
         },
         {
-          "name": "🟢 Project Dev (Dev - iOS)",
+          "name": "🟢 Gigafaucet (Dev - iOS)",
           "request": "launch",
           "type": "dart",
           "program": "lib/main_dev.dart"
         },
         // 🎯 Default Configuration (Dev)
         {
-          "name": "🎯 Project Dev (Default)",
+          "name": "🎯 Gigafaucet (Default)",
           "request": "launch",
           "type": "dart",
           "program": "lib/main.dart"

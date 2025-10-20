@@ -96,7 +96,7 @@ class HomePage extends ConsumerWidget {
                                   );
                                 } else {
                                   return Text(
-                                    'Welcome to Project Dev!',
+                                    'Welcome to Gigafaucet!',
                                     style: context.bodySmall?.copyWith(
                                       color: context.onSurface.withOpacity(0.7),
                                     ),

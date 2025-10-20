@@ -1,4 +1,4 @@
-# VS Code Integration for Project Dev Flavor System
+# VS Code Integration for Gigafaucet Flavor System
 
 ## 🚀 Quick Start
 
@@ -11,22 +11,22 @@ This VS Code workspace is fully configured for Flutter development with our mult
 Open the **Run and Debug** panel (`Cmd+Shift+D` on macOS, `Ctrl+Shift+D` on Windows/Linux) and select from:
 
 #### 🟢 Development Flavor
-- **🟢 Project Dev (Dev)** - Debug mode with full logging
-- **🟢 Project Dev (Dev - Profile)** - Profile mode for performance testing
-- **🟢 Project Dev (Dev - Android)** - Android-specific debug
-- **🟢 Project Dev (Dev - iOS)** - iOS-specific debug
+- **🟢 Gigafaucet (Dev)** - Debug mode with full logging
+- **🟢 Gigafaucet (Dev - Profile)** - Profile mode for performance testing
+- **🟢 Gigafaucet (Dev - Android)** - Android-specific debug
+- **🟢 Gigafaucet (Dev - iOS)** - iOS-specific debug
 
 #### 🟠 Staging Flavor
-- **🟠 Project Dev (Staging)** - Pre-production testing
-- **🟠 Project Dev (Staging - Profile)** - Profile mode for staging
+- **🟠 Gigafaucet (Staging)** - Pre-production testing
+- **🟠 Gigafaucet (Staging - Profile)** - Profile mode for staging
 
 #### 🔴 Production Flavor
-- **🔴 Project Dev (Production)** - Production environment
-- **🔴 Project Dev (Production - Profile)** - Production profile mode
-- **🔴 Project Dev (Production - Release)** - Full release build
+- **🔴 Gigafaucet (Production)** - Production environment
+- **🔴 Gigafaucet (Production - Profile)** - Production profile mode
+- **🔴 Gigafaucet (Production - Release)** - Full release build
 
 #### 🎯 Default
-- **🎯 Project Dev (Default)** - Uses main.dart (dev flavor)
+- **🎯 Gigafaucet (Default)** - Uses main.dart (dev flavor)
 
 ### How to Use
 
@@ -208,17 +208,17 @@ The workspace recommends these extensions (install via **Extensions** panel):
 
 ### Daily Development
 1. Open VS Code in project root
-2. Select **🟢 Project Dev (Dev)** configuration
+2. Select **🟢 Gigafaucet (Dev)** configuration
 3. Press `F5` to start debugging
 4. Make changes and save for hot reload
 
 ### Testing & QA
-1. Use **🟠 Project Dev (Staging)** for feature testing
+1. Use **🟠 Gigafaucet (Staging)** for feature testing
 2. Use **Profile mode** configurations for performance testing
 3. Run **🔍 Analyze Code** task before commits
 
 ### Release Preparation
-1. Test with **🔴 Project Dev (Production)** configuration
+1. Test with **🔴 Gigafaucet (Production)** configuration
 2. Run **🔴 Build APK (Production)** task
 3. Verify all features work without debug tools
 
@@ -238,4 +238,4 @@ The workspace recommends these extensions (install via **Extensions** panel):
 
 ---
 
-Happy coding with your fully configured Project Dev development environment! 🍔✨
+Happy coding with your fully configured Gigafaucet development environment! 🍔✨
