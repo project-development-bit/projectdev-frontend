@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/common/common_textfield.dart';
 import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/widgets/locale_switch_widget.dart';
+import '../../../../core/widgets/responsive_container.dart';
 import '../../../../core/extensions/context_extensions.dart';
 
 class ForgotPasswordPage extends ConsumerStatefulWidget {
@@ -97,37 +98,42 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const SizedBox(height: 40),
-                
-                // Icon
-                Center(
-                  child: Container(
-                    width: 100,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      color: colorScheme.primary.withAlpha(25),
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                    child: Icon(
-                      Icons.lock_reset,
-                      size: 50,
-                      color: colorScheme.primary,
+          child: ResponsiveContainer(
+            maxWidth: context.isMobile ? null : 400,
+            padding: EdgeInsets.symmetric(
+              horizontal: context.isMobile ? 24 : 32,
+              vertical: 24,
+            ),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const SizedBox(height: 40),
+                  
+                  // Icon
+                  Center(
+                    child: Container(
+                      width: context.isMobile ? 90 : 100,
+                      height: context.isMobile ? 90 : 100,
+                      decoration: BoxDecoration(
+                        color: colorScheme.primary.withAlpha(25),
+                        borderRadius: BorderRadius.circular(context.isMobile ? 45 : 50),
+                      ),
+                      child: Icon(
+                        Icons.lock_reset,
+                        size: context.isMobile ? 45 : 50,
+                        color: colorScheme.primary,
+                      ),
                     ),
                   ),
-                ),
-                
-                const SizedBox(height: 40),
-                
-                // Title
-                Text(
-                  localizations?.translate('forgot_password') ?? 'Forgot Password?',
-                  style: theme.textTheme.headlineMedium?.copyWith(
+                  
+                  const SizedBox(height: 40),
+                  
+                  // Title
+                  Text(
+                    localizations?.translate('forgot_password') ?? 'Forgot Password?',
+                    style: theme.textTheme.headlineMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: colorScheme.onSurface,
                   ),
@@ -289,6 +295,7 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
             ),
           ),
         ),
+      ),
       ),
     );
   }

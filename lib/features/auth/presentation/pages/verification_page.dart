@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/common/common_text.dart';
 import '../../../../core/extensions/context_extensions.dart';
+import '../../../../core/widgets/responsive_container.dart';
 import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/widgets/locale_switch_widget.dart';
 import '../providers/verification_provider.dart';
@@ -153,8 +154,12 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
         ],
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
+        child: ResponsiveContainer(
+          maxWidth: context.isMobile ? null : 400,
+          padding: EdgeInsets.symmetric(
+            horizontal: context.isMobile ? 24 : 32,
+            vertical: 24,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -162,15 +167,15 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
 
               // Header Icon
               Container(
-                width: 80,
-                height: 80,
+                width: context.isMobile ? 70 : 80,
+                height: context.isMobile ? 70 : 80,
                 decoration: BoxDecoration(
                   color: context.primary.withAlpha(26), // 0.1 * 255 = 26
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
                   Icons.email_outlined,
-                  size: 40,
+                  size: context.isMobile ? 35 : 40,
                   color: context.primary,
                 ),
               ),

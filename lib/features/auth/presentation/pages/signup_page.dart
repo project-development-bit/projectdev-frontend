@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/common/common_textfield.dart';
 import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/widgets/locale_switch_widget.dart';
+import '../../../../core/widgets/responsive_container.dart';
 import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/enum/user_role.dart';
 import '../providers/register_provider.dart';
@@ -140,13 +141,18 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const SizedBox(height: 20),
+          child: ResponsiveContainer(
+            maxWidth: context.isMobile ? null : 400,
+            padding: EdgeInsets.symmetric(
+              horizontal: context.isMobile ? 24 : 32,
+              vertical: 24,
+            ),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const SizedBox(height: 20),
                 
                 // Create Account Text
                 Text(
@@ -357,6 +363,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
             ),
           ),
         ),
+      ),
       ),
     );
   }

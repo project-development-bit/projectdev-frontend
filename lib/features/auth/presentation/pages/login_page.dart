@@ -9,6 +9,7 @@ import '../../../../core/providers/translation_provider.dart';
 import '../../../../core/providers/auth_debug_provider.dart';
 import '../../../../core/widgets/locale_switch_widget.dart';
 import '../../../../core/widgets/theme_switch_widget.dart';
+import '../../../../core/widgets/responsive_container.dart';
 import '../../../../core/extensions/context_extensions.dart';
 import '../../../../routing/app_router.dart';
 import '../providers/login_provider.dart';
@@ -103,63 +104,69 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           children: [
             // Main login content
             SingleChildScrollView(
-              padding: const EdgeInsets.all(24.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const SizedBox(height: 60),
+              child: ResponsiveContainer(
+                maxWidth: context.isMobile ? null : 400,
+                padding: EdgeInsets.symmetric(
+                  horizontal: context.isMobile ? 24 : 32,
+                  vertical: 24,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    SizedBox(height: context.isMobile ? 60 : 80),
 
-                  // App Logo/Icon
-                  Center(
-                    child: Container(
-                      width: 120,
-                      height: 120,
-                      decoration: BoxDecoration(
-                        color: context.primary.withAlpha(25),
-                        borderRadius: BorderRadius.circular(60),
-                      ),
-                      child: Icon(
-                        Icons.fastfood_rounded,
-                        size: 64,
-                        color: context.primary,
+                    // App Logo/Icon
+                    Center(
+                      child: Container(
+                        width: context.isMobile ? 100 : 120,
+                        height: context.isMobile ? 100 : 120,
+                        decoration: BoxDecoration(
+                          color: context.primary.withAlpha(25),
+                          borderRadius: BorderRadius.circular(context.isMobile ? 50 : 60),
+                        ),
+                        child: Icon(
+                          Icons.fastfood_rounded,
+                          size: context.isMobile ? 56 : 64,
+                          color: context.primary,
+                        ),
                       ),
                     ),
-                  ),
 
-                  const SizedBox(height: 20),
+                    const SizedBox(height: 20),
 
-                  // Welcome Text - Testing direct translation provider
-                  CommonText.headlineMedium(
-                    translate('welcome_back'),
-                    fontWeight: FontWeight.bold,
-                    color: context.onSurface,
-                    textAlign: TextAlign.center,
-                  ),
+                    // Welcome Text - Testing direct translation provider
+                    CommonText.headlineMedium(
+                      translate('welcome_back'),
+                      fontWeight: FontWeight.bold,
+                      color: context.onSurface,
+                      textAlign: TextAlign.center,
+                    ),
 
-                  const SizedBox(height: 8),
+                    const SizedBox(height: 8),
 
-                  CommonText.bodyLarge(
-                    translate('sign_in_subtitle'),
-                    color: context.onSurfaceVariant,
-                    textAlign: TextAlign.center,
-                  ),
+                    CommonText.bodyLarge(
+                      translate('sign_in_subtitle'),
+                      color: context.onSurfaceVariant,
+                      textAlign: TextAlign.center,
+                    ),
 
-                  const SizedBox(height: 40),
+                    const SizedBox(height: 40),
 
-                  // Login Form Widget
-                  LoginFormWidget(
-                    onLoginSuccess: () {
-                      // Navigation is handled in the login listener above
-                    },
-                    onForgotPassword: _handleForgotPassword,
-                    onSignUp: _handleSignUp,
-                    showSocialLogin: true,
-                    showSignUpLink: true,
-                    showRememberMe: true,
-                  ),
+                    // Login Form Widget
+                    LoginFormWidget(
+                      onLoginSuccess: () {
+                        // Navigation is handled in the login listener above
+                      },
+                      onForgotPassword: _handleForgotPassword,
+                      onSignUp: _handleSignUp,
+                      showSocialLogin: true,
+                      showSignUpLink: true,
+                      showRememberMe: true,
+                    ),
 
-                  const SizedBox(height: 24),
-                ],
+                    const SizedBox(height: 24),
+                  ],
+                ),
               ),
             ),
 

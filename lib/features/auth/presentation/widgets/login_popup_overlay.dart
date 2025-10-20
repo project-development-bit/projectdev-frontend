@@ -63,14 +63,14 @@ class _LoginPopupModal extends ConsumerWidget {
       color: Colors.black.withOpacity(0.7), // Semi-transparent background
       child: Center(
         child: Container(
-          margin: const EdgeInsets.all(24),
-          constraints: const BoxConstraints(
-            maxWidth: 400,
-            maxHeight: 600,
+          margin: EdgeInsets.all(context.isMobile ? 16 : 24),
+          constraints: BoxConstraints(
+            maxWidth: context.isMobile ? context.screenWidth * 0.9 : 400,
+            maxHeight: context.isMobile ? context.screenHeight * 0.8 : 600,
           ),
           decoration: BoxDecoration(
             color: context.surface,
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(context.isMobile ? 16 : 20),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.3),
