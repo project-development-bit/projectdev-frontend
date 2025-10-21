@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../extensions/context_extensions.dart';
+import '../theme/app_typography.dart';
 
 /// A common text widget with predefined styles
 class CommonText extends StatelessWidget {
@@ -201,6 +201,45 @@ class CommonText extends StatelessWidget {
     this.decoration,
   }) : style = _TextStyle.labelSmall;
 
+  /// Special crypto display text style (Orbitron with effects)
+  const CommonText.cryptoDisplay(
+    this.text, {
+    super.key,
+    this.color,
+    this.fontSize,
+    this.fontWeight,
+    this.textAlign,
+    this.maxLines,
+    this.overflow,
+    this.decoration,
+  }) : style = _TextStyle.cryptoDisplay;
+
+  /// Special crypto amount text style (Orbitron for numbers)
+  const CommonText.cryptoAmount(
+    this.text, {
+    super.key,
+    this.color,
+    this.fontSize,
+    this.fontWeight,
+    this.textAlign,
+    this.maxLines,
+    this.overflow,
+    this.decoration,
+  }) : style = _TextStyle.cryptoAmount;
+
+  /// Button text style (Orbitron for buttons)
+  const CommonText.button(
+    this.text, {
+    super.key,
+    this.color,
+    this.fontSize,
+    this.fontWeight,
+    this.textAlign,
+    this.maxLines,
+    this.overflow,
+    this.decoration,
+  }) : style = _TextStyle.button;
+
   final String text;
   final _TextStyle? style;
   final Color? color;
@@ -214,59 +253,91 @@ class CommonText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TextStyle? baseStyle;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     switch (style) {
       case _TextStyle.displayLarge:
-        baseStyle = context.displayLarge;
+        baseStyle = isDark
+            ? AppTypography.displayLargeDark
+            : AppTypography.displayLarge;
         break;
       case _TextStyle.displayMedium:
-        baseStyle = context.displayMedium;
+        baseStyle = isDark
+            ? AppTypography.displayMediumDark
+            : AppTypography.displayMedium;
         break;
       case _TextStyle.displaySmall:
-        baseStyle = context.displaySmall;
+        baseStyle = isDark
+            ? AppTypography.displaySmallDark
+            : AppTypography.displaySmall;
         break;
       case _TextStyle.headlineLarge:
-        baseStyle = context.headlineLarge;
+        baseStyle = isDark
+            ? AppTypography.headlineLargeDark
+            : AppTypography.headlineLarge;
         break;
       case _TextStyle.headlineMedium:
-        baseStyle = context.headlineMedium;
+        baseStyle = isDark
+            ? AppTypography.headlineMediumDark
+            : AppTypography.headlineMedium;
         break;
       case _TextStyle.headlineSmall:
-        baseStyle = context.headlineSmall;
+        baseStyle = isDark
+            ? AppTypography.headlineSmallDark
+            : AppTypography.headlineSmall;
         break;
       case _TextStyle.titleLarge:
-        baseStyle = context.titleLarge;
+        baseStyle =
+            isDark ? AppTypography.titleLargeDark : AppTypography.titleLarge;
         break;
       case _TextStyle.titleMedium:
-        baseStyle = context.titleMedium;
+        baseStyle =
+            isDark ? AppTypography.titleMediumDark : AppTypography.titleMedium;
         break;
       case _TextStyle.titleSmall:
-        baseStyle = context.titleSmall;
+        baseStyle =
+            isDark ? AppTypography.titleSmallDark : AppTypography.titleSmall;
         break;
       case _TextStyle.bodyLarge:
-        baseStyle = context.bodyLarge;
+        baseStyle =
+            isDark ? AppTypography.bodyLargeDark : AppTypography.bodyLarge;
         break;
       case _TextStyle.bodyMedium:
-        baseStyle = context.bodyMedium;
+        baseStyle =
+            isDark ? AppTypography.bodyMediumDark : AppTypography.bodyMedium;
         break;
       case _TextStyle.bodySmall:
-        baseStyle = context.bodySmall;
+        baseStyle =
+            isDark ? AppTypography.bodySmallDark : AppTypography.bodySmall;
         break;
       case _TextStyle.labelLarge:
-        baseStyle = context.labelLarge;
+        baseStyle =
+            isDark ? AppTypography.labelLargeDark : AppTypography.labelLarge;
         break;
       case _TextStyle.labelMedium:
-        baseStyle = context.labelMedium;
+        baseStyle =
+            isDark ? AppTypography.labelMediumDark : AppTypography.labelMedium;
         break;
       case _TextStyle.labelSmall:
-        baseStyle = context.labelSmall;
+        baseStyle =
+            isDark ? AppTypography.labelSmallDark : AppTypography.labelSmall;
+        break;
+      case _TextStyle.cryptoDisplay:
+        baseStyle = AppTypography.cryptoDisplay;
+        break;
+      case _TextStyle.cryptoAmount:
+        baseStyle = AppTypography.cryptoAmount;
+        break;
+      case _TextStyle.button:
+        baseStyle = AppTypography.buttonText;
         break;
       case null:
-        baseStyle = context.bodyMedium;
+        baseStyle =
+            isDark ? AppTypography.bodyMediumDark : AppTypography.bodyMedium;
         break;
     }
 
-    final effectiveStyle = baseStyle?.copyWith(
+    final effectiveStyle = baseStyle.copyWith(
       color: color,
       fontSize: fontSize,
       fontWeight: fontWeight,
@@ -299,4 +370,7 @@ enum _TextStyle {
   labelLarge,
   labelMedium,
   labelSmall,
+  cryptoDisplay,
+  cryptoAmount,
+  button,
 }

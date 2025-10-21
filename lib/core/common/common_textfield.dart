@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../localization/app_localizations.dart';
+import '../theme/app_typography.dart';
+import '../theme/app_colors.dart';
 
 class CommonTextField extends StatefulWidget {
   final String? hintText;
@@ -135,7 +137,10 @@ class _CommonTextFieldState extends State<CommonTextField> {
       autofocus: widget.autofocus,
       textCapitalization: widget.textCapitalization,
       textAlign: widget.textAlign,
-      style: widget.style ?? theme.textTheme.bodyMedium,
+      style: widget.style ??
+          (Theme.of(context).brightness == Brightness.dark
+              ? AppTypography.bodyMediumDark
+              : AppTypography.bodyMedium),
       decoration: InputDecoration(
         hintText: widget.hintText,
         labelText: widget.labelText,
@@ -160,66 +165,89 @@ class _CommonTextFieldState extends State<CommonTextField> {
         focusedBorder: widget.focusedBorder ?? _defaultFocusedBorder(),
         errorBorder: widget.errorBorder ?? _defaultErrorBorder(),
         disabledBorder: widget.disabledBorder ?? _defaultDisabledBorder(),
-        fillColor: widget.fillColor ?? theme.colorScheme.surfaceContainerHighest.withAlpha(25),
+        fillColor: widget.fillColor ??
+            (Theme.of(context).brightness == Brightness.dark
+                ? AppColors.websiteCard
+                : theme.colorScheme.surfaceContainerHighest.withOpacity(0.1)),
         filled: widget.filled,
         hintStyle: widget.hintStyle ??
-            theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onSurfaceVariant.withAlpha(140),
-            ),
+            (Theme.of(context).brightness == Brightness.dark
+                ? AppTypography.bodyMediumDark.copyWith(
+                    color: AppColors.websiteText.withOpacity(0.6),
+                  )
+                : AppTypography.bodyMedium.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant.withOpacity(0.6),
+                  )),
         labelStyle: widget.labelStyle ??
-            theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onSurfaceVariant,
-            ),
+            (Theme.of(context).brightness == Brightness.dark
+                ? AppTypography.labelMediumDark.copyWith(
+                    color: AppColors.websiteText,
+                  )
+                : AppTypography.labelMedium),
         floatingLabelBehavior: widget.floatingLabelBehavior ?? FloatingLabelBehavior.auto,
       ),
     );
   }
 
   OutlineInputBorder _defaultBorder() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(widget.borderRadius ?? 8.0),
+      borderRadius: BorderRadius.circular(widget.borderRadius ?? 12.0),
       borderSide: BorderSide(
-        color: widget.borderColor ?? Theme.of(context).colorScheme.outline,
+        color: widget.borderColor ??
+            (isDark
+                ? AppColors.websiteBorder
+                : Theme.of(context).colorScheme.outline),
         width: widget.borderWidth ?? 1.0,
       ),
     );
   }
 
   OutlineInputBorder _defaultEnabledBorder() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(widget.borderRadius ?? 8.0),
+      borderRadius: BorderRadius.circular(widget.borderRadius ?? 12.0),
       borderSide: BorderSide(
-        color: widget.borderColor ?? Theme.of(context).colorScheme.outline,
+        color: widget.borderColor ??
+            (isDark
+                ? AppColors.websiteBorder
+                : Theme.of(context).colorScheme.outline),
         width: widget.borderWidth ?? 1.0,
       ),
     );
   }
 
   OutlineInputBorder _defaultFocusedBorder() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(widget.borderRadius ?? 8.0),
+      borderRadius: BorderRadius.circular(widget.borderRadius ?? 12.0),
       borderSide: BorderSide(
-        color: Theme.of(context).colorScheme.primary,
+        color: isDark ? AppColors.primaryLight : AppColors.primary,
         width: (widget.borderWidth ?? 1.0) + 1.0,
       ),
     );
   }
 
   OutlineInputBorder _defaultErrorBorder() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(widget.borderRadius ?? 8.0),
+      borderRadius: BorderRadius.circular(widget.borderRadius ?? 12.0),
       borderSide: BorderSide(
-        color: Theme.of(context).colorScheme.error,
+        color: isDark ? AppColors.websiteAccent : AppColors.error,
         width: (widget.borderWidth ?? 1.0) + 1.0,
       ),
     );
   }
 
   OutlineInputBorder _defaultDisabledBorder() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(widget.borderRadius ?? 8.0),
+      borderRadius: BorderRadius.circular(widget.borderRadius ?? 12.0),
       borderSide: BorderSide(
-        color: Theme.of(context).colorScheme.outline.withAlpha(85),
+        color: (isDark
+                ? AppColors.websiteBorder
+                : Theme.of(context).colorScheme.outline)
+            .withOpacity(0.3),
         width: widget.borderWidth ?? 1.0,
       ),
     );

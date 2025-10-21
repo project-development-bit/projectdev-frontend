@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'app_colors.dart';
-import 'text_theme.dart';
+import 'app_typography.dart';
 
+/// App theme configuration using Gigafaucet website colors and typography
 class AppTheme {
-  static const String fontFamily = 'Roboto';
+  AppTheme._();
+
+  static const String fontFamily = 'Barlow'; // Normal text
+  static const String titleFontFamily = 'Orbitron'; // Titles, captions, headers
   static const List<String> fontFamilyFallback = [
-    'Roboto',
+    'Orbitron',
+    'Barlow',
     '-apple-system',
     'BlinkMacSystemFont',
     'Segoe UI',
@@ -21,7 +26,7 @@ class AppTheme {
       brightness: Brightness.light,
       fontFamily: fontFamily,
       colorScheme: AppColors.lightColorScheme,
-      textTheme: AppTextTheme.lightTextTheme,
+      textTheme: AppTypography.lightTextTheme,
       scaffoldBackgroundColor: AppColors.lightColorScheme.surface,
       
       // App Bar Theme
@@ -31,7 +36,7 @@ class AppTheme {
         elevation: 0,
         scrolledUnderElevation: 1,
         systemOverlayStyle: SystemUiOverlayStyle.dark,
-        titleTextStyle: AppTextTheme.lightTextTheme.titleLarge?.copyWith(
+        titleTextStyle: AppTypography.titleLarge.copyWith(
           color: AppColors.lightColorScheme.onSurface,
           fontWeight: FontWeight.w600,
         ),
@@ -48,7 +53,7 @@ class AppTheme {
             borderRadius: BorderRadius.circular(12),
           ),
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-          textStyle: AppTextTheme.lightTextTheme.labelLarge?.copyWith(
+          textStyle: AppTypography.lightTextTheme.labelLarge?.copyWith(
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -63,7 +68,7 @@ class AppTheme {
             borderRadius: BorderRadius.circular(12),
           ),
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-          textStyle: AppTextTheme.lightTextTheme.labelLarge?.copyWith(
+          textStyle: AppTypography.lightTextTheme.labelLarge?.copyWith(
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -77,7 +82,7 @@ class AppTheme {
             borderRadius: BorderRadius.circular(8),
           ),
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          textStyle: AppTextTheme.lightTextTheme.labelLarge?.copyWith(
+          textStyle: AppTypography.lightTextTheme.labelLarge?.copyWith(
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -115,10 +120,10 @@ class AppTheme {
           ),
         ),
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-        hintStyle: AppTextTheme.lightTextTheme.bodyMedium?.copyWith(
+        hintStyle: AppTypography.lightTextTheme.bodyMedium?.copyWith(
           color: AppColors.lightColorScheme.onSurfaceVariant,
         ),
-        labelStyle: AppTextTheme.lightTextTheme.bodyMedium?.copyWith(
+        labelStyle: AppTypography.lightTextTheme.bodyMedium?.copyWith(
           color: AppColors.lightColorScheme.onSurfaceVariant,
         ),
       ),
@@ -142,11 +147,11 @@ class AppTheme {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
-        titleTextStyle: AppTextTheme.lightTextTheme.headlineSmall?.copyWith(
+        titleTextStyle: AppTypography.lightTextTheme.headlineSmall?.copyWith(
           color: AppColors.lightColorScheme.onSurface,
           fontWeight: FontWeight.w600,
         ),
-        contentTextStyle: AppTextTheme.lightTextTheme.bodyMedium?.copyWith(
+        contentTextStyle: AppTypography.lightTextTheme.bodyMedium?.copyWith(
           color: AppColors.lightColorScheme.onSurfaceVariant,
         ),
       ),
@@ -158,10 +163,10 @@ class AppTheme {
         unselectedItemColor: AppColors.lightColorScheme.onSurfaceVariant,
         type: BottomNavigationBarType.fixed,
         elevation: 8,
-        selectedLabelStyle: AppTextTheme.lightTextTheme.labelSmall?.copyWith(
+        selectedLabelStyle: AppTypography.lightTextTheme.labelSmall?.copyWith(
           fontWeight: FontWeight.w600,
         ),
-        unselectedLabelStyle: AppTextTheme.lightTextTheme.labelSmall,
+        unselectedLabelStyle: AppTypography.lightTextTheme.labelSmall,
       ),
 
       // Navigation Bar Theme
@@ -170,12 +175,12 @@ class AppTheme {
         indicatorColor: AppColors.lightColorScheme.secondaryContainer,
         labelTextStyle: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
-            return AppTextTheme.lightTextTheme.labelSmall?.copyWith(
+            return AppTypography.lightTextTheme.labelSmall?.copyWith(
               color: AppColors.lightColorScheme.onSurface,
               fontWeight: FontWeight.w600,
             );
           }
-          return AppTextTheme.lightTextTheme.labelSmall?.copyWith(
+          return AppTypography.lightTextTheme.labelSmall?.copyWith(
             color: AppColors.lightColorScheme.onSurfaceVariant,
           );
         }),
@@ -229,7 +234,7 @@ class AppTheme {
       brightness: Brightness.dark,
       fontFamily: fontFamily,
       colorScheme: AppColors.darkColorScheme,
-      textTheme: AppTextTheme.darkTextTheme,
+      textTheme: AppTypography.darkTextTheme,
       scaffoldBackgroundColor: AppColors.darkColorScheme.surface,
       
       // App Bar Theme
@@ -239,7 +244,7 @@ class AppTheme {
         elevation: 0,
         scrolledUnderElevation: 1,
         systemOverlayStyle: SystemUiOverlayStyle.light,
-        titleTextStyle: AppTextTheme.darkTextTheme.titleLarge?.copyWith(
+        titleTextStyle: AppTypography.darkTextTheme.titleLarge?.copyWith(
           color: AppColors.darkColorScheme.onSurface,
           fontWeight: FontWeight.w600,
         ),
@@ -256,7 +261,7 @@ class AppTheme {
             borderRadius: BorderRadius.circular(12),
           ),
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-          textStyle: AppTextTheme.darkTextTheme.labelLarge?.copyWith(
+          textStyle: AppTypography.darkTextTheme.labelLarge?.copyWith(
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -271,7 +276,7 @@ class AppTheme {
             borderRadius: BorderRadius.circular(12),
           ),
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-          textStyle: AppTextTheme.darkTextTheme.labelLarge?.copyWith(
+          textStyle: AppTypography.darkTextTheme.labelLarge?.copyWith(
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -285,7 +290,7 @@ class AppTheme {
             borderRadius: BorderRadius.circular(8),
           ),
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          textStyle: AppTextTheme.darkTextTheme.labelLarge?.copyWith(
+          textStyle: AppTypography.darkTextTheme.labelLarge?.copyWith(
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -323,10 +328,10 @@ class AppTheme {
           ),
         ),
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-        hintStyle: AppTextTheme.darkTextTheme.bodyMedium?.copyWith(
+        hintStyle: AppTypography.darkTextTheme.bodyMedium?.copyWith(
           color: AppColors.darkColorScheme.onSurfaceVariant,
         ),
-        labelStyle: AppTextTheme.darkTextTheme.bodyMedium?.copyWith(
+        labelStyle: AppTypography.darkTextTheme.bodyMedium?.copyWith(
           color: AppColors.darkColorScheme.onSurfaceVariant,
         ),
       ),
@@ -350,11 +355,11 @@ class AppTheme {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
-        titleTextStyle: AppTextTheme.darkTextTheme.headlineSmall?.copyWith(
+        titleTextStyle: AppTypography.darkTextTheme.headlineSmall?.copyWith(
           color: AppColors.darkColorScheme.onSurface,
           fontWeight: FontWeight.w600,
         ),
-        contentTextStyle: AppTextTheme.darkTextTheme.bodyMedium?.copyWith(
+        contentTextStyle: AppTypography.darkTextTheme.bodyMedium?.copyWith(
           color: AppColors.darkColorScheme.onSurfaceVariant,
         ),
       ),
@@ -366,10 +371,10 @@ class AppTheme {
         unselectedItemColor: AppColors.darkColorScheme.onSurfaceVariant,
         type: BottomNavigationBarType.fixed,
         elevation: 8,
-        selectedLabelStyle: AppTextTheme.darkTextTheme.labelSmall?.copyWith(
+        selectedLabelStyle: AppTypography.darkTextTheme.labelSmall?.copyWith(
           fontWeight: FontWeight.w600,
         ),
-        unselectedLabelStyle: AppTextTheme.darkTextTheme.labelSmall,
+        unselectedLabelStyle: AppTypography.darkTextTheme.labelSmall,
       ),
 
       // Navigation Bar Theme
@@ -378,12 +383,12 @@ class AppTheme {
         indicatorColor: AppColors.darkColorScheme.secondaryContainer,
         labelTextStyle: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
-            return AppTextTheme.darkTextTheme.labelSmall?.copyWith(
+            return AppTypography.darkTextTheme.labelSmall?.copyWith(
               color: AppColors.darkColorScheme.onSurface,
               fontWeight: FontWeight.w600,
             );
           }
-          return AppTextTheme.darkTextTheme.labelSmall?.copyWith(
+          return AppTypography.darkTextTheme.labelSmall?.copyWith(
             color: AppColors.darkColorScheme.onSurfaceVariant,
           );
         }),

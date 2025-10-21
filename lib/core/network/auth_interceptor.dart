@@ -90,7 +90,7 @@ class TokenInterceptor extends Interceptor {
     try {
       final refreshToken = await tokenService.getRefreshToken();
       final response = await retryDio.post(
-        '/users/refresh-token',
+        'users/refresh-token',
         data: {"refreshToken": refreshToken},
       );
       final parsedResponse = response.data;

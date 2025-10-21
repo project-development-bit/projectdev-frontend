@@ -13,6 +13,8 @@ import '../models/resend_code_request.dart';
 import '../models/resend_code_response.dart';
 import '../models/verify_code_request.dart';
 import '../models/verify_code_response.dart';
+import '../models/forgot_password_request.dart';
+import '../models/forgot_password_response.dart';
 import '../models/login_response_model.dart';
 import '../datasources/remote/auth_remote.dart';
 
@@ -70,6 +72,27 @@ class AuthRepositoryImpl implements AuthRepository {
         message: e.message,
         statusCode: e.response?.statusCode,
           errorModel: errorModel
+      ));
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, ForgotPasswordResponse>> forgotPassword(
+      ForgotPasswordRequest request) async {
+    try {
+      final response = await remoteDataSource.forgotPassword(request);
+      return Right(response);
+    } on DioException catch (e) {
+      ErrorModel? errorModel;
+      if (e.response?.data != null) {
+        errorModel = ErrorModel.fromJson(e.response!.data);
+      }
+      return Left(ServerFailure(
+        message: e.message,
+        statusCode: e.response?.statusCode,
+        errorModel: errorModel,
       ));
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));

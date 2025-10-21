@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../extensions/context_extensions.dart';
+import '../theme/app_colors.dart';
 
 /// A common image widget that handles network images with loading and error states
 class CommonImage extends StatelessWidget {
@@ -27,18 +28,20 @@ class CommonImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final defaultLoadingWidget = loadingWidget ??
         Container(
           width: width,
           height: height,
           decoration: BoxDecoration(
-            color: context.surfaceContainer,
+            color: isDark ? AppColors.websiteCard : context.surfaceContainer,
             borderRadius: borderRadius,
           ),
           child: Center(
             child: CircularProgressIndicator(
               strokeWidth: 2,
-              valueColor: AlwaysStoppedAnimation(context.primary),
+              valueColor: AlwaysStoppedAnimation(
+                  isDark ? AppColors.primaryLight : AppColors.primary),
             ),
           ),
         );
@@ -48,12 +51,14 @@ class CommonImage extends StatelessWidget {
           width: width,
           height: height,
           decoration: BoxDecoration(
-            color: context.errorContainer,
+            color: isDark
+                ? AppColors.websiteCard.withOpacity(0.5)
+                : context.errorContainer,
             borderRadius: borderRadius,
           ),
           child: Icon(
             Icons.image_not_supported_outlined,
-            color: context.onErrorContainer,
+            color: isDark ? AppColors.websiteText : context.onErrorContainer,
             size: (width != null && height != null)
                 ? (width! < height! ? width! * 0.4 : height! * 0.4)
                 : 24,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../extensions/context_extensions.dart';
+import '../theme/app_typography.dart';
 
 /// A common button widget with consistent styling
 class CommonButton extends StatelessWidget {
@@ -34,18 +34,18 @@ class CommonButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final effectiveBackgroundColor = backgroundColor ?? context.primary;
-    final effectiveTextColor = textColor ?? context.onPrimary;
-    final effectiveBorderRadius = borderRadius ?? 8.0;
+    final theme = Theme.of(context);
+    final effectiveBackgroundColor = backgroundColor ?? theme.colorScheme.primary;
+    final effectiveTextColor = textColor ?? theme.colorScheme.onPrimary;
+    final effectiveBorderRadius = borderRadius ?? 12.0;
     final effectivePadding =
-        padding ?? const EdgeInsets.symmetric(horizontal: 24, vertical: 12);
+        padding ?? const EdgeInsets.symmetric(horizontal: 24, vertical: 16);
 
     Widget child = Text(
       text,
-      style: context.bodyMedium?.copyWith(
+      style: AppTypography.buttonText.copyWith(
         color: isOutlined ? effectiveBackgroundColor : effectiveTextColor,
         fontSize: fontSize,
-        fontWeight: FontWeight.w600,
       ),
     );
 
@@ -85,6 +85,7 @@ class CommonButton extends StatelessWidget {
               borderRadius: BorderRadius.circular(effectiveBorderRadius),
             ),
             padding: effectivePadding,
+            backgroundColor: Colors.transparent,
           ),
           child: child,
         ),
@@ -103,7 +104,8 @@ class CommonButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(effectiveBorderRadius),
           ),
           padding: effectivePadding,
-          elevation: isLoading ? 0 : 2,
+          elevation: isLoading ? 0 : 3,
+          shadowColor: effectiveBackgroundColor.withOpacity(0.3),
         ),
         child: child,
       ),

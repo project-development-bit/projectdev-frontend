@@ -1,33 +1,64 @@
 import 'package:flutter/material.dart';
 
+/// Gigafaucet App color palette extracted from the website
+/// https://doc.gigafaucet.com/doc/
 class AppColors {
-  // Brand Colors
-  static const Color primaryColor = Color(0xFF6B46C1); // Purple
-  static const Color secondaryColor = Color(0xFFEAB308); // Amber
-  static const Color tertiaryColor = Color(0xFF06B6D4); // Cyan
+  AppColors._();
 
-  // Light Theme Color Scheme
+  // Primary Brand Colors - Based on Gigafaucet website
+  static const Color primary = Color(0xFFE8631C); // Orange brand color
+  static const Color primaryDark = Color(0xFFCF7A11);
+  static const Color primaryLight = Color(0xFFE6A030);
+  static const Color primaryContainer = Color(0xFFFFF3E0);
+
+  // Legacy brand colors for compatibility
+  static const Color primaryColor = Color(0xFFE8631C); // Orange
+  static const Color secondaryColor = Color(0xFF313144); // Dark blue-grey
+  static const Color tertiaryColor = Color(0xFFB0251A); // Red accent
+
+  // Website Specific Colors
+  static const Color websiteBackground = Color(0xFF050317); // Dark background
+  static const Color websiteBackgroundStart = Color(0xFF191921);
+  static const Color websiteBackgroundEnd = Color(0xFF050317);
+  static const Color websiteCard = Color(0xFF313144); // Card background
+  static const Color websiteBorder = Color(0xFF2C2C38); // Border color
+  static const Color websiteText = Color(0xFF9692BC); // Light purple text
+  static const Color websiteAccent = Color(0xFFB0251A); // Red accent
+  static const Color websiteGold = Color(0xFFE6A030); // Gold color
+
+  // Status Colors
+  static const Color success = Color(0xFF4CAF50);
+  static const Color warning = Color(0xFFE6A030);
+  static const Color error = Color(0xFFB0251A);
+
+  // Cryptocurrency Colors
+  static const Color bitcoin = Color(0xFFF7931A);
+  static const Color ethereum = Color(0xFF627EEA);
+  static const Color gold = Color(0xFFE6A030);
+  static const Color silver = Color(0xFF9692BC);
+
+  // Light Theme Color Scheme - Using Gigafaucet website colors
   static const ColorScheme lightColorScheme = ColorScheme(
     brightness: Brightness.light,
-    primary: Color(0xFF6B46C1), // Purple
+    primary: primary, // Orange brand color
     onPrimary: Color(0xFFFFFFFF), // White
-    primaryContainer: Color(0xFFE9D5FF), // Light Purple
-    onPrimaryContainer: Color(0xFF3F1A78), // Dark Purple
+    primaryContainer: primaryContainer, // Light orange
+    onPrimaryContainer: primaryDark, // Dark orange
     
-    secondary: Color(0xFFEAB308), // Amber
+    secondary: websiteGold, // Gold accent
     onSecondary: Color(0xFF000000), // Black
-    secondaryContainer: Color(0xFFFEF3C7), // Light Amber
-    onSecondaryContainer: Color(0xFF92400E), // Dark Amber
+    secondaryContainer: Color(0xFFFFF3E0), // Light gold
+    onSecondaryContainer: Color(0xFF92400E), // Dark gold
     
-    tertiary: Color(0xFF06B6D4), // Cyan
+    tertiary: silver, // Website silver color  
     onTertiary: Color(0xFFFFFFFF), // White
-    tertiaryContainer: Color(0xFFCFFAFE), // Light Cyan
-    onTertiaryContainer: Color(0xFF0E7490), // Dark Cyan
+    tertiaryContainer: Color(0xFFF3F4F6), // Light container
+    onTertiaryContainer: silver, // Website silver color
     
-    error: Color(0xFFDC2626), // Red
+    error: error, // Website error color
     onError: Color(0xFFFFFFFF), // White
     errorContainer: Color(0xFFFEE2E2), // Light Red
-    onErrorContainer: Color(0xFF991B1B), // Dark Red
+    onErrorContainer: error, // Website error color
     
     surface: Color(0xFFFAFAFA), // Very Light Gray
     onSurface: Color(0xFF1F2937), // Dark Gray
@@ -49,40 +80,40 @@ class AppColors {
     inversePrimary: Color(0xFFE9D5FF), // Light Purple
   );
 
-  // Dark Theme Color Scheme
+  // Dark Theme Color Scheme - Using Gigafaucet website colors
   static const ColorScheme darkColorScheme = ColorScheme(
     brightness: Brightness.dark,
-    primary: Color(0xFF9333EA), // Bright Purple
-    onPrimary: Color(0xFF1E1B4B), // Very Dark Purple
-    primaryContainer: Color(0xFF4C1D95), // Dark Purple
-    onPrimaryContainer: Color(0xFFE9D5FF), // Light Purple
+    primary: primaryLight, // Light orange for dark theme
+    onPrimary: websiteBackground, // Dark background
+    primaryContainer: websiteCard, // Card background
+    onPrimaryContainer: websiteText, // Light text
     
-    secondary: Color(0xFFFBBF24), // Bright Amber
-    onSecondary: Color(0xFF451A03), // Very Dark Amber
-    secondaryContainer: Color(0xFF92400E), // Dark Amber
-    onSecondaryContainer: Color(0xFFFEF3C7), // Light Amber
+    secondary: websiteGold, // Gold accent
+    onSecondary: websiteBackground, // Dark background
+    secondaryContainer: websiteCard, // Card background
+    onSecondaryContainer: websiteText, // Light text
     
-    tertiary: Color(0xFF22D3EE), // Bright Cyan
-    onTertiary: Color(0xFF164E63), // Very Dark Cyan
-    tertiaryContainer: Color(0xFF0E7490), // Dark Cyan
-    onTertiaryContainer: Color(0xFFCFFAFE), // Light Cyan
+    tertiary: silver, // Website silver color
+    onTertiary: websiteBackground, // Dark background
+    tertiaryContainer: websiteCard, // Card background
+    onTertiaryContainer: websiteText, // Light text
     
-    error: Color(0xFFF87171), // Bright Red
-    onError: Color(0xFF450A0A), // Very Dark Red
-    errorContainer: Color(0xFF991B1B), // Dark Red
-    onErrorContainer: Color(0xFFFEE2E2), // Light Red
+    error: websiteAccent, // Website red accent
+    onError: Color(0xFFFFFFFF), // White
+    errorContainer: websiteAccent, // Website red accent
+    onErrorContainer: websiteText, // Website light text
     
-    surface: Color(0xFF111827), // Very Dark Gray
-    onSurface: Color(0xFFF9FAFB), // Very Light Gray
-    surfaceContainerHighest: Color(0xFF374151), // Medium Dark Gray
-    onSurfaceVariant: Color(0xFF9CA3AF), // Light Gray
+    surface: websiteBackground, // Website dark background
+    onSurface: websiteText, // Website light text
+    surfaceContainerHighest: websiteCard, // Website card background
+    onSurfaceVariant: websiteText, // Website light text
     
-    surfaceContainer: Color(0xFF1F2937), // Dark Gray
-    surfaceContainerHigh: Color(0xFF374151), // Medium Dark Gray
-    surfaceContainerLow: Color(0xFF0F172A), // Very Dark Gray
+    surfaceContainer: websiteCard, // Website card background
+    surfaceContainerHigh: websiteCard, // Website card background
+    surfaceContainerLow: websiteBackground, // Website dark background
     
-    outline: Color(0xFF4B5563), // Border Dark Gray
-    outlineVariant: Color(0xFF374151), // Dark Border Gray
+    outline: websiteBorder, // Website border color
+    outlineVariant: websiteBorder, // Website border color
     
     shadow: Color(0xFF000000), // Black
     scrim: Color(0xFF000000), // Black
@@ -93,8 +124,6 @@ class AppColors {
   );
 
   // Additional Brand Colors
-  static const Color success = Color(0xFF10B981); // Green
-  static const Color warning = Color(0xFFF59E0B); // Orange
   static const Color info = Color(0xFF3B82F6); // Blue
 
   // Success Colors for Light Theme

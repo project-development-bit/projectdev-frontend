@@ -7,6 +7,8 @@ import '../../data/models/resend_code_request.dart';
 import '../../data/models/resend_code_response.dart';
 import '../../data/models/verify_code_request.dart';
 import '../../data/models/verify_code_response.dart';
+import '../../data/models/forgot_password_request.dart';
+import '../../data/models/forgot_password_response.dart';
 
 /// Authentication repository interface
 /// 
@@ -17,6 +19,10 @@ abstract class AuthRepository {
   
   /// Login user with credentials
   Future<Either<Failure, LoginResponse>> login(LoginRequest request);
+  
+  /// Send forgot password request
+  Future<Either<Failure, ForgotPasswordResponse>> forgotPassword(
+      ForgotPasswordRequest request);
   
   /// Logout current user
   Future<Either<Failure, void>> logout();
