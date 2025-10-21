@@ -1,4 +1,5 @@
 // 📦 Package imports
+import 'package:cointiply_app/features/auth/presentation/widgets/internal_verification_overlay.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -54,6 +55,7 @@ class BurgerEatsAppRoutes {
         navigatorKey: _rootNavigatorKey,
         initialLocation: _initialPath,
         debugLogDiagnostics: true,
+        
         
         routes: [
           // Landing Route Handler
@@ -138,7 +140,7 @@ class BurgerEatsAppRoutes {
             pageBuilder: (context, state, child) {
               return NoTransitionPage(
                 child: ShellRouteWrapper(
-                  child: AppWithLoginPopup(child: child),
+                  child: InternalVerificationOverlay(child: child),
                 ),
               );
             },
