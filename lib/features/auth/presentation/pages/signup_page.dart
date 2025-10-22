@@ -33,6 +33,45 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
   bool _agreeToTerms = false;
 
   @override
+  void initState() {
+    super.initState();
+
+    // Watch register state for navigation and error handling
+    ref.listenManual<RegisterState>(registerNotifierProvider, (previous, next) {
+      if (!mounted) return;
+
+      switch (next) {
+        case RegisterSuccess():
+          // Navigate to verification page on successful registration
+          context.goToVerification(
+            email: next.email,
+            isSendCode: false,
+            isFromForgotPassword: false,
+          );
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                  'Registration successful! Please check your email for the verification code.'),
+              backgroundColor: Colors.green,
+            ),
+          );
+          break;
+        case RegisterError():
+          // Show error message
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(next.message),
+              backgroundColor: Colors.red,
+            ),
+          );
+          break;
+        default:
+          break;
+      }
+    });
+  }
+
+  @override
   void dispose() {
     _nameController.dispose();
     _emailController.dispose();
@@ -93,39 +132,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
     final localizations = AppLocalizations.of(context);
     final isLoading = ref.watch(isRegisterLoadingProvider);
     
-    // Watch register state for navigation and error handling
-    ref.listen<RegisterState>(registerNotifierProvider, (previous, next) {
-      if (!mounted) return;
-
-      switch (next) {
-        case RegisterSuccess():
-          // Navigate to verification page on successful registration
-          context.goToVerification(
-            email: next.email,
-            isSendCode: false,
-            isFromForgotPassword: false,
-          );
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Registration successful! Please check your email for the verification code.'),
-              backgroundColor: Colors.green,
-            ),
-          );
-          break;
-        case RegisterError():
-          // Show error message
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(next.message),
-              backgroundColor: Colors.red,
-            ),
-          );
-          break;
-        default:
-          break;
-      }
-    });
-    
+   
     return Scaffold(
       backgroundColor: colorScheme.surface,
       appBar: AppBar(

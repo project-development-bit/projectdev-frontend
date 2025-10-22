@@ -50,6 +50,45 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
             .resendCode(email: widget.email);
       }
     });
+
+    
+    // Listen to state changes for navigation
+    ref.listenManual<VerificationState>(verificationNotifierProvider,
+        (previous, next) {
+      if (next is VerificationSuccess) {
+        // Show success message and navigate to login
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(next.message),
+            backgroundColor: Colors.green,
+          ),
+        );
+        if (widget.isFromForgotPassword) {
+          context.goToResetPassword(email: widget.email);
+          return;
+        }
+        GoRouterExtension(context).go('/auth/login');
+      } else if (next is VerificationError) {
+        // Show error message and clear code
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(next.message),
+            backgroundColor: Colors.red,
+          ),
+        );
+        _clearCode();
+      } else if (next is ResendCodeSuccess) {
+        // Show success message for resend code
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(next.message),
+            backgroundColor: Colors.green,
+          ),
+        );
+        // Timer is restarted in _resendCode method
+      }
+    });
+
   }
 
   @override
@@ -108,43 +147,6 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
     final verificationState = ref.watch(verificationNotifierProvider);
     final canResend = ref.watch(canResendProvider);
     final countdown = ref.watch(countdownProvider);
-
-    // Listen to state changes for navigation
-    ref.listen<VerificationState>(verificationNotifierProvider,
-        (previous, next) {
-      if (next is VerificationSuccess) {
-        // Show success message and navigate to login
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(next.message),
-            backgroundColor: Colors.green,
-          ),
-        );
-        if (widget.isFromForgotPassword) {
-          context.goToResetPassword(email: widget.email);
-          return;
-        }
-        GoRouterExtension(context).go('/auth/login');
-      } else if (next is VerificationError) {
-        // Show error message and clear code
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(next.message),
-            backgroundColor: Colors.red,
-          ),
-        );
-        _clearCode();
-      } else if (next is ResendCodeSuccess) {
-        // Show success message for resend code
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(next.message),
-            backgroundColor: Colors.green,
-          ),
-        );
-        // Timer is restarted in _resendCode method
-      }
-    });
 
     return Scaffold(
       appBar: AppBar(

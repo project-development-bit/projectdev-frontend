@@ -36,6 +36,20 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
   void initState() {
     super.initState();
     
+    // Listen to reset password state changes
+    ref.listenManual<ResetPasswordState>(resetPasswordProvider,
+        (previous, next) {
+      switch (next) {
+        case ResetPasswordSuccess():
+          _handleResetSuccess();
+          break;
+        case ResetPasswordError(message: final message):
+          _handleResetError(message);
+          break;
+        default:
+          break;
+      }
+    });
     // Listen to reset password state changes will be done in build method
   }
 
@@ -115,19 +129,7 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
     final l10n = AppLocalizations.of(context);
     final isLoading = ref.watch(isResetPasswordLoadingProvider);
     
-    // Listen to reset password state changes
-    ref.listen<ResetPasswordState>(resetPasswordProvider, (previous, next) {
-      switch (next) {
-        case ResetPasswordSuccess():
-          _handleResetSuccess();
-          break;
-        case ResetPasswordError(message: final message):
-          _handleResetError(message);
-          break;
-        default:
-          break;
-      }
-    });
+    
     
     return Scaffold(
       appBar: AppBar(
