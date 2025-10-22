@@ -31,7 +31,7 @@ class LoginLoading extends LoginState {
 /// Login successful
 class LoginSuccess extends LoginState {
   const LoginSuccess({required this.user, required this.loginResponse});
-  
+
   final User user;
   final LoginResponse loginResponse;
 }
@@ -39,8 +39,8 @@ class LoginSuccess extends LoginState {
 /// Login error occurred
 class LoginError extends LoginState {
   const LoginError(
-      {required this.message, this.isNetworkError = false, this.errorModel});
-  
+      {required this.message,required this.email, this.isNetworkError = false, this.errorModel});
+  final String email;
   final String message;
   final bool isNetworkError;
   final ErrorModel? errorModel;
@@ -67,15 +67,15 @@ class LoginNotifier extends StateNotifier<LoginState> {
     // Ensure we start with loading state and clear any previous state
     state = const LoginLoading();
     debugPrint('🔄 State set to LoginLoading');
-    
+
     try {
       final loginRequest = LoginRequest(
         email: email,
         password: password,
       );
-      
+
       final loginUseCase = _ref.read(loginUseCaseProvider);
-      
+
       // Add timeout to prevent infinite loading
       final result = await loginUseCase(loginRequest).timeout(
         const Duration(seconds: 30),
@@ -89,9 +89,10 @@ class LoginNotifier extends StateNotifier<LoginState> {
         (failure) {
           debugPrint('❌ Login failed: ${failure.message}');
           state = LoginError(
+            email: email,
             message: failure.message ?? 'Login failed',
-            isNetworkError: failure.toString().contains('network') || 
-                           failure.toString().contains('connection'),
+            isNetworkError: failure.toString().contains('network') ||
+                failure.toString().contains('connection'),
             errorModel: failure.errorModel,
           );
           debugPrint('🔄 State set to LoginError');
@@ -102,7 +103,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
               '✅ Access token length: ${loginResponse.tokens.accessToken.length}');
           debugPrint(
               '✅ Refresh token length: ${loginResponse.tokens.refreshToken.length}');
-          
+
           // Store user data in local database
           try {
             await DatabaseService.saveUser(loginResponse.user);
@@ -111,16 +112,16 @@ class LoginNotifier extends StateNotifier<LoginState> {
             debugPrint('⚠️ Failed to save user to database: $dbError');
             // Don't fail the login process if database save fails
           }
-          
+
           // Ensure state is set after all async operations
           await Future.delayed(const Duration(milliseconds: 50));
-          
+
           state = LoginSuccess(
             user: loginResponse.user,
             loginResponse: loginResponse,
           );
           debugPrint('🔄 State set to LoginSuccess');
-          
+
           // Verify tokens were stored properly
           try {
             final secureStorage = _ref.read(secureStorageServiceProvider);
@@ -135,13 +136,14 @@ class LoginNotifier extends StateNotifier<LoginState> {
     } catch (e) {
       debugPrint('❌ Unexpected login error: $e');
       state = LoginError(
+        email: email,
         message: e.toString().contains('timeout')
             ? 'Login timeout: Please check your connection and try again'
             : 'An unexpected error occurred during login. Please try again.',
       );
       debugPrint('🔄 State set to LoginError (catch block)');
     }
-    
+
     debugPrint('🔄 Login process completed. Final state: ${state.runtimeType}');
   }
 
@@ -165,10 +167,6 @@ class LoginNotifier extends StateNotifier<LoginState> {
   /// Get current state type for debugging
   String get currentStateType => state.runtimeType.toString();
 
-  /// Force set error state (for debugging)
-  void setErrorState(String message) {
-    state = LoginError(message: message);
-  }
 
   /// Check if login is in progress
   bool get isLoading => state is LoginLoading;
@@ -206,7 +204,8 @@ class LoginNotifier extends StateNotifier<LoginState> {
 // =============================================================================
 
 /// Provider for login state management
-final loginNotifierProvider = StateNotifierProvider<LoginNotifier, LoginState>((ref) {
+final loginNotifierProvider =
+    StateNotifierProvider<LoginNotifier, LoginState>((ref) {
   return LoginNotifier(ref);
 });
 

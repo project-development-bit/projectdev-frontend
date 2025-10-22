@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import '../../../../core/common/common_textfield.dart';
 import '../../../../core/common/common_button.dart';
 import '../../../../core/common/common_text.dart';
@@ -9,6 +8,7 @@ import '../../../../core/widgets/locale_switch_widget.dart';
 import '../../../../core/widgets/responsive_container.dart';
 import '../../../../core/extensions/context_extensions.dart';
 import '../providers/forgot_password_provider.dart';
+import '../../../../routing/app_router.dart';
 
 class ForgotPasswordPage extends ConsumerStatefulWidget {
   const ForgotPasswordPage({super.key});
@@ -50,8 +50,11 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
     ref.listen<ForgotPasswordState>(forgotPasswordProvider, (previous, next) {
       if (next is ForgotPasswordSuccess) {
         // Navigate to verification screen with email
-        context.go(
-            '/auth/verification?email=${Uri.encodeComponent(_emailController.text.trim())}');
+        context.goToVerification(
+          email: _emailController.text.trim(),
+          isSendCode: false,
+          isFromForgotPassword: true,
+        );
 
         // Show success snackbar
         context.showSuccessSnackBar(

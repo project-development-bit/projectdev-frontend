@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import '../../../../core/common/common_text.dart';
 import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/widgets/responsive_container.dart';
 import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/widgets/locale_switch_widget.dart';
+import '../../../../routing/routing.dart';
 import '../providers/verification_provider.dart';
 import '../providers/resend_timer_provider.dart';
 import '../widgets/verification_code_input.dart';
@@ -13,11 +13,13 @@ import '../widgets/verification_code_input.dart';
 class VerificationPage extends ConsumerStatefulWidget {
   final String email;
   final bool isSendCode;
+  final bool isFromForgotPassword;
 
   const VerificationPage({
     super.key,
     required this.email,
     this.isSendCode = false,
+    this.isFromForgotPassword = false,
   });
 
   @override
@@ -118,7 +120,11 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
             backgroundColor: Colors.green,
           ),
         );
-        context.go('/auth/login');
+        if (widget.isFromForgotPassword) {
+          context.goToResetPassword(email: widget.email);
+          return;
+        }
+        GoRouterExtension(context).go('/auth/login');
       } else if (next is VerificationError) {
         // Show error message and clear code
         ScaffoldMessenger.of(context).showSnackBar(
@@ -146,7 +152,7 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: context.onSurface),
-          onPressed: () => context.pop(),
+          onPressed: () => GoRouterExtension(context).pop(),
         ),
         actions: const [
           LocaleSwitchWidget(),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import '../../../../core/common/common_textfield.dart';
 import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/widgets/locale_switch_widget.dart';
@@ -8,6 +7,7 @@ import '../../../../core/widgets/responsive_container.dart';
 import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/enum/user_role.dart';
 import '../providers/register_provider.dart';
+import '../../../../routing/app_router.dart';
 
 class SignUpPage extends ConsumerStatefulWidget {
   const SignUpPage({super.key});
@@ -100,7 +100,11 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
       switch (next) {
         case RegisterSuccess():
           // Navigate to verification page on successful registration
-          context.go('/auth/verification?email=${Uri.encodeComponent(next.email)}');
+          context.goToVerification(
+            email: next.email,
+            isSendCode: false,
+            isFromForgotPassword: false,
+          );
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Registration successful! Please check your email for the verification code.'),

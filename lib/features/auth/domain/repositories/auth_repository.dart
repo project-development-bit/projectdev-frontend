@@ -9,6 +9,7 @@ import '../../data/models/verify_code_request.dart';
 import '../../data/models/verify_code_response.dart';
 import '../../data/models/forgot_password_request.dart';
 import '../../data/models/forgot_password_response.dart';
+import '../../data/models/reset_password_request.dart';
 
 /// Authentication repository interface
 /// 
@@ -23,6 +24,10 @@ abstract class AuthRepository {
   /// Send forgot password request
   Future<Either<Failure, ForgotPasswordResponse>> forgotPassword(
       ForgotPasswordRequest request);
+  
+  /// Reset password with new password
+  Future<Either<Failure, LoginResponse>> resetPassword(
+      ResetPasswordRequest request);
   
   /// Logout current user
   Future<Either<Failure, void>> logout();

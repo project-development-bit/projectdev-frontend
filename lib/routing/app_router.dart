@@ -9,11 +9,12 @@ import '../features/auth/presentation/pages/login_page.dart';
 import '../features/auth/presentation/pages/signup_page.dart';
 import '../features/auth/presentation/pages/forgot_password_page.dart';
 import '../features/auth/presentation/pages/verification_page.dart';
+import '../features/auth/presentation/pages/reset_password_page.dart';
 import '../features/home/pages/home_page.dart';
 import '../features/user_profile/presentation/pages/profile_page.dart';
 import '../core/providers/auth_provider.dart';
 import '../core/widgets/shell_route_wrapper.dart';
-import '../core/widgets/app_with_login_popup.dart';
+import 'verification_page_parameter.dart';
 
 // Route names for type safety
 class AppRoutes {
@@ -23,6 +24,7 @@ class AppRoutes {
   static const String signUp = '/auth/signup';
   static const String forgotPassword = '/auth/forgot-password';
   static const String verification = '/auth/verification';
+  static const String resetPassword = '/auth/reset-password';
   static const String auth = '/auth';
   static const String profile = '/profile';
   static const String settings = '/settings';
@@ -116,11 +118,27 @@ class BurgerEatsAppRoutes {
                 path: 'verification',
                 name: 'verification',
                 pageBuilder: (context, state) {
-                  final email = state.uri.queryParameters['email'] ?? '';
+                  final parameter = state.extra as VerificationPageParameter?;
+                  final email = parameter?.email ??
+                      state.uri.queryParameters['email'] ??
+                      '';
                   return NoTransitionPage(
                     child: VerificationPage(
-                        email: email,
-                        isSendCode: state.extra as bool? ?? false),
+                      email: email,
+                      isSendCode: parameter?.isSendCode ?? false,
+                      isFromForgotPassword:
+                          parameter?.isFromForgotPassword ?? false,
+                    ),
+                  );
+                },
+              ),
+              GoRoute(
+                path: 'reset-password',
+                name: 'reset-password',
+                pageBuilder: (context, state) {
+                  final email = state.uri.queryParameters['email'] ?? '';
+                  return NoTransitionPage(
+                    child: ResetPasswordPage(email: email),
                   );
                 },
               ),
@@ -356,5 +374,46 @@ extension GoRouterExtension on BuildContext {
   void pop<T extends Object?>([T? result]) => GoRouter.of(this).pop(result);
   void replace(String location, {Object? extra}) =>
       GoRouter.of(this).pushReplacement(location, extra: extra);
+
+  // Helper methods for common navigation patterns
+  void goToVerification({
+    required String email,
+    bool isSendCode = false,
+    bool isFromForgotPassword = false,
+  }) {
+    go(
+      AppRoutes.verification,
+      extra: VerificationPageParameter(
+        email: email,
+        isSendCode: isSendCode,
+        isFromForgotPassword: isFromForgotPassword,
+      ),
+    );
+  }
+
+  void pushToVerification({
+    required String email,
+    bool isSendCode = false,
+    bool isFromForgotPassword = false,
+  }) {
+    push(
+      AppRoutes.verification,
+      extra: VerificationPageParameter(
+        email: email,
+        isSendCode: isSendCode,
+        isFromForgotPassword: isFromForgotPassword,
+      ),
+    );
+  }
+
+  /// Navigate to reset password page
+  void goToResetPassword({required String email}) {
+    go('${AppRoutes.resetPassword}?email=${Uri.encodeComponent(email)}');
+  }
+
+  /// Push reset password page
+  void pushToResetPassword({required String email}) {
+    push('${AppRoutes.resetPassword}?email=${Uri.encodeComponent(email)}');
+  }
 }
 

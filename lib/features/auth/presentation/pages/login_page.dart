@@ -69,7 +69,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               backgroundColor: Colors.red,
             ),
           );
-          _checkVerifyCode(next.errorModel);
+          _checkVerifyCode(next.errorModel,next.email);
           break;
         default:
           break;
@@ -189,15 +189,15 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     );
   }
   
-  void _checkVerifyCode(ErrorModel? errorModel) {
+  void _checkVerifyCode(ErrorModel? errorModel,String email) {
     /// If the error model indicates that email verification is required,
     /// show verification dialog
     if (errorModel?.isUnverifiedAccount == true) {
-      _showVerificationDialog();
+      _showVerificationDialog(email);
     }
   }
 
-  void _showVerificationDialog() {
+  void _showVerificationDialog(String email) {
     final localizations = AppLocalizations.of(context);
 
     showDialog(
@@ -278,7 +278,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               onPressed: () {
                 Navigator.of(context).pop();
                 // Navigate to verification page
-                GoRouter.of(context).push('/auth/verification');
+                context.pushToVerification(
+                  email:  email,
+                  isSendCode: true,
+                  isFromForgotPassword: false,
+                );
               },
               child:
                   Text(localizations?.translate('verify_now') ?? 'Verify Now'),

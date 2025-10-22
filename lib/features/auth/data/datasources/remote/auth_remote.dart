@@ -9,6 +9,7 @@ import 'package:cointiply_app/features/auth/data/models/verify_code_request.dart
 import 'package:cointiply_app/features/auth/data/models/verify_code_response.dart';
 import 'package:cointiply_app/features/auth/data/models/forgot_password_request.dart';
 import 'package:cointiply_app/features/auth/data/models/forgot_password_response.dart';
+import 'package:cointiply_app/features/auth/data/models/reset_password_request.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -30,6 +31,9 @@ abstract class AuthRemoteDataSource {
   
   /// Send forgot password request
   Future<ForgotPasswordResponse> forgotPassword(ForgotPasswordRequest request);
+  
+  /// Reset password with new password
+  Future<LoginResponseModel> resetPassword(ResetPasswordRequest request);
   
   /// Resend verification code to user's email
   Future<ResendCodeResponse> resendCode(ResendCodeRequest request);
@@ -144,6 +148,44 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     } catch (e) {
       // Handle any other unexpected exceptions
       throw Exception('Unexpected error during forgot password request: $e');
+    }
+  }
+
+  @override
+  Future<LoginResponseModel> resetPassword(ResetPasswordRequest request) async {
+    try {
+      debugPrint('📤 Sending reset password request for: ${request.email}');
+      debugPrint('📤 Request URL: $savePasswordEndpoints');
+      debugPrint(
+          '📤 Base URL from DioClient: ${dioClient.client.options.baseUrl}');
+      debugPrint('📤 Request data: ${request.toJson()}');
+
+      final response = await dioClient.post(
+        savePasswordEndpoints,
+        data: request.toJson(),
+      );
+
+      debugPrint('📥 Reset password response: ${response.data}');
+
+      return LoginResponseModel.fromJson(response.data as Map<String, dynamic>);
+    } on DioException catch (e) {
+      debugPrint('❌ Reset password DioException: ${e.message}');
+      debugPrint('❌ Request URL: ${e.requestOptions.uri}');
+      debugPrint('❌ Response status: ${e.response?.statusCode}');
+      debugPrint('❌ Response data: ${e.response?.data}');
+
+      // Extract server error message from response data
+      final serverMessage = _extractServerErrorMessage(e.response?.data);
+
+      // Create new DioException with server message or appropriate fallback
+      throw DioException(
+        requestOptions: e.requestOptions,
+        response: e.response,
+        message: serverMessage ?? _getFallbackMessage(e),
+      );
+    } catch (e) {
+      // Handle any other unexpected exceptions
+      throw Exception('Unexpected error during reset password request: $e');
     }
   }
 

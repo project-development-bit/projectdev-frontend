@@ -15,6 +15,7 @@ import '../models/verify_code_request.dart';
 import '../models/verify_code_response.dart';
 import '../models/forgot_password_request.dart';
 import '../models/forgot_password_response.dart';
+import '../models/reset_password_request.dart';
 import '../models/login_response_model.dart';
 import '../datasources/remote/auth_remote.dart';
 
@@ -84,6 +85,27 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       final response = await remoteDataSource.forgotPassword(request);
       return Right(response);
+    } on DioException catch (e) {
+      ErrorModel? errorModel;
+      if (e.response?.data != null) {
+        errorModel = ErrorModel.fromJson(e.response!.data);
+      }
+      return Left(ServerFailure(
+        message: e.message,
+        statusCode: e.response?.statusCode,
+        errorModel: errorModel,
+      ));
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, LoginResponse>> resetPassword(
+      ResetPasswordRequest request) async {
+    try {
+      final loginResponseModel = await remoteDataSource.resetPassword(request);
+      return Right(loginResponseModel.toEntity());
     } on DioException catch (e) {
       ErrorModel? errorModel;
       if (e.response?.data != null) {
@@ -178,10 +200,10 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       final response = await remoteDataSource.verifyCode(request);
 
-      // Store the authentication tokens if verification is successful
-      if (response.success && response.data != null) {
-        await _storeVerificationTokens(response.data!);
-      }
+      // // Store the authentication tokens if verification is successful
+      // if (response.success && response.data != null) {
+      //   await _storeVerificationTokens(response.data!);
+      // }
 
       return Right(response);
     } on DioException catch (e) {
@@ -205,12 +227,12 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   /// Store authentication tokens from verification response
-  Future<void> _storeVerificationTokens(VerifyCodeData data) async {
-    await secureStorage.saveAuthToken(data.tokens.accessToken);
-    await secureStorage.saveRefreshToken(data.tokens.refreshToken);
-    await secureStorage.saveUserId(data.user.id.toString());
+  // Future<void> _storeVerificationTokens(VerifyCodeData data) async {
+  //   await secureStorage.saveAuthToken(data.tokens.accessToken);
+  //   await secureStorage.saveRefreshToken(data.tokens.refreshToken);
+  //   await secureStorage.saveUserId(data.user.id.toString());
 
-    // Store additional user info if needed
-    // You could also store user role, email, etc.
-  }
+  //   // Store additional user info if needed
+  //   // You could also store user role, email, etc.
+  // }
 }
