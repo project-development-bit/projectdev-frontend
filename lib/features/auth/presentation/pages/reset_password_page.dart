@@ -5,9 +5,11 @@ import '../../../../core/common/common_text.dart';
 import '../../../../core/common/common_button.dart';
 import '../../../../core/common/common_textfield.dart';
 import '../../../../core/widgets/responsive_container.dart';
+import '../../../../core/widgets/recaptcha_widget.dart';
 import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/widgets/locale_switch_widget.dart';
+import '../../../../core/providers/consolidated_auth_provider.dart';
 import '../providers/reset_password_provider.dart';
 
 class ResetPasswordPage extends ConsumerStatefulWidget {
@@ -91,6 +93,17 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
 
   void _onResetPasswordPressed() {
     if (_formKey.currentState?.validate() ?? false) {
+      // Check if reCAPTCHA verification is required and completed
+      final canAttemptReset = ref.read(canAttemptLoginProvider); // This checks reCAPTCHA status
+      if (!canAttemptReset) {
+        final localizations = AppLocalizations.of(context);
+        context.showErrorSnackBar(
+          message: localizations?.translate('recaptcha_required') ?? 
+                  'Please verify that you are not a robot',
+        );
+        return;
+      }
+
       // Dismiss keyboard
       FocusScope.of(context).unfocus();
       
@@ -163,6 +176,13 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
                 
                 // Password Input Fields
                 _buildPasswordFields(context, l10n),
+                
+                SizedBox(height: context.isMobile ? 24 : 32),
+                
+                // reCAPTCHA Widget
+                const RecaptchaWidget(
+                  enabled: true,
+                ),
                 
                 SizedBox(height: context.isMobile ? 32 : 40),
                 

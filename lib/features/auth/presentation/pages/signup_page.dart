@@ -4,8 +4,10 @@ import '../../../../core/common/common_textfield.dart';
 import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/widgets/locale_switch_widget.dart';
 import '../../../../core/widgets/responsive_container.dart';
+import '../../../../core/widgets/recaptcha_widget.dart';
 import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/enum/user_role.dart';
+import '../../../../core/providers/consolidated_auth_provider.dart';
 import '../providers/register_provider.dart';
 import '../../../../routing/app_router.dart';
 
@@ -105,6 +107,17 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
           content: Text(localizations?.translate('agree_to_terms_error') ?? 'Please agree to the terms and conditions'),
           backgroundColor: Colors.red,
         ),
+      );
+      return;
+    }
+
+    // Check if reCAPTCHA verification is required and completed
+    final canAttemptSignup = ref.read(canAttemptLoginProvider); // This checks reCAPTCHA status
+    if (!canAttemptSignup) {
+      final localizations = AppLocalizations.of(context);
+      context.showErrorSnackBar(
+        message: localizations?.translate('recaptcha_required') ?? 
+                'Please verify that you are not a robot',
       );
       return;
     }
@@ -282,6 +295,13 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                       ),
                     ),
                   ],
+                ),
+                
+                const SizedBox(height: 24),
+                
+                // reCAPTCHA Widget
+                const RecaptchaWidget(
+                  enabled: true,
                 ),
                 
                 const SizedBox(height: 32),

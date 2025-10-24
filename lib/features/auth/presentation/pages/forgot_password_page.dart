@@ -6,7 +6,9 @@ import '../../../../core/common/common_text.dart';
 import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/widgets/locale_switch_widget.dart';
 import '../../../../core/widgets/responsive_container.dart';
+import '../../../../core/widgets/recaptcha_widget.dart';
 import '../../../../core/extensions/context_extensions.dart';
+import '../../../../core/providers/consolidated_auth_provider.dart';
 import '../providers/forgot_password_provider.dart';
 import '../../../../routing/app_router.dart';
 
@@ -31,6 +33,17 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
 
   void _handleSendResetEmail() {
     if (!_formKey.currentState!.validate()) {
+      return;
+    }
+
+    // Check if reCAPTCHA verification is required and completed
+    final canAttemptAction = ref.read(canAttemptLoginProvider); // This checks reCAPTCHA status
+    if (!canAttemptAction) {
+      final localizations = AppLocalizations.of(context);
+      context.showErrorSnackBar(
+        message: localizations?.translate('recaptcha_required') ?? 
+                'Please verify that you are not a robot',
+      );
       return;
     }
 
@@ -157,6 +170,13 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
                     prefixIcon: const Icon(Icons.email_outlined),
                     validator: (value) => TextFieldValidators.email(value, context),
                     onSubmitted: (_) => _handleSendResetEmail(),
+                  ),
+                  
+                  const SizedBox(height: 24),
+                  
+                  // reCAPTCHA Widget
+                  const RecaptchaWidget(
+                    enabled: true,
                   ),
                   
                   const SizedBox(height: 32),
