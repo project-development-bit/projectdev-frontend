@@ -44,6 +44,10 @@ class AppConfig {
     connectTimeout: Duration(seconds: 10),
     receiveTimeout: Duration(seconds: 10),
     sendTimeout: Duration(seconds: 10),
+    recaptchaSiteKey:
+        '6LceIvUrAAAAAHhQuc2U0uXTfscW181dIdPT208i', // Dev reCAPTCHA site key for testing
+    recaptchaSecretKey:
+        '6LceIvUrAAAAABMrmE_FzOEjh2b73XLgJtdMvo11', // Dev reCAPTCHA secret key for testing
     additionalConfig: {
       'debugShowCheckedModeBanner': true,
       'debugShowMaterialGrid': false,
@@ -92,6 +96,10 @@ class AppConfig {
     connectTimeout: Duration(seconds: 30),
     receiveTimeout: Duration(seconds: 30),
     sendTimeout: Duration(seconds: 30),
+    recaptchaSiteKey:
+        '6LceIvUrAAAAAHhQuc2U0uXTfscW181dIdPT208i', // Production reCAPTCHA site key
+    recaptchaSecretKey:
+        '6LceIvUrAAAAABMrmE_FzOEjh2b73XLgJtdMvo11', // Production reCAPTCHA secret key
     additionalConfig: {
       'debugShowCheckedModeBanner': false,
       'debugShowMaterialGrid': false,

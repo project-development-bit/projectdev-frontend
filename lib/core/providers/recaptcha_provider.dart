@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:g_recaptcha_v3/g_recaptcha_v3.dart';
 import '../config/flavor_manager.dart';
-import '../config/app_flavor.dart';
 
 // =============================================================================
 // RECAPTCHA STATE CLASSES
@@ -70,13 +69,7 @@ class RecaptchaNotifier extends StateNotifier<RecaptchaState> {
   Future<void> _initialize() async {
     final config = FlavorManager.currentConfig;
     
-    // Don't initialize reCAPTCHA in development mode
-    if (config.flavor == AppFlavor.dev) {
-      state = const RecaptchaNotAvailable(reason: 'reCAPTCHA disabled in development mode');
-      return;
-    }
-
-    // Check if site key is configured
+    // Check if site key is configured (regardless of flavor now)
     final siteKey = config.recaptchaSiteKey;
     if (siteKey == null || siteKey.isEmpty) {
       state = const RecaptchaNotAvailable(reason: 'reCAPTCHA site key not configured');
@@ -135,24 +128,32 @@ class RecaptchaNotifier extends StateNotifier<RecaptchaState> {
 
   /// Reset verification state
   void reset() {
+    print(
+        'reCAPTCHA Provider: reset() called, current state: ${state.runtimeType}');
     if (state is RecaptchaVerified || state is RecaptchaError) {
       final config = FlavorManager.currentConfig;
       
-      if (config.flavor == AppFlavor.dev) {
-        state = const RecaptchaNotAvailable(reason: 'reCAPTCHA disabled in development mode');
-      } else if (config.recaptchaSiteKey == null || config.recaptchaSiteKey!.isEmpty) {
+      // Check if site key is configured (regardless of flavor now)
+      if (config.recaptchaSiteKey == null || config.recaptchaSiteKey!.isEmpty) {
+        print(
+            'reCAPTCHA Provider: No site key, setting to RecaptchaNotAvailable');
         state = const RecaptchaNotAvailable(reason: 'reCAPTCHA site key not configured');
       } else {
+        print(
+            'reCAPTCHA Provider: Site key available, setting to RecaptchaReady');
         state = const RecaptchaReady();
       }
+    } else {
+      print(
+          'reCAPTCHA Provider: reset() ignored, state is ${state.runtimeType}');
     }
   }
 
   /// Check if reCAPTCHA verification is required for current environment
   bool get isRequired {
     final config = FlavorManager.currentConfig;
-    return config.flavor != AppFlavor.dev && 
-           config.recaptchaSiteKey != null && 
+    // reCAPTCHA is required if site key is configured (regardless of flavor now)
+    return config.recaptchaSiteKey != null && 
            config.recaptchaSiteKey!.isNotEmpty;
   }
 

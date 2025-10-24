@@ -28,11 +28,13 @@ class RecaptchaWidget extends ConsumerWidget {
     if (!enabled) return;
     
     final notifier = ref.read(recaptchaNotifierProvider.notifier);
+    print('reCAPTCHA Widget: Triggering verify()');
     notifier.verify();
   }
 
   void _handleReset(WidgetRef ref) {
     final notifier = ref.read(recaptchaNotifierProvider.notifier);
+    print('reCAPTCHA Widget: Triggering reset()');
     notifier.reset();
   }
 
@@ -47,12 +49,19 @@ class RecaptchaWidget extends ConsumerWidget {
 
     // Listen to verification state changes
     ref.listen<RecaptchaState>(recaptchaNotifierProvider, (previous, next) {
+      print('reCAPTCHA Widget: State changed from ${previous?.runtimeType} to ${next.runtimeType}');
       final newIsVerified = next is RecaptchaVerified;
       _handleVerificationChanged(ref, newIsVerified);
     });
 
     // Don't render anything if reCAPTCHA is not required or available
-    if (!isRequired || recaptchaState is RecaptchaNotAvailable) {
+    if (!isRequired) {
+      print('reCAPTCHA Widget: Hidden because not required');
+      return const SizedBox.shrink();
+    }
+    
+    if (recaptchaState is RecaptchaNotAvailable) {
+      print('reCAPTCHA Widget: Hidden because state is RecaptchaNotAvailable: ${recaptchaState.reason}');
       return const SizedBox.shrink();
     }
 
@@ -64,12 +73,12 @@ class RecaptchaWidget extends ConsumerWidget {
               ? context.error
               : isVerified
                   ? context.primary
-                  : context.outline.withAlpha(77), // 0.3 opacity
+                  : context.outline.withAlpha(128), // Increased opacity for better visibility
         ),
         borderRadius: BorderRadius.circular(8),
         color: isVerified
             ? context.primary.withAlpha(26) // 0.1 opacity
-            : context.surface,
+            : context.surfaceContainer, // Use surfaceContainer for better contrast
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -91,7 +100,7 @@ class RecaptchaWidget extends ConsumerWidget {
                       width: 2,
                     ),
                     borderRadius: BorderRadius.circular(4),
-                    color: isVerified ? context.primary : Colors.transparent,
+                    color: isVerified ? context.primary : context.surfaceContainerHighest, // Better background contrast
                   ),
                   child: isLoading
                       ? SizedBox(
