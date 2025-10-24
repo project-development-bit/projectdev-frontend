@@ -5,6 +5,9 @@ import '../../../../core/common/common_text.dart';
 import '../../../../core/common/common_button.dart';
 import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/extensions/context_extensions.dart';
+import '../../../../core/config/app_constant.dart';
+import '../../../../core/widgets/recaptcha_widget.dart';
+import '../../../../core/providers/consolidated_auth_provider.dart';
 import '../providers/login_provider.dart';
 
 /// Reusable login form widget that can be used in both login page and popup
@@ -14,7 +17,6 @@ class LoginFormWidget extends ConsumerStatefulWidget {
     this.onLoginSuccess,
     this.onForgotPassword,
     this.onSignUp,
-    this.showSocialLogin = true,
     this.showSignUpLink = true,
     this.showRememberMe = true,
   });
@@ -27,9 +29,6 @@ class LoginFormWidget extends ConsumerStatefulWidget {
   
   /// Callback when sign up is tapped
   final VoidCallback? onSignUp;
-  
-  /// Whether to show social login buttons
-  final bool showSocialLogin;
   
   /// Whether to show sign up link
   final bool showSignUpLink;
@@ -101,12 +100,25 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
 
   void _handleLogin() async {
     if (_formKey.currentState!.validate()) {
-      final loginNotifier = ref.read(loginNotifierProvider.notifier);
+      // Check if login can be attempted (includes reCAPTCHA check)
+      final canAttemptLogin = ref.read(canAttemptLoginProvider);
+      
+      if (!canAttemptLogin) {
+        final localizations = AppLocalizations.of(context);
+        context.showErrorSnackBar(
+          message: localizations?.translate('recaptcha_required') ?? 
+                  'Please verify that you are not a robot',
+        );
+        return;
+      }
 
-      // Reset any previous state before attempting new login
-      loginNotifier.reset();
+      // Use consolidated auth actions for login
+      final authActions = ref.read(authActionsProvider);
+      
+      // Reset previous states
+      authActions.resetAllStates();
 
-      await loginNotifier.login(
+      await authActions.login(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
@@ -121,10 +133,12 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
     widget.onSignUp?.call();
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context);
-    final isLoading = ref.watch(isLoginLoadingProvider);
+    final isLoading = ref.watch(isAnyAuthLoadingProvider);
 
     return Form(
       key: _formKey,
@@ -211,6 +225,13 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
 
           const SizedBox(height: 24),
 
+          // reCAPTCHA Widget (managed by Riverpod)
+          RecaptchaWidget(
+            enabled: !isLoading,
+          ),
+
+          const SizedBox(height: 24),
+
           // Login Button
           CommonButton(
             text: localizations?.translate('sign_in') ?? 'Sign In',
@@ -224,7 +245,7 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
           ),
 
           // Social Login Section
-          if (widget.showSocialLogin) ...[
+          if (isReadyScocial) ...[
             const SizedBox(height: 24),
 
             // Divider with OR
@@ -257,52 +278,40 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
             Row(
               children: [
                 Expanded(
-                  child: OutlinedButton.icon(
+                  child: CommonButton(
+                    text: localizations?.translate('google') ?? 'Google',
                     onPressed: () {
                       // TODO: Implement Google login
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(localizations?.translate(
-                                  'google_login_coming_soon') ??
-                              'Google login coming soon!'),
-                        ),
+                      context.showErrorSnackBar(
+                        message: localizations
+                                ?.translate('google_login_coming_soon') ??
+                            'Google login coming soon!',
                       );
                     },
                     icon: const Icon(Icons.g_mobiledata, size: 24),
-                    label: Text(
-                        localizations?.translate('google') ?? 'Google'),
-                    style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      side: BorderSide(color: context.outline),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
+                    isOutlined: true,
+                    backgroundColor: Colors.transparent,
+                    textColor: context.onSurface,
+                    height: 48,
                   ),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
-                  child: OutlinedButton.icon(
+                  child: CommonButton(
+                    text: localizations?.translate('facebook') ?? 'Facebook',
                     onPressed: () {
                       // TODO: Implement Facebook login
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(localizations?.translate(
-                                  'facebook_login_coming_soon') ??
-                              'Facebook login coming soon!'),
-                        ),
+                      context.showErrorSnackBar(
+                        message: localizations
+                                ?.translate('facebook_login_coming_soon') ??
+                            'Facebook login coming soon!',
                       );
                     },
                     icon: const Icon(Icons.facebook, size: 24),
-                    label: Text(localizations?.translate('facebook') ??
-                        'Facebook'),
-                    style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      side: BorderSide(color: context.outline),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
+                    isOutlined: true,
+                    backgroundColor: Colors.transparent,
+                    textColor: context.onSurface,
+                    height: 48,
                   ),
                 ),
               ],

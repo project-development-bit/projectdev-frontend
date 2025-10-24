@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/common/common_text.dart';
+import '../../../../core/common/common_button.dart';
+import '../../../../core/common/common_container.dart';
 import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/providers/locale_provider.dart';
 import '../../../../core/providers/translation_provider.dart';
@@ -46,12 +48,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   .logAuthState('LoginPage: before navigation to home');
 
               // Navigate to home on successful login
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(localizations?.translate('login_successful') ??
-                      'Login successful!'),
-                  backgroundColor: Colors.green,
-                ),
+              context.showSuccessSnackBar(
+                message: localizations?.translate('login_successful') ??
+                    'Login successful!',
               );
             }
             
@@ -63,11 +62,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           break;
         case LoginError():
           // Show error message
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(next.message),
-              backgroundColor: Colors.red,
-            ),
+          context.showErrorSnackBar(
+            message: next.message,
           );
           _checkVerifyCode(next.errorModel,next.email);
           break;
@@ -117,13 +113,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
                     // App Logo/Icon
                     Center(
-                      child: Container(
+                      child: CommonContainer(
                         width: context.isMobile ? 100 : 120,
                         height: context.isMobile ? 100 : 120,
-                        decoration: BoxDecoration(
-                          color: context.primary.withAlpha(25),
-                          borderRadius: BorderRadius.circular(context.isMobile ? 50 : 60),
-                        ),
+                        backgroundColor: context.primary.withAlpha(25),
+                        borderRadius: context.isMobile ? 50 : 60,
                         child: Icon(
                           Icons.fastfood_rounded,
                           size: context.isMobile ? 56 : 64,
@@ -159,7 +153,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       },
                       onForgotPassword: _handleForgotPassword,
                       onSignUp: _handleSignUp,
-                      showSocialLogin: true,
                       showSignUpLink: true,
                       showRememberMe: true,
                     ),
@@ -243,12 +236,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 color: context.onSurface.withAlpha(179), // 0.7 opacity
               ),
               const SizedBox(height: 16),
-              Container(
+              CommonContainer(
                 padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: context.primary.withAlpha(26), // 0.1 opacity
-                  borderRadius: BorderRadius.circular(8),
-                ),
+                backgroundColor: context.primary.withAlpha(26), // 0.1 opacity
+                borderRadius: 8,
                 child: Row(
                   children: [
                     Icon(
@@ -259,7 +250,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     const SizedBox(width: 8),
                     Expanded(
                       child: CommonText.bodySmall(
-                        'User Email', // This would need to be passed from the form
+                        email, // Use the actual email parameter instead of hardcoded text
                         fontWeight: FontWeight.w600,
                         color: context.primary,
                       ),
@@ -270,22 +261,27 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             ],
           ),
           actions: [
-            TextButton(
+            CommonButton(
+              text: localizations?.translate('cancel') ?? 'Cancel',
               onPressed: () => Navigator.of(context).pop(),
-              child: Text(localizations?.translate('cancel') ?? 'Cancel'),
+              isOutlined: true,
+              backgroundColor: Colors.transparent,
+              textColor: context.onSurface,
             ),
-            ElevatedButton(
+            const SizedBox(width: 8),
+            CommonButton(
+              text: localizations?.translate('verify_now') ?? 'Verify Now',
               onPressed: () {
                 Navigator.of(context).pop();
                 // Navigate to verification page
                 context.pushToVerification(
-                  email:  email,
+                  email: email,
                   isSendCode: true,
                   isFromForgotPassword: false,
                 );
               },
-              child:
-                  Text(localizations?.translate('verify_now') ?? 'Verify Now'),
+              backgroundColor: context.primary,
+              textColor: context.onPrimary,
             ),
           ],
         );

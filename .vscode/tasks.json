@@ -207,7 +207,9 @@
                 "-t",
                 "lib/main_dev.dart",
                 "--flavor",
-                "dev"
+                "dev",
+                "--web-port",
+                "8080"
             ],
             "group": "build",
             "presentation": {
@@ -228,7 +230,9 @@
                 "-t",
                 "lib/main_staging.dart",
                 "--flavor",
-                "staging"
+                "staging",
+                "--web-port",
+                "8080"
             ],
             "group": "build",
             "presentation": {

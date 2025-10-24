@@ -13,6 +13,8 @@ class AppConfig {
   final Duration receiveTimeout;
   final Duration sendTimeout;
   final Map<String, dynamic> additionalConfig;
+  final String? recaptchaSiteKey;
+  final String? recaptchaSecretKey;
 
   const AppConfig({
     required this.flavor,
@@ -26,6 +28,8 @@ class AppConfig {
     this.receiveTimeout = const Duration(seconds: 30),
     this.sendTimeout = const Duration(seconds: 30),
     this.additionalConfig = const {},
+    this.recaptchaSiteKey,
+    this.recaptchaSecretKey,
   });
 
   /// Development configuration
@@ -63,6 +67,8 @@ class AppConfig {
     connectTimeout: Duration(seconds: 20),
     receiveTimeout: Duration(seconds: 20),
     sendTimeout: Duration(seconds: 20),
+    recaptchaSiteKey: '6LceIvUrAAAAAHhQuc2U0uXTfscW181dIdPT208i',
+    recaptchaSecretKey: '6LceIvUrAAAAABMrmE_FzOEjh2b73XLgJtdMvo11',
     additionalConfig: {
       'debugShowCheckedModeBanner': false,
       'debugShowMaterialGrid': false,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/foundation.dart';
+import 'package:g_recaptcha_v3/g_recaptcha_v3.dart';
 import 'package:url_strategy/url_strategy.dart';
 import 'package:cointiply_app/core/services/database_service.dart';
 import 'package:cointiply_app/core/localization/app_localizations.dart';
@@ -19,6 +20,10 @@ Future<void> runAppWithFlavor(AppFlavor flavor) async {
   if (kIsWeb) {
     // This enables the use of clean URLs on web (without #)
     setPathUrlStrategy();
+    if (kIsWeb) {
+      bool ready = await GRecaptchaV3.ready("6LceIvUrAAAAAHhQuc2U0uXTfscW181dIdPT208i"); //--2
+      debugPrint("Is Recaptcha ready? $ready");
+    }
     debugPrint('🌐 Configuring web URL strategy for clean URLs');
   }
   

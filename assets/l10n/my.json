@@ -196,5 +196,10 @@
   "please_enter_password": "စကားဝှက်ကို ရိုက်ထည့်ပါ",
   "password_min_8_chars": "စကားဝှက်သည် အနည်းဆုံး ၈ လုံး ရှိရမည်",
   "please_confirm_password": "စကားဝှက်ကို အတည်ပြုပါ",
-  "passwords_must_match": "စကားဝှက်များ မတူညီပါ"
+  "passwords_must_match": "စကားဝှက်များ မတူညီပါ",
+  "recaptcha_required": "သင်သည် စက်ရုပ်မဟုတ်ကြောင်း အတည်ပြုပါ",
+  "recaptcha_checkbox": "ကျွန်ုပ်သည် စက်ရုပ်မဟုတ်ပါ",
+  "recaptcha_initializing": "reCAPTCHA ကို စတင်နေပါသည်...",
+  "privacy": "ကိုယ်ရေးကာကွယ်မှု",
+  "terms": "စည်းမျဉ်းများ"
 }

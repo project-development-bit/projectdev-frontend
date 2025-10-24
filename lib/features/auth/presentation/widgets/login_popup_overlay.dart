@@ -155,7 +155,6 @@ class _LoginPopupModal extends ConsumerWidget {
                       // Navigate to sign up page
                       context.go('/auth/signup');
                     },
-                    showSocialLogin: true,
                     showSignUpLink: true,
                     showRememberMe: true,
                   ),

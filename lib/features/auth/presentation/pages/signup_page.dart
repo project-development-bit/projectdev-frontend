@@ -22,13 +22,11 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
-  final _phoneController = TextEditingController();
   
   final _nameFocusNode = FocusNode();
   final _emailFocusNode = FocusNode();
   final _passwordFocusNode = FocusNode();
   final _confirmPasswordFocusNode = FocusNode();
-  final _phoneFocusNode = FocusNode();
   
   bool _agreeToTerms = false;
 
@@ -77,12 +75,10 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
-    _phoneController.dispose();
     _nameFocusNode.dispose();
     _emailFocusNode.dispose();
     _passwordFocusNode.dispose();
     _confirmPasswordFocusNode.dispose();
-    _phoneFocusNode.dispose();
     super.dispose();
   }
 
@@ -210,23 +206,8 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                   keyboardType: TextInputType.emailAddress,
                   textInputAction: TextInputAction.next,
                   prefixIcon: const Icon(Icons.email_outlined),
-                  validator: (value) => TextFieldValidators.email(value, context),
-                  onSubmitted: (_) => _phoneFocusNode.requestFocus(),
-                ),
-                
-                const SizedBox(height: 20),
-                
-                // Phone Field
-                CommonTextField(
-                  controller: _phoneController,
-                  focusNode: _phoneFocusNode,
-                  hintText: localizations?.translate('phone_number_hint') ?? 'Enter your phone number',
-                  labelText: localizations?.translate('phone_number') ?? 'Phone Number',
-                  keyboardType: TextInputType.phone,
-                  textInputAction: TextInputAction.next,
-                  prefixIcon: const Icon(Icons.phone_outlined),
-                  inputFormatters: TextFieldFormatters.phoneNumber(),
-                  validator: (value) => TextFieldValidators.phoneNumber(value, context),
+                    validator: (value) =>
+                        TextFieldValidators.email(value, context),
                   onSubmitted: (_) => _passwordFocusNode.requestFocus(),
                 ),
                 

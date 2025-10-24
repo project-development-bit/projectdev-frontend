@@ -24,11 +24,12 @@
   <!-- Content Security Policy for Flutter Web (HTTP + HTTPS) -->
   <meta http-equiv="Content-Security-Policy" content="
           default-src 'self';
-          script-src 'self' 'unsafe-eval' 'unsafe-inline' https://unpkg.com https://www.gstatic.com;
+          script-src 'self' 'unsafe-eval' 'unsafe-inline' https://unpkg.com https://www.gstatic.com https://www.google.com https://www.gstatic.com/recaptcha/;
           style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
           font-src 'self' https://fonts.gstatic.com;
           img-src 'self' data: https:;
           connect-src 'self' http: https: wss: ws:;
+          frame-src https://www.google.com;
           object-src 'none';
           base-uri 'self';
         ">
@@ -52,6 +53,8 @@
     href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&amp;display=swap"
     rel="stylesheet">
   
+    <!-- recaptcha it is only for staging , for production , we need to implement later -->
+    <script src="https://www.google.com/recaptcha/api.js?render=6LceIvUrAAAAAHhQuc2U0uXTfscW181dIdPT208i"></script>
   <!-- Font fallback styles -->
   <style>
     body {

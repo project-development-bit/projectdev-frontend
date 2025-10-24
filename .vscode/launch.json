@@ -9,49 +9,56 @@
           "name": "🟢 Gigafaucet (Dev)",
           "request": "launch",
           "type": "dart",
-          "program": "lib/main_dev.dart"
+          "program": "lib/main_dev.dart",
+          "args": ["--web-port", "8080"]
         },
         {
           "name": "🟢 Gigafaucet (Dev - Profile)",
           "request": "launch",
           "type": "dart",
           "program": "lib/main_dev.dart",
-          "flutterMode": "profile"
+          "flutterMode": "profile",
+          "args": ["--web-port", "8080"]
         },
         // 🟠 Staging Flavor Configurations
         {
           "name": "🟠 Gigafaucet (Staging)",
           "request": "launch",
           "type": "dart",
-          "program": "lib/main_staging.dart"
+          "program": "lib/main_staging.dart",
+          "args": ["--web-port", "8080"]
         },
         {
           "name": "🟠 Gigafaucet (Staging - Profile)",
           "request": "launch",
           "type": "dart",
           "program": "lib/main_staging.dart",
-          "flutterMode": "profile"
+          "flutterMode": "profile",
+          "args": ["--web-port", "8080"]
         },
         // 🔴 Production Flavor Configurations
         {
           "name": "🔴 Gigafaucet (Production)",
           "request": "launch",
           "type": "dart",
-          "program": "lib/main_prod.dart"
+          "program": "lib/main_prod.dart",
+          "args": ["--web-port", "8080"]
         },
         {
           "name": "🔴 Gigafaucet (Production - Profile)",
           "request": "launch",
           "type": "dart",
           "program": "lib/main_prod.dart",
-          "flutterMode": "profile"
+          "flutterMode": "profile",
+          "args": ["--web-port", "8080"]
         },
         {
           "name": "🔴 Gigafaucet (Production - Release)",
           "request": "launch",
           "type": "dart",
           "program": "lib/main_prod.dart",
-          "flutterMode": "release"
+          "flutterMode": "release",
+          "args": ["--web-port", "8080"]
         },
         // 📱 Platform-Specific Configurations
         {
@@ -66,12 +73,20 @@
           "type": "dart",
           "program": "lib/main_dev.dart"
         },
+        {
+          "name": "🌐 Gigafaucet (Dev - Web)",
+          "request": "launch",
+          "type": "dart",
+          "program": "lib/main_dev.dart",
+          "args": ["--web-port", "8080"]
+        },
         // 🎯 Default Configuration (Dev)
         {
           "name": "🎯 Gigafaucet (Default)",
           "request": "launch",
           "type": "dart",
-          "program": "lib/main.dart"
+          "program": "lib/main.dart",
+          "args": ["--web-port", "8080"]
         }
     ]
 }

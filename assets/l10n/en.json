@@ -198,5 +198,10 @@
   "please_enter_password": "Please enter a password",
   "password_min_8_chars": "Password must be at least 8 characters long",
   "please_confirm_password": "Please confirm your password",
-  "passwords_must_match": "Passwords do not match"
+  "passwords_must_match": "Passwords do not match",
+  "recaptcha_required": "Please verify that you are not a robot",
+  "recaptcha_checkbox": "I'm not a robot",
+  "recaptcha_initializing": "Initializing reCAPTCHA...",
+  "privacy": "Privacy",
+  "terms": "Terms"
 }
