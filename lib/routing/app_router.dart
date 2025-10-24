@@ -39,6 +39,14 @@ final routerProvider = Provider<BurgerEatsAppRoutes>(
   ),
 );
 
+// GoRouter provider - persistent across theme changes
+final goRouterProvider = Provider<GoRouter>(
+  (ref) {
+    final routes = ref.read(routerProvider);
+    return routes.routerConfig;
+  },
+);
+
 class BurgerEatsAppRoutes {
   final AuthProvider authProvider;
 
