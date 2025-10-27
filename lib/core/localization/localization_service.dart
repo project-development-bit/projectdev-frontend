@@ -46,9 +46,6 @@ class LocalizationService {
       return key;
     }
     
-    debugPrint(
-        'Translating "$key" to "$value" in locale ${_locale?.languageCode}');
-    
     // If arguments are provided, format the string
     if (args != null && args.isNotEmpty) {
       for (int i = 0; i < args.length; i++) {
