@@ -14,7 +14,6 @@ class AppConfig {
   final Duration sendTimeout;
   final Map<String, dynamic> additionalConfig;
   final String? recaptchaSiteKey;
-  final String? recaptchaSecretKey;
 
   const AppConfig({
     required this.flavor,
@@ -29,7 +28,6 @@ class AppConfig {
     this.sendTimeout = const Duration(seconds: 30),
     this.additionalConfig = const {},
     this.recaptchaSiteKey,
-    this.recaptchaSecretKey,
   });
 
   /// Development configuration
@@ -46,8 +44,6 @@ class AppConfig {
     sendTimeout: Duration(seconds: 10),
     recaptchaSiteKey:
         '6LceIvUrAAAAAHhQuc2U0uXTfscW181dIdPT208i', // Dev reCAPTCHA site key for testing
-    recaptchaSecretKey:
-        '6LceIvUrAAAAABMrmE_FzOEjh2b73XLgJtdMvo11', // Dev reCAPTCHA secret key for testing
     additionalConfig: {
       'debugShowCheckedModeBanner': true,
       'debugShowMaterialGrid': false,
@@ -72,7 +68,6 @@ class AppConfig {
     receiveTimeout: Duration(seconds: 20),
     sendTimeout: Duration(seconds: 20),
     recaptchaSiteKey: '6LceIvUrAAAAAHhQuc2U0uXTfscW181dIdPT208i',
-    recaptchaSecretKey: '6LceIvUrAAAAABMrmE_FzOEjh2b73XLgJtdMvo11',
     additionalConfig: {
       'debugShowCheckedModeBanner': false,
       'debugShowMaterialGrid': false,
@@ -98,8 +93,6 @@ class AppConfig {
     sendTimeout: Duration(seconds: 30),
     recaptchaSiteKey:
         '6LceIvUrAAAAAHhQuc2U0uXTfscW181dIdPT208i', // Production reCAPTCHA site key
-    recaptchaSecretKey:
-        '6LceIvUrAAAAABMrmE_FzOEjh2b73XLgJtdMvo11', // Production reCAPTCHA secret key
     additionalConfig: {
       'debugShowCheckedModeBanner': false,
       'debugShowMaterialGrid': false,
