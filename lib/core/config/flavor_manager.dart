@@ -74,6 +74,9 @@ class FlavorManager {
   static Duration get connectTimeout => _currentConfig.connectTimeout;
   static Duration get receiveTimeout => _currentConfig.receiveTimeout;
   static Duration get sendTimeout => _currentConfig.sendTimeout;
+
+  /// Get reCAPTCHA site key for current flavor
+  static String? get recaptchaSiteKey => _currentConfig.recaptchaSiteKey;
 }
 
 /// Provider for the current flavor

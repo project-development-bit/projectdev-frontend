@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'app_flavor.dart';
 
 /// Configuration class that holds environment-specific settings
@@ -13,7 +14,13 @@ class AppConfig {
   final Duration receiveTimeout;
   final Duration sendTimeout;
   final Map<String, dynamic> additionalConfig;
-  final String? recaptchaSiteKey;
+  
+  // reCAPTCHA Enterprise site keys for different platforms
+  final String? androidRecaptchaSiteKey;
+  final String? iosRecaptchaSiteKey;
+
+  // Legacy web support (for backward compatibility)
+  final String? webRecaptchaSiteKey;
 
   const AppConfig({
     required this.flavor,
@@ -27,8 +34,17 @@ class AppConfig {
     this.receiveTimeout = const Duration(seconds: 30),
     this.sendTimeout = const Duration(seconds: 30),
     this.additionalConfig = const {},
-    this.recaptchaSiteKey,
+    this.androidRecaptchaSiteKey,
+    this.iosRecaptchaSiteKey,
+    this.webRecaptchaSiteKey,
   });
+
+  /// Get the appropriate reCAPTCHA site key for the current platform
+  String? get recaptchaSiteKey {
+    if (Platform.isAndroid) return androidRecaptchaSiteKey;
+    if (Platform.isIOS) return iosRecaptchaSiteKey;
+    return webRecaptchaSiteKey; // Fallback for web or other platforms
+  }
 
   /// Development configuration
   static const AppConfig dev = AppConfig(
@@ -42,8 +58,12 @@ class AppConfig {
     connectTimeout: Duration(seconds: 10),
     receiveTimeout: Duration(seconds: 10),
     sendTimeout: Duration(seconds: 10),
-    recaptchaSiteKey:
-        '6LceIvUrAAAAAHhQuc2U0uXTfscW181dIdPT208i', // Dev reCAPTCHA site key for testing
+    androidRecaptchaSiteKey:
+        '6LdjbvgrAAAAAINsAjihWllPukIAyNdXctSkNKo5', // Dev Android key
+    iosRecaptchaSiteKey:
+        '6LceIvUrAAAAAHhQuc2U0uXTfscW181dIdPT208i', // Dev iOS key
+    webRecaptchaSiteKey:
+        '6LceIvUrAAAAAHhQuc2U0uXTfscW181dIdPT208i', // Dev Web key for backward compatibility
     additionalConfig: {
       'debugShowCheckedModeBanner': true,
       'debugShowMaterialGrid': false,
@@ -67,7 +87,12 @@ class AppConfig {
     connectTimeout: Duration(seconds: 20),
     receiveTimeout: Duration(seconds: 20),
     sendTimeout: Duration(seconds: 20),
-    recaptchaSiteKey: '6LceIvUrAAAAAHhQuc2U0uXTfscW181dIdPT208i',
+    androidRecaptchaSiteKey:
+        '6LdjbvgrAAAAAINsAjihWllPukIAyNdXctSkNKo5', // Staging Android key
+    iosRecaptchaSiteKey:
+        '6LceIvUrAAAAAHhQuc2U0uXTfscW181dIdPT208i', // Staging iOS key
+    webRecaptchaSiteKey:
+        '6LceIvUrAAAAAHhQuc2U0uXTfscW181dIdPT208i', // Staging Web key
     additionalConfig: {
       'debugShowCheckedModeBanner': false,
       'debugShowMaterialGrid': false,
@@ -91,8 +116,12 @@ class AppConfig {
     connectTimeout: Duration(seconds: 30),
     receiveTimeout: Duration(seconds: 30),
     sendTimeout: Duration(seconds: 30),
-    recaptchaSiteKey:
-        '6LceIvUrAAAAAHhQuc2U0uXTfscW181dIdPT208i', // Production reCAPTCHA site key
+    androidRecaptchaSiteKey:
+        '6LdjbvgrAAAAAINsAjihWllPukIAyNdXctSkNKo5', // Production Android key
+    iosRecaptchaSiteKey:
+        '6LceIvUrAAAAAHhQuc2U0uXTfscW181dIdPT208i', // Production iOS key
+    webRecaptchaSiteKey:
+        '6LceIvUrAAAAAHhQuc2U0uXTfscW181dIdPT208i', // Production Web key
     additionalConfig: {
       'debugShowCheckedModeBanner': false,
       'debugShowMaterialGrid': false,

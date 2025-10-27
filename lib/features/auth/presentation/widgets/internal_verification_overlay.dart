@@ -154,7 +154,7 @@ class _InternalVerificationOverlayState extends ConsumerState<InternalVerificati
               margin: EdgeInsets.all(context.isMobile ? 20 : 32),
               constraints: BoxConstraints(
                 maxWidth: context.isMobile ? double.infinity : 400,
-                maxHeight: context.isMobile ? 400 : 600,
+                maxHeight: context.isMobile ? double.infinity : 600,
               ),
               decoration: BoxDecoration(
                 color: context.surface,

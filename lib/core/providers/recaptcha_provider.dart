@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:g_recaptcha_v3/g_recaptcha_v3.dart';
 import '../config/flavor_manager.dart';
+import '../services/platform_recaptcha_service.dart';
 
 // =============================================================================
 // RECAPTCHA STATE CLASSES
@@ -76,16 +76,35 @@ class RecaptchaNotifier extends StateNotifier<RecaptchaState> {
       return;
     }
 
+    // Check if platform is supported
+    if (!PlatformRecaptchaService.isSupported) {
+      state = RecaptchaNotAvailable(
+          reason:
+              'reCAPTCHA not supported on ${PlatformRecaptchaService.platformName}');
+      return;
+    }
+
     state = const RecaptchaInitializing();
 
     try {
-      await GRecaptchaV3.ready(siteKey);
-      state = const RecaptchaReady();
+      // Use the service's initialize method without passing site key (it will get it from config)
+      final success = await PlatformRecaptchaService.initialize();
+      if (success) {
+        state = const RecaptchaReady();
+        debugPrint(
+            'reCAPTCHA Provider: Successfully initialized for ${PlatformRecaptchaService.platformName}');
+      } else {
+        state = const RecaptchaError(
+          message: 'Failed to initialize reCAPTCHA',
+          isInitializationError: true,
+        );
+      }
     } catch (e) {
       state = RecaptchaError(
         message: 'Failed to initialize reCAPTCHA: $e',
         isInitializationError: true,
       );
+      debugPrint('reCAPTCHA Provider: Initialization failed - $e');
     }
   }
 
@@ -107,22 +126,18 @@ class RecaptchaNotifier extends StateNotifier<RecaptchaState> {
     state = const RecaptchaVerifying();
 
     try {
-      final config = FlavorManager.currentConfig;
-      final siteKey = config.recaptchaSiteKey;
-      
-      if (siteKey == null || siteKey.isEmpty) {
-        throw Exception('reCAPTCHA site key not configured');
-      }
-
-      final token = await GRecaptchaV3.execute(action);
+      final token = await PlatformRecaptchaService.execute(action);
       
       if (token != null && token.isNotEmpty) {
         state = RecaptchaVerified(token: token);
+        debugPrint(
+            'reCAPTCHA Provider: Verification successful for ${PlatformRecaptchaService.platformName}');
       } else {
         throw Exception('Failed to get reCAPTCHA token');
       }
     } catch (e) {
       state = RecaptchaError(message: 'reCAPTCHA verification failed: $e');
+      debugPrint('reCAPTCHA Provider: Verification failed - $e');
     }
   }
 
@@ -219,4 +234,9 @@ final recaptchaTokenProvider = Provider<String?>((ref) {
 final canVerifyRecaptchaProvider = Provider<bool>((ref) {
   final state = ref.watch(recaptchaNotifierProvider);
   return state is RecaptchaReady || state is RecaptchaVerified;
+});
+
+/// Provider for getting the current reCAPTCHA site key
+final recaptchaSiteKeyProvider = Provider<String?>((ref) {
+  return FlavorManager.recaptchaSiteKey;
 });

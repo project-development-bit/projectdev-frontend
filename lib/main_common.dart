@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/foundation.dart';
-import 'package:g_recaptcha_v3/g_recaptcha_v3.dart';
 import 'package:url_strategy/url_strategy.dart';
+import 'dart:io' show Platform;
 import 'package:cointiply_app/core/services/database_service.dart';
 import 'package:cointiply_app/core/localization/app_localizations.dart';
 import 'core/providers/locale_provider.dart';
@@ -12,19 +12,57 @@ import 'core/theme/app_theme.dart';
 import 'core/config/app_flavor.dart';
 import 'core/config/flavor_manager.dart';
 import 'core/widgets/flavor_banner.dart';
+import 'core/services/platform_recaptcha_service.dart';
 import 'routing/app_router.dart';
 
 /// Common app initialization function for all flavors
 Future<void> runAppWithFlavor(AppFlavor flavor) async {
-  // Configure URL strategy for web
-  if (kIsWeb) {
-    // This enables the use of clean URLs on web (without #)
-    setPathUrlStrategy();
-    if (kIsWeb) {
-      bool ready = await GRecaptchaV3.ready("6LceIvUrAAAAAHhQuc2U0uXTfscW181dIdPT208i"); //--2
-      debugPrint("Is Recaptcha ready? $ready");
+  // Set the flavor first so configuration is available
+  FlavorManager.setFlavor(flavor);
+
+  // Initialize reCAPTCHA for all platforms
+  final recaptchaSiteKey = FlavorManager.recaptchaSiteKey;
+  if (recaptchaSiteKey != null) {
+    try {
+      if (kIsWeb) {
+        debugPrint('🌐 Web platform detected - initializing g_recaptcha_v3');
+        debugPrint(
+            '🔑 Using web reCAPTCHA site key: ${recaptchaSiteKey.substring(0, 10)}...');
+        
+        // Configure URL strategy for web
+        setPathUrlStrategy();
+        debugPrint('🌐 Configured web URL strategy for clean URLs');
+      } else if (Platform.isAndroid || Platform.isIOS) {
+        debugPrint(
+            '📱 ${Platform.isAndroid ? 'Android' : 'iOS'} platform detected');
+        debugPrint(
+            '🔐 Initializing reCAPTCHA Enterprise for ${FlavorManager.flavorDisplayName}...');
+        debugPrint(
+            '🔑 Using mobile reCAPTCHA site key: ${recaptchaSiteKey.substring(0, 10)}...');
+      }
+
+      // Initialize through the unified platform service
+      final success = await PlatformRecaptchaService.initialize();
+      if (success) {
+        debugPrint(
+            '✅ reCAPTCHA client initialized successfully for ${PlatformRecaptchaService.platformName}');
+        debugPrint(
+            '📋 Platform info: ${PlatformRecaptchaService.getPlatformErrorMessage()}');
+      } else {
+        debugPrint(
+            '❌ reCAPTCHA initialization failed for ${PlatformRecaptchaService.platformName}');
+      }
+    } catch (e) {
+      debugPrint('❌ reCAPTCHA initialization failed: $e');
     }
-    debugPrint('🌐 Configuring web URL strategy for clean URLs');
+  } else {
+    debugPrint(
+        '⚠️ No reCAPTCHA site key configured for ${FlavorManager.flavorDisplayName}');
+    if (kIsWeb) {
+      // Still configure URL strategy even without reCAPTCHA
+      setPathUrlStrategy();
+      debugPrint('🌐 Configured web URL strategy for clean URLs');
+    }
   }
   
   // Initialize SQLite database

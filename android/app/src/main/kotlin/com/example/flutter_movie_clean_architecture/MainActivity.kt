@@ -1,4 +1,4 @@
-package com.example.cointiply_app
+package com.be.gigafaucet
 
 import io.flutter.embedding.android.FlutterActivity
 
