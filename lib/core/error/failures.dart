@@ -2,7 +2,7 @@ import 'package:cointiply_app/core/error/error_model.dart';
 import 'package:equatable/equatable.dart';
 
 /// Base class for all failures in the application
-/// 
+///
 /// This abstract class is the foundation for all error handling
 /// in the clean architecture. All failures should extend this class.
 abstract class Failure extends Equatable {

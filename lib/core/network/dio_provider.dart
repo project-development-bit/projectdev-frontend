@@ -5,7 +5,7 @@ import '../config/flavor_manager.dart';
 
 final dioProvider = Provider<Dio>((ref) {
   final config = FlavorManager.currentConfig;
-  
+
   final dio = Dio(BaseOptions(
     baseUrl: config.fullApiUrl,
     connectTimeout: config.connectTimeout,

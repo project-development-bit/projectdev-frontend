@@ -63,8 +63,10 @@ void main() {
       });
 
       testWidgets('displays earnings based on profile stats', (tester) async {
-        final customStats = ProfileTestData.createTestStats(totalEarnings: 1234.5);
-        final customProfile = ProfileTestData.createTestProfile(stats: customStats);
+        final customStats =
+            ProfileTestData.createTestStats(totalEarnings: 1234.5);
+        final customProfile =
+            ProfileTestData.createTestProfile(stats: customStats);
 
         await tester.pumpWidget(buildBalancesSection(profile: customProfile));
         await tester.pumpAndSettle();
@@ -93,9 +95,11 @@ void main() {
 
     group('Data Display', () {
       testWidgets('handles null earnings gracefully', (tester) async {
-        final profileWithoutStats = ProfileTestData.createTestProfile(stats: null);
+        final profileWithoutStats =
+            ProfileTestData.createTestProfile(stats: null);
 
-        await tester.pumpWidget(buildBalancesSection(profile: profileWithoutStats));
+        await tester
+            .pumpWidget(buildBalancesSection(profile: profileWithoutStats));
         await tester.pumpAndSettle();
 
         expect(find.textContaining('0.0'), findsOneWidget);
@@ -103,8 +107,10 @@ void main() {
       });
 
       testWidgets('formats earnings with correct precision', (tester) async {
-        final customStats = ProfileTestData.createTestStats(totalEarnings: 123.456789);
-        final customProfile = ProfileTestData.createTestProfile(stats: customStats);
+        final customStats =
+            ProfileTestData.createTestStats(totalEarnings: 123.456789);
+        final customProfile =
+            ProfileTestData.createTestProfile(stats: customStats);
 
         await tester.pumpWidget(buildBalancesSection(profile: customProfile));
         await tester.pumpAndSettle();
@@ -115,7 +121,8 @@ void main() {
 
       testWidgets('handles zero earnings', (tester) async {
         final customStats = ProfileTestData.createTestStats(totalEarnings: 0.0);
-        final customProfile = ProfileTestData.createTestProfile(stats: customStats);
+        final customProfile =
+            ProfileTestData.createTestProfile(stats: customStats);
 
         await tester.pumpWidget(buildBalancesSection(profile: customProfile));
         await tester.pumpAndSettle();
@@ -147,7 +154,7 @@ void main() {
         // Verify withdraw button exists and is properly configured
         expect(find.byType(ElevatedButton), findsOneWidget);
         expect(find.text('Withdraw Earnings'), findsOneWidget);
-        
+
         // The SizedBox should exist but we don't need to verify specific properties
         expect(find.byType(SizedBox), findsWidgets);
       });
@@ -186,9 +193,10 @@ void main() {
     });
 
     group('Withdraw Button', () {
-      testWidgets('withdraw button is tappable when callback provided', (tester) async {
+      testWidgets('withdraw button is tappable when callback provided',
+          (tester) async {
         bool withdrawTapped = false;
-        
+
         await tester.pumpWidget(TestAppWrapper(
           child: BalancesSectionWidget(
             profile: testProfile,

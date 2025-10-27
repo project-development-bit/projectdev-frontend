@@ -23,7 +23,8 @@ void main() {
       useCase = ResendCodeUseCase(mockRepository);
     });
 
-    test('should return ResendCodeResponse when repository call succeeds', () async {
+    test('should return ResendCodeResponse when repository call succeeds',
+        () async {
       // Arrange
       const request = ResendCodeRequest(email: 'test@example.com');
 
@@ -44,7 +45,7 @@ void main() {
 
       // Assert
       expect(result, isA<Right<Failure, ResendCodeResponse>>());
-      
+
       result.fold(
         (failure) => fail('Expected Right, got Left: $failure'),
         (response) {
@@ -75,7 +76,7 @@ void main() {
 
       // Assert
       expect(result, isA<Left<Failure, ResendCodeResponse>>());
-      
+
       result.fold(
         (failure) {
           expect(failure, isA<ServerFailure>());
@@ -128,7 +129,7 @@ void main() {
 
       // Assert
       expect(result, isA<Left<Failure, ResendCodeResponse>>());
-      
+
       result.fold(
         (failure) {
           expect(failure, isA<ServerFailure>());
@@ -155,7 +156,7 @@ void main() {
 
       // Assert
       expect(result, isA<Left<Failure, ResendCodeResponse>>());
-      
+
       result.fold(
         (failure) {
           expect(failure, isA<ServerFailure>());

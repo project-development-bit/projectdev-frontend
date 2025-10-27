@@ -1,5 +1,5 @@
 /// Forgot password request model
-/// 
+///
 /// Contains the email needed to request password reset
 class ForgotPasswordRequest {
   const ForgotPasswordRequest({

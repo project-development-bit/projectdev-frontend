@@ -2,19 +2,19 @@
 enum UserRole {
   /// Developer role - typically for development and testing purposes
   dev('Dev'),
-  
+
   /// Administrator role - has administrative privileges
   admin('Admin'),
-  
+
   /// Super user role - has the highest level of privileges
   superUser('SuperUser'),
-  
+
   /// Normal user role - standard user with basic privileges
   normalUser('NormalUser');
 
   /// The string value of the role as it appears in the API
   const UserRole(this.value);
-  
+
   /// The string representation of the role
   final String value;
 
@@ -68,16 +68,16 @@ enum UserRole {
 
   /// Get roles with administrative privileges
   static List<UserRole> get adminRoles => [
-    UserRole.admin,
-    UserRole.superUser,
-  ];
+        UserRole.admin,
+        UserRole.superUser,
+      ];
 
   /// Get roles with elevated privileges (admin and dev)
   static List<UserRole> get elevatedRoles => [
-    UserRole.dev,
-    UserRole.admin,
-    UserRole.superUser,
-  ];
+        UserRole.dev,
+        UserRole.admin,
+        UserRole.superUser,
+      ];
 }
 
 /// Extension methods for UserRole enum
@@ -95,9 +95,9 @@ extension UserRoleExtension on UserRole {
   bool get isNormalUser => this == UserRole.normalUser;
 
   /// Check if the role has elevated privileges (dev, admin, or super user)
-  bool get hasElevatedPrivileges => 
-      this == UserRole.dev || 
-      this == UserRole.admin || 
+  bool get hasElevatedPrivileges =>
+      this == UserRole.dev ||
+      this == UserRole.admin ||
       this == UserRole.superUser;
 
   /// Check if the role can access admin features

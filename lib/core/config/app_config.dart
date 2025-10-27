@@ -1,5 +1,9 @@
-import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'app_flavor.dart';
+
+// Conditional import for Platform - avoid importing dart:io on web
+import 'dart:io' as io
+    if (dart.library.js_interop) '../services/platform_stub.dart';
 
 /// Configuration class that holds environment-specific settings
 class AppConfig {
@@ -14,7 +18,7 @@ class AppConfig {
   final Duration receiveTimeout;
   final Duration sendTimeout;
   final Map<String, dynamic> additionalConfig;
-  
+
   // reCAPTCHA Enterprise site keys for different platforms
   final String? androidRecaptchaSiteKey;
   final String? iosRecaptchaSiteKey;
@@ -41,8 +45,15 @@ class AppConfig {
 
   /// Get the appropriate reCAPTCHA site key for the current platform
   String? get recaptchaSiteKey {
-    if (Platform.isAndroid) return androidRecaptchaSiteKey;
-    if (Platform.isIOS) return iosRecaptchaSiteKey;
+    if (kIsWeb) return webRecaptchaSiteKey;
+
+    try {
+      if (io.Platform.isAndroid) return androidRecaptchaSiteKey;
+      if (io.Platform.isIOS) return iosRecaptchaSiteKey;
+    } catch (e) {
+      // Platform not available (e.g., on web)
+    }
+    
     return webRecaptchaSiteKey; // Fallback for web or other platforms
   }
 

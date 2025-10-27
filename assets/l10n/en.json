@@ -203,5 +203,19 @@
   "recaptcha_checkbox": "I'm not a robot",
   "recaptcha_initializing": "Initializing reCAPTCHA...",
   "privacy": "Privacy",
-  "terms": "Terms"
+  "terms": "Terms",
+  "_drawer_section": "Mobile Drawer Section",
+  "settings": "Settings",
+  "account": "Account",
+  "theme": "Theme",
+  "change_app_appearance": "Change app appearance",
+  "language": "Language",
+  "change_app_language": "Change app language",
+  "view_edit_profile": "View and edit your profile",
+  "sign_in_to_account": "Sign in to your account",
+  "sign_out_account": "Sign out of your account",
+  "signing_out": "Signing out...",
+  "welcome_to_gigafaucet": "Welcome to Gigafaucet!",
+  "version": "Version",
+  "logout_failed": "Logout failed: {0}"
 }

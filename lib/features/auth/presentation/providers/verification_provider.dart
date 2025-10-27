@@ -29,14 +29,14 @@ class VerificationLoading extends VerificationState {
 /// Verification successful
 class VerificationSuccess extends VerificationState {
   const VerificationSuccess({required this.message});
-  
+
   final String message;
 }
 
 /// Verification error occurred
 class VerificationError extends VerificationState {
   const VerificationError({required this.message, this.isNetworkError = false});
-  
+
   final String message;
   final bool isNetworkError;
 }
@@ -44,7 +44,7 @@ class VerificationError extends VerificationState {
 /// Resend code successful
 class ResendCodeSuccess extends VerificationState {
   const ResendCodeSuccess({required this.message});
-  
+
   final String message;
 }
 
@@ -67,10 +67,10 @@ class VerificationNotifier extends StateNotifier<VerificationState> {
   }) async {
     try {
       state = const VerificationLoading();
-      
+
       // Create request with email and code
       final request = VerifyCodeRequest(email: email, code: code);
-      
+
       // Call use case to verify code
       final result = await _verifyCodeUseCase(request);
 
@@ -103,10 +103,10 @@ class VerificationNotifier extends StateNotifier<VerificationState> {
   }) async {
     try {
       state = const VerificationLoading();
-      
+
       // Create request with email
       final request = ResendCodeRequest(email: email);
-      
+
       // Call use case to resend code
       final result = await _resendCodeUseCase(request);
 
@@ -161,7 +161,8 @@ final verifyCodeUseCaseProvider = Provider<VerifyCodeUseCase>((ref) {
 });
 
 /// Provider for verification state notifier
-final verificationNotifierProvider = StateNotifierProvider<VerificationNotifier, VerificationState>(
+final verificationNotifierProvider =
+    StateNotifierProvider<VerificationNotifier, VerificationState>(
   (ref) => VerificationNotifier(
     ref.watch(resendCodeUseCaseProvider),
     ref.watch(verifyCodeUseCaseProvider),

@@ -52,7 +52,8 @@ class ResendTimerState {
   }
 
   @override
-  int get hashCode => countdown.hashCode ^ canResend.hashCode ^ isActive.hashCode;
+  int get hashCode =>
+      countdown.hashCode ^ canResend.hashCode ^ isActive.hashCode;
 }
 
 // =============================================================================
@@ -125,7 +126,8 @@ class ResendTimerNotifier extends StateNotifier<ResendTimerState> {
 // =============================================================================
 
 /// Provider for resend timer state notifier
-final resendTimerProvider = StateNotifierProvider<ResendTimerNotifier, ResendTimerState>(
+final resendTimerProvider =
+    StateNotifierProvider<ResendTimerNotifier, ResendTimerState>(
   (ref) => ResendTimerNotifier(),
 );
 

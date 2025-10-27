@@ -5,7 +5,7 @@ import '../models/user_profile_model.dart';
 import 'profile_remote_data_source.dart';
 
 /// Implementation of [ProfileRemoteDataSource] using Dio HTTP client
-/// 
+///
 /// This class handles all remote API calls related to user profile management,
 /// including fetching, updating, and file upload operations.
 class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
@@ -17,7 +17,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   Future<UserProfileModel> getUserProfile(String userId) async {
     try {
       final response = await _dio.get('/users/$userId/profile');
-      
+
       if (response.statusCode == 200) {
         return UserProfileModel.fromJson(response.data['data']);
       } else {
@@ -40,11 +40,12 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
         '/users/$userId/profile',
         data: profileData,
       );
-      
+
       if (response.statusCode == 200) {
         return UserProfileModel.fromJson(response.data['data']);
       } else {
-        throw Exception('Failed to update user profile: ${response.statusCode}');
+        throw Exception(
+            'Failed to update user profile: ${response.statusCode}');
       }
     } on DioException catch (e) {
       throw _handleDioException(e);
@@ -58,7 +59,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
     try {
       String fileName = imageFile.path.split('/').last;
       String mimeType = _getMimeType(fileName);
-      
+
       FormData formData = FormData.fromMap({
         'profile_picture': await MultipartFile.fromFile(
           imageFile.path,
@@ -71,11 +72,12 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
         '/users/$userId/profile/picture',
         data: formData,
       );
-      
+
       if (response.statusCode == 200) {
         return response.data['data']['profile_picture_url'];
       } else {
-        throw Exception('Failed to upload profile picture: ${response.statusCode}');
+        throw Exception(
+            'Failed to upload profile picture: ${response.statusCode}');
       }
     } on DioException catch (e) {
       throw _handleDioException(e);
@@ -98,7 +100,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
           'new_password': newPassword,
         },
       );
-      
+
       if (response.statusCode != 200) {
         throw Exception('Failed to update password: ${response.statusCode}');
       }
@@ -116,7 +118,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
         '/users/$userId/email',
         data: {'new_email': newEmail},
       );
-      
+
       if (response.statusCode != 200) {
         throw Exception('Failed to update email: ${response.statusCode}');
       }
@@ -134,7 +136,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
         '/users/$userId/email/verify',
         data: {'verification_code': verificationCode},
       );
-      
+
       if (response.statusCode != 200) {
         throw Exception('Failed to verify email: ${response.statusCode}');
       }
@@ -152,7 +154,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
         '/users/$userId/phone/verify',
         data: {'verification_code': verificationCode},
       );
-      
+
       if (response.statusCode != 200) {
         throw Exception('Failed to verify phone: ${response.statusCode}');
       }
@@ -169,9 +171,10 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
       final response = await _dio.post(
         '/users/$userId/email/send-verification',
       );
-      
+
       if (response.statusCode != 200) {
-        throw Exception('Failed to send verification email: ${response.statusCode}');
+        throw Exception(
+            'Failed to send verification email: ${response.statusCode}');
       }
     } on DioException catch (e) {
       throw _handleDioException(e);
@@ -186,9 +189,10 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
       final response = await _dio.post(
         '/users/$userId/phone/send-verification',
       );
-      
+
       if (response.statusCode != 200) {
-        throw Exception('Failed to send verification SMS: ${response.statusCode}');
+        throw Exception(
+            'Failed to send verification SMS: ${response.statusCode}');
       }
     } on DioException catch (e) {
       throw _handleDioException(e);
@@ -204,7 +208,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
         '/users/$userId/deactivate',
         data: {'password': password},
       );
-      
+
       if (response.statusCode != 200) {
         throw Exception('Failed to deactivate account: ${response.statusCode}');
       }
@@ -222,7 +226,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
         '/users/$userId',
         data: {'password': password},
       );
-      
+
       if (response.statusCode != 200) {
         throw Exception('Failed to delete account: ${response.statusCode}');
       }
@@ -237,19 +241,22 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   Exception _handleDioException(DioException e) {
     switch (e.type) {
       case DioExceptionType.connectionTimeout:
-        return Exception('Connection timeout. Please check your internet connection.');
+        return Exception(
+            'Connection timeout. Please check your internet connection.');
       case DioExceptionType.sendTimeout:
         return Exception('Request timeout. Please try again.');
       case DioExceptionType.receiveTimeout:
         return Exception('Server response timeout. Please try again.');
       case DioExceptionType.badResponse:
         final statusCode = e.response?.statusCode;
-        final message = e.response?.data?['message'] ?? 'Unknown error occurred';
+        final message =
+            e.response?.data?['message'] ?? 'Unknown error occurred';
         return Exception('Server error ($statusCode): $message');
       case DioExceptionType.cancel:
         return Exception('Request was cancelled');
       case DioExceptionType.connectionError:
-        return Exception('Connection error. Please check your internet connection.');
+        return Exception(
+            'Connection error. Please check your internet connection.');
       default:
         return Exception('Network error: ${e.message}');
     }

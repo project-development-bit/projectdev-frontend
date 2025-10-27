@@ -36,7 +36,7 @@ class ThemeSwitchWidget extends ConsumerWidget {
       itemBuilder: (BuildContext context) {
         return AppThemeMode.values.map((AppThemeMode themeMode) {
           final isSelected = themeMode == currentThemeMode;
-          
+
           return PopupMenuItem<AppThemeMode>(
             value: themeMode,
             child: Container(
@@ -60,7 +60,8 @@ class ThemeSwitchWidget extends ConsumerWidget {
                       themeNotifier.getThemeModeDisplayName(themeMode),
                       style: context.bodyMedium?.copyWith(
                         color: isSelected ? context.primary : context.onSurface,
-                        fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                        fontWeight:
+                            isSelected ? FontWeight.w600 : FontWeight.w400,
                       ),
                     ),
                   ),
@@ -175,7 +176,7 @@ class ThemeSwitchTile extends ConsumerWidget {
         title ?? 'Dark Mode',
         style: context.titleMedium,
       ),
-      subtitle: subtitle != null 
+      subtitle: subtitle != null
           ? Text(
               subtitle!,
               style: context.bodySmall?.copyWith(
@@ -227,7 +228,7 @@ class ThemeSelectorCard extends ConsumerWidget {
             const SizedBox(height: 16),
             ...AppThemeMode.values.map((themeMode) {
               final isSelected = themeMode == currentThemeMode;
-              
+
               return Padding(
                 padding: const EdgeInsets.only(bottom: 8),
                 child: InkWell(
@@ -238,12 +239,12 @@ class ThemeSelectorCard extends ConsumerWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(
-                        color: isSelected 
-                            ? context.primary 
+                        color: isSelected
+                            ? context.primary
                             : context.outline.withAlpha(77), // 0.3 * 255
                         width: isSelected ? 2 : 1,
                       ),
-                      color: isSelected 
+                      color: isSelected
                           ? context.primaryContainer.withAlpha(77) // 0.3 * 255
                           : null,
                     ),
@@ -251,8 +252,8 @@ class ThemeSelectorCard extends ConsumerWidget {
                       children: [
                         Icon(
                           themeNotifier.getThemeModeIcon(themeMode),
-                          color: isSelected 
-                              ? context.primary 
+                          color: isSelected
+                              ? context.primary
                               : context.onSurfaceVariant,
                           size: 20,
                         ),
@@ -262,13 +263,14 @@ class ThemeSelectorCard extends ConsumerWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                themeNotifier.getThemeModeDisplayName(themeMode),
+                                themeNotifier
+                                    .getThemeModeDisplayName(themeMode),
                                 style: context.bodyMedium?.copyWith(
-                                  color: isSelected 
-                                      ? context.primary 
+                                  color: isSelected
+                                      ? context.primary
                                       : context.onSurface,
-                                  fontWeight: isSelected 
-                                      ? FontWeight.w600 
+                                  fontWeight: isSelected
+                                      ? FontWeight.w600
                                       : FontWeight.w400,
                                 ),
                               ),

@@ -38,19 +38,19 @@ class GigafaucetDesignExample extends StatelessWidget {
               // Hero Section
               _buildHeroSection(),
               const SizedBox(height: 24),
-              
+
               // Stats Cards
               _buildStatsSection(),
               const SizedBox(height: 24),
-              
+
               // Crypto Rewards Section
               _buildCryptoSection(),
               const SizedBox(height: 24),
-              
+
               // Action Buttons
               _buildActionButtons(),
               const SizedBox(height: 24),
-              
+
               // Website-style Form
               _buildFormExample(),
             ],
@@ -118,16 +118,23 @@ class GigafaucetDesignExample extends StatelessWidget {
   Widget _buildStatsSection() {
     return Row(
       children: [
-        Expanded(child: _buildStatCard('Total Earned', '14,212,568', AppColors.websiteGold, Icons.monetization_on)),
+        Expanded(
+            child: _buildStatCard('Total Earned', '14,212,568',
+                AppColors.websiteGold, Icons.monetization_on)),
         const SizedBox(width: 12),
-        Expanded(child: _buildStatCard('Daily Bonus', '1,000', AppColors.primaryLight, Icons.card_giftcard)),
+        Expanded(
+            child: _buildStatCard('Daily Bonus', '1,000',
+                AppColors.primaryLight, Icons.card_giftcard)),
         const SizedBox(width: 12),
-        Expanded(child: _buildStatCard('Referrals', '47', AppColors.websiteAccent, Icons.people)),
+        Expanded(
+            child: _buildStatCard(
+                'Referrals', '47', AppColors.websiteAccent, Icons.people)),
       ],
     );
   }
 
-  Widget _buildStatCard(String title, String value, Color color, IconData icon) {
+  Widget _buildStatCard(
+      String title, String value, Color color, IconData icon) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -177,13 +184,15 @@ class GigafaucetDesignExample extends StatelessWidget {
           const SizedBox(height: 12),
           _buildCryptoRow('Ethereum', 'ETH', '0.1456', AppColors.ethereum),
           const SizedBox(height: 12),
-          _buildCryptoRow('Gigafaucet Token', 'GFT', '1,250', AppColors.websiteGold),
+          _buildCryptoRow(
+              'Gigafaucet Token', 'GFT', '1,250', AppColors.websiteGold),
         ],
       ),
     );
   }
 
-  Widget _buildCryptoRow(String name, String symbol, String amount, Color color) {
+  Widget _buildCryptoRow(
+      String name, String symbol, String amount, Color color) {
     return Row(
       children: [
         Container(

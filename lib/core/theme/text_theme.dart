@@ -301,101 +301,105 @@ class AppTextTheme {
 
   // Helper methods for custom text styles
   static TextStyle displayExtraLarge({Color? color}) => TextStyle(
-    fontFamily: _fontFamily,
-    fontSize: 64,
-    fontWeight: FontWeight.w700,
-    height: 1.0,
-    letterSpacing: -0.5,
-    color: color,
-  );
+        fontFamily: _fontFamily,
+        fontSize: 64,
+        fontWeight: FontWeight.w700,
+        height: 1.0,
+        letterSpacing: -0.5,
+        color: color,
+      );
 
   static TextStyle displayExtraSmall({Color? color}) => TextStyle(
-    fontFamily: _fontFamily,
-    fontSize: 20,
-    fontWeight: FontWeight.w600,
-    height: 1.4,
-    letterSpacing: 0,
-    color: color,
-  );
+        fontFamily: _fontFamily,
+        fontSize: 20,
+        fontWeight: FontWeight.w600,
+        height: 1.4,
+        letterSpacing: 0,
+        color: color,
+      );
 
   // Brand-specific text styles
   static TextStyle brandText({Color? color, double? fontSize}) => TextStyle(
-    fontFamily: _fontFamily,
-    fontSize: fontSize ?? 24,
-    fontWeight: FontWeight.w700,
-    letterSpacing: -0.5,
-    color: color,
-  );
+        fontFamily: _fontFamily,
+        fontSize: fontSize ?? 24,
+        fontWeight: FontWeight.w700,
+        letterSpacing: -0.5,
+        color: color,
+      );
 
   static TextStyle cardTitle({bool isDark = false}) => TextStyle(
-    fontFamily: _fontFamily,
-    fontSize: 18,
-    fontWeight: FontWeight.w600,
-    height: 1.33,
-    letterSpacing: 0,
-    color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-  );
+        fontFamily: _fontFamily,
+        fontSize: 18,
+        fontWeight: FontWeight.w600,
+        height: 1.33,
+        letterSpacing: 0,
+        color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+      );
 
   static TextStyle cardSubtitle({bool isDark = false}) => TextStyle(
-    fontFamily: _fontFamily,
-    fontSize: 14,
-    fontWeight: FontWeight.w400,
-    height: 1.43,
-    letterSpacing: 0.25,
-    color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
-  );
+        fontFamily: _fontFamily,
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+        height: 1.43,
+        letterSpacing: 0.25,
+        color:
+            isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+      );
 
   static TextStyle formLabel({bool isDark = false}) => TextStyle(
-    fontFamily: _fontFamily,
-    fontSize: 14,
-    fontWeight: FontWeight.w600,
-    height: 1.43,
-    letterSpacing: 0.1,
-    color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-  );
+        fontFamily: _fontFamily,
+        fontSize: 14,
+        fontWeight: FontWeight.w600,
+        height: 1.43,
+        letterSpacing: 0.1,
+        color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+      );
 
   static TextStyle formHint({bool isDark = false}) => TextStyle(
-    fontFamily: _fontFamily,
-    fontSize: 14,
-    fontWeight: FontWeight.w400,
-    height: 1.43,
-    letterSpacing: 0.25,
-    color: isDark ? AppColors.darkTextTertiary : AppColors.lightTextTertiary,
-  );
+        fontFamily: _fontFamily,
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+        height: 1.43,
+        letterSpacing: 0.25,
+        color:
+            isDark ? AppColors.darkTextTertiary : AppColors.lightTextTertiary,
+      );
 
   static TextStyle errorText({bool isDark = false}) => TextStyle(
-    fontFamily: _fontFamily,
-    fontSize: 12,
-    fontWeight: FontWeight.w400,
-    height: 1.33,
-    letterSpacing: 0.4,
-    color: isDark ? AppColors.darkColorScheme.error : AppColors.lightColorScheme.error,
-  );
+        fontFamily: _fontFamily,
+        fontSize: 12,
+        fontWeight: FontWeight.w400,
+        height: 1.33,
+        letterSpacing: 0.4,
+        color: isDark
+            ? AppColors.darkColorScheme.error
+            : AppColors.lightColorScheme.error,
+      );
 
   static TextStyle successText({bool isDark = false}) => TextStyle(
-    fontFamily: _fontFamily,
-    fontSize: 12,
-    fontWeight: FontWeight.w400,
-    height: 1.33,
-    letterSpacing: 0.4,
-    color: isDark ? AppColors.darkSuccess : AppColors.lightSuccess,
-  );
+        fontFamily: _fontFamily,
+        fontSize: 12,
+        fontWeight: FontWeight.w400,
+        height: 1.33,
+        letterSpacing: 0.4,
+        color: isDark ? AppColors.darkSuccess : AppColors.lightSuccess,
+      );
 
   static TextStyle warningText({bool isDark = false}) => TextStyle(
-    fontFamily: _fontFamily,
-    fontSize: 12,
-    fontWeight: FontWeight.w400,
-    height: 1.33,
-    letterSpacing: 0.4,
-    color: isDark ? AppColors.darkWarning : AppColors.lightWarning,
-  );
+        fontFamily: _fontFamily,
+        fontSize: 12,
+        fontWeight: FontWeight.w400,
+        height: 1.33,
+        letterSpacing: 0.4,
+        color: isDark ? AppColors.darkWarning : AppColors.lightWarning,
+      );
 
   static TextStyle infoText({bool isDark = false}) => TextStyle(
-    fontFamily: _fontFamily,
-    fontSize: 12,
-    fontWeight: FontWeight.w400,
-    height: 1.33,
-    letterSpacing: 0.4,
-    color: isDark ? AppColors.darkInfo : AppColors.lightInfo,
-  );
+        fontFamily: _fontFamily,
+        fontSize: 12,
+        fontWeight: FontWeight.w400,
+        height: 1.33,
+        letterSpacing: 0.4,
+        color: isDark ? AppColors.darkInfo : AppColors.lightInfo,
+      );
 }

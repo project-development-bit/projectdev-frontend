@@ -52,15 +52,15 @@ class TimerTestPage extends ConsumerWidget {
             ),
             const SizedBox(height: 16),
             ElevatedButton(
-              onPressed: canResend ? () {
-                // Simulate resend code
-                print('Resending code...');
-                ref.read(resendTimerProvider.notifier).startTimer();
-              } : null,
+              onPressed: canResend
+                  ? () {
+                      // Simulate resend code
+                      print('Resending code...');
+                      ref.read(resendTimerProvider.notifier).startTimer();
+                    }
+                  : null,
               child: Text(
-                canResend 
-                    ? 'Resend Code' 
-                    : 'Resend in ${countdown}s',
+                canResend ? 'Resend Code' : 'Resend in ${countdown}s',
               ),
             ),
             const SizedBox(height: 16),

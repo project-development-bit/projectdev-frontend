@@ -18,9 +18,10 @@ import '../../domain/usecases/upload_profile_picture.dart';
 import 'profile_state_notifier.dart';
 
 /// Provider for profile remote data source
-/// 
+///
 /// Automatically switches between mock data and real API based on ProfileConfig
-final profileRemoteDataSourceProvider = Provider<ProfileRemoteDataSource>((ref) {
+final profileRemoteDataSourceProvider =
+    Provider<ProfileRemoteDataSource>((ref) {
   if (ProfileConfig.useMockData) {
     // 🎭 Mock mode: Using fake data for development/testing
     if (ProfileConfig.enableDebugLogging) {
@@ -55,7 +56,7 @@ final profileRepositoryProvider = Provider<ProfileRepository>((ref) {
   final remoteDataSource = ref.read(profileRemoteDataSourceProvider);
   final localDataSource = ref.read(profileLocalDataSourceProvider);
   final databaseDataSource = ref.read(profileDatabaseDataSourceProvider);
-  
+
   return ProfileRepositoryImpl(
     remoteDataSource: remoteDataSource,
     localDataSource: localDataSource,
@@ -76,7 +77,8 @@ final updateUserProfileUseCaseProvider = Provider<UpdateUserProfile>((ref) {
 });
 
 /// Provider for upload profile picture use case
-final uploadProfilePictureUseCaseProvider = Provider<UploadProfilePicture>((ref) {
+final uploadProfilePictureUseCaseProvider =
+    Provider<UploadProfilePicture>((ref) {
   final repository = ref.read(profileRepositoryProvider);
   return UploadProfilePicture(repository);
 });

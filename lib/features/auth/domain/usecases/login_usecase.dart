@@ -6,7 +6,7 @@ import '../repositories/auth_repository.dart';
 import '../../data/models/login_request.dart';
 
 /// Login use case
-/// 
+///
 /// Handles user authentication with email and password
 class LoginUseCase implements UseCase<LoginResponse, LoginRequest> {
   final AuthRepository repository;

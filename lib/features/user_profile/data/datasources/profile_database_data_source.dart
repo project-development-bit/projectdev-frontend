@@ -7,15 +7,16 @@ import '../../domain/entities/user_profile.dart';
 import '../models/user_profile_model.dart';
 
 /// Database data source for profile operations
-/// 
+///
 /// This class handles getting user profile data from the local SQLite database
 /// by integrating with the authentication system and database service.
 abstract class ProfileDatabaseDataSource {
   /// Get current user profile from database
   Future<Either<Failure, UserProfileModel>> getCurrentUserProfile();
-  
+
   /// Update user profile in database
-  Future<Either<Failure, UserProfileModel>> updateUserProfile(UserProfileModel profile);
+  Future<Either<Failure, UserProfileModel>> updateUserProfile(
+      UserProfileModel profile);
 }
 
 /// Implementation of [ProfileDatabaseDataSource]
@@ -29,7 +30,7 @@ class ProfileDatabaseDataSourceImpl implements ProfileDatabaseDataSource {
     try {
       // Get current user ID from secure storage (from login)
       final currentUserId = await secureStorage.getUserId();
-      
+
       if (currentUserId == null) {
         return Left(DatabaseFailure(message: 'No authenticated user found'));
       }
@@ -42,14 +43,14 @@ class ProfileDatabaseDataSourceImpl implements ProfileDatabaseDataSource {
 
       // Get user from database by ID
       final userModel = await DatabaseService.getUserById(userIdInt);
-      
+
       if (userModel == null) {
         return Left(DatabaseFailure(message: 'User not found in database'));
       }
 
       // Convert UserModel to UserProfileModel
       final profileModel = _convertUserModelToProfile(userModel);
-      
+
       return Right(profileModel);
     } catch (e) {
       return Left(DatabaseFailure(message: 'Failed to get user profile: $e'));
@@ -57,11 +58,12 @@ class ProfileDatabaseDataSourceImpl implements ProfileDatabaseDataSource {
   }
 
   @override
-  Future<Either<Failure, UserProfileModel>> updateUserProfile(UserProfileModel profile) async {
+  Future<Either<Failure, UserProfileModel>> updateUserProfile(
+      UserProfileModel profile) async {
     try {
       // Get current user ID from secure storage
       final currentUserId = await secureStorage.getUserId();
-      
+
       if (currentUserId == null) {
         return Left(DatabaseFailure(message: 'No authenticated user found'));
       }
@@ -69,10 +71,11 @@ class ProfileDatabaseDataSourceImpl implements ProfileDatabaseDataSource {
       // For now, we'll just return the same profile since the database
       // only stores basic user info (name, email, role)
       // In a real app, you'd extend the database schema to store more profile fields
-      
+
       return Right(profile);
     } catch (e) {
-      return Left(DatabaseFailure(message: 'Failed to update user profile: $e'));
+      return Left(
+          DatabaseFailure(message: 'Failed to update user profile: $e'));
     }
   }
 
@@ -90,7 +93,8 @@ class ProfileDatabaseDataSourceImpl implements ProfileDatabaseDataSource {
       contactNumber: null, // Not stored in current database schema
       dateOfBirth: null, // Not stored in current database schema
       gender: null, // Not stored in current database schema
-      accountCreated: DateTime.now(), // Default to current time (could be enhanced with actual creation date)
+      accountCreated: DateTime
+          .now(), // Default to current time (could be enhanced with actual creation date)
       lastLogin: null, // Could be added to database schema
       accountStatus: AccountStatus.active, // Default status
       verificationStatus: VerificationStatus.verified, // Default status

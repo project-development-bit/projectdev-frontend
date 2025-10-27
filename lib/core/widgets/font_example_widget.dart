@@ -44,7 +44,7 @@ class FontExampleWidget extends StatelessWidget {
                   const CommonText.displaySmall('Display Small'),
                 ],
               ),
-              
+
               // Headline Examples (Orbitron)
               _buildSection(
                 'Headlines (Orbitron)',
@@ -54,7 +54,7 @@ class FontExampleWidget extends StatelessWidget {
                   const CommonText.headlineSmall('Headline Small'),
                 ],
               ),
-              
+
               // Title Examples (Orbitron)
               _buildSection(
                 'Titles (Orbitron)',
@@ -64,7 +64,7 @@ class FontExampleWidget extends StatelessWidget {
                   const CommonText.titleSmall('Title Small'),
                 ],
               ),
-              
+
               // Body Text Examples (Barlow)
               _buildSection(
                 'Body Text (Barlow)',
@@ -80,7 +80,7 @@ class FontExampleWidget extends StatelessWidget {
                   ),
                 ],
               ),
-              
+
               // Label Examples (Orbitron)
               _buildSection(
                 'Labels (Orbitron)',
@@ -90,7 +90,7 @@ class FontExampleWidget extends StatelessWidget {
                   const CommonText.labelSmall('Label Small'),
                 ],
               ),
-              
+
               // Special Crypto Examples
               _buildSection(
                 'Crypto Styles (Orbitron)',
@@ -100,16 +100,17 @@ class FontExampleWidget extends StatelessWidget {
                   const CommonText.button('CLAIM REWARD'),
                 ],
               ),
-              
+
               const SizedBox(height: 24),
-              
+
               // Usage Example Card
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
                   color: AppColors.websiteCard,
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: AppColors.websiteBorder.withOpacity(0.3)),
+                  border: Border.all(
+                      color: AppColors.websiteBorder.withOpacity(0.3)),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -185,9 +186,9 @@ class FontExampleWidget extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           ...children.map((child) => Padding(
-            padding: const EdgeInsets.only(bottom: 8),
-            child: child,
-          )),
+                padding: const EdgeInsets.only(bottom: 8),
+                child: child,
+              )),
         ],
       ),
     );

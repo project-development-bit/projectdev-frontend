@@ -57,5 +57,5 @@ class RegisterRequest {
 //     "email": "user9@gmail.com",
 //     "password": "12345678",
 //     "confirm_password": "12345678",
-//     "role": "NormalUser"        // 'Dev', 'Admin', 'SuperUser', 'NormalUser'            
+//     "role": "NormalUser"        // 'Dev', 'Admin', 'SuperUser', 'NormalUser'
 // }

@@ -6,7 +6,8 @@ import '../../data/models/forgot_password_response.dart';
 import '../../../../core/error/failures.dart';
 
 /// Provider for forgot password functionality
-final forgotPasswordProvider = StateNotifierProvider<ForgotPasswordNotifier, ForgotPasswordState>(
+final forgotPasswordProvider =
+    StateNotifierProvider<ForgotPasswordNotifier, ForgotPasswordState>(
   (ref) => ForgotPasswordNotifier(ref.watch(authRepositoryProvider)),
 );
 
@@ -22,7 +23,7 @@ class ForgotPasswordLoading extends ForgotPasswordState {}
 /// Success state with forgot password response
 class ForgotPasswordSuccess extends ForgotPasswordState {
   final ForgotPasswordResponse response;
-  
+
   ForgotPasswordSuccess(this.response);
 }
 
@@ -30,16 +31,16 @@ class ForgotPasswordSuccess extends ForgotPasswordState {
 class ForgotPasswordError extends ForgotPasswordState {
   final String message;
   final int? statusCode;
-  
+
   ForgotPasswordError(this.message, {this.statusCode});
 }
 
 /// Notifier for forgot password operations
 class ForgotPasswordNotifier extends StateNotifier<ForgotPasswordState> {
   final AuthRepository _authRepository;
-  
+
   ForgotPasswordNotifier(this._authRepository) : super(ForgotPasswordInitial());
-  
+
   /// Send forgot password request
   Future<void> forgotPassword(String email) async {
     // Validate email format
@@ -47,12 +48,12 @@ class ForgotPasswordNotifier extends StateNotifier<ForgotPasswordState> {
       state = ForgotPasswordError('Please enter a valid email address');
       return;
     }
-    
+
     state = ForgotPasswordLoading();
-    
+
     final request = ForgotPasswordRequest(email: email);
     final result = await _authRepository.forgotPassword(request);
-    
+
     result.fold(
       (failure) {
         state = ForgotPasswordError(
@@ -65,12 +66,12 @@ class ForgotPasswordNotifier extends StateNotifier<ForgotPasswordState> {
       },
     );
   }
-  
+
   /// Reset state to initial
   void reset() {
     state = ForgotPasswordInitial();
   }
-  
+
   /// Validate email format
   bool _isValidEmail(String email) {
     final emailRegex = RegExp(
@@ -78,7 +79,7 @@ class ForgotPasswordNotifier extends StateNotifier<ForgotPasswordState> {
     );
     return emailRegex.hasMatch(email);
   }
-  
+
   /// Extract error message from failure
   String _getFailureMessage(Failure failure) {
     if (failure is ServerFailure) {

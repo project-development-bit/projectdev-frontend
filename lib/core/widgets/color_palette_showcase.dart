@@ -43,33 +43,29 @@ class ColorPaletteShowcase extends StatelessWidget {
                 _ColorItem('Primary Light', AppColors.primaryLight),
                 _ColorItem('Website Gold', AppColors.websiteGold),
               ]),
-              
               _buildSection('Website Backgrounds', [
                 _ColorItem('Background Dark', AppColors.websiteBackground),
-                _ColorItem('Background Start', AppColors.websiteBackgroundStart),
+                _ColorItem(
+                    'Background Start', AppColors.websiteBackgroundStart),
                 _ColorItem('Background End', AppColors.websiteBackgroundEnd),
                 _ColorItem('Card Background', AppColors.websiteCard),
               ]),
-              
               _buildSection('Website Text & Accents', [
                 _ColorItem('Website Text', AppColors.websiteText),
                 _ColorItem('Website Accent', AppColors.websiteAccent),
                 _ColorItem('Website Border', AppColors.websiteBorder),
               ]),
-              
               _buildSection('Cryptocurrency Colors', [
                 _ColorItem('Bitcoin', AppColors.bitcoin),
                 _ColorItem('Ethereum', AppColors.ethereum),
                 _ColorItem('Gold Reward', AppColors.websiteGold),
                 _ColorItem('Silver Reward', AppColors.silver),
               ]),
-              
               _buildSection('Status Colors', [
                 _ColorItem('Success', AppColors.success),
                 _ColorItem('Warning', AppColors.warning),
                 _ColorItem('Error', AppColors.error),
               ]),
-              
               _buildSection('Gradient Examples', [
                 _GradientItem('Website Background', [
                   AppColors.websiteBackgroundStart,
@@ -84,7 +80,6 @@ class ColorPaletteShowcase extends StatelessWidget {
                   AppColors.primaryLight,
                 ]),
               ]),
-              
               const SizedBox(height: 24),
               _buildWebsiteStyleCard(),
             ],
@@ -112,12 +107,14 @@ class ColorPaletteShowcase extends StatelessWidget {
           const SizedBox(height: 16),
           Text(
             'Orbitron Title Font',
-            style: AppTypography.displaySmall.copyWith(color: AppColors.primaryLight),
+            style: AppTypography.displaySmall
+                .copyWith(color: AppColors.primaryLight),
           ),
           const SizedBox(height: 8),
           Text(
             'This is the main title font used for headers, buttons, and crypto displays.',
-            style: AppTypography.bodyLarge.copyWith(color: AppColors.websiteText),
+            style:
+                AppTypography.bodyLarge.copyWith(color: AppColors.websiteText),
           ),
           const SizedBox(height: 16),
           Text(
@@ -127,7 +124,8 @@ class ColorPaletteShowcase extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             'This is the body font used for normal text, descriptions, and content.',
-            style: AppTypography.bodyMedium.copyWith(color: AppColors.websiteText),
+            style:
+                AppTypography.bodyMedium.copyWith(color: AppColors.websiteText),
           ),
           const SizedBox(height: 16),
           Text(
@@ -172,7 +170,8 @@ class ColorPaletteShowcase extends StatelessWidget {
                   borderRadius: BorderRadius.circular(30),
                   border: Border.all(color: AppColors.websiteGold, width: 3),
                 ),
-                child: Icon(Icons.monetization_on, color: Colors.white, size: 30),
+                child:
+                    Icon(Icons.monetization_on, color: Colors.white, size: 30),
               ),
               const SizedBox(width: 16),
               Expanded(
@@ -181,11 +180,13 @@ class ColorPaletteShowcase extends StatelessWidget {
                   children: [
                     Text(
                       'Gigafaucet Style Card',
-                      style: AppTypography.titleLarge.copyWith(color: Colors.white),
+                      style: AppTypography.titleLarge
+                          .copyWith(color: Colors.white),
                     ),
                     Text(
                       'Website-inspired design',
-                      style: AppTypography.bodyMedium.copyWith(color: AppColors.websiteText),
+                      style: AppTypography.bodyMedium
+                          .copyWith(color: AppColors.websiteText),
                     ),
                   ],
                 ),
@@ -257,9 +258,11 @@ class _ColorItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textColor = color.computeLuminance() > 0.5 ? Colors.black : Colors.white;
-    final hexColor = '#${color.value.toRadixString(16).padLeft(8, '0').substring(2).toUpperCase()}';
-    
+    final textColor =
+        color.computeLuminance() > 0.5 ? Colors.black : Colors.white;
+    final hexColor =
+        '#${color.value.toRadixString(16).padLeft(8, '0').substring(2).toUpperCase()}';
+
     return Container(
       margin: const EdgeInsets.only(bottom: 8.0),
       height: 60,

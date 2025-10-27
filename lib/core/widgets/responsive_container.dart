@@ -25,7 +25,7 @@ class ResponsiveContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     // Bootstrap-like breakpoints and max widths
     double containerMaxWidth;
-    
+
     if (maxWidth != null) {
       containerMaxWidth = maxWidth!;
     } else if (context.isMobile && fullWidthOnMobile) {
@@ -55,9 +55,10 @@ class ResponsiveContainer extends StatelessWidget {
         constraints: BoxConstraints(
           maxWidth: containerMaxWidth,
         ),
-        padding: padding ?? EdgeInsets.symmetric(
-          horizontal: context.isMobile ? 16 : 32,
-        ),
+        padding: padding ??
+            EdgeInsets.symmetric(
+              horizontal: context.isMobile ? 16 : 32,
+            ),
         color: color,
         decoration: decoration,
         child: child,

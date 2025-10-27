@@ -97,7 +97,8 @@ class BalancesSectionWidget extends StatelessWidget {
         const SizedBox(width: 12),
         Expanded(
           child: BalanceCardWidget(
-            amount: '\$${(profile.stats?.totalEarnings ?? 0.0).toStringAsFixed(1)}',
+            amount:
+                '\$${(profile.stats?.totalEarnings ?? 0.0).toStringAsFixed(1)}',
             currency: 'Earnings',
             iconColor: context.secondary,
             icon: Icons.currency_bitcoin,

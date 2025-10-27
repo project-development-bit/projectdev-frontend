@@ -69,7 +69,8 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
 }
 
 /// Provider for profile state notifier
-final profileNotifierProvider = StateNotifierProvider<ProfileNotifier, ProfileState>((ref) {
+final profileNotifierProvider =
+    StateNotifierProvider<ProfileNotifier, ProfileState>((ref) {
   final getUserProfile = ref.read(getUserProfileUseCaseProvider);
   return ProfileNotifier(getUserProfile);
 });

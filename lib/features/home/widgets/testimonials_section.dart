@@ -29,7 +29,7 @@ class TestimonialsSection extends ConsumerWidget {
             color: context.onSurfaceVariant,
           ),
           const SizedBox(height: 32),
-          
+
           // Testimonials
           if (context.isMobile)
             // Mobile: Vertical scrollable list
@@ -74,7 +74,8 @@ class _TestimonialCard extends StatelessWidget {
     required this.testimonial,
   });
 
-  final dynamic testimonial; // Using dynamic for now, should be TestimonialModel
+  final dynamic
+      testimonial; // Using dynamic for now, should be TestimonialModel
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +94,8 @@ class _TestimonialCard extends StatelessWidget {
               children: [
                 // Badge and level
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
                     color: context.primaryContainer,
                     borderRadius: BorderRadius.circular(16),
@@ -123,7 +125,7 @@ class _TestimonialCard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 12),
-            
+
             // Message
             Expanded(
               child: CommonText.bodyMedium(
@@ -133,7 +135,7 @@ class _TestimonialCard extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 12),
-            
+
             // Footer with username
             Row(
               children: [
@@ -145,7 +147,8 @@ class _TestimonialCard extends StatelessWidget {
                 const Spacer(),
                 // Earnings indicator
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                   decoration: BoxDecoration(
                     color: Colors.green.withAlpha(26), // 0.1 * 255
                     borderRadius: BorderRadius.circular(8),

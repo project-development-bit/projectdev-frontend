@@ -58,16 +58,18 @@ class FlavorManager {
   static bool get areDebugFeaturesEnabled => _currentConfig.enableDebugFeatures;
 
   /// Check if crash reporting is enabled
-  static bool get isCrashReportingEnabled => _currentConfig.enableCrashReporting;
+  static bool get isCrashReportingEnabled =>
+      _currentConfig.enableCrashReporting;
 
   /// Check if analytics is enabled
   static bool get isAnalyticsEnabled => _currentConfig.enableAnalytics;
 
   /// Get a configuration value
-  static T? getConfigValue<T>(String key) => _currentConfig.getConfigValue<T>(key);
+  static T? getConfigValue<T>(String key) =>
+      _currentConfig.getConfigValue<T>(key);
 
   /// Check if a feature is enabled
-  static bool isFeatureEnabled(String featureName) => 
+  static bool isFeatureEnabled(String featureName) =>
       _currentConfig.isFeatureEnabled(featureName);
 
   /// Get timeout durations

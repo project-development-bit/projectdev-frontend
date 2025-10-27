@@ -18,6 +18,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockAuthRemoteDataSource extends Mock implements AuthRemoteDataSource {}
+
 class MockSecureStorageService extends Mock implements SecureStorageService {}
 
 void main() {
@@ -35,7 +36,8 @@ void main() {
     setUp(() {
       mockRemoteDataSource = MockAuthRemoteDataSource();
       mockSecureStorage = MockSecureStorageService();
-      authRepository = AuthRepositoryImpl(mockRemoteDataSource, mockSecureStorage);
+      authRepository =
+          AuthRepositoryImpl(mockRemoteDataSource, mockSecureStorage);
     });
 
     group('login', () {
@@ -83,7 +85,7 @@ void main() {
 
         // Assert
         expect(result, isA<Right<Failure, LoginResponse>>());
-        
+
         result.fold(
           (failure) => fail('Expected Right, got Left: $failure'),
           (loginResponse) {
@@ -96,9 +98,12 @@ void main() {
         );
 
         verify(() => mockRemoteDataSource.login(loginRequest)).called(1);
-        verify(() => mockSecureStorage.saveAuthToken(loginResponseModel.tokens.accessToken)).called(1);
-        verify(() => mockSecureStorage.saveRefreshToken(loginResponseModel.tokens.refreshToken)).called(1);
-        verify(() => mockSecureStorage.saveUserId(loginResponseModel.user.id.toString())).called(1);
+        verify(() => mockSecureStorage
+            .saveAuthToken(loginResponseModel.tokens.accessToken)).called(1);
+        verify(() => mockSecureStorage.saveRefreshToken(
+            loginResponseModel.tokens.refreshToken)).called(1);
+        verify(() => mockSecureStorage
+            .saveUserId(loginResponseModel.user.id.toString())).called(1);
       });
 
       test('should return ServerFailure when DioException occurs', () async {
@@ -121,7 +126,7 @@ void main() {
 
         // Assert
         expect(result, isA<Left<Failure, LoginResponse>>());
-        
+
         result.fold(
           (failure) {
             expect(failure, isA<ServerFailure>());
@@ -137,7 +142,8 @@ void main() {
         verifyNever(() => mockSecureStorage.saveUserId(any()));
       });
 
-      test('should return ServerFailure when unexpected error occurs', () async {
+      test('should return ServerFailure when unexpected error occurs',
+          () async {
         // Arrange
         when(() => mockRemoteDataSource.login(loginRequest))
             .thenThrow(Exception('Network error'));
@@ -147,7 +153,7 @@ void main() {
 
         // Assert
         expect(result, isA<Left<Failure, LoginResponse>>());
-        
+
         result.fold(
           (failure) {
             expect(failure, isA<ServerFailure>());
@@ -182,7 +188,7 @@ void main() {
 
         // Assert
         expect(result, isA<Left<Failure, void>>());
-        
+
         result.fold(
           (failure) {
             expect(failure, isA<ServerFailure>());
@@ -204,7 +210,7 @@ void main() {
 
         // Assert
         expect(result, isA<Right<Failure, bool>>());
-        
+
         result.fold(
           (failure) => fail('Expected Right, got Left: $failure'),
           (isAuthenticated) => expect(isAuthenticated, true),
@@ -221,7 +227,7 @@ void main() {
 
         // Assert
         expect(result, isA<Right<Failure, bool>>());
-        
+
         result.fold(
           (failure) => fail('Expected Right, got Left: $failure'),
           (isAuthenticated) => expect(isAuthenticated, false),
@@ -238,7 +244,7 @@ void main() {
 
         // Assert
         expect(result, isA<Right<Failure, bool>>());
-        
+
         result.fold(
           (failure) => fail('Expected Right, got Left: $failure'),
           (isAuthenticated) => expect(isAuthenticated, false),

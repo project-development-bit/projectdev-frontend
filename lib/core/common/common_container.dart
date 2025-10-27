@@ -41,23 +41,28 @@ class CommonContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
-    final effectiveBackgroundColor = backgroundColor ?? 
-        (isDark ? AppColors.websiteCard : Colors.white);
+
+    final effectiveBackgroundColor =
+        backgroundColor ?? (isDark ? AppColors.websiteCard : Colors.white);
     final effectiveBorderRadius = borderRadius ?? 12.0;
-    final effectiveBorderColor = borderColor ?? 
-        (isDark ? AppColors.websiteBorder : AppColors.websiteBorder.withOpacity(0.2));
+    final effectiveBorderColor = borderColor ??
+        (isDark
+            ? AppColors.websiteBorder
+            : AppColors.websiteBorder.withOpacity(0.2));
     final effectiveBorderWidth = borderWidth ?? 1.0;
-    
-    final effectiveBoxShadow = boxShadow ?? (showShadow ? [
-      BoxShadow(
-        color: isDark 
-            ? Colors.black.withOpacity(0.3)
-            : AppColors.primary.withOpacity(0.1),
-        blurRadius: isDark ? 8 : 4,
-        offset: Offset(0, isDark ? 4 : 2),
-      ),
-    ] : null);
+
+    final effectiveBoxShadow = boxShadow ??
+        (showShadow
+            ? [
+                BoxShadow(
+                  color: isDark
+                      ? Colors.black.withOpacity(0.3)
+                      : AppColors.primary.withOpacity(0.1),
+                  blurRadius: isDark ? 8 : 4,
+                  offset: Offset(0, isDark ? 4 : 2),
+                ),
+              ]
+            : null);
 
     Widget containerWidget = Container(
       width: width,
@@ -69,10 +74,12 @@ class CommonContainer extends StatelessWidget {
         color: gradient == null ? effectiveBackgroundColor : null,
         gradient: gradient,
         borderRadius: BorderRadius.circular(effectiveBorderRadius),
-        border: showBorder ? Border.all(
-          color: effectiveBorderColor,
-          width: effectiveBorderWidth,
-        ) : null,
+        border: showBorder
+            ? Border.all(
+                color: effectiveBorderColor,
+                width: effectiveBorderWidth,
+              )
+            : null,
         boxShadow: effectiveBoxShadow,
       ),
       child: child,
@@ -121,8 +128,8 @@ class CryptoContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final effectiveAccentColor = accentColor ?? 
-        (isDark ? AppColors.primaryLight : AppColors.primary);
+    final effectiveAccentColor =
+        accentColor ?? (isDark ? AppColors.primaryLight : AppColors.primary);
 
     return CommonContainer(
       width: width,
@@ -176,10 +183,11 @@ class GradientContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final effectiveColors = colors ?? [
-      AppColors.websiteBackgroundStart,
-      AppColors.websiteBackgroundEnd,
-    ];
+    final effectiveColors = colors ??
+        [
+          AppColors.websiteBackgroundStart,
+          AppColors.websiteBackgroundEnd,
+        ];
 
     return CommonContainer(
       width: width,
@@ -246,7 +254,8 @@ class LoadingContainer extends StatelessWidget {
               fontFamily: 'Barlow',
               fontSize: 16,
               fontWeight: FontWeight.w500,
-              color: isDark ? AppColors.websiteText : AppColors.websiteBackground,
+              color:
+                  isDark ? AppColors.websiteText : AppColors.websiteBackground,
             ),
             textAlign: TextAlign.center,
           ),
@@ -295,11 +304,12 @@ class ErrorContainer extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          icon ?? Icon(
-            Icons.error_outline,
-            size: 48,
-            color: Colors.red,
-          ),
+          icon ??
+              Icon(
+                Icons.error_outline,
+                size: 48,
+                color: Colors.red,
+              ),
           const SizedBox(height: 16),
           Text(
             message,
@@ -307,7 +317,8 @@ class ErrorContainer extends StatelessWidget {
               fontFamily: 'Barlow',
               fontSize: 16,
               fontWeight: FontWeight.w500,
-              color: isDark ? AppColors.websiteText : AppColors.websiteBackground,
+              color:
+                  isDark ? AppColors.websiteText : AppColors.websiteBackground,
             ),
             textAlign: TextAlign.center,
           ),
@@ -316,9 +327,11 @@ class ErrorContainer extends StatelessWidget {
             ElevatedButton(
               onPressed: onRetry,
               style: ElevatedButton.styleFrom(
-                backgroundColor: isDark ? AppColors.primaryLight : AppColors.primary,
+                backgroundColor:
+                    isDark ? AppColors.primaryLight : AppColors.primary,
                 foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),

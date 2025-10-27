@@ -27,12 +27,14 @@ class LocaleNotifier extends StateNotifier<Locale> {
 
   Future<void> setLocale(Locale locale) async {
     try {
-      debugPrint('Setting locale to: ${locale.languageCode}-${locale.countryCode}');
+      debugPrint(
+          'Setting locale to: ${locale.languageCode}-${locale.countryCode}');
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString(_languageKey, locale.languageCode);
       await prefs.setString(_countryKey, locale.countryCode ?? 'US');
       state = locale;
-      debugPrint('Locale set successfully to: ${state.languageCode}-${state.countryCode}');
+      debugPrint(
+          'Locale set successfully to: ${state.languageCode}-${state.countryCode}');
     } catch (e) {
       // Handle error gracefully
       debugPrint('Error saving locale: $e');

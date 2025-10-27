@@ -18,10 +18,10 @@ class RecaptchaWidget extends ConsumerWidget {
 
   /// Callback when verification status changes (optional, can use providers instead)
   final ValueChanged<bool>? onVerificationChanged;
-  
+
   /// Whether the widget is enabled
   final bool enabled;
-  
+
   /// The reCAPTCHA action to perform (login, signup, etc.)
   final String action;
 
@@ -32,7 +32,7 @@ class RecaptchaWidget extends ConsumerWidget {
 
   void _handleVerify(WidgetRef ref) {
     if (!enabled) return;
-    
+
     final notifier = ref.read(recaptchaNotifierProvider.notifier);
     debugPrint(
         'reCAPTCHA Widget: Triggering verify() for action: $action on ${PlatformRecaptchaService.platformName}');
@@ -68,7 +68,7 @@ class RecaptchaWidget extends ConsumerWidget {
       debugPrint('reCAPTCHA Widget: Hidden because not required');
       return const SizedBox.shrink();
     }
-    
+
     if (recaptchaState is RecaptchaNotAvailable) {
       debugPrint(
           'reCAPTCHA Widget: Hidden because state is RecaptchaNotAvailable: ${recaptchaState.reason}');
@@ -99,9 +99,7 @@ class RecaptchaWidget extends ConsumerWidget {
               // Platform-aware checkbox with enhanced visual feedback
               GestureDetector(
                 onTap: enabled
-                    ? () => isVerified 
-                    ? _handleReset(ref) 
-                    : _handleVerify(ref)
+                    ? () => isVerified ? _handleReset(ref) : _handleVerify(ref)
                     : null,
                 child: Container(
                   width: 24, // Slightly larger for better mobile interaction
@@ -137,17 +135,15 @@ class RecaptchaWidget extends ConsumerWidget {
                           : null,
                 ),
               ),
-              
+
               const SizedBox(width: 12),
-              
+
               // Enhanced text with platform indication
               Expanded(
                 child: GestureDetector(
                   onTap: enabled
                       ? () =>
-                          isVerified 
-                      ? _handleReset(ref) 
-                      : _handleVerify(ref)
+                          isVerified ? _handleReset(ref) : _handleVerify(ref)
                       : null,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -173,7 +169,7 @@ class RecaptchaWidget extends ConsumerWidget {
                   ),
                 ),
               ),
-              
+
               // Enhanced reCAPTCHA branding with platform awareness
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
@@ -240,7 +236,7 @@ class RecaptchaWidget extends ConsumerWidget {
               ),
             ],
           ),
-          
+
           // Error message with better styling
           if (errorMessage != null) ...[
             const SizedBox(height: 8),
@@ -271,7 +267,7 @@ class RecaptchaWidget extends ConsumerWidget {
               ),
             ),
           ],
-          
+
           // Loading state with platform information
           if (recaptchaState is RecaptchaInitializing) ...[
             const SizedBox(height: 8),

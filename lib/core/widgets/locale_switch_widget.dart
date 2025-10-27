@@ -13,9 +13,11 @@ class LocaleSwitchWidget extends ConsumerWidget {
 
     return PopupMenuButton<Locale>(
       onSelected: (Locale locale) async {
-        debugPrint('Locale selected: ${locale.languageCode}-${locale.countryCode}');
+        debugPrint(
+            'Locale selected: ${locale.languageCode}-${locale.countryCode}');
         await localeNotifier.setLocale(locale);
-        debugPrint('Current locale after change: ${ref.read(localeProvider).languageCode}');
+        debugPrint(
+            'Current locale after change: ${ref.read(localeProvider).languageCode}');
       },
       tooltip: 'Select Language',
       icon: Container(
@@ -53,7 +55,7 @@ class LocaleSwitchWidget extends ConsumerWidget {
       itemBuilder: (BuildContext context) {
         return LocaleNotifier.supportedLocales.map((Locale locale) {
           final isSelected = locale.languageCode == currentLocale.languageCode;
-          
+
           return PopupMenuItem<Locale>(
             value: locale,
             child: Container(
@@ -78,7 +80,8 @@ class LocaleSwitchWidget extends ConsumerWidget {
                         color: isSelected
                             ? theme.colorScheme.primary
                             : theme.colorScheme.onSurface,
-                        fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                        fontWeight:
+                            isSelected ? FontWeight.w600 : FontWeight.w400,
                       ),
                     ),
                   ),
@@ -151,18 +154,18 @@ class CompactLocaleSwitcher extends ConsumerWidget {
 
     return GestureDetector(
       onTap: () async {
-        debugPrint('CompactLocaleSwitcher tapped - current: ${currentLocale.languageCode}');
+        debugPrint(
+            'CompactLocaleSwitcher tapped - current: ${currentLocale.languageCode}');
         await localeNotifier.toggleLocale();
-        debugPrint('After toggle - new locale: ${ref.read(localeProvider).languageCode}');
+        debugPrint(
+            'After toggle - new locale: ${ref.read(localeProvider).languageCode}');
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         decoration: BoxDecoration(
           color: theme.colorScheme.primary.withAlpha(25),
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: theme.colorScheme.primary.withAlpha(75)
-          ),
+          border: Border.all(color: theme.colorScheme.primary.withAlpha(75)),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,

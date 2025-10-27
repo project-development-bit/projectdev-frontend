@@ -4,7 +4,7 @@ import '../../domain/entities/user_profile.dart';
 part 'user_profile_stats_model.g.dart';
 
 /// Data model for User Profile Statistics
-/// 
+///
 /// This model extends the domain entity and adds JSON serialization
 /// capabilities for API communication and local storage.
 @JsonSerializable()

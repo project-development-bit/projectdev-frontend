@@ -4,7 +4,6 @@ import 'package:cointiply_app/features/user_profile/presentation/providers/profi
 
 /// Test data factory for creating user profile test objects
 class ProfileTestData {
-  
   /// Creates a test user profile with default values
   static UserProfile createTestProfile({
     String? id,

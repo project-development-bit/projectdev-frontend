@@ -20,11 +20,11 @@ class RecaptchaExamplePage extends ConsumerWidget {
     final isLoading = ref.watch(isRecaptchaLoadingProvider);
     final errorMessage = ref.watch(recaptchaErrorProvider);
     final token = ref.watch(recaptchaTokenProvider);
-    
+
     // Watch consolidated auth state
     final consolidatedState = ref.watch(consolidatedAuthStateProvider);
     final canAttemptLogin = ref.watch(canAttemptLoginProvider);
-    
+
     // Get auth actions
     final authActions = ref.read(authActionsProvider);
 
@@ -45,9 +45,9 @@ class RecaptchaExamplePage extends ConsumerWidget {
               color: context.onSurface,
               textAlign: TextAlign.center,
             ),
-            
+
             const SizedBox(height: 24),
-            
+
             // reCAPTCHA Widget
             Card(
               child: Padding(
@@ -59,9 +59,7 @@ class RecaptchaExamplePage extends ConsumerWidget {
                       'reCAPTCHA Widget',
                       color: context.onSurface,
                     ),
-                    
                     const SizedBox(height: 16),
-                    
                     const RecaptchaWidget(
                       enabled: true,
                     ),
@@ -69,9 +67,9 @@ class RecaptchaExamplePage extends ConsumerWidget {
                 ),
               ),
             ),
-            
+
             const SizedBox(height: 24),
-            
+
             // State Information
             Card(
               child: Padding(
@@ -83,23 +81,28 @@ class RecaptchaExamplePage extends ConsumerWidget {
                       'reCAPTCHA State Information',
                       color: context.onSurface,
                     ),
-                    
                     const SizedBox(height: 16),
-                    
-                    _buildStateItem(context, 'Current State', recaptchaState.runtimeType.toString()),
+                    _buildStateItem(context, 'Current State',
+                        recaptchaState.runtimeType.toString()),
                     _buildStateItem(context, 'Required', isRequired.toString()),
                     _buildStateItem(context, 'Verified', isVerified.toString()),
                     _buildStateItem(context, 'Loading', isLoading.toString()),
                     _buildStateItem(context, 'Error', errorMessage ?? 'None'),
-                    _buildStateItem(context, 'Token', token != null ? '${token.substring(0, 20)}...' : 'None'),
-                    _buildStateItem(context, 'Can Attempt Login', canAttemptLogin.toString()),
+                    _buildStateItem(
+                        context,
+                        'Token',
+                        token != null
+                            ? '${token.substring(0, 20)}...'
+                            : 'None'),
+                    _buildStateItem(context, 'Can Attempt Login',
+                        canAttemptLogin.toString()),
                   ],
                 ),
               ),
             ),
-            
+
             const SizedBox(height: 24),
-            
+
             // Action Buttons
             Card(
               child: Padding(
@@ -111,24 +114,22 @@ class RecaptchaExamplePage extends ConsumerWidget {
                       'Actions',
                       color: context.onSurface,
                     ),
-                    
                     const SizedBox(height: 16),
-                    
                     Row(
                       children: [
                         Expanded(
                           child: CommonButton(
                             text: 'Verify reCAPTCHA',
-                            onPressed: isLoading ? null : () async {
-                              await authActions.verifyRecaptcha();
-                            },
+                            onPressed: isLoading
+                                ? null
+                                : () async {
+                                    await authActions.verifyRecaptcha();
+                                  },
                             backgroundColor: context.primary,
                             textColor: context.onPrimary,
                           ),
                         ),
-                        
                         const SizedBox(width: 16),
-                        
                         Expanded(
                           child: CommonButton(
                             text: 'Reset reCAPTCHA',
@@ -142,23 +143,25 @@ class RecaptchaExamplePage extends ConsumerWidget {
                         ),
                       ],
                     ),
-                    
                     const SizedBox(height: 16),
-                    
                     CommonButton(
                       text: 'Simulate Login',
-                      onPressed: canAttemptLogin ? () async {
-                        // Show success/error based on login attempt
-                        if (isVerified || !isRequired) {
-                          context.showSuccessSnackBar(
-                            message: 'Login would succeed! reCAPTCHA verified or not required.',
-                          );
-                        } else {
-                          context.showErrorSnackBar(
-                            message: 'Login blocked: reCAPTCHA verification required.',
-                          );
-                        }
-                      } : null,
+                      onPressed: canAttemptLogin
+                          ? () async {
+                              // Show success/error based on login attempt
+                              if (isVerified || !isRequired) {
+                                context.showSuccessSnackBar(
+                                  message:
+                                      'Login would succeed! reCAPTCHA verified or not required.',
+                                );
+                              } else {
+                                context.showErrorSnackBar(
+                                  message:
+                                      'Login blocked: reCAPTCHA verification required.',
+                                );
+                              }
+                            }
+                          : null,
                       backgroundColor: context.secondary,
                       textColor: context.onSecondary,
                     ),
@@ -166,9 +169,9 @@ class RecaptchaExamplePage extends ConsumerWidget {
                 ),
               ),
             ),
-            
+
             const SizedBox(height: 24),
-            
+
             // Consolidated State Information
             Card(
               child: Padding(
@@ -180,20 +183,22 @@ class RecaptchaExamplePage extends ConsumerWidget {
                       'Consolidated Auth State',
                       color: context.onSurface,
                     ),
-                    
                     const SizedBox(height: 16),
-                    
-                    _buildStateItem(context, 'Is Loading', consolidatedState.isLoading.toString()),
-                    _buildStateItem(context, 'Is Auth Ready', consolidatedState.isAuthReady.toString()),
-                    _buildStateItem(context, 'Can Attempt Login', consolidatedState.canAttemptLogin.toString()),
-                    _buildStateItem(context, 'Current Error', consolidatedState.currentError ?? 'None'),
+                    _buildStateItem(context, 'Is Loading',
+                        consolidatedState.isLoading.toString()),
+                    _buildStateItem(context, 'Is Auth Ready',
+                        consolidatedState.isAuthReady.toString()),
+                    _buildStateItem(context, 'Can Attempt Login',
+                        consolidatedState.canAttemptLogin.toString()),
+                    _buildStateItem(context, 'Current Error',
+                        consolidatedState.currentError ?? 'None'),
                   ],
                 ),
               ),
             ),
-            
+
             const SizedBox(height: 24),
-            
+
             // Usage Instructions
             Card(
               color: context.surfaceContainer,
@@ -206,9 +211,7 @@ class RecaptchaExamplePage extends ConsumerWidget {
                       'How to Use Riverpod reCAPTCHA',
                       color: context.onSurface,
                     ),
-                    
                     const SizedBox(height: 16),
-                    
                     CommonText.bodyMedium(
                       '1. Add RecaptchaWidget to your forms\n'
                       '2. Watch isRecaptchaVerifiedProvider for verification status\n'

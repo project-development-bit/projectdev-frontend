@@ -46,8 +46,7 @@ class FeaturedOffersSection extends ConsumerWidget {
                   ],
                 ),
               ),
-              if (!context.isMobile)
-              const Spacer(),
+              if (!context.isMobile) const Spacer(),
               if (!context.isMobile)
                 CommonButton(
                   text: context.translate('view_all_offers'),
@@ -59,7 +58,7 @@ class FeaturedOffersSection extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: 24),
-          
+
           // Stats row
           Container(
             padding: const EdgeInsets.all(16),
@@ -89,7 +88,7 @@ class FeaturedOffersSection extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 32),
-          
+
           // Offers grid/list
           if (context.isMobile)
             // Mobile: Vertical list
@@ -130,9 +129,9 @@ class FeaturedOffersSection extends ConsumerWidget {
                 );
               },
             ),
-          
+
           const SizedBox(height: 32),
-          
+
           // Mobile "View All" button
           if (context.isMobile)
             Center(

@@ -5,7 +5,7 @@ import '../repositories/auth_repository.dart';
 import '../../data/models/register_request.dart';
 
 /// Register use case
-/// 
+///
 /// Handles user registration with email, password, name, and role
 class RegisterUseCase implements UseCase<void, RegisterRequest> {
   final AuthRepository repository;

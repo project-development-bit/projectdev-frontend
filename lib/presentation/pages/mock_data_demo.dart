@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 /// Demo page to showcase all available mock data for the profile module
-/// 
+///
 /// This page displays all the mock user profiles that are available
 /// for development and testing purposes, formatted in a readable way.
 class MockDataDemo extends StatelessWidget {
@@ -28,7 +28,7 @@ class MockDataDemo extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-            
+
             // Regular User Profile
             _buildProfileCard(
               'Regular User Profile (ID: 1)',
@@ -47,15 +47,15 @@ class MockDataDemo extends StatelessWidget {
                 'Member Since: March 10, 2022',
               ],
             ),
-            
+
             const SizedBox(height: 20),
-            
-            // New User Profile  
+
+            // New User Profile
             _buildProfileCard(
               'New User Profile (ID: 2)',
               'Perfect for testing onboarding flows and empty states',
               [
-                'Username: newuser2024', 
+                'Username: newuser2024',
                 'Email: newuser@example.com',
                 'Display Name: New User',
                 'Status: Active but Unverified',
@@ -68,16 +68,16 @@ class MockDataDemo extends StatelessWidget {
                 'Member Since: Yesterday',
               ],
             ),
-            
+
             const SizedBox(height: 20),
-            
+
             // Premium User Profile
             _buildProfileCard(
-              'Premium User Profile (ID: 3)', 
+              'Premium User Profile (ID: 3)',
               'High-value user for testing advanced features and UI with large numbers',
               [
                 'Username: cryptomaster',
-                'Email: premium.user@example.com', 
+                'Email: premium.user@example.com',
                 'Display Name: Crypto Master',
                 'Status: Active & Verified',
                 'Total Earnings: \$15,847.92',
@@ -89,9 +89,9 @@ class MockDataDemo extends StatelessWidget {
                 'Member Since: June 15, 2018',
               ],
             ),
-            
+
             const SizedBox(height: 20),
-            
+
             // Problematic User Profile
             _buildProfileCard(
               'Problematic User Profile (ID: 4)',
@@ -99,7 +99,7 @@ class MockDataDemo extends StatelessWidget {
               [
                 'Username: problemuser',
                 'Email: problem.user@example.com',
-                'Display Name: Problem User', 
+                'Display Name: Problem User',
                 'Status: Suspended & Pending Verification',
                 'Total Earnings: \$89.45',
                 'Completed Offers: 23',
@@ -111,9 +111,9 @@ class MockDataDemo extends StatelessWidget {
                 'Last Login: 3 days ago',
               ],
             ),
-            
+
             const SizedBox(height: 30),
-            
+
             const Text(
               'Mock Data Features',
               style: TextStyle(
@@ -122,7 +122,7 @@ class MockDataDemo extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10),
-            
+
             _buildFeatureList([
               '🔄 Simulated network delays (800ms) for realistic testing',
               '🖼️ Random profile picture URLs from pravatar.cc',
@@ -133,9 +133,9 @@ class MockDataDemo extends StatelessWidget {
               '🌍 Realistic user data from different regions',
               '⏱️ Dynamic timestamps based on current time',
             ]),
-            
+
             const SizedBox(height: 20),
-            
+
             const Text(
               'How to Use Mock Data',
               style: TextStyle(
@@ -144,7 +144,7 @@ class MockDataDemo extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10),
-            
+
             _buildFeatureList([
               '1. Import ProfileMockDataSource in your provider configuration',
               '2. Replace ProfileRemoteDataSourceImpl with ProfileMockDataSource',
@@ -158,8 +158,9 @@ class MockDataDemo extends StatelessWidget {
       ),
     );
   }
-  
-  Widget _buildProfileCard(String title, String description, List<String> details) {
+
+  Widget _buildProfileCard(
+      String title, String description, List<String> details) {
     return Card(
       elevation: 4,
       child: Padding(
@@ -186,37 +187,40 @@ class MockDataDemo extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             ...details.map((detail) => Padding(
-              padding: const EdgeInsets.symmetric(vertical: 2.0),
-              child: Row(
-                children: [
-                  const Icon(Icons.check_circle, size: 16, color: Colors.green),
-                  const SizedBox(width: 8),
-                  Expanded(child: Text(detail)),
-                ],
-              ),
-            )),
+                  padding: const EdgeInsets.symmetric(vertical: 2.0),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.check_circle,
+                          size: 16, color: Colors.green),
+                      const SizedBox(width: 8),
+                      Expanded(child: Text(detail)),
+                    ],
+                  ),
+                )),
           ],
         ),
       ),
     );
   }
-  
+
   Widget _buildFeatureList(List<String> features) {
     return Card(
       elevation: 2,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          children: features.map((feature) => Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4.0),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(width: 8),
-                Expanded(child: Text(feature)),
-              ],
-            ),
-          )).toList(),
+          children: features
+              .map((feature) => Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(width: 8),
+                        Expanded(child: Text(feature)),
+                      ],
+                    ),
+                  ))
+              .toList(),
         ),
       ),
     );

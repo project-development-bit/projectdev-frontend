@@ -10,6 +10,7 @@ import 'package:cointiply_app/features/auth/data/models/forgot_password_request.
 import 'package:cointiply_app/features/auth/data/models/forgot_password_response.dart';
 
 class MockAuthRemoteDataSource extends Mock implements AuthRemoteDataSource {}
+
 class MockSecureStorageService extends Mock implements SecureStorageService {}
 
 void main() {
@@ -41,7 +42,9 @@ void main() {
     );
 
     group('forgotPassword', () {
-      test('should return ForgotPasswordResponse when remote call is successful', () async {
+      test(
+          'should return ForgotPasswordResponse when remote call is successful',
+          () async {
         // Arrange
         when(() => mockRemoteDataSource.forgotPassword(testRequest))
             .thenAnswer((_) async => testResponse);
@@ -51,7 +54,8 @@ void main() {
 
         // Assert
         expect(result, equals(const Right(testResponse)));
-        verify(() => mockRemoteDataSource.forgotPassword(testRequest)).called(1);
+        verify(() => mockRemoteDataSource.forgotPassword(testRequest))
+            .called(1);
         verifyNoMoreInteractions(mockRemoteDataSource);
       });
 
@@ -65,7 +69,7 @@ void main() {
             statusCode: 500,
           ),
         );
-        
+
         when(() => mockRemoteDataSource.forgotPassword(testRequest))
             .thenThrow(dioException);
 
@@ -82,16 +86,19 @@ void main() {
           },
           (response) => fail('Should return failure'),
         );
-        verify(() => mockRemoteDataSource.forgotPassword(testRequest)).called(1);
+        verify(() => mockRemoteDataSource.forgotPassword(testRequest))
+            .called(1);
       });
 
-      test('should return ServerFailure with ErrorModel when DioException has response data', () async {
+      test(
+          'should return ServerFailure with ErrorModel when DioException has response data',
+          () async {
         // Arrange
         final errorResponseData = {
           'message': 'User not found',
           'code': 'USER_NOT_FOUND',
         };
-        
+
         final dioException = DioException(
           requestOptions: RequestOptions(path: '/test'),
           message: 'User not found',
@@ -101,7 +108,7 @@ void main() {
             data: errorResponseData,
           ),
         );
-        
+
         when(() => mockRemoteDataSource.forgotPassword(testRequest))
             .thenThrow(dioException);
 
@@ -121,7 +128,8 @@ void main() {
         );
       });
 
-      test('should return ServerFailure when generic exception occurs', () async {
+      test('should return ServerFailure when generic exception occurs',
+          () async {
         // Arrange
         const exception = 'Unexpected error';
         when(() => mockRemoteDataSource.forgotPassword(testRequest))
@@ -139,7 +147,8 @@ void main() {
           },
           (response) => fail('Should return failure'),
         );
-        verify(() => mockRemoteDataSource.forgotPassword(testRequest)).called(1);
+        verify(() => mockRemoteDataSource.forgotPassword(testRequest))
+            .called(1);
       });
 
       test('should handle different email formats correctly', () async {
@@ -171,10 +180,11 @@ void main() {
         }
       });
 
-      test('should handle API response with different security codes', () async {
+      test('should handle API response with different security codes',
+          () async {
         // Arrange
         const securityCodes = [1234, 5678, 9999, 0000];
-        
+
         for (final code in securityCodes) {
           final response = ForgotPasswordResponse(
             success: true,

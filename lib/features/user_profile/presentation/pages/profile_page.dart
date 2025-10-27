@@ -7,7 +7,7 @@ import '../providers/profile_state_notifier.dart';
 import '../widgets/widgets.dart';
 
 /// Profile page exactly matching Cointiply.com design
-/// 
+///
 /// Features a theme-aware design with gradient backgrounds, balance cards,
 /// level progress, achievement badges, and detailed profile information.
 class ProfilePage extends ConsumerStatefulWidget {
@@ -42,7 +42,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   Widget build(BuildContext context) {
     final profileState = ref.watch(profileNotifierProvider);
     final localizations = AppLocalizations.of(context);
-    
+
     return Scaffold(
       backgroundColor: context.surface,
       body: _buildBody(context, profileState, localizations),
@@ -85,7 +85,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
             selectedIndex: _selectedTabIndex,
             onTabSelected: _onTabSelected,
           ),
-          
+
           // Main content based on selected tab
           _buildTabContent(context, profile),
         ],

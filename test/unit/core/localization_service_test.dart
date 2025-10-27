@@ -23,7 +23,8 @@ void main() {
       expect(localizationService.getCurrentLocale(), const Locale('en', 'US'));
     });
 
-    test('should check initialization status correctly when not initialized', () {
+    test('should check initialization status correctly when not initialized',
+        () {
       // Initially not initialized
       expect(localizationService.isInitialized, false);
     });
@@ -42,7 +43,8 @@ void main() {
       test('should handle parameter replacement with args', () {
         // We can test the method signature even if we can't load actual translations
         expect(
-          () => localizationService.translate('test_key', args: ['arg1', 'arg2']),
+          () =>
+              localizationService.translate('test_key', args: ['arg1', 'arg2']),
           returnsNormally,
         );
       });
@@ -91,14 +93,15 @@ void main() {
       test('should handle load request for unsupported locale', () async {
         // This will fail to load the actual file, but tests the method signature
         final result = await localizationService.load(const Locale('xx'));
-        expect(result, isFalse); // Will be false because assets don't exist in test
+        expect(result,
+            isFalse); // Will be false because assets don't exist in test
       });
     });
 
     group('Singleton Access Test', () {
       test('should provide singleton instance', () {
         expect(localizationService, isA<LocalizationService>());
-        
+
         // Test that the global instance exists
         final globalInstance = localizationService;
         expect(globalInstance, isNotNull);

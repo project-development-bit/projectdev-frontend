@@ -37,12 +37,13 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
     }
 
     // Check if reCAPTCHA verification is required and completed
-    final canAttemptAction = ref.read(canAttemptLoginProvider); // This checks reCAPTCHA status
+    final canAttemptAction =
+        ref.read(canAttemptLoginProvider); // This checks reCAPTCHA status
     if (!canAttemptAction) {
       final localizations = AppLocalizations.of(context);
       context.showErrorSnackBar(
-        message: localizations?.translate('recaptcha_required') ?? 
-                'Please verify that you are not a robot',
+        message: localizations?.translate('recaptcha_required') ??
+            'Please verify that you are not a robot',
       );
       return;
     }
@@ -80,7 +81,7 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
 
     final isLoading = forgotPasswordState is ForgotPasswordLoading;
     final emailSent = forgotPasswordState is ForgotPasswordSuccess;
-    
+
     return Scaffold(
       backgroundColor: colorScheme.surface,
       appBar: AppBar(
@@ -112,7 +113,7 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   const SizedBox(height: 40),
-                  
+
                   // Icon
                   Center(
                     child: Container(
@@ -120,7 +121,8 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
                       height: context.isMobile ? 90 : 100,
                       decoration: BoxDecoration(
                         color: colorScheme.primary.withAlpha(25),
-                        borderRadius: BorderRadius.circular(context.isMobile ? 45 : 50),
+                        borderRadius:
+                            BorderRadius.circular(context.isMobile ? 45 : 50),
                       ),
                       child: Icon(
                         Icons.lock_reset,
@@ -129,9 +131,9 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
                       ),
                     ),
                   ),
-                  
+
                   const SizedBox(height: 40),
-                  
+
                   // Title
                   CommonText.headlineMedium(
                     localizations?.translate('forgot_password') ??
@@ -140,10 +142,10 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
                     color: colorScheme.onSurface,
                     textAlign: TextAlign.center,
                   ),
-                
-                const SizedBox(height: 16),
-                
-                // Subtitle
+
+                  const SizedBox(height: 16),
+
+                  // Subtitle
                   CommonText.bodyLarge(
                     emailSent
                         ? (localizations
@@ -153,35 +155,37 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
                                 ?.translate('forgot_password_subtitle') ??
                             'Enter your email address and we\'ll send you a link to reset your password.'),
                     color: colorScheme.onSurfaceVariant,
-                  textAlign: TextAlign.center,
-                ),
-                
-                const SizedBox(height: 40),
-                
+                    textAlign: TextAlign.center,
+                  ),
+
+                  const SizedBox(height: 40),
+
                   if (!emailSent) ...[
-                  // Email Field
-                  CommonTextField(
-                    controller: _emailController,
-                    focusNode: _emailFocusNode,
-                    hintText: localizations?.translate('email_hint') ?? 'Enter your email',
-                    labelText: localizations?.translate('email') ?? 'Email',
-                    keyboardType: TextInputType.emailAddress,
-                    textInputAction: TextInputAction.done,
-                    prefixIcon: const Icon(Icons.email_outlined),
-                    validator: (value) => TextFieldValidators.email(value, context),
-                    onSubmitted: (_) => _handleSendResetEmail(),
-                  ),
-                  
-                  const SizedBox(height: 24),
-                  
-                  // reCAPTCHA Widget
-                  const RecaptchaWidget(
-                    enabled: true,
-                  ),
-                  
-                  const SizedBox(height: 32),
-                  
-                  // Send Reset Email Button
+                    // Email Field
+                    CommonTextField(
+                      controller: _emailController,
+                      focusNode: _emailFocusNode,
+                      hintText: localizations?.translate('email_hint') ??
+                          'Enter your email',
+                      labelText: localizations?.translate('email') ?? 'Email',
+                      keyboardType: TextInputType.emailAddress,
+                      textInputAction: TextInputAction.done,
+                      prefixIcon: const Icon(Icons.email_outlined),
+                      validator: (value) =>
+                          TextFieldValidators.email(value, context),
+                      onSubmitted: (_) => _handleSendResetEmail(),
+                    ),
+
+                    const SizedBox(height: 24),
+
+                    // reCAPTCHA Widget
+                    const RecaptchaWidget(
+                      enabled: true,
+                    ),
+
+                    const SizedBox(height: 32),
+
+                    // Send Reset Email Button
                     CommonButton(
                       text: localizations?.translate('send_reset_email') ??
                           'Send Reset Email',
@@ -191,91 +195,91 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
                       backgroundColor: colorScheme.primary,
                       textColor: colorScheme.onPrimary,
                       borderRadius: 12,
-                  ),
-                ] else ...[
-                  // Email sent success state
-                  Container(
-                    padding: const EdgeInsets.all(24),
-                    decoration: BoxDecoration(
-                      color: Colors.green.withAlpha(25),
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: Colors.green.withAlpha(75),
-                      ),
                     ),
-                    child: Column(
-                      children: [
-                        const Icon(
-                          Icons.check_circle,
-                          size: 48,
-                          color: Colors.green,
+                  ] else ...[
+                    // Email sent success state
+                    Container(
+                      padding: const EdgeInsets.all(24),
+                      decoration: BoxDecoration(
+                        color: Colors.green.withAlpha(25),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: Colors.green.withAlpha(75),
                         ),
-                        const SizedBox(height: 16),
+                      ),
+                      child: Column(
+                        children: [
+                          const Icon(
+                            Icons.check_circle,
+                            size: 48,
+                            color: Colors.green,
+                          ),
+                          const SizedBox(height: 16),
                           CommonText.titleLarge(
                             localizations?.translate('email_sent') ??
                                 'Email Sent!',
                             color: Colors.green.shade700,
                             fontWeight: FontWeight.bold,
-                        ),
-                        const SizedBox(height: 8),
+                          ),
+                          const SizedBox(height: 8),
                           CommonText.bodyMedium(
                             localizations?.translate('check_email_for_reset') ??
                                 'Check your email for the reset link',
                             color: Colors.green.shade600,
-                        ),
-                      ],
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  
-                  const SizedBox(height: 32),
-                  
-                  // Resend Button
+
+                    const SizedBox(height: 32),
+
+                    // Resend Button
                     CommonButton(
                       text: localizations?.translate('resend_email') ??
                           'Resend Email',
-                    onPressed: () {
+                      onPressed: () {
                         ref.read(forgotPasswordProvider.notifier).reset();
-                    },
+                      },
                       isOutlined: true,
                       height: 56,
                       backgroundColor: colorScheme.primary,
                       borderRadius: 12,
-                  ),
-                ],
-                
-                const SizedBox(height: 40),
-                
-                // Back to Login Link
+                    ),
+                  ],
+
+                  const SizedBox(height: 40),
+
+                  // Back to Login Link
                   Wrap(
                     alignment: WrapAlignment.center,
-                  children: [
+                    children: [
                       CommonText.bodyMedium(
                         localizations?.translate('remember_password') ??
                             'Remember your password? ',
                         color: colorScheme.onSurfaceVariant,
-                    ),
-                    TextButton(
-                      onPressed: () => context.goToLogin(),
-                      style: TextButton.styleFrom(
-                        padding: EdgeInsets.zero,
-                        minimumSize: Size.zero,
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       ),
+                      TextButton(
+                        onPressed: () => context.goToLogin(),
+                        style: TextButton.styleFrom(
+                          padding: EdgeInsets.zero,
+                          minimumSize: Size.zero,
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
                         child: CommonText.bodyMedium(
                           localizations?.translate('sign_in') ?? 'Sign In',
                           color: colorScheme.primary,
                           fontWeight: FontWeight.w600,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                
-                const SizedBox(height: 24),
-              ],
+                    ],
+                  ),
+
+                  const SizedBox(height: 24),
+                ],
+              ),
             ),
           ),
         ),
-      ),
       ),
     );
   }

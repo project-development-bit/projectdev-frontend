@@ -43,7 +43,7 @@ class HeroSection extends ConsumerWidget {
               color: context.onPrimary,
             ),
             const SizedBox(height: 24),
-            
+
             // Subheading with earning potential
             CommonText.headlineSmall(
               context.translate('hero_subheading'),
@@ -51,7 +51,7 @@ class HeroSection extends ConsumerWidget {
               color: context.onPrimary.withOpacity(0.9),
             ),
             const SizedBox(height: 32),
-            
+
             // Call to action button
             CommonButton(
               text: isLoggedIn
@@ -70,7 +70,7 @@ class HeroSection extends ConsumerWidget {
               padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
             ),
             const SizedBox(height: 24),
-            
+
             // Last payout info
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -101,7 +101,7 @@ class HeroSection extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 16),
-            
+
             // Trust indicators
             Column(
               children: [
@@ -121,7 +121,7 @@ class HeroSection extends ConsumerWidget {
               ],
             ),
             const SizedBox(height: 32),
-            
+
             // App store badges (placeholder)
             if (context.isMobile) ...[
               Row(
@@ -143,17 +143,19 @@ class HeroSection extends ConsumerWidget {
                 ],
               ),
               const SizedBox(height: 16),
-              
+
               // Rating info
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Row(
-                    children: List.generate(5, (index) => Icon(
-                      Icons.star,
-                      color: Colors.amber,
-                      size: 16,
-                    )),
+                    children: List.generate(
+                        5,
+                        (index) => Icon(
+                              Icons.star,
+                              color: Colors.amber,
+                              size: 16,
+                            )),
                   ),
                   const SizedBox(width: 8),
                   CommonText.bodySmall(

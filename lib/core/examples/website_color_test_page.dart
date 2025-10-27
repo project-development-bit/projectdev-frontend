@@ -8,7 +8,7 @@ class WebsiteColorTestPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
     return Scaffold(
       appBar: AppBar(
         title: const CommonText.titleLarge('Website Colors Test'),
@@ -26,9 +26,11 @@ class WebsiteColorTestPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CommonText.bodyMedium('Theme Mode: ${isDark ? 'Dark' : 'Light'}'),
+                  CommonText.bodyMedium(
+                      'Theme Mode: ${isDark ? 'Dark' : 'Light'}'),
                   const SizedBox(height: 8),
-                  CommonText.bodySmall('The buttons and fields below should show Gigafaucet website colors automatically.'),
+                  CommonText.bodySmall(
+                      'The buttons and fields below should show Gigafaucet website colors automatically.'),
                 ],
               ),
             ),
@@ -37,7 +39,7 @@ class WebsiteColorTestPage extends StatelessWidget {
             // Color demonstration
             const CommonText.titleMedium('Theme Colors in Action'),
             const SizedBox(height: 16),
-            
+
             // Buttons showing theme colors
             Wrap(
               spacing: 12,
@@ -59,13 +61,13 @@ class WebsiteColorTestPage extends StatelessWidget {
                 ),
               ],
             ),
-            
+
             const SizedBox(height: 24),
-            
+
             // Text fields showing theme colors
             const CommonText.titleMedium('Text Fields'),
             const SizedBox(height: 16),
-            
+
             Column(
               children: [
                 const CommonTextField(
@@ -81,13 +83,13 @@ class WebsiteColorTestPage extends StatelessWidget {
                 ),
               ],
             ),
-            
+
             const SizedBox(height: 24),
-            
+
             // Cards showing theme colors
             const CommonText.titleMedium('Cards and Containers'),
             const SizedBox(height: 16),
-            
+
             // Regular card
             CommonCard(
               title: 'Regular Card',
@@ -96,9 +98,9 @@ class WebsiteColorTestPage extends StatelessWidget {
                 'This card automatically adapts to light/dark theme using website colors.',
               ),
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             // Crypto card
             CryptoCard(
               title: 'Bitcoin Balance',
@@ -107,9 +109,9 @@ class WebsiteColorTestPage extends StatelessWidget {
               icon: const Icon(Icons.currency_bitcoin, color: Colors.orange),
               subtitle: 'Main wallet',
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             // Gradient card
             const GradientCard(
               title: 'Gradient Card',
@@ -118,25 +120,29 @@ class WebsiteColorTestPage extends StatelessWidget {
                 color: Colors.white,
               ),
             ),
-            
+
             const SizedBox(height: 24),
-            
+
             // Color palette display
             const CommonText.titleMedium('Website Color Palette'),
             const SizedBox(height: 16),
-            
+
             CommonCard(
               child: Column(
                 children: [
-                  _ColorSwatch('Primary', Theme.of(context).colorScheme.primary),
-                  _ColorSwatch('Secondary', Theme.of(context).colorScheme.secondary),
-                  _ColorSwatch('Surface', Theme.of(context).colorScheme.surface),
-                  _ColorSwatch('Primary Container', Theme.of(context).colorScheme.primaryContainer),
+                  _ColorSwatch(
+                      'Primary', Theme.of(context).colorScheme.primary),
+                  _ColorSwatch(
+                      'Secondary', Theme.of(context).colorScheme.secondary),
+                  _ColorSwatch(
+                      'Surface', Theme.of(context).colorScheme.surface),
+                  _ColorSwatch('Primary Container',
+                      Theme.of(context).colorScheme.primaryContainer),
                   _ColorSwatch('Error', Theme.of(context).colorScheme.error),
                 ],
               ),
             ),
-            
+
             const SizedBox(height: 40),
           ],
         ),
@@ -148,9 +154,9 @@ class WebsiteColorTestPage extends StatelessWidget {
 class _ColorSwatch extends StatelessWidget {
   final String name;
   final Color color;
-  
+
   const _ColorSwatch(this.name, this.color);
-  
+
   @override
   Widget build(BuildContext context) {
     return Padding(

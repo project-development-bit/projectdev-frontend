@@ -21,7 +21,8 @@ void main() {
       });
 
       test('should initialize successfully', () async {
-        final success = await PlatformRecaptchaService.initialize('test_site_key');
+        final success =
+            await PlatformRecaptchaService.initialize('test_site_key');
         expect(success, isTrue);
       });
 
@@ -34,7 +35,8 @@ void main() {
     });
 
     group('RecaptchaWidget', () {
-      testWidgets('should render for staging environment', (WidgetTester tester) async {
+      testWidgets('should render for staging environment',
+          (WidgetTester tester) async {
         await tester.pumpWidget(
           ProviderScope(
             child: MaterialApp(
@@ -52,7 +54,8 @@ void main() {
         expect(find.text("I'm not a robot"), findsOneWidget);
       });
 
-      testWidgets('should show platform indicator in debug mode', (WidgetTester tester) async {
+      testWidgets('should show platform indicator in debug mode',
+          (WidgetTester tester) async {
         await tester.pumpWidget(
           ProviderScope(
             child: MaterialApp(
@@ -70,7 +73,8 @@ void main() {
         expect(find.textContaining('Action: login'), findsOneWidget);
       });
 
-      testWidgets('should handle verification tap', (WidgetTester tester) async {
+      testWidgets('should handle verification tap',
+          (WidgetTester tester) async {
         await tester.pumpWidget(
           ProviderScope(
             child: MaterialApp(
@@ -89,7 +93,7 @@ void main() {
         // Find and tap the verification area
         final recaptchaFinder = find.text("I'm not a robot");
         expect(recaptchaFinder, findsOneWidget);
-        
+
         await tester.tap(recaptchaFinder);
         await tester.pump();
 
@@ -97,7 +101,8 @@ void main() {
         expect(find.byType(CircularProgressIndicator), findsOneWidget);
       });
 
-      testWidgets('should use different actions for different factory methods', (WidgetTester tester) async {
+      testWidgets('should use different actions for different factory methods',
+          (WidgetTester tester) async {
         await tester.pumpWidget(
           ProviderScope(
             child: MaterialApp(
@@ -119,7 +124,7 @@ void main() {
 
         // Should render multiple reCAPTCHA widgets
         expect(find.byType(RecaptchaWidget), findsNWidgets(4));
-        
+
         // Should show different actions in debug mode
         expect(find.textContaining('Action: login'), findsOneWidget);
         expect(find.textContaining('Action: signup'), findsOneWidget);
@@ -127,7 +132,8 @@ void main() {
         expect(find.textContaining('Action: forgot_password'), findsOneWidget);
       });
 
-      testWidgets('should show enhanced UI with platform icons', (WidgetTester tester) async {
+      testWidgets('should show enhanced UI with platform icons',
+          (WidgetTester tester) async {
         await tester.pumpWidget(
           ProviderScope(
             child: MaterialApp(
@@ -144,12 +150,14 @@ void main() {
         expect(find.text('reCAPTCHA'), findsOneWidget);
         expect(find.text('Privacy'), findsOneWidget);
         expect(find.text('Terms'), findsOneWidget);
-        
+
         // Should show platform-specific icon
-        expect(find.byIcon(Icons.language), findsOneWidget); // Web platform icon
+        expect(
+            find.byIcon(Icons.language), findsOneWidget); // Web platform icon
       });
 
-      testWidgets('should work with custom actions', (WidgetTester tester) async {
+      testWidgets('should work with custom actions',
+          (WidgetTester tester) async {
         await tester.pumpWidget(
           ProviderScope(
             child: MaterialApp(
@@ -168,9 +176,10 @@ void main() {
     });
 
     group('RecaptchaProvider Integration', () {
-      testWidgets('should integrate with RecaptchaProvider state', (WidgetTester tester) async {
+      testWidgets('should integrate with RecaptchaProvider state',
+          (WidgetTester tester) async {
         late WidgetRef ref;
-        
+
         await tester.pumpWidget(
           ProviderScope(
             child: MaterialApp(
@@ -191,29 +200,30 @@ void main() {
         // Check initial provider state
         final isRequired = ref.read(isRecaptchaRequiredProvider);
         final isLoading = ref.read(isRecaptchaLoadingProvider);
-        
+
         expect(isRequired, isTrue);
         expect(isLoading, isFalse); // Should be ready after initialization
       });
 
       test('should provide correct state through providers', () async {
         final container = ProviderContainer();
-        
+
         // Wait for initialization
         await Future.delayed(const Duration(milliseconds: 100));
-        
+
         final isRequired = container.read(isRecaptchaRequiredProvider);
         final isAvailable = container.read(isRecaptchaAvailableProvider);
-        
+
         expect(isRequired, isTrue);
         expect(isAvailable, isTrue);
-        
+
         container.dispose();
       });
     });
 
     group('Error Handling', () {
-      testWidgets('should display error messages properly', (WidgetTester tester) async {
+      testWidgets('should display error messages properly',
+          (WidgetTester tester) async {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [

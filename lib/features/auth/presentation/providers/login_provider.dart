@@ -39,7 +39,10 @@ class LoginSuccess extends LoginState {
 /// Login error occurred
 class LoginError extends LoginState {
   const LoginError(
-      {required this.message,required this.email, this.isNetworkError = false, this.errorModel});
+      {required this.message,
+      required this.email,
+      this.isNetworkError = false,
+      this.errorModel});
   final String email;
   final String message;
   final bool isNetworkError;
@@ -166,7 +169,6 @@ class LoginNotifier extends StateNotifier<LoginState> {
 
   /// Get current state type for debugging
   String get currentStateType => state.runtimeType.toString();
-
 
   /// Check if login is in progress
   bool get isLoading => state is LoginLoading;

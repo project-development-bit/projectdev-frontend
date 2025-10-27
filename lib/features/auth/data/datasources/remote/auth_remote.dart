@@ -25,16 +25,16 @@ final authRemoteDataSourceProvider = Provider<AuthRemoteDataSource>(
 abstract class AuthRemoteDataSource {
   /// Register a new user with the provided request data
   Future<void> register(RegisterRequest request);
-  
+
   /// Login user with email and password
   Future<LoginResponseModel> login(LoginRequest request);
-  
+
   /// Send forgot password request
   Future<ForgotPasswordResponse> forgotPassword(ForgotPasswordRequest request);
-  
+
   /// Reset password with new password
   Future<LoginResponseModel> resetPassword(ResetPasswordRequest request);
-  
+
   /// Resend verification code to user's email
   Future<ResendCodeResponse> resendCode(ResendCodeRequest request);
 
@@ -49,7 +49,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   /// Creates an instance of [AuthRemoteDataSourceImpl]
   const AuthRemoteDataSourceImpl(this.dioClient);
-  
+
   @override
   Future<void> register(RegisterRequest request) async {
     try {
@@ -57,14 +57,13 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         registerEndpoints,
         data: request.toJson(),
       );
-      
+
       // Successful responses (200-299) don't need explicit handling
       // Dio automatically throws for non-2xx responses
-      
     } on DioException catch (e) {
       // Extract server error message from response data
       final serverMessage = _extractServerErrorMessage(e.response?.data);
-      
+
       // Create new DioException with server message or appropriate fallback
       throw DioException(
         requestOptions: e.requestOptions,
@@ -92,13 +91,12 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         loginEndpoints,
         data: request.toJson(),
       );
-      
+
       return LoginResponseModel.fromJson(response.data as Map<String, dynamic>);
-      
     } on DioException catch (e) {
       // Extract server error message from response data
       final serverMessage = _extractServerErrorMessage(e.response?.data);
-      
+
       // Create new DioException with server message or appropriate fallback
       throw DioException(
         requestOptions: e.requestOptions,
@@ -302,7 +300,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   /// Get appropriate fallback message based on status code or original message
   String _getFallbackMessage(DioException exception) {
     final statusCode = exception.response?.statusCode;
-    
+
     switch (statusCode) {
       case 400:
         return 'Bad Request';

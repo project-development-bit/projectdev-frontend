@@ -54,9 +54,9 @@ void main() {
         );
 
         when(() => mockDioClient.post(
-          registerEndpoints,
-          data: registerRequest.toJson(),
-        )).thenAnswer((_) async => response);
+              registerEndpoints,
+              data: registerRequest.toJson(),
+            )).thenAnswer((_) async => response);
 
         // Act & Assert
         expect(
@@ -65,9 +65,9 @@ void main() {
         );
 
         verify(() => mockDioClient.post(
-          registerEndpoints,
-          data: registerRequest.toJson(),
-        )).called(1);
+              registerEndpoints,
+              data: registerRequest.toJson(),
+            )).called(1);
       });
 
       test('should complete successfully when API returns 201', () async {
@@ -79,9 +79,9 @@ void main() {
         );
 
         when(() => mockDioClient.post(
-          registerEndpoints,
-          data: registerRequest.toJson(),
-        )).thenAnswer((_) async => response);
+              registerEndpoints,
+              data: registerRequest.toJson(),
+            )).thenAnswer((_) async => response);
 
         // Act & Assert
         expect(
@@ -90,12 +90,13 @@ void main() {
         );
 
         verify(() => mockDioClient.post(
-          registerEndpoints,
-          data: registerRequest.toJson(),
-        )).called(1);
+              registerEndpoints,
+              data: registerRequest.toJson(),
+            )).called(1);
       });
 
-      test('should throw DioException when API returns 400 (Bad Request)', () async {
+      test('should throw DioException when API returns 400 (Bad Request)',
+          () async {
         // Arrange
         final response = Response(
           requestOptions: RequestOptions(path: registerEndpoints),
@@ -109,9 +110,9 @@ void main() {
         );
 
         when(() => mockDioClient.post(
-          registerEndpoints,
-          data: registerRequest.toJson(),
-        )).thenThrow(dioException);
+              registerEndpoints,
+              data: registerRequest.toJson(),
+            )).thenThrow(dioException);
 
         // Act & Assert
         expect(
@@ -124,12 +125,16 @@ void main() {
         );
       });
 
-      test('should throw DioException when API returns 409 (Conflict)', () async {
+      test('should throw DioException when API returns 409 (Conflict)',
+          () async {
         // Arrange
         final response = Response(
           requestOptions: RequestOptions(path: registerEndpoints),
           statusCode: 409,
-          data: {'message': "Duplicate entry 'user10@gmail.com' for key 'users.email'"},
+          data: {
+            'message':
+                "Duplicate entry 'user10@gmail.com' for key 'users.email'"
+          },
         );
 
         final dioException = DioException(
@@ -138,9 +143,9 @@ void main() {
         );
 
         when(() => mockDioClient.post(
-          registerEndpoints,
-          data: registerRequest.toJson(),
-        )).thenThrow(dioException);
+              registerEndpoints,
+              data: registerRequest.toJson(),
+            )).thenThrow(dioException);
 
         // Act & Assert
         expect(
@@ -153,7 +158,9 @@ void main() {
         );
       });
 
-      test('should throw DioException when API returns 422 (Unprocessable Entity)', () async {
+      test(
+          'should throw DioException when API returns 422 (Unprocessable Entity)',
+          () async {
         // Arrange
         final response = Response(
           requestOptions: RequestOptions(path: registerEndpoints),
@@ -167,9 +174,9 @@ void main() {
         );
 
         when(() => mockDioClient.post(
-          registerEndpoints,
-          data: registerRequest.toJson(),
-        )).thenThrow(dioException);
+              registerEndpoints,
+              data: registerRequest.toJson(),
+            )).thenThrow(dioException);
 
         // Act & Assert
         expect(
@@ -182,7 +189,9 @@ void main() {
         );
       });
 
-      test('should throw DioException with generic message for other HTTP errors', () async {
+      test(
+          'should throw DioException with generic message for other HTTP errors',
+          () async {
         // Arrange
         final response = Response(
           requestOptions: RequestOptions(path: registerEndpoints),
@@ -197,9 +206,9 @@ void main() {
         );
 
         when(() => mockDioClient.post(
-          registerEndpoints,
-          data: registerRequest.toJson(),
-        )).thenThrow(dioException);
+              registerEndpoints,
+              data: registerRequest.toJson(),
+            )).thenThrow(dioException);
 
         // Act & Assert
         expect(
@@ -215,9 +224,9 @@ void main() {
       test('should throw Exception for non-DioException errors', () async {
         // Arrange
         when(() => mockDioClient.post(
-          registerEndpoints,
-          data: registerRequest.toJson(),
-        )).thenThrow(Exception('Network error'));
+              registerEndpoints,
+              data: registerRequest.toJson(),
+            )).thenThrow(Exception('Network error'));
 
         // Act & Assert
         expect(
@@ -244,9 +253,9 @@ void main() {
         );
 
         when(() => mockDioClient.post(
-          registerEndpoints,
-          data: registerRequest.toJson(),
-        )).thenThrow(dioException);
+              registerEndpoints,
+              data: registerRequest.toJson(),
+            )).thenThrow(dioException);
 
         // Act & Assert
         expect(
@@ -267,7 +276,8 @@ void main() {
           data: {
             "type": "error",
             "status": 409,
-            "message": "Duplicate entry 'user10@gmail.com' for key 'users.email'"
+            "message":
+                "Duplicate entry 'user10@gmail.com' for key 'users.email'"
           },
         );
 
@@ -277,9 +287,9 @@ void main() {
         );
 
         when(() => mockDioClient.post(
-          registerEndpoints,
-          data: registerRequest.toJson(),
-        )).thenThrow(dioException);
+              registerEndpoints,
+              data: registerRequest.toJson(),
+            )).thenThrow(dioException);
 
         // Act & Assert
         expect(
@@ -308,18 +318,18 @@ void main() {
         );
 
         when(() => mockDioClient.post(
-          registerEndpoints,
-          data: any(named: 'data'),
-        )).thenAnswer((_) async => response);
+              registerEndpoints,
+              data: any(named: 'data'),
+            )).thenAnswer((_) async => response);
 
         // Act
         await authRemoteDataSource.register(registerRequest);
 
         // Assert
         verify(() => mockDioClient.post(
-          registerEndpoints,
-          data: expectedData,
-        )).called(1);
+              registerEndpoints,
+              data: expectedData,
+            )).called(1);
       });
 
       test('should work with different user roles', () async {
@@ -346,9 +356,9 @@ void main() {
         );
 
         when(() => mockDioClient.post(
-          registerEndpoints,
-          data: adminRequest.toJson(),
-        )).thenAnswer((_) async => response);
+              registerEndpoints,
+              data: adminRequest.toJson(),
+            )).thenAnswer((_) async => response);
 
         // Act & Assert
         expect(
@@ -357,9 +367,9 @@ void main() {
         );
 
         verify(() => mockDioClient.post(
-          registerEndpoints,
-          data: expectedData,
-        )).called(1);
+              registerEndpoints,
+              data: expectedData,
+            )).called(1);
       });
 
       test('should handle timeout errors', () async {
@@ -371,9 +381,9 @@ void main() {
         );
 
         when(() => mockDioClient.post(
-          registerEndpoints,
-          data: registerRequest.toJson(),
-        )).thenThrow(dioException);
+              registerEndpoints,
+              data: registerRequest.toJson(),
+            )).thenThrow(dioException);
 
         // Act & Assert
         expect(
@@ -395,9 +405,9 @@ void main() {
         );
 
         when(() => mockDioClient.post(
-          registerEndpoints,
-          data: registerRequest.toJson(),
-        )).thenThrow(dioException);
+              registerEndpoints,
+              data: registerRequest.toJson(),
+            )).thenThrow(dioException);
 
         // Act & Assert
         expect(
@@ -421,7 +431,8 @@ void main() {
         );
       });
 
-      test('should return LoginResponseModel when API returns successful login', () async {
+      test('should return LoginResponseModel when API returns successful login',
+          () async {
         // Arrange
         final mockResponseData = {
           "success": true,
@@ -450,9 +461,9 @@ void main() {
         );
 
         when(() => mockDioClient.post(
-          loginEndpoints,
-          data: loginRequest.toJson(),
-        )).thenAnswer((_) async => response);
+              loginEndpoints,
+              data: loginRequest.toJson(),
+            )).thenAnswer((_) async => response);
 
         // Act
         final result = await authRemoteDataSource.login(loginRequest);
@@ -467,11 +478,11 @@ void main() {
         expect(result.user.role, UserRole.normalUser);
         expect(result.tokens.tokenType, 'Bearer');
         expect(result.tokens.accessTokenExpiresIn, '15m');
-        
+
         verify(() => mockDioClient.post(
-          loginEndpoints,
-          data: loginRequest.toJson(),
-        )).called(1);
+              loginEndpoints,
+              data: loginRequest.toJson(),
+            )).called(1);
       });
 
       test('should throw DioException when login fails with 401', () async {
@@ -488,9 +499,9 @@ void main() {
         );
 
         when(() => mockDioClient.post(
-          loginEndpoints,
-          data: loginRequest.toJson(),
-        )).thenThrow(dioException);
+              loginEndpoints,
+              data: loginRequest.toJson(),
+            )).thenThrow(dioException);
 
         // Act & Assert
         expect(
@@ -503,7 +514,9 @@ void main() {
         );
       });
 
-      test('should throw DioException with fallback message when no server message', () async {
+      test(
+          'should throw DioException with fallback message when no server message',
+          () async {
         // Arrange
         final response = Response(
           requestOptions: RequestOptions(path: loginEndpoints),
@@ -517,9 +530,9 @@ void main() {
         );
 
         when(() => mockDioClient.post(
-          loginEndpoints,
-          data: loginRequest.toJson(),
-        )).thenThrow(dioException);
+              loginEndpoints,
+              data: loginRequest.toJson(),
+            )).thenThrow(dioException);
 
         // Act & Assert
         expect(
@@ -543,7 +556,12 @@ void main() {
           "success": true,
           "message": "Login successful.",
           "data": {
-            "user": {"id": 11, "name": "User 7", "email": "user8@gmail.com", "role": "NormalUser"},
+            "user": {
+              "id": 11,
+              "name": "User 7",
+              "email": "user8@gmail.com",
+              "role": "NormalUser"
+            },
             "tokens": {
               "accessToken": "token",
               "refreshToken": "refresh",
@@ -561,18 +579,18 @@ void main() {
         );
 
         when(() => mockDioClient.post(
-          loginEndpoints,
-          data: any(named: 'data'),
-        )).thenAnswer((_) async => response);
+              loginEndpoints,
+              data: any(named: 'data'),
+            )).thenAnswer((_) async => response);
 
         // Act
         await authRemoteDataSource.login(loginRequest);
 
         // Assert
         verify(() => mockDioClient.post(
-          loginEndpoints,
-          data: expectedData,
-        )).called(1);
+              loginEndpoints,
+              data: expectedData,
+            )).called(1);
       });
     });
 
@@ -833,7 +851,8 @@ void main() {
   group('AuthRemoteDataSource Provider', () {
     test('should create AuthRemoteDataSourceImpl instance', () {
       // This test verifies that the provider exists and has the correct type
-      expect(authRemoteDataSourceProvider, isA<Provider<AuthRemoteDataSource>>());
+      expect(
+          authRemoteDataSourceProvider, isA<Provider<AuthRemoteDataSource>>());
     });
   });
 }

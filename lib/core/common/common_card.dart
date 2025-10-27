@@ -38,14 +38,16 @@ class CommonCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
-    final effectiveBackgroundColor = backgroundColor ?? 
-        (isDark ? AppColors.websiteCard : Colors.white);
+
+    final effectiveBackgroundColor =
+        backgroundColor ?? (isDark ? AppColors.websiteCard : Colors.white);
     final effectiveBorderRadius = borderRadius ?? 16.0;
     final effectivePadding = padding ?? const EdgeInsets.all(20);
     final effectiveMargin = margin ?? const EdgeInsets.all(8);
-    final effectiveBorderColor = borderColor ?? 
-        (isDark ? AppColors.websiteBorder.withOpacity(0.3) : Colors.transparent);
+    final effectiveBorderColor = borderColor ??
+        (isDark
+            ? AppColors.websiteBorder.withOpacity(0.3)
+            : Colors.transparent);
     final effectiveBorderWidth = borderWidth ?? (isDark ? 1.0 : 0.0);
 
     Widget cardContent = Container(
@@ -58,15 +60,17 @@ class CommonCard extends StatelessWidget {
           color: effectiveBorderColor,
           width: effectiveBorderWidth,
         ),
-        boxShadow: showShadow ? [
-          BoxShadow(
-            color: isDark 
-                ? Colors.black.withOpacity(0.3)
-                : AppColors.primary.withOpacity(0.1),
-            blurRadius: isDark ? 8 : 4,
-            offset: Offset(0, isDark ? 4 : 2),
-          ),
-        ] : null,
+        boxShadow: showShadow
+            ? [
+                BoxShadow(
+                  color: isDark
+                      ? Colors.black.withOpacity(0.3)
+                      : AppColors.primary.withOpacity(0.1),
+                  blurRadius: isDark ? 8 : 4,
+                  offset: Offset(0, isDark ? 4 : 2),
+                ),
+              ]
+            : null,
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(effectiveBorderRadius),
@@ -83,7 +87,7 @@ class CommonCard extends StatelessWidget {
                     if (title != null)
                       Text(
                         title!,
-                        style: isDark 
+                        style: isDark
                             ? AppTypography.titleLargeDark
                             : AppTypography.titleLarge,
                       ),
@@ -91,7 +95,7 @@ class CommonCard extends StatelessWidget {
                       const SizedBox(height: 4),
                       Text(
                         subtitle!,
-                        style: isDark 
+                        style: isDark
                             ? AppTypography.bodyMediumDark
                             : AppTypography.bodyMedium,
                       ),
@@ -154,8 +158,8 @@ class CryptoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final effectiveAccentColor = accentColor ?? 
-        (isDark ? AppColors.primaryLight : AppColors.primary);
+    final effectiveAccentColor =
+        accentColor ?? (isDark ? AppColors.primaryLight : AppColors.primary);
 
     return CommonCard(
       onTap: onTap,
@@ -184,7 +188,7 @@ class CryptoCard extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: isDark 
+                  style: isDark
                       ? AppTypography.titleMediumDark
                       : AppTypography.titleMedium,
                 ),
@@ -192,7 +196,7 @@ class CryptoCard extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     subtitle!,
-                    style: isDark 
+                    style: isDark
                         ? AppTypography.bodySmallDark
                         : AppTypography.bodySmall,
                   ),
@@ -248,10 +252,11 @@ class GradientCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final effectiveColors = colors ?? [
-      AppColors.websiteBackgroundStart,
-      AppColors.websiteBackgroundEnd,
-    ];
+    final effectiveColors = colors ??
+        [
+          AppColors.websiteBackgroundStart,
+          AppColors.websiteBackgroundEnd,
+        ];
 
     return CommonCard(
       gradient: LinearGradient(

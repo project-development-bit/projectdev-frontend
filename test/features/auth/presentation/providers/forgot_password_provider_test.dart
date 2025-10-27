@@ -26,7 +26,7 @@ void main() {
     test('should validate email format correctly', () {
       // Arrange
       final notifier = container.read(forgotPasswordProvider.notifier);
-      
+
       // Test invalid emails
       const invalidEmails = [
         '',
@@ -40,12 +40,13 @@ void main() {
       for (final email in invalidEmails) {
         // Act
         notifier.forgotPassword(email);
-        
+
         // Assert
         final state = container.read(forgotPasswordProvider);
         expect(state, isA<ForgotPasswordError>());
-        expect((state as ForgotPasswordError).message, 'Please enter a valid email address');
-        
+        expect((state as ForgotPasswordError).message,
+            'Please enter a valid email address');
+
         // Reset for next test
         notifier.reset();
       }
@@ -54,7 +55,7 @@ void main() {
     test('should accept valid email formats', () {
       // Note: This test would require mocking the repository to actually test the full flow
       // For now, we just test that invalid emails are caught before reaching the repository
-      
+
       const validEmails = [
         'user@domain.com',
         'user.name@domain.co.uk',
@@ -65,11 +66,11 @@ void main() {
 
       for (final email in validEmails) {
         final notifier = container.read(forgotPasswordProvider.notifier);
-        
+
         // This will fail at the repository level since we don't have a mock
         // But it shows the email validation passes
         expect(() => notifier.forgotPassword(email), returnsNormally);
-        
+
         // Reset for next test
         notifier.reset();
       }
@@ -78,16 +79,18 @@ void main() {
     test('reset should return to initial state', () {
       // Arrange
       final notifier = container.read(forgotPasswordProvider.notifier);
-      
+
       // Set an error state first
       notifier.forgotPassword(''); // This will create an error state
-      expect(container.read(forgotPasswordProvider), isA<ForgotPasswordError>());
-      
+      expect(
+          container.read(forgotPasswordProvider), isA<ForgotPasswordError>());
+
       // Act
       notifier.reset();
-      
+
       // Assert
-      expect(container.read(forgotPasswordProvider), isA<ForgotPasswordInitial>());
+      expect(
+          container.read(forgotPasswordProvider), isA<ForgotPasswordInitial>());
     });
 
     group('State Types', () {
@@ -96,38 +99,39 @@ void main() {
         const response = ForgotPasswordResponse(
           success: true,
           message: 'Test message',
-          data: ForgotPasswordData(email: 'test@example.com', securityCode: 1234),
+          data:
+              ForgotPasswordData(email: 'test@example.com', securityCode: 1234),
         );
-        
+
         // Act
         final state = ForgotPasswordSuccess(response);
-        
+
         // Assert
         expect(state.response, equals(response));
         expect(state.response.data.email, 'test@example.com');
         expect(state.response.data.securityCode, 1234);
       });
-      
+
       test('ForgotPasswordError should hold error message and status code', () {
         // Arrange
         const message = 'Network error';
         const statusCode = 500;
-        
+
         // Act
         final state = ForgotPasswordError(message, statusCode: statusCode);
-        
+
         // Assert
         expect(state.message, message);
         expect(state.statusCode, statusCode);
       });
-      
+
       test('ForgotPasswordError should work without status code', () {
         // Arrange
         const message = 'Validation error';
-        
+
         // Act
         final state = ForgotPasswordError(message);
-        
+
         // Assert
         expect(state.message, message);
         expect(state.statusCode, isNull);
@@ -144,17 +148,18 @@ void main() {
       test('should reject empty email', () {
         // Act
         notifier.forgotPassword('');
-        
+
         // Assert
         final state = container.read(forgotPasswordProvider);
         expect(state, isA<ForgotPasswordError>());
-        expect((state as ForgotPasswordError).message, 'Please enter a valid email address');
+        expect((state as ForgotPasswordError).message,
+            'Please enter a valid email address');
       });
 
       test('should reject email without @', () {
         // Act
         notifier.forgotPassword('userexample.com');
-        
+
         // Assert
         final state = container.read(forgotPasswordProvider);
         expect(state, isA<ForgotPasswordError>());
@@ -163,7 +168,7 @@ void main() {
       test('should reject email without domain', () {
         // Act
         notifier.forgotPassword('user@');
-        
+
         // Assert
         final state = container.read(forgotPasswordProvider);
         expect(state, isA<ForgotPasswordError>());
@@ -172,7 +177,7 @@ void main() {
       test('should reject email without local part', () {
         // Act
         notifier.forgotPassword('@example.com');
-        
+
         // Assert
         final state = container.read(forgotPasswordProvider);
         expect(state, isA<ForgotPasswordError>());

@@ -9,7 +9,7 @@ import '../datasources/profile_database_data_source.dart';
 import '../models/user_profile_model.dart';
 
 /// Implementation of [ProfileRepository]
-/// 
+///
 /// This class implements the profile repository interface and coordinates
 /// between remote, local, and database data sources. It prioritizes database
 /// data for current user profile and handles caching and error handling.
@@ -29,7 +29,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
     try {
       // First, try to get profile from database (current user)
       final databaseResult = await databaseDataSource.getCurrentUserProfile();
-      
+
       return databaseResult.fold(
         (failure) async {
           // If database fails, try cached data
@@ -72,7 +72,8 @@ class ProfileRepositoryImpl implements ProfileRepository {
   }
 
   @override
-  Future<Either<Failure, UserProfile>> updateUserProfile(UserProfile profile) async {
+  Future<Either<Failure, UserProfile>> updateUserProfile(
+      UserProfile profile) async {
     try {
       // Try to update via database first
       final profileModel = UserProfileModel.fromEntity(profile);
@@ -112,17 +113,17 @@ class ProfileRepositoryImpl implements ProfileRepository {
     try {
       // Create File object using universal_io which works on both mobile and web
       final imageFile = File(imagePath);
-      
+
       // Check if file exists (this works for both platforms)
       if (!await imageFile.exists()) {
         return Left(ServerFailure(message: 'Image file not found: $imagePath'));
       }
-      
+
       final imageUrl = await remoteDataSource.uploadProfilePicture(
         'current',
         imageFile,
       );
-      
+
       // Update cached profile with new image URL if it exists
       final cachedProfile =
           await localDataSource.getCachedUserProfile('current');
@@ -132,7 +133,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
         );
         await localDataSource.cacheUserProfile(updatedProfile);
       }
-      
+
       return Right(imageUrl);
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));
@@ -165,14 +166,15 @@ class ProfileRepositoryImpl implements ProfileRepository {
     try {
       // Get full profile to extract stats
       final profileResult = await getUserProfile();
-      
+
       return profileResult.fold(
         (failure) => Left(failure),
         (profile) {
           if (profile.stats != null) {
             return Right(profile.stats!);
           } else {
-            return Left(ServerFailure(message: 'Profile statistics not available'));
+            return Left(
+                ServerFailure(message: 'Profile statistics not available'));
           }
         },
       );
@@ -212,7 +214,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
   Future<Either<Failure, Unit>> verifyEmail(String verificationCode) async {
     try {
       await remoteDataSource.verifyEmail('current', verificationCode);
-      
+
       // Update cached profile to mark email as verified
       final cachedProfile =
           await localDataSource.getCachedUserProfile('current');
@@ -222,7 +224,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
         );
         await localDataSource.cacheUserProfile(updatedProfile);
       }
-      
+
       return const Right(unit);
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));
@@ -236,7 +238,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
   }) async {
     try {
       await remoteDataSource.verifyPhone('current', verificationCode);
-      
+
       // Update cached profile verification status
       final cachedProfile =
           await localDataSource.getCachedUserProfile('current');
@@ -246,7 +248,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
         );
         await localDataSource.cacheUserProfile(updatedProfile);
       }
-      
+
       return const Right(unit);
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));
@@ -257,10 +259,10 @@ class ProfileRepositoryImpl implements ProfileRepository {
   Future<Either<Failure, Unit>> deleteAccount(String password) async {
     try {
       await remoteDataSource.deleteAccount('current', password);
-      
+
       // Clear all cached data
       await localDataSource.clearCache();
-      
+
       return const Right(unit);
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));

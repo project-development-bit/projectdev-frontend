@@ -96,7 +96,7 @@ extension ThemeExtension on BuildContext {
   bool get isLight => theme.brightness == Brightness.light;
 
   /// Get the opposite brightness
-  Brightness get oppositeBrightness => 
+  Brightness get oppositeBrightness =>
       isDark ? Brightness.light : Brightness.dark;
 }
 
@@ -170,7 +170,8 @@ extension NavigationExtension on BuildContext {
       navigator.pushReplacement(newRoute, result: result);
 
   /// Push and remove all previous routes
-  Future<T?> pushAndRemoveUntil<T>(Route<T> newRoute, bool Function(Route<dynamic>) predicate) =>
+  Future<T?> pushAndRemoveUntil<T>(
+          Route<T> newRoute, bool Function(Route<dynamic>) predicate) =>
       navigator.pushAndRemoveUntil(newRoute, predicate);
 
   /// Pop until a specific route

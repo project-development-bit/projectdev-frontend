@@ -27,7 +27,7 @@ class LogoutLoading extends LogoutState {
 /// Logout successful
 class LogoutSuccess extends LogoutState {
   const LogoutSuccess({this.message = 'Logged out successfully'});
-  
+
   final String message;
 }
 
@@ -56,22 +56,22 @@ class LogoutNotifier extends StateNotifier<LogoutState> {
   Future<void> logout() async {
     try {
       state = const LogoutLoading();
-      
+
       final logoutUseCase = _ref.read(logoutUseCaseProvider);
       final result = await logoutUseCase.call();
-      
+
       await result.fold(
         (failure) {
           debugPrint('❌ Logout failed: ${failure.message}');
           state = LogoutError(
             message: failure.message ?? 'Logout failed',
-            isNetworkError: failure.toString().contains('network') || 
-                           failure.toString().contains('connection'),
+            isNetworkError: failure.toString().contains('network') ||
+                failure.toString().contains('connection'),
           );
         },
         (_) async {
           debugPrint('✅ Logout successful');
-          
+
           // Clear local database
           try {
             await DatabaseService.clearAllUsers();
@@ -80,11 +80,11 @@ class LogoutNotifier extends StateNotifier<LogoutState> {
             debugPrint('⚠️ Failed to clear user data from database: $dbError');
             // Don't fail the logout process if database clear fails
           }
-          
+
           // Clear login state to ensure UI updates properly
           _ref.read(loginNotifierProvider.notifier).resetToInitial();
           debugPrint('✅ Login state reset to initial');
-          
+
           state = const LogoutSuccess();
         },
       );
@@ -122,7 +122,8 @@ class LogoutNotifier extends StateNotifier<LogoutState> {
 // =============================================================================
 
 /// Provider for logout state management
-final logoutNotifierProvider = StateNotifierProvider<LogoutNotifier, LogoutState>((ref) {
+final logoutNotifierProvider =
+    StateNotifierProvider<LogoutNotifier, LogoutState>((ref) {
   return LogoutNotifier(ref);
 });
 

@@ -27,7 +27,7 @@ class RegisterLoading extends RegisterState {
 /// Registration successful
 class RegisterSuccess extends RegisterState {
   const RegisterSuccess({required this.message, required this.email});
-  
+
   final String message;
   final String email;
 }
@@ -35,7 +35,7 @@ class RegisterSuccess extends RegisterState {
 /// Registration error occurred
 class RegisterError extends RegisterState {
   const RegisterError({required this.message, this.isNetworkError = false});
-  
+
   final String message;
   final bool isNetworkError;
 }
@@ -60,7 +60,7 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
   }) async {
     try {
       state = const RegisterLoading();
-      
+
       final registerRequest = RegisterRequest(
         name: name,
         email: email,
@@ -68,23 +68,24 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
         confirmPassword: confirmPassword,
         role: role,
       );
-      
+
       final registerUseCase = _ref.read(registerUseCaseProvider);
       final result = await registerUseCase(registerRequest);
-      
+
       result.fold(
         (failure) {
           debugPrint('❌ Registration failed: ${failure.message}');
           state = RegisterError(
             message: failure.message ?? 'Registration failed',
-            isNetworkError: failure.toString().contains('network') || 
-                           failure.toString().contains('connection'),
+            isNetworkError: failure.toString().contains('network') ||
+                failure.toString().contains('connection'),
           );
         },
         (_) {
           debugPrint('✅ Registration successful for: $email');
           state = RegisterSuccess(
-            message: 'Registration successful! Please log in with your credentials.',
+            message:
+                'Registration successful! Please log in with your credentials.',
             email: email,
           );
         },
@@ -145,7 +146,8 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
 // =============================================================================
 
 /// Provider for register state management
-final registerNotifierProvider = StateNotifierProvider<RegisterNotifier, RegisterState>((ref) {
+final registerNotifierProvider =
+    StateNotifierProvider<RegisterNotifier, RegisterState>((ref) {
   return RegisterNotifier(ref);
 });
 

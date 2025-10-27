@@ -12,7 +12,7 @@ void main() {
 
     test('should initialize with dev flavor', () {
       FlavorManager.initialize(AppFlavor.dev);
-      
+
       expect(FlavorManager.currentFlavor, AppFlavor.dev);
       expect(FlavorManager.appName, 'Gigafaucet (Dev)');
       expect(FlavorManager.apiBaseUrl, 'https://api-dev.burgereats.com');
@@ -22,17 +22,18 @@ void main() {
 
     test('should initialize with staging flavor', () {
       FlavorManager.initialize(AppFlavor.staging);
-      
+
       expect(FlavorManager.currentFlavor, AppFlavor.staging);
       expect(FlavorManager.appName, 'Gigafaucet (Staging)');
       expect(FlavorManager.apiBaseUrl, 'https://api-staging.burgereats.com');
-      expect(FlavorManager.areDebugFeaturesEnabled, true); // Staging has debug features enabled
+      expect(FlavorManager.areDebugFeaturesEnabled,
+          true); // Staging has debug features enabled
       expect(FlavorManager.isLoggingEnabled, true);
     });
 
     test('should initialize with prod flavor', () {
       FlavorManager.initialize(AppFlavor.prod);
-      
+
       expect(FlavorManager.currentFlavor, AppFlavor.prod);
       expect(FlavorManager.appName, 'Gigafaucet');
       expect(FlavorManager.apiBaseUrl, 'https://api.burgereats.com');
@@ -43,10 +44,10 @@ void main() {
     test('should generate correct full API URL', () {
       FlavorManager.initialize(AppFlavor.dev);
       expect(FlavorManager.fullApiUrl, 'https://api-dev.burgereats.com/v1');
-      
+
       FlavorManager.initialize(AppFlavor.staging);
       expect(FlavorManager.fullApiUrl, 'https://api-staging.burgereats.com/v1');
-      
+
       FlavorManager.initialize(AppFlavor.prod);
       expect(FlavorManager.fullApiUrl, 'https://api.burgereats.com/v1');
     });
@@ -86,25 +87,25 @@ void main() {
       for (final entry in configs.entries) {
         final flavor = entry.key;
         final config = entry.value;
-        
+
         expect(config.apiBaseUrl, isNotEmpty);
         expect(config.appName, isNotEmpty);
         expect(config.enableDebugFeatures, isA<bool>());
         expect(config.enableLogging, isA<bool>());
-        
+
         // Verify that dev has debug features enabled
         if (flavor == AppFlavor.dev) {
           expect(config.enableDebugFeatures, true);
           expect(config.enableLogging, true);
         }
-        
+
         // Verify that staging has debug features enabled but different settings
         if (flavor == AppFlavor.staging) {
           expect(config.enableDebugFeatures, true);
           expect(config.enableLogging, true);
           expect(config.enableCrashReporting, true);
         }
-        
+
         // Verify that prod has debug features disabled
         if (flavor == AppFlavor.prod) {
           expect(config.enableDebugFeatures, false);
@@ -117,7 +118,7 @@ void main() {
 
     test('should have valid API URLs', () {
       final configs = [AppConfig.dev, AppConfig.staging, AppConfig.prod];
-      
+
       for (final config in configs) {
         expect(config.apiBaseUrl, startsWith('https://'));
         expect(config.apiBaseUrl, contains('burgereats.com'));

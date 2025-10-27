@@ -5,7 +5,8 @@ import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/common/common_text.dart';
 
 /// Provider to manage internal verification state
-final internalVerificationProvider = StateNotifierProvider<InternalVerificationNotifier, bool>((ref) {
+final internalVerificationProvider =
+    StateNotifierProvider<InternalVerificationNotifier, bool>((ref) {
   return InternalVerificationNotifier();
 });
 
@@ -31,10 +32,10 @@ class InternalVerificationNotifier extends StateNotifier<bool> {
 class InternalVerificationConfig {
   /// Set to false to bypass verification entirely (for development)
   static const bool isEnabled = true;
-  
+
   /// The verification code required
   static const String requiredCode = "2026";
-  
+
   /// Whether to show debug information
   static const bool showDebugInfo = true;
 }
@@ -49,10 +50,12 @@ class InternalVerificationOverlay extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<InternalVerificationOverlay> createState() => _InternalVerificationOverlayState();
+  ConsumerState<InternalVerificationOverlay> createState() =>
+      _InternalVerificationOverlayState();
 }
 
-class _InternalVerificationOverlayState extends ConsumerState<InternalVerificationOverlay> {
+class _InternalVerificationOverlayState
+    extends ConsumerState<InternalVerificationOverlay> {
   final TextEditingController _codeController = TextEditingController();
   final FocusNode _codeFocusNode = FocusNode();
   bool _isLoading = false;
@@ -78,7 +81,7 @@ class _InternalVerificationOverlayState extends ConsumerState<InternalVerificati
 
   void _handleVerification() {
     final code = _codeController.text.trim();
-    
+
     if (code.isEmpty) {
       setState(() {
         _errorMessage = "Please enter the verification code";
@@ -97,7 +100,7 @@ class _InternalVerificationOverlayState extends ConsumerState<InternalVerificati
         if (code == _correctCode) {
           // Correct code entered
           ref.read(internalVerificationProvider.notifier).markVerified();
-          
+
           // Show success message
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
@@ -147,7 +150,7 @@ class _InternalVerificationOverlayState extends ConsumerState<InternalVerificati
               ),
             ),
           ),
-          
+
           // Verification popup
           Center(
             child: Container(
@@ -186,9 +189,9 @@ class _InternalVerificationOverlayState extends ConsumerState<InternalVerificati
                         color: context.primary,
                       ),
                     ),
-                    
+
                     const SizedBox(height: 24),
-                    
+
                     // Title
                     CommonText.headlineMedium(
                       'Internal Access Verification',
@@ -196,17 +199,17 @@ class _InternalVerificationOverlayState extends ConsumerState<InternalVerificati
                       color: context.onSurface,
                       textAlign: TextAlign.center,
                     ),
-                    
+
                     const SizedBox(height: 8),
-                    
+
                     CommonText.bodyMedium(
                       'Enter the internal verification code to access the application',
                       color: context.onSurfaceVariant,
                       textAlign: TextAlign.center,
                     ),
-                    
+
                     const SizedBox(height: 32),
-                    
+
                     // Code input field
                     TextFormField(
                       controller: _codeController,
@@ -233,9 +236,9 @@ class _InternalVerificationOverlayState extends ConsumerState<InternalVerificati
                       ),
                       onFieldSubmitted: (_) => _handleVerification(),
                     ),
-                    
+
                     const SizedBox(height: 24),
-                    
+
                     // Verify button
                     SizedBox(
                       width: double.infinity,
@@ -269,9 +272,9 @@ class _InternalVerificationOverlayState extends ConsumerState<InternalVerificati
                               ),
                       ),
                     ),
-                    
+
                     const SizedBox(height: 16),
-                    
+
                     // Info text
                     CommonText.bodySmall(
                       'This is an internal verification for development access',

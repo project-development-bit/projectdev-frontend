@@ -39,16 +39,19 @@ class RecaptchaDebugPage extends ConsumerWidget {
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                     const SizedBox(height: 8),
-                    Text('Current Flavor: ${FlavorManager.currentConfig.flavor}'),
-                    Text('Site Key: ${FlavorManager.currentConfig.recaptchaSiteKey ?? "Not configured"}'),
-                    Text('Site Key Configured: ${FlavorManager.currentConfig.recaptchaSiteKey != null}'),
+                    Text(
+                        'Current Flavor: ${FlavorManager.currentConfig.flavor}'),
+                    Text(
+                        'Site Key: ${FlavorManager.currentConfig.recaptchaSiteKey ?? "Not configured"}'),
+                    Text(
+                        'Site Key Configured: ${FlavorManager.currentConfig.recaptchaSiteKey != null}'),
                   ],
                 ),
               ),
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             // State Info
             Card(
               child: Padding(
@@ -70,9 +73,9 @@ class RecaptchaDebugPage extends ConsumerWidget {
                 ),
               ),
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             // Widget Test
             Card(
               child: Padding(
@@ -92,15 +95,16 @@ class RecaptchaDebugPage extends ConsumerWidget {
                 ),
               ),
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             // Manual Test Buttons
             Row(
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    final notifier = ref.read(recaptchaNotifierProvider.notifier);
+                    final notifier =
+                        ref.read(recaptchaNotifierProvider.notifier);
                     notifier.verify();
                   },
                   child: const Text('Test Verify'),
@@ -108,7 +112,8 @@ class RecaptchaDebugPage extends ConsumerWidget {
                 const SizedBox(width: 16),
                 ElevatedButton(
                   onPressed: () {
-                    final notifier = ref.read(recaptchaNotifierProvider.notifier);
+                    final notifier =
+                        ref.read(recaptchaNotifierProvider.notifier);
                     notifier.reset();
                   },
                   child: const Text('Reset'),

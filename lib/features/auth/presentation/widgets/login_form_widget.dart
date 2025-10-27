@@ -23,16 +23,16 @@ class LoginFormWidget extends ConsumerStatefulWidget {
 
   /// Callback when login is successful
   final VoidCallback? onLoginSuccess;
-  
+
   /// Callback when forgot password is tapped
   final VoidCallback? onForgotPassword;
-  
+
   /// Callback when sign up is tapped
   final VoidCallback? onSignUp;
-  
+
   /// Whether to show sign up link
   final bool showSignUpLink;
-  
+
   /// Whether to show remember me checkbox
   final bool showRememberMe;
 
@@ -61,7 +61,7 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
         case LoginSuccess():
           // Call success callback if provided
           widget.onLoginSuccess?.call();
-          
+
           // Show success message
           if (mounted) {
             final localizations = AppLocalizations.of(context);
@@ -102,19 +102,19 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
     if (_formKey.currentState!.validate()) {
       // Check if login can be attempted (includes reCAPTCHA check)
       final canAttemptLogin = ref.read(canAttemptLoginProvider);
-      
+
       if (!canAttemptLogin) {
         final localizations = AppLocalizations.of(context);
         context.showErrorSnackBar(
-          message: localizations?.translate('recaptcha_required') ?? 
-                  'Please verify that you are not a robot',
+          message: localizations?.translate('recaptcha_required') ??
+              'Please verify that you are not a robot',
         );
         return;
       }
 
       // Use consolidated auth actions for login
       final authActions = ref.read(authActionsProvider);
-      
+
       // Reset previous states
       authActions.resetAllStates();
 
@@ -133,8 +133,6 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
     widget.onSignUp?.call();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context);
@@ -150,14 +148,13 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
           CommonTextField(
             controller: _emailController,
             focusNode: _emailFocusNode,
-            hintText: localizations?.translate('email_hint') ??
-                'Enter your email',
+            hintText:
+                localizations?.translate('email_hint') ?? 'Enter your email',
             labelText: localizations?.translate('email') ?? 'Email',
             keyboardType: TextInputType.emailAddress,
             textInputAction: TextInputAction.next,
             prefixIcon: const Icon(Icons.email_outlined),
-            validator: (value) =>
-                TextFieldValidators.email(value, context),
+            validator: (value) => TextFieldValidators.email(value, context),
             onSubmitted: (_) => _passwordFocusNode.requestFocus(),
           ),
 
@@ -169,15 +166,13 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
             focusNode: _passwordFocusNode,
             hintText: localizations?.translate('password_hint') ??
                 'Enter your password',
-            labelText:
-                localizations?.translate('password') ?? 'Password',
+            labelText: localizations?.translate('password') ?? 'Password',
             obscureText: true,
             textInputAction: TextInputAction.done,
             prefixIcon: const Icon(Icons.lock_outlined),
             validator: (value) => TextFieldValidators.minLength(
                 value, 6, context,
-                fieldName: localizations?.translate('password') ??
-                    'Password'),
+                fieldName: localizations?.translate('password') ?? 'Password'),
             onSubmitted: (_) => _handleLogin(),
           ),
 

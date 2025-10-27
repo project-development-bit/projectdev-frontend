@@ -8,10 +8,10 @@ part 'verify_code_response.g.dart';
 class VerifyCodeResponse extends Equatable {
   /// Whether the verification was successful
   final bool success;
-  
+
   /// Response message
   final String message;
-  
+
   /// User data and tokens
   final VerifyCodeData? data;
 
@@ -32,7 +32,8 @@ class VerifyCodeResponse extends Equatable {
   List<Object?> get props => [success, message, data];
 
   @override
-  String toString() => 'VerifyCodeResponse(success: $success, message: $message, data: $data)';
+  String toString() =>
+      'VerifyCodeResponse(success: $success, message: $message, data: $data)';
 }
 
 /// Data model for verify code response
@@ -40,7 +41,7 @@ class VerifyCodeResponse extends Equatable {
 class VerifyCodeData extends Equatable {
   /// User information
   final User user;
-  
+
   /// Authentication tokens
   final Tokens tokens;
 
@@ -68,13 +69,13 @@ class VerifyCodeData extends Equatable {
 class User extends Equatable {
   /// User ID
   final int id;
-  
+
   /// User name
   final String name;
-  
+
   /// User email
   final String email;
-  
+
   /// User role
   final String role;
 
@@ -86,8 +87,7 @@ class User extends Equatable {
   });
 
   /// Create User from JSON
-  factory User.fromJson(Map<String, dynamic> json) =>
-      _$UserFromJson(json);
+  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 
   /// Convert User to JSON
   Map<String, dynamic> toJson() => _$UserToJson(this);
@@ -104,16 +104,16 @@ class User extends Equatable {
 class Tokens extends Equatable {
   /// Access token
   final String accessToken;
-  
+
   /// Refresh token
   final String refreshToken;
-  
+
   /// Token type (usually "Bearer")
   final String tokenType;
-  
+
   /// Access token expiration time
   final String accessTokenExpiresIn;
-  
+
   /// Refresh token expiration time
   final String refreshTokenExpiresIn;
 
@@ -126,8 +126,7 @@ class Tokens extends Equatable {
   });
 
   /// Create Tokens from JSON
-  factory Tokens.fromJson(Map<String, dynamic> json) =>
-      _$TokensFromJson(json);
+  factory Tokens.fromJson(Map<String, dynamic> json) => _$TokensFromJson(json);
 
   /// Convert Tokens to JSON
   Map<String, dynamic> toJson() => _$TokensToJson(this);
@@ -142,5 +141,6 @@ class Tokens extends Equatable {
       ];
 
   @override
-  String toString() => 'Tokens(accessToken: ${accessToken.substring(0, 20)}..., refreshToken: ${refreshToken.substring(0, 20)}..., tokenType: $tokenType, accessTokenExpiresIn: $accessTokenExpiresIn, refreshTokenExpiresIn: $refreshTokenExpiresIn)';
+  String toString() =>
+      'Tokens(accessToken: ${accessToken.substring(0, 20)}..., refreshToken: ${refreshToken.substring(0, 20)}..., tokenType: $tokenType, accessTokenExpiresIn: $accessTokenExpiresIn, refreshTokenExpiresIn: $refreshTokenExpiresIn)';
 }

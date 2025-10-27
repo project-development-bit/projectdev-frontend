@@ -23,9 +23,8 @@ void main() {
 
     test('should return false when logout is successful', () {
       // Simulate successful logout
-      container
-          .read(logoutNotifierProvider.notifier)
-          .state = const LogoutSuccess();
+      container.read(logoutNotifierProvider.notifier).state =
+          const LogoutSuccess();
 
       // Should be unauthenticated
       final isAuth = container.read(isAuthenticatedObservableProvider);
@@ -38,9 +37,8 @@ void main() {
       expect(initialAuthState.isUnauthenticated, true);
 
       // Simulate logout
-      container
-          .read(logoutNotifierProvider.notifier)
-          .state = const LogoutSuccess();
+      container.read(logoutNotifierProvider.notifier).state =
+          const LogoutSuccess();
 
       // Auth state should still be unauthenticated
       final newAuthState = container.read(authProvider);
@@ -52,9 +50,8 @@ void main() {
       expect(container.read(isAuthenticatedObservableProvider), false);
 
       // Simulate logout success
-      container
-          .read(logoutNotifierProvider.notifier)
-          .state = const LogoutSuccess();
+      container.read(logoutNotifierProvider.notifier).state =
+          const LogoutSuccess();
 
       // Should still be false (logged out)
       expect(container.read(isAuthenticatedObservableProvider), false);
@@ -62,7 +59,7 @@ void main() {
 
     test('auth state should properly handle logout', () {
       final authNotifier = container.read(authProvider.notifier);
-      
+
       // Initially unauthenticated
       expect(container.read(authProvider).isUnauthenticated, true);
 
@@ -71,9 +68,8 @@ void main() {
       expect(container.read(authProvider).isAuthenticated, true);
 
       // Trigger logout
-      container
-          .read(logoutNotifierProvider.notifier)
-          .state = const LogoutSuccess();
+      container.read(logoutNotifierProvider.notifier).state =
+          const LogoutSuccess();
 
       // Should become unauthenticated due to listener
       expect(container.read(authProvider).isUnauthenticated, true);

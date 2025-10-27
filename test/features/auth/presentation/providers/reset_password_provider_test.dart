@@ -67,7 +67,8 @@ void main() {
       expect(state, isA<ResetPasswordInitial>());
     });
 
-    test('should emit loading and success states when reset password succeeds', () async {
+    test('should emit loading and success states when reset password succeeds',
+        () async {
       // Arrange
       when(() => mockAuthRepository.resetPassword(any()))
           .thenAnswer((_) async => Right(testLoginResponse));
@@ -100,7 +101,8 @@ void main() {
       expect(successState.response.user.email, testEmail);
     });
 
-    test('should emit loading and error states when reset password fails', () async {
+    test('should emit loading and error states when reset password fails',
+        () async {
       // Arrange
       const errorMessage = 'Invalid email or password';
       when(() => mockAuthRepository.resetPassword(any()))
@@ -200,7 +202,7 @@ void main() {
         password: testPassword,
         confirmPassword: testConfirmPassword,
       );
-      
+
       ResetPasswordState state = container.read(resetPasswordProvider);
       expect(state, isA<ResetPasswordError>());
       ResetPasswordError errorState = state as ResetPasswordError;
@@ -215,8 +217,9 @@ void main() {
         password: '',
         confirmPassword: testConfirmPassword,
       );
-      
-      state = container.read(resetPasswordProvider as ProviderListenable<ResetPasswordError>);
+
+      state = container.read(
+          resetPasswordProvider as ProviderListenable<ResetPasswordError>);
       expect(state, isA<ResetPasswordError>());
       errorState = state as ResetPasswordError;
       expect(errorState.message, 'Please enter a password');
@@ -230,8 +233,9 @@ void main() {
         password: testPassword,
         confirmPassword: '',
       );
-      
-      state = container.read(resetPasswordProvider as ProviderListenable<ResetPasswordError>);
+
+      state = container.read(
+          resetPasswordProvider as ProviderListenable<ResetPasswordError>);
       expect(state, isA<ResetPasswordError>());
       errorState = state as ResetPasswordError;
       expect(errorState.message, 'Please confirm your password');
@@ -240,7 +244,8 @@ void main() {
     test('should reset state to initial', () {
       // Arrange
       final notifier = container.read(resetPasswordProvider.notifier);
-      container.read(resetPasswordProvider.notifier).state = ResetPasswordError('Some error');
+      container.read(resetPasswordProvider.notifier).state =
+          ResetPasswordError('Some error');
 
       // Act
       notifier.reset();
@@ -314,9 +319,11 @@ void main() {
     });
 
     group('Convenience Providers', () {
-      test('isResetPasswordLoadingProvider should return correct loading state', () {
+      test('isResetPasswordLoadingProvider should return correct loading state',
+          () {
         // Arrange
-        container.read(resetPasswordProvider.notifier).state = ResetPasswordLoading();
+        container.read(resetPasswordProvider.notifier).state =
+            ResetPasswordLoading();
 
         // Act
         final isLoading = container.read(isResetPasswordLoadingProvider);
@@ -328,7 +335,8 @@ void main() {
       test('resetPasswordErrorProvider should return error message', () {
         // Arrange
         const errorMessage = 'Test error';
-        container.read(resetPasswordProvider.notifier).state = ResetPasswordError(errorMessage);
+        container.read(resetPasswordProvider.notifier).state =
+            ResetPasswordError(errorMessage);
 
         // Act
         final error = container.read(resetPasswordErrorProvider);
@@ -339,7 +347,8 @@ void main() {
 
       test('resetPasswordSuccessProvider should return success response', () {
         // Arrange
-        container.read(resetPasswordProvider.notifier).state = ResetPasswordSuccess(testLoginResponse);
+        container.read(resetPasswordProvider.notifier).state =
+            ResetPasswordSuccess(testLoginResponse);
 
         // Act
         final response = container.read(resetPasswordSuccessProvider);

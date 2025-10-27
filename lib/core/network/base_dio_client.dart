@@ -6,8 +6,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final dioClientProvider =
-    Provider<DioClient>((ref) => DioClient(ref.watch(secureStorageServiceProvider)));
+final dioClientProvider = Provider<DioClient>(
+    (ref) => DioClient(ref.watch(secureStorageServiceProvider)));
 
 class DioClient {
   late final Dio _dio;
@@ -17,7 +17,7 @@ class DioClient {
     // TODO: Remove this after confirming correct endpoint
     final baseUrl = FlavorManager.currentConfig.fullApiUrl;
     debugPrint('🌐 DioClient using base URL: $baseUrl');
-    
+
     BaseOptions options = BaseOptions(
       baseUrl: baseUrl,
       connectTimeout: const Duration(seconds: 10),

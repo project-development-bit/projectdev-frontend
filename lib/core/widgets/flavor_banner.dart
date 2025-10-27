@@ -8,7 +8,7 @@ import '../extensions/context_extensions.dart';
 /// Only visible in non-production builds
 class FlavorBanner extends ConsumerWidget {
   final Widget child;
-  
+
   const FlavorBanner({
     super.key,
     required this.child,
@@ -17,7 +17,7 @@ class FlavorBanner extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final flavor = ref.watch(flavorProvider);
-    
+
     // Don't show banner in production
     if (FlavorManager.isProd) {
       return child;
@@ -61,7 +61,7 @@ class FlavorDebugInfo extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final flavor = ref.watch(flavorProvider);
     final config = ref.watch(configProvider);
-    
+
     // Don't show in production or when debug features are disabled
     if (!FlavorManager.areDebugFeaturesEnabled) {
       return const SizedBox.shrink();
@@ -90,10 +90,14 @@ class FlavorDebugInfo extends ConsumerWidget {
           _buildInfoRow('Flavor', flavor.displayName),
           _buildInfoRow('App Name', config.appName),
           _buildInfoRow('API URL', config.apiBaseUrl),
-          _buildInfoRow('Logging', config.enableLogging ? 'Enabled' : 'Disabled'),
-          _buildInfoRow('Debug Features', config.enableDebugFeatures ? 'Enabled' : 'Disabled'),
-          _buildInfoRow('Analytics', config.enableAnalytics ? 'Enabled' : 'Disabled'),
-          _buildInfoRow('Crash Reporting', config.enableCrashReporting ? 'Enabled' : 'Disabled'),
+          _buildInfoRow(
+              'Logging', config.enableLogging ? 'Enabled' : 'Disabled'),
+          _buildInfoRow('Debug Features',
+              config.enableDebugFeatures ? 'Enabled' : 'Disabled'),
+          _buildInfoRow(
+              'Analytics', config.enableAnalytics ? 'Enabled' : 'Disabled'),
+          _buildInfoRow('Crash Reporting',
+              config.enableCrashReporting ? 'Enabled' : 'Disabled'),
         ],
       ),
     );

@@ -71,13 +71,13 @@ class DatabaseService {
       throw DatabaseFailure(
           message: 'SQLite database not available on web platform');
     }
-    
+
     if (_database != null) return _database!;
-    
+
     if (!_isInitialized) {
       await init();
     }
-    
+
     return _database!;
   }
 
@@ -91,9 +91,9 @@ class DatabaseService {
     try {
       final documentsDirectory = await getDatabasesPath();
       final path = join(documentsDirectory, _databaseName);
-      
+
       debugPrint('📊 Initializing database at: $path');
-      
+
       return await openDatabase(
         path,
         version: _databaseVersion,
@@ -113,7 +113,7 @@ class DatabaseService {
   static Future<void> _createTables(Database db, int version) async {
     try {
       debugPrint('📊 Creating database tables...');
-      
+
       // Create users table
       await db.execute('''
         CREATE TABLE $_usersTable (
@@ -125,7 +125,7 @@ class DatabaseService {
           $_columnUpdatedAt TEXT NOT NULL
         )
       ''');
-      
+
       debugPrint('✅ Database tables created successfully');
     } catch (e) {
       debugPrint('❌ Error creating database tables: $e');
@@ -134,15 +134,16 @@ class DatabaseService {
   }
 
   /// Handle database upgrades
-  static Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+  static Future<void> _onUpgrade(
+      Database db, int oldVersion, int newVersion) async {
     debugPrint('📊 Upgrading database from version $oldVersion to $newVersion');
-    
+
     // Handle database migrations here in future versions
     // For now, we'll just recreate the tables
     if (oldVersion < newVersion) {
       // Drop existing tables
       await db.execute('DROP TABLE IF EXISTS $_usersTable');
-      
+
       // Recreate tables with new schema
       await _createTables(db, newVersion);
     }
@@ -152,10 +153,11 @@ class DatabaseService {
   static Future<void> saveUser(User user) async {
     // Skip database operations in test environment
     if (_isTestEnvironment) {
-      debugPrint('🧪 Test mode: Skipping database save for user: ${user.email}');
+      debugPrint(
+          '🧪 Test mode: Skipping database save for user: ${user.email}');
       return;
     }
-    
+
     try {
       if (kIsWeb) {
         // For web, store in memory
@@ -205,9 +207,9 @@ class DatabaseService {
       }
 
       final db = await database;
-      
+
       debugPrint('📊 Getting user by ID: $userId');
-      
+
       final List<Map<String, dynamic>> results = await db.query(
         _usersTable,
         where: '$_columnId = ?',
@@ -234,9 +236,9 @@ class DatabaseService {
   static Future<UserModel?> getUserByEmail(String email) async {
     try {
       final db = await database;
-      
+
       debugPrint('📊 Getting user by email: $email');
-      
+
       final List<Map<String, dynamic>> results = await db.query(
         _usersTable,
         where: '$_columnEmail = ?',
@@ -263,16 +265,18 @@ class DatabaseService {
   static Future<List<UserModel>> getAllUsers() async {
     try {
       final db = await database;
-      
+
       debugPrint('📊 Getting all users');
-      
+
       final List<Map<String, dynamic>> results = await db.query(
         _usersTable,
         orderBy: '$_columnCreatedAt DESC',
       );
 
-      final users = results.map((userData) => UserModel.fromDatabaseJson(userData)).toList();
-      
+      final users = results
+          .map((userData) => UserModel.fromDatabaseJson(userData))
+          .toList();
+
       debugPrint('✅ Found ${users.length} users');
       return users;
     } catch (e) {
@@ -285,9 +289,9 @@ class DatabaseService {
   static Future<void> updateUser(User user) async {
     try {
       final db = await database;
-      
+
       debugPrint('📊 Updating user: ${user.email}');
-      
+
       final userData = {
         _columnName: user.name,
         _columnEmail: user.email,
@@ -318,9 +322,9 @@ class DatabaseService {
   static Future<void> deleteUser(int userId) async {
     try {
       final db = await database;
-      
+
       debugPrint('📊 Deleting user with ID: $userId');
-      
+
       final rowsAffected = await db.delete(
         _usersTable,
         where: '$_columnId = ?',
@@ -349,11 +353,11 @@ class DatabaseService {
       }
 
       final db = await database;
-      
+
       debugPrint('📊 Clearing all users');
-      
+
       await db.delete(_usersTable);
-      
+
       debugPrint('✅ All users cleared successfully');
     } catch (e) {
       debugPrint('❌ Error clearing users: $e');
@@ -369,11 +373,11 @@ class DatabaseService {
       }
 
       final db = await database;
-      
+
       final List<Map<String, dynamic>> results = await db.rawQuery(
         'SELECT COUNT(*) as count FROM $_usersTable',
       );
-      
+
       final count = Sqflite.firstIntValue(results) ?? 0;
       return count > 0;
     } catch (e) {
@@ -430,7 +434,7 @@ class DatabaseService {
       final secureStorage = SecureStorageService();
       final currentUserId = await secureStorage.getUserId();
       final currentToken = await secureStorage.getAuthToken();
-      
+
       // Only set up test auth if explicitly needed for development and no auth exists
       // This prevents automatic login after logout
       if (currentUserId == null && currentToken == null) {
@@ -481,12 +485,12 @@ class DatabaseService {
     try {
       final documentsDirectory = await getDatabasesPath();
       final path = join(documentsDirectory, _databaseName);
-      
+
       if (await File(path).exists()) {
         await File(path).delete();
         debugPrint('📊 Database file deleted: $path');
       }
-      
+
       _database = null;
     } catch (e) {
       debugPrint('❌ Error deleting database: $e');
@@ -497,9 +501,10 @@ class DatabaseService {
   static Future<Map<String, dynamic>> getDatabaseInfo() async {
     try {
       final db = await database;
-      final userCount = await db.rawQuery('SELECT COUNT(*) as count FROM $_usersTable');
+      final userCount =
+          await db.rawQuery('SELECT COUNT(*) as count FROM $_usersTable');
       final dbSize = await db.rawQuery('PRAGMA page_count');
-      
+
       return {
         'database_name': _databaseName,
         'database_version': _databaseVersion,

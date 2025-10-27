@@ -36,14 +36,15 @@ class RecaptchaVerifying extends RecaptchaState {
 /// reCAPTCHA verification successful
 class RecaptchaVerified extends RecaptchaState {
   const RecaptchaVerified({required this.token});
-  
+
   final String token;
 }
 
 /// reCAPTCHA verification failed or error occurred
 class RecaptchaError extends RecaptchaState {
-  const RecaptchaError({required this.message, this.isInitializationError = false});
-  
+  const RecaptchaError(
+      {required this.message, this.isInitializationError = false});
+
   final String message;
   final bool isInitializationError;
 }
@@ -51,7 +52,7 @@ class RecaptchaError extends RecaptchaState {
 /// reCAPTCHA not available (development mode or not configured)
 class RecaptchaNotAvailable extends RecaptchaState {
   const RecaptchaNotAvailable({this.reason = 'reCAPTCHA not available'});
-  
+
   final String reason;
 }
 
@@ -68,11 +69,12 @@ class RecaptchaNotifier extends StateNotifier<RecaptchaState> {
   /// Initialize reCAPTCHA based on current environment
   Future<void> _initialize() async {
     final config = FlavorManager.currentConfig;
-    
+
     // Check if site key is configured (regardless of flavor now)
     final siteKey = config.recaptchaSiteKey;
     if (siteKey == null || siteKey.isEmpty) {
-      state = const RecaptchaNotAvailable(reason: 'reCAPTCHA site key not configured');
+      state = const RecaptchaNotAvailable(
+          reason: 'reCAPTCHA site key not configured');
       return;
     }
 
@@ -127,7 +129,7 @@ class RecaptchaNotifier extends StateNotifier<RecaptchaState> {
 
     try {
       final token = await PlatformRecaptchaService.execute(action);
-      
+
       if (token != null && token.isNotEmpty) {
         state = RecaptchaVerified(token: token);
         debugPrint(
@@ -147,12 +149,13 @@ class RecaptchaNotifier extends StateNotifier<RecaptchaState> {
         'reCAPTCHA Provider: reset() called, current state: ${state.runtimeType}');
     if (state is RecaptchaVerified || state is RecaptchaError) {
       final config = FlavorManager.currentConfig;
-      
+
       // Check if site key is configured (regardless of flavor now)
       if (config.recaptchaSiteKey == null || config.recaptchaSiteKey!.isEmpty) {
         print(
             'reCAPTCHA Provider: No site key, setting to RecaptchaNotAvailable');
-        state = const RecaptchaNotAvailable(reason: 'reCAPTCHA site key not configured');
+        state = const RecaptchaNotAvailable(
+            reason: 'reCAPTCHA site key not configured');
       } else {
         print(
             'reCAPTCHA Provider: Site key available, setting to RecaptchaReady');
@@ -168,8 +171,8 @@ class RecaptchaNotifier extends StateNotifier<RecaptchaState> {
   bool get isRequired {
     final config = FlavorManager.currentConfig;
     // reCAPTCHA is required if site key is configured (regardless of flavor now)
-    return config.recaptchaSiteKey != null && 
-           config.recaptchaSiteKey!.isNotEmpty;
+    return config.recaptchaSiteKey != null &&
+        config.recaptchaSiteKey!.isNotEmpty;
   }
 
   /// Get current verification token (null if not verified)
@@ -187,7 +190,8 @@ class RecaptchaNotifier extends StateNotifier<RecaptchaState> {
 // =============================================================================
 
 /// Provider for reCAPTCHA state management
-final recaptchaNotifierProvider = StateNotifierProvider<RecaptchaNotifier, RecaptchaState>((ref) {
+final recaptchaNotifierProvider =
+    StateNotifierProvider<RecaptchaNotifier, RecaptchaState>((ref) {
   return RecaptchaNotifier();
 });
 

@@ -28,12 +28,12 @@ final authRepositoryProvider = Provider<AuthRepository>(
 );
 
 /// Implementation of [AuthRepository]
-/// 
+///
 /// Handles authentication operations with remote data source and local storage
 class AuthRepositoryImpl implements AuthRepository {
   /// Remote data source for API calls
   final AuthRemoteDataSource remoteDataSource;
-  
+
   /// Secure storage service for token management
   final SecureStorageService secureStorage;
 
@@ -59,10 +59,10 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Either<Failure, LoginResponse>> login(LoginRequest request) async {
     try {
       final loginResponseModel = await remoteDataSource.login(request);
-      
+
       // Store tokens in secure storage
       await _storeTokens(loginResponseModel);
-      
+
       return Right(loginResponseModel.toEntity());
     } on DioException catch (e) {
       ErrorModel? errorModel;
@@ -70,10 +70,9 @@ class AuthRepositoryImpl implements AuthRepository {
         errorModel = ErrorModel.fromJson(e.response!.data);
       }
       return Left(ServerFailure(
-        message: e.message,
-        statusCode: e.response?.statusCode,
-          errorModel: errorModel
-      ));
+          message: e.message,
+          statusCode: e.response?.statusCode,
+          errorModel: errorModel));
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));
     }
@@ -148,11 +147,11 @@ class AuthRepositoryImpl implements AuthRepository {
       final accessToken = await secureStorage.getAuthToken();
       final refreshToken = await secureStorage.getRefreshToken();
       final userId = await secureStorage.getUserId();
-      
+
       if (accessToken == null || refreshToken == null || userId == null) {
         return const Right(null);
       }
-      
+
       // For now, we don't store complete user info locally
       // In a real app, you might want to store and retrieve user data
       return const Right(null);
@@ -165,11 +164,11 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Either<Failure, LoginResponse>> refreshToken() async {
     try {
       final refreshToken = await secureStorage.getRefreshToken();
-      
+
       if (refreshToken == null) {
         return Left(ServerFailure(message: 'No refresh token available'));
       }
-      
+
       // TODO: Implement refresh token API call
       // For now, return a failure
       return Left(ServerFailure(message: 'Refresh token not implemented'));
@@ -221,7 +220,7 @@ class AuthRepositoryImpl implements AuthRepository {
     await secureStorage.saveAuthToken(loginResponse.tokens.accessToken);
     await secureStorage.saveRefreshToken(loginResponse.tokens.refreshToken);
     await secureStorage.saveUserId(loginResponse.user.id.toString());
-    
+
     // Store additional user info if needed
     // You could also store user role, email, etc.
   }

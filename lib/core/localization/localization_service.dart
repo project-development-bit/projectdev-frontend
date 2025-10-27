@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 class LocalizationService {
   static const String _localizationPath = 'assets/l10n';
   static const List<String> supportedLocales = ['en', 'my'];
-  
+
   Locale? _locale;
   Map<String, String>? _localizedStrings;
 
@@ -38,21 +38,21 @@ class LocalizationService {
       debugPrint('Translation failed: No localized strings loaded');
       return key;
     }
-    
+
     String? value = _localizedStrings![key];
     if (value == null) {
       debugPrint(
           'Translation failed: Key "$key" not found in locale ${_locale?.languageCode}');
       return key;
     }
-    
+
     // If arguments are provided, format the string
     if (args != null && args.isNotEmpty) {
       for (int i = 0; i < args.length; i++) {
         value = value!.replaceAll('{$i}', args[i]);
       }
     }
-    
+
     return value!;
   }
 
@@ -60,7 +60,7 @@ class LocalizationService {
   Locale getCurrentLocale() {
     return _locale ?? const Locale('en', 'US');
   }
-  
+
   // Change locale
   Future<void> changeLocale(String languageCode) async {
     await load(Locale(languageCode));

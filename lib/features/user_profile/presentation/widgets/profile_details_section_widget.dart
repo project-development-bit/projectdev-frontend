@@ -138,8 +138,8 @@ class ProfileDetailsSectionWidget extends StatelessWidget {
         ),
         ProfileDetailRowWidget(
           label: 'Last Name',
-          value: (profile.displayName?.split(' ').length ?? 0) > 1 
-              ? profile.displayName!.split(' ').last 
+          value: (profile.displayName?.split(' ').length ?? 0) > 1
+              ? profile.displayName!.split(' ').last
               : 'Set',
         ),
         ProfileDetailRowWidget(

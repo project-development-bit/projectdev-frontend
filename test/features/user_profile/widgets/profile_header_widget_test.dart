@@ -23,19 +23,19 @@ void main() {
     }
 
     group('Widget Structure', () {
-      testWidgets('renders main container with gradient background', (tester) async {
+      testWidgets('renders main container with gradient background',
+          (tester) async {
         await tester.pumpWidget(buildProfileHeader());
         await tester.pumpAndSettle();
 
         expect(find.byType(Container), findsWidgets);
         expect(find.byType(ProfileHeaderWidget), findsOneWidget);
-        
+
         // Check gradient container exists
         final containers = tester.widgetList<Container>(find.byType(Container));
-        final gradientContainer = containers.any((container) => 
-          container.decoration != null && 
-          (container.decoration as BoxDecoration?)?.gradient != null
-        );
+        final gradientContainer = containers.any((container) =>
+            container.decoration != null &&
+            (container.decoration as BoxDecoration?)?.gradient != null);
         expect(gradientContainer, isTrue);
       });
 
@@ -60,7 +60,8 @@ void main() {
         expect(find.text('Custom Display Name'), findsOneWidget);
       });
 
-      testWidgets('falls back to username when display name is null', (tester) async {
+      testWidgets('falls back to username when display name is null',
+          (tester) async {
         // Create a profile where we specifically pass null for displayName
         final profile = UserProfile(
           id: 'test-id',
@@ -107,12 +108,14 @@ void main() {
     });
 
     group('Avatar Display', () {
-      testWidgets('shows default person icon when no profile picture', (tester) async {
+      testWidgets('shows default person icon when no profile picture',
+          (tester) async {
         final profileWithoutImage = ProfileTestData.createTestProfile(
           profilePictureUrl: null,
         );
 
-        await tester.pumpWidget(buildProfileHeader(profile: profileWithoutImage));
+        await tester
+            .pumpWidget(buildProfileHeader(profile: profileWithoutImage));
         await tester.pumpAndSettle();
 
         expect(find.byIcon(Icons.person), findsOneWidget);
@@ -124,10 +127,9 @@ void main() {
 
         // Verify circular container exists
         final containers = tester.widgetList<Container>(find.byType(Container));
-        final avatarContainer = containers.any((container) => 
-          container.decoration != null && 
-          (container.decoration as BoxDecoration?)?.shape == BoxShape.circle
-        );
+        final avatarContainer = containers.any((container) =>
+            container.decoration != null &&
+            (container.decoration as BoxDecoration?)?.shape == BoxShape.circle);
         expect(avatarContainer, isTrue);
       });
     });
@@ -139,19 +141,20 @@ void main() {
 
         // Find containers with border radius (level badge)
         final containers = tester.widgetList<Container>(find.byType(Container));
-        final levelBadgeExists = containers.any((container) => 
-          container.decoration != null && 
-          (container.decoration as BoxDecoration?)?.borderRadius != null
-        );
+        final levelBadgeExists = containers.any((container) =>
+            container.decoration != null &&
+            (container.decoration as BoxDecoration?)?.borderRadius != null);
         expect(levelBadgeExists, isTrue);
       });
 
-      testWidgets('handles stats with default values when null', (tester) async {
+      testWidgets('handles stats with default values when null',
+          (tester) async {
         final profileWithoutStats = ProfileTestData.createTestProfile(
           stats: null,
         );
 
-        await tester.pumpWidget(buildProfileHeader(profile: profileWithoutStats));
+        await tester
+            .pumpWidget(buildProfileHeader(profile: profileWithoutStats));
         await tester.pumpAndSettle();
 
         // Widget should handle null stats gracefully
@@ -207,7 +210,8 @@ void main() {
 
         // Verify spacing widgets are present
         expect(find.byType(SizedBox), findsWidgets);
-        expect(find.byType(Padding), findsWidgets); // Multiple padding widgets expected
+        expect(find.byType(Padding),
+            findsWidgets); // Multiple padding widgets expected
       });
 
       testWidgets('no layout overflow errors', (tester) async {

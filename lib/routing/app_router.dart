@@ -65,8 +65,7 @@ class BurgerEatsAppRoutes {
         navigatorKey: _rootNavigatorKey,
         initialLocation: _initialPath,
         debugLogDiagnostics: true,
-        
-        
+
         routes: [
           // Landing Route Handler
           GoRoute(
@@ -90,16 +89,17 @@ class BurgerEatsAppRoutes {
             path: AppRoutes.auth,
             redirect: (context, state) async {
               final isAuthenticated = await authProvider.isAuthenticated();
-          
+
               if (isAuthenticated) {
                 return AppRoutes.home;
               }
 
               // Only redirect to login if the exact path is /auth
-              if (state.fullPath == AppRoutes.auth || state.fullPath == '/auth') {
+              if (state.fullPath == AppRoutes.auth ||
+                  state.fullPath == '/auth') {
                 return AppRoutes.login;
               }
-              
+
               // Allow sub-routes like forgot-password to proceed
               return null;
             },
@@ -365,10 +365,9 @@ class BurgerEatsAppRoutes {
         //       return AppRoutes.login;
         //     }
         //   }
-      
+
         //   return null;
         // },
-      
       );
 }
 
@@ -424,4 +423,3 @@ extension GoRouterExtension on BuildContext {
     push('${AppRoutes.resetPassword}?email=${Uri.encodeComponent(email)}');
   }
 }
-

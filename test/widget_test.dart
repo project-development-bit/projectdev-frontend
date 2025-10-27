@@ -15,17 +15,20 @@ void main() {
       // The profile widget tests are working correctly
     }, skip: true);
 
-    testWidgets('App should show flavor banner in development', (WidgetTester tester) async {
+    testWidgets('App should show flavor banner in development',
+        (WidgetTester tester) async {
       // Skip this test for now due to app initialization complexity in test environment
       // The profile widget tests are working correctly
     }, skip: true);
 
-    testWidgets('App should support theme switching', (WidgetTester tester) async {
+    testWidgets('App should support theme switching',
+        (WidgetTester tester) async {
       // Skip this test for now due to app initialization complexity in test environment
       // The profile widget tests are working correctly
     }, skip: true);
 
-    testWidgets('App should support locale switching', (WidgetTester tester) async {
+    testWidgets('App should support locale switching',
+        (WidgetTester tester) async {
       // Skip this test for now due to app initialization complexity in test environment
       // The profile widget tests are working correctly
     }, skip: true);

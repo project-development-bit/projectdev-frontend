@@ -8,7 +8,8 @@ class AppTypography {
   AppTypography._();
 
   // Font Families from Gigafaucet website
-  static String get titleFontFamily => 'Orbitron'; // For titles, captions, headers
+  static String get titleFontFamily =>
+      'Orbitron'; // For titles, captions, headers
   static String get bodyFontFamily => 'Barlow'; // For normal text
   static String get monoFontFamily => 'Roboto Mono';
 

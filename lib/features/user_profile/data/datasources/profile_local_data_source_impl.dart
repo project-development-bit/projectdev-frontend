@@ -4,7 +4,7 @@ import '../models/user_profile_model.dart';
 import 'profile_local_data_source.dart';
 
 /// Implementation of [ProfileLocalDataSource] using SharedPreferences for local storage
-/// 
+///
 /// This class handles caching user profile data locally for offline support
 /// and improved performance. Uses SharedPreferences for simple key-value storage.
 class ProfileLocalDataSourceImpl implements ProfileLocalDataSource {
@@ -16,7 +16,7 @@ class ProfileLocalDataSourceImpl implements ProfileLocalDataSource {
     try {
       final prefs = await SharedPreferences.getInstance();
       final profileJson = prefs.getString('$_profileKeyPrefix$userId');
-      
+
       if (profileJson != null) {
         final Map<String, dynamic> profileData = json.decode(profileJson);
         return UserProfileModel.fromJson(profileData);
@@ -32,7 +32,7 @@ class ProfileLocalDataSourceImpl implements ProfileLocalDataSource {
     try {
       final prefs = await SharedPreferences.getInstance();
       final profileJson = json.encode(profile.toJson());
-      
+
       await prefs.setString('$_profileKeyPrefix${profile.id}', profileJson);
       await prefs.setInt(
         '$_timestampKeyPrefix${profile.id}',
@@ -58,11 +58,13 @@ class ProfileLocalDataSourceImpl implements ProfileLocalDataSource {
   Future<void> clearCache() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      final keys = prefs.getKeys().where((key) => 
-          key.startsWith(_profileKeyPrefix) || 
-          key.startsWith(_timestampKeyPrefix)
-      ).toList();
-      
+      final keys = prefs
+          .getKeys()
+          .where((key) =>
+              key.startsWith(_profileKeyPrefix) ||
+              key.startsWith(_timestampKeyPrefix))
+          .toList();
+
       for (final key in keys) {
         await prefs.remove(key);
       }
@@ -86,7 +88,7 @@ class ProfileLocalDataSourceImpl implements ProfileLocalDataSource {
     try {
       final prefs = await SharedPreferences.getInstance();
       final timestamp = prefs.getInt('$_timestampKeyPrefix$userId');
-      
+
       if (timestamp != null) {
         return DateTime.fromMillisecondsSinceEpoch(timestamp);
       }

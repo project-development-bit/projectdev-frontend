@@ -56,7 +56,7 @@ class StatisticsSection extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 40),
-          
+
           // Statistics grid
           if (context.isMobile)
             // Mobile: Vertical layout
@@ -126,14 +126,14 @@ class StatisticsSection extends ConsumerWidget {
       context.translate('level_investor'),
       context.translate('level_cryptolord')
     ];
-    
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: levels.asMap().entries.map((entry) {
         final index = entry.key;
         final level = entry.value;
         final isActive = index == 1; // Simulate current level
-        
+
         return Column(
           children: [
             Container(
@@ -150,7 +150,8 @@ class StatisticsSection extends ConsumerWidget {
               child: Center(
                 child: Icon(
                   _getLevelIcon(index),
-                  color: isActive ? context.onPrimary : context.onSurfaceVariant,
+                  color:
+                      isActive ? context.onPrimary : context.onSurfaceVariant,
                   size: 20,
                 ),
               ),

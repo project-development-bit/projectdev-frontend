@@ -4,10 +4,10 @@ import 'package:equatable/equatable.dart';
 class ResendCodeResponse extends Equatable {
   /// Indicates if the request was successful
   final bool success;
-  
+
   /// Response message
   final String message;
-  
+
   /// Response data containing email and security code
   final ResendCodeData data;
 
@@ -44,7 +44,7 @@ class ResendCodeResponse extends Equatable {
 class ResendCodeData extends Equatable {
   /// User's email address
   final String email;
-  
+
   /// Security code sent to user (for testing purposes)
   final int securityCode;
 

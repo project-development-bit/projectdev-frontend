@@ -6,15 +6,17 @@ import '../../data/models/resend_code_request.dart';
 import '../../data/models/resend_code_response.dart';
 
 /// Resend verification code use case
-/// 
+///
 /// Handles resending verification code to user's email
-class ResendCodeUseCase implements UseCase<ResendCodeResponse, ResendCodeRequest> {
+class ResendCodeUseCase
+    implements UseCase<ResendCodeResponse, ResendCodeRequest> {
   final AuthRepository repository;
 
   ResendCodeUseCase(this.repository);
 
   @override
-  Future<Either<Failure, ResendCodeResponse>> call(ResendCodeRequest params) async {
+  Future<Either<Failure, ResendCodeResponse>> call(
+      ResendCodeRequest params) async {
     return await repository.resendCode(params);
   }
 }

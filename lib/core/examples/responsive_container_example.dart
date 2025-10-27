@@ -35,7 +35,7 @@ class ResponsiveContainerExample extends StatelessWidget {
                 ],
               ),
             ),
-            
+
             // Another section with different background
             ResponsiveSection(
               backgroundColor: Colors.green.shade50,
@@ -57,7 +57,7 @@ class ResponsiveContainerExample extends StatelessWidget {
                 ],
               ),
             ),
-            
+
             // Section with custom max width
             ResponsiveSection(
               backgroundColor: Colors.orange.shade50,

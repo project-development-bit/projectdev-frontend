@@ -24,12 +24,12 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
-  
+
   final _nameFocusNode = FocusNode();
   final _emailFocusNode = FocusNode();
   final _passwordFocusNode = FocusNode();
   final _confirmPasswordFocusNode = FocusNode();
-  
+
   bool _agreeToTerms = false;
 
   @override
@@ -87,10 +87,13 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
   String? _validateConfirmPassword(String? value) {
     final localizations = AppLocalizations.of(context);
     if (value == null || value.isEmpty) {
-      return localizations?.translate('field_required', args: [localizations.translate('confirm_password')]) ?? 'Confirm Password is required';
+      return localizations?.translate('field_required',
+              args: [localizations.translate('confirm_password')]) ??
+          'Confirm Password is required';
     }
     if (value != _passwordController.text) {
-      return localizations?.translate('passwords_do_not_match') ?? 'Passwords do not match';
+      return localizations?.translate('passwords_do_not_match') ??
+          'Passwords do not match';
     }
     return null;
   }
@@ -104,7 +107,8 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
       final localizations = AppLocalizations.of(context);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(localizations?.translate('agree_to_terms_error') ?? 'Please agree to the terms and conditions'),
+          content: Text(localizations?.translate('agree_to_terms_error') ??
+              'Please agree to the terms and conditions'),
           backgroundColor: Colors.red,
         ),
       );
@@ -112,19 +116,20 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
     }
 
     // Check if reCAPTCHA verification is required and completed
-    final canAttemptSignup = ref.read(canAttemptLoginProvider); // This checks reCAPTCHA status
+    final canAttemptSignup =
+        ref.read(canAttemptLoginProvider); // This checks reCAPTCHA status
     if (!canAttemptSignup) {
       final localizations = AppLocalizations.of(context);
       context.showErrorSnackBar(
-        message: localizations?.translate('recaptcha_required') ?? 
-                'Please verify that you are not a robot',
+        message: localizations?.translate('recaptcha_required') ??
+            'Please verify that you are not a robot',
       );
       return;
     }
 
     // Use the new register state notifier
     final registerNotifier = ref.read(registerNotifierProvider.notifier);
-    
+
     await registerNotifier.register(
       name: _nameController.text.trim(),
       email: _emailController.text.trim(),
@@ -140,8 +145,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
     final colorScheme = theme.colorScheme;
     final localizations = AppLocalizations.of(context);
     final isLoading = ref.watch(isRegisterLoadingProvider);
-    
-   
+
     return Scaffold(
       backgroundColor: colorScheme.surface,
       appBar: AppBar(
@@ -173,209 +177,234 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   const SizedBox(height: 20),
-                
-                // Create Account Text
-                Text(
-                  localizations?.translate('create_account') ?? 'Create Account',
-                  style: theme.textTheme.headlineMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: colorScheme.onSurface,
+
+                  // Create Account Text
+                  Text(
+                    localizations?.translate('create_account') ??
+                        'Create Account',
+                    style: theme.textTheme.headlineMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: colorScheme.onSurface,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
-                ),
-                
-                const SizedBox(height: 8),
-                
-                Text(
-                  localizations?.translate('create_account_subtitle') ?? 'Fill in the details below to create your account',
-                  style: theme.textTheme.bodyLarge?.copyWith(
-                    color: colorScheme.onSurfaceVariant,
+
+                  const SizedBox(height: 8),
+
+                  Text(
+                    localizations?.translate('create_account_subtitle') ??
+                        'Fill in the details below to create your account',
+                    style: theme.textTheme.bodyLarge?.copyWith(
+                      color: colorScheme.onSurfaceVariant,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
-                ),
-                
-                const SizedBox(height: 40),
-                
-                // Full Name Field
-                CommonTextField(
-                  controller: _nameController,
-                  focusNode: _nameFocusNode,
-                  hintText: localizations?.translate('full_name_hint') ?? 'Enter your full name',
-                  labelText: localizations?.translate('full_name') ?? 'Full Name',
-                  textInputAction: TextInputAction.next,
-                  prefixIcon: const Icon(Icons.person_outlined),
-                  validator: (value) => TextFieldValidators.required(value, context, fieldName: localizations?.translate('full_name') ?? 'Full Name'),
-                  onSubmitted: (_) => _emailFocusNode.requestFocus(),
-                ),
-                
-                const SizedBox(height: 20),
-                
-                // Email Field
-                CommonTextField(
-                  controller: _emailController,
-                  focusNode: _emailFocusNode,
-                  hintText: localizations?.translate('email_hint') ?? 'Enter your email',
-                  labelText: localizations?.translate('email') ?? 'Email',
-                  keyboardType: TextInputType.emailAddress,
-                  textInputAction: TextInputAction.next,
-                  prefixIcon: const Icon(Icons.email_outlined),
+
+                  const SizedBox(height: 40),
+
+                  // Full Name Field
+                  CommonTextField(
+                    controller: _nameController,
+                    focusNode: _nameFocusNode,
+                    hintText: localizations?.translate('full_name_hint') ??
+                        'Enter your full name',
+                    labelText:
+                        localizations?.translate('full_name') ?? 'Full Name',
+                    textInputAction: TextInputAction.next,
+                    prefixIcon: const Icon(Icons.person_outlined),
+                    validator: (value) => TextFieldValidators.required(
+                        value, context,
+                        fieldName: localizations?.translate('full_name') ??
+                            'Full Name'),
+                    onSubmitted: (_) => _emailFocusNode.requestFocus(),
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  // Email Field
+                  CommonTextField(
+                    controller: _emailController,
+                    focusNode: _emailFocusNode,
+                    hintText: localizations?.translate('email_hint') ??
+                        'Enter your email',
+                    labelText: localizations?.translate('email') ?? 'Email',
+                    keyboardType: TextInputType.emailAddress,
+                    textInputAction: TextInputAction.next,
+                    prefixIcon: const Icon(Icons.email_outlined),
                     validator: (value) =>
                         TextFieldValidators.email(value, context),
-                  onSubmitted: (_) => _passwordFocusNode.requestFocus(),
-                ),
-                
-                const SizedBox(height: 20),
-                
-                // Password Field
-                CommonTextField(
-                  controller: _passwordController,
-                  focusNode: _passwordFocusNode,
-                  hintText: localizations?.translate('password_hint') ?? 'Enter your password',
-                  labelText: localizations?.translate('password') ?? 'Password',
-                  obscureText: true,
-                  textInputAction: TextInputAction.next,
-                  prefixIcon: const Icon(Icons.lock_outlined),
-                  validator: (value) => TextFieldValidators.password(value, context),
-                  onSubmitted: (_) => _confirmPasswordFocusNode.requestFocus(),
-                ),
-                
-                const SizedBox(height: 20),
-                
-                // Confirm Password Field
-                CommonTextField(
-                  controller: _confirmPasswordController,
-                  focusNode: _confirmPasswordFocusNode,
-                  hintText: localizations?.translate('confirm_password_hint') ?? 'Confirm your password',
-                  labelText: localizations?.translate('confirm_password') ?? 'Confirm Password',
-                  obscureText: true,
-                  textInputAction: TextInputAction.done,
-                  prefixIcon: const Icon(Icons.lock_outlined),
-                  validator: _validateConfirmPassword,
-                  onSubmitted: (_) => _handleSignUp(),
-                ),
-                
-                const SizedBox(height: 24),
-                
-                // Terms and Conditions
-                Row(
-                  children: [
-                    Checkbox(
-                      value: _agreeToTerms,
-                      onChanged: (value) {
-                        setState(() {
-                          _agreeToTerms = value ?? false;
-                        });
-                      },
-                    ),
-                    Expanded(
-                      child: RichText(
-                        text: TextSpan(
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            color: colorScheme.onSurfaceVariant,
-                          ),
-                          children: [
-                            TextSpan(text: localizations?.translate('agree_to_terms') ?? 'I agree to the '),
-                            TextSpan(
-                              text: localizations?.translate('terms_and_conditions') ?? 'Terms and Conditions',
-                              style: TextStyle(
-                                color: colorScheme.primary,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            TextSpan(text: localizations?.translate('and') ?? ' and '),
-                            TextSpan(
-                              text: localizations?.translate('privacy_policy') ?? 'Privacy Policy',
-                              style: TextStyle(
-                                color: colorScheme.primary,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                
-                const SizedBox(height: 24),
-                
-                // reCAPTCHA Widget
-                const RecaptchaWidget(
-                  enabled: true,
-                ),
-                
-                const SizedBox(height: 32),
-                
-                // Sign Up Button
-                SizedBox(
-                  height: 56,
-                  child: ElevatedButton(
-                    onPressed: isLoading ? null : _handleSignUp,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: colorScheme.primary,
-                      foregroundColor: colorScheme.onPrimary,
-                      elevation: 2,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    child: isLoading
-                        ? SizedBox(
-                            width: 24,
-                            height: 24,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                colorScheme.onPrimary,
-                              ),
-                            ),
-                          )
-                        : Text(
-                            localizations?.translate('sign_up') ?? 'Sign Up',
-                            style: theme.textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.w600,
-                              color: colorScheme.onPrimary,
-                            ),
-                          ),
+                    onSubmitted: (_) => _passwordFocusNode.requestFocus(),
                   ),
-                ),
-                
-                const SizedBox(height: 32),
-                
-                // Already have account link
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      localizations?.translate('already_have_account') ?? 'Already have an account? ',
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: colorScheme.onSurfaceVariant,
+
+                  const SizedBox(height: 20),
+
+                  // Password Field
+                  CommonTextField(
+                    controller: _passwordController,
+                    focusNode: _passwordFocusNode,
+                    hintText: localizations?.translate('password_hint') ??
+                        'Enter your password',
+                    labelText:
+                        localizations?.translate('password') ?? 'Password',
+                    obscureText: true,
+                    textInputAction: TextInputAction.next,
+                    prefixIcon: const Icon(Icons.lock_outlined),
+                    validator: (value) =>
+                        TextFieldValidators.password(value, context),
+                    onSubmitted: (_) =>
+                        _confirmPasswordFocusNode.requestFocus(),
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  // Confirm Password Field
+                  CommonTextField(
+                    controller: _confirmPasswordController,
+                    focusNode: _confirmPasswordFocusNode,
+                    hintText:
+                        localizations?.translate('confirm_password_hint') ??
+                            'Confirm your password',
+                    labelText: localizations?.translate('confirm_password') ??
+                        'Confirm Password',
+                    obscureText: true,
+                    textInputAction: TextInputAction.done,
+                    prefixIcon: const Icon(Icons.lock_outlined),
+                    validator: _validateConfirmPassword,
+                    onSubmitted: (_) => _handleSignUp(),
+                  ),
+
+                  const SizedBox(height: 24),
+
+                  // Terms and Conditions
+                  Row(
+                    children: [
+                      Checkbox(
+                        value: _agreeToTerms,
+                        onChanged: (value) {
+                          setState(() {
+                            _agreeToTerms = value ?? false;
+                          });
+                        },
                       ),
-                    ),
-                    TextButton(
-                      onPressed: () => context.goToLogin(),
-                      style: TextButton.styleFrom(
-                        padding: EdgeInsets.zero,
-                        minimumSize: Size.zero,
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      ),
-                      child: Text(
-                        localizations?.translate('sign_in') ?? 'Sign In',
-                        style: TextStyle(
-                          color: colorScheme.primary,
-                          fontWeight: FontWeight.w600,
+                      Expanded(
+                        child: RichText(
+                          text: TextSpan(
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: colorScheme.onSurfaceVariant,
+                            ),
+                            children: [
+                              TextSpan(
+                                  text: localizations
+                                          ?.translate('agree_to_terms') ??
+                                      'I agree to the '),
+                              TextSpan(
+                                text: localizations
+                                        ?.translate('terms_and_conditions') ??
+                                    'Terms and Conditions',
+                                style: TextStyle(
+                                  color: colorScheme.primary,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              TextSpan(
+                                  text: localizations?.translate('and') ??
+                                      ' and '),
+                              TextSpan(
+                                text: localizations
+                                        ?.translate('privacy_policy') ??
+                                    'Privacy Policy',
+                                style: TextStyle(
+                                  color: colorScheme.primary,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 24),
+
+                  // reCAPTCHA Widget
+                  const RecaptchaWidget(
+                    enabled: true,
+                  ),
+
+                  const SizedBox(height: 32),
+
+                  // Sign Up Button
+                  SizedBox(
+                    height: 56,
+                    child: ElevatedButton(
+                      onPressed: isLoading ? null : _handleSignUp,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: colorScheme.primary,
+                        foregroundColor: colorScheme.onPrimary,
+                        elevation: 2,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: isLoading
+                          ? SizedBox(
+                              width: 24,
+                              height: 24,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  colorScheme.onPrimary,
+                                ),
+                              ),
+                            )
+                          : Text(
+                              localizations?.translate('sign_up') ?? 'Sign Up',
+                              style: theme.textTheme.titleMedium?.copyWith(
+                                fontWeight: FontWeight.w600,
+                                color: colorScheme.onPrimary,
+                              ),
+                            ),
                     ),
-                  ],
-                ),
-                
-                const SizedBox(height: 24),
-              ],
+                  ),
+
+                  const SizedBox(height: 32),
+
+                  // Already have account link
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        localizations?.translate('already_have_account') ??
+                            'Already have an account? ',
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () => context.goToLogin(),
+                        style: TextButton.styleFrom(
+                          padding: EdgeInsets.zero,
+                          minimumSize: Size.zero,
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
+                        child: Text(
+                          localizations?.translate('sign_in') ?? 'Sign In',
+                          style: TextStyle(
+                            color: colorScheme.primary,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 24),
+                ],
+              ),
             ),
           ),
         ),
-      ),
       ),
     );
   }

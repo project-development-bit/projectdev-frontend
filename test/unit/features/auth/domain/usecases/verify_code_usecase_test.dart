@@ -23,7 +23,8 @@ void main() {
       useCase = VerifyCodeUseCase(mockRepository);
     });
 
-    test('should return VerifyCodeResponse when repository call succeeds', () async {
+    test('should return VerifyCodeResponse when repository call succeeds',
+        () async {
       // Arrange
       const request = VerifyCodeRequest(
         email: 'test@example.com',
@@ -58,7 +59,7 @@ void main() {
 
       // Assert
       expect(result, isA<Right<Failure, VerifyCodeResponse>>());
-      
+
       result.fold(
         (failure) => fail('Expected Right, got Left: $failure'),
         (response) {
@@ -92,7 +93,7 @@ void main() {
 
       // Assert
       expect(result, isA<Left<Failure, VerifyCodeResponse>>());
-      
+
       result.fold(
         (failure) {
           expect(failure, isA<ServerFailure>());
@@ -148,7 +149,7 @@ void main() {
 
       // Assert
       expect(result, isA<Left<Failure, VerifyCodeResponse>>());
-      
+
       result.fold(
         (failure) {
           expect(failure, isA<ServerFailure>());

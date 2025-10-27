@@ -2,13 +2,16 @@
 // This file contains alternative endpoints to test against the actual backend
 
 // Current endpoints (from api_endpoints.dart)
-const String currentVerifyEndpoint = 'users/verify'; // POST with /{email}/{code}
-const String currentResendEndpoint = 'users/resend-code'; // POST with request body
+const String currentVerifyEndpoint =
+    'users/verify'; // POST with /{email}/{code}
+const String currentResendEndpoint =
+    'users/resend-code'; // POST with request body
 
 // Alternative endpoint formats to test:
 
 // Option 1: Verify with request body instead of path params
-const String verifyWithBodyEndpoint = 'users/verify'; // POST with email/code in body
+const String verifyWithBodyEndpoint =
+    'users/verify'; // POST with email/code in body
 
 // Option 2: Different endpoint names
 const String verifyAltEndpoint = 'auth/verify-email';

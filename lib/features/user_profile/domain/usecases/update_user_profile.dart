@@ -6,13 +6,15 @@ import '../entities/user_profile.dart';
 import '../repositories/profile_repository.dart';
 
 /// Use case for updating user profile
-class UpdateUserProfile implements UseCase<UserProfile, UpdateUserProfileParams> {
+class UpdateUserProfile
+    implements UseCase<UserProfile, UpdateUserProfileParams> {
   const UpdateUserProfile(this.repository);
 
   final ProfileRepository repository;
 
   @override
-  Future<Either<Failure, UserProfile>> call(UpdateUserProfileParams params) async {
+  Future<Either<Failure, UserProfile>> call(
+      UpdateUserProfileParams params) async {
     return await repository.updateUserProfile(params.profile);
   }
 }

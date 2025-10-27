@@ -2,7 +2,7 @@ import '../../domain/entities/user.dart';
 import '../../../../core/enum/user_role.dart';
 
 /// User model for data layer
-/// 
+///
 /// Extends the User entity with JSON serialization capabilities
 class UserModel extends User {
   const UserModel({

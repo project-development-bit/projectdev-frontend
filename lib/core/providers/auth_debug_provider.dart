@@ -14,11 +14,11 @@ class AuthDebugProvider extends StateNotifier<AuthDebugState> {
   Future<void> logAuthState(String context) async {
     final loginState = _ref.read(loginNotifierProvider);
     final authState = _ref.read(authProvider);
-    
+
     try {
       final authRepository = _ref.read(authRepositoryProvider);
       final isAuthResult = await authRepository.isAuthenticated();
-      
+
       final debugState = AuthDebugState(
         context: context,
         loginStateType: loginState.runtimeType.toString(),
@@ -26,15 +26,14 @@ class AuthDebugProvider extends StateNotifier<AuthDebugState> {
         isAuthenticated: isAuthResult.fold((l) => false, (r) => r),
         timestamp: DateTime.now(),
       );
-      
+
       state = debugState;
-      
+
       debugPrint('🔍 Auth Debug [$context]:');
       debugPrint('  Login State: ${debugState.loginStateType}');
       debugPrint('  Auth State: ${debugState.authStateType}');
       debugPrint('  Is Authenticated: ${debugState.isAuthenticated}');
       debugPrint('  Timestamp: ${debugState.timestamp}');
-      
     } catch (e) {
       debugPrint('🔍 Auth Debug Error [$context]: $e');
     }
@@ -64,6 +63,7 @@ class AuthDebugState {
 }
 
 /// Provider for auth debugging
-final authDebugProvider = StateNotifierProvider<AuthDebugProvider, AuthDebugState>((ref) {
+final authDebugProvider =
+    StateNotifierProvider<AuthDebugProvider, AuthDebugState>((ref) {
   return AuthDebugProvider(ref);
 });

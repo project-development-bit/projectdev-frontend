@@ -39,7 +39,6 @@ class ApiTestPage extends ConsumerWidget {
               style: Theme.of(context).textTheme.headlineSmall,
             ),
             const SizedBox(height: 20),
-            
             if (verificationState is VerificationError)
               Container(
                 padding: const EdgeInsets.all(16),
@@ -53,7 +52,6 @@ class ApiTestPage extends ConsumerWidget {
                   style: const TextStyle(color: Colors.red),
                 ),
               ),
-            
             if (verificationState is VerificationSuccess)
               Container(
                 padding: const EdgeInsets.all(16),
@@ -67,7 +65,6 @@ class ApiTestPage extends ConsumerWidget {
                   style: const TextStyle(color: Colors.green),
                 ),
               ),
-            
             if (verificationState is ResendCodeSuccess)
               Container(
                 padding: const EdgeInsets.all(16),
@@ -81,36 +78,38 @@ class ApiTestPage extends ConsumerWidget {
                   style: const TextStyle(color: Colors.blue),
                 ),
               ),
-            
             const SizedBox(height: 20),
-            
             ElevatedButton(
-              onPressed: verificationState is VerificationLoading ? null : () {
-                ref.read(verificationNotifierProvider.notifier).resendCode(
-                  email: 'test@example.com',
-                );
-              },
-              child: verificationState is VerificationLoading 
+              onPressed: verificationState is VerificationLoading
+                  ? null
+                  : () {
+                      ref
+                          .read(verificationNotifierProvider.notifier)
+                          .resendCode(
+                            email: 'test@example.com',
+                          );
+                    },
+              child: verificationState is VerificationLoading
                   ? const CircularProgressIndicator()
                   : const Text('Test Resend Code'),
             ),
-            
             const SizedBox(height: 16),
-            
             ElevatedButton(
-              onPressed: verificationState is VerificationLoading ? null : () {
-                ref.read(verificationNotifierProvider.notifier).verifyCode(
-                  email: 'test@example.com',
-                  code: '1234',
-                );
-              },
-              child: verificationState is VerificationLoading 
+              onPressed: verificationState is VerificationLoading
+                  ? null
+                  : () {
+                      ref
+                          .read(verificationNotifierProvider.notifier)
+                          .verifyCode(
+                            email: 'test@example.com',
+                            code: '1234',
+                          );
+                    },
+              child: verificationState is VerificationLoading
                   ? const CircularProgressIndicator()
                   : const Text('Test Verify Code'),
             ),
-            
             const SizedBox(height: 20),
-            
             const Text(
               'Check the debug console for detailed API call logs.',
               style: TextStyle(fontStyle: FontStyle.italic),

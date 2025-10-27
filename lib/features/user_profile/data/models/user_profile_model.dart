@@ -5,7 +5,7 @@ import 'user_profile_stats_model.dart';
 part 'user_profile_model.g.dart';
 
 /// Data model for User Profile
-/// 
+///
 /// This model extends the domain entity and adds JSON serialization
 /// capabilities for API communication and local storage.
 @JsonSerializable()
@@ -49,7 +49,9 @@ class UserProfileModel extends UserProfile {
 
   /// Helper method to convert stats to JSON
   static Map<String, dynamic>? _statsToJson(UserProfileStats? stats) {
-    return stats != null ? UserProfileStatsModel.fromEntity(stats).toJson() : null;
+    return stats != null
+        ? UserProfileStatsModel.fromEntity(stats).toJson()
+        : null;
   }
 
   /// Creates a [UserProfileModel] from a [UserProfile] entity
@@ -72,8 +74,8 @@ class UserProfileModel extends UserProfile {
       verificationStatus: profile.verificationStatus,
       isEmailVerified: profile.isEmailVerified,
       isPhoneVerified: profile.isPhoneVerified,
-      stats: profile.stats != null 
-          ? UserProfileStatsModel.fromEntity(profile.stats!) 
+      stats: profile.stats != null
+          ? UserProfileStatsModel.fromEntity(profile.stats!)
           : null,
     );
   }

@@ -27,7 +27,7 @@ class ProfileNavigationWidget extends StatelessWidget {
             final index = entry.key;
             final title = entry.value;
             final isSelected = index == selectedIndex;
-            
+
             return _buildNavTab(context, title, isSelected, () {
               onTabSelected?.call(index);
             });
@@ -37,12 +37,8 @@ class ProfileNavigationWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildNavTab(
-    BuildContext context, 
-    String title, 
-    bool isSelected, 
-    VoidCallback? onTap
-  ) {
+  Widget _buildNavTab(BuildContext context, String title, bool isSelected,
+      VoidCallback? onTap) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -57,7 +53,8 @@ class ProfileNavigationWidget extends StatelessWidget {
         ),
         child: CommonText.bodyMedium(
           title,
-          color: isSelected ? context.primary : context.onSurface.withOpacity(0.7),
+          color:
+              isSelected ? context.primary : context.onSurface.withOpacity(0.7),
           fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
         ),
       ),

@@ -20,17 +20,17 @@ class ProfileHeaderWidget extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: context.isDark 
-            ? [
-                context.primary.withOpacity(0.8),
-                context.secondary.withOpacity(0.8),
-                context.tertiary.withOpacity(0.8),
-              ]
-            : [
-                context.primary,
-                context.secondary,
-                context.tertiary,
-              ],
+          colors: context.isDark
+              ? [
+                  context.primary.withOpacity(0.8),
+                  context.secondary.withOpacity(0.8),
+                  context.tertiary.withOpacity(0.8),
+                ]
+              : [
+                  context.primary,
+                  context.secondary,
+                  context.tertiary,
+                ],
         ),
       ),
       child: Padding(
@@ -61,9 +61,7 @@ class ProfileHeaderWidget extends StatelessWidget {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: Border.all(
-          color: context.isDark ? Colors.white : context.onPrimary, 
-          width: 3
-        ),
+            color: context.isDark ? Colors.white : context.onPrimary, width: 3),
         image: profile.profilePictureUrl != null
             ? DecorationImage(
                 image: NetworkImage(profile.profilePictureUrl!),
@@ -72,11 +70,9 @@ class ProfileHeaderWidget extends StatelessWidget {
             : null,
       ),
       child: profile.profilePictureUrl == null
-          ? Icon(
-              Icons.person, 
-              size: 40, 
-              color: context.isDark ? Colors.white : context.onPrimary
-            )
+          ? Icon(Icons.person,
+              size: 40,
+              color: context.isDark ? Colors.white : context.onPrimary)
           : null,
     );
   }
@@ -104,7 +100,8 @@ class ProfileHeaderWidget extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       decoration: BoxDecoration(
-        color: (context.isDark ? Colors.white : context.onPrimary).withOpacity(0.2),
+        color: (context.isDark ? Colors.white : context.onPrimary)
+            .withOpacity(0.2),
         borderRadius: BorderRadius.circular(16),
       ),
       child: CommonText.labelMedium(
@@ -118,7 +115,8 @@ class ProfileHeaderWidget extends StatelessWidget {
   Widget _buildExperienceText(BuildContext context) {
     return CommonText.bodySmall(
       'XP: ${profile.stats?.experiencePoints ?? 0} / ${((profile.stats?.currentLevel ?? 1) + 1) * 1000}',
-      color: (context.isDark ? Colors.white : context.onPrimary).withOpacity(0.7),
+      color:
+          (context.isDark ? Colors.white : context.onPrimary).withOpacity(0.7),
     );
   }
 }

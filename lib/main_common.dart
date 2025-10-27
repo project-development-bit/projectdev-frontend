@@ -3,7 +3,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/foundation.dart';
 import 'package:url_strategy/url_strategy.dart';
-import 'dart:io' show Platform;
 import 'package:cointiply_app/core/services/database_service.dart';
 import 'package:cointiply_app/core/localization/app_localizations.dart';
 import 'core/providers/locale_provider.dart';
@@ -28,17 +27,24 @@ Future<void> runAppWithFlavor(AppFlavor flavor) async {
         debugPrint('🌐 Web platform detected - initializing g_recaptcha_v3');
         debugPrint(
             '🔑 Using web reCAPTCHA site key: ${recaptchaSiteKey.substring(0, 10)}...');
-        
+
         // Configure URL strategy for web
         setPathUrlStrategy();
         debugPrint('🌐 Configured web URL strategy for clean URLs');
-      } else if (Platform.isAndroid || Platform.isIOS) {
-        debugPrint(
-            '📱 ${Platform.isAndroid ? 'Android' : 'iOS'} platform detected');
-        debugPrint(
-            '🔐 Initializing reCAPTCHA Enterprise for ${FlavorManager.flavorDisplayName}...');
-        debugPrint(
-            '🔑 Using mobile reCAPTCHA site key: ${recaptchaSiteKey.substring(0, 10)}...');
+      } else {
+        // Mobile platform detection using our platform service
+        if (PlatformRecaptchaService.isAndroid) {
+          debugPrint('📱 Android platform detected');
+        } else if (PlatformRecaptchaService.isIOS) {
+          debugPrint('📱 iOS platform detected');
+        }
+
+        if (PlatformRecaptchaService.isMobilePlatform) {
+          debugPrint(
+              '🔐 Initializing reCAPTCHA Enterprise for ${FlavorManager.flavorDisplayName}...');
+          debugPrint(
+              '🔑 Using mobile reCAPTCHA site key: ${recaptchaSiteKey.substring(0, 10)}...');
+        }
       }
 
       // Initialize through the unified platform service
@@ -64,31 +70,31 @@ Future<void> runAppWithFlavor(AppFlavor flavor) async {
       debugPrint('🌐 Configured web URL strategy for clean URLs');
     }
   }
-  
+
   // Initialize SQLite database
   await DatabaseService.init();
-  
+
   // Print flavor information for debugging
   debugPrint('🚀 Starting app with flavor: ${flavor.displayName}');
   debugPrint('📱 App Name: ${FlavorManager.appName}');
   debugPrint('🌐 API URL: ${FlavorManager.fullApiUrl}');
   debugPrint('🔧 Debug Features: ${FlavorManager.areDebugFeaturesEnabled}');
   debugPrint('📝 Logging: ${FlavorManager.isLoggingEnabled}');
-  
+
   // Run the app
   runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends ConsumerWidget {
   const MyApp({super.key});
-  
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentLocale = ref.watch(localeProvider);
     final currentThemeMode = ref.watch(themeProvider);
     final themeNotifier = ref.read(themeProvider.notifier);
     final currentFlavor = ref.watch(flavorProvider);
-    
+
     // Use the new router provider (fallback to simple router for now)
     // final appRouter = router; // ref.read(routerProvider).routerConfig;
 
@@ -96,10 +102,11 @@ class MyApp extends ConsumerWidget {
         'MyApp building with locale: ${currentLocale.languageCode}-${currentLocale.countryCode}');
     debugPrint('MyApp building with theme: ${currentThemeMode.name}');
     debugPrint('MyApp building with flavor: ${currentFlavor.displayName}');
-    
+
     return FlavorBanner(
       child: MaterialApp.router(
-        debugShowCheckedModeBanner: !FlavorManager.isProd, // Hide debug banner in production
+        debugShowCheckedModeBanner:
+            !FlavorManager.isProd, // Hide debug banner in production
         routerConfig: ref.read(goRouterProvider), // Using persistent router
         locale: currentLocale,
         title: FlavorManager.appName, // Use flavor-specific app name

@@ -2,7 +2,7 @@ import 'package:universal_io/io.dart';
 import '../models/user_profile_model.dart';
 
 /// Abstract class for profile remote data source
-/// 
+///
 /// This defines the contract for fetching and managing user profile data
 /// from remote APIs. Implementations will handle HTTP requests,
 /// authentication, and error responses.

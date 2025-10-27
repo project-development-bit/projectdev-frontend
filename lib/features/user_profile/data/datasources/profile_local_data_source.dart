@@ -1,7 +1,7 @@
 import '../models/user_profile_model.dart';
 
 /// Abstract class for profile local data source
-/// 
+///
 /// This defines the contract for caching and managing user profile data
 /// locally using Hive or SharedPreferences. Used for offline support
 /// and performance optimization.

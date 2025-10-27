@@ -10,7 +10,7 @@ class InternalVerificationDebugHelper extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isVerified = ref.watch(internalVerificationProvider);
-    
+
     return Container(
       padding: const EdgeInsets.all(8),
       margin: const EdgeInsets.all(16),
@@ -72,7 +72,9 @@ class InternalVerificationDebugHelper extends ConsumerWidget {
             children: [
               ElevatedButton(
                 onPressed: () {
-                  ref.read(internalVerificationProvider.notifier).markVerified();
+                  ref
+                      .read(internalVerificationProvider.notifier)
+                      .markVerified();
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,

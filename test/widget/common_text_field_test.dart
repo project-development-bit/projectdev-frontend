@@ -7,7 +7,8 @@ import '../test_helpers/test_app_wrapper.dart';
 
 void main() {
   group('CommonTextField Widget Tests', () {
-    testWidgets('should render with basic properties', (WidgetTester tester) async {
+    testWidgets('should render with basic properties',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         ProviderScope(
           child: TestAppWrapper(
@@ -114,7 +115,8 @@ void main() {
       expect(find.byIcon(Icons.visibility), findsNothing);
     });
 
-    testWidgets('should handle prefix and suffix icons', (WidgetTester tester) async {
+    testWidgets('should handle prefix and suffix icons',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         ProviderScope(
           child: TestAppWrapper(
@@ -152,7 +154,7 @@ void main() {
       );
 
       final textField = find.byType(TextFormField);
-      
+
       // Try to enter text - should not change because it's read-only
       await tester.enterText(textField, 'new text');
       await tester.pump();
@@ -160,7 +162,8 @@ void main() {
       expect(controller.text, 'Read only text');
     });
 
-    testWidgets('should handle enabled/disabled state', (WidgetTester tester) async {
+    testWidgets('should handle enabled/disabled state',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         ProviderScope(
           child: TestAppWrapper(
@@ -177,13 +180,14 @@ void main() {
 
       final textField = find.byType(TextFormField);
       expect(textField, findsOneWidget);
-      
+
       // Check that the field is disabled
       final textFormField = tester.widget<TextFormField>(textField);
       expect(textFormField.enabled, false);
     });
 
-    testWidgets('should handle different keyboard types', (WidgetTester tester) async {
+    testWidgets('should handle different keyboard types',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         ProviderScope(
           child: TestAppWrapper(
@@ -200,12 +204,13 @@ void main() {
 
       final textField = find.byType(TextFormField);
       expect(textField, findsOneWidget);
-      
+
       // Note: Accessing keyboard type requires accessing the decoration
       // This tests that the widget renders successfully with the property
     });
 
-    testWidgets('should handle text input actions', (WidgetTester tester) async {
+    testWidgets('should handle text input actions',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         ProviderScope(
           child: TestAppWrapper(
@@ -222,7 +227,7 @@ void main() {
 
       final textField = find.byType(TextFormField);
       expect(textField, findsOneWidget);
-      
+
       // Note: Accessing textInputAction requires accessing the decoration
       // This tests that the widget renders successfully with the property
     });
@@ -244,7 +249,7 @@ void main() {
 
       final textField = find.byType(TextFormField);
       expect(textField, findsOneWidget);
-      
+
       // Note: Accessing maxLines requires accessing the decoration
       // This tests that the widget renders successfully with the property
     });
@@ -291,14 +296,15 @@ void main() {
 
         final textField = find.byType(TextFormField);
         expect(textField, findsOneWidget);
-        
+
         // The widget should be rendered without errors
         // Theme integration is tested through the TestAppWrapper
       });
     });
 
     group('Obscure Text Tests', () {
-      testWidgets('should handle obscure text property', (WidgetTester tester) async {
+      testWidgets('should handle obscure text property',
+          (WidgetTester tester) async {
         await tester.pumpWidget(
           ProviderScope(
             child: TestAppWrapper(
@@ -315,14 +321,15 @@ void main() {
 
         final textField = find.byType(TextFormField);
         expect(textField, findsOneWidget);
-        
+
         // Check that the obscure text is handled properly
         // The widget should render with a visibility toggle button
         // When _obscureText is true, it shows visibility icon
         expect(find.byIcon(Icons.visibility), findsOneWidget);
       });
 
-      testWidgets('should not show toggle for non-obscured text', (WidgetTester tester) async {
+      testWidgets('should not show toggle for non-obscured text',
+          (WidgetTester tester) async {
         await tester.pumpWidget(
           ProviderScope(
             child: TestAppWrapper(
@@ -339,7 +346,7 @@ void main() {
 
         final textField = find.byType(TextFormField);
         expect(textField, findsOneWidget);
-        
+
         // Should not show password toggle buttons
         expect(find.byIcon(Icons.visibility_off), findsNothing);
         expect(find.byIcon(Icons.visibility), findsNothing);

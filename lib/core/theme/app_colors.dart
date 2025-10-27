@@ -44,37 +44,37 @@ class AppColors {
     onPrimary: Color(0xFFFFFFFF), // White
     primaryContainer: primaryContainer, // Light orange
     onPrimaryContainer: primaryDark, // Dark orange
-    
+
     secondary: websiteGold, // Gold accent
     onSecondary: Color(0xFF000000), // Black
     secondaryContainer: Color(0xFFFFF3E0), // Light gold
     onSecondaryContainer: Color(0xFF92400E), // Dark gold
-    
-    tertiary: silver, // Website silver color  
+
+    tertiary: silver, // Website silver color
     onTertiary: Color(0xFFFFFFFF), // White
     tertiaryContainer: Color(0xFFF3F4F6), // Light container
     onTertiaryContainer: silver, // Website silver color
-    
+
     error: error, // Website error color
     onError: Color(0xFFFFFFFF), // White
     errorContainer: Color(0xFFFEE2E2), // Light Red
     onErrorContainer: error, // Website error color
-    
+
     surface: Color(0xFFFAFAFA), // Very Light Gray
     onSurface: Color(0xFF1F2937), // Dark Gray
     surfaceContainerHighest: Color(0xFFE5E7EB), // Light Gray
     onSurfaceVariant: Color(0xFF6B7280), // Medium Gray
-    
+
     surfaceContainer: Color(0xFFF3F4F6), // Very Light Gray
     surfaceContainerHigh: Color(0xFFE5E7EB), // Light Gray
     surfaceContainerLow: Color(0xFFF9FAFB), // Off White
-    
+
     outline: Color(0xFFD1D5DB), // Border Gray
     outlineVariant: Color(0xFFE5E7EB), // Light Border Gray
-    
+
     shadow: Color(0xFF000000), // Black
     scrim: Color(0xFF000000), // Black
-    
+
     inverseSurface: Color(0xFF1F2937), // Dark Gray
     onInverseSurface: Color(0xFFFAFAFA), // Light Gray
     inversePrimary: Color(0xFFE9D5FF), // Light Purple
@@ -87,37 +87,37 @@ class AppColors {
     onPrimary: websiteBackground, // Dark background
     primaryContainer: websiteCard, // Card background
     onPrimaryContainer: websiteText, // Light text
-    
+
     secondary: websiteGold, // Gold accent
     onSecondary: websiteBackground, // Dark background
     secondaryContainer: websiteCard, // Card background
     onSecondaryContainer: websiteText, // Light text
-    
+
     tertiary: silver, // Website silver color
     onTertiary: websiteBackground, // Dark background
     tertiaryContainer: websiteCard, // Card background
     onTertiaryContainer: websiteText, // Light text
-    
+
     error: websiteAccent, // Website red accent
     onError: Color(0xFFFFFFFF), // White
     errorContainer: websiteAccent, // Website red accent
     onErrorContainer: websiteText, // Website light text
-    
+
     surface: websiteBackground, // Website dark background
     onSurface: websiteText, // Website light text
     surfaceContainerHighest: websiteCard, // Website card background
     onSurfaceVariant: websiteText, // Website light text
-    
+
     surfaceContainer: websiteCard, // Website card background
     surfaceContainerHigh: websiteCard, // Website card background
     surfaceContainerLow: websiteBackground, // Website dark background
-    
+
     outline: websiteBorder, // Website border color
     outlineVariant: websiteBorder, // Website border color
-    
+
     shadow: Color(0xFF000000), // Black
     scrim: Color(0xFF000000), // Black
-    
+
     inverseSurface: Color(0xFFF9FAFB), // Very Light Gray
     onInverseSurface: Color(0xFF111827), // Very Dark Gray
     inversePrimary: Color(0xFF6B46C1), // Purple

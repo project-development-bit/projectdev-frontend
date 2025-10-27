@@ -68,11 +68,11 @@ class ResponsiveTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return ConstrainedBox(
       constraints: BoxConstraints(
-        maxWidth: context.isMobile 
-          ? double.infinity 
-          : context.isTablet 
-            ? 500 
-            : 400,
+        maxWidth: context.isMobile
+            ? double.infinity
+            : context.isTablet
+                ? 500
+                : 400,
       ),
       child: CommonTextField(
         hintText: hintText,

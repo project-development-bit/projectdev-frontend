@@ -201,5 +201,19 @@
   "recaptcha_checkbox": "ကျွန်ုပ်သည် စက်ရုပ်မဟုတ်ပါ",
   "recaptcha_initializing": "reCAPTCHA ကို စတင်နေပါသည်...",
   "privacy": "ကိုယ်ရေးကာကွယ်မှု",
-  "terms": "စည်းမျဉ်းများ"
+  "terms": "စည်းမျဉ်းများ",
+  "_drawer_section": "မိုဘိုင်းဒရော်ယာအပိုင်း",
+  "settings": "ဆက်တင်များ",
+  "account": "အကောင့်",
+  "theme": "အပြင်အဆင်",
+  "change_app_appearance": "အက်ပ်ပ်အပြင်အဆင် ပြောင်းလဲရန်",
+  "language": "ဘာသာစကား",
+  "change_app_language": "အက်ပ်ပ်ဘာသာစကား ပြောင်းလဲရန်",
+  "view_edit_profile": "ပရိုဖိုင်ကြည့်ရှုပြီး တည်းဖြတ်ရန်",
+  "sign_in_to_account": "သင့်အကောင့်သို့ လော့ဂ်အင်ဝင်ရန်",
+  "sign_out_account": "သင့်အကောင့်မှ လော့ဂ်အောက်ထွက်ရန်",
+  "signing_out": "လော့ဂ်အောက်ထွက်နေသည်...",
+  "welcome_to_gigafaucet": "Gigafaucet သို့ ကြိုဆိုပါသည်!",
+  "version": "ဗားရှင်း",
+  "logout_failed": "လော့ဂ်အောက်ထွက်မှု မအောင်မြင်ပါ: {0}"
 }

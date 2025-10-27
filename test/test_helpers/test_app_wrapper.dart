@@ -37,13 +37,13 @@ class TestInitializer {
     if (_isInitialized) return;
 
     TestWidgetsFlutterBinding.ensureInitialized();
-    
+
     // Initialize test flavor
     FlavorManager.initialize(AppFlavor.dev);
-    
+
     // Initialize Hive for testing (in-memory)
     // await DatabaseService.init();
-    
+
     _isInitialized = true;
   }
 
@@ -57,7 +57,8 @@ class TestInitializer {
 /// Test utilities for common operations
 class TestUtils {
   /// Pumps widget and waits for all animations to complete
-  static Future<void> pumpAndSettle(WidgetTester tester, [Widget? widget]) async {
+  static Future<void> pumpAndSettle(WidgetTester tester,
+      [Widget? widget]) async {
     if (widget != null) {
       await tester.pumpWidget(widget);
     }
@@ -82,7 +83,8 @@ class TestUtils {
   }
 
   /// Enters text into a field and waits for completion
-  static Future<void> enterTextAndSettle(WidgetTester tester, Finder finder, String text) async {
+  static Future<void> enterTextAndSettle(
+      WidgetTester tester, Finder finder, String text) async {
     await tester.enterText(finder, text);
     await tester.pumpAndSettle();
   }

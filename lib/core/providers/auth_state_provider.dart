@@ -35,7 +35,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   Future<void> _checkAuthStatus() async {
     final token = await _secureStorage.getAuthToken();
     final userId = await _secureStorage.getUserId();
-    
+
     state = state.copyWith(
       isAuthenticated: token != null && token.isNotEmpty,
       token: token,
@@ -46,7 +46,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   Future<void> signIn(String token, String userId) async {
     await _secureStorage.saveAuthToken(token);
     await _secureStorage.saveUserId(userId);
-    
+
     state = state.copyWith(
       isAuthenticated: true,
       token: token,
@@ -56,13 +56,13 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   Future<void> signOut() async {
     await _secureStorage.clearAllAuthData();
-    
+
     state = const AuthState(isAuthenticated: false);
   }
 
   Future<void> updateToken(String newToken) async {
     await _secureStorage.saveAuthToken(newToken);
-    
+
     state = state.copyWith(token: newToken);
   }
 }

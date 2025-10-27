@@ -6,8 +6,8 @@ import 'package:cointiply_app/features/auth/presentation/providers/forgot_passwo
 
 void main() {
   group('ForgotPasswordPage Widget Tests', () {
-    
-    testWidgets('should display all required UI elements', (WidgetTester tester) async {
+    testWidgets('should display all required UI elements',
+        (WidgetTester tester) async {
       // Arrange
       await tester.pumpWidget(
         ProviderScope(
@@ -25,8 +25,9 @@ void main() {
       expect(find.text('Back to Login'), findsOneWidget);
     });
 
-    testWidgets('should show validation error for empty email', (WidgetTester tester) async {
-      // Arrange  
+    testWidgets('should show validation error for empty email',
+        (WidgetTester tester) async {
+      // Arrange
       await tester.pumpWidget(
         ProviderScope(
           child: MaterialApp(
@@ -43,7 +44,8 @@ void main() {
       expect(find.text('Please enter your email address'), findsOneWidget);
     });
 
-    testWidgets('should show validation error for invalid email format', (WidgetTester tester) async {
+    testWidgets('should show validation error for invalid email format',
+        (WidgetTester tester) async {
       // Arrange
       await tester.pumpWidget(
         ProviderScope(
@@ -62,7 +64,8 @@ void main() {
       expect(find.text('Please enter a valid email address'), findsOneWidget);
     });
 
-    testWidgets('should accept valid email format', (WidgetTester tester) async {
+    testWidgets('should accept valid email format',
+        (WidgetTester tester) async {
       // Arrange
       await tester.pumpWidget(
         ProviderScope(
@@ -82,7 +85,8 @@ void main() {
       expect(find.text('Please enter a valid email address'), findsNothing);
     });
 
-    testWidgets('should show loading indicator when request is in progress', (WidgetTester tester) async {
+    testWidgets('should show loading indicator when request is in progress',
+        (WidgetTester tester) async {
       // Arrange
       await tester.pumpWidget(
         ProviderScope(
@@ -99,13 +103,14 @@ void main() {
 
       // Assert
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
-      
+
       // The button should be disabled during loading
       final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
       expect(button.onPressed, isNull);
     });
 
-    testWidgets('should navigate back when back button is pressed', (WidgetTester tester) async {
+    testWidgets('should navigate back when back button is pressed',
+        (WidgetTester tester) async {
       // Arrange
       bool backPressed = false;
       await tester.pumpWidget(
@@ -116,9 +121,9 @@ void main() {
                 body: ElevatedButton(
                   onPressed: () {
                     Navigator.push(
-                      context, 
-                      MaterialPageRoute(builder: (_) => const ForgotPasswordPage())
-                    );
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => const ForgotPasswordPage()));
                   },
                   child: const Text('Go to Forgot Password'),
                 ),
@@ -146,7 +151,8 @@ void main() {
       expect(find.byType(ForgotPasswordPage), findsNothing);
     });
 
-    testWidgets('should handle different screen sizes responsively', (WidgetTester tester) async {
+    testWidgets('should handle different screen sizes responsively',
+        (WidgetTester tester) async {
       // Test mobile size
       await tester.binding.setSurfaceSize(const Size(400, 800));
       await tester.pumpWidget(
@@ -161,7 +167,7 @@ void main() {
       // Assert mobile layout elements are present
       expect(find.byType(ForgotPasswordPage), findsOneWidget);
       expect(find.byIcon(Icons.lock_reset), findsOneWidget);
-      
+
       // Test tablet/desktop size
       await tester.binding.setSurfaceSize(const Size(800, 600));
       await tester.pump();
@@ -171,7 +177,8 @@ void main() {
       expect(find.byIcon(Icons.lock_reset), findsOneWidget);
     });
 
-    testWidgets('should display correct hint and label text', (WidgetTester tester) async {
+    testWidgets('should display correct hint and label text',
+        (WidgetTester tester) async {
       // Arrange
       await tester.pumpWidget(
         ProviderScope(
@@ -183,10 +190,10 @@ void main() {
 
       // Act
       final textField = find.byType(TextFormField);
-      
+
       // Assert
       expect(textField, findsOneWidget);
-      
+
       // Check that the text field renders properly
       final textFormField = tester.widget<TextFormField>(textField);
       expect(textFormField, isNotNull);
@@ -197,17 +204,18 @@ void main() {
 /// Test notifier for overriding the provider in tests
 class TestForgotPasswordNotifier extends ForgotPasswordNotifier {
   final ForgotPasswordState _testState;
-  
-  TestForgotPasswordNotifier(this._testState) : super(throw UnimplementedError());
-  
+
+  TestForgotPasswordNotifier(this._testState)
+      : super(throw UnimplementedError());
+
   @override
   ForgotPasswordState build() => _testState;
-  
+
   @override
   Future<void> forgotPassword(String email) async {
     // Do nothing in test
   }
-  
+
   @override
   void reset() {
     // Do nothing in test

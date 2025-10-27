@@ -1,5 +1,5 @@
 /// Reset password request model
-/// 
+///
 /// Contains the email, new password, and confirmation needed to reset password
 class ResetPasswordRequest {
   const ResetPasswordRequest({
@@ -36,7 +36,8 @@ class ResetPasswordRequest {
   }
 
   @override
-  String toString() => 'ResetPasswordRequest(email: $email, password: [HIDDEN], confirmPassword: [HIDDEN])';
+  String toString() =>
+      'ResetPasswordRequest(email: $email, password: [HIDDEN], confirmPassword: [HIDDEN])';
 
   @override
   bool operator ==(Object other) {
@@ -70,8 +71,6 @@ class ResetPasswordRequest {
   bool get isPasswordValid => password.length >= 8;
 
   /// Check if all fields are provided
-  bool get isComplete => 
-      email.isNotEmpty && 
-      password.isNotEmpty && 
-      confirmPassword.isNotEmpty;
+  bool get isComplete =>
+      email.isNotEmpty && password.isNotEmpty && confirmPassword.isNotEmpty;
 }

@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 /// Token entity for authentication
-/// 
+///
 /// Represents the authentication tokens received from the server
 class AuthTokens extends Equatable {
   const AuthTokens({
@@ -40,19 +40,21 @@ class AuthTokens extends Equatable {
       refreshToken: refreshToken ?? this.refreshToken,
       tokenType: tokenType ?? this.tokenType,
       accessTokenExpiresIn: accessTokenExpiresIn ?? this.accessTokenExpiresIn,
-      refreshTokenExpiresIn: refreshTokenExpiresIn ?? this.refreshTokenExpiresIn,
+      refreshTokenExpiresIn:
+          refreshTokenExpiresIn ?? this.refreshTokenExpiresIn,
     );
   }
 
   @override
   List<Object> get props => [
-    accessToken,
-    refreshToken,
-    tokenType,
-    accessTokenExpiresIn,
-    refreshTokenExpiresIn,
-  ];
+        accessToken,
+        refreshToken,
+        tokenType,
+        accessTokenExpiresIn,
+        refreshTokenExpiresIn,
+      ];
 
   @override
-  String toString() => 'AuthTokens(tokenType: $tokenType, expiresIn: $accessTokenExpiresIn)';
+  String toString() =>
+      'AuthTokens(tokenType: $tokenType, expiresIn: $accessTokenExpiresIn)';
 }

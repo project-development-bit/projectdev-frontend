@@ -3,18 +3,19 @@ import 'dart:async';
 
 void main() {
   print('🧪 Testing Timer Functionality...\n');
-  
+
   // Simulate timer behavior
   Timer? timer;
   int countdown = 30;
   bool canResend = false;
-  
+
   print('Timer started: canResend = $canResend, countdown = $countdown');
-  
+
   timer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
     if (countdown > 0) {
       countdown--;
-      if (countdown % 5 == 0) { // Print every 5 ticks for demo
+      if (countdown % 5 == 0) {
+        // Print every 5 ticks for demo
         print('Countdown: ${countdown}s, canResend: $canResend');
       }
     } else {
@@ -23,7 +24,7 @@ void main() {
       timer.cancel();
     }
   });
-  
+
   // Simulate waiting for timer to complete
   Timer(const Duration(milliseconds: 3100), () {
     timer?.cancel();

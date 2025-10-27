@@ -41,7 +41,8 @@ class _ThemeShowcaseWidgetState extends State<ThemeShowcaseWidget> {
             const CommonText.displayMedium('Display Medium Text'),
             const CommonText.titleLarge('Title Large Text'),
             const CommonText.titleMedium('Title Medium Text'),
-            const CommonText.bodyLarge('Body Large - Regular paragraph text using Barlow font'),
+            const CommonText.bodyLarge(
+                'Body Large - Regular paragraph text using Barlow font'),
             const CommonText.bodyMedium('Body Medium - Standard text content'),
             const CommonText.bodySmall('Body Small - Fine print and captions'),
             const CommonText.cryptoDisplay('₿ 0.00123456'),
@@ -202,7 +203,8 @@ class _ThemeShowcaseWidgetState extends State<ThemeShowcaseWidget> {
             ],
             const SizedBox(height: 16),
             ErrorContainer(
-              message: 'Failed to load data. Please check your internet connection.',
+              message:
+                  'Failed to load data. Please check your internet connection.',
               onRetry: () => _showSnackBar('Retry button pressed'),
             ),
             const SizedBox(height: 32),

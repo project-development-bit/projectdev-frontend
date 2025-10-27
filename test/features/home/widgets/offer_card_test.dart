@@ -17,7 +17,8 @@ void main() {
       rating: 4.5,
     );
 
-    testWidgets('should display offer information correctly', (WidgetTester tester) async {
+    testWidgets('should display offer information correctly',
+        (WidgetTester tester) async {
       // Arrange & Act
       await tester.pumpWidget(
         MaterialApp(
@@ -29,14 +30,16 @@ void main() {
 
       // Assert
       expect(find.text('Test Game'), findsOneWidget);
-      expect(find.text('Test game description for testing purposes'), findsOneWidget);
+      expect(find.text('Test game description for testing purposes'),
+          findsOneWidget);
       expect(find.text('\$25.50'), findsOneWidget);
       expect(find.text('Multi Day'), findsOneWidget);
       expect(find.text('Game'), findsOneWidget);
       expect(find.text('4.5'), findsOneWidget);
     });
 
-    testWidgets('should display HOT badge when offer is hot', (WidgetTester tester) async {
+    testWidgets('should display HOT badge when offer is hot',
+        (WidgetTester tester) async {
       // Arrange & Act
       await tester.pumpWidget(
         MaterialApp(
@@ -50,7 +53,8 @@ void main() {
       expect(find.text('HOT'), findsOneWidget);
     });
 
-    testWidgets('should not display HOT badge when offer is not hot', (WidgetTester tester) async {
+    testWidgets('should not display HOT badge when offer is not hot',
+        (WidgetTester tester) async {
       // Arrange
       const normalOffer = OfferModel(
         id: '2',
@@ -75,7 +79,9 @@ void main() {
       expect(find.text('HOT'), findsNothing);
     });
 
-    testWidgets('should display progress bar when showProgress is true and progress is available', (WidgetTester tester) async {
+    testWidgets(
+        'should display progress bar when showProgress is true and progress is available',
+        (WidgetTester tester) async {
       // Arrange
       const offerWithProgress = OfferModel(
         id: '3',
@@ -104,7 +110,8 @@ void main() {
       expect(find.text('75% Complete'), findsOneWidget);
     });
 
-    testWidgets('should call onTap when card is tapped', (WidgetTester tester) async {
+    testWidgets('should call onTap when card is tapped',
+        (WidgetTester tester) async {
       // Arrange
       bool tapped = false;
       void onTap() {
@@ -130,7 +137,8 @@ void main() {
       expect(tapped, isTrue);
     });
 
-    testWidgets('should display correct button text based on showProgress', (WidgetTester tester) async {
+    testWidgets('should display correct button text based on showProgress',
+        (WidgetTester tester) async {
       // Test with showProgress false
       await tester.pumpWidget(
         MaterialApp(
@@ -160,7 +168,8 @@ void main() {
       expect(find.text('Continue'), findsOneWidget);
     });
 
-    testWidgets('should display rating when available', (WidgetTester tester) async {
+    testWidgets('should display rating when available',
+        (WidgetTester tester) async {
       // Arrange & Act
       await tester.pumpWidget(
         MaterialApp(
@@ -175,7 +184,8 @@ void main() {
       expect(find.text('4.5'), findsOneWidget);
     });
 
-    testWidgets('should handle offers without rating', (WidgetTester tester) async {
+    testWidgets('should handle offers without rating',
+        (WidgetTester tester) async {
       // Arrange
       const offerWithoutRating = OfferModel(
         id: '4',

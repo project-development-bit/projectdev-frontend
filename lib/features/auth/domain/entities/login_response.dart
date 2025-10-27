@@ -3,7 +3,7 @@ import 'user.dart';
 import 'auth_tokens.dart';
 
 /// Login response entity
-/// 
+///
 /// Represents the complete login response from the server
 class LoginResponse extends Equatable {
   const LoginResponse({
@@ -44,5 +44,6 @@ class LoginResponse extends Equatable {
   List<Object> get props => [success, message, user, tokens];
 
   @override
-  String toString() => 'LoginResponse(success: $success, message: $message, user: $user)';
+  String toString() =>
+      'LoginResponse(success: $success, message: $message, user: $user)';
 }

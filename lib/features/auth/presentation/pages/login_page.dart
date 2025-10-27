@@ -53,7 +53,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     'Login successful!',
               );
             }
-            
+
             if (mounted) {
               // Use GoRouter.of(context).go() to replace the current route
               GoRouter.of(context).go(AppRoutes.home);
@@ -65,7 +65,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           context.showErrorSnackBar(
             message: next.message,
           );
-          _checkVerifyCode(next.errorModel,next.email);
+          _checkVerifyCode(next.errorModel, next.email);
           break;
         default:
           break;
@@ -181,8 +181,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       ),
     );
   }
-  
-  void _checkVerifyCode(ErrorModel? errorModel,String email) {
+
+  void _checkVerifyCode(ErrorModel? errorModel, String email) {
     /// If the error model indicates that email verification is required,
     /// show verification dialog
     if (errorModel?.isUnverifiedAccount == true) {

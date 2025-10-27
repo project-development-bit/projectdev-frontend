@@ -28,7 +28,7 @@ class AppTheme {
       colorScheme: AppColors.lightColorScheme,
       textTheme: AppTypography.lightTextTheme,
       scaffoldBackgroundColor: AppColors.lightColorScheme.surface,
-      
+
       // App Bar Theme
       appBarTheme: AppBarTheme(
         backgroundColor: AppColors.lightColorScheme.surface,
@@ -119,7 +119,8 @@ class AppTheme {
             width: 2,
           ),
         ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         hintStyle: AppTypography.lightTextTheme.bodyMedium?.copyWith(
           color: AppColors.lightColorScheme.onSurfaceVariant,
         ),
@@ -194,7 +195,8 @@ class AppTheme {
           }
           return Colors.transparent;
         }),
-        checkColor: WidgetStateProperty.all(AppColors.lightColorScheme.onPrimary),
+        checkColor:
+            WidgetStateProperty.all(AppColors.lightColorScheme.onPrimary),
         side: BorderSide(color: AppColors.lightColorScheme.outline, width: 2),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
       ),
@@ -236,7 +238,7 @@ class AppTheme {
       colorScheme: AppColors.darkColorScheme,
       textTheme: AppTypography.darkTextTheme,
       scaffoldBackgroundColor: AppColors.darkColorScheme.surface,
-      
+
       // App Bar Theme
       appBarTheme: AppBarTheme(
         backgroundColor: AppColors.darkColorScheme.surface,
@@ -327,7 +329,8 @@ class AppTheme {
             width: 2,
           ),
         ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         hintStyle: AppTypography.darkTextTheme.bodyMedium?.copyWith(
           color: AppColors.darkColorScheme.onSurfaceVariant,
         ),
@@ -402,7 +405,8 @@ class AppTheme {
           }
           return Colors.transparent;
         }),
-        checkColor: WidgetStateProperty.all(AppColors.darkColorScheme.onPrimary),
+        checkColor:
+            WidgetStateProperty.all(AppColors.darkColorScheme.onPrimary),
         side: BorderSide(color: AppColors.darkColorScheme.outline, width: 2),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
       ),

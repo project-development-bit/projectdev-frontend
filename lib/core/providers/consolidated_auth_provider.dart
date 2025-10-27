@@ -38,12 +38,12 @@ class ConsolidatedAuthState {
   /// Check if any authentication operation is in progress
   bool get isLoading {
     return loginState is LoginLoading ||
-           logoutState is LogoutLoading ||
-           registerState is RegisterLoading ||
-           forgotPasswordState is ForgotPasswordLoading ||
-           resetPasswordState is ResetPasswordLoading ||
-           recaptchaState is RecaptchaInitializing ||
-           recaptchaState is RecaptchaVerifying;
+        logoutState is LogoutLoading ||
+        registerState is RegisterLoading ||
+        forgotPasswordState is ForgotPasswordLoading ||
+        resetPasswordState is ResetPasswordLoading ||
+        recaptchaState is RecaptchaInitializing ||
+        recaptchaState is RecaptchaVerifying;
   }
 
   /// Check if authentication is ready (not loading and authenticated)

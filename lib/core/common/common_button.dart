@@ -35,7 +35,8 @@ class CommonButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final effectiveBackgroundColor = backgroundColor ?? theme.colorScheme.primary;
+    final effectiveBackgroundColor =
+        backgroundColor ?? theme.colorScheme.primary;
     final effectiveTextColor = textColor ?? theme.colorScheme.onPrimary;
     final effectiveBorderRadius = borderRadius ?? 12.0;
     final effectivePadding =

@@ -12,7 +12,8 @@ void main() {
       FlavorManager.initialize(AppFlavor.staging);
     });
 
-    testWidgets('should render reCAPTCHA widget for staging environment', (WidgetTester tester) async {
+    testWidgets('should render reCAPTCHA widget for staging environment',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         ProviderScope(
           child: MaterialApp(
@@ -32,7 +33,8 @@ void main() {
       expect(find.text('reCAPTCHA'), findsOneWidget);
     });
 
-    testWidgets('should not render reCAPTCHA widget for dev environment', (WidgetTester tester) async {
+    testWidgets('should not render reCAPTCHA widget for dev environment',
+        (WidgetTester tester) async {
       // Set to dev environment
       FlavorManager.initialize(AppFlavor.dev);
 
@@ -55,7 +57,9 @@ void main() {
       expect(find.text('reCAPTCHA'), findsNothing);
     });
 
-    testWidgets('should call onVerificationChanged when verification status changes', (WidgetTester tester) async {
+    testWidgets(
+        'should call onVerificationChanged when verification status changes',
+        (WidgetTester tester) async {
       FlavorManager.initialize(AppFlavor.staging);
       bool verificationStatus = false;
 
@@ -80,7 +84,8 @@ void main() {
       // as it requires browser APIs. This would need integration tests.
     });
 
-    testWidgets('should show error message when reCAPTCHA is not configured', (WidgetTester tester) async {
+    testWidgets('should show error message when reCAPTCHA is not configured',
+        (WidgetTester tester) async {
       // Set to production where no reCAPTCHA key is configured
       FlavorManager.initialize(AppFlavor.prod);
 

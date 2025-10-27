@@ -26,11 +26,8 @@ class RewardIconWidget extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
             border: Border.all(color: context.outline, width: 1),
           ),
-          child: Icon(
-            icon, 
-            color: context.onSurface.withOpacity(0.7), 
-            size: 24
-          ),
+          child:
+              Icon(icon, color: context.onSurface.withOpacity(0.7), size: 24),
         ),
         const SizedBox(height: 8),
         CommonText.labelSmall(

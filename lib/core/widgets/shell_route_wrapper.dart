@@ -16,7 +16,7 @@ class ShellRouteWrapper extends StatelessWidget {
       // You can add common app bar, drawer, bottom navigation here
       // For now, just return the child
       body: child,
-      
+
       // Example: Add a common app bar
       // appBar: AppBar(
       //   title: const Text('Gigafaucet'),
@@ -29,7 +29,7 @@ class ShellRouteWrapper extends StatelessWidget {
       //     ),
       //   ],
       // ),
-      
+
       // Example: Add bottom navigation
       // bottomNavigationBar: BottomNavigationBar(
       //   items: const [

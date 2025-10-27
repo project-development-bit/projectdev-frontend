@@ -39,8 +39,6 @@ class VerificationPageParameter {
 
   @override
   int get hashCode {
-    return email.hashCode ^
-        isSendCode.hashCode ^
-        isFromForgotPassword.hashCode;
+    return email.hashCode ^ isSendCode.hashCode ^ isFromForgotPassword.hashCode;
   }
 }

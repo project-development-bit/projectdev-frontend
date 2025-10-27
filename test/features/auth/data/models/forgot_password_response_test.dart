@@ -5,14 +5,14 @@ void main() {
   group('ForgotPasswordData', () {
     const testEmail = 'test@example.com';
     const testSecurityCode = 1234;
-    
+
     test('should create instance with required parameters', () {
       // Arrange & Act
       const data = ForgotPasswordData(
         email: testEmail,
         securityCode: testSecurityCode,
       );
-      
+
       // Assert
       expect(data.email, testEmail);
       expect(data.securityCode, testSecurityCode);
@@ -24,10 +24,10 @@ void main() {
         email: testEmail,
         securityCode: testSecurityCode,
       );
-      
+
       // Act
       final json = data.toJson();
-      
+
       // Assert
       expect(json['email'], testEmail);
       expect(json['securityCode'], testSecurityCode);
@@ -40,10 +40,10 @@ void main() {
         'email': testEmail,
         'securityCode': testSecurityCode,
       };
-      
+
       // Act
       final data = ForgotPasswordData.fromJson(json);
-      
+
       // Assert
       expect(data.email, testEmail);
       expect(data.securityCode, testSecurityCode);
@@ -51,10 +51,13 @@ void main() {
 
     test('should implement equality correctly', () {
       // Arrange
-      const data1 = ForgotPasswordData(email: testEmail, securityCode: testSecurityCode);
-      const data2 = ForgotPasswordData(email: testEmail, securityCode: testSecurityCode);
-      const data3 = ForgotPasswordData(email: 'different@example.com', securityCode: testSecurityCode);
-      
+      const data1 =
+          ForgotPasswordData(email: testEmail, securityCode: testSecurityCode);
+      const data2 =
+          ForgotPasswordData(email: testEmail, securityCode: testSecurityCode);
+      const data3 = ForgotPasswordData(
+          email: 'different@example.com', securityCode: testSecurityCode);
+
       // Assert
       expect(data1, equals(data2));
       expect(data1, isNot(equals(data3)));
@@ -62,9 +65,11 @@ void main() {
 
     test('should implement hashCode correctly', () {
       // Arrange
-      const data1 = ForgotPasswordData(email: testEmail, securityCode: testSecurityCode);
-      const data2 = ForgotPasswordData(email: testEmail, securityCode: testSecurityCode);
-      
+      const data1 =
+          ForgotPasswordData(email: testEmail, securityCode: testSecurityCode);
+      const data2 =
+          ForgotPasswordData(email: testEmail, securityCode: testSecurityCode);
+
       // Assert
       expect(data1.hashCode, equals(data2.hashCode));
     });
@@ -77,7 +82,7 @@ void main() {
       email: 'test@example.com',
       securityCode: 1234,
     );
-    
+
     test('should create instance with required parameters', () {
       // Arrange & Act
       const response = ForgotPasswordResponse(
@@ -85,7 +90,7 @@ void main() {
         message: testMessage,
         data: testData,
       );
-      
+
       // Assert
       expect(response.success, testSuccess);
       expect(response.message, testMessage);
@@ -99,10 +104,10 @@ void main() {
         message: testMessage,
         data: testData,
       );
-      
+
       // Act
       final json = response.toJson();
-      
+
       // Assert
       expect(json['success'], testSuccess);
       expect(json['message'], testMessage);
@@ -121,10 +126,10 @@ void main() {
           'securityCode': testData.securityCode,
         },
       };
-      
+
       // Act
       final response = ForgotPasswordResponse.fromJson(json);
-      
+
       // Assert
       expect(response.success, testSuccess);
       expect(response.message, testMessage);
@@ -142,10 +147,10 @@ void main() {
           'securityCode': 2912,
         },
       };
-      
+
       // Act
       final response = ForgotPasswordResponse.fromJson(json);
-      
+
       // Assert
       expect(response.success, true);
       expect(response.message, 'Reset password is completed!');
@@ -155,10 +160,13 @@ void main() {
 
     test('should implement equality correctly', () {
       // Arrange
-      const response1 = ForgotPasswordResponse(success: testSuccess, message: testMessage, data: testData);
-      const response2 = ForgotPasswordResponse(success: testSuccess, message: testMessage, data: testData);
-      const response3 = ForgotPasswordResponse(success: false, message: testMessage, data: testData);
-      
+      const response1 = ForgotPasswordResponse(
+          success: testSuccess, message: testMessage, data: testData);
+      const response2 = ForgotPasswordResponse(
+          success: testSuccess, message: testMessage, data: testData);
+      const response3 = ForgotPasswordResponse(
+          success: false, message: testMessage, data: testData);
+
       // Assert
       expect(response1, equals(response2));
       expect(response1, isNot(equals(response3)));
@@ -166,20 +174,23 @@ void main() {
 
     test('should implement hashCode correctly', () {
       // Arrange
-      const response1 = ForgotPasswordResponse(success: testSuccess, message: testMessage, data: testData);
-      const response2 = ForgotPasswordResponse(success: testSuccess, message: testMessage, data: testData);
-      
+      const response1 = ForgotPasswordResponse(
+          success: testSuccess, message: testMessage, data: testData);
+      const response2 = ForgotPasswordResponse(
+          success: testSuccess, message: testMessage, data: testData);
+
       // Assert
       expect(response1.hashCode, equals(response2.hashCode));
     });
 
     test('should have correct toString representation', () {
       // Arrange
-      const response = ForgotPasswordResponse(success: testSuccess, message: testMessage, data: testData);
-      
+      const response = ForgotPasswordResponse(
+          success: testSuccess, message: testMessage, data: testData);
+
       // Act
       final stringRepresentation = response.toString();
-      
+
       // Assert
       expect(stringRepresentation, contains('ForgotPasswordResponse'));
       expect(stringRepresentation, contains(testSuccess.toString()));

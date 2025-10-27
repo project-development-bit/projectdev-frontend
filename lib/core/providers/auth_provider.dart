@@ -143,7 +143,8 @@ extension AuthStateExtension on AuthState {
   bool get isUnauthenticated => this is AuthStateUnauthenticated;
   bool get isLoading => this is AuthStateLoading;
   bool get isError => this is AuthStateError;
-  String? get errorMessage => this is AuthStateError ? (this as AuthStateError).message : null;
+  String? get errorMessage =>
+      this is AuthStateError ? (this as AuthStateError).message : null;
 }
 
 /// Legacy provider for the auth state (for backward compatibility)
@@ -156,19 +157,19 @@ final authProvider = StateNotifierProvider<AuthProvider, AuthState>(
 final isAuthenticatedObservableProvider = Provider<bool>((ref) {
   // Watch the auth state to make it reactive
   final authState = ref.watch(authProvider);
-  
+
   // Watch login state for immediate updates
   final loginState = ref.watch(loginNotifierProvider);
   if (loginState is LoginSuccess) {
     return true;
   }
-  
+
   // Watch logout state for immediate updates
   final logoutState = ref.watch(logoutNotifierProvider);
   if (logoutState is LogoutSuccess) {
     return false;
   }
-  
+
   // Check the auth state directly
   return authState.isAuthenticated;
 });
@@ -179,11 +180,11 @@ final isAuthenticatedAsyncProvider = FutureProvider<bool>((ref) async {
   // Watch for state changes to invalidate this provider
   ref.watch(loginNotifierProvider);
   ref.watch(logoutNotifierProvider);
-  
+
   try {
     final authRepository = ref.read(authRepositoryProvider);
     final result = await authRepository.isAuthenticated();
-    
+
     return result.fold(
       (failure) => false,
       (isAuth) => isAuth,

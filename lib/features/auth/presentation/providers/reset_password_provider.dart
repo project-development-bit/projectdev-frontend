@@ -6,7 +6,8 @@ import '../../data/models/reset_password_response.dart';
 import '../../../../core/error/failures.dart';
 
 /// Provider for reset password functionality
-final resetPasswordProvider = StateNotifierProvider<ResetPasswordNotifier, ResetPasswordState>(
+final resetPasswordProvider =
+    StateNotifierProvider<ResetPasswordNotifier, ResetPasswordState>(
   (ref) => ResetPasswordNotifier(ref.watch(authRepositoryProvider)),
 );
 
@@ -23,7 +24,7 @@ class ResetPasswordLoading extends ResetPasswordState {}
 /// Note: We don't store tokens as user should navigate to login
 class ResetPasswordSuccess extends ResetPasswordState {
   final ResetPasswordResponse response;
-  
+
   ResetPasswordSuccess(this.response);
 }
 
@@ -31,16 +32,16 @@ class ResetPasswordSuccess extends ResetPasswordState {
 class ResetPasswordError extends ResetPasswordState {
   final String message;
   final int? statusCode;
-  
+
   ResetPasswordError(this.message, {this.statusCode});
 }
 
 /// Notifier for reset password operations
 class ResetPasswordNotifier extends StateNotifier<ResetPasswordState> {
   final AuthRepository _authRepository;
-  
+
   ResetPasswordNotifier(this._authRepository) : super(ResetPasswordInitial());
-  
+
   /// Reset password with new password
   Future<void> resetPassword({
     required String email,
@@ -53,17 +54,17 @@ class ResetPasswordNotifier extends StateNotifier<ResetPasswordState> {
       state = ResetPasswordError(validationError);
       return;
     }
-    
+
     state = ResetPasswordLoading();
-    
+
     final request = ResetPasswordRequest(
       email: email,
       password: password,
       confirmPassword: confirmPassword,
     );
-    
+
     final result = await _authRepository.resetPassword(request);
-    
+
     result.fold(
       (failure) {
         state = ResetPasswordError(
@@ -78,37 +79,38 @@ class ResetPasswordNotifier extends StateNotifier<ResetPasswordState> {
       },
     );
   }
-  
+
   /// Reset state to initial
   void reset() {
     state = ResetPasswordInitial();
   }
-  
+
   /// Validate all inputs
-  String? _validateInputs(String email, String password, String confirmPassword) {
+  String? _validateInputs(
+      String email, String password, String confirmPassword) {
     if (!_isValidEmail(email)) {
       return 'Please enter a valid email address';
     }
-    
+
     if (password.isEmpty) {
       return 'Please enter a password';
     }
-    
+
     if (password.length < 8) {
       return 'Password must be at least 8 characters long';
     }
-    
+
     if (confirmPassword.isEmpty) {
       return 'Please confirm your password';
     }
-    
+
     if (password != confirmPassword) {
       return 'Passwords do not match';
     }
-    
+
     return null; // All validations passed
   }
-  
+
   /// Validate email format
   bool _isValidEmail(String email) {
     final emailRegex = RegExp(
@@ -116,7 +118,7 @@ class ResetPasswordNotifier extends StateNotifier<ResetPasswordState> {
     );
     return emailRegex.hasMatch(email);
   }
-  
+
   /// Convert failure to user-friendly message
   String _getFailureMessage(Failure failure) {
     if (failure is ServerFailure) {
@@ -142,10 +144,10 @@ class ResetPasswordNotifier extends StateNotifier<ResetPasswordState> {
       if (failure.statusCode == 500) {
         return 'Server error. Please try again later';
       }
-      
+
       return failure.message ?? 'Failed to reset password';
     }
-    
+
     return 'An unexpected error occurred. Please try again';
   }
 }

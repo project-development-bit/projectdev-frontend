@@ -11,7 +11,7 @@ enum ErrorCode {
   /// Parse error code from string value
   static ErrorCode? fromString(String? value) {
     if (value == null) return null;
-    
+
     for (ErrorCode code in ErrorCode.values) {
       if (code.value == value) {
         return code;

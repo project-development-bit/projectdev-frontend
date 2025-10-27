@@ -23,12 +23,14 @@ class LocaleTestWidget extends ConsumerWidget {
             Text(
               'Locale Test Widget',
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
             const SizedBox(height: 8),
-            Text('Current Locale: ${currentLocale.languageCode}-${currentLocale.countryCode}'),
-            Text('Direct Translation "welcome_back": ${translate('welcome_back')}'),
+            Text(
+                'Current Locale: ${currentLocale.languageCode}-${currentLocale.countryCode}'),
+            Text(
+                'Direct Translation "welcome_back": ${translate('welcome_back')}'),
             Text('Direct Translation "sign_in": ${translate('sign_in')}'),
             const SizedBox(height: 16),
             Row(

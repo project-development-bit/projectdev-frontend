@@ -1,6 +1,8 @@
-import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart';
 import '../config/flavor_manager.dart';
+
+// Conditional import for Platform - avoid importing dart:io on web
+import 'dart:io' as io if (dart.library.js_interop) 'platform_stub.dart';
 
 /// Platform-aware reCAPTCHA service using different implementations per platform
 /// - Web: Uses g_recaptcha_v3 package
@@ -8,19 +10,47 @@ import '../config/flavor_manager.dart';
 class PlatformRecaptchaService {
   /// Check if current platform is web
   static bool get isWebPlatform => kIsWeb;
-  
+
   /// Check if current platform is mobile (Android or iOS)
-  static bool get isMobilePlatform => !kIsWeb && (Platform.isAndroid || Platform.isIOS);
-  
+  static bool get isMobilePlatform => !kIsWeb && _isAndroidOrIOS;
+
   /// Check if current platform is Android
-  static bool get isAndroid => !kIsWeb && Platform.isAndroid;
-  
+  static bool get isAndroid => !kIsWeb && _isAndroidPlatform;
+
   /// Check if current platform is iOS
-  static bool get isIOS => !kIsWeb && Platform.isIOS;
-  
+  static bool get isIOS => !kIsWeb && _isIOSPlatform;
+
+  // Web-safe platform checks
+  static bool get _isAndroidOrIOS {
+    if (kIsWeb) return false;
+    try {
+      return io.Platform.isAndroid || io.Platform.isIOS;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  static bool get _isAndroidPlatform {
+    if (kIsWeb) return false;
+    try {
+      return io.Platform.isAndroid;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  static bool get _isIOSPlatform {
+    if (kIsWeb) return false;
+    try {
+      return io.Platform.isIOS;
+    } catch (e) {
+      return false;
+    }
+  }
+
   /// Check if reCAPTCHA is supported on current platform
   static bool get isSupported => isWebPlatform || isMobilePlatform;
-  
+
   /// Get platform name for debugging
   static String get platformName {
     if (isWebPlatform) return 'Web';
@@ -36,37 +66,52 @@ class PlatformRecaptchaService {
   static Future<bool> initialize([String? customSiteKey]) async {
     final key = customSiteKey ?? siteKey;
     if (key == null) {
-      debugPrint('reCAPTCHA: No site key configured for ${FlavorManager.flavorDisplayName} on $platformName');
+      debugPrint(
+          'reCAPTCHA: No site key configured for ${FlavorManager.flavorDisplayName} on $platformName');
       return false;
     }
 
     try {
       if (isWebPlatform) {
+        // Skip reCAPTCHA initialization in debug mode for web platform
+        if (kDebugMode && FlavorManager.areDebugFeaturesEnabled) {
+          debugPrint(
+              'reCAPTCHA: Skipping initialization in debug mode for web platform');
+          return true;
+        }
+
         // Web platform - use g_recaptcha_v3
-        debugPrint('reCAPTCHA: Initializing $platformName with g_recaptcha_v3...');
-        debugPrint('reCAPTCHA: Using site key for ${FlavorManager.flavorDisplayName}: ${key.substring(0, 10)}...');
-        
+        debugPrint(
+            'reCAPTCHA: Initializing $platformName with g_recaptcha_v3...');
+        debugPrint(
+            'reCAPTCHA: Using site key for ${FlavorManager.flavorDisplayName}: ${key.substring(0, 10)}...');
+
         // Import and call g_recaptcha_v3
         final webRecaptcha = await _importWebRecaptcha();
         if (webRecaptcha != null) {
           final success = await webRecaptcha.ready(key);
           if (success) {
-            debugPrint('reCAPTCHA: Successfully initialized $platformName client with g_recaptcha_v3');
+            debugPrint(
+                'reCAPTCHA: Successfully initialized $platformName client with g_recaptcha_v3');
             return true;
           } else {
-            debugPrint('reCAPTCHA: Failed to load g_recaptcha_v3 on $platformName');
+            debugPrint(
+                'reCAPTCHA: Failed to load g_recaptcha_v3 on $platformName');
             return false;
           }
         }
         return false;
       } else if (isMobilePlatform) {
         // Mobile platform - use reCAPTCHA Enterprise Flutter
-        debugPrint('reCAPTCHA: Initializing $platformName with reCAPTCHA Enterprise...');
-        debugPrint('reCAPTCHA: Using site key for ${FlavorManager.flavorDisplayName}: ${key.substring(0, 10)}...');
-        
+        debugPrint(
+            'reCAPTCHA: Initializing $platformName with reCAPTCHA Enterprise...');
+        debugPrint(
+            'reCAPTCHA: Using site key for ${FlavorManager.flavorDisplayName}: ${key.substring(0, 10)}...');
+
         // For reCAPTCHA Enterprise, we initialize the client when needed in execute()
         // This is because the client is created with Recaptcha.fetchClient()
-        debugPrint('reCAPTCHA: $platformName ready for reCAPTCHA Enterprise client creation');
+        debugPrint(
+            'reCAPTCHA: $platformName ready for reCAPTCHA Enterprise client creation');
         return true;
       } else {
         debugPrint('reCAPTCHA: Platform not supported - $platformName');
@@ -82,36 +127,50 @@ class PlatformRecaptchaService {
   static Future<String?> execute(String action) async {
     try {
       if (isWebPlatform) {
+        // Skip reCAPTCHA in debug mode for web platform
+        if (kDebugMode && FlavorManager.areDebugFeaturesEnabled) {
+          debugPrint(
+              'reCAPTCHA: Skipping verification in debug mode for web platform (action: $action)');
+          // Return a mock token for debugging
+          return 'debug_mock_token_${DateTime.now().millisecondsSinceEpoch}';
+        }
+
         // Web platform - use g_recaptcha_v3
-        debugPrint('reCAPTCHA: Executing $platformName reCAPTCHA for action: $action');
-        
+        debugPrint(
+            'reCAPTCHA: Executing $platformName reCAPTCHA for action: $action');
+
         final webRecaptcha = await _importWebRecaptcha();
         if (webRecaptcha != null) {
           final token = await webRecaptcha.execute(action);
-          debugPrint('reCAPTCHA: $platformName execution completed, token received: ${token != null}');
+          debugPrint(
+              'reCAPTCHA: $platformName execution completed, token received: ${token != null}');
           return token;
         }
         throw Exception('Failed to load web reCAPTCHA library');
       } else if (isMobilePlatform) {
         // Mobile platform - use reCAPTCHA Enterprise
-        debugPrint('reCAPTCHA: Executing $platformName reCAPTCHA Enterprise for action: $action');
-        
+        debugPrint(
+            'reCAPTCHA: Executing $platformName reCAPTCHA Enterprise for action: $action');
+
         final mobileRecaptcha = await _importMobileRecaptcha();
         if (mobileRecaptcha != null) {
           final key = siteKey;
           if (key == null) {
             throw Exception('No site key configured for $platformName');
           }
-          
+
           final client = await mobileRecaptcha.fetchClient(key);
-          final token = await client.execute(mobileRecaptcha.customAction(action));
-          
-          debugPrint('reCAPTCHA: $platformName execution completed, token received: ${token.isNotEmpty}');
+          final token =
+              await client.execute(mobileRecaptcha.customAction(action));
+
+          debugPrint(
+              'reCAPTCHA: $platformName execution completed, token received: ${token.isNotEmpty}');
           return token;
         }
         throw Exception('Failed to load mobile reCAPTCHA library');
       } else {
-        debugPrint('reCAPTCHA: Platform not supported for execution - $platformName');
+        debugPrint(
+            'reCAPTCHA: Platform not supported for execution - $platformName');
         throw Exception('Platform not supported: $platformName');
       }
     } catch (e) {

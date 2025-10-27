@@ -15,8 +15,8 @@ class VerificationCodeInput extends StatelessWidget {
     required this.focusNodes,
     required this.onChanged,
     this.enabled = true,
-  }) : assert(controllers.length == 4, 'Must have exactly 4 controllers'),
-       assert(focusNodes.length == 4, 'Must have exactly 4 focus nodes');
+  })  : assert(controllers.length == 4, 'Must have exactly 4 controllers'),
+        assert(focusNodes.length == 4, 'Must have exactly 4 focus nodes');
 
   @override
   Widget build(BuildContext context) {
@@ -55,14 +55,14 @@ class _CodeInputField extends StatelessWidget {
       height: 60,
       decoration: BoxDecoration(
         border: Border.all(
-          color: focusNode.hasFocus 
-              ? context.primary 
+          color: focusNode.hasFocus
+              ? context.primary
               : context.outline.withAlpha(77), // 0.3 * 255 = 77
           width: focusNode.hasFocus ? 2 : 1,
         ),
         borderRadius: BorderRadius.circular(12),
-        color: enabled 
-            ? context.surface 
+        color: enabled
+            ? context.surface
             : context.surface.withAlpha(128), // 0.5 * 255 = 128
       ),
       child: Center(
@@ -73,8 +73,8 @@ class _CodeInputField extends StatelessWidget {
           textAlign: TextAlign.center,
           style: context.headlineSmall?.copyWith(
             fontWeight: FontWeight.bold,
-            color: enabled 
-                ? context.onSurface 
+            color: enabled
+                ? context.onSurface
                 : context.onSurface.withAlpha(128), // 0.5 * 255 = 128
           ),
           keyboardType: TextInputType.number,

@@ -1,7 +1,7 @@
 import '../../domain/entities/auth_tokens.dart';
 
 /// AuthTokens model for data layer
-/// 
+///
 /// Extends the AuthTokens entity with JSON serialization capabilities
 class AuthTokensModel extends AuthTokens {
   const AuthTokensModel({
@@ -70,7 +70,8 @@ class AuthTokensModel extends AuthTokens {
       refreshToken: refreshToken ?? this.refreshToken,
       tokenType: tokenType ?? this.tokenType,
       accessTokenExpiresIn: accessTokenExpiresIn ?? this.accessTokenExpiresIn,
-      refreshTokenExpiresIn: refreshTokenExpiresIn ?? this.refreshTokenExpiresIn,
+      refreshTokenExpiresIn:
+          refreshTokenExpiresIn ?? this.refreshTokenExpiresIn,
     );
   }
 }

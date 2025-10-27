@@ -8,9 +8,11 @@ final featuredOffersProvider = StateProvider<List<OfferModel>>((ref) {
     const OfferModel(
       id: '1',
       title: 'Time Master',
-      description: 'Become a Coin Master! Travel to unique islands, spin the slot machine & collect gold coins in Time Master!',
+      description:
+          'Become a Coin Master! Travel to unique islands, spin the slot machine & collect gold coins in Time Master!',
       earning: 185.89,
-      imageUrl: 'https://cdn.mychips.io/thumbnail/5a19234a88ed2629d38cc16f2fcfacb3.jpg',
+      imageUrl:
+          'https://cdn.mychips.io/thumbnail/5a19234a88ed2629d38cc16f2fcfacb3.jpg',
       type: OfferType.game,
       duration: 'Multi Day',
       isHot: true,
@@ -19,9 +21,11 @@ final featuredOffersProvider = StateProvider<List<OfferModel>>((ref) {
     const OfferModel(
       id: '2',
       title: 'Ever Legion',
-      description: 'Dive into a dark fantasy world in Ever Legion! Summon epic heroes, battle undead hordes, and conquer powerful foes!',
+      description:
+          'Dive into a dark fantasy world in Ever Legion! Summon epic heroes, battle undead hordes, and conquer powerful foes!',
       earning: 96.96,
-      imageUrl: 'https://cdn.mychips.io/thumbnail/29db928e62479b3b103b75c148e3c0b7.png',
+      imageUrl:
+          'https://cdn.mychips.io/thumbnail/29db928e62479b3b103b75c148e3c0b7.png',
       type: OfferType.game,
       duration: 'Multi Day',
       rating: 4.7,
@@ -31,7 +35,8 @@ final featuredOffersProvider = StateProvider<List<OfferModel>>((ref) {
       title: 'Survivor Idle Run',
       description: 'Complete Quests one after another to progress',
       earning: 178.66,
-      imageUrl: 'https://cdn.mychips.io/thumbnail/abe7009045453de4c9555aff3825f02c.png',
+      imageUrl:
+          'https://cdn.mychips.io/thumbnail/abe7009045453de4c9555aff3825f02c.png',
       type: OfferType.game,
       duration: 'Multi Day',
       rating: 4.6,
@@ -39,9 +44,11 @@ final featuredOffersProvider = StateProvider<List<OfferModel>>((ref) {
     const OfferModel(
       id: '4',
       title: 'Travel Stories: Merge Journey',
-      description: 'Embark on an unforgettable journey in the captivating merge puzzle game, "Tales of Travel".',
+      description:
+          'Embark on an unforgettable journey in the captivating merge puzzle game, "Tales of Travel".',
       earning: 54.13,
-      imageUrl: 'https://cdn.mychips.io/thumbnail/bda29a3bc32a90ac968ea3bb58644398.png',
+      imageUrl:
+          'https://cdn.mychips.io/thumbnail/bda29a3bc32a90ac968ea3bb58644398.png',
       type: OfferType.game,
       duration: 'Multi Day',
       rating: 4.7,
@@ -49,9 +56,11 @@ final featuredOffersProvider = StateProvider<List<OfferModel>>((ref) {
     const OfferModel(
       id: '5',
       title: 'Merge Designer - Decor & Story',
-      description: 'Become an excellent designer & have fun! Merge items and decorate your dream house.',
+      description:
+          'Become an excellent designer & have fun! Merge items and decorate your dream house.',
       earning: 53.63,
-      imageUrl: 'https://cdn.mychips.io/thumbnail/3aa170e9e0a37c82cd79236d7e4837b0.png',
+      imageUrl:
+          'https://cdn.mychips.io/thumbnail/3aa170e9e0a37c82cd79236d7e4837b0.png',
       type: OfferType.game,
       duration: 'Multi Day',
       rating: 4.5,
@@ -59,9 +68,11 @@ final featuredOffersProvider = StateProvider<List<OfferModel>>((ref) {
     const OfferModel(
       id: '6',
       title: 'Crypto.com',
-      description: 'Experience Seamless Crypto Trading on Crypto.com and Grab a chance to win 1 Bitcoin.',
+      description:
+          'Experience Seamless Crypto Trading on Crypto.com and Grab a chance to win 1 Bitcoin.',
       earning: 36.16,
-      imageUrl: 'https://cdn.mychips.io/thumbnail/29db928e62479b3b103b75c148e3c0b7.png',
+      imageUrl:
+          'https://cdn.mychips.io/thumbnail/29db928e62479b3b103b75c148e3c0b7.png',
       type: OfferType.crypto,
       duration: 'Multi Day',
       rating: 4.3,

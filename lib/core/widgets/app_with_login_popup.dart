@@ -18,18 +18,19 @@ class AppWithLoginPopup extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // Watch authentication state to show/hide popup
     final isAuthenticated = ref.watch(isAuthenticatedObservableProvider);
-    
+
     // Get current route to determine if we should show popup
     final currentLocation = GoRouterState.of(context).uri.path;
     final isAuthRoute = currentLocation.startsWith('/auth');
-    
+
     // Only show popup if:
     // 1. User is not authenticated
     // 2. Current route is NOT an authentication route
     final shouldShowPopup = !isAuthenticated && !isAuthRoute;
-    
-    debugPrint('🔍 AppWithLoginPopup - Location: $currentLocation, IsAuth: $isAuthenticated, IsAuthRoute: $isAuthRoute, ShowPopup: $shouldShowPopup');
-    
+
+    debugPrint(
+        '🔍 AppWithLoginPopup - Location: $currentLocation, IsAuth: $isAuthenticated, IsAuthRoute: $isAuthRoute, ShowPopup: $shouldShowPopup');
+
     return LoginPopupOverlay(
       showPopup: shouldShowPopup,
       onLoginSuccess: () {

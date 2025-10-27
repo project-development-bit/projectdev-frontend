@@ -1,5 +1,5 @@
 /// Forgot password data model
-/// 
+///
 /// Contains the data returned from forgot password API
 class ForgotPasswordData {
   const ForgotPasswordData({
@@ -30,7 +30,8 @@ class ForgotPasswordData {
   }
 
   @override
-  String toString() => 'ForgotPasswordData(email: $email, securityCode: $securityCode)';
+  String toString() =>
+      'ForgotPasswordData(email: $email, securityCode: $securityCode)';
 
   @override
   bool operator ==(Object other) {
@@ -45,7 +46,7 @@ class ForgotPasswordData {
 }
 
 /// Forgot password response model
-/// 
+///
 /// Contains the complete response from the forgot password API endpoint
 class ForgotPasswordResponse {
   const ForgotPasswordResponse({
@@ -82,7 +83,8 @@ class ForgotPasswordResponse {
   }
 
   @override
-  String toString() => 'ForgotPasswordResponse(success: $success, message: $message, data: $data)';
+  String toString() =>
+      'ForgotPasswordResponse(success: $success, message: $message, data: $data)';
 
   @override
   bool operator ==(Object other) {

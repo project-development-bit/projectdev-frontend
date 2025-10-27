@@ -8,7 +8,7 @@ part 'verify_code_request.g.dart';
 class VerifyCodeRequest extends Equatable {
   /// User's email address
   final String email;
-  
+
   /// Verification code
   final String code;
 

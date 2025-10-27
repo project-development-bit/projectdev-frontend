@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import '../../../../core/enum/user_role.dart';
 
 /// User entity for authentication
-/// 
+///
 /// Represents the authenticated user's basic information
 class User extends Equatable {
   const User({

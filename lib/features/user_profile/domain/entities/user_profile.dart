@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 /// User Profile Entity
-/// 
+///
 /// Represents the user's profile information in the domain layer.
 /// This is a pure Dart class with no dependencies on external packages
 /// except for Equatable for value equality comparison.

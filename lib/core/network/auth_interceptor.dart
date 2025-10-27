@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:developer' as logger show log;
-import 'dart:io';
 import 'package:cointiply_app/core/config/flavor_manager.dart';
 import 'package:cointiply_app/core/services/secure_storage_service.dart';
+import 'package:cointiply_app/core/services/platform_recaptcha_service.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
@@ -37,11 +37,13 @@ class TokenInterceptor extends Interceptor {
     }
 
     try {
-      options.headers['API_REQUEST_FROM'] = Platform.isIOS
-          ? "ios"
-          : Platform.isAndroid
-              ? "android"
-              : "WEB";
+      String platform = "WEB"; // Default to web
+      if (PlatformRecaptchaService.isIOS) {
+        platform = "ios";
+      } else if (PlatformRecaptchaService.isAndroid) {
+        platform = "android";
+      }
+      options.headers['API_REQUEST_FROM'] = platform;
     } catch (_) {
       options.headers['API_REQUEST_FROM'] = "WEB";
     }

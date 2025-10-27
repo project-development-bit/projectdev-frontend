@@ -27,7 +27,7 @@ class HowItWorksSection extends StatelessWidget {
             color: context.onSurfaceVariant,
           ),
           const SizedBox(height: 48),
-          
+
           // Steps
           if (context.isMobile)
             // Mobile: Vertical layout
@@ -78,9 +78,12 @@ class HowItWorksSection extends StatelessWidget {
     );
   }
 
-  Widget _buildStep(BuildContext context, int stepNumber, String title, String description) {
+  Widget _buildStep(
+      BuildContext context, int stepNumber, String title, String description) {
     return Column(
-      crossAxisAlignment: context.isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+      crossAxisAlignment: context.isMobile
+          ? CrossAxisAlignment.center
+          : CrossAxisAlignment.start,
       children: [
         // Step number circle
         Container(
@@ -106,7 +109,7 @@ class HowItWorksSection extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 20),
-        
+
         // Title
         CommonText.titleLarge(
           title,
@@ -114,14 +117,14 @@ class HowItWorksSection extends StatelessWidget {
           fontWeight: FontWeight.w600,
         ),
         const SizedBox(height: 12),
-        
+
         // Description
         CommonText.bodyMedium(
           description,
           textAlign: context.isMobile ? TextAlign.center : TextAlign.start,
           color: context.onSurfaceVariant,
         ),
-        
+
         // Visual indicator (arrow for desktop)
         if (!context.isMobile && stepNumber < 3) ...[
           const SizedBox(height: 20),

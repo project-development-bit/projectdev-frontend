@@ -7,7 +7,8 @@ void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   group('Sign Up Flow Test', () {
-    testWidgets('Complete sign up flow with valid data', (WidgetTester tester) async {
+    testWidgets('Complete sign up flow with valid data',
+        (WidgetTester tester) async {
       // Launch the app
       app.main();
       await tester.pumpAndSettle();
@@ -25,7 +26,7 @@ void main() {
         if (loginFinder.evaluate().isNotEmpty) {
           await tester.tap(loginFinder.first);
           await tester.pumpAndSettle();
-          
+
           // Look for "Sign Up" link on login page
           final signUpLinkFinder = find.text('Sign Up');
           if (signUpLinkFinder.evaluate().isNotEmpty) {
@@ -64,7 +65,7 @@ void main() {
       final roleDropdown = find.byType(DropdownButtonFormField<dynamic>);
       await tester.tap(roleDropdown);
       await tester.pumpAndSettle();
-      
+
       // Select "Developer" role
       final developerOption = find.text('Developer').last;
       await tester.tap(developerOption);
@@ -73,7 +74,7 @@ void main() {
       // Submit the form
       final signUpButton = find.widgetWithText(ElevatedButton, 'Sign Up');
       expect(signUpButton, findsOneWidget);
-      
+
       await tester.tap(signUpButton);
       await tester.pumpAndSettle();
 
@@ -83,7 +84,7 @@ void main() {
 
       // Check if we successfully navigated to Sign In screen
       // We expect either to be on sign in page or see a success message
-      
+
       // Check for success scenarios:
       // 1. We're redirected to login page
       final loginPageIndicators = [
@@ -92,7 +93,7 @@ void main() {
         find.text('Enter your email'),
         find.text('Enter your password')
       ];
-      
+
       bool foundLoginIndicator = false;
       for (final indicator in loginPageIndicators) {
         if (indicator.evaluate().isNotEmpty) {
@@ -106,21 +107,24 @@ void main() {
       bool foundSuccessMessage = successMessage.evaluate().isNotEmpty;
 
       // Assert that either we're on login page or saw success message
-      expect(foundLoginIndicator || foundSuccessMessage, isTrue, 
-        reason: 'Should either navigate to login page or show success message');
+      expect(foundLoginIndicator || foundSuccessMessage, isTrue,
+          reason:
+              'Should either navigate to login page or show success message');
 
       // If we found login indicators, verify we're actually on the sign in screen
       if (foundLoginIndicator) {
         // Verify key elements of the sign in screen are present
-        expect(find.byType(TextFormField), findsAtLeastNWidgets(2)); // Email and password fields
-        
+        expect(find.byType(TextFormField),
+            findsAtLeastNWidgets(2)); // Email and password fields
+
         // Look for sign in button
         final signInButton = find.widgetWithText(ElevatedButton, 'Sign In');
         expect(signInButton, findsOneWidget);
       }
     });
 
-    testWidgets('Sign up with invalid data shows validation errors', (WidgetTester tester) async {
+    testWidgets('Sign up with invalid data shows validation errors',
+        (WidgetTester tester) async {
       // Launch the app
       app.main();
       await tester.pumpAndSettle();
@@ -146,7 +150,8 @@ void main() {
       expect(find.text('Password is required'), findsOneWidget);
     });
 
-    testWidgets('Sign up with mismatched passwords shows error', (WidgetTester tester) async {
+    testWidgets('Sign up with mismatched passwords shows error',
+        (WidgetTester tester) async {
       // Launch the app
       app.main();
       await tester.pumpAndSettle();
@@ -161,16 +166,16 @@ void main() {
       // Fill form with mismatched passwords
       final nameField = find.byType(TextFormField).at(0);
       await tester.enterText(nameField, 'Test User');
-      
+
       final emailField = find.byType(TextFormField).at(1);
       await tester.enterText(emailField, 'test@example.com');
-      
+
       final passwordField = find.byType(TextFormField).at(2);
       await tester.enterText(passwordField, 'password123');
-      
+
       final confirmPasswordField = find.byType(TextFormField).at(3);
       await tester.enterText(confirmPasswordField, 'differentpassword');
-      
+
       await tester.pumpAndSettle();
 
       // Submit form

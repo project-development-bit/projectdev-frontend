@@ -51,7 +51,6 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
       }
     });
 
-    
     // Listen to state changes for navigation
     ref.listenManual<VerificationState>(verificationNotifierProvider,
         (previous, next) {
@@ -88,7 +87,6 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
         // Timer is restarted in _resendCode method
       }
     });
-
   }
 
   @override
@@ -263,7 +261,7 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
                     onPressed:
                         (verificationState is VerificationLoading || !canResend)
                             ? null
-                        : _resendCode,
+                            : _resendCode,
                     child: CommonText.bodyMedium(
                       canResend
                           ? (localizations?.translate('resend_code') ??

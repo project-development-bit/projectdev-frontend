@@ -116,7 +116,7 @@ class _CommonTextFieldState extends State<CommonTextField> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return TextFormField(
       controller: widget.controller,
       keyboardType: widget.keyboardType,
@@ -184,7 +184,8 @@ class _CommonTextFieldState extends State<CommonTextField> {
                     color: AppColors.websiteText,
                   )
                 : AppTypography.labelMedium),
-        floatingLabelBehavior: widget.floatingLabelBehavior ?? FloatingLabelBehavior.auto,
+        floatingLabelBehavior:
+            widget.floatingLabelBehavior ?? FloatingLabelBehavior.auto,
       ),
     );
   }
@@ -263,7 +264,8 @@ class TextFieldValidators {
     }
     final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
     if (!emailRegex.hasMatch(value)) {
-      return localizations?.translate('email_invalid') ?? 'Please enter a valid email address';
+      return localizations?.translate('email_invalid') ??
+          'Please enter a valid email address';
     }
     return null;
   }
@@ -271,43 +273,56 @@ class TextFieldValidators {
   static String? password(String? value, BuildContext context) {
     final localizations = AppLocalizations.of(context);
     if (value == null || value.isEmpty) {
-      return localizations?.translate('password_required') ?? 'Password is required';
+      return localizations?.translate('password_required') ??
+          'Password is required';
     }
     if (value.length < 8) {
-      return localizations?.translate('password_min_length', args: ['8']) ?? 'Password must be at least 8 characters long';
+      return localizations?.translate('password_min_length', args: ['8']) ??
+          'Password must be at least 8 characters long';
     }
     return null;
   }
 
-  static String? required(String? value, BuildContext context, {String? fieldName}) {
+  static String? required(String? value, BuildContext context,
+      {String? fieldName}) {
     final localizations = AppLocalizations.of(context);
     if (value == null || value.trim().isEmpty) {
       if (fieldName != null) {
-        return localizations?.translate('field_required', args: [fieldName]) ?? '$fieldName is required';
+        return localizations?.translate('field_required', args: [fieldName]) ??
+            '$fieldName is required';
       }
-      return localizations?.translate('field_required', args: ['This field']) ?? 'This field is required';
+      return localizations?.translate('field_required', args: ['This field']) ??
+          'This field is required';
     }
     return null;
   }
 
-  static String? minLength(String? value, int minLength, BuildContext context, {String? fieldName}) {
+  static String? minLength(String? value, int minLength, BuildContext context,
+      {String? fieldName}) {
     final localizations = AppLocalizations.of(context);
     if (value == null || value.isEmpty) {
       if (fieldName != null) {
-        return localizations?.translate('field_required', args: [fieldName]) ?? '$fieldName is required';
+        return localizations?.translate('field_required', args: [fieldName]) ??
+            '$fieldName is required';
       }
-      return localizations?.translate('field_required', args: ['This field']) ?? 'This field is required';
+      return localizations?.translate('field_required', args: ['This field']) ??
+          'This field is required';
     }
     if (value.length < minLength) {
       if (fieldName != null) {
-        return localizations?.translate('password_min_length', args: [minLength.toString()]) ?? '$fieldName must be at least $minLength characters long';
+        return localizations?.translate('password_min_length',
+                args: [minLength.toString()]) ??
+            '$fieldName must be at least $minLength characters long';
       }
-      return localizations?.translate('password_min_length', args: [minLength.toString()]) ?? 'This field must be at least $minLength characters long';
+      return localizations?.translate('password_min_length',
+              args: [minLength.toString()]) ??
+          'This field must be at least $minLength characters long';
     }
     return null;
   }
 
-  static String? maxLength(String? value, int maxLength, BuildContext context, {String? fieldName}) {
+  static String? maxLength(String? value, int maxLength, BuildContext context,
+      {String? fieldName}) {
     if (value != null && value.length > maxLength) {
       return '${fieldName ?? 'This field'} must not exceed $maxLength characters';
     }
@@ -325,7 +340,8 @@ class TextFieldValidators {
     return null;
   }
 
-  static String? numeric(String? value, BuildContext context, {String? fieldName}) {
+  static String? numeric(String? value, BuildContext context,
+      {String? fieldName}) {
     if (value == null || value.isEmpty) {
       return '${fieldName ?? 'This field'} is required';
     }

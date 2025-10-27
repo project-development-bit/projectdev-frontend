@@ -74,7 +74,7 @@ class OfferCard extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(width: 12),
-                  
+
                   // Title and type
                   Expanded(
                     child: Column(
@@ -106,7 +106,7 @@ class OfferCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 8),
-                  
+
                   // Earning amount
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
@@ -126,7 +126,7 @@ class OfferCard extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 12),
-              
+
               // Description
               CommonText.bodySmall(
                 offer.description,
@@ -134,7 +134,7 @@ class OfferCard extends StatelessWidget {
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
-              
+
               // Progress bar (if applicable)
               if (showProgress && offer.progress != null) ...[
                 const SizedBox(height: 12),
@@ -155,9 +155,9 @@ class OfferCard extends StatelessWidget {
                   ],
                 ),
               ],
-              
+
               const SizedBox(height: 12),
-              
+
               // Footer with rating and action button
               Row(
                 children: [
@@ -176,13 +176,14 @@ class OfferCard extends StatelessWidget {
                     const Spacer(),
                   ] else
                     const Spacer(),
-                  
+
                   // Action button
                   CommonButton(
                     text: showProgress ? 'Continue' : 'Start Offer',
                     onPressed: onTap,
                     height: 32,
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                     fontSize: 12,
                   ),
                 ],

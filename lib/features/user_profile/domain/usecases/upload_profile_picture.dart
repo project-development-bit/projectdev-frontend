@@ -5,13 +5,15 @@ import '../../../../core/usecases/usecase.dart';
 import '../repositories/profile_repository.dart';
 
 /// Use case for uploading profile picture
-class UploadProfilePicture implements UseCase<String, UploadProfilePictureParams> {
+class UploadProfilePicture
+    implements UseCase<String, UploadProfilePictureParams> {
   const UploadProfilePicture(this.repository);
 
   final ProfileRepository repository;
 
   @override
-  Future<Either<Failure, String>> call(UploadProfilePictureParams params) async {
+  Future<Either<Failure, String>> call(
+      UploadProfilePictureParams params) async {
     return await repository.uploadProfilePicture(params.imagePath);
   }
 }

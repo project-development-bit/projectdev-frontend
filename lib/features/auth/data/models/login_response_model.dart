@@ -3,7 +3,7 @@ import 'user_model.dart';
 import 'auth_tokens_model.dart';
 
 /// LoginResponse model for data layer
-/// 
+///
 /// Extends the LoginResponse entity with JSON serialization capabilities
 class LoginResponseModel extends LoginResponse {
   const LoginResponseModel({
@@ -16,7 +16,7 @@ class LoginResponseModel extends LoginResponse {
   /// Create LoginResponseModel from JSON response
   factory LoginResponseModel.fromJson(Map<String, dynamic> json) {
     final data = json['data'] as Map<String, dynamic>;
-    
+
     return LoginResponseModel(
       success: json['success'] as bool,
       message: json['message'] as String,

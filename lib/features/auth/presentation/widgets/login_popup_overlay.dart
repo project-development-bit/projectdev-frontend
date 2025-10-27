@@ -17,10 +17,10 @@ class LoginPopupOverlay extends ConsumerWidget {
 
   /// The main app content to show behind the overlay
   final Widget child;
-  
+
   /// Whether to show the login popup
   final bool showPopup;
-  
+
   /// Callback when login is successful
   final VoidCallback? onLoginSuccess;
 
@@ -29,7 +29,7 @@ class LoginPopupOverlay extends ConsumerWidget {
     if (!showPopup) {
       return child;
     }
-    
+
     return Stack(
       children: [
         // Main app content (with reduced interaction)
@@ -37,7 +37,7 @@ class LoginPopupOverlay extends ConsumerWidget {
           absorbing: showPopup,
           child: child,
         ),
-        
+
         // Login popup overlay
         _LoginPopupModal(
           onLoginSuccess: onLoginSuccess,
@@ -116,12 +116,14 @@ class _LoginPopupModal extends ConsumerWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           CommonText.titleLarge(
-                            localizations?.translate('welcome_back') ?? 'Welcome Back',
+                            localizations?.translate('welcome_back') ??
+                                'Welcome Back',
                             fontWeight: FontWeight.bold,
                             color: context.onSurface,
                           ),
                           CommonText.bodyMedium(
-                            localizations?.translate('sign_in_to_continue') ?? 'Sign in to continue',
+                            localizations?.translate('sign_in_to_continue') ??
+                                'Sign in to continue',
                             color: context.onSurfaceVariant,
                           ),
                         ],
@@ -137,7 +139,7 @@ class _LoginPopupModal extends ConsumerWidget {
                   ],
                 ),
               ),
-              
+
               // Login form content
               Flexible(
                 child: SingleChildScrollView(
@@ -160,7 +162,7 @@ class _LoginPopupModal extends ConsumerWidget {
                   ),
                 ),
               ),
-              
+
               // Footer
               Container(
                 padding: const EdgeInsets.all(20),
@@ -182,7 +184,8 @@ class _LoginPopupModal extends ConsumerWidget {
                     ),
                     const SizedBox(width: 8),
                     CommonText.bodySmall(
-                      localizations?.translate('secure_login') ?? 'Your information is secure',
+                      localizations?.translate('secure_login') ??
+                          'Your information is secure',
                       color: context.onSurfaceVariant,
                     ),
                   ],

@@ -11,7 +11,8 @@ class TextThemeExampleWidget extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           'Text Theme Examples',
-          style: context.titleLarge, // Using extension instead of Theme.of(context).textTheme.titleLarge
+          style: context
+              .titleLarge, // Using extension instead of Theme.of(context).textTheme.titleLarge
         ),
       ),
       body: SingleChildScrollView(
@@ -24,9 +25,12 @@ class TextThemeExampleWidget extends StatelessWidget {
               context,
               'Display Styles',
               [
-                _buildTextExample(context, 'Display Large', context.displayLarge),
-                _buildTextExample(context, 'Display Medium', context.displayMedium),
-                _buildTextExample(context, 'Display Small', context.displaySmall),
+                _buildTextExample(
+                    context, 'Display Large', context.displayLarge),
+                _buildTextExample(
+                    context, 'Display Medium', context.displayMedium),
+                _buildTextExample(
+                    context, 'Display Small', context.displaySmall),
               ],
             ),
 
@@ -35,9 +39,12 @@ class TextThemeExampleWidget extends StatelessWidget {
               context,
               'Headline Styles',
               [
-                _buildTextExample(context, 'Headline Large', context.headlineLarge),
-                _buildTextExample(context, 'Headline Medium', context.headlineMedium),
-                _buildTextExample(context, 'Headline Small', context.headlineSmall),
+                _buildTextExample(
+                    context, 'Headline Large', context.headlineLarge),
+                _buildTextExample(
+                    context, 'Headline Medium', context.headlineMedium),
+                _buildTextExample(
+                    context, 'Headline Small', context.headlineSmall),
               ],
             ),
 
@@ -113,7 +120,8 @@ class TextThemeExampleWidget extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: context.surface, // Using extension
                     borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: context.outline), // Using extension
+                    border:
+                        Border.all(color: context.outline), // Using extension
                   ),
                   child: Text(
                     'Surface with OnSurface text',
@@ -207,7 +215,8 @@ class TextThemeExampleWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildSection(BuildContext context, String title, List<Widget> children) {
+  Widget _buildSection(
+      BuildContext context, String title, List<Widget> children) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -224,7 +233,8 @@ class TextThemeExampleWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildTextExample(BuildContext context, String label, TextStyle? style) {
+  Widget _buildTextExample(
+      BuildContext context, String label, TextStyle? style) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Column(
@@ -248,7 +258,7 @@ class TextThemeExampleWidget extends StatelessWidget {
 }
 
 /// Usage examples in code comments:
-/// 
+///
 /// Instead of writing:
 /// ```dart
 /// Text(
@@ -256,7 +266,7 @@ class TextThemeExampleWidget extends StatelessWidget {
 ///   style: Theme.of(context).textTheme.bodyLarge,
 /// )
 /// ```
-/// 
+///
 /// You can now write:
 /// ```dart
 /// Text(
@@ -264,7 +274,7 @@ class TextThemeExampleWidget extends StatelessWidget {
 ///   style: context.bodyLarge,
 /// )
 /// ```
-/// 
+///
 /// Color examples:
 /// ```dart
 /// Container(
@@ -277,7 +287,7 @@ class TextThemeExampleWidget extends StatelessWidget {
 ///   ),
 /// )
 /// ```
-/// 
+///
 /// Media query examples:
 /// ```dart
 /// if (context.isMobile) {           // Instead of MediaQuery.of(context).size.width < 768
@@ -288,7 +298,7 @@ class TextThemeExampleWidget extends StatelessWidget {
 ///   // Desktop layout
 /// }
 /// ```
-/// 
+///
 /// Navigation examples:
 /// ```dart
 /// context.pop();                    // Instead of Navigator.of(context).pop()
@@ -296,14 +306,14 @@ class TextThemeExampleWidget extends StatelessWidget {
 ///   builder: (context) => MyPage(),
 /// ));
 /// ```
-/// 
+///
 /// Dialog and SnackBar examples:
 /// ```dart
 /// context.showAlertDialog(          // Instead of showDialog()
 ///   title: 'Alert',
 ///   content: 'This is an alert',
 /// );
-/// 
+///
 /// context.showSnackBar(             // Instead of ScaffoldMessenger.of(context).showSnackBar()
 ///   message: 'Hello SnackBar',
 /// );
