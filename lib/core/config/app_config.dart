@@ -72,7 +72,7 @@ class AppConfig {
     androidRecaptchaSiteKey:
         '6LdjbvgrAAAAAINsAjihWllPukIAyNdXctSkNKo5', // Dev Android key
     iosRecaptchaSiteKey:
-        '6LceIvUrAAAAAHhQuc2U0uXTfscW181dIdPT208i', // Dev iOS key
+        '6Lc8qvkrAAAAABmU7uNaaAWgMs8YTt_xyAi19IEG', // Dev iOS key
     webRecaptchaSiteKey:
         '6LceIvUrAAAAAHhQuc2U0uXTfscW181dIdPT208i', // Dev Web key for backward compatibility
     additionalConfig: {
@@ -101,7 +101,7 @@ class AppConfig {
     androidRecaptchaSiteKey:
         '6LdjbvgrAAAAAINsAjihWllPukIAyNdXctSkNKo5', // Staging Android key
     iosRecaptchaSiteKey:
-        '6LceIvUrAAAAAHhQuc2U0uXTfscW181dIdPT208i', // Staging iOS key
+        '6Lc8qvkrAAAAABmU7uNaaAWgMs8YTt_xyAi19IEG', // Staging iOS key
     webRecaptchaSiteKey:
         '6LceIvUrAAAAAHhQuc2U0uXTfscW181dIdPT208i', // Staging Web key
     additionalConfig: {
@@ -130,7 +130,7 @@ class AppConfig {
     androidRecaptchaSiteKey:
         '6LdjbvgrAAAAAINsAjihWllPukIAyNdXctSkNKo5', // Production Android key
     iosRecaptchaSiteKey:
-        '6LceIvUrAAAAAHhQuc2U0uXTfscW181dIdPT208i', // Production iOS key
+        '6Lc8qvkrAAAAABmU7uNaaAWgMs8YTt_xyAi19IEG', // Production iOS key
     webRecaptchaSiteKey:
         '6LceIvUrAAAAAHhQuc2U0uXTfscW181dIdPT208i', // Production Web key
     additionalConfig: {
