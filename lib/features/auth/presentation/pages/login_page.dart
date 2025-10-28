@@ -157,6 +157,65 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       showRememberMe: true,
                     ),
 
+                    const SizedBox(height: 32),
+
+                    // Legal Links Section
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Expanded(
+                          child: TextButton(
+                            onPressed: () => GoRouter.of(context)
+                                .push(AppRoutes.privacyPolicy),
+                            style: TextButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(vertical: 8),
+                            ),
+                            child: CommonText.bodySmall(
+                              translate('privacy_policy'),
+                              color: context.primary,
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                        CommonText.bodySmall(
+                          '•',
+                          color: context.onSurfaceVariant,
+                        ),
+                        Expanded(
+                          child: TextButton(
+                            onPressed: () => GoRouter.of(context)
+                                .push(AppRoutes.termsOfService),
+                            style: TextButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(vertical: 8),
+                            ),
+                            child: CommonText.bodySmall(
+                              translate('terms_of_service'),
+                              color: context.primary,
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                        CommonText.bodySmall(
+                          '•',
+                          color: context.onSurfaceVariant,
+                        ),
+                        Expanded(
+                          child: TextButton(
+                            onPressed: () =>
+                                GoRouter.of(context).push(AppRoutes.contactUs),
+                            style: TextButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(vertical: 8),
+                            ),
+                            child: CommonText.bodySmall(
+                              translate('contact_us'),
+                              color: context.primary,
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
                     const SizedBox(height: 24),
                   ],
                 ),
