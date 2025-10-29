@@ -157,14 +157,14 @@ class RecaptchaWidget extends ConsumerWidget {
                         fontWeight: FontWeight.w500,
                       ),
                       // Platform indicator for debugging (only in debug mode)
-                      if (kDebugMode) ...[
-                        const SizedBox(height: 2),
-                        CommonText.bodySmall(
-                          'Platform: ${PlatformRecaptchaService.platformName} | Action: $action',
-                          color: context.onSurfaceVariant.withAlpha(128),
-                          fontSize: 10,
-                        ),
-                      ],
+                      // if (kDebugMode) ...[
+                      //   const SizedBox(height: 2),
+                      //   CommonText.bodySmall(
+                      //     'Platform: ${PlatformRecaptchaService.platformName} | Action: $action',
+                      //     color: context.onSurfaceVariant.withAlpha(128),
+                      //     fontSize: 10,
+                      //   ),
+                      // ],
                     ],
                   ),
                 ),

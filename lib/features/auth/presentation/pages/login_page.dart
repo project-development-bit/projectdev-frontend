@@ -100,124 +100,128 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           children: [
             // Main login content
             SingleChildScrollView(
-              child: ResponsiveContainer(
-                maxWidth: context.isMobile ? null : 400,
-                padding: EdgeInsets.symmetric(
-                  horizontal: context.isMobile ? 24 : 32,
-                  vertical: 24,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    SizedBox(height: context.isMobile ? 60 : 80),
-
-                    // App Logo/Icon
-                    Center(
-                      child: CommonContainer(
-                        width: context.isMobile ? 100 : 120,
-                        height: context.isMobile ? 100 : 120,
-                        backgroundColor: context.primary.withAlpha(25),
-                        borderRadius: context.isMobile ? 50 : 60,
-                        child: Icon(
-                          Icons.fastfood_rounded,
-                          size: context.isMobile ? 56 : 64,
-                          color: context.primary,
+              child: Center(
+                child: ResponsiveContainer(
+                  maxWidth: context.isMobile ? null : 400,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: context.isMobile ? 24 : 32,
+                    vertical: 24,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      
+                  
+                      // App Logo/Icon
+                      Center(
+                        child: CommonContainer(
+                          width: context.isMobile ? 100 : 120,
+                          height: context.isMobile ? 100 : 120,
+                          backgroundColor: context.primary.withAlpha(25),
+                          borderRadius: context.isMobile ? 50 : 60,
+                          child: Icon(
+                            Icons.fastfood_rounded,
+                            size: context.isMobile ? 56 : 64,
+                            color: context.primary,
+                          ),
                         ),
                       ),
-                    ),
 
-                    const SizedBox(height: 20),
+                      const SizedBox(height: 20),
 
-                    // Welcome Text - Testing direct translation provider
-                    CommonText.headlineMedium(
-                      translate('welcome_back'),
-                      fontWeight: FontWeight.bold,
-                      color: context.onSurface,
-                      textAlign: TextAlign.center,
-                    ),
+                      // Welcome Text - Testing direct translation provider
+                      CommonText.headlineMedium(
+                        translate('welcome_back'),
+                        fontWeight: FontWeight.bold,
+                        color: context.onSurface,
+                        textAlign: TextAlign.center,
+                      ),
 
-                    const SizedBox(height: 8),
+                      const SizedBox(height: 8),
 
-                    CommonText.bodyLarge(
-                      translate('sign_in_subtitle'),
-                      color: context.onSurfaceVariant,
-                      textAlign: TextAlign.center,
-                    ),
+                      CommonText.bodyLarge(
+                        translate('sign_in_subtitle'),
+                        color: context.onSurfaceVariant,
+                        textAlign: TextAlign.center,
+                      ),
 
-                    const SizedBox(height: 40),
+                      const SizedBox(height: 40),
 
-                    // Login Form Widget
-                    LoginFormWidget(
-                      onLoginSuccess: () {
-                        // Navigation is handled in the login listener above
-                      },
-                      onForgotPassword: _handleForgotPassword,
-                      onSignUp: _handleSignUp,
-                      showSignUpLink: true,
-                      showRememberMe: true,
-                    ),
+                      // Login Form Widget
+                      LoginFormWidget(
+                        onLoginSuccess: () {
+                          // Navigation is handled in the login listener above
+                        },
+                        onForgotPassword: _handleForgotPassword,
+                        onSignUp: _handleSignUp,
+                        showSignUpLink: true,
+                        showRememberMe: true,
+                      ),
 
-                    const SizedBox(height: 32),
+                      const SizedBox(height: 32),
 
-                    // Legal Links Section
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Expanded(
-                          child: TextButton(
-                            onPressed: () => GoRouter.of(context)
-                                .push(AppRoutes.privacyPolicy),
-                            style: TextButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(vertical: 8),
-                            ),
-                            child: CommonText.bodySmall(
-                              translate('privacy_policy'),
-                              color: context.primary,
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ),
-                        CommonText.bodySmall(
-                          '•',
-                          color: context.onSurfaceVariant,
-                        ),
-                        Expanded(
-                          child: TextButton(
-                            onPressed: () => GoRouter.of(context)
-                                .push(AppRoutes.termsOfService),
-                            style: TextButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(vertical: 8),
-                            ),
-                            child: CommonText.bodySmall(
-                              translate('terms_of_service'),
-                              color: context.primary,
-                              textAlign: TextAlign.center,
+                      // Legal Links Section
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Expanded(
+                            child: TextButton(
+                              onPressed: () => GoRouter.of(context)
+                                  .push(AppRoutes.privacyPolicy),
+                              style: TextButton.styleFrom(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8),
+                              ),
+                              child: CommonText.bodySmall(
+                                translate('privacy_policy'),
+                                color: context.primary,
+                                textAlign: TextAlign.center,
+                              ),
                             ),
                           ),
-                        ),
-                        CommonText.bodySmall(
-                          '•',
-                          color: context.onSurfaceVariant,
-                        ),
-                        Expanded(
-                          child: TextButton(
-                            onPressed: () =>
-                                GoRouter.of(context).push(AppRoutes.contactUs),
-                            style: TextButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(vertical: 8),
-                            ),
-                            child: CommonText.bodySmall(
-                              translate('contact_us'),
-                              color: context.primary,
-                              textAlign: TextAlign.center,
+                          CommonText.bodySmall(
+                            '•',
+                            color: context.onSurfaceVariant,
+                          ),
+                          Expanded(
+                            child: TextButton(
+                              onPressed: () => GoRouter.of(context)
+                                  .push(AppRoutes.termsOfService),
+                              style: TextButton.styleFrom(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8),
+                              ),
+                              child: CommonText.bodySmall(
+                                translate('terms_of_service'),
+                                color: context.primary,
+                                textAlign: TextAlign.center,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 24),
-                  ],
+                          CommonText.bodySmall(
+                            '•',
+                            color: context.onSurfaceVariant,
+                          ),
+                          Expanded(
+                            child: TextButton(
+                              onPressed: () => GoRouter.of(context)
+                                  .push(AppRoutes.contactUs),
+                              style: TextButton.styleFrom(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8),
+                              ),
+                              child: CommonText.bodySmall(
+                                translate('contact_us'),
+                                color: context.primary,
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

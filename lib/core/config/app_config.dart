@@ -76,6 +76,8 @@ class AppConfig {
     webRecaptchaSiteKey:
         '6LceIvUrAAAAAHhQuc2U0uXTfscW181dIdPT208i', // Dev Web key for backward compatibility
     additionalConfig: {
+      'localhostRecaptchaSiteKey':
+          '6LdNlforAAAAAOIH7T2emlRz8XwliT8DacIeVn4W', // Add your localhost site key here
       'debugShowCheckedModeBanner': true,
       'debugShowMaterialGrid': false,
       'showPerformanceOverlay': false,
@@ -105,6 +107,7 @@ class AppConfig {
     webRecaptchaSiteKey:
         '6LceIvUrAAAAAHhQuc2U0uXTfscW181dIdPT208i', // Staging Web key
     additionalConfig: {
+      'localhostRecaptchaSiteKey': '6LdNlforAAAAAOIH7T2emlRz8XwliT8DacIeVn4W', 
       'debugShowCheckedModeBanner': false,
       'debugShowMaterialGrid': false,
       'showPerformanceOverlay': false,
@@ -134,6 +137,7 @@ class AppConfig {
     webRecaptchaSiteKey:
         '6LceIvUrAAAAAHhQuc2U0uXTfscW181dIdPT208i', // Production Web key
     additionalConfig: {
+      'localhostRecaptchaSiteKey': '6LdNlforAAAAAOIH7T2emlRz8XwliT8DacIeVn4W', 
       'debugShowCheckedModeBanner': false,
       'debugShowMaterialGrid': false,
       'showPerformanceOverlay': false,

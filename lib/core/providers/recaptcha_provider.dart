@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../config/flavor_manager.dart';
@@ -141,6 +142,31 @@ class RecaptchaNotifier extends StateNotifier<RecaptchaState> {
       state = RecaptchaError(message: 'reCAPTCHA verification failed: $e');
       debugPrint('reCAPTCHA Provider: Verification failed - $e');
     }
+  }
+
+  /// Get reCAPTCHA token, verifying if necessary
+  /// Returns null if reCAPTCHA is not required or verification fails
+  Future<String?> getToken({String action = 'login'}) async {
+    // If reCAPTCHA is not required, return null
+    if (!isRequired) {
+      debugPrint('reCAPTCHA Provider: Not required, returning null token');
+      return null;
+    }
+
+    // If already verified, return current token
+    if (state is RecaptchaVerified) {
+      final token = verificationToken;
+      debugPrint('reCAPTCHA Provider: Using existing token');
+      return token;
+    }
+
+    // If not verified, attempt verification
+    debugPrint(
+        'reCAPTCHA Provider: Token not available, attempting verification');
+    await verify(action: action);
+
+    // Return token if verification was successful
+    return verificationToken;
   }
 
   /// Reset verification state

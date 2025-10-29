@@ -428,6 +428,7 @@ void main() {
         loginRequest = const LoginRequest(
           email: 'user8@gmail.com',
           password: '12345678',
+          recaptchaToken: 'test_recaptcha_token', // Add test token
         );
       });
 
@@ -550,6 +551,7 @@ void main() {
         final expectedData = {
           'email': 'user8@gmail.com',
           'password': '12345678',
+          'recaptchaToken': 'test_recaptcha_token',
         };
 
         final mockResponseData = {

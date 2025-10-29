@@ -5,6 +5,7 @@ class LoginRequest extends Equatable {
   const LoginRequest({
     required this.email,
     required this.password,
+    this.recaptchaToken,
   });
 
   /// User's email address
@@ -13,12 +14,22 @@ class LoginRequest extends Equatable {
   /// User's password
   final String password;
 
+  /// reCAPTCHA token for verification (optional, will be null in debug mode)
+  final String? recaptchaToken;
+
   /// Convert to JSON for API request
   Map<String, dynamic> toJson() {
-    return {
+    final json = {
       'email': email,
       'password': password,
     };
+
+    // Only add recaptchaToken if it's not null
+    if (recaptchaToken != null) {
+      json['recaptchaToken'] = recaptchaToken!;
+    }
+
+    return json;
   }
 
   /// Create from JSON response (if needed)
@@ -26,6 +37,7 @@ class LoginRequest extends Equatable {
     return LoginRequest(
       email: json['email'] ?? '',
       password: json['password'] ?? '',
+      recaptchaToken: json['recaptchaToken'],
     );
   }
 
@@ -33,16 +45,21 @@ class LoginRequest extends Equatable {
   LoginRequest copyWith({
     String? email,
     String? password,
+    String? recaptchaToken,
+    bool clearRecaptchaToken = false,
   }) {
     return LoginRequest(
       email: email ?? this.email,
       password: password ?? this.password,
+      recaptchaToken:
+          clearRecaptchaToken ? null : (recaptchaToken ?? this.recaptchaToken),
     );
   }
 
   @override
-  List<Object> get props => [email, password];
+  List<Object?> get props => [email, password, recaptchaToken];
 
   @override
-  String toString() => 'LoginRequest(email: $email)';
+  String toString() =>
+      'LoginRequest(email: $email, hasRecaptcha: ${recaptchaToken != null})';
 }

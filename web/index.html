@@ -53,8 +53,74 @@
     href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&amp;display=swap"
     rel="stylesheet">
   
-    <!-- recaptcha it is only for staging , for production , we need to implement later -->
-    <script src="https://www.google.com/recaptcha/api.js?render=6LceIvUrAAAAAHhQuc2U0uXTfscW181dIdPT208i"></script>
+  <!-- Dynamic reCAPTCHA script loading -->
+  <script>
+    // Configuration for different environments
+    window.recaptchaConfig = {
+      // Production/staging keys
+      production: '6LceIvUrAAAAAHhQuc2U0uXTfscW181dIdPT208i',
+      // Add your localhost key here
+      localhost: '6LdNlforAAAAAOIH7T2emlRz8XwliT8DacIeVn4W', // Replace with your actual localhost key
+    };
+    // Function to detect localhost
+    window.isLocalhost = function () {
+      const hostname = window.location.hostname;
+      return hostname === 'localhost' ||
+        hostname === '127.0.0.1' ||
+        hostname === '0.0.0.0' ||
+        hostname.startsWith('192.168.') ||
+        hostname.endsWith('.local');
+    };
+
+    // Function to get the appropriate site key
+    window.getRecaptchaSiteKey = function () {
+      const isLocal = window.isLocalhost();
+      const key = isLocal ? window.recaptchaConfig.localhost : window.recaptchaConfig.production;
+      console.log('reCAPTCHA: Using', isLocal ? 'localhost' : 'production', 'key:', key.substring(0, 10) + '...');
+      return key;
+    };
+
+    // Function to load reCAPTCHA dynamically
+    window.loadRecaptcha = function (customSiteKey) {
+      // Remove existing reCAPTCHA script if present
+      const existingScript = document.querySelector('script[src*="recaptcha"]');
+      if (existingScript) {
+        existingScript.remove();
+        console.log('reCAPTCHA: Removed existing script');
+      }
+
+      // Get the site key to use
+      const siteKey = customSiteKey || window.getRecaptchaSiteKey();
+
+      // Validate the site key
+      if (!siteKey || siteKey === '6LdNlforAAAAAOIH7T2emlRz8XwliT8DacIeVn4W') {
+        console.warn('reCAPTCHA: Invalid or placeholder site key:', siteKey);
+        return;
+      }
+
+      // Create and load new reCAPTCHA script
+      const script = document.createElement('script');
+      script.src = `https://www.google.com/recaptcha/api.js?render=${siteKey}`;
+      script.async = true;
+
+      script.onload = function () {
+        console.log('reCAPTCHA: Script loaded successfully with key:', siteKey.substring(0, 10) + '...');
+        window.currentRecaptchaKey = siteKey;
+      };
+
+      script.onerror = function () {
+        console.error('reCAPTCHA: Failed to load script with key:', siteKey.substring(0, 10) + '...');
+      };
+
+      document.head.appendChild(script);
+    };
+
+    // Auto-load reCAPTCHA on page load
+    window.addEventListener('DOMContentLoaded', function () {
+      console.log('reCAPTCHA: Page loaded, initializing...');
+      window.loadRecaptcha();
+    });
+  </script>
   <!-- Font fallback styles -->
   <style>
     body {

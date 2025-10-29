@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/services/database_service.dart';
 import '../../../../core/services/secure_storage_service.dart';
+import '../../../../core/providers/recaptcha_provider.dart';
 import '../../domain/entities/user.dart';
 import '../../domain/entities/login_response.dart';
 import '../../data/models/login_request.dart';
@@ -72,10 +73,37 @@ class LoginNotifier extends StateNotifier<LoginState> {
     debugPrint('🔄 State set to LoginLoading');
 
     try {
+      // Get reCAPTCHA token if required
+      String? recaptchaToken;
+      final recaptchaNotifier = _ref.read(recaptchaNotifierProvider.notifier);
+
+      debugPrint('🔐 Checking reCAPTCHA requirements...');
+      if (recaptchaNotifier.isRequired) {
+        debugPrint('🔐 reCAPTCHA is required, getting token...');
+        recaptchaToken = await recaptchaNotifier.getToken(action: 'login');
+
+        if (recaptchaToken == null) {
+          debugPrint('❌ Failed to get reCAPTCHA token');
+          state = LoginError(
+            email: email,
+            message: 'reCAPTCHA verification failed. Please try again.',
+          );
+          return;
+        }
+
+        debugPrint('✅ reCAPTCHA token obtained successfully');
+      } else {
+        debugPrint('🔐 reCAPTCHA not required for this environment');
+      }
+
       final loginRequest = LoginRequest(
         email: email,
         password: password,
+        recaptchaToken: recaptchaToken,
       );
+
+      debugPrint(
+          '📤 Sending login request${recaptchaToken != null ? ' with reCAPTCHA token' : ''}');
 
       final loginUseCase = _ref.read(loginUseCaseProvider);
 
