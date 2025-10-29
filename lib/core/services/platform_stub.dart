@@ -10,3 +10,18 @@ class Platform {
   static String get operatingSystem => 'web';
   static String get operatingSystemVersion => 'unknown';
 }
+
+/// Stub implementation for RealWebRecaptchaService on non-web platforms
+class RealWebRecaptchaService {
+  static Future<bool> initialize(String siteKey) async {
+    throw UnsupportedError('RealWebRecaptchaService is only supported on web');
+  }
+
+  static Future<String?> execute(String action) async {
+    throw UnsupportedError('RealWebRecaptchaService is only supported on web');
+  }
+
+  static bool get isInitialized => false;
+  static String? get currentSiteKey => null;
+  static void reset() {}
+}

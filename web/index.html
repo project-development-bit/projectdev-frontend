@@ -59,8 +59,9 @@
     window.recaptchaConfig = {
       // Production/staging keys
       production: '6LceIvUrAAAAAHhQuc2U0uXTfscW181dIdPT208i',
-      // Add your localhost key here
-      localhost: '6LdNlforAAAAAOIH7T2emlRz8XwliT8DacIeVn4W', // Replace with your actual localhost key
+      // TODO: Replace with your actual localhost reCAPTCHA site key
+      // You need to register localhost:3000 (or your dev port) in Google reCAPTCHA admin console
+      localhost: '6LdNlforAAAAAOIH7T2emlRz8XwliT8DacIeVn4W', // ⚠️ REPLACE WITH REAL LOCALHOST KEY
     };
     // Function to detect localhost
     window.isLocalhost = function () {
@@ -91,13 +92,16 @@
 
       // Get the site key to use
       const siteKey = customSiteKey || window.getRecaptchaSiteKey();
+      const isLocal = window.isLocalhost();
 
-      // Validate the site key
-      if (!siteKey || siteKey === '6LdNlforAAAAAOIH7T2emlRz8XwliT8DacIeVn4W') {
-        console.warn('reCAPTCHA: Invalid or placeholder site key:', siteKey);
+      // Validate the site key - ensure it's not empty and is a valid format
+      if (!siteKey || !siteKey.startsWith('6L') || siteKey.length < 30) {
+        console.warn('reCAPTCHA: Invalid site key format:', siteKey);
         return;
       }
 
+      console.log(`reCAPTCHA: Loading script for ${isLocal ? 'localhost' : 'production'} environment`);
+      
       // Create and load new reCAPTCHA script
       const script = document.createElement('script');
       script.src = `https://www.google.com/recaptcha/api.js?render=${siteKey}`;
@@ -106,6 +110,22 @@
       script.onload = function () {
         console.log('reCAPTCHA: Script loaded successfully with key:', siteKey.substring(0, 10) + '...');
         window.currentRecaptchaKey = siteKey;
+        
+        // Make grecaptcha globally available
+        if (window.grecaptcha) {
+          console.log('reCAPTCHA: grecaptcha object is now available');
+          
+          // Ensure the badge is visible and properly positioned/sized
+          setTimeout(() => {
+            window.ensureRecaptchaBadgeVisible();
+            console.log('reCAPTCHA: Badge positioned, styled, and resized');
+          }, 100);
+          
+          // Apply customizations again after a longer delay to ensure they stick
+          setTimeout(() => {
+            window.ensureRecaptchaBadgeVisible();
+          }, 1000);
+        }
       };
 
       script.onerror = function () {
@@ -115,11 +135,153 @@
       document.head.appendChild(script);
     };
 
-    // Auto-load reCAPTCHA on page load
+    // Auto-load reCAPTCHA after Flutter is ready
     window.addEventListener('DOMContentLoaded', function () {
-      console.log('reCAPTCHA: Page loaded, initializing...');
-      window.loadRecaptcha();
+      console.log('reCAPTCHA: DOM loaded, waiting for Flutter...');
+      
+      // Wait for Flutter to be ready before loading reCAPTCHA
+      function waitForFlutterAndLoadRecaptcha() {
+        // Check if Flutter app element exists (Flutter creates flt-glass-pane)
+        if (document.querySelector('flt-glass-pane') || document.querySelector('[data-flutter-view]')) {
+          console.log('reCAPTCHA: Flutter detected, loading reCAPTCHA...');
+          setTimeout(() => {
+            window.loadRecaptcha();
+          }, 1000); // Small delay to ensure Flutter is fully rendered
+        } else {
+          // Flutter not ready yet, check again
+          setTimeout(waitForFlutterAndLoadRecaptcha, 500);
+        }
+      }
+
+      // Start checking for Flutter
+      waitForFlutterAndLoadRecaptcha();
+      
+      // Fallback: Load reCAPTCHA after 5 seconds regardless
+      setTimeout(() => {
+        if (!window.grecaptcha) {
+          console.log('reCAPTCHA: Fallback loading after 5 seconds...');
+          window.loadRecaptcha();
+        }
+      }, 5000);
     });
+
+    // Listen for Flutter initialization events
+    window.addEventListener('flutter-initialized', function () {
+      console.log('reCAPTCHA: Flutter initialized event received');
+      setTimeout(() => {
+        if (!window.grecaptcha) {
+          console.log('reCAPTCHA: Loading after Flutter initialization...');
+          window.loadRecaptcha();
+        }
+      }, 1000);
+    });
+
+    // Function to execute reCAPTCHA and get token (for Flutter to call)
+    window.executeRecaptcha = function (action) {
+      return new Promise((resolve, reject) => {
+        if (!window.grecaptcha) {
+          console.error('reCAPTCHA: grecaptcha not loaded');
+          reject(new Error('reCAPTCHA not loaded'));
+          return;
+        }
+
+        if (!window.currentRecaptchaKey) {
+          console.error('reCAPTCHA: No site key available');
+          reject(new Error('No reCAPTCHA site key'));
+          return;
+        }
+
+        console.log('reCAPTCHA: Executing for action:', action);
+        
+        window.grecaptcha.execute(window.currentRecaptchaKey, { action: action })
+          .then(function (token) {
+            console.log('reCAPTCHA: Token generated successfully for action:', action);
+            resolve(token);
+          })
+          .catch(function (error) {
+            console.error('reCAPTCHA: Execution failed:', error);
+            reject(error);
+          });
+      });
+    };
+
+    // Function to check if reCAPTCHA is ready
+    window.isRecaptchaReady = function () {
+      return !!(window.grecaptcha && window.currentRecaptchaKey);
+    };
+
+    // Function to ensure reCAPTCHA badge stays visible and properly customized
+    window.ensureRecaptchaBadgeVisible = function () {
+      const badge = document.querySelector('.grecaptcha-badge');
+      if (badge) {
+        // Position and visibility
+        badge.style.zIndex = '9999';
+        badge.style.position = 'fixed';
+        badge.style.bottom = '14px';
+        badge.style.right = '14px';
+        badge.style.opacity = '1';
+        badge.style.visibility = 'visible';
+        badge.style.display = 'block';
+        
+        // Make it smaller and customize size
+        badge.style.transform = 'scale(0.75)';
+        badge.style.transformOrigin = 'bottom right';
+        badge.style.width = '70px';
+        badge.style.height = '60px';
+        
+        // Hide text elements within the badge
+        const textElements = badge.querySelectorAll('div[style*="text"], .grecaptcha-text');
+        textElements.forEach(el => {
+          el.style.display = 'none';
+        });
+        
+        // Hide the last div which usually contains text
+        const lastDiv = badge.querySelector('div:last-child');
+        if (lastDiv && lastDiv.textContent && lastDiv.textContent.trim()) {
+          lastDiv.style.fontSize = '0';
+          lastDiv.style.height = '0';
+          lastDiv.style.overflow = 'hidden';
+        }
+        
+        // Target iframe if present
+        const iframe = badge.querySelector('iframe');
+        if (iframe) {
+          iframe.style.width = '70px';
+          iframe.style.height = '60px';
+        }
+        
+        return true;
+      }
+      return false;
+    };
+
+    // Periodically check that reCAPTCHA badge is visible
+    setInterval(() => {
+      if (window.grecaptcha && window.currentRecaptchaKey) {
+        window.ensureRecaptchaBadgeVisible();
+      }
+    }, 2000); // Check every 2 seconds
+
+    // Watch for DOM changes that might affect the reCAPTCHA badge
+    if (typeof MutationObserver !== 'undefined') {
+      const observer = new MutationObserver(() => {
+        if (window.grecaptcha && window.currentRecaptchaKey) {
+          setTimeout(() => {
+            window.ensureRecaptchaBadgeVisible();
+          }, 100);
+        }
+      });
+
+      // Start observing when the page loads
+      window.addEventListener('DOMContentLoaded', () => {
+        observer.observe(document.body, {
+          childList: true,
+          subtree: true,
+          attributes: true,
+          attributeFilter: ['style', 'class']
+        });
+      });
+    }
   </script>
   <!-- Font fallback styles -->
   <style>
@@ -132,6 +294,61 @@
       font-family: 'Roboto-fallback';
       src: local('Arial'), local('Helvetica'), local('sans-serif');
       font-display: swap;
+    }
+
+    /* reCAPTCHA badge styling - ensure it stays visible and smaller */
+    .grecaptcha-badge {
+      z-index: 9999 !important;
+      position: fixed !important;
+      bottom: 14px !important;
+      right: 14px !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+      display: block !important;
+      /* Make the badge smaller */
+      transform: scale(0.75) !important;
+      transform-origin: bottom right !important;
+      width: 70px !important;
+      height: 60px !important;
+    }
+
+    /* Hide the reCAPTCHA text, keep only the logo */
+    .grecaptcha-badge .grecaptcha-logo {
+      display: block !important;
+    }
+    
+    .grecaptcha-badge .grecaptcha-text {
+      display: none !important;
+    }
+
+    /* Hide text elements within the badge */
+    .grecaptcha-badge div[style*="text"] {
+      display: none !important;
+    }
+
+    /* Target the badge content more specifically - hide text divs */
+    .grecaptcha-badge > div:last-child {
+      font-size: 0 !important;
+      height: 0 !important;
+      overflow: hidden !important;
+    }
+
+    /* Ensure reCAPTCHA badge is not hidden by Flutter overlays */
+    flt-glass-pane .grecaptcha-badge,
+    flutter-view .grecaptcha-badge {
+      z-index: 10000 !important;
+      transform: scale(0.75) !important;
+      transform-origin: bottom right !important;
+    }
+
+    /* Prevent any potential conflicts with Flutter's rendering */
+    iframe[src*="recaptcha"] {
+      z-index: 9999 !important;
+      position: fixed !important;
+      width: 70px !important;
+      height: 60px !important;
+      bottom: 14px !important;
+      right: 14px !important;
     }
   </style>
   

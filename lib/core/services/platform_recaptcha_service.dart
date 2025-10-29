@@ -2,7 +2,10 @@ import 'package:flutter/foundation.dart';
 import '../config/flavor_manager.dart';
 
 // Conditional import for Platform - avoid importing dart:io on web
-import 'dart:io' as io if (dart.library.js_interop) 'platform_stub.dart';
+// Conditional imports for web-only functionality
+import 'dart:js_interop' if (dart.library.io) 'platform_stub.dart';
+import 'real_web_recaptcha_service.dart' if (dart.library.io) 'platform_stub.dart';
+import 'dart:io' as io if (dart.library.io) 'dart:io';
 
 /// Platform-aware reCAPTCHA service using different implementations per platform
 /// - Web: Uses g_recaptcha_v3 package
@@ -262,17 +265,33 @@ class _WebRecaptchaWrapper {
 /// Wrapper for WebRecaptchaService to handle dynamic imports
 class _WebRecaptchaServiceWrapper {
   Future<bool> initialize(String siteKey) async {
-    // Simulate WebRecaptchaService.initialize()
-    debugPrint('reCAPTCHA Web: Simulating WebRecaptchaService.initialize()');
-    await Future.delayed(const Duration(milliseconds: 500));
-    return true;
+    try {
+      // Use the real WebRecaptchaService implementation
+      debugPrint('reCAPTCHA Web: Using RealWebRecaptchaService.initialize()');
+      if (kIsWeb) {
+        // Import is handled conditionally above
+        return await RealWebRecaptchaService.initialize(siteKey);
+      }
+      return false;
+    } catch (e) {
+      debugPrint('reCAPTCHA Web: Initialize error: $e');
+      return false;
+    }
   }
 
   Future<String?> execute(String action) async {
-    // Simulate WebRecaptchaService.execute()
-    debugPrint('reCAPTCHA Web: Simulating WebRecaptchaService.execute()');
-    await Future.delayed(const Duration(milliseconds: 1000));
-    return 'web_token_${DateTime.now().millisecondsSinceEpoch}';
+    try {
+      // Use the real WebRecaptchaService implementation
+      debugPrint('reCAPTCHA Web: Using RealWebRecaptchaService.execute()');
+      if (kIsWeb) {
+        // Import is handled conditionally above
+        return await RealWebRecaptchaService.execute(action);
+      }
+      return null;
+    } catch (e) {
+      debugPrint('reCAPTCHA Web: Execute error: $e');
+      return null;
+    }
   }
 }
 

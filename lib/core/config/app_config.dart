@@ -45,7 +45,17 @@ class AppConfig {
 
   /// Get the appropriate reCAPTCHA site key for the current platform
   String? get recaptchaSiteKey {
-    if (kIsWeb) return webRecaptchaSiteKey;
+    // For web platform, check if we're on localhost
+    if (kIsWeb) {
+      // Check if we're running on localhost
+      if (_isLocalhost()) {
+        final localhostKey = additionalConfig['localhostRecaptchaSiteKey'] as String?;
+        if (localhostKey != null && localhostKey.isNotEmpty) {
+          return localhostKey;
+        }
+      }
+      return webRecaptchaSiteKey;
+    }
 
     try {
       if (io.Platform.isAndroid) return androidRecaptchaSiteKey;
@@ -55,6 +65,16 @@ class AppConfig {
     }
     
     return webRecaptchaSiteKey; // Fallback for web or other platforms
+  }
+
+  /// Check if running on localhost (web only)
+  bool _isLocalhost() {
+    if (!kIsWeb) return false;
+    
+    // This is a web-safe way to check localhost
+    // We'll use a basic check since we can't access window.location directly in this context
+    // The actual localhost detection will be handled by the web service layer
+    return flavor == AppFlavor.dev; // Use localhost key for dev flavor on web
   }
 
   /// Development configuration

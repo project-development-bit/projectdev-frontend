@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>reCAPTCHA Test</title>
+</head>
+<body>
+    <h1>reCAPTCHA Test Page</h1>
+    <button onclick="testRecaptcha()">Test reCAPTCHA</button>
+    <div id="result"></div>
+
+    <script>
+        // Configuration for different environments
+        window.recaptchaConfig = {
+            // Production/staging keys
+            production: '6LceIvUrAAAAAHhQuc2U0uXTfscW181dIdPT208i',
+            // TODO: Replace with your actual localhost reCAPTCHA site key
+            // You need to register localhost:3000 (or your dev port) in Google reCAPTCHA admin console
+            localhost: '6LdNlforAAAAAOIH7T2emlRz8XwliT8DacIeVn4W', // ⚠️ REPLACE WITH REAL LOCALHOST KEY
+        };
+
+        // Function to detect localhost
+        window.isLocalhost = function () {
+            const hostname = window.location.hostname;
+            return hostname === 'localhost' ||
+                hostname === '127.0.0.1' ||
+                hostname === '0.0.0.0' ||
+                hostname.startsWith('192.168.') ||
+                hostname.endsWith('.local');
+        };
+
+        // Function to get the appropriate site key
+        window.getRecaptchaSiteKey = function () {
+            const isLocal = window.isLocalhost();
+            const key = isLocal ? window.recaptchaConfig.localhost : window.recaptchaConfig.production;
+            console.log('reCAPTCHA: Using', isLocal ? 'localhost' : 'production', 'key:', key.substring(0, 10) + '...');
+            return key;
+        };
+
+        // Function to load reCAPTCHA dynamically
+        window.loadRecaptcha = function (customSiteKey) {
+            // Remove existing reCAPTCHA script if present
+            const existingScript = document.querySelector('script[src*="recaptcha"]');
+            if (existingScript) {
+                existingScript.remove();
+                console.log('reCAPTCHA: Removed existing script');
+            }
+
+            // Get the site key to use
+            const siteKey = customSiteKey || window.getRecaptchaSiteKey();
+            const isLocal = window.isLocalhost();
+
+            // Validate the site key - ensure it's not empty and is a valid format
+            if (!siteKey || !siteKey.startsWith('6L') || siteKey.length < 30) {
+                console.warn('reCAPTCHA: Invalid site key format:', siteKey);
+                return;
+            }
+
+            console.log(`reCAPTCHA: Loading script for ${isLocal ? 'localhost' : 'production'} environment`);
+            
+            // Create and load new reCAPTCHA script
+            const script = document.createElement('script');
+            script.src = `https://www.google.com/recaptcha/api.js?render=${siteKey}`;
+            script.async = true;
+
+            script.onload = function () {
+                console.log('reCAPTCHA: Script loaded successfully with key:', siteKey.substring(0, 10) + '...');
+                window.currentRecaptchaKey = siteKey;
+                
+                // Make grecaptcha globally available
+                if (window.grecaptcha) {
+                    console.log('reCAPTCHA: grecaptcha object is now available');
+                    document.getElementById('result').innerHTML = '<p style="color: green;">✅ reCAPTCHA loaded successfully!</p>';
+                }
+            };
+
+            script.onerror = function () {
+                console.error('reCAPTCHA: Failed to load script with key:', siteKey.substring(0, 10) + '...');
+                document.getElementById('result').innerHTML = '<p style="color: red;">❌ reCAPTCHA failed to load</p>';
+            };
+
+            document.head.appendChild(script);
+        };
+
+        // Function to execute reCAPTCHA and get token (for Flutter to call)
+        window.executeRecaptcha = function (action) {
+            return new Promise((resolve, reject) => {
+                if (!window.grecaptcha) {
+                    console.error('reCAPTCHA: grecaptcha not loaded');
+                    reject(new Error('reCAPTCHA not loaded'));
+                    return;
+                }
+
+                if (!window.currentRecaptchaKey) {
+                    console.error('reCAPTCHA: No site key available');
+                    reject(new Error('No reCAPTCHA site key'));
+                    return;
+                }
+
+                console.log('reCAPTCHA: Executing for action:', action);
+                
+                window.grecaptcha.execute(window.currentRecaptchaKey, { action: action })
+                    .then(function (token) {
+                        console.log('reCAPTCHA: Token generated successfully for action:', action);
+                        resolve(token);
+                    })
+                    .catch(function (error) {
+                        console.error('reCAPTCHA: Execution failed:', error);
+                        reject(error);
+                    });
+            });
+        };
+
+        // Function to check if reCAPTCHA is ready
+        window.isRecaptchaReady = function () {
+            return !!(window.grecaptcha && window.currentRecaptchaKey);
+        };
+
+        // Auto-load reCAPTCHA on page load
+        window.addEventListener('DOMContentLoaded', function () {
+            console.log('reCAPTCHA: Page loaded, initializing...');
+            window.loadRecaptcha();
+        });
+
+        function testRecaptcha() {
+            const result = document.getElementById('result');
+            
+            if (!window.isRecaptchaReady()) {
+                result.innerHTML = '<p style="color: orange;">⚠️ reCAPTCHA not ready yet</p>';
+                return;
+            }
+
+            result.innerHTML = '<p style="color: blue;">🔄 Executing reCAPTCHA...</p>';
+            
+            window.executeRecaptcha('test')
+                .then(token => {
+                    result.innerHTML = `<p style="color: green;">✅ reCAPTCHA token received!</p><p><strong>Token:</strong> ${token.substring(0, 50)}...</p>`;
+                })
+                .catch(error => {
+                    result.innerHTML = `<p style="color: red;">❌ reCAPTCHA execution failed: ${error.message}</p>`;
+                });
+        }
+    </script>
+</body>
+</html>
