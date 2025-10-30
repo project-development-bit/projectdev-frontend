@@ -94,6 +94,20 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
       return LoginResponseModel.fromJson(response.data as Map<String, dynamic>);
     } on DioException catch (e) {
+      debugPrint('❌ Login DioException: ${e.message}');
+      debugPrint('❌ Request URL: ${e.requestOptions.uri}');
+      debugPrint('❌ Response status: ${e.response?.statusCode}');
+      debugPrint('❌ Response data: ${e.response?.data}');
+
+      // Check for the specific "Client error" message
+      if (e.response?.data?.toString().contains('Client error') == true ||
+          e.message?.contains('Client error') == true) {
+        debugPrint('🚨 FOUND "CLIENT ERROR" MESSAGE IN LOGIN!');
+        debugPrint('🚨 Full response: ${e.response?.data}');
+        debugPrint('🚨 Full message: ${e.message}');
+        debugPrint('🚨 This error is likely from the API server!');
+      }
+
       // Extract server error message from response data
       final serverMessage = _extractServerErrorMessage(e.response?.data);
 
@@ -133,6 +147,14 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       debugPrint('❌ Request URL: ${e.requestOptions.uri}');
       debugPrint('❌ Response status: ${e.response?.statusCode}');
       debugPrint('❌ Response data: ${e.response?.data}');
+      
+      // Check for the specific "Client error" message
+      if (e.response?.data?.toString().contains('Client error') == true ||
+          e.message?.contains('Client error') == true) {
+        debugPrint('🚨 FOUND "CLIENT ERROR" MESSAGE IN FORGOT PASSWORD!');
+        debugPrint('🚨 Full response: ${e.response?.data}');
+        debugPrint('🚨 Full message: ${e.message}');
+      }
 
       // Extract server error message from response data
       final serverMessage = _extractServerErrorMessage(e.response?.data);
@@ -171,6 +193,14 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       debugPrint('❌ Request URL: ${e.requestOptions.uri}');
       debugPrint('❌ Response status: ${e.response?.statusCode}');
       debugPrint('❌ Response data: ${e.response?.data}');
+      
+      // Check for the specific "Client error" message
+      if (e.response?.data?.toString().contains('Client error') == true ||
+          e.message?.contains('Client error') == true) {
+        debugPrint('🚨 FOUND "CLIENT ERROR" MESSAGE IN RESET PASSWORD!');
+        debugPrint('🚨 Full response: ${e.response?.data}');
+        debugPrint('🚨 Full message: ${e.message}');
+      }
 
       // Extract server error message from response data
       final serverMessage = _extractServerErrorMessage(e.response?.data);

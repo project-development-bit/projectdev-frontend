@@ -90,14 +90,14 @@ class AppConfig {
     receiveTimeout: Duration(seconds: 10),
     sendTimeout: Duration(seconds: 10),
     androidRecaptchaSiteKey:
-        '6LdjbvgrAAAAAINsAjihWllPukIAyNdXctSkNKo5', // Dev Android key
+        '6Ldpy_srAAAAAIW0V8h8zSzAt7cPS3f64z3unNft', // Dev Android key
     iosRecaptchaSiteKey:
         '6Lc8qvkrAAAAABmU7uNaaAWgMs8YTt_xyAi19IEG', // Dev iOS key
     webRecaptchaSiteKey:
         '6LceIvUrAAAAAHhQuc2U0uXTfscW181dIdPT208i', // Dev Web key for backward compatibility
     additionalConfig: {
       'localhostRecaptchaSiteKey':
-          '6LdNlforAAAAAOIH7T2emlRz8XwliT8DacIeVn4W', // Add your localhost site key here
+          '6LceIvUrAAAAAHhQuc2U0uXTfscW181dIdPT208i', // Add your localhost site key here
       'debugShowCheckedModeBanner': true,
       'debugShowMaterialGrid': false,
       'showPerformanceOverlay': false,
@@ -127,7 +127,7 @@ class AppConfig {
     webRecaptchaSiteKey:
         '6LceIvUrAAAAAHhQuc2U0uXTfscW181dIdPT208i', // Staging Web key
     additionalConfig: {
-      'localhostRecaptchaSiteKey': '6LdNlforAAAAAOIH7T2emlRz8XwliT8DacIeVn4W', 
+      'localhostRecaptchaSiteKey': '6LceIvUrAAAAAHhQuc2U0uXTfscW181dIdPT208i', 
       'debugShowCheckedModeBanner': false,
       'debugShowMaterialGrid': false,
       'showPerformanceOverlay': false,
@@ -151,13 +151,13 @@ class AppConfig {
     receiveTimeout: Duration(seconds: 30),
     sendTimeout: Duration(seconds: 30),
     androidRecaptchaSiteKey:
-        '6LdjbvgrAAAAAINsAjihWllPukIAyNdXctSkNKo5', // Production Android key
+        '6LeA0vsrAAAAAPttQZTnxMZNSnV18EW1eKB6AyJj', // Production Android key
     iosRecaptchaSiteKey:
         '6Lc8qvkrAAAAABmU7uNaaAWgMs8YTt_xyAi19IEG', // Production iOS key
     webRecaptchaSiteKey:
         '6LceIvUrAAAAAHhQuc2U0uXTfscW181dIdPT208i', // Production Web key
     additionalConfig: {
-      'localhostRecaptchaSiteKey': '6LdNlforAAAAAOIH7T2emlRz8XwliT8DacIeVn4W', 
+      'localhostRecaptchaSiteKey': '6LceIvUrAAAAAHhQuc2U0uXTfscW181dIdPT208i', 
       'debugShowCheckedModeBanner': false,
       'debugShowMaterialGrid': false,
       'showPerformanceOverlay': false,

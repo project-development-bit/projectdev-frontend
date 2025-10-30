@@ -25,3 +25,22 @@ class RealWebRecaptchaService {
   static String? get currentSiteKey => null;
   static void reset() {}
 }
+
+/// Stub implementation for RealMobileRecaptchaService on web platforms
+class RealMobileRecaptchaService {
+  static Future<bool> initialize(String siteKey) async {
+    throw UnsupportedError(
+        'RealMobileRecaptchaService is only supported on mobile');
+  }
+
+  static Future<String?> execute(String action) async {
+    throw UnsupportedError(
+        'RealMobileRecaptchaService is only supported on mobile');
+  }
+
+  static bool get isInitialized => false;
+  static bool get isEnterpriseMode => false;
+  static String? get currentSiteKey => null;
+  static void dispose() {}
+  static void reset() {}
+}

@@ -3,8 +3,9 @@ import '../config/flavor_manager.dart';
 
 // Conditional import for Platform - avoid importing dart:io on web
 // Conditional imports for web-only functionality
-import 'dart:js_interop' if (dart.library.io) 'platform_stub.dart';
 import 'real_web_recaptcha_service.dart' if (dart.library.io) 'platform_stub.dart';
+import 'real_mobile_recaptcha_service_official.dart'
+    if (dart.library.js_util) 'platform_stub.dart' as mobile_service;
 import 'dart:io' as io if (dart.library.io) 'dart:io';
 
 /// Platform-aware reCAPTCHA service using different implementations per platform
@@ -99,17 +100,24 @@ class PlatformRecaptchaService {
         }
         return false;
       } else if (isMobilePlatform) {
-        // Mobile platform - use reCAPTCHA Enterprise Flutter
+        // Mobile platform - use OFFICIAL Google reCAPTCHA Enterprise Flutter
         debugPrint(
-            'reCAPTCHA: Initializing $platformName with reCAPTCHA Enterprise...');
+            'reCAPTCHA: Initializing $platformName with OFFICIAL Google reCAPTCHA Enterprise...');
         debugPrint(
             'reCAPTCHA: Using site key for ${FlavorManager.flavorDisplayName}: ${key.substring(0, 10)}...');
 
-        // For reCAPTCHA Enterprise, we initialize the client when needed in execute()
-        // This is because the client is created with Recaptcha.fetchClient()
-        debugPrint(
-            'reCAPTCHA: $platformName ready for reCAPTCHA Enterprise client creation');
-        return true;
+        // Initialize using the OFFICIAL Google reCAPTCHA Enterprise service
+        final success =
+            await mobile_service.RealMobileRecaptchaService.initialize(key);
+        if (success) {
+          debugPrint(
+              'reCAPTCHA: ✅ Successfully initialized $platformName with OFFICIAL Google reCAPTCHA Enterprise');
+          return true;
+        } else {
+          debugPrint(
+              'reCAPTCHA: ❌ Failed to initialize OFFICIAL Google reCAPTCHA Enterprise on $platformName');
+          return false;
+        }
       } else {
         debugPrint('reCAPTCHA: Platform not supported - $platformName');
         return false;
@@ -145,26 +153,39 @@ class PlatformRecaptchaService {
         }
         throw Exception('Failed to load web reCAPTCHA library');
       } else if (isMobilePlatform) {
-        // Mobile platform - use reCAPTCHA Enterprise
+        // Mobile platform - use OFFICIAL Google reCAPTCHA Enterprise
         debugPrint(
-            'reCAPTCHA: Executing $platformName reCAPTCHA Enterprise for action: $action');
+            'reCAPTCHA: Executing $platformName OFFICIAL Google reCAPTCHA Enterprise for action: $action');
 
-        final mobileRecaptcha = await _importMobileRecaptcha();
-        if (mobileRecaptcha != null) {
-          final key = siteKey;
-          if (key == null) {
-            throw Exception('No site key configured for $platformName');
-          }
+        // Use the OFFICIAL Google mobile reCAPTCHA Enterprise service
+        final token =
+            await mobile_service.RealMobileRecaptchaService.execute(action);
 
-          final client = await mobileRecaptcha.fetchClient(key);
-          final token =
-              await client.execute(mobileRecaptcha.customAction(action));
-
+        if (token != null && token.isNotEmpty) {
           debugPrint(
-              'reCAPTCHA: $platformName execution completed, token received: ${token.isNotEmpty}');
+              'reCAPTCHA: ✅ $platformName OFFICIAL Google Enterprise execution completed, token received: true');
+          debugPrint(
+              'reCAPTCHA: 📏 $platformName token length: ${token.length} characters');
+
+          // Compare token characteristics with web tokens
+          if (token.length > 500) {
+            debugPrint(
+                'reCAPTCHA: ✨ $platformName generated REAL Google-length token!');
+          }
+          
+          // Check for real Google reCAPTCHA token characteristics
+          if (token.startsWith('03A')) {
+            debugPrint(
+                'reCAPTCHA: 🏆 $platformName token has genuine Google reCAPTCHA prefix!');
+          }
+          
           return token;
+        } else {
+          debugPrint(
+              'reCAPTCHA: ❌ $platformName OFFICIAL Google Enterprise returned null/empty token');
+          throw Exception(
+              'OFFICIAL Google mobile reCAPTCHA Enterprise failed to generate token');
         }
-        throw Exception('Failed to load mobile reCAPTCHA library');
       } else {
         debugPrint(
             'reCAPTCHA: Platform not supported for execution - $platformName');
@@ -202,20 +223,6 @@ class PlatformRecaptchaService {
       return null;
     } catch (e) {
       debugPrint('reCAPTCHA: Could not import web reCAPTCHA package: $e');
-      return null;
-    }
-  }
-
-  /// Import mobile reCAPTCHA dynamically to prevent compilation errors on web
-  static Future<_MobileRecaptchaWrapper?> _importMobileRecaptcha() async {
-    try {
-      if (!kIsWeb) {
-        // Import recaptcha_enterprise_flutter only on mobile
-        return _MobileRecaptchaWrapper();
-      }
-      return null;
-    } catch (e) {
-      debugPrint('reCAPTCHA: Could not import mobile reCAPTCHA package: $e');
       return null;
     }
   }
@@ -293,36 +300,4 @@ class _WebRecaptchaServiceWrapper {
       return null;
     }
   }
-}
-
-/// Wrapper for mobile reCAPTCHA to handle dynamic imports
-class _MobileRecaptchaWrapper {
-  Future<_MobileRecaptchaClient> fetchClient(String siteKey) async {
-    if (!kIsWeb) {
-      // On mobile, this would call the actual recaptcha_enterprise_flutter
-      // For now, simulate the call
-      debugPrint('reCAPTCHA Mobile: Simulating Recaptcha.fetchClient() call');
-      await Future.delayed(const Duration(milliseconds: 1000));
-      return _MobileRecaptchaClient();
-    }
-    throw Exception('Mobile reCAPTCHA not available on web');
-  }
-
-  _MobileRecaptchaAction customAction(String action) {
-    return _MobileRecaptchaAction(action);
-  }
-}
-
-class _MobileRecaptchaClient {
-  Future<String> execute(_MobileRecaptchaAction action) async {
-    // Simulate reCAPTCHA Enterprise execution
-    debugPrint('reCAPTCHA Mobile: Simulating client.execute() call');
-    await Future.delayed(const Duration(milliseconds: 1500));
-    return 'mobile_enterprise_${action.name}_${DateTime.now().millisecondsSinceEpoch}';
-  }
-}
-
-class _MobileRecaptchaAction {
-  final String name;
-  _MobileRecaptchaAction(this.name);
 }
