@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/enum/user_role.dart';
+import '../../../../core/providers/recaptcha_provider.dart';
 import '../../data/models/register_request.dart';
 import 'auth_providers.dart';
 
@@ -57,9 +58,39 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
     required String password,
     required String confirmPassword,
     required UserRole role,
+    VoidCallback? onSuccess,
+    Function(String)? onError,
   }) async {
+    debugPrint('🔄 Starting registration process for: $email');
+    debugPrint('🔄 Current state before registration: ${state.runtimeType}');
+
+    // Ensure we start with loading state
+    state = const RegisterLoading();
+    debugPrint('🔄 State set to RegisterLoading');
+
     try {
-      state = const RegisterLoading();
+      // Get reCAPTCHA token if required
+      String? recaptchaToken;
+      final recaptchaNotifier = _ref.read(recaptchaNotifierProvider.notifier);
+
+      debugPrint('🔐 Checking reCAPTCHA requirements...');
+      if (recaptchaNotifier.isRequired) {
+        debugPrint('🔐 reCAPTCHA is required, getting token...');
+        recaptchaToken = await recaptchaNotifier.getToken(action: 'register');
+
+        if (recaptchaToken == null) {
+          debugPrint('❌ Failed to get reCAPTCHA token');
+          state = const RegisterError(
+            message: 'reCAPTCHA verification failed. Please try again.',
+          );
+          onError?.call('reCAPTCHA verification failed. Please try again.');
+          return;
+        }
+        
+        debugPrint('✅ reCAPTCHA token obtained successfully');
+      } else {
+        debugPrint('🔐 reCAPTCHA not required for this environment');
+      }
 
       final registerRequest = RegisterRequest(
         name: name,
@@ -67,10 +98,22 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
         password: password,
         confirmPassword: confirmPassword,
         role: role,
+        recaptchaToken: recaptchaToken,
       );
 
+      debugPrint(
+          '📤 Sending registration request${recaptchaToken != null ? ' with reCAPTCHA token' : ''}');
+
       final registerUseCase = _ref.read(registerUseCaseProvider);
-      final result = await registerUseCase(registerRequest);
+
+      // Add timeout to prevent infinite loading
+      final result = await registerUseCase(registerRequest).timeout(
+        const Duration(seconds: 30),
+        onTimeout: () {
+          throw Exception(
+              'Registration timeout: Please check your internet connection and try again');
+        },
+      );
 
       result.fold(
         (failure) {
@@ -80,6 +123,8 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
             isNetworkError: failure.toString().contains('network') ||
                 failure.toString().contains('connection'),
           );
+          onError?.call(failure.message ?? 'Registration failed');
+          debugPrint('🔄 State set to RegisterError');
         },
         (_) {
           debugPrint('✅ Registration successful for: $email');
@@ -88,14 +133,22 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
                 'Registration successful! Please log in with your credentials.',
             email: email,
           );
+          debugPrint('🔄 State set to RegisterSuccess');
+          onSuccess?.call();
         },
       );
     } catch (e) {
       debugPrint('❌ Unexpected registration error: $e');
       state = RegisterError(
-        message: 'An unexpected error occurred during registration: $e',
+        message: e.toString().contains('timeout')
+            ? 'Registration timeout: Please check your connection and try again'
+            : 'An unexpected error occurred during registration. Please try again.',
       );
+      onError?.call(e.toString());
+      debugPrint('🔄 State set to RegisterError (catch block)');
     }
+
+    debugPrint('🔄 Registration process completed. Final state: ${state.runtimeType}');
   }
 
   /// Clear error state

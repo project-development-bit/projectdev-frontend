@@ -136,6 +136,12 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
       password: _passwordController.text,
       confirmPassword: _confirmPasswordController.text,
       role: UserRole.normalUser, // Default to normal user
+      onSuccess: () {
+        debugPrint('✅ SignUpPage: Registration successful callback triggered');
+      },
+      onError: (errorMessage) {
+        debugPrint('❌ SignUpPage: Registration error callback: $errorMessage');
+      },
     );
   }
 

@@ -6,6 +6,7 @@ class RegisterRequest {
   final String password;
   final String confirmPassword;
   final UserRole role;
+  final String? recaptchaToken;
 
   RegisterRequest({
     required this.name,
@@ -13,6 +14,7 @@ class RegisterRequest {
     required this.password,
     required this.confirmPassword,
     this.role = UserRole.normalUser,
+    this.recaptchaToken,
   });
 
   Map<String, dynamic> toJson() {
@@ -22,6 +24,7 @@ class RegisterRequest {
       "password": password,
       "confirm_password": confirmPassword,
       "role": role.value,
+      if (recaptchaToken != null) "recaptchaToken": recaptchaToken,
     };
   }
 
@@ -32,6 +35,7 @@ class RegisterRequest {
       password: json['password'] ?? '',
       confirmPassword: json['confirm_password'] ?? '',
       role: UserRole.tryFromString(json['role']) ?? UserRole.normalUser,
+      recaptchaToken: json['recaptchaToken'],
     );
   }
 
@@ -41,6 +45,7 @@ class RegisterRequest {
     String? password,
     String? confirmPassword,
     UserRole? role,
+    String? recaptchaToken,
   }) {
     return RegisterRequest(
       name: name ?? this.name,
@@ -48,6 +53,7 @@ class RegisterRequest {
       password: password ?? this.password,
       confirmPassword: confirmPassword ?? this.confirmPassword,
       role: role ?? this.role,
+      recaptchaToken: recaptchaToken ?? this.recaptchaToken,
     );
   }
 }

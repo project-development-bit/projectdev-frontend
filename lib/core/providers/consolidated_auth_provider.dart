@@ -250,6 +250,8 @@ class AuthActions {
     required String confirmPassword,
     required String name,
     dynamic role, // UserRole - made dynamic to avoid import issues
+    VoidCallback? onSuccess,
+    Function(String)? onError,
   }) async {
     final registerNotifier = _ref.read(registerNotifierProvider.notifier);
     await registerNotifier.register(
@@ -258,6 +260,8 @@ class AuthActions {
       confirmPassword: confirmPassword,
       name: name,
       role: role,
+      onSuccess: onSuccess,
+      onError: onError,
     );
   }
 
