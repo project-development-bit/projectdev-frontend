@@ -27,6 +27,13 @@ void main() {
       name: 'Test User',
       email: testEmail,
       role: UserRole.normalUser,
+      refreshToken: 'test_refresh_token',
+      securityCode: 'test_security_code',
+      isBanned: 0,
+      isVerified: 1,
+      riskScore: 0,
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
     );
 
     final testTokens = AuthTokens(

@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/common/common_text.dart';
 import '../../../../core/extensions/context_extensions.dart';
 import '../../domain/entities/user_profile.dart';
+import 'current_user_info_widget.dart';
 
 /// Profile header widget with gradient background and user info
-class ProfileHeaderWidget extends StatelessWidget {
-  final UserProfile profile;
+/// Now supports both UserProfile data and current user data from whoami API
+class ProfileHeaderWidget extends ConsumerWidget {
+  final UserProfile? profile;
+  final bool showCurrentUser;
 
   const ProfileHeaderWidget({
     super.key,
-    required this.profile,
+    this.profile,
+    this.showCurrentUser = false,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -37,10 +42,36 @@ class ProfileHeaderWidget extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(16, 60, 16, 24),
         child: Column(
           children: [
-            _buildUserInfo(context),
+            if (showCurrentUser)
+              _buildCurrentUserInfo(context, ref)
+            else if (profile != null)
+              _buildUserInfo(context)
+            else
+              _buildFallbackUserInfo(context, ref),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildCurrentUserInfo(BuildContext context, WidgetRef ref) {
+    return CurrentUserInfoWidget(
+      autoRefresh: true,
+      showLoading: true,
+      decoration: null, // No decoration since we're in the gradient container
+      padding: EdgeInsets.zero,
+      isCompact: false,
+    );
+  }
+
+  Widget _buildFallbackUserInfo(BuildContext context, WidgetRef ref) {
+    // Show current user info if no profile is available
+    return CurrentUserInfoWidget(
+      autoRefresh: true,
+      showLoading: true,
+      decoration: null,
+      padding: EdgeInsets.zero,
+      isCompact: false,
     );
   }
 
@@ -62,14 +93,14 @@ class ProfileHeaderWidget extends StatelessWidget {
         shape: BoxShape.circle,
         border: Border.all(
             color: context.isDark ? Colors.white : context.onPrimary, width: 3),
-        image: profile.profilePictureUrl != null
+        image: profile?.profilePictureUrl != null
             ? DecorationImage(
-                image: NetworkImage(profile.profilePictureUrl!),
+                image: NetworkImage(profile!.profilePictureUrl!),
                 fit: BoxFit.cover,
               )
             : null,
       ),
-      child: profile.profilePictureUrl == null
+      child: profile?.profilePictureUrl == null
           ? Icon(Icons.person,
               size: 40,
               color: context.isDark ? Colors.white : context.onPrimary)
@@ -83,7 +114,7 @@ class ProfileHeaderWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CommonText.headlineSmall(
-            profile.displayName ?? profile.username,
+            profile?.displayName ?? profile?.username ?? 'User',
             color: context.isDark ? Colors.white : context.onPrimary,
             fontWeight: FontWeight.bold,
           ),
@@ -105,7 +136,7 @@ class ProfileHeaderWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
       ),
       child: CommonText.labelMedium(
-        'Level ${profile.stats?.currentLevel ?? 1}',
+        'Level ${profile?.stats?.currentLevel ?? 1}',
         color: context.isDark ? Colors.white : context.onPrimary,
         fontWeight: FontWeight.w500,
       ),
@@ -114,7 +145,7 @@ class ProfileHeaderWidget extends StatelessWidget {
 
   Widget _buildExperienceText(BuildContext context) {
     return CommonText.bodySmall(
-      'XP: ${profile.stats?.experiencePoints ?? 0} / ${((profile.stats?.currentLevel ?? 1) + 1) * 1000}',
+      'XP: ${profile?.stats?.experiencePoints ?? 0} / ${((profile?.stats?.currentLevel ?? 1) + 1) * 1000}',
       color:
           (context.isDark ? Colors.white : context.onPrimary).withOpacity(0.7),
     );

@@ -1,3 +1,4 @@
+import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -16,15 +17,31 @@ import '../widgets/statistics_section.dart';
 import '../widgets/mobile_drawer.dart';
 
 /// The main home page replicating Cointiply's homepage design
-class HomePage extends ConsumerWidget {
+class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    // Load profile data when the page builds
+  ConsumerState<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends ConsumerState<HomePage> {
+  @override
+  void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(profileNotifierProvider.notifier).loadProfile();
+      // Only initialize user if authenticated
+      final isAuthenticated = ref.read(isAuthenticatedObservableProvider);
+      if (isAuthenticated) {
+        ref.read(currentUserProvider.notifier).initializeUser();
+      }
     });
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Load profile data when the page builds
+   
 
     return Scaffold(
       // Add drawer for mobile screens (temporarily always showing for testing)

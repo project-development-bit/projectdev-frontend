@@ -108,6 +108,7 @@ class TokenInterceptor extends Interceptor {
       await retryRequests(parsedResponse['data']['access_token']);
     } on DioException catch (e) {
       log("LOGGING OUT: EXPIRED REFRESH TOKEN $e", name: name);
+      
       return handler.reject(err);
     } catch (e) {
       // Handle cases like 400 Bad Request or other server errors

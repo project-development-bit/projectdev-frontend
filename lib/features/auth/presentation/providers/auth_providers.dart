@@ -6,6 +6,7 @@ import '../../domain/repositories/auth_repository.dart';
 import '../../domain/usecases/login_usecase.dart';
 import '../../domain/usecases/register_usecase.dart';
 import '../../domain/usecases/logout_usecase.dart';
+import '../../domain/usecases/get_current_user_usecase.dart';
 
 // Note: authRemoteDataSourceProvider is already defined in auth_remote.dart
 // Note: secureStorageServiceProvider is already defined in secure_storage_service.dart
@@ -41,6 +42,12 @@ final registerUseCaseProvider = Provider<RegisterUseCase>((ref) {
 final logoutUseCaseProvider = Provider<LogoutUseCase>((ref) {
   final repository = ref.read(authRepositoryProvider);
   return LogoutUseCase(repository);
+});
+
+/// Provider for get current user use case
+final getCurrentUserUseCaseProvider = Provider<GetCurrentUserUseCase>((ref) {
+  final repository = ref.read(authRepositoryProvider);
+  return GetCurrentUserUseCase(repository);
 });
 
 /// Provider for checking authentication status

@@ -42,6 +42,13 @@ void main() {
       name: 'Test User',
       email: testEmail,
       role: UserRole.normalUser,
+      refreshToken: 'refresh_token',
+      securityCode: 'security_code',
+      isBanned: 0,
+      isVerified: 1,
+      riskScore: 0,
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
     );
 
     final testTokens = AuthTokens(
@@ -221,7 +228,7 @@ void main() {
       state = container.read(
           resetPasswordProvider as ProviderListenable<ResetPasswordError>);
       expect(state, isA<ResetPasswordError>());
-      errorState = state as ResetPasswordError;
+      errorState = state;
       expect(errorState.message, 'Please enter a password');
 
       // Reset state
@@ -237,7 +244,7 @@ void main() {
       state = container.read(
           resetPasswordProvider as ProviderListenable<ResetPasswordError>);
       expect(state, isA<ResetPasswordError>());
-      errorState = state as ResetPasswordError;
+      errorState = state;
       expect(errorState.message, 'Please confirm your password');
     });
 

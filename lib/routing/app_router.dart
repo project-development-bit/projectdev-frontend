@@ -193,10 +193,17 @@ class BurgerEatsAppRoutes {
                 ),
               ),
 
-              // Offers Routes
+              // Offers Routes - Requires Authentication
               GoRoute(
                 path: AppRoutes.offers,
                 redirect: (context, state) async {
+                  final isAuthenticated = await authProvider.isAuthenticated();
+                  
+                  if (!isAuthenticated) {
+                    debugPrint('🔒 Offers access denied - redirecting to login');
+                    return AppRoutes.login;
+                  }
+                  
                   if (state.fullPath == AppRoutes.offers) {
                     return '${AppRoutes.offers}/browse';
                   }
@@ -236,18 +243,38 @@ class BurgerEatsAppRoutes {
                 ],
               ),
 
-              // Profile Routes
+              // Profile Routes - Requires Authentication
               GoRoute(
                 path: AppRoutes.profile,
                 name: 'profile',
+                redirect: (context, state) async {
+                  final isAuthenticated = await authProvider.isAuthenticated();
+                  
+                  if (!isAuthenticated) {
+                    debugPrint('🔒 Profile access denied - redirecting to login');
+                    return AppRoutes.login;
+                  }
+                  
+                  return null; // Allow access to profile
+                },
                 pageBuilder: (context, state) => const NoTransitionPage(
                   child: ProfilePage(),
                 ),
               ),
 
-              // Settings Routes
+              // Settings Routes - Requires Authentication
               GoRoute(
                 path: AppRoutes.settings,
+                redirect: (context, state) async {
+                  final isAuthenticated = await authProvider.isAuthenticated();
+                  
+                  if (!isAuthenticated) {
+                    debugPrint('🔒 Settings access denied - redirecting to login');
+                    return AppRoutes.login;
+                  }
+                  
+                  return null; // Allow access to settings
+                },
                 pageBuilder: (context, state) => const NoTransitionPage(
                   child: Scaffold(
                     body: Center(
@@ -257,10 +284,17 @@ class BurgerEatsAppRoutes {
                 ),
               ),
 
-              // Dashboard Routes (for admin/advanced features)
+              // Dashboard Routes (for admin/advanced features) - Requires Authentication
               GoRoute(
                 path: AppRoutes.dashboard,
                 redirect: (context, state) async {
+                  final isAuthenticated = await authProvider.isAuthenticated();
+                  
+                  if (!isAuthenticated) {
+                    debugPrint('🔒 Dashboard access denied - redirecting to login');
+                    return AppRoutes.login;
+                  }
+                  
                   if (state.fullPath == AppRoutes.dashboard) {
                     return '${AppRoutes.dashboard}/overview';
                   }

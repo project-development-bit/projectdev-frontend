@@ -3,6 +3,7 @@ import 'package:cointiply_app/core/network/base_dio_client.dart';
 import 'package:cointiply_app/features/auth/data/models/register_request.dart';
 import 'package:cointiply_app/features/auth/data/models/login_request.dart';
 import 'package:cointiply_app/features/auth/data/models/login_response_model.dart';
+import 'package:cointiply_app/features/auth/data/models/user_model.dart';
 import 'package:cointiply_app/features/auth/data/models/resend_code_request.dart';
 import 'package:cointiply_app/features/auth/data/models/resend_code_response.dart';
 import 'package:cointiply_app/features/auth/data/models/verify_code_request.dart';
@@ -28,6 +29,9 @@ abstract class AuthRemoteDataSource {
 
   /// Login user with email and password
   Future<LoginResponseModel> login(LoginRequest request);
+
+  /// Get current user information from server
+  Future<UserModel> whoami();
 
   /// Send forgot password request
   Future<ForgotPasswordResponse> forgotPassword(ForgotPasswordRequest request);
@@ -120,6 +124,42 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     } catch (e) {
       // Handle any other unexpected exceptions
       throw Exception('Unexpected error during login: $e');
+    }
+  }
+
+  @override
+  Future<UserModel> whoami() async {
+    try {
+      debugPrint('📤 Fetching current user info (whoami)');
+      debugPrint('📤 Request URL: $whoamiEndpoints');
+      debugPrint(
+          '📤 Base URL from DioClient: ${dioClient.client.options.baseUrl}');
+
+      final response = await dioClient.get(whoamiEndpoints);
+
+      debugPrint('📥 Whoami response received');
+      debugPrint('📥 Response status: ${response.statusCode}');
+      debugPrint('📥 Response data: ${response.data}');
+
+      return UserModel.fromJson(response.data as Map<String, dynamic>);
+    } on DioException catch (e) {
+      debugPrint('❌ Whoami DioException: ${e.message}');
+      debugPrint('❌ Request URL: ${e.requestOptions.uri}');
+      debugPrint('❌ Response status: ${e.response?.statusCode}');
+      debugPrint('❌ Response data: ${e.response?.data}');
+
+      // Extract server error message from response data
+      final serverMessage = _extractServerErrorMessage(e.response?.data);
+
+      // Create new DioException with server message or appropriate fallback
+      throw DioException(
+        requestOptions: e.requestOptions,
+        response: e.response,
+        message: serverMessage ?? _getFallbackMessage(e),
+      );
+    } catch (e) {
+      // Handle any other unexpected exceptions
+      throw Exception('Unexpected error during whoami: $e');
     }
   }
 

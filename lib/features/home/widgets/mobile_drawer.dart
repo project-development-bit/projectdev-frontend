@@ -8,7 +8,7 @@ import '../../../core/providers/auth_provider.dart';
 import '../../../core/widgets/locale_switch_widget.dart';
 import '../../../core/widgets/theme_switch_widget.dart';
 import '../../auth/presentation/providers/logout_provider.dart';
-import '../../user_profile/presentation/providers/profile_providers.dart';
+import '../../user_profile/presentation/providers/current_user_provider.dart';
 
 /// Mobile drawer widget containing navigation options, settings, and user controls
 class MobileDrawer extends ConsumerWidget {
@@ -17,13 +17,24 @@ class MobileDrawer extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isAuthenticated = ref.watch(isAuthenticatedObservableProvider);
-    final profile = ref.watch(currentUserProfileProvider);
+    final currentUserState = ref.watch(currentUserProvider);
+
+    // Initialize user data when authenticated and no user data exists
+    // Only call this when we actually need the user data
+    if (isAuthenticated &&
+        currentUserState.user == null &&
+        !currentUserState.isLoading &&
+        currentUserState.error == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ref.read(currentUserProvider.notifier).initializeUser();
+      });
+    }
 
     return Drawer(
       child: Column(
         children: [
           // Drawer Header
-          _buildDrawerHeader(context, ref, isAuthenticated, profile),
+          _buildDrawerHeader(context, ref, isAuthenticated, currentUserState),
 
           // Main content
           Expanded(
@@ -46,7 +57,7 @@ class MobileDrawer extends ConsumerWidget {
                   _buildSectionHeader(context, context.translate('account')),
 
                   // Profile
-                  _buildProfileItem(context, profile),
+                  _buildProfileItem(context, currentUserState),
 
                   const Divider(),
 
@@ -70,7 +81,7 @@ class MobileDrawer extends ConsumerWidget {
 
   /// Build the drawer header with app branding and user info
   Widget _buildDrawerHeader(BuildContext context, WidgetRef ref,
-      bool isAuthenticated, dynamic profile) {
+      bool isAuthenticated, CurrentUserState currentUserState) {
     return CommonContainer(
       height: 160, // Fixed height to prevent overflow
       gradient: LinearGradient(
@@ -113,67 +124,164 @@ class MobileDrawer extends ConsumerWidget {
 
           // User info
           Flexible(
-            child: isAuthenticated && profile != null
-                ? Row(
-                    children: [
-                      CircleAvatar(
-                        radius: 18,
-                        backgroundColor: context.onPrimary.withOpacity(0.2),
-                        child: Icon(
-                          Icons.person,
-                          color: context.onPrimary,
-                          size: 20,
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            CommonText.titleSmall(
-                              profile.displayName ?? profile.username ?? 'User',
-                              color: context.onPrimary,
-                              fontWeight: FontWeight.w600,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                            ),
-                            if (profile.email != null) ...[
-                              const SizedBox(height: 2),
-                              CommonText.bodySmall(
-                                profile.email!,
-                                color: context.onPrimary.withOpacity(0.8),
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                              ),
-                            ],
-                          ],
-                        ),
-                      ),
-                    ],
-                  )
-                : Row(
-                    children: [
-                      Icon(
-                        Icons.account_circle,
-                        color: context.onPrimary.withOpacity(0.7),
-                        size: 36,
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: CommonText.titleSmall(
-                          context.translate('welcome_to_gigafaucet'),
-                          color: context.onPrimary,
-                          fontWeight: FontWeight.w500,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 2,
-                        ),
-                      ),
-                    ],
-                  ),
+            child: _buildUserInfo(context, isAuthenticated, currentUserState),
           ),
         ],
       ),
+    );
+  }
+
+  /// Build user info section with proper state handling
+  Widget _buildUserInfo(BuildContext context, bool isAuthenticated,
+      CurrentUserState currentUserState) {
+    if (!isAuthenticated) {
+      return Row(
+        children: [
+          Icon(
+            Icons.account_circle,
+            color: context.onPrimary.withOpacity(0.7),
+            size: 36,
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: CommonText.titleSmall(
+              context.translate('welcome_to_gigafaucet'),
+              color: context.onPrimary,
+              fontWeight: FontWeight.w500,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 2,
+            ),
+          ),
+        ],
+      );
+    }
+
+    // Loading state
+    if (currentUserState.isLoading) {
+      return Row(
+        children: [
+          SizedBox(
+            width: 36,
+            height: 36,
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+              valueColor: AlwaysStoppedAnimation<Color>(
+                context.onPrimary.withOpacity(0.7),
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: CommonText.titleSmall(
+              context.translate('loading_user_info'),
+              color: context.onPrimary.withOpacity(0.8),
+              fontWeight: FontWeight.w500,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+            ),
+          ),
+        ],
+      );
+    }
+
+    // Error state
+    if (currentUserState.error != null) {
+      return Row(
+        children: [
+          Icon(
+            Icons.error_outline,
+            color: context.onPrimary.withOpacity(0.7),
+            size: 36,
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CommonText.titleSmall(
+                  context.translate('error_loading_user'),
+                  color: context.onPrimary,
+                  fontWeight: FontWeight.w600,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+                const SizedBox(height: 2),
+                CommonText.bodySmall(
+                  context.translate('tap_to_retry'),
+                  color: context.onPrimary.withOpacity(0.8),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+              ],
+            ),
+          ),
+        ],
+      );
+    }
+
+    // User data available
+    final user = currentUserState.user;
+    if (user != null) {
+      return Row(
+        children: [
+          CircleAvatar(
+            radius: 18,
+            backgroundColor: context.onPrimary.withOpacity(0.2),
+            child: CommonText.titleSmall(
+              user.name.isNotEmpty
+                  ? user.name.substring(0, 1).toUpperCase()
+                  : 'U',
+              color: context.onPrimary,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CommonText.titleSmall(
+                  user.name.isNotEmpty ? user.name : 'User',
+                  color: context.onPrimary,
+                  fontWeight: FontWeight.w600,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+                const SizedBox(height: 2),
+                CommonText.bodySmall(
+                  user.email,
+                  color: context.onPrimary.withOpacity(0.8),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+              ],
+            ),
+          ),
+        ],
+      );
+    }
+
+    // Fallback state
+    return Row(
+      children: [
+        Icon(
+          Icons.account_circle,
+          color: context.onPrimary.withOpacity(0.7),
+          size: 36,
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: CommonText.titleSmall(
+            context.translate('user_not_found'),
+            color: context.onPrimary.withOpacity(0.8),
+            fontWeight: FontWeight.w500,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+          ),
+        ),
+      ],
     );
   }
 
@@ -228,7 +336,8 @@ class MobileDrawer extends ConsumerWidget {
   }
 
   /// Build profile item
-  Widget _buildProfileItem(BuildContext context, dynamic profile) {
+  Widget _buildProfileItem(
+      BuildContext context, CurrentUserState currentUserState) {
     return ListTile(
       leading: CircleAvatar(
         radius: 18,

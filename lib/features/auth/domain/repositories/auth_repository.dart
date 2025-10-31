@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import '../../../../core/error/failures.dart';
 import '../entities/login_response.dart';
+import '../entities/user.dart' as auth_entities;
 import '../../data/models/login_request.dart';
 import '../../data/models/register_request.dart';
 import '../../data/models/resend_code_request.dart';
@@ -20,6 +21,9 @@ abstract class AuthRepository {
 
   /// Login user with credentials
   Future<Either<Failure, LoginResponse>> login(LoginRequest request);
+
+  /// Get current user information from server
+  Future<Either<Failure, auth_entities.User>> whoami();
 
   /// Send forgot password request
   Future<Either<Failure, ForgotPasswordResponse>> forgotPassword(

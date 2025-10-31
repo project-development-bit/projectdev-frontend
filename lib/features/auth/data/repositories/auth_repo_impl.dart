@@ -7,6 +7,7 @@ import '../../../../core/error/failures.dart';
 import '../../../../core/services/secure_storage_service.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../../domain/entities/login_response.dart';
+import '../../domain/entities/user.dart' as auth_entities;
 import '../models/login_request.dart';
 import '../models/register_request.dart';
 import '../models/resend_code_request.dart';
@@ -73,6 +74,26 @@ class AuthRepositoryImpl implements AuthRepository {
           message: e.message,
           statusCode: e.response?.statusCode,
           errorModel: errorModel));
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, auth_entities.User>> whoami() async {
+    try {
+      final userModel = await remoteDataSource.whoami();
+      return Right(userModel.toEntity());
+    } on DioException catch (e) {
+      ErrorModel? errorModel;
+      if (e.response?.data != null) {
+        errorModel = ErrorModel.fromJson(e.response!.data);
+      }
+      return Left(ServerFailure(
+        message: e.message,
+        statusCode: e.response?.statusCode,
+        errorModel: errorModel,
+      ));
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));
     }

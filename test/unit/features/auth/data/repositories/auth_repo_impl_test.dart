@@ -55,11 +55,18 @@ void main() {
         loginResponseModel = LoginResponseModel(
           success: true,
           message: 'Login successful.',
-          user: const UserModel(
+          user: UserModel(
             id: 11,
             name: 'User 7',
             email: 'user8@gmail.com',
             role: UserRole.normalUser,
+            refreshToken: '',
+            securityCode: '',
+            isBanned: 0,
+            isVerified: 1,
+            riskScore: 0,
+            createdAt: DateTime.now(),
+            updatedAt: DateTime.now(),
           ),
           tokens: const AuthTokensModel(
             accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
