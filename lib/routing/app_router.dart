@@ -12,8 +12,6 @@ import '../features/auth/presentation/pages/verification_page.dart';
 import '../features/auth/presentation/pages/reset_password_page.dart';
 import '../features/home/pages/home_page.dart';
 import '../features/user_profile/presentation/pages/profile_page.dart';
-import '../features/legal/presentation/pages/privacy_policy_page.dart';
-import '../features/legal/presentation/pages/terms_of_service_page.dart';
 import '../features/legal/presentation/pages/contact_us_page.dart';
 import '../core/providers/auth_provider.dart';
 import '../core/widgets/shell_route_wrapper.dart';
@@ -167,22 +165,6 @@ class BurgerEatsAppRoutes {
           ),
 
           // Legal Routes - Public access
-          GoRoute(
-            path: AppRoutes.privacyPolicy,
-            name: 'privacy-policy',
-            pageBuilder: (context, state) => const NoTransitionPage(
-              child: PrivacyPolicyPage(),
-            ),
-          ),
-
-          GoRoute(
-            path: AppRoutes.termsOfService,
-            name: 'terms-of-service',
-            pageBuilder: (context, state) => const NoTransitionPage(
-              child: TermsOfServicePage(),
-            ),
-          ),
-
           GoRoute(
             path: AppRoutes.contactUs,
             name: 'contact-us',

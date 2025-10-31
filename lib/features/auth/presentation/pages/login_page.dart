@@ -14,6 +14,7 @@ import '../../../../core/widgets/theme_switch_widget.dart';
 import '../../../../core/widgets/responsive_container.dart';
 import '../../../../core/extensions/context_extensions.dart';
 import '../../../../routing/app_router.dart';
+import '../../../terms_privacy/presentation/services/terms_privacy_navigation_service.dart';
 import '../providers/login_provider.dart';
 import '../widgets/login_form_widget.dart';
 
@@ -151,8 +152,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         children: [
                           Expanded(
                             child: TextButton(
-                              onPressed: () => GoRouter.of(context)
-                                  .push(AppRoutes.privacyPolicy),
+                              onPressed: () => context.showPrivacy(ref),
                               style: TextButton.styleFrom(
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 8),
@@ -170,8 +170,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                           ),
                           Expanded(
                             child: TextButton(
-                              onPressed: () => GoRouter.of(context)
-                                  .push(AppRoutes.termsOfService),
+                              onPressed: () => context.showTerms(ref),
                               style: TextButton.styleFrom(
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 8),
