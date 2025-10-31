@@ -64,6 +64,8 @@ class LoginNotifier extends StateNotifier<LoginState> {
   Future<void> login({
     required String email,
     required String password,
+    VoidCallback? onSuccess,
+    Function(String)? onError,
   }) async {
     debugPrint('🔄 Starting login process for: $email');
     debugPrint('🔄 Current state before login: ${state.runtimeType}');
@@ -90,7 +92,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
           );
           return;
         }
-
+        
         debugPrint('✅ reCAPTCHA token obtained successfully');
       } else {
         debugPrint('🔐 reCAPTCHA not required for this environment');
@@ -126,6 +128,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
                 failure.toString().contains('connection'),
             errorModel: failure.errorModel,
           );
+          onError?.call(failure.message ?? 'Login failed');
           debugPrint('🔄 State set to LoginError');
         },
         (loginResponse) async {
@@ -162,6 +165,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
           } catch (e) {
             debugPrint('⚠️ Token verification failed: $e');
           }
+          onSuccess?.call();
         },
       );
     } catch (e) {

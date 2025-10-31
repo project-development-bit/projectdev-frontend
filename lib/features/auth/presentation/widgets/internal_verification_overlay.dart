@@ -102,13 +102,13 @@ class _InternalVerificationOverlayState
           ref.read(internalVerificationProvider.notifier).markVerified();
 
           // Show success message
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('✅ Internal verification successful'),
-              backgroundColor: Colors.green,
-              duration: Duration(seconds: 2),
-            ),
-          );
+          // ScaffoldMessenger.of(context).showSnackBar(
+          //   const SnackBar(
+          //     content: Text('✅ Internal verification successful'),
+          //     backgroundColor: Colors.green,
+          //     duration: Duration(seconds: 2),
+          //   ),
+          // );
         } else {
           // Incorrect code
           setState(() {

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../features/auth/presentation/providers/login_provider.dart';
 import '../../features/auth/presentation/providers/logout_provider.dart';
@@ -225,9 +226,15 @@ class AuthActions {
   Future<void> login({
     required String email,
     required String password,
+    VoidCallback? onSuccess,
+    Function(String)? onError,
   }) async {
     final loginNotifier = _ref.read(loginNotifierProvider.notifier);
-    await loginNotifier.login(email: email, password: password);
+    await loginNotifier.login(
+        email: email,
+        password: password,
+        onError: onError,
+        onSuccess: onSuccess);
   }
 
   /// Logout current user

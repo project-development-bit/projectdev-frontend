@@ -60,28 +60,14 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
       switch (next) {
         case LoginSuccess():
           // Call success callback if provided
-          widget.onLoginSuccess?.call();
+          
 
           // Show success message
-          if (mounted) {
-            final localizations = AppLocalizations.of(context);
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(localizations?.translate('login_successful') ??
-                    'Login successful!'),
-                backgroundColor: Colors.green,
-              ),
-            );
-          }
+          
           break;
         case LoginError():
           // Show error message
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(next.message),
-              backgroundColor: Colors.red,
-            ),
-          );
+        
           break;
         default:
           break;
@@ -121,6 +107,27 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
       await authActions.login(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
+          onSuccess: () {
+            widget.onLoginSuccess?.call();
+            // if (mounted) {
+            //   final localizations = AppLocalizations.of(context);
+            //   ScaffoldMessenger.of(context).showSnackBar(
+            //     SnackBar(
+            //       content: Text(localizations?.translate('login_successful') ??
+            //           'Login successful!'),
+            //       backgroundColor: Colors.green,
+            //     ),
+            //   );
+            // }
+          },
+          onError: (v) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(v),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
       );
     }
   }

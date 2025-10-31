@@ -42,19 +42,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           // Add a small delay to ensure all async operations complete
           Future.delayed(const Duration(milliseconds: 100), () async {
             if (mounted) {
-              final localizations = AppLocalizations.of(context);
-              // Log auth state before navigation
-              debugNotifier
-                  .logAuthState('LoginPage: before navigation to home');
-
-              // Navigate to home on successful login
-              context.showSuccessSnackBar(
-                message: localizations?.translate('login_successful') ??
-                    'Login successful!',
-              );
-            }
-
-            if (mounted) {
               // Use GoRouter.of(context).go() to replace the current route
               GoRouter.of(context).go(AppRoutes.home);
             }
@@ -62,9 +49,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           break;
         case LoginError():
           // Show error message
-          context.showErrorSnackBar(
-            message: next.message,
-          );
           _checkVerifyCode(next.errorModel, next.email);
           break;
         default:
