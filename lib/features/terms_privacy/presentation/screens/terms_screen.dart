@@ -26,13 +26,6 @@ class _TermsScreenState extends ConsumerState<TermsScreen> {
     final state = ref.watch(termsPrivacyNotifierProvider);
     
     return Scaffold(
-      appBar: AppBar(
-        title: const CommonText(
-          'Terms of Service',
-          fontSize: 18,
-          fontWeight: FontWeight.w600,
-        ),
-      ),
       body: _buildBody(state),
     );
   }

@@ -26,13 +26,6 @@ class _PrivacyScreenState extends ConsumerState<PrivacyScreen> {
     final state = ref.watch(termsPrivacyNotifierProvider);
     
     return Scaffold(
-      appBar: AppBar(
-        title: const CommonText(
-          'Privacy Policy',
-          fontSize: 18,
-          fontWeight: FontWeight.w600,
-        ),
-      ),
       body: _buildBody(state),
     );
   }
