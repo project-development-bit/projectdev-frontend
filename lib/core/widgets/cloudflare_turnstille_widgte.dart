@@ -29,13 +29,36 @@ class CloudflareTurnstileWidget extends ConsumerStatefulWidget {
 }
 
 class _CloudflareTurnstileWidgetState extends ConsumerState<CloudflareTurnstileWidget> {
+  bool _isInitialized = false;
+
   @override
   void initState() {
     super.initState();
-    // Initialize the controller when widget is created
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(turnstileNotifierProvider.notifier).initializeController();
-    });
+    // Initialize the controller immediately
+    _initializeController();
+  }
+
+  Future<void> _initializeController() async {
+    try {
+      await ref.read(turnstileNotifierProvider.notifier).initializeController();
+      if (mounted) {
+        setState(() {
+          _isInitialized = true;
+        });
+        if (kDebugMode) {
+          print('✅ Turnstile controller initialized successfully');
+        }
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('❌ Failed to initialize Turnstile controller: $e');
+      }
+      // Set error state
+      if (mounted) {
+        ref.read(turnstileNotifierProvider.notifier).onTurnstileError(
+            'Failed to load security verification. Please refresh the page.');
+      }
+    }
   }
 
   /// Get the correct site key based on environment
@@ -182,7 +205,7 @@ class _CloudflareTurnstileWidgetState extends ConsumerState<CloudflareTurnstileW
               borderRadius: BorderRadius.circular(8),
               color: Theme.of(context).cardColor,
             ),
-            child: controller != null
+            child: _isInitialized && controller != null
                 ? Center(
                     child: CloudflareTurnstile(
                       siteKey: _getLiveSiteKey,

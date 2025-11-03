@@ -35,10 +35,40 @@ class TurnstileNotifier extends StateNotifier<TurnstileState> {
   TurnstileNotifier() : super(const TurnstileInitial());
   
   TurnstileController? _controller;
+  bool _isInitializing = false;
   
   /// Initialize the controller
-  void initializeController() {
-    _controller = TurnstileController();
+  Future<void> initializeController() async {
+    if (_isInitializing || _controller != null) {
+      debugPrint(
+          '⚠️  Turnstile controller already initializing or initialized');
+      return;
+    }
+
+    _isInitializing = true;
+
+    try {
+      // Wait a bit for the Turnstile API to be available
+      await Future.delayed(const Duration(milliseconds: 100));
+
+      _controller = TurnstileController();
+      debugPrint('✅ Turnstile controller created successfully');
+      _isInitializing = false;
+    } catch (e) {
+      debugPrint('❌ Failed to create Turnstile controller: $e');
+      _isInitializing = false;
+
+      // Retry once after a delay
+      await Future.delayed(const Duration(milliseconds: 500));
+      try {
+        _controller = TurnstileController();
+        debugPrint('✅ Turnstile controller created successfully on retry');
+      } catch (e) {
+        debugPrint('❌ Failed to create Turnstile controller on retry: $e');
+        state = TurnstileError(
+            'Failed to initialize security verification. Please refresh the page.');
+      }
+    }
   }
   
   /// Get the controller
