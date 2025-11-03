@@ -226,6 +226,7 @@ class _CloudflareTurnstileWidgetState extends ConsumerState<CloudflareTurnstileW
                       siteKey: _getLiveSiteKey,
                       options: options,
                       controller: controller,
+                      action: "login",
                       onTokenReceived: (token) {
                         if (kDebugMode) {
                           print('✅ Turnstile: Token received successfully');
