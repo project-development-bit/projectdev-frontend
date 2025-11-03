@@ -92,22 +92,27 @@ class _CloudflareTurnstileWidgetState extends ConsumerState<CloudflareTurnstileW
       return widget.siteKey!;
     }
     
+    // TEMPORARY: Using test key for ALL environments until you get your real key
+    // This test key always passes verification
+    // Once you have your real site key from Cloudflare, update the production key below
+    const String testKey = '1x00000000000000000000AA';
+    const String productionSiteKey =
+        '0x4AAAAAAABvMxgQiLjU_ErY'; // REPLACE THIS WITH YOUR REAL KEY
+
+    // For now, use test key in both debug and production
+    // This helps verify the integration works before adding real key
     if (kDebugMode) {
-      // Development: Use Cloudflare's official test key that always passes
-      // This key is specifically for testing and will always succeed
-      return '1x00000000000000000000AA';
+      debugPrint('🔑 Using Turnstile TEST key (always passes)');
+      return testKey;
     } else {
-      // Production: REPLACE WITH YOUR ACTUAL CLOUDFLARE SITE KEY
-      // The key '0x4AAAAAAABvMxgQiLjU_ErY' is an example format
-      // You MUST replace this with your real site key from Cloudflare dashboard
+      // IMPORTANT: Change this to 'productionSiteKey' after getting your real key from Cloudflare
+      debugPrint(
+          '⚠️ WARNING: Using TEST key in production. Please update with real site key!');
+      return testKey; // Change to: productionSiteKey
       
-      // STEP 1: Replace this with your actual site key
-      const String productionSiteKey = '0x4AAAAAAABvMxgQiLjU_ErY';
-      
-      // STEP 2: Ensure this key matches your domain in Cloudflare
-      // STEP 3: Verify HTTPS is enabled on your domain
-      
-      return productionSiteKey;
+      // After getting your real site key:
+      // 1. Replace '0x4AAAAAAABvMxgQiLjU_ErY' above with your real key
+      // 2. Change 'return testKey;' to 'return productionSiteKey;'
     }
   }
 
