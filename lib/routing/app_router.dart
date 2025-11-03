@@ -181,12 +181,13 @@ class BurgerEatsAppRoutes {
               return NoTransitionPage(
                 child: ShellRouteWrapper(
                   child: InternalVerificationOverlay(
-                    child: Builder(
-                      builder: (context) {
-                        // once verified, show tutorial overlay next
-                        return TutorialOverlay(
-                          child: child,
-                        );
+                    child: Consumer(
+                      builder: (context, ref, _) {
+                        final isVerified =
+                            ref.watch(internalVerificationProvider);
+                        return isVerified
+                            ? TutorialOverlay(child: child)
+                            : child;
                       },
                     ),
                   ),

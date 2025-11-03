@@ -6,9 +6,9 @@ final tutorialProvider =
     StateNotifierProvider<TutorialNotifier, bool>((ref) => TutorialNotifier());
 
 class TutorialNotifier extends StateNotifier<bool> {
-  static const _tutorialShownKey = 'tutorial_shown';
+  static const _tutorialShownKey = 'tutorial_shown2';
 
-  TutorialNotifier() : super(false) {
+  TutorialNotifier() : super(true) {
     _checkIfShown();
   }
 

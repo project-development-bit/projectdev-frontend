@@ -17,22 +17,28 @@ class _TutorialOverlayState extends ConsumerState<TutorialOverlay> {
     final tutorialShown = ref.watch(tutorialProvider);
 
     if (tutorialShown) return widget.child;
-
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      // 🧠 Recheck before showing
-      final alreadyShown = ref.read(tutorialProvider);
-      if (!alreadyShown) return;
-      await showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (_) => CointiplyTutorialDialog(
-          onComplete: () {
-            ref.read(tutorialProvider.notifier).markAsShown();
-          },
-        ),
-      );
-    });
-
-    return widget.child;
+    return Material(
+      color: Colors.black87,
+      child: Stack(
+        children: [
+          // App content (blurred/disabled)
+          Positioned.fill(
+            child: AbsorbPointer(
+              child: Opacity(
+                opacity: 0.1,
+                child: widget.child,
+              ),
+            ),
+          ),
+          Center(
+            child: CointiplyTutorialDialog(
+              onComplete: () {
+                ref.read(tutorialProvider.notifier).markAsShown();
+              },
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

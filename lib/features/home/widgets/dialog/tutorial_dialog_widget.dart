@@ -70,159 +70,172 @@ class _CointiplyTutorialDialogState extends State<CointiplyTutorialDialog> {
   Widget build(BuildContext context) {
     final data = steps[step - 1];
 
-    return Dialog(
-      backgroundColor: const Color(0xFF181818),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 420, minWidth: 320),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // ─── Header ────────────────────────────────
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  CommonText.titleSmall(
-                    context.translate(data['title']),
-                    color: context.inverseSurface,
-                  ),
-                  GestureDetector(
-                    onTap: () => Navigator.pop(context),
-                    child: CommonText.labelMedium(
-                      context.translate('dismiss_hide'),
-                      color: Colors.grey[400],
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              Divider(color: Colors.grey[700]),
-              const SizedBox(height: 20),
-
-              // ─── Icon or Gradient Title ────────────────
-              Center(
-                child: data['gradient'] == true
-                    ? ShaderMask(
-                        shaderCallback: (bounds) => const LinearGradient(
-                          colors: [
-                            Color(0xFFFF007F),
-                            Color(0xFF7F00FF),
-                            Color(0xFF00FFFF),
-                          ],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ).createShader(bounds),
-                        child: CommonText.displayMedium(
-                          'WELCOME',
-                          color: context.inverseSurface,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      )
-                    : Image.asset(
-                        data['image'],
-                        height: 110,
-                      ),
-              ),
-              const SizedBox(height: 24),
-
-              // ─── Description ───────────────────────────
-              CommonText.bodyMedium(
-                context.translate(data['description']),
-                color: context.inverseSurface,
-                maxLines: 20,
-              ),
-
-              // ─── Captcha + Reward for Final Step ────────
-              if (data['final'] == true) ...[
-                const SizedBox(height: 20),
-                // Center(
-                //   child: CommonText.titleSmall(
-                //     context.translate('captcha_selection'),
-                //     color: context.inverseSurface,
-                //   ),
-                // ),
-                // const SizedBox(height: 10),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   children: [
-                //     _buildCaptchaOption(context.translate('hcaptcha'), false),
-                //     const SizedBox(width: 12),
-                //     _buildCaptchaOption(context.translate('recaptcha'), true),
-                //   ],
-                // ),
-                const SizedBox(height: 10),
-                RecaptchaWidget(),
-                const SizedBox(height: 20),
-                // _buildCaptchaPreview(),
-                const SizedBox(height: 24),
-                _buildRewardBox(),
-              ],
-
-              const SizedBox(height: 24),
-              Divider(color: Colors.grey[700]),
-              const SizedBox(height: 16),
-
-              // ─── Footer ────────────────────────────────
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  CommonText.labelMedium(
-                    context
-                        .translate('step_of')
-                        .replaceAll('{step}', '$step')
-                        .replaceAll('{totalSteps}', '$totalSteps'),
-                    color: Colors.white70,
-                  ),
-                  Row(
-                    children: [
-                      TextButton(
-                        onPressed:
-                            step > 1 ? () => setState(() => step--) : null,
-                        style: TextButton.styleFrom(
-                          foregroundColor: Colors.grey[500],
-                        ),
-                        child: CommonText.labelMedium(
-                          context.translate('back'),
-                          color: step > 1 ? Colors.white70 : Colors.grey[700],
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      ElevatedButton(
-                        onPressed: () {
-                          if (step < totalSteps) {
-                            setState(() => step++);
-                          } else {
-                            widget.onComplete();
-                            Navigator.pop(context);
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: data['final'] == true
-                              ? Colors.blueAccent
-                              : const Color(0xFFE91E63),
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 12),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(6)),
-                        ),
-                        child: CommonText.labelMedium(
-                          step == totalSteps
-                              ? context.translate('claim_tutorial_reward')
-                              : context.translate('continue'),
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ],
+    return Container(
+      margin: EdgeInsets.all(context.isMobile ? 20 : 32),
+      constraints: BoxConstraints(
+        maxWidth: context.isMobile ? double.infinity : 400,
+        maxHeight: context.isMobile
+            ? double.infinity
+            : data['final'] == true
+                ? 800
+                : 600,
+      ),
+      decoration: BoxDecoration(
+        color: context.surface,
+        borderRadius: BorderRadius.circular(context.isMobile ? 16 : 20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.3),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
           ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // ─── Header ────────────────────────────────
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                CommonText.titleSmall(
+                  context.translate(data['title']),
+                  color: context.inverseSurface,
+                ),
+                GestureDetector(
+                  onTap: () => Navigator.pop(context),
+                  child: CommonText.labelMedium(
+                    context.translate('dismiss_hide'),
+                    color: Colors.grey[400],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Divider(color: Colors.grey[700]),
+            const SizedBox(height: 20),
+
+            // ─── Icon or Gradient Title ────────────────
+            Center(
+              child: data['gradient'] == true
+                  ? ShaderMask(
+                      shaderCallback: (bounds) => const LinearGradient(
+                        colors: [
+                          Color(0xFFFF007F),
+                          Color(0xFF7F00FF),
+                          Color(0xFF00FFFF),
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ).createShader(bounds),
+                      child: CommonText.displayMedium(
+                        'WELCOME',
+                        color: context.inverseSurface,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    )
+                  : Image.asset(
+                      data['image'],
+                      height: 110,
+                    ),
+            ),
+            const SizedBox(height: 24),
+
+            // ─── Description ───────────────────────────
+            CommonText.bodyMedium(
+              context.translate(data['description']),
+              color: context.inverseSurface,
+              maxLines: 20,
+            ),
+
+            // ─── Captcha + Reward for Final Step ────────
+            if (data['final'] == true) ...[
+              const SizedBox(height: 20),
+              // Center(
+              //   child: CommonText.titleSmall(
+              //     context.translate('captcha_selection'),
+              //     color: context.inverseSurface,
+              //   ),
+              // ),
+              // const SizedBox(height: 10),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.center,
+              //   children: [
+              //     _buildCaptchaOption(context.translate('hcaptcha'), false),
+              //     const SizedBox(width: 12),
+              //     _buildCaptchaOption(context.translate('recaptcha'), true),
+              //   ],
+              // ),
+              const SizedBox(height: 10),
+              RecaptchaWidget(),
+              const SizedBox(height: 20),
+              // _buildCaptchaPreview(),
+              const SizedBox(height: 24),
+              _buildRewardBox(),
+            ],
+
+            const SizedBox(height: 24),
+            Divider(color: Colors.grey[700]),
+            const SizedBox(height: 16),
+
+            // ─── Footer ────────────────────────────────
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                CommonText.labelMedium(
+                  context
+                      .translate('step_of')
+                      .replaceAll('{step}', '$step')
+                      .replaceAll('{totalSteps}', '$totalSteps'),
+                  color: Colors.white70,
+                ),
+                Row(
+                  children: [
+                    TextButton(
+                      onPressed: step > 1 ? () => setState(() => step--) : null,
+                      style: TextButton.styleFrom(
+                        foregroundColor: Colors.grey[500],
+                      ),
+                      child: CommonText.labelMedium(
+                        context.translate('back'),
+                        color: step > 1 ? Colors.white70 : Colors.grey[700],
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    ElevatedButton(
+                      onPressed: () {
+                        if (step < totalSteps) {
+                          setState(() => step++);
+                        } else {
+                          widget.onComplete();
+                          Navigator.pop(context);
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: data['final'] == true
+                            ? Colors.blueAccent
+                            : const Color(0xFFE91E63),
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 12),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(6)),
+                      ),
+                      child: CommonText.labelMedium(
+                        step == totalSteps
+                            ? context.translate('claim_tutorial_reward')
+                            : context.translate('continue'),
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
