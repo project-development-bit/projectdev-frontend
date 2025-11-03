@@ -36,43 +36,66 @@ class TurnstileNotifier extends StateNotifier<TurnstileState> {
   
   TurnstileController? _controller;
   bool _isInitializing = false;
+  int _retryCount = 0;
+  static const int _maxRetries = 3;
   
-  /// Initialize the controller
+  /// Initialize the controller with better retry logic
   Future<void> initializeController() async {
     if (_isInitializing || _controller != null) {
-      debugPrint(
-          '⚠️  Turnstile controller already initializing or initialized');
+      debugPrint('⚠️ Turnstile controller already initializing or initialized');
       return;
     }
 
     _isInitializing = true;
+    _retryCount = 0;
 
+    await _attemptInitialization();
+  }
+  
+  Future<void> _attemptInitialization() async {
     try {
-      // Wait a bit for the Turnstile API to be available
-      await Future.delayed(const Duration(milliseconds: 100));
+      debugPrint('🔄 Attempting Turnstile initialization (attempt ${_retryCount + 1}/$_maxRetries)');
+      
+      // Wait longer for Turnstile API to be available
+      final delay = Duration(milliseconds: 300 * (_retryCount + 1));
+      await Future.delayed(delay);
+
+      // Check if running on web
+      if (kIsWeb) {
+        debugPrint('🌐 Running on web platform');
+      }
 
       _controller = TurnstileController();
       debugPrint('✅ Turnstile controller created successfully');
       _isInitializing = false;
+      _retryCount = 0;
+      
     } catch (e) {
       debugPrint('❌ Failed to create Turnstile controller: $e');
-      _isInitializing = false;
+      _retryCount++;
 
-      // Retry once after a delay
-      await Future.delayed(const Duration(milliseconds: 500));
-      try {
-        _controller = TurnstileController();
-        debugPrint('✅ Turnstile controller created successfully on retry');
-      } catch (e) {
-        debugPrint('❌ Failed to create Turnstile controller on retry: $e');
+      if (_retryCount < _maxRetries) {
+        debugPrint('🔄 Retrying in ${300 * _retryCount}ms...');
+        await _attemptInitialization();
+      } else {
+        debugPrint('❌ Max retries reached. Initialization failed.');
+        _isInitializing = false;
         state = TurnstileError(
-            'Failed to initialize security verification. Please refresh the page.');
+          'Failed to load security verification. Please check:\n'
+          '1. Your internet connection\n'
+          '2. That the site key is correct\n'
+          '3. That your domain is authorized in Cloudflare\n'
+          'Then refresh the page.'
+        );
       }
     }
   }
   
   /// Get the controller
   TurnstileController? get controller => _controller;
+  
+  /// Check if controller is ready
+  bool get isControllerReady => _controller != null && !_isInitializing;
   
   /// Handle token received
   void onTokenReceived(String token) {
@@ -133,6 +156,8 @@ class TurnstileNotifier extends StateNotifier<TurnstileState> {
   void disposeController() {
     _controller?.dispose();
     _controller = null;
+    _isInitializing = false;
+    _retryCount = 0;
   }
   
   /// Get current token
@@ -189,4 +214,9 @@ final isTurnstileLoadingProvider = Provider<bool>((ref) {
 
 final turnstileErrorProvider = Provider<String?>((ref) {
   return ref.watch(turnstileNotifierProvider.notifier).errorMessage;
+});
+
+/// Provider to check if controller is ready
+final turnstileControllerReadyProvider = Provider<bool>((ref) {
+  return ref.watch(turnstileNotifierProvider.notifier).isControllerReady;
 });

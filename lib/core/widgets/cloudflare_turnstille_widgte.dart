@@ -34,19 +34,28 @@ class _CloudflareTurnstileWidgetState extends ConsumerState<CloudflareTurnstileW
   @override
   void initState() {
     super.initState();
-    // Initialize the controller immediately
-    _initializeController();
+    // Initialize with delay to ensure Turnstile API is loaded
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _initializeController();
+    });
   }
 
   Future<void> _initializeController() async {
     try {
+      if (kDebugMode) {
+        print('🔧 Initializing Turnstile widget...');
+        print('🔑 Site Key: $_getLiveSiteKey');
+        print('🌐 Environment: ${kDebugMode ? 'Debug' : 'Production'}');
+      }
+      
       await ref.read(turnstileNotifierProvider.notifier).initializeController();
+      
       if (mounted) {
         setState(() {
           _isInitialized = true;
         });
         if (kDebugMode) {
-          print('✅ Turnstile controller initialized successfully');
+          print('✅ Turnstile widget initialized successfully');
         }
       }
     } catch (e) {
@@ -56,7 +65,8 @@ class _CloudflareTurnstileWidgetState extends ConsumerState<CloudflareTurnstileW
       // Set error state
       if (mounted) {
         ref.read(turnstileNotifierProvider.notifier).onTurnstileError(
-            'Failed to load security verification. Please refresh the page.');
+          'Failed to load security verification. Please check your internet connection and refresh the page.'
+        );
       }
     }
   }
