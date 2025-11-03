@@ -12,33 +12,27 @@ class TutorialOverlay extends ConsumerStatefulWidget {
 }
 
 class _TutorialOverlayState extends ConsumerState<TutorialOverlay> {
-  bool _dialogShown = false;
-
   @override
   Widget build(BuildContext context) {
     final tutorialShown = ref.watch(tutorialProvider);
 
-    // if tutorial completed → just show app
     if (tutorialShown) return widget.child;
 
-    // show dialog once after app loads
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if (!_dialogShown) {
-        _dialogShown = true;
-
-        await showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (_) => CointiplyTutorialDialog(
-            onComplete: () {
-              ref.read(tutorialProvider.notifier).markAsShown();
-            },
-          ),
-        );
-      }
+      // 🧠 Recheck before showing
+      final alreadyShown = ref.read(tutorialProvider);
+      if (!alreadyShown) return;
+      await showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) => CointiplyTutorialDialog(
+          onComplete: () {
+            ref.read(tutorialProvider.notifier).markAsShown();
+          },
+        ),
+      );
     });
 
-    // temporarily show app behind, no stack blur
     return widget.child;
   }
 }
