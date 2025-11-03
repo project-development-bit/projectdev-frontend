@@ -108,7 +108,7 @@ class _CloudflareTurnstileWidgetState extends ConsumerState<CloudflareTurnstileW
       // IMPORTANT: Change this to 'productionSiteKey' after getting your real key from Cloudflare
       debugPrint(
           '⚠️ WARNING: Using TEST key in production. Please update with real site key!');
-      return testKey; // Change to: productionSiteKey
+      return productionSiteKey; // Change to: productionSiteKey
       
       // After getting your real site key:
       // 1. Replace '0x4AAAAAAABvMxgQiLjU_ErY' above with your real key
