@@ -110,7 +110,7 @@ class _CloudflareTurnstileWidgetState extends ConsumerState<CloudflareTurnstileW
           '⚠️ WARNING: Using TEST key in production. Please update with real site key!');
       return productionSiteKey; // Change to: productionSiteKey
       
-      // After getting your real site key:
+      // After getting your realxsite key:
       // 1. Replace '0x4AAAAAAABvMxgQiLjU_ErY' above with your real key
       // 2. Change 'return testKey;' to 'return productionSiteKey;'
     }
@@ -227,6 +227,8 @@ class _CloudflareTurnstileWidgetState extends ConsumerState<CloudflareTurnstileW
                       options: options,
                       controller: controller,
                       action: "login",
+                      baseUrl:
+                          kDebugMode ? "localhost" : "staging.gigafaucet.com",
                       onTokenReceived: (token) {
                         if (kDebugMode) {
                           print('✅ Turnstile: Token received successfully');
