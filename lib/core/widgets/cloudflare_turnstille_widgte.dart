@@ -95,9 +95,9 @@ class _CloudflareTurnstileWidgetState extends ConsumerState<CloudflareTurnstileW
     // TEMPORARY: Using test key for ALL environments until you get your real key
     // This test key always passes verification
     // Once you have your real site key from Cloudflare, update the production key below
-    const String testKey = '1x00000000000000000000AA';
+    const String testKey = '0x4AAAAAAB-h_zqcfZnriGXu';
     const String productionSiteKey =
-        '0x4AAAAAAABvMxgQiLjU_ErY'; // REPLACE THIS WITH YOUR REAL KEY
+        '0x4AAAAAAB-h_zqcfZnriGXu'; // REPLACE THIS WITH YOUR REAL KEY
 
     // For now, use test key in both debug and production
     // This helps verify the integration works before adding real key
@@ -228,7 +228,9 @@ class _CloudflareTurnstileWidgetState extends ConsumerState<CloudflareTurnstileW
                       controller: controller,
                       action: "login",
                       baseUrl:
-                          kDebugMode ? "localhost" : "staging.gigafaucet.com",
+                          kDebugMode
+                          ? "http://localhost"
+                          : "https://staging.gigafaucet.com",
                       onTokenReceived: (token) {
                         if (kDebugMode) {
                           print('✅ Turnstile: Token received successfully');
