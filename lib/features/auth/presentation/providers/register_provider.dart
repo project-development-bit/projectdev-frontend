@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/enum/user_role.dart';
-import '../../../../core/providers/recaptcha_provider.dart';
+import '../../../../core/providers/turnstile_provider.dart';
 import '../../data/models/register_request.dart';
 import 'auth_providers.dart';
 
@@ -69,27 +69,22 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
     debugPrint('🔄 State set to RegisterLoading');
 
     try {
-      // Get reCAPTCHA token if required
-      String? recaptchaToken;
-      final recaptchaNotifier = _ref.read(recaptchaNotifierProvider.notifier);
+      // Get Turnstile token (replaces reCAPTCHA)
+      String? turnstileToken;
 
-      debugPrint('🔐 Checking reCAPTCHA requirements...');
-      if (recaptchaNotifier.isRequired) {
-        debugPrint('🔐 reCAPTCHA is required, getting token...');
-        recaptchaToken = await recaptchaNotifier.getToken(action: 'register');
-
-        if (recaptchaToken == null) {
-          debugPrint('❌ Failed to get reCAPTCHA token');
-          state = const RegisterError(
-            message: 'reCAPTCHA verification failed. Please try again.',
-          );
-          onError?.call('reCAPTCHA verification failed. Please try again.');
-          return;
-        }
-        
-        debugPrint('✅ reCAPTCHA token obtained successfully');
+      debugPrint('🔐 Checking Turnstile verification...');
+      final turnstileState = _ref.read(turnstileNotifierProvider);
+      
+      if (turnstileState is TurnstileSuccess) {
+        turnstileToken = turnstileState.token;
+        debugPrint('✅ Turnstile token obtained successfully');
       } else {
-        debugPrint('🔐 reCAPTCHA not required for this environment');
+        debugPrint('❌ Turnstile verification incomplete');
+        state = const RegisterError(
+          message: 'Security verification required. Please complete the verification and try again.',
+        );
+        onError?.call('Security verification required. Please complete the verification and try again.');
+        return;
       }
 
       final registerRequest = RegisterRequest(
@@ -98,11 +93,10 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
         password: password,
         confirmPassword: confirmPassword,
         role: role,
-        recaptchaToken: recaptchaToken,
+        recaptchaToken: turnstileToken, // Using recaptchaToken field for Turnstile token
       );
 
-      debugPrint(
-          '📤 Sending registration request${recaptchaToken != null ? ' with reCAPTCHA token' : ''}');
+      debugPrint('📤 Sending registration request with Turnstile token');
 
       final registerUseCase = _ref.read(registerUseCaseProvider);
 

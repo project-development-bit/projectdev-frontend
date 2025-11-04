@@ -4,10 +4,10 @@ import '../../../../core/common/common_textfield.dart';
 import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/widgets/locale_switch_widget.dart';
 import '../../../../core/widgets/responsive_container.dart';
-import '../../../../core/widgets/recaptcha_widget.dart';
+import '../../../../core/widgets/cloudflare_turnstille_widgte.dart';
+import '../../../../core/providers/turnstile_provider.dart';
 import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/enum/user_role.dart';
-import '../../../../core/providers/consolidated_auth_provider.dart';
 import '../providers/register_provider.dart';
 import '../../../../routing/app_router.dart';
 
@@ -115,14 +115,13 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
       return;
     }
 
-    // Check if reCAPTCHA verification is required and completed
-    final canAttemptSignup =
-        ref.read(canAttemptLoginProvider); // This checks reCAPTCHA status
-    if (!canAttemptSignup) {
+    // Check if Turnstile verification is completed
+    final turnstileState = ref.read(turnstileNotifierProvider);
+    if (turnstileState is! TurnstileSuccess) {
       final localizations = AppLocalizations.of(context);
       context.showErrorSnackBar(
-        message: localizations?.translate('recaptcha_required') ??
-            'Please verify that you are not a robot',
+        message: localizations?.translate('security_verification_required') ??
+            'Please complete the security verification',
       );
       return;
     }
@@ -333,9 +332,9 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
 
                   const SizedBox(height: 24),
 
-                  // reCAPTCHA Widget
-                  const RecaptchaWidget(
-                    enabled: true,
+                  // Cloudflare Turnstile Widget (replaces reCAPTCHA)
+                  const CloudflareTurnstileWidget(
+                    action: "create_user",
                   ),
 
                   const SizedBox(height: 32),

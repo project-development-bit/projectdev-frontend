@@ -1,3 +1,5 @@
+import 'package:cointiply_app/core/widgets/cloudflare_turnstille_widgte.dart';
+import 'package:cointiply_app/core/providers/turnstile_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/common/common_textfield.dart';
@@ -6,7 +8,6 @@ import '../../../../core/common/common_button.dart';
 import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/config/app_constant.dart';
-import '../../../../core/widgets/recaptcha_widget.dart';
 import '../../../../core/providers/consolidated_auth_provider.dart';
 import '../providers/login_provider.dart';
 
@@ -86,14 +87,26 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
 
   void _handleLogin() async {
     if (_formKey.currentState!.validate()) {
-      // Check if login can be attempted (includes reCAPTCHA check)
-      final canAttemptLogin = ref.read(canAttemptLoginProvider);
+      // Check Turnstile verification
+      final turnstileCanAttempt = ref.read(turnstileCanAttemptLoginProvider);
 
-      if (!canAttemptLogin) {
+      if (!turnstileCanAttempt) {
         final localizations = AppLocalizations.of(context);
         context.showErrorSnackBar(
-          message: localizations?.translate('recaptcha_required') ??
-              'Please verify that you are not a robot',
+          message: localizations?.translate('turnstile_required') ??
+              'Please complete the security verification',
+        );
+        return;
+      }
+
+      // Get the Turnstile token
+      final turnstileToken = ref.read(turnstileTokenProvider);
+      
+      if (turnstileToken == null) {
+        final localizations = AppLocalizations.of(context);
+        context.showErrorSnackBar(
+          message: localizations?.translate('turnstile_token_missing') ??
+              'Security verification token is missing. Please try again.',
         );
         return;
       }
@@ -227,10 +240,8 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
 
           const SizedBox(height: 24),
 
-          // reCAPTCHA Widget (managed by Riverpod)
-          RecaptchaWidget(
-            enabled: !isLoading,
-          ),
+          // Cloudflare Turnstile Security Widget
+          const CloudflareTurnstileWidget(),
 
           const SizedBox(height: 24),
 
