@@ -9,7 +9,9 @@ class ChatPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WebViewWrapper(
-      title: AppLocalizations.of(context)!.translate('chat'),
+      title: !context.isMobile
+          ? null
+          : AppLocalizations.of(context)?.translate('chat') ?? 'Chat',
       url: RightChatOverlayConfig.chatUrl,
     );
   }

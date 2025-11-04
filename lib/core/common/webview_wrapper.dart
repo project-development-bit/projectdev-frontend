@@ -1,13 +1,12 @@
 import 'package:cointiply_app/core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:webview_all/webview_all.dart';
-import 'common_text.dart';
 
 class WebViewWrapper extends StatelessWidget {
   final String url;
   final String? title;
   final VoidCallback? onClose;
+  // final
 
   const WebViewWrapper({
     super.key,
@@ -18,31 +17,38 @@ class WebViewWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = context.isMobile;
-
+    final bool isMobile = context.isMobile;
     return Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: title != null
           ? AppBar(
-              automaticallyImplyLeading: false,
-              elevation: 0,
-              backgroundColor: isMobile
-                  ? Colors.transparent
-                  : Theme.of(context).appBarTheme.backgroundColor,
-              toolbarOpacity: 1.0,
-              title: CommonText(
-                title!,
-                fontSize: 18,
+              title: CommonText.titleMedium(
+                title ?? '',
+                color: context.onSurface,
                 fontWeight: FontWeight.w600,
-                color: Colors.black,
               ),
               leading: IconButton(
-                icon: const Icon(Icons.close, color: Colors.black),
-                onPressed: onClose ?? () => Navigator.of(context).pop(),
+                icon: Icon(
+                  Icons.close,
+                  color: context.onSurface,
+                ),
+                onPressed: () {
+                  if (onClose != null) {
+                    onClose!();
+                  } else {
+                    Navigator.of(context).pop();
+                  }
+                },
               ),
+              elevation: 1,
             )
           : null,
-      body: Webview(
-        url: url,
+      body: ResponsiveSection(
+        // 90 % of screen width
+        maxWidth: isMobile ? null : MediaQuery.of(context).size.width * 0.9,
+        padding: EdgeInsets.zero,
+        fullWidthOnMobile: true,
+        child: Webview(url: url),
       ),
     );
   }
