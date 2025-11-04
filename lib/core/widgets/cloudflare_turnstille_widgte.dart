@@ -13,6 +13,7 @@ class CloudflareTurnstileWidget extends ConsumerStatefulWidget {
   final String? language;
   final bool retryAutomatically;
   final TurnstileRefreshExpired refreshExpired;
+  final String action;
   
   const CloudflareTurnstileWidget({
     super.key,
@@ -21,6 +22,7 @@ class CloudflareTurnstileWidget extends ConsumerStatefulWidget {
     this.theme,
     this.language,
     this.retryAutomatically = false,
+    this.action = "login",
     this.refreshExpired = TurnstileRefreshExpired.manual,
   });
 
@@ -226,7 +228,7 @@ class _CloudflareTurnstileWidgetState extends ConsumerState<CloudflareTurnstileW
                       siteKey: _getLiveSiteKey,
                       options: options,
                       controller: controller,
-                      action: "login",
+                      action: widget.action,
                       baseUrl:
                           kDebugMode
                           ? "http://localhost"
