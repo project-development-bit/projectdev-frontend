@@ -57,7 +57,7 @@ dependencies:
   melos: ^7.2.0
   google_fonts: ^6.2.1
   recaptcha_enterprise_flutter: ^18.8.1
-  webview_flutter: ^4.10.0
+  # webview_flutter: ^4.10.0
   g_recaptcha_v3: ^1.0.0
   cloudflare_turnstile:
     git:
