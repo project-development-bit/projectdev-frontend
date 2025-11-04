@@ -63,6 +63,7 @@ dependencies:
     git:
       url: https://github.com/Nika0000/cloudflare_turnstile.git
       ref: legacy
+  webview_all: ^0.5.2
 
 dev_dependencies:
   flutter_test:
@@ -105,6 +106,7 @@ flutter:
   assets:
     - assets/l10n/
     - assets/images/
+    - assets/images/icons/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
