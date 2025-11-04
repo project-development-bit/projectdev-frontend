@@ -1,7 +1,7 @@
+import 'package:cointiply_app/core/common/webview_wrapper.dart';
 import 'package:cointiply_app/features/chat/presentation/provider/right_chat_overlay_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:webview_all/webview_all.dart';
 
 /// --- UI WRAPPER SECTION ---
 ///
@@ -56,7 +56,7 @@ class _ChatPanel extends ConsumerWidget {
       child: Stack(
         children: [
           // Embedded chat WebView
-          const Webview(
+          const WebViewWrapper(
             url: RightChatOverlayConfig.chatUrl,
           ),
 

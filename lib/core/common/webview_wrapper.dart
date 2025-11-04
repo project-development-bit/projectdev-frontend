@@ -17,19 +17,21 @@ class WebViewWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: title != null
-            ? CommonText(
-                title ?? "",
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-              )
-            : SizedBox(),
-        leading: IconButton(
-          icon: const Icon(Icons.close),
-          onPressed: onClose ?? () => Navigator.of(context).pop(),
-        ),
-      ),
+      appBar: title != null
+          ? AppBar(
+              title: title != null
+                  ? CommonText(
+                      title ?? "",
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                    )
+                  : SizedBox(),
+              leading: IconButton(
+                icon: const Icon(Icons.close),
+                onPressed: onClose ?? () => Navigator.of(context).pop(),
+              ),
+            )
+          : null,
       body: Webview(
         url: url,
       ),
