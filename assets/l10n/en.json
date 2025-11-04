@@ -279,5 +279,10 @@
   "support": "Support",
   "chat": "Chat",
   "open_chat": "Open Chat",
-  "close_chat": "Close Chat"
+  "close_chat": "Close Chat",
+  "loading_privacy_policy": "Loading Privacy Policy...",
+  "failed_to_load_privacy_policy": "Failed to Load Privacy Policy",
+  "close": "Close",
+  "failed_to_load_terms": "Failed to Load Terms",
+  "loading_terms_of_service": "Loading Terms of Service..."
 }

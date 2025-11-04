@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/localization/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/common/common_text.dart';
@@ -48,14 +49,15 @@ class _TermsScreenState extends ConsumerState<TermsScreen> {
   Widget _buildLoadingView() {
     return Container(
       padding: const EdgeInsets.all(24),
-      child: const Center(
+      child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CircularProgressIndicator(),
             SizedBox(height: 16),
             CommonText(
-              'Loading Terms of Service...',
+              AppLocalizations.of(context)!
+                  .translate("loading_terms_of_service"),
               fontSize: 16,
               textAlign: TextAlign.center,
             ),
@@ -68,7 +70,7 @@ class _TermsScreenState extends ConsumerState<TermsScreen> {
   Widget _buildWebView(String url) {
     return WebViewWrapper(
       url: url,
-      title: 'Terms of Service',
+      title: AppLocalizations.of(context)!.translate("terms_of_service"),
       onClose: () => Navigator.of(context).pop(),
     );
   }
@@ -86,8 +88,8 @@ class _TermsScreenState extends ConsumerState<TermsScreen> {
               color: Colors.red[400],
             ),
             const SizedBox(height: 16),
-            const CommonText(
-              'Failed to Load Terms',
+            CommonText(
+              AppLocalizations.of(context)!.translate("failed_to_load_terms"),
               fontSize: 18,
               fontWeight: FontWeight.w600,
               textAlign: TextAlign.center,
@@ -107,12 +109,12 @@ class _TermsScreenState extends ConsumerState<TermsScreen> {
                     .fetchTermsAndPrivacy();
               },
               icon: const Icon(Icons.refresh),
-              label: const Text('Retry'),
+              label: Text(AppLocalizations.of(context)!.translate("retry")),
             ),
             const SizedBox(height: 12),
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Close'),
+              child: Text(AppLocalizations.of(context)!.translate("close")),
             ),
           ],
         ),
