@@ -248,5 +248,8 @@
   "_drawer_missing_keys": "မရှိတဲ့ Drawer Translation Keys",
   "error_loading_user": "အသုံးပြုသူ အချက်အလက် ရယူခြင်း အမှား",
   "tap_to_retry": "ပြန်လည်ကြိုးစားရန် နှိပ်ပါ",
-  "user_not_found": "အသုံးပြုသူ မတွေ့ရှိပါ"
+  "user_not_found": "အသုံးပြုသူ မတွေ့ရှိပါ",
+  "support": "ပံ့ပိုးမှု",
+  "chat": "ချတ်",
+  "open_chat": "ချတ်ဖွင့်ပါ"
 }

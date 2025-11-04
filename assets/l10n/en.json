@@ -275,5 +275,8 @@
   "_drawer_missing_keys": "Missing Drawer Translation Keys",
   "error_loading_user": "Error loading user",
   "tap_to_retry": "Tap to retry",
-  "user_not_found": "User not found"
+  "user_not_found": "User not found",
+  "support": "Support",
+  "chat": "Chat",
+  "open_chat": "Open Chat"
 }

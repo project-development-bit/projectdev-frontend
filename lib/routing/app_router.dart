@@ -1,5 +1,6 @@
 // 📦 Package imports
 import 'package:cointiply_app/features/auth/presentation/widgets/internal_verification_overlay.dart';
+import 'package:cointiply_app/features/chat/presentation/pages/chat_page.dart';
 import 'package:cointiply_app/features/chat/presentation/pages/right_chat_overlay.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -198,6 +199,15 @@ class BurgerEatsAppRoutes {
                 name: 'home',
                 pageBuilder: (context, state) => const NoTransitionPage(
                   child: HomePage(),
+                ),
+              ),
+
+              // chat Route
+              GoRoute(
+                path: AppRoutes.chat,
+                name: 'chat',
+                pageBuilder: (context, state) => const NoTransitionPage(
+                  child: ChatPage(),
                 ),
               ),
 
