@@ -1,4 +1,5 @@
 import 'package:cointiply_app/core/common/webview_wrapper.dart';
+import 'package:cointiply_app/core/localization/app_localizations.dart';
 import 'package:cointiply_app/features/chat/presentation/provider/right_chat_overlay_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -67,7 +68,7 @@ class _ChatPanel extends ConsumerWidget {
             child: IconButton(
               icon: const Icon(Icons.close, color: Colors.black),
               onPressed: notifier.close,
-              tooltip: 'Close chat',
+              tooltip: AppLocalizations.of(context)!.translate('close_chat'),
             ),
           ),
         ],

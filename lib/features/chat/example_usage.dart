@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/features/chat/presentation/pages/right_chat_overlay.dart';
 import 'package:cointiply_app/features/chat/presentation/provider/right_chat_overlay_provider.dart';
 import 'package:flutter/material.dart';
@@ -25,9 +26,9 @@ class RightChatOverlayExample extends ConsumerWidget {
           ],
         ),
         body: const Center(
-          child: Text(
+          child: CommonText.titleMedium(
             "Main App Content",
-            style: TextStyle(color: Colors.white, fontSize: 18),
+            color: Colors.white,
           ),
         ),
       ),
