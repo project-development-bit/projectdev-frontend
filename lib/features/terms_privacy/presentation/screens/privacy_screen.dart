@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/common/common_text.dart';
 import '../providers/terms_privacy_provider.dart';
-import '../widgets/webview_wrapper.dart';
+import '../../../../core/common/webview_wrapper.dart';
 
 class PrivacyScreen extends ConsumerStatefulWidget {
   const PrivacyScreen({super.key});
@@ -24,7 +24,7 @@ class _PrivacyScreenState extends ConsumerState<PrivacyScreen> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(termsPrivacyNotifierProvider);
-    
+
     return Scaffold(
       body: _buildBody(state),
     );
@@ -102,7 +102,9 @@ class _PrivacyScreenState extends ConsumerState<PrivacyScreen> {
             const SizedBox(height: 24),
             ElevatedButton.icon(
               onPressed: () {
-                ref.read(termsPrivacyNotifierProvider.notifier).fetchTermsAndPrivacy();
+                ref
+                    .read(termsPrivacyNotifierProvider.notifier)
+                    .fetchTermsAndPrivacy();
               },
               icon: const Icon(Icons.refresh),
               label: const Text('Retry'),

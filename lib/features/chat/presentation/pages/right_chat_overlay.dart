@@ -75,35 +75,3 @@ class _ChatPanel extends ConsumerWidget {
     );
   }
 }
-
-/// --- EXAMPLE PAGE ---
-
-class RightChatOverlayExample extends ConsumerWidget {
-  const RightChatOverlayExample({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    // final chatNotifier = ref.read(rightChatOverlayProvider.notifier);
-
-    return RightChatOverlay(
-      child: Scaffold(
-        backgroundColor: Colors.black,
-        // appBar: AppBar(
-        //   title: const Text("Right Chat Overlay Example"),
-        //   actions: [
-        //     IconButton(
-        //       icon: const Icon(Icons.chat),
-        //       onPressed: chatNotifier.toggle,
-        //     ),
-        //   ],
-        // ),
-        body: const Center(
-          child: Text(
-            "Main App Content",
-            style: TextStyle(color: Colors.white, fontSize: 18),
-          ),
-        ),
-      ),
-    );
-  }
-}
