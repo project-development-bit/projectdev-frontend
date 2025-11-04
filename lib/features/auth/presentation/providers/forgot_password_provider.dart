@@ -41,8 +41,8 @@ class ForgotPasswordNotifier extends StateNotifier<ForgotPasswordState> {
 
   ForgotPasswordNotifier(this._authRepository) : super(ForgotPasswordInitial());
 
-  /// Send forgot password request
-  Future<void> forgotPassword(String email) async {
+  /// Send forgot password request with Turnstile token
+  Future<void> forgotPassword(String email, String turnstileToken) async {
     // Validate email format
     if (!_isValidEmail(email)) {
       state = ForgotPasswordError('Please enter a valid email address');
@@ -51,7 +51,10 @@ class ForgotPasswordNotifier extends StateNotifier<ForgotPasswordState> {
 
     state = ForgotPasswordLoading();
 
-    final request = ForgotPasswordRequest(email: email);
+    final request = ForgotPasswordRequest(
+      email: email,
+      recaptchaToken: turnstileToken,
+    );
     final result = await _authRepository.forgotPassword(request);
 
     result.fold(
