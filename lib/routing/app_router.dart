@@ -1,4 +1,5 @@
 // 📦 Package imports
+import 'package:cointiply_app/features/auth/presentation/examples/two_factor_auth_example.dart';
 import 'package:cointiply_app/features/auth/presentation/widgets/internal_verification_overlay.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -9,6 +10,7 @@ import '../features/auth/presentation/pages/login_page.dart';
 import '../features/auth/presentation/pages/signup_page.dart';
 import '../features/auth/presentation/pages/forgot_password_page.dart';
 import '../features/auth/presentation/pages/verification_page.dart';
+import '../features/auth/presentation/pages/two_factor_auth_page.dart';
 import '../features/auth/presentation/pages/reset_password_page.dart';
 import '../features/home/pages/home_page.dart';
 import '../features/user_profile/presentation/pages/profile_page.dart';
@@ -25,6 +27,7 @@ class AppRoutes {
   static const String signUp = '/auth/signup';
   static const String forgotPassword = '/auth/forgot-password';
   static const String verification = '/auth/verification';
+  static const String twoFactorAuth = '/auth/2fa';
   static const String resetPassword = '/auth/reset-password';
   static const String auth = '/auth';
   static const String profile = '/profile';
@@ -141,6 +144,22 @@ class BurgerEatsAppRoutes {
                       isFromForgotPassword:
                           parameter?.isFromForgotPassword ?? false,
                     ),
+                  );
+                },
+              ),
+              GoRoute(
+                path: '2fa',
+                name: '2fa',
+                pageBuilder: (context, state) {
+                  final email = state.uri.queryParameters['email'] ?? '';
+                  final sessionToken =
+                      state.uri.queryParameters['sessionToken'];
+                  return NoTransitionPage(
+                    child: TwoFactorAuthExample(),
+                    // child: TwoFactorAuthPage(
+                    //   email: email,
+                    //   sessionToken: sessionToken,
+                    // ),
                   );
                 },
               ),
@@ -468,5 +487,35 @@ extension GoRouterExtension on BuildContext {
   /// Push reset password page
   void pushToResetPassword({required String email}) {
     push('${AppRoutes.resetPassword}?email=${Uri.encodeComponent(email)}');
+  }
+
+  /// Navigate to 2FA page
+  void goTo2FA({
+    required String email,
+    String? sessionToken,
+  }) {
+    final uri = Uri(
+      path: AppRoutes.twoFactorAuth,
+      queryParameters: {
+        'email': email,
+        if (sessionToken != null) 'sessionToken': sessionToken,
+      },
+    );
+    go(uri.toString());
+  }
+
+  /// Push 2FA page
+  void pushTo2FA({
+    required String email,
+    String? sessionToken,
+  }) {
+    final uri = Uri(
+      path: AppRoutes.twoFactorAuth,
+      queryParameters: {
+        'email': email,
+        if (sessionToken != null) 'sessionToken': sessionToken,
+      },
+    );
+    push(uri.toString());
   }
 }

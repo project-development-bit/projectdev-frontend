@@ -14,6 +14,8 @@ import '../models/resend_code_request.dart';
 import '../models/resend_code_response.dart';
 import '../models/verify_code_request.dart';
 import '../models/verify_code_response.dart';
+import '../models/verify_2fa_request.dart';
+import '../models/verify_2fa_response.dart';
 import '../models/forgot_password_request.dart';
 import '../models/forgot_password_response.dart';
 import '../models/reset_password_request.dart';
@@ -236,11 +238,43 @@ class AuthRepositoryImpl implements AuthRepository {
     }
   }
 
+  @override
+  Future<Either<Failure, Verify2FAResponse>> verify2FA(
+      Verify2FARequest request) async {
+    try {
+      final response = await remoteDataSource.verify2FA(request);
+
+      // Store the authentication tokens if 2FA verification is successful
+      if (response.success && response.data != null) {
+        await _store2FATokens(response.data!);
+      }
+
+      return Right(response);
+    } on DioException catch (e) {
+      return Left(ServerFailure(
+        message: e.message,
+        statusCode: e.response?.statusCode,
+      ));
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
   /// Store authentication tokens in secure storage
   Future<void> _storeTokens(LoginResponseModel loginResponse) async {
     await secureStorage.saveAuthToken(loginResponse.tokens.accessToken);
     await secureStorage.saveRefreshToken(loginResponse.tokens.refreshToken);
     await secureStorage.saveUserId(loginResponse.user.id.toString());
+
+    // Store additional user info if needed
+    // You could also store user role, email, etc.
+  }
+
+  /// Store authentication tokens from 2FA verification response
+  Future<void> _store2FATokens(Verify2FAData data) async {
+    await secureStorage.saveAuthToken(data.tokens.accessToken);
+    await secureStorage.saveRefreshToken(data.tokens.refreshToken);
+    await secureStorage.saveUserId(data.user.id.toString());
 
     // Store additional user info if needed
     // You could also store user role, email, etc.

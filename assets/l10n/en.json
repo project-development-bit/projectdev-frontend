@@ -275,5 +275,12 @@
   "_drawer_missing_keys": "Missing Drawer Translation Keys",
   "error_loading_user": "Error loading user",
   "tap_to_retry": "Tap to retry",
-  "user_not_found": "User not found"
+  "user_not_found": "User not found",
+  "authentication_required": "Authentication Required",
+  "2fa_unknown_device_subtitle": "We noticed you are logging in from an unknown device.",
+  "2fa_instruction": "Please enter the security code from your authenticator app.",
+  "2fa_support_text": "If you do not have your security code, please ",
+  "contact_support": "contact support",
+  "continue": "Continue",
+  "security_verification_required": "Please complete the security verification"
 }

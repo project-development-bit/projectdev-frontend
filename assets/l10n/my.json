@@ -246,7 +246,14 @@
   "response_time": "ပြန်လည်ဖြေကြားချိန်",
   "response_time_description": "ကျွန်ုပ်တို့သည် ပုံမှန်အားဖြင့် ၂၄ နာရီအတွင်း ပြန်လည်ဖြေကြားပါသည်",
   "_drawer_missing_keys": "မရှိတဲ့ Drawer Translation Keys",
-  "error_loading_user": "အသုံးပြုသူ အချက်အလက် ရယူခြင်း အမှား",
-  "tap_to_retry": "ပြန်လည်ကြိုးစားရန် နှိပ်ပါ",
-  "user_not_found": "အသုံးပြုသူ မတွေ့ရှိပါ"
+    "error_loading_user": "အသုံးပြုသူအချက်အလက် တင်ရာတွင် အမှားရှိသည်",
+  "tap_to_retry": "ထပ်ကြိုးစားရန် နှိပ်ပါ",
+  "user_not_found": "အသုံးပြုသူ မတွေ့ပါ",
+  "authentication_required": "အထောက်အထား အတည်ပြုရန် လိုအပ်သည်",
+  "2fa_unknown_device_subtitle": "သင်သည် အသိမရှိသော စက်ပစ္စည်းမှ အကောင့်ဝင်နေသည်ကို တွေ့ရှိပါသည်။",
+  "2fa_instruction": "သင့် authenticator အက်ပ်မှ လုံခြုံရေး ကုဒ်ကို ထည့်သွင်းပါ။",
+  "2fa_support_text": "သင့်တွင် လုံခြုံရေး ကုဒ် မရှိပါက ကျေးဇူးပြု၍ ",
+  "contact_support": "ပံ့ပိုးကူညီမှုနှင့် ဆက်သွယ်ပါ",
+  "continue": "ဆက်လုပ်ရန်",
+  "security_verification_required": "လုံခြုံရေး အတည်ပြုချက် ပြီးစီးပါ"
 }

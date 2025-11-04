@@ -8,6 +8,8 @@ import 'package:cointiply_app/features/auth/data/models/resend_code_request.dart
 import 'package:cointiply_app/features/auth/data/models/resend_code_response.dart';
 import 'package:cointiply_app/features/auth/data/models/verify_code_request.dart';
 import 'package:cointiply_app/features/auth/data/models/verify_code_response.dart';
+import 'package:cointiply_app/features/auth/data/models/verify_2fa_request.dart';
+import 'package:cointiply_app/features/auth/data/models/verify_2fa_response.dart';
 import 'package:cointiply_app/features/auth/data/models/forgot_password_request.dart';
 import 'package:cointiply_app/features/auth/data/models/forgot_password_response.dart';
 import 'package:cointiply_app/features/auth/data/models/reset_password_request.dart';
@@ -44,6 +46,9 @@ abstract class AuthRemoteDataSource {
 
   /// Verify email with verification code
   Future<VerifyCodeResponse> verifyCode(VerifyCodeRequest request);
+
+  /// Verify 2FA code from authenticator app
+  Future<Verify2FAResponse> verify2FA(Verify2FARequest request);
 }
 
 /// Implementation of [AuthRemoteDataSource] that handles HTTP requests
@@ -75,8 +80,42 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         message: serverMessage ?? _getFallbackMessage(e),
       );
     } catch (e) {
+            // Handle any other unexpected exceptions
+      throw Exception('Unexpected error during code verification: $e');
+    }
+  }
+
+  @override
+  Future<Verify2FAResponse> verify2FA(Verify2FARequest request) async {
+    try {
+      debugPrint('🔐 Verifying 2FA code for: ${request.email}');
+
+      final response = await dioClient.post(
+        verify2FAEndpoints,
+        data: request.toJson(),
+      );
+
+      debugPrint('✅ 2FA verification successful');
+      return Verify2FAResponse.fromJson(response.data as Map<String, dynamic>);
+    } on DioException catch (e) {
+      debugPrint('❌ 2FA verification DioException: ${e.message}');
+      debugPrint('❌ Request URL: ${e.requestOptions.uri}');
+      debugPrint('❌ Response status: ${e.response?.statusCode}');
+      debugPrint('❌ Response data: ${e.response?.data}');
+
+      // Extract server error message from response data
+      final serverMessage = _extractServerErrorMessage(e.response?.data);
+
+      // Create new DioException with server message or appropriate fallback
+      throw DioException(
+        requestOptions: e.requestOptions,
+        response: e.response,
+        message: serverMessage ?? _getFallbackMessage(e),
+      );
+    } catch (e) {
       // Handle any other unexpected exceptions
-      throw Exception('Unexpected error during registration: $e');
+      debugPrint('❌ Unexpected error during 2FA verification: $e');
+      throw Exception('Unexpected error during 2FA verification: $e');
     }
   }
 

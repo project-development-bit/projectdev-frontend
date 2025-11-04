@@ -8,6 +8,8 @@ import '../../data/models/resend_code_request.dart';
 import '../../data/models/resend_code_response.dart';
 import '../../data/models/verify_code_request.dart';
 import '../../data/models/verify_code_response.dart';
+import '../../data/models/verify_2fa_request.dart';
+import '../../data/models/verify_2fa_response.dart';
 import '../../data/models/forgot_password_request.dart';
 import '../../data/models/forgot_password_response.dart';
 import '../../data/models/reset_password_request.dart';
@@ -52,4 +54,8 @@ abstract class AuthRepository {
   /// Verify email with verification code
   Future<Either<Failure, VerifyCodeResponse>> verifyCode(
       VerifyCodeRequest request);
+
+  /// Verify 2FA code from authenticator app
+  Future<Either<Failure, Verify2FAResponse>> verify2FA(
+      Verify2FARequest request);
 }
