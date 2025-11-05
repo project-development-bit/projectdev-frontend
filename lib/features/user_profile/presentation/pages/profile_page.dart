@@ -72,7 +72,6 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     }
 
     return Scaffold(
-      backgroundColor: AppColors.websiteBackground,
       body: CustomScrollView(
         slivers: [
           SliverAppBar(

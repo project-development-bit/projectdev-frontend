@@ -1,4 +1,6 @@
 import 'package:cointiply_app/core/core.dart';
+import 'package:cointiply_app/features/user_profile/presentation/widgets/settings/profile_security_settings.dart';
+import 'package:cointiply_app/features/user_profile/presentation/widgets/settings/profile_setting_details.dart';
 import 'package:flutter/material.dart';
 
 class ProfileSettingsSection extends StatelessWidget {
@@ -6,36 +8,16 @@ class ProfileSettingsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
     return ResponsiveSection(
       padding: EdgeInsets.zero,
-      child: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: colorScheme.surfaceContainerHighest,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        padding: EdgeInsets.all(context.isMobile ? 16 : 24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Title
-            CommonText.titleLarge(
-              "Under Development",
-              fontWeight: FontWeight.bold,
-            ),
-            const SizedBox(height: 20),
-            Divider(color: colorScheme.onSurfaceVariant),
-            const SizedBox(height: 20),
-
-            // Content placeholder
-            CommonText.bodyMedium(
-              'Profile settings will be available soon. Stay tuned!',
-              color: colorScheme.onSurfaceVariant,
-            ),
-          ],
-        ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Title
+          ProfileSettingDetails(),
+          SizedBox(height: context.isMobile ? 16 : 24),
+          ProfileSecuritySettings(),
+        ],
       ),
     );
   }
