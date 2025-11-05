@@ -9,7 +9,8 @@ class TutorialNotifier extends StateNotifier<bool> {
   static const _tutorialShownKey = 'tutorial_shown';
 
   TutorialNotifier() : super(true) {
-    _checkIfShown();
+    // _checkIfShown();
+    state = false;
   }
 
   Future<void> _checkIfShown() async {

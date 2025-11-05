@@ -18,7 +18,7 @@ class _TutorialOverlayState extends ConsumerState<TutorialOverlay> {
 
     if (tutorialShown) return widget.child;
     return Material(
-      color: Colors.black87,
+      color: Theme.of(context).colorScheme.scrim,
       child: Stack(
         children: [
           // App content (blurred/disabled)

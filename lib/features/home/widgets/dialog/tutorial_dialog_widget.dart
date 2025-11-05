@@ -1,5 +1,6 @@
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
+import 'package:cointiply_app/core/theme/app_colors.dart';
 import 'package:cointiply_app/core/widgets/recaptcha_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -69,11 +70,16 @@ class _CointiplyTutorialDialogState extends State<CointiplyTutorialDialog> {
   @override
   Widget build(BuildContext context) {
     final data = steps[step - 1];
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
       margin: EdgeInsets.all(context.isMobile ? 20 : 32),
       constraints: BoxConstraints(
-        maxWidth: context.isMobile ? double.infinity : 400,
+        maxWidth: context.isMobile
+            ? double.infinity
+            : data['final'] == true
+                ? 500
+                : 400,
         maxHeight: context.isMobile
             ? double.infinity
             : data['final'] == true
@@ -85,7 +91,7 @@ class _CointiplyTutorialDialogState extends State<CointiplyTutorialDialog> {
         borderRadius: BorderRadius.circular(context.isMobile ? 16 : 20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.3),
+            color: colorScheme.shadow,
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
@@ -109,28 +115,21 @@ class _CointiplyTutorialDialogState extends State<CointiplyTutorialDialog> {
                   onTap: () => Navigator.pop(context),
                   child: CommonText.labelMedium(
                     context.translate('dismiss_hide'),
-                    color: Colors.grey[400],
+                    color: context.inverseSurface,
                   ),
                 ),
               ],
             ),
             const SizedBox(height: 16),
-            Divider(color: Colors.grey[700]),
+            Divider(color: colorScheme.outline),
             const SizedBox(height: 20),
 
             // ─── Icon or Gradient Title ────────────────
             Center(
               child: data['gradient'] == true
                   ? ShaderMask(
-                      shaderCallback: (bounds) => const LinearGradient(
-                        colors: [
-                          Color(0xFFFF007F),
-                          Color(0xFF7F00FF),
-                          Color(0xFF00FFFF),
-                        ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ).createShader(bounds),
+                      shaderCallback: (bounds) =>
+                          AppColors.welcomeGradient.createShader(bounds),
                       child: CommonText.displayMedium(
                         'WELCOME',
                         color: context.inverseSurface,
@@ -153,32 +152,13 @@ class _CointiplyTutorialDialogState extends State<CointiplyTutorialDialog> {
 
             // ─── Captcha + Reward for Final Step ────────
             if (data['final'] == true) ...[
-              const SizedBox(height: 20),
-              // Center(
-              //   child: CommonText.titleSmall(
-              //     context.translate('captcha_selection'),
-              //     color: context.inverseSurface,
-              //   ),
-              // ),
-              // const SizedBox(height: 10),
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.center,
-              //   children: [
-              //     _buildCaptchaOption(context.translate('hcaptcha'), false),
-              //     const SizedBox(width: 12),
-              //     _buildCaptchaOption(context.translate('recaptcha'), true),
-              //   ],
-              // ),
               const SizedBox(height: 10),
               RecaptchaWidget(),
-              const SizedBox(height: 20),
-              // _buildCaptchaPreview(),
               const SizedBox(height: 24),
-              _buildRewardBox(),
+              _buildRewardBox(context),
             ],
-
             const SizedBox(height: 24),
-            Divider(color: Colors.grey[700]),
+            Divider(color: colorScheme.outline),
             const SizedBox(height: 16),
 
             // ─── Footer ────────────────────────────────
@@ -190,18 +170,18 @@ class _CointiplyTutorialDialogState extends State<CointiplyTutorialDialog> {
                       .translate('step_of')
                       .replaceAll('{step}', '$step')
                       .replaceAll('{totalSteps}', '$totalSteps'),
-                  color: Colors.white70,
+                  color: colorScheme.tertiary,
                 ),
                 Row(
                   children: [
                     TextButton(
                       onPressed: step > 1 ? () => setState(() => step--) : null,
                       style: TextButton.styleFrom(
-                        foregroundColor: Colors.grey[500],
+                        foregroundColor: colorScheme.primary,
                       ),
                       child: CommonText.labelMedium(
                         context.translate('back'),
-                        color: step > 1 ? Colors.white70 : Colors.grey[700],
+                        color: colorScheme.inverseSurface,
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -216,19 +196,15 @@ class _CointiplyTutorialDialogState extends State<CointiplyTutorialDialog> {
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: data['final'] == true
-                            ? Colors.blueAccent
-                            : const Color(0xFFE91E63),
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 12),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(6)),
+                            ? colorScheme.tertiary
+                            : colorScheme.primary,
+                        foregroundColor: colorScheme.inversePrimary,
                       ),
                       child: CommonText.labelMedium(
                         step == totalSteps
                             ? context.translate('claim_tutorial_reward')
                             : context.translate('continue'),
-                        color: Colors.white,
+                        color: AppColors.lightSurfaceVariant,
                       ),
                     ),
                   ],
@@ -241,28 +217,14 @@ class _CointiplyTutorialDialogState extends State<CointiplyTutorialDialog> {
     );
   }
 
-  // ─── Captcha Option Widget ────────────────────────────────
-  // Widget _buildCaptchaOption(String label, bool selected) {
-  //   return Container(
-  //     decoration: BoxDecoration(
-  //       color: selected ? const Color(0xFFE91E63) : const Color(0xFF2C2C2C),
-  //       borderRadius: BorderRadius.circular(6),
-  //     ),
-  //     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-  //     child: CommonText.bodySmall(
-  //       label,
-  //       color: selected ? Colors.white : Colors.white70,
-  //     ),
-  //   );
-  // }
-
   // ─── Tutorial Reward Box ────────────────────────────────
-  Widget _buildRewardBox() {
+  Widget _buildRewardBox(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        border: Border.all(color: const Color(0xFFE91E63)),
+        border: Border.all(color: colorScheme.error),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
@@ -270,12 +232,12 @@ class _CointiplyTutorialDialogState extends State<CointiplyTutorialDialog> {
         children: [
           CommonText.titleSmall(
             context.translate('tutorial_reward'),
-            color: const Color(0xFFE91E63),
+            color: colorScheme.error,
           ),
           const SizedBox(height: 6),
           CommonText.bodySmall(
             context.translate('tutorial_reward_desc'),
-            color: Colors.white,
+            color: colorScheme.tertiary,
           ),
         ],
       ),
