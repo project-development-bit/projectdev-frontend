@@ -101,124 +101,130 @@ class _CointiplyTutorialDialogState extends State<CointiplyTutorialDialog> {
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // ─── Header ────────────────────────────────
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                CommonText.titleSmall(
-                  context.translate(data['title']),
-                  color: context.inverseSurface,
-                ),
-                Consumer(
-                  builder: (context, ref, child) {
-                    return GestureDetector(
-                      onTap: () => ref.read(tutorialProvider.notifier).closes(),
-                      child: CommonText.labelMedium(
-                        context.translate('dismiss_hide'),
-                        color: context.inverseSurface,
+
+        // ✅ Make scrollable here
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // ─── Header ────────────────────────────────
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  CommonText.titleSmall(
+                    context.translate(data['title']),
+                    color: context.inverseSurface,
+                  ),
+                  Consumer(
+                    builder: (context, ref, child) {
+                      return GestureDetector(
+                        onTap: () =>
+                            ref.read(tutorialProvider.notifier).closes(),
+                        child: CommonText.labelMedium(
+                          context.translate('dismiss_hide'),
+                          color: context.inverseSurface,
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Divider(color: colorScheme.outline),
+              const SizedBox(height: 20),
+
+              // ─── Icon or Gradient Title ────────────────
+              Center(
+                child: data['gradient'] == true
+                    ? ShaderMask(
+                        shaderCallback: (bounds) =>
+                            AppColors.welcomeGradient.createShader(bounds),
+                        child: CommonText.displayMedium(
+                          'WELCOME',
+                          color: context.inverseSurface,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      )
+                    : Image.asset(
+                        data['image'],
+                        height: 110,
                       ),
-                    );
-                  },
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Divider(color: colorScheme.outline),
-            const SizedBox(height: 20),
-
-            // ─── Icon or Gradient Title ────────────────
-            Center(
-              child: data['gradient'] == true
-                  ? ShaderMask(
-                      shaderCallback: (bounds) =>
-                          AppColors.welcomeGradient.createShader(bounds),
-                      child: CommonText.displayMedium(
-                        'WELCOME',
-                        color: context.inverseSurface,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    )
-                  : Image.asset(
-                      data['image'],
-                      height: 110,
-                    ),
-            ),
-            const SizedBox(height: 24),
-
-            // ─── Description ───────────────────────────
-            CommonText.bodyMedium(
-              context.translate(data['description']),
-              color: context.inverseSurface,
-              maxLines: 20,
-            ),
-
-            // ─── Captcha + Reward for Final Step ────────
-            if (data['final'] == true) ...[
-              const SizedBox(height: 10),
-              const CloudflareTurnstileWidget(
-                debugMode: false,
               ),
               const SizedBox(height: 24),
-              _buildRewardBox(context),
-            ],
-            const SizedBox(height: 24),
-            Divider(color: colorScheme.outline),
-            const SizedBox(height: 16),
 
-            // ─── Footer ────────────────────────────────
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                CommonText.labelMedium(
-                  context
-                      .translate('step_of')
-                      .replaceAll('{step}', '$step')
-                      .replaceAll('{totalSteps}', '$totalSteps'),
-                  color: colorScheme.tertiary,
-                ),
-                Row(
-                  children: [
-                    TextButton(
-                      onPressed: step > 1 ? () => setState(() => step--) : null,
-                      style: TextButton.styleFrom(
-                        foregroundColor: colorScheme.primary,
-                      ),
-                      child: CommonText.labelMedium(
-                        context.translate('back'),
-                        color: colorScheme.inverseSurface,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    ElevatedButton(
-                      onPressed: () {
-                        if (step < totalSteps) {
-                          setState(() => step++);
-                        } else {
-                          widget.onComplete();
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: data['final'] == true
-                            ? colorScheme.tertiary
-                            : colorScheme.primary,
-                        foregroundColor: colorScheme.inversePrimary,
-                      ),
-                      child: CommonText.labelMedium(
-                        step == totalSteps
-                            ? context.translate('claim_tutorial_reward')
-                            : context.translate('continue'),
-                        color: AppColors.lightSurfaceVariant,
-                      ),
-                    ),
-                  ],
-                ),
+              // ─── Description ───────────────────────────
+              CommonText.bodyMedium(
+                context.translate(data['description']),
+                color: context.inverseSurface,
+                maxLines: 20,
+              ),
+
+              // ─── Captcha + Reward for Final Step ────────
+              if (data['final'] == true) ...[
+                const SizedBox(height: 10),
+                const CloudflareTurnstileWidget(debugMode: false),
+                const SizedBox(height: 24),
+                _buildRewardBox(context),
               ],
-            ),
-          ],
+
+              const SizedBox(height: 24),
+              Divider(color: colorScheme.outline),
+              const SizedBox(height: 16),
+
+              // ─── Footer ────────────────────────────────
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  CommonText.labelMedium(
+                    context
+                        .translate('step_of')
+                        .replaceAll('{step}', '$step')
+                        .replaceAll('{totalSteps}', '$totalSteps'),
+                    color: colorScheme.tertiary,
+                  ),
+                  Row(
+                    children: [
+                      TextButton(
+                        onPressed:
+                            step > 1 ? () => setState(() => step--) : null,
+                        style: TextButton.styleFrom(
+                          foregroundColor: colorScheme.primary,
+                        ),
+                        child: CommonText.labelMedium(
+                          context.translate('back'),
+                          color: colorScheme.inverseSurface,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      ElevatedButton(
+                        onPressed: () {
+                          if (step < totalSteps) {
+                            setState(() => step++);
+                          } else {
+                            widget.onComplete();
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: data['final'] == true
+                              ? colorScheme.tertiary
+                              : colorScheme.primary,
+                          foregroundColor: colorScheme.inversePrimary,
+                        ),
+                        child: CommonText.labelMedium(
+                          step == totalSteps
+                              ? context.translate('claim_tutorial_reward')
+                              : context.translate('continue'),
+                          color: AppColors.lightSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
