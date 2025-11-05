@@ -109,12 +109,16 @@ class _TermsScreenState extends ConsumerState<TermsScreen> {
                     .fetchTermsAndPrivacy();
               },
               icon: const Icon(Icons.refresh),
-              label: Text(AppLocalizations.of(context)!.translate("retry")),
+              label: CommonText.titleSmall(
+                AppLocalizations.of(context)!.translate("retry"),
+                color: Colors.white,
+              ),
             ),
             const SizedBox(height: 12),
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text(AppLocalizations.of(context)!.translate("close")),
+              child: CommonText.titleSmall(
+                  AppLocalizations.of(context)!.translate("close")),
             ),
           ],
         ),

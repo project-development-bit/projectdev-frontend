@@ -109,14 +109,14 @@ class _PrivacyScreenState extends ConsumerState<PrivacyScreen> {
                     .fetchTermsAndPrivacy();
               },
               icon: const Icon(Icons.refresh),
-              label: Text(
+              label: CommonText.titleSmall(
                 AppLocalizations.of(context)!.translate("retry"),
               ),
             ),
             const SizedBox(height: 12),
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text(
+              child: CommonText.titleSmall(
                 AppLocalizations.of(context)!.translate("close"),
               ),
             ),
