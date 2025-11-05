@@ -10,6 +10,13 @@ import '../../data/models/verify_code_request.dart';
 import '../../data/models/verify_code_response.dart';
 import '../../data/models/verify_2fa_request.dart';
 import '../../data/models/verify_2fa_response.dart';
+import '../../data/models/setup_2fa_request.dart';
+import '../../data/models/setup_2fa_response.dart';
+import '../../data/models/enable_2fa_request.dart';
+import '../../data/models/enable_2fa_response.dart';
+import '../../data/models/check_2fa_status_response.dart';
+import '../../data/models/disable_2fa_request.dart';
+import '../../data/models/disable_2fa_response.dart';
 import '../../data/models/forgot_password_request.dart';
 import '../../data/models/forgot_password_response.dart';
 import '../../data/models/reset_password_request.dart';
@@ -58,4 +65,18 @@ abstract class AuthRepository {
   /// Verify 2FA code from authenticator app
   Future<Either<Failure, Verify2FAResponse>> verify2FA(
       Verify2FARequest request);
+
+  /// Setup 2FA for the authenticated user
+  Future<Either<Failure, Setup2FAResponse>> setup2FA(Setup2FARequest request);
+
+  /// Enable 2FA by verifying the token from authenticator app
+  Future<Either<Failure, Enable2FAResponse>> enable2FA(
+      Enable2FARequest request);
+
+  /// Check 2FA status for the authenticated user
+  Future<Either<Failure, Check2FAStatusResponse>> check2FAStatus();
+
+  /// Disable 2FA for the authenticated user
+  Future<Either<Failure, Disable2FAResponse>> disable2FA(
+      Disable2FARequest request);
 }

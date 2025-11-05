@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/services/database_service.dart';
-import '../../../../core/services/secure_storage_service.dart';
 import '../../domain/entities/user.dart';
 import '../../data/models/verify_2fa_request.dart';
-import '../../data/models/verify_2fa_response.dart';
 import '../../domain/usecases/verify_2fa_usecase.dart';
 
 // =============================================================================
