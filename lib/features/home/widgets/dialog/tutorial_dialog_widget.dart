@@ -2,7 +2,9 @@ import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:cointiply_app/core/theme/app_colors.dart';
 import 'package:cointiply_app/core/widgets/recaptcha_widget.dart';
+import 'package:cointiply_app/features/home/providers/tutorial_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class CointiplyTutorialDialog extends StatefulWidget {
   final VoidCallback onComplete;
@@ -111,12 +113,16 @@ class _CointiplyTutorialDialogState extends State<CointiplyTutorialDialog> {
                   context.translate(data['title']),
                   color: context.inverseSurface,
                 ),
-                GestureDetector(
-                  onTap: () => Navigator.pop(context),
-                  child: CommonText.labelMedium(
-                    context.translate('dismiss_hide'),
-                    color: context.inverseSurface,
-                  ),
+                Consumer(
+                  builder: (context, ref, child) {
+                    return GestureDetector(
+                      onTap: () => ref.read(tutorialProvider.notifier).closes(),
+                      child: CommonText.labelMedium(
+                        context.translate('dismiss_hide'),
+                        color: context.inverseSurface,
+                      ),
+                    );
+                  },
                 ),
               ],
             ),
@@ -191,7 +197,6 @@ class _CointiplyTutorialDialogState extends State<CointiplyTutorialDialog> {
                           setState(() => step++);
                         } else {
                           widget.onComplete();
-                          Navigator.pop(context);
                         }
                       },
                       style: ElevatedButton.styleFrom(

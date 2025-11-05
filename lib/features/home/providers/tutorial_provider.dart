@@ -9,8 +9,7 @@ class TutorialNotifier extends StateNotifier<bool> {
   static const _tutorialShownKey = 'tutorial_shown';
 
   TutorialNotifier() : super(true) {
-    // _checkIfShown();
-    state = false;
+    _checkIfShown();
   }
 
   Future<void> _checkIfShown() async {
@@ -25,6 +24,10 @@ class TutorialNotifier extends StateNotifier<bool> {
     await prefs.setBool(_tutorialShownKey, true);
     debugPrint(
         'Tutorial shown : Tutorial marked as shown ${prefs.getBool(_tutorialShownKey) ?? false}');
+    state = true;
+  }
+
+  Future<void> closes() async {
     state = true;
   }
 
