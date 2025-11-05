@@ -266,10 +266,10 @@ class AuthActions {
   }
 
   /// Send forgot password email
-  Future<void> forgotPassword({required String email}) async {
-    final forgotPasswordNotifier = _ref.read(forgotPasswordProvider.notifier);
-    await forgotPasswordNotifier.forgotPassword(email);
-  }
+  // Future<void> forgotPassword({required String email}) async {
+  //   final forgotPasswordNotifier = _ref.read(forgotPasswordProvider.notifier);
+  //   await forgotPasswordNotifier.forgotPassword(email);
+  // }
 
   /// Reset password with new password
   Future<void> resetPassword({
