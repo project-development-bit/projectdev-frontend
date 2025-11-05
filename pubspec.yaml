@@ -63,6 +63,8 @@ dependencies:
     git:
       url: https://github.com/Nika0000/cloudflare_turnstile.git
       ref: legacy
+  qr_flutter: ^4.1.0
+  dotted_decoration: ^2.0.0
 
 dev_dependencies:
   flutter_test:

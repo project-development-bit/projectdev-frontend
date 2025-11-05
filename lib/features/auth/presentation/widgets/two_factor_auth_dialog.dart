@@ -1,14 +1,16 @@
+import 'package:cointiply_app/core/common/common_button.dart';
+import 'package:cointiply_app/core/common/common_text.dart' show CommonText;
+import 'package:cointiply_app/core/common/common_textfield.dart'
+    show CommonTextField;
+import 'package:cointiply_app/core/extensions/context_extensions.dart';
+import 'package:cointiply_app/routing/routing.dart';
+import 'package:dotted_decoration/dotted_decoration.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/common/common_button.dart';
-import '../../../../core/common/common_text.dart';
-import '../../../../core/localization/app_localizations.dart';
-import '../../../../core/extensions/context_extensions.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import '../providers/verify_2fa_provider.dart';
 
-/// Two-Factor Authentication Dialog
-/// A popup dialog for entering 6-digit 2FA code from authenticator app
 class TwoFactorAuthDialog extends ConsumerStatefulWidget {
   const TwoFactorAuthDialog({
     super.key,
@@ -49,7 +51,7 @@ class _TwoFactorAuthDialogState extends ConsumerState<TwoFactorAuthDialog> {
             );
 
             // Close dialog
-            Navigator.of(context).pop(true);
+            context.pop();
 
             // Call success callback
             widget.onSuccess?.call();
@@ -113,9 +115,11 @@ class _TwoFactorAuthDialogState extends ConsumerState<TwoFactorAuthDialog> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final localizations = AppLocalizations.of(context);
+    // final localizations = AppLocalizations.of(context);
     final isLoading = ref.watch(is2FALoadingProvider);
     final isMobile = context.isMobile;
+
+    final qrCodeData = "12345678"; // Replace with actual data for QR code
 
     return Dialog(
       backgroundColor: colorScheme.surface,
@@ -125,217 +129,174 @@ class _TwoFactorAuthDialogState extends ConsumerState<TwoFactorAuthDialog> {
       child: Container(
         constraints: BoxConstraints(
           maxWidth: isMobile ? double.infinity : 500,
-          maxHeight: MediaQuery.of(context).size.height * 0.85,
+          maxHeight: MediaQuery.of(context).size.height * 0.95,
         ),
         child: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.all(isMobile ? 24 : 32),
+            padding: EdgeInsets.all(isMobile ? 20 : 28),
             child: Form(
               key: _formKey,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                spacing: 15,
                 children: [
                   // Close button
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: IconButton(
-                      icon: Icon(
-                        Icons.close,
-                        color: colorScheme.onSurfaceVariant,
-                      ),
-                      onPressed: isLoading
-                          ? null
-                          : () => Navigator.of(context).pop(false),
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(),
+                  dialogAppBar(colorScheme, isLoading, context),
+                  Divider(
+                    color: colorScheme.outline.withAlpha(77), // 0.3 * 255 = 77
+                    thickness: 1,
+                  ),
+
+                  //subtitle and body text
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CommonText.labelMedium(
+                          context.translate("2fa_dialog_subtitle"),
+                          color: Colors.white,
+                        ),
+                        const SizedBox(height: 8),
+                        CommonText.bodyMedium(
+                          context.translate("2fa_dialog_body_text"),
+                          textAlign: TextAlign.start,
+                        ),
+                      ],
                     ),
                   ),
 
-                  const SizedBox(height: 8),
-
-                  // Lock icon
-                  Center(
-                    child: Container(
-                      width: isMobile ? 80 : 100,
-                      height: isMobile ? 80 : 100,
-                      decoration: BoxDecoration(
-                        color: colorScheme.primary.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      child: Icon(
-                        Icons.lock_outlined,
-                        size: isMobile ? 40 : 50,
-                        color: colorScheme.primary,
-                      ),
-                    ),
+                  /// QR Code Display
+                  QrImageView(
+                    data: qrCodeData,
+                    size: 150,
+                    backgroundColor: Colors.white,
                   ),
 
-                  const SizedBox(height: 24),
+                  /// note text
+                  _2faNoteText(context, qrCodeData),
 
-                  // Title
-                  CommonText.headlineSmall(
-                    localizations?.translate('authentication_required') ??
-                        'Authentication Required',
-                    fontWeight: FontWeight.bold,
-                    color: colorScheme.onSurface,
-                    textAlign: TextAlign.center,
-                  ),
-
-                  const SizedBox(height: 12),
-
-                  // Subtitle
-                  CommonText.bodyMedium(
-                    localizations?.translate('2fa_unknown_device_subtitle') ??
-                        'We noticed you are logging in from an unknown device.',
-                    color: colorScheme.onSurfaceVariant,
-                    textAlign: TextAlign.center,
-                  ),
-
-                  const SizedBox(height: 24),
-
-                  // Instructions
-                  CommonText.bodySmall(
-                    localizations?.translate('2fa_instruction') ??
-                        'Please enter the security code from your authenticator app.',
-                    color: colorScheme.onSurface,
-                    textAlign: TextAlign.center,
-                    fontWeight: FontWeight.w600,
-                  ),
-
-                  const SizedBox(height: 24),
-
-                  // 6-digit code input field
-                  TextFormField(
+                  /// Verification Code Input
+                  CommonTextField(
                     controller: _codeController,
                     focusNode: _codeFocusNode,
-                    autofocus: true,
-                    textAlign: TextAlign.center,
-                    style: theme.textTheme.headlineSmall?.copyWith(
-                      letterSpacing: 16,
-                      fontWeight: FontWeight.bold,
-                      color: colorScheme.onSurface,
-                    ),
+                    labelText:
+                        context.translate("security_verification_required"),
+                    hintText: 'Enter 6-digit code',
                     keyboardType: TextInputType.number,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                      LengthLimitingTextInputFormatter(6),
-                    ],
-                    decoration: InputDecoration(
-                      hintText: '● ● ● ● ● ●',
-                      hintStyle: TextStyle(
-                        letterSpacing: 24,
-                        color: colorScheme.onSurfaceVariant.withOpacity(0.3),
-                        fontSize: 24,
-                      ),
-                      filled: true,
-                      fillColor: colorScheme.surfaceContainerHighest,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(
-                          color: colorScheme.outline,
-                          width: 1.5,
-                        ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(
-                          color: colorScheme.outline,
-                          width: 1.5,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(
-                          color: colorScheme.primary,
-                          width: 2,
-                        ),
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(
-                          color: colorScheme.error,
-                          width: 1.5,
-                        ),
-                      ),
-                      focusedErrorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(
-                          color: colorScheme.error,
-                          width: 2,
-                        ),
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 16,
-                      ),
-                    ),
+                    maxLength: 6,
+                    enabled: !isLoading,
                     validator: _validateCode,
-                    onFieldSubmitted: (_) => _handleVerify(),
-                    onChanged: (value) {
-                      // Auto-submit when 6 digits are entered
-                      if (value.length == 6 && !isLoading) {
-                        _handleVerify();
-                      }
-                    },
+                    onSubmitted: (_) => _handleVerify(),
                   ),
 
-                  const SizedBox(height: 32),
-
-                  // Continue Button
                   CommonButton(
-                    text: localizations?.translate('continue') ?? 'Continue',
-                    onPressed: isLoading ? null : _handleVerify,
-                    isLoading: isLoading,
-                    height: 52,
-                    backgroundColor:
-                        const Color(0xFFE53945), // Red color as requested
-                    textColor: Colors.white,
-                    borderRadius: 12,
-                  ),
-
-                  const SizedBox(height: 20),
-
-                  // Support text
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CommonText.bodySmall(
-                        localizations?.translate('2fa_support_text') ??
-                            'If you do not have your security code, please ',
-                        color: colorScheme.onSurfaceVariant,
-                        textAlign: TextAlign.center,
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          // TODO: Navigate to support or open support URL
-                          context.showSuccessSnackBar(
-                            message:
-                                'Please contact support at support@example.com',
-                          );
-                        },
-                        style: TextButton.styleFrom(
-                          padding: EdgeInsets.zero,
-                          minimumSize: Size.zero,
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        ),
-                        child: CommonText.bodySmall(
-                          localizations?.translate('contact_support') ??
-                              'contact support',
-                          color: const Color(0xFFE53945), // Red color
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  const SizedBox(height: 8),
+                      text: context.translate("2fa_verify_button_text"),
+                      onPressed: () {
+                        _handleVerify();
+                      })
                 ],
               ),
             ),
           ),
         ),
       ),
+    );
+  }
+
+  // ignore: non_constant_identifier_names
+  Container _2faNoteText(BuildContext context, String qrCodeData) {
+    return Container(
+        decoration: DottedDecoration(
+          color: context.primary,
+          shape: Shape.box,
+          dash: [4, 4],
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(8.0),
+            decoration: BoxDecoration(
+              color: context.primary.withAlpha(40),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.info_outline,
+                  color: context.primary,
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CommonText.bodyMedium(
+                        context.translate("2fa_dialog_note_text"),
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          InkWell(
+                              onTap: () {
+                                Clipboard.setData(
+                                  ClipboardData(text: qrCodeData),
+                                );
+                                context.showSuccessSnackBar(
+                                  message: 'Copied to clipboard',
+                                );
+                              },
+                              child: CommonText.labelMedium(qrCodeData)),
+                          IconButton(
+                            icon: Icon(
+                              Icons.copy,
+                              size: 20,
+                              color: context.primary,
+                            ),
+                            onPressed: () {
+                              Clipboard.setData(
+                                ClipboardData(text: qrCodeData),
+                              );
+                              context.showSuccessSnackBar(
+                                message: 'Copied to clipboard',
+                              );
+                            },
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            )));
+  }
+
+  Widget dialogAppBar(
+      ColorScheme colorScheme, bool isLoading, BuildContext context) {
+    return Row(
+      children: [
+        Align(
+          child: CommonText.titleSmall(
+            context.translate("two_factor_authentication_title"),
+          ),
+        ),
+        Spacer(),
+        Align(
+          alignment: Alignment.topRight,
+          child: IconButton(
+            icon: Icon(
+              Icons.close,
+              color: colorScheme.onSurfaceVariant,
+            ),
+            onPressed: isLoading ? null : () => context.pop(false),
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(),
+          ),
+        ),
+      ],
     );
   }
 }

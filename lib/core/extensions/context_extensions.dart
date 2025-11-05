@@ -483,7 +483,7 @@ extension DialogExtension on BuildContext {
 
   /// Show 2FA verification dialog
   Future<bool?> show2FAVerificationDialog({
-    required String email,
+    String email = "",
     String? sessionToken,
     VoidCallback? onSuccess,
   }) {

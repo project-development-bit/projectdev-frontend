@@ -282,5 +282,10 @@
   "2fa_support_text": "If you do not have your security code, please ",
   "contact_support": "contact support",
   "continue": "Continue",
-  "security_verification_required": "Please complete the security verification"
+  "security_verification_required": "Please complete the security verification",
+  "two_factor_authentication_title": "Two-Factor Authentication",
+  "2fa_dialog_subtitle": "Authenticator Apps",
+  "2fa_dialog_body_text": "Using an authenticator app like Google Authenticator, Microsoft Authenticator, Authy, or 1Password, scan the QR code. It will generate a 6 digit code for you to enter below.",
+  "2fa_dialog_note_text": "If you having trouble using the QR code, select manual entry on your app, and enter your username and the code:",
+  "2fa_verify_button_text": "Verify"
 }

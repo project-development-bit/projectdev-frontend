@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/common/common_card.dart';
@@ -402,7 +403,6 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               ],
             ),
             const SizedBox(height: 24),
-
             Row(
               children: [
                 Expanded(
@@ -479,6 +479,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
       {'title': 'Faucet', 'icon': Icons.water_drop_outlined},
       {'title': 'User Rewards', 'icon': Icons.card_giftcard_outlined},
       {'title': 'Funny Tests!', 'icon': Icons.emoji_emotions_outlined},
+      {'title': '2FA', 'icon': Icons.security},
     ];
 
     return Container(
@@ -542,7 +543,9 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                           : AppColors.websiteText,
                     ),
                     onTap: () {
-                      // Handle navigation
+                      item['title'] == '2FA'
+                          ? context.show2FAVerificationDialog()
+                          : null; // Handle navigation
                     },
                   ),
                 );

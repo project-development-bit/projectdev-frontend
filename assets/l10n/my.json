@@ -255,5 +255,10 @@
   "2fa_support_text": "သင့်တွင် လုံခြုံရေး ကုဒ် မရှိပါက ကျေးဇူးပြု၍ ",
   "contact_support": "ပံ့ပိုးကူညီမှုနှင့် ဆက်သွယ်ပါ",
   "continue": "ဆက်လုပ်ရန်",
-  "security_verification_required": "လုံခြုံရေး အတည်ပြုချက် ပြီးစီးပါ"
+  "security_verification_required": "လုံခြုံရေး အတည်ပြုချက် ပြီးစီးပါ",
+  "two_factor_authentication_title": "နှစ်ဆင့် အတည်ပြုချက်",
+  "2fa_dialog_subtitle": "Authenticator Apps",
+  "2fa_dialog_body_text": "ကျွန်ုပ်တို့သည် သင့်အကောင့်ကို လုံခြုံစေရန် နှစ်ဆင့် အတည်ပြုချက်ကို အသုံးပြုရန် အကြံပြုပါသည်။ (Authenticator အက်ပ်များတွင် Google Authenticator, Authy, Microsoft Authenticator စသည်တို့ ပါဝင်သည်။)",
+  "2fa_dialog_note_text": "QR ကုဒ်ကို အသုံးပြုရာတွင် အခက်အခဲရှိပါက သင့်အက်ပ်တွင် ကိုယ်တိုင်ထည့်သွင်းရန် ရွေးချယ်ပြီး သင့်အသုံးပြုသူအမည်နှင့် ကုဒ်ကို ရိုက်ထည့်ပါ",
+  "2fa_verify_button_text": "ကုဒ်အတည်ပြုပါ"
 }
