@@ -19,7 +19,7 @@ class BalanceSection extends StatelessWidget {
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
-          color: colorScheme.surfaceContainerHighest,
+          color: colorScheme.surfaceContainerHighest.withAlpha(100),
           borderRadius: BorderRadius.circular(12),
         ),
         padding: EdgeInsets.all(isMobile ? 16 : 24),
@@ -208,7 +208,6 @@ class BalanceSection extends StatelessWidget {
         children: [
           CommonText.titleMedium(
             value,
-            color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
           const SizedBox(height: 4),

@@ -19,7 +19,7 @@ class LevelRewardsSection extends StatelessWidget {
         width: double.infinity,
         padding: EdgeInsets.all(isMobile ? 16 : 24),
         decoration: BoxDecoration(
-          color: colorScheme.surfaceContainerHighest,
+          color: colorScheme.surfaceContainerHighest.withAlpha(100),
           borderRadius: BorderRadius.circular(16),
         ),
         child: Column(

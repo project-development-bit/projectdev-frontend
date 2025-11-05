@@ -18,7 +18,7 @@ class ProfileDetailsSection extends ConsumerWidget {
         width: double.infinity,
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
-          color: colorScheme.surfaceContainerHighest,
+          color: colorScheme.surfaceContainerHighest.withAlpha(100),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: colorScheme.outlineVariant, width: 1),
         ),

@@ -19,17 +19,15 @@ class _ProfileSecuritySettingsState extends State<ProfileSecuritySettings> {
     final localizations = AppLocalizations.of(context);
 
     return Container(
-      margin: const EdgeInsets.all(16),
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: colorScheme.surfaceContainerHighest,
+        color: colorScheme.surfaceContainerHighest.withAlpha(100),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: colorScheme.outlineVariant),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // ─── Header ─────────────────────────────
           CommonText.titleLarge(
             localizations?.translate('security_settings_title') ??
                 'Sign in / Security Settings',
@@ -38,7 +36,6 @@ class _ProfileSecuritySettingsState extends State<ProfileSecuritySettings> {
           ),
           const SizedBox(height: 24),
 
-          // ─── Email Address ────────────────────────
           _buildRowHeader(
             context,
             title:
@@ -65,7 +62,6 @@ class _ProfileSecuritySettingsState extends State<ProfileSecuritySettings> {
           const Divider(thickness: 0.5),
           const SizedBox(height: 8),
 
-          // ─── 2FA Pin Code ─────────────────────────
           _buildSwitchRow(
             context,
             title: localizations?.translate('security_enable_2fa') ??
@@ -79,7 +75,6 @@ class _ProfileSecuritySettingsState extends State<ProfileSecuritySettings> {
           const Divider(thickness: 0.5),
           const SizedBox(height: 8),
 
-          // ─── 4 Digit Pin ──────────────────────────
           _buildSwitchRow(
             context,
             title: localizations?.translate('security_enable_pin') ??
@@ -283,7 +278,7 @@ class _ProfileSecuritySettingsState extends State<ProfileSecuritySettings> {
           Switch(
             value: value,
             onChanged: onChanged,
-            activeColor: colorScheme.primary,
+            activeThumbColor: colorScheme.primary,
             inactiveTrackColor: colorScheme.surfaceContainerHigh,
           ),
         ],
