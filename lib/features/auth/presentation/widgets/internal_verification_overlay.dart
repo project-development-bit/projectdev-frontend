@@ -31,7 +31,7 @@ class InternalVerificationNotifier extends StateNotifier<bool> {
 /// Configuration for internal verification
 class InternalVerificationConfig {
   /// Set to false to bypass verification entirely (for development)
-  static const bool isEnabled = true;
+  static const bool isEnabled = false;
 
   /// The verification code required
   static const String requiredCode = "2026";
