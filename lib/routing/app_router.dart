@@ -4,6 +4,8 @@ import 'package:cointiply_app/features/auth/presentation/widgets/internal_verifi
 import 'package:cointiply_app/features/home/widgets/dialog/tutorial_overlay.dart';
 import 'package:cointiply_app/features/chat/presentation/pages/chat_page.dart';
 import 'package:cointiply_app/features/chat/presentation/pages/right_chat_overlay.dart';
+import 'package:cointiply_app/features/terms_privacy/presentation/screens/privacy_screen.dart';
+import 'package:cointiply_app/features/terms_privacy/presentation/screens/terms_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -41,6 +43,8 @@ class AppRoutes {
   static const String termsOfService = '/legal/terms-of-service';
   static const String contactUs = '/legal/contact-us';
   static const String chat = '/chat';
+  static const String privacy = '/privacy';
+  static const String terms = '/terms';
 }
 
 // Router provider for dependency injection
@@ -286,6 +290,23 @@ class BurgerEatsAppRoutes {
                     ),
                   ),
                 ],
+              ),
+
+              // Terms and Privacy Routes - Public access
+              GoRoute(
+                path: AppRoutes.terms,
+                name: AppRoutes.terms,
+                pageBuilder: (context, state) => const NoTransitionPage(
+                  child: TermsScreen(),
+                ),
+              ),
+
+              GoRoute(
+                path: AppRoutes.privacy,
+                name: AppRoutes.privacy,
+                pageBuilder: (context, state) => const NoTransitionPage(
+                  child: PrivacyScreen(),
+                ),
               ),
 
               // Profile Routes - Requires Authentication
