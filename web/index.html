@@ -22,7 +22,7 @@
   <meta name="description" content="Gigafaucet - Turn your free time into rewards">
 
   <!-- Content Security Policy for Flutter Web (HTTP + HTTPS) -->
-  <meta http-equiv="Content-Security-Policy" content="
+  <!-- <meta http-equiv="Content-Security-Policy" content="
           default-src 'self';
           script-src 'self' 'unsafe-eval' 'unsafe-inline' https://unpkg.com https://www.gstatic.com https://www.google.com https://www.gstatic.com/recaptcha/ https://challenges.cloudflare.com;
           style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
@@ -32,7 +32,32 @@
           frame-src https://www.google.com https://challenges.cloudflare.com;
           object-src 'none';
           base-uri 'self';
-        ">
+        "> -->
+
+  <meta http-equiv="Content-Security-Policy" content="
+      default-src 'self' data: blob:;
+      script-src 'self' 'unsafe-eval' 'unsafe-inline'
+        https://unpkg.com
+        https://www.gstatic.com
+        https://www.google.com
+        https://www.gstatic.com/recaptcha/
+        https://challenges.cloudflare.com;
+      style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+      font-src 'self' https://fonts.gstatic.com;
+      img-src 'self' data: https:;
+      connect-src 'self' http: https: wss: ws: https://challenges.cloudflare.com;
+      frame-src 'self'
+        http://localhost:3000
+        https://embed.tawk.to
+        http://tawk.to
+        https://tawk.to
+        https://www.google.com
+        https://doc.gigafaucet.com
+        https://challenges.cloudflare.com;
+      object-src 'none';
+      base-uri 'self';
+    ">
+
 
   <!-- iOS meta tags & icons -->
   <meta name="mobile-web-app-capable" content="yes">
@@ -213,47 +238,70 @@
 
     // Function to ensure reCAPTCHA badge stays visible and properly customized
     window.ensureRecaptchaBadgeVisible = function () {
+      // const badge = document.querySelector('.grecaptcha-badge');
+      // if (badge) {
+      //   // Position and visibility
+      //   badge.style.zIndex = '9999';
+      //   badge.style.position = 'fixed';
+      //   badge.style.bottom = '14px';
+      //   badge.style.left = '14px';
+      //   badge.style.right = 'auto';
+      //   badge.style.opacity = '1';
+      //   badge.style.visibility = 'visible';
+      //   badge.style.display = 'block';
+
+      //   // Make it smaller and customize size
+      //   badge.style.transform = 'scale(0.75)';
+      //   badge.style.transformOrigin = 'bottom left';
+      //   badge.style.width = '70px';
+      //   badge.style.height = '60px';
+
+      //   // Hide text elements within the badge
+      //   const textElements = badge.querySelectorAll('div[style*="text"], .grecaptcha-text');
+      //   textElements.forEach(el => {
+      //     el.style.display = 'none';
+      //   });
+
+      //   // Hide the last div which usually contains text
+      //   const lastDiv = badge.querySelector('div:last-child');
+      //   if (lastDiv && lastDiv.textContent && lastDiv.textContent.trim()) {
+      //     lastDiv.style.fontSize = '0';
+      //     lastDiv.style.height = '0';
+      //     lastDiv.style.overflow = 'hidden';
+      //   }
+
+      //   // Target iframe if present
+      //   const iframe = badge.querySelector('iframe');
+      //   if (iframe) {
+      //     iframe.style.width = '70px';
+      //     iframe.style.height = '60px';
+      //   }
+
+      //   return true;
+      // }
+      // return false;
       const badge = document.querySelector('.grecaptcha-badge');
+      const iframe = document.querySelector('iframe[src*="recaptcha"]');
+
       if (badge) {
-        // Position and visibility
-        badge.style.zIndex = '9999';
         badge.style.position = 'fixed';
+        badge.style.left = '14px';
+        badge.style.right = 'auto';
         badge.style.bottom = '14px';
-        badge.style.right = '14px';
-        badge.style.opacity = '1';
-        badge.style.visibility = 'visible';
-        badge.style.display = 'block';
-
-        // Make it smaller and customize size
-        badge.style.transform = 'scale(0.75)';
-        badge.style.transformOrigin = 'bottom right';
-        badge.style.width = '70px';
-        badge.style.height = '60px';
-
-        // Hide text elements within the badge
-        const textElements = badge.querySelectorAll('div[style*="text"], .grecaptcha-text');
-        textElements.forEach(el => {
-          el.style.display = 'none';
-        });
-
-        // Hide the last div which usually contains text
-        const lastDiv = badge.querySelector('div:last-child');
-        if (lastDiv && lastDiv.textContent && lastDiv.textContent.trim()) {
-          lastDiv.style.fontSize = '0';
-          lastDiv.style.height = '0';
-          lastDiv.style.overflow = 'hidden';
-        }
-
-        // Target iframe if present
-        const iframe = badge.querySelector('iframe');
-        if (iframe) {
-          iframe.style.width = '70px';
-          iframe.style.height = '60px';
-        }
-
-        return true;
+        badge.style.transformOrigin = 'bottom left';
+        badge.style.zIndex = '9999';
+        badge.style.opacity = '0.6';
+        badge.onmouseenter = () => (badge.style.opacity = '1');
+        badge.onmouseleave = () => (badge.style.opacity = '0.6');
       }
-      return false;
+
+      if (iframe) {
+        iframe.style.position = 'fixed';
+        iframe.style.left = '14px';
+        iframe.style.right = 'auto';
+        iframe.style.bottom = '14px';
+        iframe.style.zIndex = '9999';
+      }
     };
 
     // Periodically check that reCAPTCHA badge is visible
@@ -299,18 +347,17 @@
 
     /* reCAPTCHA badge styling - ensure it stays visible and smaller */
     .grecaptcha-badge {
-      z-index: 9999 !important;
       position: fixed !important;
       bottom: 14px !important;
-      right: 14px !important;
-      opacity: 1 !important;
-      visibility: visible !important;
-      display: block !important;
-      /* Make the badge smaller */
+      left: 14px !important;
+      right: auto !important;
+      z-index: 9999 !important;
       transform: scale(0.75) !important;
-      transform-origin: bottom right !important;
+      transform-origin: bottom left !important;
       width: 70px !important;
       height: 60px !important;
+      opacity: 0.6 !important;
+      transition: opacity 0.3s ease-in-out;
     }
 
     /* Hide the reCAPTCHA text, keep only the logo */
@@ -349,7 +396,7 @@
       width: 70px !important;
       height: 60px !important;
       bottom: 14px !important;
-      right: 14px !important;
+      left: 14px !important;
     }
   </style>
 
