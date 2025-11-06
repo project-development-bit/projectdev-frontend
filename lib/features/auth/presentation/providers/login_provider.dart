@@ -31,9 +31,9 @@ class LoginLoading extends LoginState {
 
 /// Login successful
 class LoginSuccess extends LoginState {
-  const LoginSuccess({required this.user, required this.loginResponse});
+  const LoginSuccess({this.user, required this.loginResponse});
 
-  final User user;
+  final User? user;
   final LoginResponse loginResponse;
 }
 
@@ -130,14 +130,28 @@ class LoginNotifier extends StateNotifier<LoginState> {
         },
         (loginResponse) async {
           debugPrint('✅ Login successful for: $email');
+          
+          // Check if this is a 2FA required response (user and tokens are null)
+          if (loginResponse.user == null || loginResponse.tokens == null) {
+            debugPrint('🔐 2FA required - userId: ${loginResponse.userId}');
+            // Set state to LoginSuccess with the response containing userId
+            state = LoginSuccess(
+              user: null,
+              loginResponse: loginResponse,
+            );
+            debugPrint('🔄 State set to LoginSuccess (2FA required)');
+            onSuccess?.call();
+            return;
+          }
+          
           debugPrint(
-              '✅ Access token length: ${loginResponse.tokens.accessToken.length}');
+              '✅ Access token length: ${loginResponse.tokens!.accessToken.length}');
           debugPrint(
-              '✅ Refresh token length: ${loginResponse.tokens.refreshToken.length}');
+              '✅ Refresh token length: ${loginResponse.tokens!.refreshToken.length}');
 
           // Store user data in local database
           try {
-            await DatabaseService.saveUser(loginResponse.user);
+            await DatabaseService.saveUser(loginResponse.user!);
             debugPrint('✅ User data saved to database');
           } catch (dbError) {
             debugPrint('⚠️ Failed to save user to database: $dbError');

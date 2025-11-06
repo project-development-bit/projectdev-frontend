@@ -69,7 +69,7 @@ class ConsolidatedAuthState {
   String? get authToken {
     if (loginState is LoginSuccess) {
       final loginResponse = (loginState as LoginSuccess).loginResponse;
-      return loginResponse.tokens.accessToken;
+      return loginResponse.tokens?.accessToken;
     }
     return null;
   }

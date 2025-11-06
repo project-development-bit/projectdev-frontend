@@ -9,19 +9,34 @@ class LoginResponseModel extends LoginResponse {
   const LoginResponseModel({
     required super.success,
     required super.message,
-    required super.user,
-    required super.tokens,
+    super.user,
+    super.tokens,
+    super.userId,
   });
 
   /// Create LoginResponseModel from JSON response
   factory LoginResponseModel.fromJson(Map<String, dynamic> json) {
-    final data = json['data'] as Map<String, dynamic>;
+    final data = json['data'] as Map<String, dynamic>?;
+
+    // When 2FA is required, the response only contains success, message, and userId
+    // without user and tokens data
+    if (data == null || data['user'] == null || data['tokens'] == null) {
+      // Return a minimal response with userId for 2FA verification
+      return LoginResponseModel(
+        success: json['success'] as bool,
+        message: json['message'] as String,
+        user: null,
+        tokens: null,
+        userId: json['userId'] as int?,
+      );
+    }
 
     return LoginResponseModel(
       success: json['success'] as bool,
       message: json['message'] as String,
       user: UserModel.fromJson(data['user'] as Map<String, dynamic>),
       tokens: AuthTokensModel.fromJson(data['tokens'] as Map<String, dynamic>),
+      userId: data['userId'] as int?,
     );
   }
 
@@ -30,10 +45,12 @@ class LoginResponseModel extends LoginResponse {
     return {
       'success': success,
       'message': message,
-      'data': {
-        'user': (user as UserModel).toJson(),
-        'tokens': (tokens as AuthTokensModel).toJson(),
-      },
+      'userId': userId,
+      if (user != null && tokens != null)
+        'data': {
+          'user': (user as UserModel).toJson(),
+          'tokens': (tokens as AuthTokensModel).toJson(),
+        },
     };
   }
 
@@ -44,6 +61,7 @@ class LoginResponseModel extends LoginResponse {
       message: loginResponse.message,
       user: loginResponse.user,
       tokens: loginResponse.tokens,
+      userId: loginResponse.userId,
     );
   }
 
@@ -54,6 +72,7 @@ class LoginResponseModel extends LoginResponse {
       message: message,
       user: user,
       tokens: tokens,
+      userId: userId,
     );
   }
 
@@ -63,12 +82,14 @@ class LoginResponseModel extends LoginResponse {
     String? message,
     UserModel? user,
     AuthTokensModel? tokens,
+    int? userId,
   }) {
     return LoginResponseModel(
       success: success ?? this.success,
       message: message ?? this.message,
-      user: user ?? this.user as UserModel,
-      tokens: tokens ?? this.tokens as AuthTokensModel,
+      user: user ?? (this.user != null ? this.user as UserModel : null),
+      tokens: tokens ?? (this.tokens != null ? this.tokens as AuthTokensModel : null),
+      userId: userId ?? this.userId,
     );
   }
 }

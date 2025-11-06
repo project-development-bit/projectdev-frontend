@@ -16,6 +16,8 @@ import '../models/verify_code_request.dart';
 import '../models/verify_code_response.dart';
 import '../models/verify_2fa_request.dart';
 import '../models/verify_2fa_response.dart';
+import '../models/verify_login_2fa_request.dart';
+import '../models/verify_login_2fa_response.dart';
 import '../models/setup_2fa_request.dart';
 import '../models/setup_2fa_response.dart';
 import '../models/enable_2fa_request.dart';
@@ -301,12 +303,15 @@ class AuthRepositoryImpl implements AuthRepository {
 
   /// Store authentication tokens in secure storage
   Future<void> _storeTokens(LoginResponseModel loginResponse) async {
-    await secureStorage.saveAuthToken(loginResponse.tokens.accessToken);
-    await secureStorage.saveRefreshToken(loginResponse.tokens.refreshToken);
-    await secureStorage.saveUserId(loginResponse.user.id.toString());
+    // Only store tokens if they are not null (i.e., not a 2FA required response)
+    if (loginResponse.tokens != null && loginResponse.user != null) {
+      await secureStorage.saveAuthToken(loginResponse.tokens!.accessToken);
+      await secureStorage.saveRefreshToken(loginResponse.tokens!.refreshToken);
+      await secureStorage.saveUserId(loginResponse.user!.id.toString());
 
-    // Store additional user info if needed
-    // You could also store user role, email, etc.
+      // Store additional user info if needed
+      // You could also store user role, email, etc.
+    }
   }
 
   /// Store authentication tokens from 2FA verification response
@@ -353,6 +358,22 @@ class AuthRepositoryImpl implements AuthRepository {
     } on DioException catch (e) {
       return Left(ServerFailure(
         message: e.message ?? 'Failed to disable 2FA',
+        statusCode: e.response?.statusCode,
+      ));
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, VerifyLogin2FAResponse>> verifyLogin2FA(
+      VerifyLogin2FARequest request) async {
+    try {
+      final response = await remoteDataSource.verifyLogin2FA(request);
+      return Right(response);
+    } on DioException catch (e) {
+      return Left(ServerFailure(
+        message: e.message ?? 'Failed to verify 2FA code',
         statusCode: e.response?.statusCode,
       ));
     } catch (e) {
