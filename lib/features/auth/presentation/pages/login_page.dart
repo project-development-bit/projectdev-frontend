@@ -96,8 +96,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      
-                  
                       // App Logo/Icon
                       Center(
                         child: CommonContainer(

@@ -181,6 +181,15 @@ class AppColors {
     end: Alignment.bottomRight,
   );
 
+  static const LinearGradient welcomeGradient = LinearGradient(
+    colors: [
+      Color(0xFFFF007F),
+      Color(0xFF7F00FF),
+      Color(0xFF00FFFF),
+    ],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
   // Surface Variants
   static const Color lightSurfaceVariant = Color(0xFFF3F4F6);
   static const Color darkSurfaceVariant = Color(0xFF374151);

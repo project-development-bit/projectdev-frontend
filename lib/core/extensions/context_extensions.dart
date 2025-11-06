@@ -259,6 +259,18 @@ extension NavigationExtension on BuildContext {
         extra: extra,
       );
 
+  Future<T?> pushNamedChat<T extends Object?>({
+    Map<String, String> pathParameters = const <String, String>{},
+    Map<String, dynamic> queryParameters = const <String, dynamic>{},
+    Object? extra,
+  }) =>
+      GoRouter.of(this).pushNamed<T>(
+        'chat',
+        pathParameters: pathParameters,
+        queryParameters: queryParameters,
+        extra: extra,
+      );
+
   Future<T?> pushNamedForgotPassword<T extends Object?>({
     Map<String, String> pathParameters = const <String, String>{},
     Map<String, dynamic> queryParameters = const <String, dynamic>{},

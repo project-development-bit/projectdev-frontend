@@ -1,6 +1,9 @@
 // 📦 Package imports
 import 'package:cointiply_app/features/auth/presentation/examples/two_factor_auth_example.dart';
 import 'package:cointiply_app/features/auth/presentation/widgets/internal_verification_overlay.dart';
+import 'package:cointiply_app/features/home/widgets/dialog/tutorial_overlay.dart';
+import 'package:cointiply_app/features/chat/presentation/pages/chat_page.dart';
+import 'package:cointiply_app/features/chat/presentation/pages/right_chat_overlay.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -37,6 +40,7 @@ class AppRoutes {
   static const String privacyPolicy = '/legal/privacy-policy';
   static const String termsOfService = '/legal/terms-of-service';
   static const String contactUs = '/legal/contact-us';
+  static const String chat = '/chat';
 }
 
 // Router provider for dependency injection
@@ -198,7 +202,19 @@ class BurgerEatsAppRoutes {
             pageBuilder: (context, state, child) {
               return NoTransitionPage(
                 child: ShellRouteWrapper(
-                  child: InternalVerificationOverlay(child: child),
+                  child: InternalVerificationOverlay(
+                    child: RightChatOverlay(
+                      child: Consumer(
+                        builder: (context, ref, _) {
+                          final isVerified =
+                              ref.watch(internalVerificationProvider);
+                          return isVerified
+                              ? TutorialOverlay(child: child)
+                              : child;
+                        },
+                      ),
+                    ),
+                  ),
                 ),
               );
             },
@@ -212,17 +228,27 @@ class BurgerEatsAppRoutes {
                 ),
               ),
 
+              // chat Route
+              GoRoute(
+                path: AppRoutes.chat,
+                name: 'chat',
+                pageBuilder: (context, state) => const NoTransitionPage(
+                  child: ChatPage(),
+                ),
+              ),
+
               // Offers Routes - Requires Authentication
               GoRoute(
                 path: AppRoutes.offers,
                 redirect: (context, state) async {
                   final isAuthenticated = await authProvider.isAuthenticated();
-                  
+
                   if (!isAuthenticated) {
-                    debugPrint('🔒 Offers access denied - redirecting to login');
+                    debugPrint(
+                        '🔒 Offers access denied - redirecting to login');
                     return AppRoutes.login;
                   }
-                  
+
                   if (state.fullPath == AppRoutes.offers) {
                     return '${AppRoutes.offers}/browse';
                   }
@@ -268,12 +294,13 @@ class BurgerEatsAppRoutes {
                 name: 'profile',
                 redirect: (context, state) async {
                   final isAuthenticated = await authProvider.isAuthenticated();
-                  
+
                   if (!isAuthenticated) {
-                    debugPrint('🔒 Profile access denied - redirecting to login');
+                    debugPrint(
+                        '🔒 Profile access denied - redirecting to login');
                     return AppRoutes.login;
                   }
-                  
+
                   return null; // Allow access to profile
                 },
                 pageBuilder: (context, state) => const NoTransitionPage(
@@ -286,12 +313,13 @@ class BurgerEatsAppRoutes {
                 path: AppRoutes.settings,
                 redirect: (context, state) async {
                   final isAuthenticated = await authProvider.isAuthenticated();
-                  
+
                   if (!isAuthenticated) {
-                    debugPrint('🔒 Settings access denied - redirecting to login');
+                    debugPrint(
+                        '🔒 Settings access denied - redirecting to login');
                     return AppRoutes.login;
                   }
-                  
+
                   return null; // Allow access to settings
                 },
                 pageBuilder: (context, state) => const NoTransitionPage(
@@ -308,12 +336,13 @@ class BurgerEatsAppRoutes {
                 path: AppRoutes.dashboard,
                 redirect: (context, state) async {
                   final isAuthenticated = await authProvider.isAuthenticated();
-                  
+
                   if (!isAuthenticated) {
-                    debugPrint('🔒 Dashboard access denied - redirecting to login');
+                    debugPrint(
+                        '🔒 Dashboard access denied - redirecting to login');
                     return AppRoutes.login;
                   }
-                  
+
                   if (state.fullPath == AppRoutes.dashboard) {
                     return '${AppRoutes.dashboard}/overview';
                   }
