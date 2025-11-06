@@ -1,4 +1,6 @@
+import 'package:cointiply_app/core/extensions/extensions.dart';
 import 'package:cointiply_app/core/localization/app_localizations.dart';
+import 'package:cointiply_app/features/common/widgets/build_app_bar_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/common/common_text.dart';
@@ -66,11 +68,58 @@ class _PrivacyScreenState extends ConsumerState<PrivacyScreen> {
     );
   }
 
+  // Widget _buildWebView(String url) {
+  //   return WebViewWrapper(
+  //     url: url,
+  //     title: AppLocalizations.of(context)!.translate("privacy_policy"),
+  //     onClose: () => Navigator.of(context).pop(),
+  //   );
+  // }
+
   Widget _buildWebView(String url) {
-    return WebViewWrapper(
-      url: url,
-      title: AppLocalizations.of(context)!.translate("privacy_policy"),
-      onClose: () => Navigator.of(context).pop(),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              expandedHeight: 80.0,
+              floating: true,
+              pinned: true,
+              snap: false,
+              backgroundColor: context.surface.withAlpha(242),
+              surfaceTintColor: Colors.transparent,
+              elevation: 0,
+              scrolledUnderElevation: 1,
+              automaticallyImplyLeading:
+                  MediaQuery.of(context).size.width < 768,
+              title: const CommonAppBar(),
+              titleSpacing: 16,
+              flexibleSpace: FlexibleSpaceBar(
+                background: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        context.surface.withAlpha(250),
+                        context.surface.withAlpha(235),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SliverFillRemaining(
+              hasScrollBody: true,
+              child: WebViewWrapper(
+                useScaffold: false,
+                url: url,
+                onClose: () => Navigator.of(context).pop(),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 
