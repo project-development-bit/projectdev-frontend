@@ -1,6 +1,8 @@
 // 📦 Package imports
 import 'package:cointiply_app/features/auth/presentation/widgets/internal_verification_overlay.dart';
 import 'package:cointiply_app/features/home/widgets/dialog/tutorial_overlay.dart';
+import 'package:cointiply_app/features/chat/presentation/pages/chat_page.dart';
+import 'package:cointiply_app/features/chat/presentation/pages/right_chat_overlay.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -35,6 +37,7 @@ class AppRoutes {
   static const String privacyPolicy = '/legal/privacy-policy';
   static const String termsOfService = '/legal/terms-of-service';
   static const String contactUs = '/legal/contact-us';
+  static const String chat = '/chat';
 }
 
 // Router provider for dependency injection
@@ -181,14 +184,16 @@ class BurgerEatsAppRoutes {
               return NoTransitionPage(
                 child: ShellRouteWrapper(
                   child: InternalVerificationOverlay(
-                    child: Consumer(
-                      builder: (context, ref, _) {
-                        final isVerified =
-                            ref.watch(internalVerificationProvider);
-                        return isVerified
-                            ? TutorialOverlay(child: child)
-                            : child;
-                      },
+                    child: RightChatOverlay(
+                      child: Consumer(
+                        builder: (context, ref, _) {
+                          final isVerified =
+                              ref.watch(internalVerificationProvider);
+                          return isVerified
+                              ? TutorialOverlay(child: child)
+                              : child;
+                        },
+                      ),
                     ),
                   ),
                 ),
@@ -201,6 +206,15 @@ class BurgerEatsAppRoutes {
                 name: 'home',
                 pageBuilder: (context, state) => const NoTransitionPage(
                   child: HomePage(),
+                ),
+              ),
+
+              // chat Route
+              GoRoute(
+                path: AppRoutes.chat,
+                name: 'chat',
+                pageBuilder: (context, state) => const NoTransitionPage(
+                  child: ChatPage(),
                 ),
               ),
 
