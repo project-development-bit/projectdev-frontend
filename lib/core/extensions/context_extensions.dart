@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../localization/app_localizations.dart';
 import '../../routing/app_router.dart';
+import '../../features/auth/presentation/widgets/two_factor_auth_dialog.dart';
 
 /// Extension on BuildContext to provide easy access to text styles
 extension TextThemeExtension on BuildContext {
@@ -489,6 +490,20 @@ extension DialogExtension on BuildContext {
       elevation: elevation,
       shape: shape,
       builder: (context) => child,
+    );
+  }
+
+  /// Show 2FA verification dialog
+  Future<bool?> show2FAVerificationDialog({
+    String email = "",
+    String? sessionToken,
+    VoidCallback? onSuccess,
+  }) {
+    return show2FADialog(
+      this,
+      email: email,
+      sessionToken: sessionToken,
+      onSuccess: onSuccess,
     );
   }
 }

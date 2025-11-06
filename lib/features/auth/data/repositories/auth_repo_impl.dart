@@ -14,6 +14,15 @@ import '../models/resend_code_request.dart';
 import '../models/resend_code_response.dart';
 import '../models/verify_code_request.dart';
 import '../models/verify_code_response.dart';
+import '../models/verify_2fa_request.dart';
+import '../models/verify_2fa_response.dart';
+import '../models/setup_2fa_request.dart';
+import '../models/setup_2fa_response.dart';
+import '../models/enable_2fa_request.dart';
+import '../models/enable_2fa_response.dart';
+import '../models/check_2fa_status_response.dart';
+import '../models/disable_2fa_request.dart';
+import '../models/disable_2fa_response.dart';
 import '../models/forgot_password_request.dart';
 import '../models/forgot_password_response.dart';
 import '../models/reset_password_request.dart';
@@ -236,11 +245,75 @@ class AuthRepositoryImpl implements AuthRepository {
     }
   }
 
+  @override
+  Future<Either<Failure, Verify2FAResponse>> verify2FA(
+      Verify2FARequest request) async {
+    try {
+      final response = await remoteDataSource.verify2FA(request);
+
+      // Store the authentication tokens if 2FA verification is successful
+      if (response.success && response.data != null) {
+        await _store2FATokens(response.data!);
+      }
+
+      return Right(response);
+    } on DioException catch (e) {
+      return Left(ServerFailure(
+        message: e.message,
+        statusCode: e.response?.statusCode,
+      ));
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Setup2FAResponse>> setup2FA(
+      Setup2FARequest request) async {
+    try {
+      final response = await remoteDataSource.setup2FA(request);
+      return Right(response);
+    } on DioException catch (e) {
+      return Left(ServerFailure(
+        message: e.message,
+        statusCode: e.response?.statusCode,
+      ));
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Enable2FAResponse>> enable2FA(
+      Enable2FARequest request) async {
+    try {
+      final response = await remoteDataSource.enable2FA(request);
+      return Right(response);
+    } on DioException catch (e) {
+      return Left(ServerFailure(
+        message: e.message,
+        statusCode: e.response?.statusCode,
+      ));
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
   /// Store authentication tokens in secure storage
   Future<void> _storeTokens(LoginResponseModel loginResponse) async {
     await secureStorage.saveAuthToken(loginResponse.tokens.accessToken);
     await secureStorage.saveRefreshToken(loginResponse.tokens.refreshToken);
     await secureStorage.saveUserId(loginResponse.user.id.toString());
+
+    // Store additional user info if needed
+    // You could also store user role, email, etc.
+  }
+
+  /// Store authentication tokens from 2FA verification response
+  Future<void> _store2FATokens(Verify2FAData data) async {
+    await secureStorage.saveAuthToken(data.tokens.accessToken);
+    await secureStorage.saveRefreshToken(data.tokens.refreshToken);
+    await secureStorage.saveUserId(data.user.id.toString());
 
     // Store additional user info if needed
     // You could also store user role, email, etc.
@@ -255,4 +328,35 @@ class AuthRepositoryImpl implements AuthRepository {
   //   // Store additional user info if needed
   //   // You could also store user role, email, etc.
   // }
+
+  @override
+  Future<Either<Failure, Check2FAStatusResponse>> check2FAStatus() async {
+    try {
+      final response = await remoteDataSource.check2FAStatus();
+      return Right(response);
+    } on DioException catch (e) {
+      return Left(ServerFailure(
+        message: e.message ?? 'Failed to check 2FA status',
+        statusCode: e.response?.statusCode,
+      ));
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Disable2FAResponse>> disable2FA(
+      Disable2FARequest request) async {
+    try {
+      final response = await remoteDataSource.disable2FA(request);
+      return Right(response);
+    } on DioException catch (e) {
+      return Left(ServerFailure(
+        message: e.message ?? 'Failed to disable 2FA',
+        statusCode: e.response?.statusCode,
+      ));
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
 }
