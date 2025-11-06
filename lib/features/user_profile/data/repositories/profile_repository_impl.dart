@@ -1,3 +1,4 @@
+import 'package:cointiply_app/features/user_profile/data/models/request/user_update_request.dart';
 import 'package:dartz/dartz.dart';
 import 'package:universal_io/io.dart';
 import '../../../../core/error/failures.dart';
@@ -6,7 +7,7 @@ import '../../domain/repositories/profile_repository.dart';
 import '../datasources/profile_local_data_source.dart';
 import '../datasources/profile_remote_data_source.dart';
 import '../datasources/profile_database_data_source.dart';
-import '../models/user_profile_model.dart';
+import '../models/response/user_profile_model.dart';
 
 /// Implementation of [ProfileRepository]
 ///
@@ -73,32 +74,34 @@ class ProfileRepositoryImpl implements ProfileRepository {
 
   @override
   Future<Either<Failure, UserProfile>> updateUserProfile(
-      UserProfile profile) async {
+    UserUpdateRequest profile,
+  ) async {
     try {
+      // Convert request → model
+      final profileModel = UserProfileModel.fromUpdateRequest(profile);
+
       // Try to update via database first
-      final profileModel = UserProfileModel.fromEntity(profile);
       final databaseResult =
           await databaseDataSource.updateUserProfile(profileModel);
 
-      return databaseResult.fold(
+      return await databaseResult.fold(
         (failure) async {
-          // If database update fails, try remote
+          // If local DB update fails, try remote
           try {
             final updatedProfile = await remoteDataSource.updateUserProfile(
               'current',
-              _profileToMap(profile),
+              profile.toJson(),
             );
 
-            // Update cache with new data
+            // Cache the new data
             await localDataSource.cacheUserProfile(updatedProfile);
-
             return Right(updatedProfile);
           } catch (e) {
             return Left(ServerFailure(message: e.toString()));
           }
         },
         (updatedProfile) async {
-          // Cache the updated profile
+          // Cache the successfully updated profile
           await localDataSource.cacheUserProfile(updatedProfile);
           return Right(updatedProfile);
         },

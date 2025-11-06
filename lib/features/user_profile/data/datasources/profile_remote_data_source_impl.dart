@@ -1,7 +1,7 @@
 import 'package:universal_io/io.dart';
 import 'package:dio/dio.dart';
 import 'package:http_parser/http_parser.dart';
-import '../models/user_profile_model.dart';
+import '../models/response/user_profile_model.dart';
 import 'profile_remote_data_source.dart';
 
 /// Implementation of [ProfileRemoteDataSource] using Dio HTTP client

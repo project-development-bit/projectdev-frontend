@@ -1,3 +1,4 @@
+import 'package:cointiply_app/features/user_profile/data/models/request/user_update_request.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import '../../../../core/error/failures.dart';
@@ -23,7 +24,7 @@ class UpdateUserProfile
 class UpdateUserProfileParams extends Equatable {
   const UpdateUserProfileParams({required this.profile});
 
-  final UserProfile profile;
+  final UserUpdateRequest profile;
 
   @override
   List<Object> get props => [profile];

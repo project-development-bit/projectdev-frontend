@@ -1,5 +1,6 @@
+import 'package:cointiply_app/features/user_profile/data/models/request/user_update_request.dart';
 import 'package:json_annotation/json_annotation.dart';
-import '../../domain/entities/user_profile.dart';
+import '../../../domain/entities/user_profile.dart';
 import 'user_profile_stats_model.dart';
 
 part 'user_profile_model.g.dart';
@@ -101,6 +102,28 @@ class UserProfileModel extends UserProfile {
       isEmailVerified: isEmailVerified,
       isPhoneVerified: isPhoneVerified,
       stats: stats,
+    );
+  }
+
+  factory UserProfileModel.fromUpdateRequest(UserUpdateRequest request) {
+    return UserProfileModel(
+      id: '', // you can fill this later from auth/session context
+      email: request.email ?? '',
+      username: request.name ?? '', // or request.username if you have that
+      displayName: request.name,
+      profilePictureUrl: null,
+      bio: null,
+      location: request.country,
+      website: null,
+      contactNumber: null,
+      dateOfBirth: null,
+      gender: null,
+      accountCreated: DateTime.now(), // or fetch from existing
+      lastLogin: null,
+      accountStatus: 'active', // fallback
+      verificationStatus: 'verified', // fallback
+      isEmailVerified: true,
+      isPhoneVerified: false,
     );
   }
 }
