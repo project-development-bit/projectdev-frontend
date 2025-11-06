@@ -6,18 +6,30 @@ class WebViewWrapper extends StatelessWidget {
   final String url;
   final String? title;
   final VoidCallback? onClose;
-  // final
+  final bool useScaffold;
 
   const WebViewWrapper({
     super.key,
     required this.url,
     this.title,
     this.onClose,
+    this.useScaffold = true,
   });
 
   @override
   Widget build(BuildContext context) {
     final bool isMobile = context.isMobile;
+    final webview = ResponsiveSection(
+      maxWidth: isMobile ? null : MediaQuery.of(context).size.width * 0.9,
+      padding: EdgeInsets.zero,
+      fullWidthOnMobile: true,
+      child: Webview(url: url),
+    );
+
+    if (!useScaffold) {
+      return webview;
+    }
+
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: title != null
@@ -43,13 +55,7 @@ class WebViewWrapper extends StatelessWidget {
               elevation: 1,
             )
           : null,
-      body: ResponsiveSection(
-        // 90 % of screen width
-        maxWidth: isMobile ? null : MediaQuery.of(context).size.width * 0.9,
-        padding: EdgeInsets.zero,
-        fullWidthOnMobile: true,
-        child: Webview(url: url),
-      ),
+      body: webview,
     );
   }
 }
