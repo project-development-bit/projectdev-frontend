@@ -1,4 +1,5 @@
-import 'package:cloudflare_turnstile/cloudflare_turnstile.dart' hide TurnstileError;
+import 'package:cloudflare_turnstile/cloudflare_turnstile.dart'
+    hide TurnstileError;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,7 +15,8 @@ class CloudflareTurnstileWidget extends ConsumerStatefulWidget {
   final bool retryAutomatically;
   final TurnstileRefreshExpired refreshExpired;
   final String action;
-  
+  final bool debugMode;
+
   const CloudflareTurnstileWidget({
     super.key,
     this.siteKey,
@@ -24,13 +26,16 @@ class CloudflareTurnstileWidget extends ConsumerStatefulWidget {
     this.retryAutomatically = false,
     this.action = "login",
     this.refreshExpired = TurnstileRefreshExpired.manual,
+    this.debugMode = kDebugMode,
   });
 
   @override
-  ConsumerState<CloudflareTurnstileWidget> createState() => _CloudflareTurnstileWidgetState();
+  ConsumerState<CloudflareTurnstileWidget> createState() =>
+      _CloudflareTurnstileWidgetState();
 }
 
-class _CloudflareTurnstileWidgetState extends ConsumerState<CloudflareTurnstileWidget> {
+class _CloudflareTurnstileWidgetState
+    extends ConsumerState<CloudflareTurnstileWidget> {
   bool _isInitialized = false;
 
   @override
@@ -49,9 +54,9 @@ class _CloudflareTurnstileWidgetState extends ConsumerState<CloudflareTurnstileW
         print('🔑 Site Key: $_getLiveSiteKey');
         print('🌐 Environment: ${kDebugMode ? 'Debug' : 'Production'}');
       }
-      
+
       await ref.read(turnstileNotifierProvider.notifier).initializeController();
-      
+
       if (mounted) {
         setState(() {
           _isInitialized = true;
@@ -67,8 +72,7 @@ class _CloudflareTurnstileWidgetState extends ConsumerState<CloudflareTurnstileW
       // Set error state
       if (mounted) {
         ref.read(turnstileNotifierProvider.notifier).onTurnstileError(
-          'Failed to load security verification. Please check your internet connection and refresh the page.'
-        );
+            'Failed to load security verification. Please check your internet connection and refresh the page.');
       }
     }
   }
@@ -76,12 +80,12 @@ class _CloudflareTurnstileWidgetState extends ConsumerState<CloudflareTurnstileW
   /// Get the correct site key based on environment
   String get _getLiveSiteKey {
     // IMPORTANT: Cloudflare Turnstile site key configuration
-    // 
+    //
     // This error occurs when:
     // 1. Wrong site key is used
     // 2. Site key doesn't match the domain
     // 3. Site key is not properly configured in Cloudflare
-    // 
+    //
     // To fix this:
     // 1. Go to Cloudflare dashboard: https://dash.cloudflare.com/
     // 2. Select your domain
@@ -89,11 +93,11 @@ class _CloudflareTurnstileWidgetState extends ConsumerState<CloudflareTurnstileW
     // 4. Create a new site with your exact domain
     // 5. Copy the "Site Key" (public key) - NOT the secret key
     // 6. Replace the production key below
-    
+
     if (widget.siteKey != null) {
       return widget.siteKey!;
     }
-    
+
     // TEMPORARY: Using test key for ALL environments until you get your real key
     // This test key always passes verification
     // Once you have your real site key from Cloudflare, update the production key below
@@ -111,7 +115,7 @@ class _CloudflareTurnstileWidgetState extends ConsumerState<CloudflareTurnstileW
       debugPrint(
           '⚠️ WARNING: Using TEST key in production. Please update with real site key!');
       return productionSiteKey; // Change to: productionSiteKey
-      
+
       // After getting your realxsite key:
       // 1. Replace '0x4AAAAAAABvMxgQiLjU_ErY' above with your real key
       // 2. Change 'return testKey;' to 'return productionSiteKey;'
@@ -121,15 +125,17 @@ class _CloudflareTurnstileWidgetState extends ConsumerState<CloudflareTurnstileW
   /// Get theme based on current context
   TurnstileTheme get _getTheme {
     if (widget.theme != null) return widget.theme!;
-    
+
     final brightness = Theme.of(context).brightness;
-    return brightness == Brightness.dark ? TurnstileTheme.dark : TurnstileTheme.light;
+    return brightness == Brightness.dark
+        ? TurnstileTheme.dark
+        : TurnstileTheme.light;
   }
 
   /// Get language code
   String get _getLanguage {
     if (widget.language != null) return widget.language!;
-    
+
     final locale = Localizations.localeOf(context);
     return locale.languageCode;
   }
@@ -144,7 +150,7 @@ class _CloudflareTurnstileWidgetState extends ConsumerState<CloudflareTurnstileW
     final controller = ref.read(turnstileNotifierProvider.notifier).controller;
     if (controller != null) {
       final isExpired = await controller.isExpired();
-      
+
       if (mounted) {
         context.showSuccessSnackBar(
           message: isExpired ? 'Token is Expired' : 'Token is Valid',
@@ -156,7 +162,7 @@ class _CloudflareTurnstileWidgetState extends ConsumerState<CloudflareTurnstileW
   /// Validate configuration and log helpful information
   void _validateConfiguration() {
     final siteKey = _getLiveSiteKey;
-    
+
     if (kDebugMode) {
       print('🔧 Turnstile Configuration Validation:');
       print('🔑 Site Key: $siteKey');
@@ -165,18 +171,19 @@ class _CloudflareTurnstileWidgetState extends ConsumerState<CloudflareTurnstileW
       print('🔒 HTTPS: ${Uri.base.scheme == "https"}');
       print('🎨 Theme: $_getTheme');
       print('🗣️ Language: $_getLanguage');
-      
+
       // Validate common issues
       if (siteKey == '0x4AAAAAAABvMxgQiLjU_ErY' && !kDebugMode) {
         print('⚠️  WARNING: You are using the example site key in production!');
         print('   Please replace with your actual Cloudflare site key.');
       }
-      
+
       if (siteKey.startsWith('0x') && kDebugMode) {
         print('💡 INFO: Using live site key in debug mode.');
-        print('   Consider using test key "1x00000000000000000000AA" for development.');
+        print(
+            '   Consider using test key "1x00000000000000000000AA" for development.');
       }
-      
+
       if (Uri.base.scheme != "https" && !kDebugMode) {
         print('⚠️  WARNING: Production requires HTTPS for Turnstile to work.');
       }
@@ -229,15 +236,15 @@ class _CloudflareTurnstileWidgetState extends ConsumerState<CloudflareTurnstileW
                       options: options,
                       controller: controller,
                       action: widget.action,
-                      baseUrl:
-                          kDebugMode
+                      baseUrl: kDebugMode
                           ? "http://localhost"
                           : "https://staging.gigafaucet.com",
                       onTokenReceived: (token) {
                         if (kDebugMode) {
                           print('✅ Turnstile: Token received successfully');
                           print('🔑 Site Key: $_getLiveSiteKey');
-                          print('🌐 Environment: ${kDebugMode ? "Debug" : "Production"}');
+                          print(
+                              '🌐 Environment: ${kDebugMode ? "Debug" : "Production"}');
                         }
                         turnstileNotifier.onTokenReceived(token);
                       },
@@ -251,7 +258,8 @@ class _CloudflareTurnstileWidgetState extends ConsumerState<CloudflareTurnstileW
                         if (kDebugMode) {
                           print('❌ Turnstile Error: ${error.message}');
                           print('🔑 Site Key Used: $_getLiveSiteKey');
-                          print('🌐 Environment: ${kDebugMode ? "Debug" : "Production"}');
+                          print(
+                              '🌐 Environment: ${kDebugMode ? "Debug" : "Production"}');
                           print('🔧 Domain: ${Uri.base.host}');
                           print('🔒 HTTPS: ${Uri.base.scheme == "https"}');
                         }
@@ -290,9 +298,9 @@ class _CloudflareTurnstileWidgetState extends ConsumerState<CloudflareTurnstileW
       children: [
         // Status indicator
         _buildStatusIndicator(state, context),
-        
+
         // Token display (only in debug mode)
-        if (kDebugMode && state is TurnstileSuccess) ...[
+        if (widget.debugMode && state is TurnstileSuccess) ...[
           const SizedBox(height: 8),
           Container(
             width: double.infinity,
@@ -311,7 +319,7 @@ class _CloudflareTurnstileWidgetState extends ConsumerState<CloudflareTurnstileW
                 ),
                 const SizedBox(height: 4),
                 CommonText.bodySmall(
-                  state.token.length > 50 
+                  state.token.length > 50
                       ? '${state.token.substring(0, 50)}...'
                       : state.token,
                   color: Colors.grey.shade800,
@@ -320,10 +328,13 @@ class _CloudflareTurnstileWidgetState extends ConsumerState<CloudflareTurnstileW
             ),
           ),
         ],
-        
+
         // Action buttons (only show in debug mode or when there's an error)
-        if ((kDebugMode || state is TurnstileError || state is TurnstileExpired) && 
-            ref.watch(turnstileNotifierProvider.notifier).controller != null) ...[
+        if ((widget.debugMode ||
+                state is TurnstileError ||
+                state is TurnstileExpired) &&
+            ref.watch(turnstileNotifierProvider.notifier).controller !=
+                null) ...[
           const SizedBox(height: 8),
           Row(
             children: [
@@ -333,7 +344,8 @@ class _CloudflareTurnstileWidgetState extends ConsumerState<CloudflareTurnstileW
                   icon: const Icon(Icons.refresh, size: 16),
                   label: const Text('Retry'),
                   style: TextButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     minimumSize: Size.zero,
                   ),
                 ),
@@ -345,7 +357,8 @@ class _CloudflareTurnstileWidgetState extends ConsumerState<CloudflareTurnstileW
                   icon: const Icon(Icons.check_circle, size: 16),
                   label: const Text('Validate'),
                   style: TextButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     minimumSize: Size.zero,
                   ),
                 ),
