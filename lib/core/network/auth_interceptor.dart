@@ -60,18 +60,26 @@ class TokenInterceptor extends Interceptor {
   void onError(DioException err, ErrorInterceptorHandler handler) async {
     log(
       'ERROR[${err.response?.statusCode}] => PATH: ${err.requestOptions.path}, IS REFRESHING: ${isRefreshing.toString()}',
+      name: name,
     );
+    
     if (err.response?.statusCode == 401 || err.response?.statusCode == 403) {
       if (!isRefreshing) {
-        log("ACCESS TOKEN EXPIRED, GETTING NEW TOKEN PAIR");
+        log("ACCESS TOKEN EXPIRED, GETTING NEW TOKEN PAIR", name: name);
         isRefreshing = true;
-        failedRequests.add({'err': err, 'handler': handler});
-        await refreshToken(err, handler);
-        return handler.next(err);
+        
+        // Try to refresh the token
+        try {
+          await refreshToken(err, handler);
+        } catch (e) {
+          log("REFRESH TOKEN FAILED: $e", name: name);
+          isRefreshing = false;
+          failedRequests = [];
+          return handler.reject(err);
+        }
       } else {
-        log("ADDING ERROR REQUEST TO FAILED QUEUE");
+        log("ADDING ERROR REQUEST TO FAILED QUEUE", name: name);
         failedRequests.add({'err': err, 'handler': handler});
-        return handler.next(err);
       }
     } else {
       return handler.next(err);
@@ -91,31 +99,123 @@ class TokenInterceptor extends Interceptor {
 
     try {
       final refreshToken = await tokenService.getRefreshToken();
+      
+      // Check if refresh token exists
+      if (refreshToken == null || refreshToken.isEmpty) {
+        log("NO REFRESH TOKEN AVAILABLE, LOGGING OUT", name: name);
+        isRefreshing = false;
+        failedRequests = [];
+
+        // Clear all tokens
+        await tokenService.clearAllAuthData();
+
+        throw DioException(
+          requestOptions: err.requestOptions,
+          error: 'No refresh token available',
+          type: DioExceptionType.connectionError,
+        );
+      }
+
+      log("REFRESHING TOKEN WITH: ${refreshToken.substring(0, 20)}...",
+          name: name);
+      
       final response = await retryDio.post(
         'users/refresh-token',
         data: {"refreshToken": refreshToken},
       );
-      final parsedResponse = response.data;
-      if (response.statusCode != null && response.statusCode! >= 400) {
-        // Handle logout for invalid refresh tokens
-        log("LOGGING OUT: EXPIRED REFRESH TOKEN ${response.data}");
-
-        return handler.reject(err);
-      }
-      await tokenService.saveAuthToken(parsedResponse['accessToken']);
-      isRefreshing = false;
-      log("RETRYING ${failedRequests.length} FAILED REQUEST(s)", name: name);
-      await retryRequests(parsedResponse['data']['access_token']);
-    } on DioException catch (e) {
-      log("LOGGING OUT: EXPIRED REFRESH TOKEN $e", name: name);
       
-      return handler.reject(err);
-    } catch (e) {
-      // Handle cases like 400 Bad Request or other server errors
-      log("REFRESH TOKEN FAILED: $e", name: name);
+      final parsedResponse = response.data;
+      
+      // Check if response is successful
+      if (response.statusCode == null || response.statusCode! >= 400) {
+        log("REFRESH TOKEN INVALID: ${response.statusCode} - ${response.data}",
+            name: name);
+        isRefreshing = false;
+        failedRequests = [];
+
+        // Clear all tokens
+        await tokenService.clearAllAuthData();
+
+        throw DioException(
+          requestOptions: err.requestOptions,
+          response: response,
+          error: 'Refresh token expired or invalid',
+          type: DioExceptionType.badResponse,
+        );
+      }
+
+      // Extract tokens from response
+      String? newAccessToken;
+      String? newRefreshToken;
+
+      // Handle different response structures
+      if (parsedResponse is Map<String, dynamic>) {
+        // Check if tokens are at root level
+        if (parsedResponse.containsKey('accessToken')) {
+          newAccessToken = parsedResponse['accessToken'];
+          newRefreshToken = parsedResponse['refreshToken'];
+        }
+        // Check if tokens are in 'data' object
+        else if (parsedResponse.containsKey('data') &&
+            parsedResponse['data'] is Map) {
+          final data = parsedResponse['data'] as Map<String, dynamic>;
+          newAccessToken = data['accessToken'] ?? data['access_token'];
+          newRefreshToken = data['refreshToken'] ?? data['refresh_token'];
+        }
+        // Check if tokens are in 'tokens' object
+        else if (parsedResponse.containsKey('tokens') &&
+            parsedResponse['tokens'] is Map) {
+          final tokens = parsedResponse['tokens'] as Map<String, dynamic>;
+          newAccessToken = tokens['accessToken'] ?? tokens['access_token'];
+          newRefreshToken = tokens['refreshToken'] ?? tokens['refresh_token'];
+        }
+      }
+
+      if (newAccessToken == null || newAccessToken.isEmpty) {
+        log("NO ACCESS TOKEN IN RESPONSE: $parsedResponse", name: name);
+        isRefreshing = false;
+        failedRequests = [];
+
+        throw DioException(
+          requestOptions: err.requestOptions,
+          response: response,
+          error: 'No access token in refresh response',
+          type: DioExceptionType.badResponse,
+        );
+      }
+
+      // Save new tokens
+      await tokenService.saveAuthToken(newAccessToken);
+      if (newRefreshToken != null && newRefreshToken.isNotEmpty) {
+        await tokenService.saveRefreshToken(newRefreshToken);
+      }
+
+      log("TOKEN REFRESH SUCCESSFUL", name: name);
+      log("RETRYING ${failedRequests.length} FAILED REQUEST(s)", name: name);
+
+      // Retry all failed requests
+      await retryRequests(newAccessToken);
+
+      isRefreshing = false;
+    } on DioException catch (e) {
+      log("REFRESH TOKEN DIO ERROR: ${e.response?.statusCode} - ${e.message}",
+          name: name);
       isRefreshing = false;
       failedRequests = [];
-      handler.reject(err); // Pass the original error back
+
+      // Clear all tokens on refresh failure
+      await tokenService.clearAllAuthData();
+      
+      rethrow;
+    } catch (e) {
+      log("REFRESH TOKEN UNEXPECTED ERROR: $e", name: name);
+      isRefreshing = false;
+      failedRequests = [];
+      
+      // Clear all tokens on any failure
+      await tokenService.clearAllAuthData();
+
+      rethrow;
     }
   }
 

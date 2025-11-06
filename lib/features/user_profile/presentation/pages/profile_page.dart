@@ -1,4 +1,5 @@
 import 'package:cointiply_app/core/core.dart';
+import 'package:cointiply_app/features/auth/presentation/providers/check_2fa_status_provider.dart';
 import 'package:cointiply_app/features/common/widgets/build_app_bar_title.dart';
 import 'package:cointiply_app/features/user_profile/data/enum/profile_tab_type.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/profile_tab_provider.dart';
@@ -38,6 +39,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
       final isAuthenticated = ref.read(isAuthenticatedObservableProvider);
       if (isAuthenticated) {
         ref.read(currentUserProvider.notifier).initializeUser();
+        // Check 2FA status
+        ref.read(check2FAStatusProvider.notifier).check2FAStatus();
       }
     });
   }

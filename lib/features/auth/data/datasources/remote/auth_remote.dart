@@ -8,6 +8,15 @@ import 'package:cointiply_app/features/auth/data/models/resend_code_request.dart
 import 'package:cointiply_app/features/auth/data/models/resend_code_response.dart';
 import 'package:cointiply_app/features/auth/data/models/verify_code_request.dart';
 import 'package:cointiply_app/features/auth/data/models/verify_code_response.dart';
+import 'package:cointiply_app/features/auth/data/models/verify_2fa_request.dart';
+import 'package:cointiply_app/features/auth/data/models/verify_2fa_response.dart';
+import 'package:cointiply_app/features/auth/data/models/setup_2fa_request.dart';
+import 'package:cointiply_app/features/auth/data/models/setup_2fa_response.dart';
+import 'package:cointiply_app/features/auth/data/models/enable_2fa_request.dart';
+import 'package:cointiply_app/features/auth/data/models/enable_2fa_response.dart';
+import 'package:cointiply_app/features/auth/data/models/check_2fa_status_response.dart';
+import 'package:cointiply_app/features/auth/data/models/disable_2fa_request.dart';
+import 'package:cointiply_app/features/auth/data/models/disable_2fa_response.dart';
 import 'package:cointiply_app/features/auth/data/models/forgot_password_request.dart';
 import 'package:cointiply_app/features/auth/data/models/forgot_password_response.dart';
 import 'package:cointiply_app/features/auth/data/models/reset_password_request.dart';
@@ -44,6 +53,21 @@ abstract class AuthRemoteDataSource {
 
   /// Verify email with verification code
   Future<VerifyCodeResponse> verifyCode(VerifyCodeRequest request);
+
+  /// Verify 2FA code from authenticator app
+  Future<Verify2FAResponse> verify2FA(Verify2FARequest request);
+
+  /// Setup 2FA for the authenticated user
+  Future<Setup2FAResponse> setup2FA(Setup2FARequest request);
+
+  /// Enable 2FA by verifying the token from authenticator app
+  Future<Enable2FAResponse> enable2FA(Enable2FARequest request);
+
+  /// Check 2FA status for the authenticated user
+  Future<Check2FAStatusResponse> check2FAStatus();
+
+  /// Disable 2FA for the authenticated user
+  Future<Disable2FAResponse> disable2FA(Disable2FARequest request);
 }
 
 /// Implementation of [AuthRemoteDataSource] that handles HTTP requests
@@ -75,8 +99,110 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         message: serverMessage ?? _getFallbackMessage(e),
       );
     } catch (e) {
+            // Handle any other unexpected exceptions
+      throw Exception('Unexpected error during code verification: $e');
+    }
+  }
+
+  @override
+  Future<Verify2FAResponse> verify2FA(Verify2FARequest request) async {
+    try {
+      debugPrint('🔐 Verifying 2FA code for: ${request.email}');
+
+      final response = await dioClient.post(
+        verify2FAEndpoints,
+        data: request.toJson(),
+      );
+
+      debugPrint('✅ 2FA verification successful');
+      return Verify2FAResponse.fromJson(response.data as Map<String, dynamic>);
+    } on DioException catch (e) {
+      debugPrint('❌ 2FA verification DioException: ${e.message}');
+      debugPrint('❌ Request URL: ${e.requestOptions.uri}');
+      debugPrint('❌ Response status: ${e.response?.statusCode}');
+      debugPrint('❌ Response data: ${e.response?.data}');
+
+      // Extract server error message from response data
+      final serverMessage = _extractServerErrorMessage(e.response?.data);
+
+      // Create new DioException with server message or appropriate fallback
+      throw DioException(
+        requestOptions: e.requestOptions,
+        response: e.response,
+        message: serverMessage ?? _getFallbackMessage(e),
+      );
+    } catch (e) {
       // Handle any other unexpected exceptions
-      throw Exception('Unexpected error during registration: $e');
+      debugPrint('❌ Unexpected error during 2FA verification: $e');
+      throw Exception('Unexpected error during 2FA verification: $e');
+    }
+  }
+
+  @override
+  Future<Setup2FAResponse> setup2FA(Setup2FARequest request) async {
+    try {
+      debugPrint('🔐 Setting up 2FA for authenticated user');
+
+      final response = await dioClient.post(
+        setup2FAEndpoints,
+        data: request.toJson(),
+      );
+
+      debugPrint('✅ 2FA setup successful');
+      return Setup2FAResponse.fromJson(response.data as Map<String, dynamic>);
+    } on DioException catch (e) {
+      debugPrint('❌ 2FA setup DioException: ${e.message}');
+      debugPrint('❌ Request URL: ${e.requestOptions.uri}');
+      debugPrint('❌ Response status: ${e.response?.statusCode}');
+      debugPrint('❌ Response data: ${e.response?.data}');
+
+      // Extract server error message from response data
+      final serverMessage = _extractServerErrorMessage(e.response?.data);
+
+      // Create new DioException with server message or appropriate fallback
+      throw DioException(
+        requestOptions: e.requestOptions,
+        response: e.response,
+        message: serverMessage ?? _getFallbackMessage(e),
+      );
+    } catch (e) {
+      // Handle any other unexpected exceptions
+      debugPrint('❌ Unexpected error during 2FA setup: $e');
+      throw Exception('Unexpected error during 2FA setup: $e');
+    }
+  }
+
+  @override
+  Future<Enable2FAResponse> enable2FA(Enable2FARequest request) async {
+    try {
+      debugPrint('🔐 Enabling 2FA with token verification');
+
+      final response = await dioClient.post(
+        enable2FAEndpoints,
+        data: request.toJson(),
+      );
+
+      debugPrint('✅ 2FA enabled successfully');
+      return Enable2FAResponse.fromJson(response.data as Map<String, dynamic>);
+    } on DioException catch (e) {
+      debugPrint('❌ 2FA enable DioException: ${e.message}');
+      debugPrint('❌ Request URL: ${e.requestOptions.uri}');
+      debugPrint('❌ Response status: ${e.response?.statusCode}');
+      debugPrint('❌ Response data: ${e.response?.data}');
+
+      // Extract server error message from response data
+      final serverMessage = _extractServerErrorMessage(e.response?.data);
+
+      // Create new DioException with server message or appropriate fallback
+      throw DioException(
+        requestOptions: e.requestOptions,
+        response: e.response,
+        message: serverMessage ?? _getFallbackMessage(e),
+      );
+    } catch (e) {
+      // Handle any other unexpected exceptions
+      debugPrint('❌ Unexpected error during 2FA enable: $e');
+      throw Exception('Unexpected error during 2FA enable: $e');
     }
   }
 
@@ -364,6 +490,52 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     } catch (e) {
       // Handle any other unexpected exceptions
       throw Exception('Unexpected error during verification: $e');
+    }
+  }
+
+  @override
+  Future<Check2FAStatusResponse> check2FAStatus() async {
+    try {
+      debugPrint('Checking 2FA status...');
+      final response = await dioClient.get(
+        check2FAStatusEndpoints,
+      );
+
+      debugPrint('Check 2FA status response: ${response.data}');
+      return Check2FAStatusResponse.fromJson(
+          response.data as Map<String, dynamic>);
+    } on DioException catch (e) {
+      debugPrint('Check 2FA status DioException: ${e.message}');
+      if (e.response != null) {
+        debugPrint('Check 2FA status error response: ${e.response?.data}');
+      }
+      rethrow;
+    } catch (e) {
+      debugPrint('Check 2FA status error: $e');
+      rethrow;
+    }
+  }
+
+  @override
+  Future<Disable2FAResponse> disable2FA(Disable2FARequest request) async {
+    try {
+      debugPrint('Disabling 2FA...');
+      final response = await dioClient.post(
+        disable2FAEndpoints,
+        data: request.toJson(),
+      );
+
+      debugPrint('Disable 2FA response: ${response.data}');
+      return Disable2FAResponse.fromJson(response.data as Map<String, dynamic>);
+    } on DioException catch (e) {
+      debugPrint('Disable 2FA DioException: ${e.message}');
+      if (e.response != null) {
+        debugPrint('Disable 2FA error response: ${e.response?.data}');
+      }
+      rethrow;
+    } catch (e) {
+      debugPrint('Disable 2FA error: $e');
+      rethrow;
     }
   }
 

@@ -1,8 +1,9 @@
+import 'package:cointiply_app/core/localization/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/common/common_text.dart';
 import '../providers/terms_privacy_provider.dart';
-import '../widgets/webview_wrapper.dart';
+import '../../../../core/common/webview_wrapper.dart';
 
 class PrivacyScreen extends ConsumerStatefulWidget {
   const PrivacyScreen({super.key});
@@ -24,7 +25,7 @@ class _PrivacyScreenState extends ConsumerState<PrivacyScreen> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(termsPrivacyNotifierProvider);
-    
+
     return Scaffold(
       body: _buildBody(state),
     );
@@ -48,14 +49,14 @@ class _PrivacyScreenState extends ConsumerState<PrivacyScreen> {
   Widget _buildLoadingView() {
     return Container(
       padding: const EdgeInsets.all(24),
-      child: const Center(
+      child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CircularProgressIndicator(),
             SizedBox(height: 16),
             CommonText(
-              'Loading Privacy Policy...',
+              AppLocalizations.of(context)!.translate("loading_privacy_policy"),
               fontSize: 16,
               textAlign: TextAlign.center,
             ),
@@ -68,7 +69,7 @@ class _PrivacyScreenState extends ConsumerState<PrivacyScreen> {
   Widget _buildWebView(String url) {
     return WebViewWrapper(
       url: url,
-      title: 'Privacy Policy',
+      title: AppLocalizations.of(context)!.translate("privacy_policy"),
       onClose: () => Navigator.of(context).pop(),
     );
   }
@@ -86,8 +87,9 @@ class _PrivacyScreenState extends ConsumerState<PrivacyScreen> {
               color: Colors.red[400],
             ),
             const SizedBox(height: 16),
-            const CommonText(
-              'Failed to Load Privacy Policy',
+            CommonText(
+              AppLocalizations.of(context)!
+                  .translate("failed_to_load_privacy_policy"),
               fontSize: 18,
               fontWeight: FontWeight.w600,
               textAlign: TextAlign.center,
@@ -102,15 +104,21 @@ class _PrivacyScreenState extends ConsumerState<PrivacyScreen> {
             const SizedBox(height: 24),
             ElevatedButton.icon(
               onPressed: () {
-                ref.read(termsPrivacyNotifierProvider.notifier).fetchTermsAndPrivacy();
+                ref
+                    .read(termsPrivacyNotifierProvider.notifier)
+                    .fetchTermsAndPrivacy();
               },
               icon: const Icon(Icons.refresh),
-              label: const Text('Retry'),
+              label: CommonText.titleSmall(
+                AppLocalizations.of(context)!.translate("retry"),
+              ),
             ),
             const SizedBox(height: 12),
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Close'),
+              child: CommonText.titleSmall(
+                AppLocalizations.of(context)!.translate("close"),
+              ),
             ),
           ],
         ),

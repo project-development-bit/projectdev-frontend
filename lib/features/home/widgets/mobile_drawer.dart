@@ -58,6 +58,8 @@ class MobileDrawer extends ConsumerWidget {
 
                   // Profile
                   _buildProfileItem(context, currentUserState),
+                  _buildSectionHeader(context, context.translate('support')),
+                  _buildChatItem(context),
 
                   const Divider(),
 
@@ -365,6 +367,34 @@ class MobileDrawer extends ConsumerWidget {
     );
   }
 
+  Widget _buildChatItem(BuildContext context) {
+    return ListTile(
+      leading: CircleAvatar(
+        radius: 18,
+        backgroundColor: context.primary.withOpacity(0.1),
+        child: Icon(
+          Icons.chat,
+          color: context.primary,
+          size: 20,
+        ),
+      ),
+      title: CommonText.bodyLarge(context.translate('chat')),
+      subtitle: CommonText.bodySmall(
+        context.translate('open_chat'),
+        color: context.onSurfaceVariant,
+      ),
+      trailing: Icon(
+        Icons.arrow_forward_ios,
+        size: 16,
+        color: context.onSurfaceVariant,
+      ),
+      onTap: () {
+        Navigator.of(context).pop(); // Close drawer
+        context.pushNamedChat();
+      },
+    );
+  }
+
   /// Build login item
   Widget _buildLoginItem(BuildContext context) {
     return ListTile(
@@ -426,8 +456,8 @@ class MobileDrawer extends ConsumerWidget {
                 : context.translate('sign_out_account'),
             color: context.onSurfaceVariant,
           ),
-          onTap: isLoading 
-              ? null 
+          onTap: isLoading
+              ? null
               : () {
                   print('🔴 Logout ListTile onTap triggered');
                   debugPrint('🔴 Logout ListTile onTap triggered - debugPrint');
@@ -467,12 +497,12 @@ class MobileDrawer extends ConsumerWidget {
   Future<void> _handleLogout(BuildContext context, WidgetRef ref) async {
     print('🔴 Logout button pressed - starting logout process');
     debugPrint('🔴 Logout button pressed - starting logout process');
-    
+
     // Store references early before any navigation that might dispose the widget
     final navigator = Navigator.of(context);
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     final logoutNotifier = ref.read(logoutNotifierProvider.notifier);
-    
+
     // Close drawer first
     navigator.pop();
 
@@ -511,7 +541,7 @@ class MobileDrawer extends ConsumerWidget {
       try {
         print('🔴 Calling logout notifier...');
         debugPrint('🔴 Calling logout notifier...');
-        
+
         // Perform logout using the stored reference
         await logoutNotifier.logout();
 
@@ -529,11 +559,13 @@ class MobileDrawer extends ConsumerWidget {
       } catch (e) {
         print('🔴 Exception during logout: $e');
         debugPrint('🔴 Exception during logout: $e');
-        
+
         // Show error message using stored reference if context is mounted
         if (context.mounted) {
           try {
-            final errorMessage = context.translate('logout_failed').replaceAll('{0}', e.toString());
+            final errorMessage = context
+                .translate('logout_failed')
+                .replaceAll('{0}', e.toString());
             scaffoldMessenger.showSnackBar(
               SnackBar(
                 content: Text(errorMessage),

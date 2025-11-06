@@ -57,12 +57,15 @@ dependencies:
   melos: ^7.2.0
   google_fonts: ^6.2.1
   recaptcha_enterprise_flutter: ^18.8.1
-  webview_flutter: ^4.10.0
+  # webview_flutter: ^4.10.0
   g_recaptcha_v3: ^1.0.0
   cloudflare_turnstile:
     git:
       url: https://github.com/Nika0000/cloudflare_turnstile.git
       ref: legacy
+  qr_flutter: ^4.1.0
+  dotted_decoration: ^2.0.0
+  webview_all: ^0.5.2
 
 dev_dependencies:
   flutter_test:
@@ -108,6 +111,7 @@ flutter:
     - assets/images/bg/
     - assets/images/levels/
     - assets/images/rewards/
+    - assets/tutorial/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

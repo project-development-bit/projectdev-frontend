@@ -37,7 +37,7 @@ class TermsPrivacyExample extends ConsumerWidget {
               color: Colors.grey,
             ),
             const SizedBox(height: 32),
-            
+
             // Terms of Service Button
             ElevatedButton.icon(
               onPressed: () {
@@ -53,9 +53,9 @@ class TermsPrivacyExample extends ConsumerWidget {
                 padding: const EdgeInsets.symmetric(vertical: 16),
               ),
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             // Privacy Policy Button
             ElevatedButton.icon(
               onPressed: () {
@@ -71,9 +71,9 @@ class TermsPrivacyExample extends ConsumerWidget {
                 padding: const EdgeInsets.symmetric(vertical: 16),
               ),
             ),
-            
+
             const SizedBox(height: 32),
-            
+
             // Status indicator
             Consumer(
               builder: (context, ref, child) {

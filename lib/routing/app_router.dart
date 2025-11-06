@@ -1,5 +1,9 @@
 // 📦 Package imports
+import 'package:cointiply_app/features/auth/presentation/examples/two_factor_auth_example.dart';
 import 'package:cointiply_app/features/auth/presentation/widgets/internal_verification_overlay.dart';
+import 'package:cointiply_app/features/home/widgets/dialog/tutorial_overlay.dart';
+import 'package:cointiply_app/features/chat/presentation/pages/chat_page.dart';
+import 'package:cointiply_app/features/chat/presentation/pages/right_chat_overlay.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,6 +13,7 @@ import '../features/auth/presentation/pages/login_page.dart';
 import '../features/auth/presentation/pages/signup_page.dart';
 import '../features/auth/presentation/pages/forgot_password_page.dart';
 import '../features/auth/presentation/pages/verification_page.dart';
+import '../features/auth/presentation/pages/two_factor_auth_page.dart';
 import '../features/auth/presentation/pages/reset_password_page.dart';
 import '../features/home/pages/home_page.dart';
 import '../features/user_profile/presentation/pages/profile_page.dart';
@@ -25,6 +30,7 @@ class AppRoutes {
   static const String signUp = '/auth/signup';
   static const String forgotPassword = '/auth/forgot-password';
   static const String verification = '/auth/verification';
+  static const String twoFactorAuth = '/auth/2fa';
   static const String resetPassword = '/auth/reset-password';
   static const String auth = '/auth';
   static const String profile = '/profile';
@@ -34,6 +40,7 @@ class AppRoutes {
   static const String privacyPolicy = '/legal/privacy-policy';
   static const String termsOfService = '/legal/terms-of-service';
   static const String contactUs = '/legal/contact-us';
+  static const String chat = '/chat';
 }
 
 // Router provider for dependency injection
@@ -145,6 +152,22 @@ class BurgerEatsAppRoutes {
                 },
               ),
               GoRoute(
+                path: '2fa',
+                name: '2fa',
+                pageBuilder: (context, state) {
+                  final email = state.uri.queryParameters['email'] ?? '';
+                  final sessionToken =
+                      state.uri.queryParameters['sessionToken'];
+                  return NoTransitionPage(
+                    child: TwoFactorAuthExample(),
+                    // child: TwoFactorAuthPage(
+                    //   email: email,
+                    //   sessionToken: sessionToken,
+                    // ),
+                  );
+                },
+              ),
+              GoRoute(
                 path: 'reset-password',
                 name: 'reset-password',
                 pageBuilder: (context, state) {
@@ -179,7 +202,19 @@ class BurgerEatsAppRoutes {
             pageBuilder: (context, state, child) {
               return NoTransitionPage(
                 child: ShellRouteWrapper(
-                  child: InternalVerificationOverlay(child: child),
+                  child: InternalVerificationOverlay(
+                    child: RightChatOverlay(
+                      child: Consumer(
+                        builder: (context, ref, _) {
+                          final isVerified =
+                              ref.watch(internalVerificationProvider);
+                          return isVerified
+                              ? TutorialOverlay(child: child)
+                              : child;
+                        },
+                      ),
+                    ),
+                  ),
                 ),
               );
             },
@@ -193,17 +228,27 @@ class BurgerEatsAppRoutes {
                 ),
               ),
 
+              // chat Route
+              GoRoute(
+                path: AppRoutes.chat,
+                name: 'chat',
+                pageBuilder: (context, state) => const NoTransitionPage(
+                  child: ChatPage(),
+                ),
+              ),
+
               // Offers Routes - Requires Authentication
               GoRoute(
                 path: AppRoutes.offers,
                 redirect: (context, state) async {
                   final isAuthenticated = await authProvider.isAuthenticated();
-                  
+
                   if (!isAuthenticated) {
-                    debugPrint('🔒 Offers access denied - redirecting to login');
+                    debugPrint(
+                        '🔒 Offers access denied - redirecting to login');
                     return AppRoutes.login;
                   }
-                  
+
                   if (state.fullPath == AppRoutes.offers) {
                     return '${AppRoutes.offers}/browse';
                   }
@@ -249,12 +294,13 @@ class BurgerEatsAppRoutes {
                 name: 'profile',
                 redirect: (context, state) async {
                   final isAuthenticated = await authProvider.isAuthenticated();
-                  
+
                   if (!isAuthenticated) {
-                    debugPrint('🔒 Profile access denied - redirecting to login');
+                    debugPrint(
+                        '🔒 Profile access denied - redirecting to login');
                     return AppRoutes.login;
                   }
-                  
+
                   return null; // Allow access to profile
                 },
                 pageBuilder: (context, state) => const NoTransitionPage(
@@ -267,12 +313,13 @@ class BurgerEatsAppRoutes {
                 path: AppRoutes.settings,
                 redirect: (context, state) async {
                   final isAuthenticated = await authProvider.isAuthenticated();
-                  
+
                   if (!isAuthenticated) {
-                    debugPrint('🔒 Settings access denied - redirecting to login');
+                    debugPrint(
+                        '🔒 Settings access denied - redirecting to login');
                     return AppRoutes.login;
                   }
-                  
+
                   return null; // Allow access to settings
                 },
                 pageBuilder: (context, state) => const NoTransitionPage(
@@ -289,12 +336,13 @@ class BurgerEatsAppRoutes {
                 path: AppRoutes.dashboard,
                 redirect: (context, state) async {
                   final isAuthenticated = await authProvider.isAuthenticated();
-                  
+
                   if (!isAuthenticated) {
-                    debugPrint('🔒 Dashboard access denied - redirecting to login');
+                    debugPrint(
+                        '🔒 Dashboard access denied - redirecting to login');
                     return AppRoutes.login;
                   }
-                  
+
                   if (state.fullPath == AppRoutes.dashboard) {
                     return '${AppRoutes.dashboard}/overview';
                   }
@@ -468,5 +516,35 @@ extension GoRouterExtension on BuildContext {
   /// Push reset password page
   void pushToResetPassword({required String email}) {
     push('${AppRoutes.resetPassword}?email=${Uri.encodeComponent(email)}');
+  }
+
+  /// Navigate to 2FA page
+  void goTo2FA({
+    required String email,
+    String? sessionToken,
+  }) {
+    final uri = Uri(
+      path: AppRoutes.twoFactorAuth,
+      queryParameters: {
+        'email': email,
+        if (sessionToken != null) 'sessionToken': sessionToken,
+      },
+    );
+    go(uri.toString());
+  }
+
+  /// Push 2FA page
+  void pushTo2FA({
+    required String email,
+    String? sessionToken,
+  }) {
+    final uri = Uri(
+      path: AppRoutes.twoFactorAuth,
+      queryParameters: {
+        'email': email,
+        if (sessionToken != null) 'sessionToken': sessionToken,
+      },
+    );
+    push(uri.toString());
   }
 }
