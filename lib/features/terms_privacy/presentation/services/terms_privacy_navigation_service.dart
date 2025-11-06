@@ -1,7 +1,7 @@
+import 'package:cointiply_app/routing/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../screens/terms_screen.dart';
-import '../screens/privacy_screen.dart';
+import 'package:go_router/go_router.dart';
 
 /// Service for handling Terms & Privacy navigation across platforms
 class TermsPrivacyNavigationService {
@@ -76,19 +76,21 @@ class TermsPrivacyNavigationService {
 
   // Private methods for mobile platform
   static void _showTermsScreen(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const TermsScreen(),
-      ),
-    );
+    // Navigator.of(context).push(
+    //   MaterialPageRoute(
+    //     builder: (context) => const TermsScreen(),
+    //   ),
+    // );
+    context.goNamed(AppRoutes.terms);
   }
 
   static void _showPrivacyScreen(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const PrivacyScreen(),
-      ),
-    );
+    // Navigator.of(context).push(
+    //   MaterialPageRoute(
+    //     builder: (context) => const PrivacyScreen(),
+    //   ),
+    // );
+    context.goNamed(AppRoutes.privacy);
   }
 
   // Platform-agnostic URL launcher

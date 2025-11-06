@@ -59,11 +59,11 @@ class TermsPrivacyExample extends ConsumerWidget {
             // Privacy Policy Button
             ElevatedButton.icon(
               onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const PrivacyScreen(),
-                  ),
-                );
+                // Navigator.of(context).push(
+                //   MaterialPageRoute(
+                //     builder: (context) => const PrivacyScreen(),
+                //   ),
+                // );
               },
               icon: const Icon(Icons.privacy_tip_outlined),
               label: const Text('Privacy Policy'),
