@@ -3,6 +3,7 @@ const loginEndpoints = 'users/login';
 const resendCodeEndpoints = 'users/resend-code';
 const verifyCodeEndpoints = 'users/verify'; // POST with /{email}/{code}
 const verify2FAEndpoints = 'users/verify-2fa'; // POST with 2FA code
+const verifyLogin2FAEndpoints = '2fa/verify-login'; // POST to verify 2FA during login
 const setup2FAEndpoints = '2fa/setup'; // POST to setup 2FA
 const enable2FAEndpoints = '2fa/verify'; // POST to enable 2FA
 const check2FAStatusEndpoints = '2fa/status'; // GET to check 2FA status
