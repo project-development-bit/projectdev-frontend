@@ -15,7 +15,6 @@ import '../features/auth/presentation/pages/login_page.dart';
 import '../features/auth/presentation/pages/signup_page.dart';
 import '../features/auth/presentation/pages/forgot_password_page.dart';
 import '../features/auth/presentation/pages/verification_page.dart';
-import '../features/auth/presentation/pages/two_factor_auth_page.dart';
 import '../features/auth/presentation/pages/reset_password_page.dart';
 import '../features/home/pages/home_page.dart';
 import '../features/user_profile/presentation/pages/profile_page.dart';
@@ -241,6 +240,23 @@ class BurgerEatsAppRoutes {
                 ),
               ),
 
+              // Terms and Privacy Routes - Public access
+              GoRoute(
+                path: AppRoutes.terms,
+                name: AppRoutes.terms,
+                pageBuilder: (context, state) => const NoTransitionPage(
+                  child: TermsScreen(),
+                ),
+              ),
+
+              GoRoute(
+                path: AppRoutes.privacy,
+                name: AppRoutes.privacy,
+                pageBuilder: (context, state) => const NoTransitionPage(
+                  child: PrivacyScreen(),
+                ),
+              ),
+
               // Offers Routes - Requires Authentication
               GoRoute(
                 path: AppRoutes.offers,
@@ -290,23 +306,6 @@ class BurgerEatsAppRoutes {
                     ),
                   ),
                 ],
-              ),
-
-              // Terms and Privacy Routes - Public access
-              GoRoute(
-                path: AppRoutes.terms,
-                name: AppRoutes.terms,
-                pageBuilder: (context, state) => const NoTransitionPage(
-                  child: TermsScreen(),
-                ),
-              ),
-
-              GoRoute(
-                path: AppRoutes.privacy,
-                name: AppRoutes.privacy,
-                pageBuilder: (context, state) => const NoTransitionPage(
-                  child: PrivacyScreen(),
-                ),
               ),
 
               // Profile Routes - Requires Authentication
