@@ -2,6 +2,7 @@ import 'package:cointiply_app/features/chat/presentation/provider/right_chat_ove
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pointer_interceptor/pointer_interceptor.dart';
 import '../../../core/widgets/locale_switch_widget.dart';
 import '../../../core/widgets/theme_switch_widget.dart';
 import '../../../core/extensions/context_extensions.dart';
@@ -182,22 +183,24 @@ class CommonAppBar extends StatelessWidget {
     // Show confirmation dialog
     final shouldLogout = await showDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(context.translate('logout')),
-        content: Text(context.translate('logout_confirmation')),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: Text(context.translate('cancel')),
-          ),
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(true),
-            style: TextButton.styleFrom(
-              foregroundColor: context.error,
+      builder: (context) => PointerInterceptor(
+        child: AlertDialog(
+          title: Text(context.translate('logout')),
+          content: Text(context.translate('logout_confirmation')),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text(context.translate('cancel')),
             ),
-            child: Text(context.translate('logout')),
-          ),
-        ],
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              style: TextButton.styleFrom(
+                foregroundColor: context.error,
+              ),
+              child: Text(context.translate('logout')),
+            ),
+          ],
+        ),
       ),
     );
 
