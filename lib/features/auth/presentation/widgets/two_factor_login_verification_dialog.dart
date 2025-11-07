@@ -1,3 +1,4 @@
+import 'package:cointiply_app/features/common/widgets/custom_pointer_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -51,7 +52,8 @@ class _TwoFactorLoginVerificationDialogState
           // Store tokens
           if (response.data != null) {
             final secureStorage = ref.read(secureStorageServiceProvider);
-            await secureStorage.saveAuthToken(response.data!.tokens.accessToken);
+            await secureStorage
+                .saveAuthToken(response.data!.tokens.accessToken);
             await secureStorage
                 .saveRefreshToken(response.data!.tokens.refreshToken);
             await secureStorage.saveUserId(response.data!.user.id.toString());
@@ -310,9 +312,11 @@ extension TwoFactorLoginDialogExtension on BuildContext {
     return showDialog<bool>(
       context: this,
       barrierDismissible: false,
-      builder: (context) => TwoFactorLoginVerificationDialog(
-        userId: userId,
-        onSuccess: onSuccess,
+      builder: (context) => CustomPointerInterceptor(
+        child: TwoFactorLoginVerificationDialog(
+          userId: userId,
+          onSuccess: onSuccess,
+        ),
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:cointiply_app/features/common/widgets/custom_pointer_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -509,28 +510,30 @@ class MobileDrawer extends ConsumerWidget {
     // Show confirmation dialog
     final shouldLogout = await showDialog<bool>(
       context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: Text(dialogContext.translate('logout')),
-        content: Text(dialogContext.translate('logout_confirmation')),
-        actions: [
-          TextButton(
-            onPressed: () {
-              print('🔴 User pressed Cancel in logout dialog');
-              Navigator.of(dialogContext).pop(false);
-            },
-            child: Text(dialogContext.translate('cancel')),
-          ),
-          TextButton(
-            onPressed: () {
-              print('🔴 User pressed Logout in logout dialog');
-              Navigator.of(dialogContext).pop(true);
-            },
-            style: TextButton.styleFrom(
-              foregroundColor: Theme.of(dialogContext).colorScheme.error,
+      builder: (dialogContext) => CustomPointerInterceptor(
+        child: AlertDialog(
+          title: Text(dialogContext.translate('logout')),
+          content: Text(dialogContext.translate('logout_confirmation')),
+          actions: [
+            TextButton(
+              onPressed: () {
+                print('🔴 User pressed Cancel in logout dialog');
+                Navigator.of(dialogContext).pop(false);
+              },
+              child: Text(dialogContext.translate('cancel')),
             ),
-            child: Text(dialogContext.translate('logout')),
-          ),
-        ],
+            TextButton(
+              onPressed: () {
+                print('🔴 User pressed Logout in logout dialog');
+                Navigator.of(dialogContext).pop(true);
+              },
+              style: TextButton.styleFrom(
+                foregroundColor: Theme.of(dialogContext).colorScheme.error,
+              ),
+              child: Text(dialogContext.translate('logout')),
+            ),
+          ],
+        ),
       ),
     );
 

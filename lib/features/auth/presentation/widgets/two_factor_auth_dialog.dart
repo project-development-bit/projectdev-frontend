@@ -35,7 +35,7 @@ class _TwoFactorAuthDialogState extends ConsumerState<TwoFactorAuthDialog> {
   final _formKey = GlobalKey<FormState>();
   final _codeController = TextEditingController();
   final _codeFocusNode = FocusNode();
-  
+
   // Store the secret from setup response to use in enable API
   String? _secret;
 

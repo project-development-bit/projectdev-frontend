@@ -1,8 +1,8 @@
 import 'package:cointiply_app/features/chat/presentation/provider/right_chat_overlay_provider.dart';
+import 'package:cointiply_app/features/common/widgets/custom_pointer_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:pointer_interceptor/pointer_interceptor.dart';
 import '../../../core/widgets/locale_switch_widget.dart';
 import '../../../core/widgets/theme_switch_widget.dart';
 import '../../../core/extensions/context_extensions.dart';
@@ -183,7 +183,7 @@ class CommonAppBar extends StatelessWidget {
     // Show confirmation dialog
     final shouldLogout = await showDialog<bool>(
       context: context,
-      builder: (context) => PointerInterceptor(
+      builder: (context) => CustomPointerInterceptor(
         child: AlertDialog(
           title: Text(context.translate('logout')),
           content: Text(context.translate('logout_confirmation')),

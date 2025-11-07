@@ -1,3 +1,4 @@
+import 'package:cointiply_app/features/common/widgets/custom_pointer_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -23,10 +24,10 @@ class Disable2FAConfirmationDialog extends ConsumerWidget {
       if (next is Disable2FASuccess) {
         // Close dialog on success
         Navigator.of(context).pop();
-        
+
         // Refresh 2FA status
         ref.read(check2FAStatusProvider.notifier).check2FAStatus();
-        
+
         // Show success message
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -206,7 +207,8 @@ extension Disable2FADialogExtension on BuildContext {
     showDialog(
       context: this,
       barrierDismissible: false,
-      builder: (context) => const Disable2FAConfirmationDialog(),
+      builder: (context) =>
+          CustomPointerInterceptor(child: const Disable2FAConfirmationDialog()),
     );
   }
 }
