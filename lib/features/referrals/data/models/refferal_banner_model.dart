@@ -39,7 +39,7 @@ class RefferalBannerModel extends Equatable {
   @override
   String toString() => 'BannerModel(image: $image, ${width}x$height, $format)';
 
-  RefferalBannerEntity toEntity() => RefferalBannerEntity(
+  ReferalBannerEntity toEntity() => ReferalBannerEntity(
         imageUrl: image,
         width: width,
         height: height,

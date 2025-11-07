@@ -1,19 +1,8 @@
-import 'package:cointiply_app/features/referrals/data/datasources/referral_user_remote_service.dart';
-import 'package:cointiply_app/features/referrals/data/repositories/referral_user_repository_impl.dart';
 import 'package:cointiply_app/features/referrals/domain/entity/referred_user_entity.dart';
-import 'package:cointiply_app/features/referrals/domain/repository/referral_users_repository.dart';
+import 'package:cointiply_app/features/referrals/domain/usecases/get_referred_users_usecase.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/network/base_dio_client.dart';
 import '../../../../core/error/failures.dart';
-
-/// Repository Provider
-final referralUsersRepositoryProvider =
-    Provider<ReferralUsersRepository>((ref) {
-  final dioClient = ref.read(dioClientProvider);
-  final remote = ReferralUsersRemoteService(dioClient);
-  return ReferralUsersRepositoryImpl(remote);
-});
 
 /// States
 @immutable
@@ -42,9 +31,9 @@ class ReferralUsersError extends ReferralUsersState {
 
 /// Notifier
 class ReferralUsersNotifier extends StateNotifier<ReferralUsersState> {
-  final ReferralUsersRepository _repository;
+  final GetReferredUsersUsecase _usecase;
 
-  ReferralUsersNotifier(this._repository) : super(const ReferralUsersInitial());
+  ReferralUsersNotifier(this._usecase) : super(const ReferralUsersInitial());
 
   Future<void> fetchReferralUsers() async {
     if (state is ReferralUsersLoading) return;
@@ -52,7 +41,7 @@ class ReferralUsersNotifier extends StateNotifier<ReferralUsersState> {
     state = const ReferralUsersLoading();
     debugPrint('🔄 ReferralUsersNotifier: Loading...');
 
-    final result = await _repository.getReferredUsers();
+    final result = await _usecase.call();
     result.fold(
       (failure) {
         debugPrint('❌ ReferralUsersNotifier: Failed - ${failure.message}');
@@ -77,8 +66,8 @@ class ReferralUsersNotifier extends StateNotifier<ReferralUsersState> {
 /// Provider
 final referralUsersNotifierProvider =
     StateNotifierProvider<ReferralUsersNotifier, ReferralUsersState>((ref) {
-  final repository = ref.read(referralUsersRepositoryProvider);
-  return ReferralUsersNotifier(repository);
+  final usecase = ref.read(getReferredUsersUsecaseProvider);
+  return ReferralUsersNotifier(usecase);
 });
 
 /// Helpers

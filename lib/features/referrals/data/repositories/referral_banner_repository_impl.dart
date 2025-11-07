@@ -14,7 +14,7 @@ class ReferralBannerRepositoryImpl implements ReferralBannerRepository {
   ReferralBannerRepositoryImpl(this._remote);
 
   @override
-  Future<Either<Failure, List<RefferalBannerEntity>>>
+  Future<Either<Failure, List<ReferalBannerEntity>>>
       getReferralBanners() async {
     try {
       debugPrint('🏪 ReferralBannerRepository: Starting banner fetch...');

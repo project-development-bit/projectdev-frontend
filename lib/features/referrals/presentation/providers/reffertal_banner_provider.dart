@@ -1,21 +1,8 @@
-import 'package:cointiply_app/features/referrals/data/datasources/referral_banner_remote_service.dart';
 import 'package:cointiply_app/features/referrals/domain/entity/banner_entity.dart';
-import 'package:cointiply_app/features/referrals/domain/repository/referral_banner_repository.dart';
+import 'package:cointiply_app/features/referrals/domain/usecases/get_referral_banners_usecase.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/network/base_dio_client.dart';
 import '../../../../core/error/failures.dart';
-import '../../data/repositories/referral_banner_repository_impl.dart';
-
-/// ─────────────────────────────────────────────────────────────
-/// REPOSITORY PROVIDER
-/// ─────────────────────────────────────────────────────────────
-final referralBannerRepositoryProvider =
-    Provider<ReferralBannerRepository>((ref) {
-  final dioClient = ref.read(dioClientProvider);
-  final remote = ReferralBannerRemoteService(dioClient);
-  return ReferralBannerRepositoryImpl(remote);
-});
 
 /// ─────────────────────────────────────────────────────────────
 /// STATE CLASSES
@@ -34,7 +21,7 @@ class ReferralBannerLoading extends ReferralBannerState {
 }
 
 class ReferralBannerSuccess extends ReferralBannerState {
-  final List<RefferalBannerEntity> banners;
+  final List<ReferalBannerEntity> banners;
 
   const ReferralBannerSuccess(this.banners);
 }
@@ -53,10 +40,9 @@ class ReferralBannerError extends ReferralBannerState {
 /// STATE NOTIFIER
 /// ─────────────────────────────────────────────────────────────
 class ReferralBannerNotifier extends StateNotifier<ReferralBannerState> {
-  final ReferralBannerRepository _repository;
+  final GetReferralBannersUsecase _usecase;
 
-  ReferralBannerNotifier(this._repository)
-      : super(const ReferralBannerInitial());
+  ReferralBannerNotifier(this._usecase) : super(const ReferralBannerInitial());
 
   /// Fetch referral banners from the repository
   Future<void> fetchReferralBanners() async {
@@ -65,7 +51,7 @@ class ReferralBannerNotifier extends StateNotifier<ReferralBannerState> {
     state = const ReferralBannerLoading();
     debugPrint('🔄 ReferralBannerNotifier: Fetching referral banners...');
 
-    final result = await _repository.getReferralBanners();
+    final result = await _usecase.call();
 
     result.fold(
       (failure) {
@@ -108,7 +94,7 @@ class ReferralBannerNotifier extends StateNotifier<ReferralBannerState> {
   bool get hasData => state is ReferralBannerSuccess;
 
   /// Get current list (if available)
-  List<RefferalBannerEntity>? get currentBanners {
+  List<ReferalBannerEntity>? get currentBanners {
     final currentState = state;
     return currentState is ReferralBannerSuccess ? currentState.banners : null;
   }
@@ -119,12 +105,12 @@ class ReferralBannerNotifier extends StateNotifier<ReferralBannerState> {
 /// ─────────────────────────────────────────────────────────────
 final referralBannerNotifierProvider =
     StateNotifierProvider<ReferralBannerNotifier, ReferralBannerState>((ref) {
-  final repository = ref.read(referralBannerRepositoryProvider);
-  return ReferralBannerNotifier(repository);
+  final usecase = ref.read(getReferralBannersUsecaseProvider);
+  return ReferralBannerNotifier(usecase);
 });
 
 /// Provides list of banners directly
-final referralBannersProvider = Provider<List<RefferalBannerEntity>>((ref) {
+final referralBannersProvider = Provider<List<ReferalBannerEntity>>((ref) {
   final state = ref.watch(referralBannerNotifierProvider);
   return state is ReferralBannerSuccess ? state.banners : [];
 });

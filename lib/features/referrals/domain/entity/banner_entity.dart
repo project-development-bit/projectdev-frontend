@@ -1,13 +1,13 @@
 import 'package:equatable/equatable.dart';
 
 /// Pure domain entity — independent of data layer
-class RefferalBannerEntity extends Equatable {
+class ReferalBannerEntity extends Equatable {
   final String imageUrl;
   final int width;
   final int height;
   final String format;
 
-  const RefferalBannerEntity({
+  const ReferalBannerEntity({
     required this.imageUrl,
     required this.width,
     required this.height,

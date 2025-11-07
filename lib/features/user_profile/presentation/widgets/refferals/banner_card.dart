@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class BannerCard extends StatelessWidget {
-  final RefferalBannerEntity banner;
+  final ReferalBannerEntity banner;
 
   const BannerCard({super.key, required this.banner});
 
@@ -49,7 +49,7 @@ class BannerCard extends StatelessWidget {
 }
 
 class BannerImage extends StatelessWidget {
-  final RefferalBannerEntity banner;
+  final ReferalBannerEntity banner;
 
   const BannerImage({super.key, required this.banner});
 
@@ -86,7 +86,7 @@ class BannerImage extends StatelessWidget {
 }
 
 class BannerCodeFields extends StatelessWidget {
-  final RefferalBannerEntity banner;
+  final ReferalBannerEntity banner;
 
   const BannerCodeFields({super.key, required this.banner});
 
