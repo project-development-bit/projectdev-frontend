@@ -5,11 +5,9 @@ import '../../../../core/common/common_text.dart';
 import '../../../../core/common/common_button.dart';
 import '../../../../core/common/common_textfield.dart';
 import '../../../../core/widgets/responsive_container.dart';
-import '../../../../core/widgets/recaptcha_widget.dart';
 import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/widgets/locale_switch_widget.dart';
-import '../../../../core/providers/consolidated_auth_provider.dart';
 import '../providers/reset_password_provider.dart';
 
 class ResetPasswordPage extends ConsumerStatefulWidget {
