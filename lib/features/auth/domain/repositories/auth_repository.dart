@@ -10,6 +10,8 @@ import '../../data/models/verify_code_request.dart';
 import '../../data/models/verify_code_response.dart';
 import '../../data/models/verify_2fa_request.dart';
 import '../../data/models/verify_2fa_response.dart';
+import '../../data/models/verify_login_2fa_request.dart';
+import '../../data/models/verify_login_2fa_response.dart';
 import '../../data/models/setup_2fa_request.dart';
 import '../../data/models/setup_2fa_response.dart';
 import '../../data/models/enable_2fa_request.dart';
@@ -65,6 +67,10 @@ abstract class AuthRepository {
   /// Verify 2FA code from authenticator app
   Future<Either<Failure, Verify2FAResponse>> verify2FA(
       Verify2FARequest request);
+
+  /// Verify 2FA code during login for 2FA-enabled users
+  Future<Either<Failure, VerifyLogin2FAResponse>> verifyLogin2FA(
+      VerifyLogin2FARequest request);
 
   /// Setup 2FA for the authenticated user
   Future<Either<Failure, Setup2FAResponse>> setup2FA(Setup2FARequest request);

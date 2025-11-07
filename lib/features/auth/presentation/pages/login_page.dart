@@ -17,6 +17,7 @@ import '../../../../routing/app_router.dart';
 import '../../../terms_privacy/presentation/services/terms_privacy_navigation_service.dart';
 import '../providers/login_provider.dart';
 import '../widgets/login_form_widget.dart';
+import '../widgets/two_factor_login_verification_dialog.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
@@ -39,14 +40,38 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           .logAuthState('LoginPage: state changed to ${next.runtimeType}');
 
       switch (next) {
-        case LoginSuccess():
-          // Add a small delay to ensure all async operations complete
-          Future.delayed(const Duration(milliseconds: 100), () async {
+        case LoginSuccess(:final loginResponse):
+          // Check if user has 2FA enabled (userId is not null)
+          if (loginResponse.userId != null) {
+            debugPrint('🔐 2FA required for user: ${loginResponse.userId}');
+            // Show 2FA verification dialog
             if (mounted) {
-              // Use GoRouter.of(context).go() to replace the current route
-              GoRouter.of(context).go(AppRoutes.home);
+              final result = await context.show2FALoginVerificationDialog(
+                userId: loginResponse.userId!,
+                onSuccess: () {
+                  // Navigate to home after successful 2FA verification
+                  if (mounted) {
+                    GoRouter.of(context).go(AppRoutes.home);
+                  }
+                },
+              );
+              
+              // If user cancelled the dialog, reset login state
+              if (result == false && mounted) {
+                ref.read(loginNotifierProvider.notifier).reset();
+              }
             }
-          });
+          } else {
+            // No 2FA required, proceed with normal login
+            debugPrint('✅ No 2FA required, proceeding to home');
+            // Add a small delay to ensure all async operations complete
+            Future.delayed(const Duration(milliseconds: 100), () async {
+              if (mounted) {
+                // Use GoRouter.of(context).go() to replace the current route
+                GoRouter.of(context).go(AppRoutes.home);
+              }
+            });
+          }
           break;
         case LoginError():
           // Show error message

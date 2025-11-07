@@ -10,6 +10,8 @@ import 'package:cointiply_app/features/auth/data/models/verify_code_request.dart
 import 'package:cointiply_app/features/auth/data/models/verify_code_response.dart';
 import 'package:cointiply_app/features/auth/data/models/verify_2fa_request.dart';
 import 'package:cointiply_app/features/auth/data/models/verify_2fa_response.dart';
+import 'package:cointiply_app/features/auth/data/models/verify_login_2fa_request.dart';
+import 'package:cointiply_app/features/auth/data/models/verify_login_2fa_response.dart';
 import 'package:cointiply_app/features/auth/data/models/setup_2fa_request.dart';
 import 'package:cointiply_app/features/auth/data/models/setup_2fa_response.dart';
 import 'package:cointiply_app/features/auth/data/models/enable_2fa_request.dart';
@@ -56,6 +58,9 @@ abstract class AuthRemoteDataSource {
 
   /// Verify 2FA code from authenticator app
   Future<Verify2FAResponse> verify2FA(Verify2FARequest request);
+
+  /// Verify 2FA code during login for 2FA-enabled users
+  Future<VerifyLogin2FAResponse> verifyLogin2FA(VerifyLogin2FARequest request);
 
   /// Setup 2FA for the authenticated user
   Future<Setup2FAResponse> setup2FA(Setup2FARequest request);
@@ -535,6 +540,31 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       rethrow;
     } catch (e) {
       debugPrint('Disable 2FA error: $e');
+      rethrow;
+    }
+  }
+
+  @override
+  Future<VerifyLogin2FAResponse> verifyLogin2FA(VerifyLogin2FARequest request) async {
+    try {
+      debugPrint('Verifying 2FA during login...');
+      debugPrint('Token: ${request.token}, UserId: ${request.userId}');
+      
+      final response = await dioClient.post(
+        verifyLogin2FAEndpoints,
+        data: request.toJson(),
+      );
+
+      debugPrint('Verify Login 2FA response: ${response.data}');
+      return VerifyLogin2FAResponse.fromJson(response.data as Map<String, dynamic>);
+    } on DioException catch (e) {
+      debugPrint('Verify Login 2FA DioException: ${e.message}');
+      if (e.response != null) {
+        debugPrint('Verify Login 2FA error response: ${e.response?.data}');
+      }
+      rethrow;
+    } catch (e) {
+      debugPrint('Verify Login 2FA error: $e');
       rethrow;
     }
   }

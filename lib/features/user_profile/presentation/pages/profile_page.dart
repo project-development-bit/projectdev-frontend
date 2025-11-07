@@ -1,6 +1,5 @@
 import 'package:cointiply_app/core/core.dart';
 import 'package:cointiply_app/features/auth/presentation/providers/check_2fa_status_provider.dart';
-import 'package:cointiply_app/features/common/widgets/build_app_bar_title.dart';
 import 'package:cointiply_app/features/user_profile/data/enum/profile_tab_type.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/profile_providers.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/profile_tab_provider.dart';
@@ -77,33 +76,6 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          SliverAppBar(
-            expandedHeight: 80.0,
-            floating: true,
-            pinned: false,
-            snap: true,
-            backgroundColor: context.surface.withAlpha(242), // 0.95 * 255
-            surfaceTintColor: Colors.transparent,
-            elevation: 0,
-            scrolledUnderElevation: 1,
-            automaticallyImplyLeading: MediaQuery.of(context).size.width < 768,
-            flexibleSpace: FlexibleSpaceBar(
-              background: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      context.surface.withAlpha(250), // 0.98 * 255
-                      context.surface.withAlpha(235), // 0.92 * 255
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            title: CommonAppBar(),
-            titleSpacing: 16,
-          ),
           SliverList(
             delegate: SliverChildListDelegate([
               ProfileHeader(),

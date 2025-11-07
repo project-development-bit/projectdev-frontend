@@ -1,4 +1,3 @@
-import 'package:cointiply_app/features/common/widgets/build_app_bar_title.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,9 +10,7 @@ import '../widgets/how_it_works_section.dart';
 import '../widgets/offer_walls_section.dart';
 import '../widgets/testimonials_section.dart';
 import '../widgets/statistics_section.dart';
-import '../widgets/mobile_drawer.dart';
 
-/// The main home page replicating Cointiply's homepage design
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
 
@@ -40,41 +37,8 @@ class _HomePageState extends ConsumerState<HomePage> {
     // Load profile data when the page builds
 
     return Scaffold(
-      // Add drawer for mobile screens (temporarily always showing for testing)
-      drawer:
-          const MobileDrawer(), // MediaQuery.of(context).size.width < 768 ? const MobileDrawer() : null,
       body: CustomScrollView(
         slivers: [
-          // Sliver app bar that hides/shows on scroll
-          SliverAppBar(
-            expandedHeight: 80.0,
-            floating: true,
-            pinned: false,
-            snap: true,
-            backgroundColor: context.surface.withAlpha(242), // 0.95 * 255
-            surfaceTintColor: Colors.transparent,
-            elevation: 0,
-            scrolledUnderElevation: 1,
-            automaticallyImplyLeading: MediaQuery.of(context).size.width < 768,
-            flexibleSpace: FlexibleSpaceBar(
-              background: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      context.surface.withAlpha(250), // 0.98 * 255
-                      context.surface.withAlpha(235), // 0.92 * 255
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            title: CommonAppBar(),
-            titleSpacing: 16,
-          ),
-
-          // Main content
           SliverList(
             delegate: SliverChildListDelegate([
               // Hero section with main value proposition
