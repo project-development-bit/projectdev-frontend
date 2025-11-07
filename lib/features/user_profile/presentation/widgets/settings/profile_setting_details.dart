@@ -115,22 +115,27 @@ class _ProfileSettingDetailsState extends ConsumerState<ProfileSettingDetails> {
                 Center(
                   child: Column(
                     children: [
-                      Container(
-                        width: 90,
-                        height: 90,
-                        decoration: BoxDecoration(
-                          color: colorScheme.secondaryContainer,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Center(
-                          child: CommonText.titleLarge(
-                            "AU",
-                            color: colorScheme.onSecondaryContainer,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
+                      currentUserState.user?.name.isNotEmpty == true
+                          ? Container(
+                              width: 90,
+                              height: 90,
+                              decoration: BoxDecoration(
+                                color: colorScheme.onSurface,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Center(
+                                child: CommonText.titleLarge(
+                                  currentUserState.user!.name
+                                      .substring(0, 1)
+                                      .toUpperCase(),
+                                ),
+                              ),
+                            )
+                          : const CircleAvatar(
+                              backgroundColor: AppColors.websiteText,
+                              child: Icon(Icons.person,
+                                  size: 56, color: Colors.white),
+                            ),
                       CommonText.bodyMedium(
                         localizations?.translate('profile_avatar') ?? 'Avatar',
                         color: colorScheme.onSurfaceVariant,
