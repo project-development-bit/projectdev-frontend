@@ -1,5 +1,5 @@
+import 'package:cointiply_app/core/network/base_dio_client.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/network/dio_provider.dart';
 import '../../../../core/services/secure_storage_service.dart';
 import '../../config/profile_config.dart';
 import '../../domain/entities/user_profile.dart';
@@ -34,8 +34,8 @@ final profileRemoteDataSourceProvider =
     if (ProfileConfig.enableDebugLogging) {
       print('🌐 Profile Module: Using REAL API data source');
     }
-    final dio = ref.read(dioProvider);
-    return ProfileRemoteDataSourceImpl(dio: dio);
+    final dio = ref.read(dioClientProvider);
+    return ProfileRemoteDataSourceImpl(dioClient: dio);
   }
 });
 
@@ -93,23 +93,24 @@ final getProfileStatsUseCaseProvider = Provider<GetProfileStats>((ref) {
 final profileNotifierProvider =
     StateNotifierProvider<ProfileNotifier, ProfileState>((ref) {
   final getUserProfile = ref.read(getUserProfileUseCaseProvider);
-  return ProfileNotifier(getUserProfile);
+  final updateUserProfile = ref.read(updateUserProfileUseCaseProvider);
+  return ProfileNotifier(getUserProfile, updateUserProfile);
 });
 
 /// Provider for current user profile (convenient access)
 final currentUserProfileProvider = Provider<UserProfile?>((ref) {
   final profileState = ref.watch(profileNotifierProvider);
-  return profileState.profile;
+  return profileState is ProfileSuccess ? profileState.profile : null;
 });
 
 /// Provider for profile loading state
 final profileLoadingProvider = Provider<bool>((ref) {
   final profileState = ref.watch(profileNotifierProvider);
-  return profileState.isLoading;
+  return profileState is ProfileLoading;
 });
 
 /// Provider for profile error
 final profileErrorProvider = Provider<String?>((ref) {
   final profileState = ref.watch(profileNotifierProvider);
-  return profileState.error;
+  return profileState is ProfileError ? profileState.error : null;
 });

@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../models/user_profile_model.dart';
+import '../models/response/user_profile_model.dart';
 import 'profile_local_data_source.dart';
 
 /// Implementation of [ProfileLocalDataSource] using SharedPreferences for local storage

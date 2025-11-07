@@ -1,42 +1,44 @@
 import 'package:cointiply_app/core/core.dart';
+import 'package:cointiply_app/features/referrals/presentation/providers/referral_users_provider.dart';
+import 'package:cointiply_app/features/referrals/presentation/providers/reffertal_banner_provider.dart';
+import 'package:cointiply_app/features/user_profile/presentation/widgets/refferals/manage_referrals_section.dart';
+import 'package:cointiply_app/features/user_profile/presentation/widgets/refferals/referral_get_started_section.dart';
+import 'package:cointiply_app/features/user_profile/presentation/widgets/refferals/referred_users_section.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ProfileReferralsSection extends StatelessWidget {
+class ProfileReferralsSection extends ConsumerStatefulWidget {
   const ProfileReferralsSection({super.key});
 
   @override
+  ConsumerState<ProfileReferralsSection> createState() =>
+      _ProfileReferralsSectionState();
+}
+
+class _ProfileReferralsSectionState
+    extends ConsumerState<ProfileReferralsSection> {
+  @override
+  initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(referralBannerNotifierProvider.notifier).fetchReferralBanners();
+      ref.read(referralUsersNotifierProvider.notifier).fetchReferralUsers();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return ResponsiveSection(
-      padding: EdgeInsets.zero,
-      child: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: colorScheme.surfaceContainerHighest,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        padding: EdgeInsets.all(context.isMobile ? 16 : 24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Title
-            CommonText.titleLarge(
-              "Under Development",
-              fontWeight: FontWeight.bold,
-            ),
-            const SizedBox(height: 20),
-            Divider(color: colorScheme.onSurfaceVariant),
-            const SizedBox(height: 20),
-
-            // Content placeholder
-            CommonText.bodyMedium(
-              'Profile referrals will be available soon. Stay tuned!',
-              color: colorScheme.onSurfaceVariant,
-            ),
-          ],
-        ),
-      ),
+    final isMobile = context.isMobile;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ManageReferralsSection(),
+        SizedBox(height: isMobile ? 16 : 24),
+        ReferredUsersSection(),
+        SizedBox(height: isMobile ? 16 : 24),
+        ReferralGetStartedSection(),
+        SizedBox(height: isMobile ? 16 : 24),
+      ],
     );
   }
 }

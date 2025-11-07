@@ -1,3 +1,5 @@
+import 'package:cointiply_app/features/user_profile/data/models/request/user_update_request.dart';
+import 'package:cointiply_app/features/user_profile/data/models/response/user_update_respons.dart';
 import 'package:dartz/dartz.dart';
 import 'package:universal_io/io.dart';
 import '../../../../core/error/failures.dart';
@@ -6,7 +8,7 @@ import '../../domain/repositories/profile_repository.dart';
 import '../datasources/profile_local_data_source.dart';
 import '../datasources/profile_remote_data_source.dart';
 import '../datasources/profile_database_data_source.dart';
-import '../models/user_profile_model.dart';
+import '../models/response/user_profile_model.dart';
 
 /// Implementation of [ProfileRepository]
 ///
@@ -72,37 +74,52 @@ class ProfileRepositoryImpl implements ProfileRepository {
   }
 
   @override
-  Future<Either<Failure, UserProfile>> updateUserProfile(
-      UserProfile profile) async {
+  Future<Either<Failure, UserUpdateResponse>> updateUserProfile(
+    UserUpdateRequest profile,
+  ) async {
     try {
+      print('Updating user profile: ${profile.toJson()}');
+      // Convert request → model
+      // UserProfileModel? cachedModel =
+      //     await localDataSource.getCachedUserProfile(profile.id);
+      // final profileModel = cachedModel?.copyWith(
+      //   username: profile.name,
+      //   email: profile.email,
+      // );
+      print('Profile model to update: 1');
+
       // Try to update via database first
-      final profileModel = UserProfileModel.fromEntity(profile);
-      final databaseResult =
-          await databaseDataSource.updateUserProfile(profileModel);
+      // final databaseResult = await databaseDataSource
+      //     .updateUserProfile(UserProfileModel.fromEntity(profileModel!));
+      // print('Profile model to update: 2');
+      // return await databaseResult.fold(
+      //   (failure) async {
+      //     print('Database update failed: ${failure.message}');
+      //     // If local DB update fails, try remote
+      //     try {
 
-      return databaseResult.fold(
-        (failure) async {
-          // If database update fails, try remote
-          try {
-            final updatedProfile = await remoteDataSource.updateUserProfile(
-              'current',
-              _profileToMap(profile),
-            );
+      //       print('Updated profile from remote: ${updatedProfile.toJson()}');
 
-            // Update cache with new data
-            await localDataSource.cacheUserProfile(updatedProfile);
-
-            return Right(updatedProfile);
-          } catch (e) {
-            return Left(ServerFailure(message: e.toString()));
-          }
-        },
-        (updatedProfile) async {
-          // Cache the updated profile
-          await localDataSource.cacheUserProfile(updatedProfile);
-          return Right(updatedProfile);
-        },
+      //       // Cache the new data
+      //       await localDataSource.cacheUserProfile(updatedProfile);
+      //       return Right(updatedProfile);
+      //     } catch (e) {
+      //       return Left(ServerFailure(message: e.toString()));
+      //     }
+      //   },
+      //   (updatedProfile) async {
+      //     print('Updated profile from database: ${updatedProfile.toJson()}');
+      //     // Cache the successfully updated profile
+      //     await localDataSource.cacheUserProfile(updatedProfile);
+      //     return Right(updatedProfile);
+      //   },
+      // );
+      final updatedProfile = await remoteDataSource.updateUserProfile(
+        profile.id,
+        profile.toJson(),
       );
+      print('Profile model to update: 3 $updatedProfile');
+      return Right(updatedProfile);
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));
     }
@@ -148,8 +165,10 @@ class ProfileRepositoryImpl implements ProfileRepository {
       return result.fold(
         (failure) => Left(failure),
         (profile) async {
-          final updatedProfile = profile.copyWith(profilePictureUrl: null);
-          final updateResult = await updateUserProfile(updatedProfile);
+          final updateResult = await updateUserProfile(UserUpdateRequest(
+            id: profile.id,
+            profilePictureUrl: null,
+          ));
           return updateResult.fold(
             (failure) => Left(failure),
             (_) => const Right(unit),
@@ -270,15 +289,15 @@ class ProfileRepositoryImpl implements ProfileRepository {
   }
 
   /// Helper method to convert UserProfile entity to Map for API calls
-  Map<String, dynamic> _profileToMap(UserProfile profile) {
-    return {
-      'display_name': profile.displayName,
-      'bio': profile.bio,
-      'location': profile.location,
-      'website': profile.website,
-      'contact_number': profile.contactNumber,
-      'date_of_birth': profile.dateOfBirth?.toIso8601String(),
-      'gender': profile.gender,
-    };
-  }
+  // Map<String, dynamic> _profileToMap(UserProfile profile) {
+  //   return {
+  //     'display_name': profile.displayName,
+  //     'bio': profile.bio,
+  //     'location': profile.location,
+  //     'website': profile.website,
+  //     'contact_number': profile.contactNumber,
+  //     'date_of_birth': profile.dateOfBirth?.toIso8601String(),
+  //     'gender': profile.gender,
+  //   };
+  // }
 }
