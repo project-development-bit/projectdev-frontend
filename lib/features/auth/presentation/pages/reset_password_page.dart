@@ -95,18 +95,6 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
 
   void _onResetPasswordPressed() {
     if (_formKey.currentState?.validate() ?? false) {
-      // Check if reCAPTCHA verification is required and completed
-      final canAttemptReset =
-          ref.read(canAttemptLoginProvider); // This checks reCAPTCHA status
-      if (!canAttemptReset) {
-        final localizations = AppLocalizations.of(context);
-        context.showErrorSnackBar(
-          message: localizations?.translate('recaptcha_required') ??
-              'Please verify that you are not a robot',
-        );
-        return;
-      }
-
       // Dismiss keyboard
       FocusScope.of(context).unfocus();
 
@@ -181,13 +169,6 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
 
                 // Password Input Fields
                 _buildPasswordFields(context, l10n),
-
-                SizedBox(height: context.isMobile ? 24 : 32),
-
-                // reCAPTCHA Widget
-                const RecaptchaWidget(
-                  enabled: true,
-                ),
 
                 SizedBox(height: context.isMobile ? 32 : 40),
 
