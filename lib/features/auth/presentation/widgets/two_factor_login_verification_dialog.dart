@@ -4,10 +4,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/common/common_text.dart';
+import '../../../../core/common/common_textfield.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/services/secure_storage_service.dart';
+import '../../../../core/config/flavor_manager.dart';
 import '../providers/verify_login_2fa_provider.dart';
 
 /// 2FA Login Verification Dialog
@@ -33,6 +35,7 @@ class _TwoFactorLoginVerificationDialogState
     extends ConsumerState<TwoFactorLoginVerificationDialog> {
   final TextEditingController _codeController = TextEditingController();
   final FocusNode _codeFocusNode = FocusNode();
+  String? _errorText;
 
   @override
   void initState() {
@@ -73,9 +76,11 @@ class _TwoFactorLoginVerificationDialogState
           }
           break;
         case VerifyLogin2FAError(:final message):
-          // Show error message
+          // Show error message under text field
           if (mounted) {
-            context.showErrorSnackBar(message: message);
+            setState(() {
+              _errorText = message;
+            });
           }
           break;
         default:
@@ -92,18 +97,23 @@ class _TwoFactorLoginVerificationDialogState
   }
 
   void _handleVerify() {
+    // Clear previous error
+    setState(() {
+      _errorText = null;
+    });
+
     final code = _codeController.text.trim();
     if (code.isEmpty) {
-      context.showErrorSnackBar(
-        message: context.translate('2fa_code_required'),
-      );
+      setState(() {
+        _errorText = context.translate('2fa_code_required');
+      });
       return;
     }
 
     if (code.length != 6) {
-      context.showErrorSnackBar(
-        message: context.translate('2fa_code_must_be_6_digits'),
-      );
+      setState(() {
+        _errorText = context.translate('2fa_code_must_be_6_digits');
+      });
       return;
     }
 
@@ -117,11 +127,12 @@ class _TwoFactorLoginVerificationDialogState
     final verifyLogin2FAState = ref.watch(verifyLogin2FAProvider);
     final localizations = AppLocalizations.of(context);
     final isLoading = verifyLogin2FAState is VerifyLogin2FALoading;
+    final appName = FlavorManager.appName;
 
     return PopScope(
       canPop: !isLoading,
       child: AlertDialog(
-        backgroundColor: AppColors.websiteCard,
+        backgroundColor: context.surface,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
@@ -130,131 +141,134 @@ class _TwoFactorLoginVerificationDialogState
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Security Icon
-              Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: AppColors.primary.withValues(alpha: 0.1),
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.security,
-                  size: 48,
-                  color: AppColors.primary,
-                ),
+              // App Logo/Name
+              CommonText(
+                appName.toUpperCase(),
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: AppColors.error,
+                textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 32),
 
               // Title
               CommonText(
                 localizations?.translate('2fa_login_verification_title') ??
-                    'Two-Factor Authentication',
+                    'Authentication Required',
                 fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+                fontWeight: FontWeight.w600,
+                color: context.onSurface,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 12),
 
               // Subtitle
               CommonText(
-                localizations?.translate('2fa_login_verification_subtitle') ??
-                    'Enter the 6-digit code from your authenticator app to complete your login.',
+                localizations?.translate('2fa_unknown_device_subtitle') ??
+                    'We noticed you are logging in from an unknown device.',
                 fontSize: 14,
-                color: AppColors.websiteText,
+                color: context.onSurface.withValues(alpha: 0.6),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 32),
 
+              // Instruction
+              CommonText(
+                localizations?.translate('2fa_login_verification_subtitle') ??
+                    'Please enter the security code from your authenticator app.',
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: context.onSurface,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 24),
+
               // Code Input Field
-              TextField(
+              CommonTextField(
                 controller: _codeController,
                 focusNode: _codeFocusNode,
                 enabled: !isLoading,
                 keyboardType: TextInputType.number,
                 textAlign: TextAlign.center,
                 maxLength: 6,
-                style: const TextStyle(
-                  fontSize: 32,
+                style: TextStyle(
+                  fontSize: 20,
                   fontWeight: FontWeight.bold,
-                  letterSpacing: 12,
-                  color: Colors.white,
+                  letterSpacing: 8,
+                  color: context.onSurface,
                 ),
+                hintText: 'XXXXXX',
+                hintStyle: TextStyle(
+                  color: context.onSurface.withValues(alpha: 0.3),
+                  letterSpacing: 8,
+                ),
+                fillColor: context.surfaceContainerHighest,
+                filled: true,
+                borderRadius: 8,
+                borderColor:
+                    _errorText != null ? AppColors.error : context.outline,
+                borderWidth: 1,
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(
+                    color:
+                        _errorText != null ? AppColors.error : context.outline,
+                    width: 1,
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(
+                    color:
+                        _errorText != null ? AppColors.error : context.primary,
+                    width: 2,
+                  ),
+                ),
+                contentPadding:
+                    const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                 inputFormatters: [
                   FilteringTextInputFormatter.digitsOnly,
                   LengthLimitingTextInputFormatter(6),
                 ],
-                decoration: InputDecoration(
-                  counterText: '',
-                  hintText: '000000',
-                  hintStyle: TextStyle(
-                    color: AppColors.websiteText.withValues(alpha: 0.3),
-                    letterSpacing: 12,
-                  ),
-                  filled: true,
-                  fillColor: AppColors.websiteBackground,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide.none,
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(
-                      color: AppColors.primary,
-                      width: 2,
-                    ),
-                  ),
-                  contentPadding: const EdgeInsets.symmetric(vertical: 20),
-                ),
                 onSubmitted: isLoading ? null : (_) => _handleVerify(),
+                onChanged: (_) {
+                  // Clear error when user starts typing
+                  if (_errorText != null) {
+                    setState(() {
+                      _errorText = null;
+                    });
+                  }
+                },
               ),
-              const SizedBox(height: 24),
-
-              // Info Box
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: AppColors.primary.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: AppColors.primary.withValues(alpha: 0.3),
-                    width: 1,
-                  ),
+              
+              // Error Text
+              if (_errorText != null) ...[
+                const SizedBox(height: 8),
+                CommonText(
+                  _errorText!,
+                  fontSize: 14,
+                  color: AppColors.error,
+                  textAlign: TextAlign.center,
                 ),
-                child: Row(
-                  children: [
-                    const Icon(
-                      Icons.info_outline,
-                      color: AppColors.primary,
-                      size: 20,
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: CommonText(
-                        localizations?.translate('2fa_login_info') ??
-                            'Open your authenticator app to get the code.',
-                        fontSize: 13,
-                        color: AppColors.primary,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              ],
+              
               const SizedBox(height: 32),
 
-              // Verify Button
+              // Continue Button
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: isLoading ? null : _handleVerify,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.websiteGold,
+                    backgroundColor: AppColors.error,
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(8),
                     ),
                     elevation: 0,
+                    disabledBackgroundColor:
+                        AppColors.error.withValues(alpha: 0.5),
                   ),
                   child: isLoading
                       ? const SizedBox(
@@ -267,32 +281,47 @@ class _TwoFactorLoginVerificationDialogState
                           ),
                         )
                       : CommonText(
-                          localizations?.translate('verify') ?? 'Verify',
+                          localizations?.translate('continue') ?? 'Continue',
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                           color: Colors.white,
                         ),
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 24),
 
-              // Cancel Button
-              TextButton(
-                onPressed: isLoading
-                    ? null
-                    : () {
-                        Navigator.of(context).pop(false);
-                        ref.read(verifyLogin2FAProvider.notifier).reset();
-                      },
-                style: TextButton.styleFrom(
-                  foregroundColor: AppColors.websiteText,
-                  padding: const EdgeInsets.symmetric(vertical: 12),
+              // Support Link
+              RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: context.onSurface.withValues(alpha: 0.6),
+                  ),
+                  children: [
+                    TextSpan(
+                      text: localizations?.translate('2fa_support_text') ??
+                          'If you do not have your security code, please ',
+                    ),
+                    TextSpan(
+                      text: localizations?.translate('contact_support') ??
+                          'contact support',
+                      style: TextStyle(
+                        color: AppColors.error,
+                        fontWeight: FontWeight.w600,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ],
                 ),
-                child: CommonText(
-                  localizations?.translate('cancel') ?? 'Cancel',
-                  fontSize: 14,
-                  color: AppColors.websiteText,
-                ),
+              ),
+              const SizedBox(height: 32),
+
+              // Security Icon
+              Icon(
+                Icons.lock_outline,
+                size: 80,
+                color: context.onSurface.withValues(alpha: 0.2),
               ),
             ],
           ),

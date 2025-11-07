@@ -547,7 +547,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<VerifyLogin2FAResponse> verifyLogin2FA(VerifyLogin2FARequest request) async {
     try {
-      debugPrint('Verifying 2FA during login...');
+      debugPrint('🔐 Verifying 2FA during login...');
       debugPrint('Token: ${request.token}, UserId: ${request.userId}');
       
       final response = await dioClient.post(
@@ -555,17 +555,26 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         data: request.toJson(),
       );
 
-      debugPrint('Verify Login 2FA response: ${response.data}');
+      debugPrint('✅ Verify Login 2FA successful');
       return VerifyLogin2FAResponse.fromJson(response.data as Map<String, dynamic>);
     } on DioException catch (e) {
-      debugPrint('Verify Login 2FA DioException: ${e.message}');
-      if (e.response != null) {
-        debugPrint('Verify Login 2FA error response: ${e.response?.data}');
-      }
-      rethrow;
+      debugPrint('❌ Verify Login 2FA DioException: ${e.message}');
+      debugPrint('❌ Request URL: ${e.requestOptions.uri}');
+      debugPrint('❌ Response status: ${e.response?.statusCode}');
+      debugPrint('❌ Response data: ${e.response?.data}');
+
+      // Extract server error message from response data
+      final serverMessage = _extractServerErrorMessage(e.response?.data);
+
+      // Create new DioException with server message or appropriate fallback
+      throw DioException(
+        requestOptions: e.requestOptions,
+        response: e.response,
+        message: serverMessage ?? _getFallbackMessage(e),
+      );
     } catch (e) {
-      debugPrint('Verify Login 2FA error: $e');
-      rethrow;
+      debugPrint('❌ Unexpected error during verify login 2FA: $e');
+      throw Exception('Unexpected error during verify login 2FA: $e');
     }
   }
 
