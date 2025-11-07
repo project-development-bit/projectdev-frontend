@@ -86,6 +86,8 @@ class _ProfileSettingDetailsState extends ConsumerState<ProfileSettingDetails> {
       }
     });
 
+    final profileState = ref.watch(profileNotifierProvider);
+
     return ResponsiveSection(
       padding: EdgeInsets.zero,
       child: Container(
@@ -231,19 +233,15 @@ class _ProfileSettingDetailsState extends ConsumerState<ProfileSettingDetails> {
                       ),
                     ),
                     const SizedBox(width: 12),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: colorScheme.primary,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 24,
-                          vertical: 14,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
+                    CommonButton(
+                      fontSize: 12,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
                       ),
-                      onPressed: () async {
-                        //check if there are changes
+                      text: localizations?.translate('btn_save_changes') ??
+                          'Save Changes',
+                      isLoading: profileState is ProfileLoading,
+                      onPressed: () {
                         if (_usernameCtrl.text.trim() ==
                             _initialUsernameValue) {
                           context.showErrorSnackBar(
@@ -253,7 +251,7 @@ class _ProfileSettingDetailsState extends ConsumerState<ProfileSettingDetails> {
                           );
                           return;
                         }
-                        // Validate the form only if there are changes
+
                         if (!(_formKey.currentState?.validate() ?? false)) {
                           return;
                         }
@@ -269,12 +267,8 @@ class _ProfileSettingDetailsState extends ConsumerState<ProfileSettingDetails> {
                           ),
                         );
                       },
-                      child: CommonText.bodyMedium(
-                        localizations?.translate('btn_save_changes') ??
-                            'Save Changes',
-                        color: colorScheme.onPrimary,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      backgroundColor: context.primary,
+                      textColor: context.onPrimary,
                     ),
                   ],
                 ),

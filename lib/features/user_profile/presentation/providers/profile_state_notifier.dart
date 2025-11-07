@@ -61,23 +61,16 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
   }
 
   /// Update user profile (remote + local)
-  /// Update user profile (remote + local)
   Future<void> updateProfile(UserUpdateRequest updatedProfile) async {
     state = ProfileLoading(); // Set loading state
-
     final result = await _updateUserProfile(
       UpdateUserProfileParams(profile: updatedProfile),
     );
-
-    print("Update result: $result");
-
     result.fold(
       (failure) {
-        print('Failed to update profile: $failure');
         state = ProfileError(failure.message ?? 'Failed to update profile');
       },
       (profile) {
-        print('Profile updated: $profile');
         state = ProfileUpdateSuccess(
           message: profile.message,
           success: profile.success,
