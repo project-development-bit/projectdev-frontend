@@ -114,6 +114,14 @@ class CommonAppBar extends StatelessWidget {
                           icon: const Icon(Icons.person),
                           tooltip: 'Profile',
                         ),
+
+                        IconButton(
+                          icon: const Icon(Icons.contact_mail),
+                          onPressed: () {
+                            context.go(
+                                '/legal/contact-us'); // Navigate to Contact Us screen
+                          },
+                        ),
                         // Logout button
                         Consumer(
                           builder: (context, ref, child) {

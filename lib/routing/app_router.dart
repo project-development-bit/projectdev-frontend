@@ -158,7 +158,7 @@ class BurgerEatsAppRoutes {
                 path: '2fa',
                 name: '2fa',
                 pageBuilder: (context, state) {
-                      state.uri.queryParameters['sessionToken'];
+                  state.uri.queryParameters['sessionToken'];
                   return NoTransitionPage(
                     child: TwoFactorAuthExample(),
                     // child: TwoFactorAuthPage(
@@ -186,15 +186,6 @@ class BurgerEatsAppRoutes {
                 ),
               ),
             ],
-          ),
-
-          // Legal Routes - Public access
-          GoRoute(
-            path: AppRoutes.contactUs,
-            name: 'contact-us',
-            pageBuilder: (context, state) => const NoTransitionPage(
-              child: ContactUsPage(),
-            ),
           ),
 
           // Main App Shell Route - Wraps non-auth routes with login popup
@@ -254,7 +245,14 @@ class BurgerEatsAppRoutes {
                   child: PrivacyScreen(),
                 ),
               ),
-
+              // Legal Routes - Public access
+              GoRoute(
+                path: AppRoutes.contactUs,
+                name: 'contact-us',
+                pageBuilder: (context, state) => const NoTransitionPage(
+                  child: ContactUsPage(),
+                ),
+              ),
               // Offers Routes - Requires Authentication
               GoRoute(
                 path: AppRoutes.offers,
