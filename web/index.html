@@ -80,7 +80,7 @@
   <!-- Cloudflare Turnstile Script - Load synchronously to ensure availability -->
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"></script>
   <!-- Dynamic reCAPTCHA script loading -->
-  <!-- <script>
+  <script>
     // Configuration for different environments
     window.recaptchaConfig = {
       // Production/staging keys
@@ -331,7 +331,7 @@
         });
       });
     }
-  </script> -->
+  </script>
   <!-- Font fallback styles -->
   <style>
     body {
@@ -390,14 +390,14 @@
     }
 
     /* Prevent any potential conflicts with Flutter's rendering */
-    /* iframe[src*="recaptcha"] {
+    iframe[src*="recaptcha"] {
       z-index: 9999 !important;
       position: fixed !important;
       width: 70px !important;
       height: 60px !important;
       bottom: 14px !important;
       left: 14px !important;
-    } */
+    }
   </style>
 
   <title>Gigafaucet</title>
