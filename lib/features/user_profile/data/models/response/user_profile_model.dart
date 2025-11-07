@@ -104,26 +104,4 @@ class UserProfileModel extends UserProfile {
       stats: stats,
     );
   }
-
-  factory UserProfileModel.fromUpdateRequest(UserUpdateRequest request) {
-    return UserProfileModel(
-      id: '', // you can fill this later from auth/session context
-      email: request.email ?? '',
-      username: request.name ?? '', // or request.username if you have that
-      displayName: request.name,
-      profilePictureUrl: null,
-      bio: null,
-      location: request.country,
-      website: null,
-      contactNumber: null,
-      dateOfBirth: null,
-      gender: null,
-      accountCreated: DateTime.now(), // or fetch from existing
-      lastLogin: null,
-      accountStatus: 'active', // fallback
-      verificationStatus: 'verified', // fallback
-      isEmailVerified: true,
-      isPhoneVerified: false,
-    );
-  }
 }

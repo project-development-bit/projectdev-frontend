@@ -31,14 +31,6 @@ class _ProfileSettingDetailsState extends ConsumerState<ProfileSettingDetails> {
       final user = state.user; // uses the extension above
       _usernameCtrl.text = user?.name ?? '';
     });
-
-    // Keep in sync if the provider later becomes "loaded"
-    ref.listen<CurrentUserState>(currentUserProvider, (prev, next) {
-      final user = next.user;
-      if (user != null && (_usernameCtrl.text.isEmpty || prev?.user == null)) {
-        _usernameCtrl.text = user.name;
-      }
-    });
   }
 
   @override
@@ -54,8 +46,14 @@ class _ProfileSettingDetailsState extends ConsumerState<ProfileSettingDetails> {
     final isMobile = context.isMobile;
     final currentUserState = ref.watch(currentUserProvider);
 
-    final updateUserProfileUseCase = ref.read(updateUserProfileUseCaseProvider);
-
+    final profileNotifier = ref.read(profileNotifierProvider.notifier);
+    // Keep in sync if the provider later becomes "loaded"
+    ref.listen<CurrentUserState>(currentUserProvider, (prev, next) {
+      final user = next.user;
+      if (user != null && (_usernameCtrl.text.isEmpty || prev?.user == null)) {
+        _usernameCtrl.text = user.name;
+      }
+    });
     return ResponsiveSection(
       padding: EdgeInsets.all(isMobile ? 16 : 24),
       child: Container(
@@ -208,28 +206,21 @@ class _ProfileSettingDetailsState extends ConsumerState<ProfileSettingDetails> {
                         ),
                       ),
                       onPressed: () async {
-                        if (!(_formKey.currentState?.validate() ?? false)) {
-                          return;
-                        }
+                        // print(
+                        //     'Save Changes pressed ${!(_formKey.currentState?.validate() ?? false)}');
+                        // if (!(_formKey.currentState?.validate() ?? false)) {
+                        //   return;
+                        // }
 
                         final currentUser = currentUserState.user;
 
                         if (currentUser == null) return;
 
-                        final result = await updateUserProfileUseCase(
-                          UpdateUserProfileParams(
-                              profile: UserUpdateRequest(
+                        profileNotifier.updateProfile(
+                          UserUpdateRequest(
+                            id: currentUser.id.toString(),
                             name: _usernameCtrl.text.trim(),
-                          )),
-                        );
-
-                        result.fold(
-                          (failure) {
-                            // TODO: show failure snackbar
-                          },
-                          (success) {
-                            // TODO: show success snackbar / refresh provider
-                          },
+                          ),
                         );
                       },
                       child: CommonText.bodyMedium(

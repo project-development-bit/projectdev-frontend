@@ -1,7 +1,8 @@
+import 'package:cointiply_app/features/user_profile/data/models/request/user_update_request.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/entities/user_profile.dart';
 import '../../domain/usecases/get_user_profile.dart';
-import 'profile_providers.dart';
+import '../../domain/usecases/update_user_profile.dart';
 
 /// State for profile operations
 class ProfileState {
@@ -35,8 +36,12 @@ class ProfileState {
 /// Profile state notifier
 class ProfileNotifier extends StateNotifier<ProfileState> {
   final GetUserProfile _getUserProfile;
+  final UpdateUserProfile _updateUserProfile;
 
-  ProfileNotifier(this._getUserProfile) : super(const ProfileState());
+  ProfileNotifier(
+    this._getUserProfile,
+    this._updateUserProfile,
+  ) : super(const ProfileState());
 
   /// Load user profile
   Future<void> loadProfile() async {
@@ -57,6 +62,25 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
     );
   }
 
+  /// Update user profile (remote + local)
+  Future<void> updateProfile(UserUpdateRequest updatedProfile) async {
+    state = state.copyWith(isUpdating: true, error: null);
+    final result = await _updateUserProfile(
+      UpdateUserProfileParams(profile: updatedProfile),
+    );
+    result.fold(
+      (failure) => state = state.copyWith(
+        isUpdating: false,
+        error: failure.message ?? 'Failed to update profile',
+      ),
+      (profile) => state = state.copyWith(
+        isUpdating: false,
+        profile: profile,
+        error: null,
+      ),
+    );
+  }
+
   /// Clear error
   void clearError() {
     state = state.copyWith(error: null);
@@ -67,10 +91,3 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
     state = state.copyWith(profile: profile);
   }
 }
-
-/// Provider for profile state notifier
-final profileNotifierProvider =
-    StateNotifierProvider<ProfileNotifier, ProfileState>((ref) {
-  final getUserProfile = ref.read(getUserProfileUseCaseProvider);
-  return ProfileNotifier(getUserProfile);
-});

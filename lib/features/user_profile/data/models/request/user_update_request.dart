@@ -10,6 +10,7 @@ class UserUpdateRequest extends Equatable {
   final String? role;
   final String? country;
   final String? language;
+  final String? profilePictureUrl;
 
   const UserUpdateRequest({
     required this.id,
@@ -20,20 +21,21 @@ class UserUpdateRequest extends Equatable {
     this.role,
     this.country,
     this.language,
+    this.profilePictureUrl,
   });
 
   /// Convert JSON → Model
   factory UserUpdateRequest.fromJson(Map<String, dynamic> json) {
     return UserUpdateRequest(
-      id: json['id'] as String,
-      name: json['name'] as String,
-      password: json['password'] as String?,
-      confirmPassword: json['confirm_password'] as String?,
-      email: json['email'] as String?,
-      role: json['role'] as String?,
-      country: json['country'] as String?,
-      language: json['language'] as String?,
-    );
+        id: json['id'] as String,
+        name: json['name'] as String,
+        password: json['password'] as String?,
+        confirmPassword: json['confirm_password'] as String?,
+        email: json['email'] as String?,
+        role: json['role'] as String?,
+        country: json['country'] as String?,
+        language: json['language'] as String?,
+        profilePictureUrl: json['profile_picture_url'] as String?);
   }
 
   /// Convert Model → JSON (for API request)

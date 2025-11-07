@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/network/base_dio_client.dart';
 import 'package:universal_io/io.dart';
 import 'package:dio/dio.dart';
 import 'package:http_parser/http_parser.dart';
@@ -9,9 +10,10 @@ import 'profile_remote_data_source.dart';
 /// This class handles all remote API calls related to user profile management,
 /// including fetching, updating, and file upload operations.
 class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
-  final Dio _dio;
+  final DioClient _dio;
 
-  ProfileRemoteDataSourceImpl({required Dio dio}) : _dio = dio;
+  ProfileRemoteDataSourceImpl({required DioClient dioClient})
+      : _dio = dioClient;
 
   @override
   Future<UserProfileModel> getUserProfile(String userId) async {
@@ -36,11 +38,10 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
     Map<String, dynamic> profileData,
   ) async {
     try {
-      final response = await _dio.put(
-        '/users/$userId/profile',
+      final response = await _dio.patch(
+        '/users/id/$userId',
         data: profileData,
       );
-
       if (response.statusCode == 200) {
         return UserProfileModel.fromJson(response.data['data']);
       } else {

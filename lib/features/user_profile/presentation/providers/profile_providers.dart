@@ -1,5 +1,5 @@
+import 'package:cointiply_app/core/network/base_dio_client.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/network/dio_provider.dart';
 import '../../../../core/services/secure_storage_service.dart';
 import '../../config/profile_config.dart';
 import '../../domain/entities/user_profile.dart';
@@ -34,8 +34,8 @@ final profileRemoteDataSourceProvider =
     if (ProfileConfig.enableDebugLogging) {
       print('🌐 Profile Module: Using REAL API data source');
     }
-    final dio = ref.read(dioProvider);
-    return ProfileRemoteDataSourceImpl(dio: dio);
+    final dio = ref.read(dioClientProvider);
+    return ProfileRemoteDataSourceImpl(dioClient: dio);
   }
 });
 
@@ -93,7 +93,8 @@ final getProfileStatsUseCaseProvider = Provider<GetProfileStats>((ref) {
 final profileNotifierProvider =
     StateNotifierProvider<ProfileNotifier, ProfileState>((ref) {
   final getUserProfile = ref.read(getUserProfileUseCaseProvider);
-  return ProfileNotifier(getUserProfile);
+  final updateUserProfile = ref.read(updateUserProfileUseCaseProvider);
+  return ProfileNotifier(getUserProfile, updateUserProfile);
 });
 
 /// Provider for current user profile (convenient access)
