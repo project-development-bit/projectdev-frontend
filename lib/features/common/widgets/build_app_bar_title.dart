@@ -1,3 +1,4 @@
+import 'package:cointiply_app/features/chat/presentation/provider/right_chat_overlay_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -113,6 +114,16 @@ class CommonAppBar extends StatelessWidget {
                           onPressed: () => context.pushNamedProfile(),
                           icon: const Icon(Icons.person),
                           tooltip: 'Profile',
+                        ),
+                        // Chat overlay button
+                        IconButton(
+                          onPressed: () {
+                            ref
+                                .read(rightChatOverlayProvider.notifier)
+                                .toggle();
+                          },
+                          icon: const Icon(Icons.chat),
+                          tooltip: 'Chat',
                         ),
                         // Logout button
                         Consumer(
