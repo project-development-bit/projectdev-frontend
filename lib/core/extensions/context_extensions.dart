@@ -1,3 +1,4 @@
+import 'package:cointiply_app/features/common/widgets/custom_pointer_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../localization/app_localizations.dart';
@@ -372,20 +373,22 @@ extension DialogExtension on BuildContext {
     String? cancelText,
   }) {
     return showMaterialDialog<bool>(
-      child: AlertDialog(
-        title: Text(title),
-        content: Text(content),
-        actions: [
-          if (cancelText != null)
+      child: CustomPointerInterceptor(
+        child: AlertDialog(
+          title: Text(title),
+          content: Text(content),
+          actions: [
+            if (cancelText != null)
+              TextButton(
+                onPressed: () => GoRouter.of(this).pop(false),
+                child: Text(cancelText),
+              ),
             TextButton(
-              onPressed: () => GoRouter.of(this).pop(false),
-              child: Text(cancelText),
+              onPressed: () => GoRouter.of(this).pop(true),
+              child: Text(confirmText),
             ),
-          TextButton(
-            onPressed: () => GoRouter.of(this).pop(true),
-            child: Text(confirmText),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

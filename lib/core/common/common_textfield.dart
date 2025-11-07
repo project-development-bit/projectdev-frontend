@@ -47,6 +47,7 @@ class CommonTextField extends StatefulWidget {
   final double? borderRadius;
   final Color? borderColor;
   final double? borderWidth;
+  final Iterable<String>? autofillHints;
 
   const CommonTextField({
     super.key,
@@ -92,6 +93,7 @@ class CommonTextField extends StatefulWidget {
     this.borderRadius,
     this.borderColor,
     this.borderWidth,
+    this.autofillHints,
   });
 
   @override
@@ -141,6 +143,7 @@ class _CommonTextFieldState extends State<CommonTextField> {
           (Theme.of(context).brightness == Brightness.dark
               ? AppTypography.bodyMediumDark
               : AppTypography.bodyMedium),
+      autofillHints: widget.autofillHints,
       decoration: InputDecoration(
         hintText: widget.hintText,
         labelText: widget.labelText,

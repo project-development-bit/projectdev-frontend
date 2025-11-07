@@ -1,3 +1,5 @@
+import 'package:cointiply_app/features/user_profile/data/models/request/user_update_request.dart';
+import 'package:cointiply_app/features/user_profile/data/models/response/user_update_respons.dart';
 import 'package:dartz/dartz.dart';
 import '../entities/user_profile.dart';
 import '../../../../core/error/failures.dart';
@@ -16,8 +18,9 @@ abstract class ProfileRepository {
   /// Update the user's profile
   ///
   /// [profile] - Updated profile data
-  /// Returns updated [UserProfile] on success or [Failure] on error
-  Future<Either<Failure, UserProfile>> updateUserProfile(UserProfile profile);
+  /// Returns updated [UserUpdateResponse] on success or [Failure] on error
+  Future<Either<Failure, UserUpdateResponse>> updateUserProfile(
+      UserUpdateRequest profile);
 
   /// Upload a new profile picture
   ///

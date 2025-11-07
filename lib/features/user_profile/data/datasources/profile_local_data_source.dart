@@ -1,4 +1,4 @@
-import '../models/user_profile_model.dart';
+import '../models/response/user_profile_model.dart';
 
 /// Abstract class for profile local data source
 ///

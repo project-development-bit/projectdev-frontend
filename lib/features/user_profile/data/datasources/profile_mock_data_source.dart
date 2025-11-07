@@ -1,7 +1,8 @@
+import 'package:cointiply_app/features/user_profile/data/models/response/user_update_respons.dart';
 import 'package:universal_io/io.dart';
 import '../../domain/entities/user_profile.dart';
-import '../models/user_profile_model.dart';
-import '../models/user_profile_stats_model.dart';
+import '../models/response/user_profile_model.dart';
+import '../models/response/user_profile_stats_model.dart';
 import 'profile_remote_data_source.dart';
 
 /// Mock implementation of [ProfileRemoteDataSource] for development and testing
@@ -52,7 +53,7 @@ class ProfileMockDataSource implements ProfileRemoteDataSource {
   }
 
   @override
-  Future<UserProfileModel> updateUserProfile(
+  Future<UserUpdateResponse> updateUserProfile(
     String userId,
     Map<String, dynamic> profileData,
   ) async {
@@ -61,29 +62,9 @@ class ProfileMockDataSource implements ProfileRemoteDataSource {
     // Simulate updating the profile with new data
     final currentProfile = await getUserProfile(userId);
 
-    return UserProfileModel(
-      id: currentProfile.id,
-      email: profileData['email'] ?? currentProfile.email,
-      username: profileData['username'] ?? currentProfile.username,
-      displayName: profileData['displayName'] ?? currentProfile.displayName,
-      profilePictureUrl:
-          profileData['profilePictureUrl'] ?? currentProfile.profilePictureUrl,
-      bio: profileData['bio'] ?? currentProfile.bio,
-      location: profileData['location'] ?? currentProfile.location,
-      website: profileData['website'] ?? currentProfile.website,
-      contactNumber:
-          profileData['contactNumber'] ?? currentProfile.contactNumber,
-      dateOfBirth: profileData['dateOfBirth'] != null
-          ? DateTime.parse(profileData['dateOfBirth'])
-          : currentProfile.dateOfBirth,
-      gender: profileData['gender'] ?? currentProfile.gender,
-      accountCreated: currentProfile.accountCreated,
-      lastLogin: DateTime.now(), // Update last login
-      accountStatus: currentProfile.accountStatus,
-      verificationStatus: currentProfile.verificationStatus,
-      isEmailVerified: currentProfile.isEmailVerified,
-      isPhoneVerified: currentProfile.isPhoneVerified,
-      stats: currentProfile.stats,
+    return UserUpdateResponse(
+      success: true,
+      message: 'Profile updated successfully',
     );
   }
 

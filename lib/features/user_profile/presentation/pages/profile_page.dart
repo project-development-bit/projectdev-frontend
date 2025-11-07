@@ -1,6 +1,7 @@
 import 'package:cointiply_app/core/core.dart';
 import 'package:cointiply_app/features/auth/presentation/providers/check_2fa_status_provider.dart';
 import 'package:cointiply_app/features/user_profile/data/enum/profile_tab_type.dart';
+import 'package:cointiply_app/features/user_profile/presentation/providers/profile_providers.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/profile_tab_provider.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/profile_footer.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/profile_header.dart';
@@ -13,7 +14,6 @@ import 'package:cointiply_app/features/user_profile/presentation/widgets/sub_pag
 import 'package:cointiply_app/features/user_profile/presentation/widgets/sub_pages/profile_settings_section.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../providers/profile_state_notifier.dart';
 import '../providers/current_user_provider.dart';
 
 /// Profile page styled after GigaFaucet documentation design

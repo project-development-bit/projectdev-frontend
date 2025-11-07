@@ -418,6 +418,8 @@
   "close": "Close",
   "failed_to_load_terms": "Failed to Load Terms",
   "loading_terms_of_service": "Loading Terms of Service...",
+  "profile_update_success": "Profile updated successfully!",
+  "no_changes_to_save": "No changes to save.",
   "referrals_manage_title": "Manage Referrals",
   "view_details": "View Details",
   "referrals_manage_desc": "Share Cointiply with your friends & family to earn up to 25% on each referral.",

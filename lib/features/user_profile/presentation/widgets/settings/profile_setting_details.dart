@@ -1,26 +1,70 @@
 import 'package:cointiply_app/core/core.dart';
+import 'package:cointiply_app/features/user_profile/data/models/request/user_update_request.dart';
+import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
+import 'package:cointiply_app/features/user_profile/presentation/providers/profile_providers.dart';
+import 'package:cointiply_app/features/user_profile/presentation/providers/profile_state_notifier.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ProfileSettingDetails extends StatefulWidget {
+class ProfileSettingDetails extends ConsumerStatefulWidget {
   const ProfileSettingDetails({super.key});
 
   @override
-  State<ProfileSettingDetails> createState() => _ProfileSettingDetailsState();
+  ConsumerState<ProfileSettingDetails> createState() =>
+      _ProfileSettingDetailsState();
 }
 
-class _ProfileSettingDetailsState extends State<ProfileSettingDetails> {
+class _ProfileSettingDetailsState extends ConsumerState<ProfileSettingDetails> {
   final _formKey = GlobalKey<FormState>();
-
-  final TextEditingController _firstNameCtrl = TextEditingController();
-  final TextEditingController _lastNameCtrl = TextEditingController();
   final TextEditingController _usernameCtrl = TextEditingController();
-
+  late String _initialUsernameValue;
   bool enableInterest = false;
 
   @override
+  void initState() {
+    super.initState();
+    // Seed once from whatever is already in the provider
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final state = ref.read(currentUserProvider); // CurrentUserState
+      final user = state.user; // uses the extension above
+      _usernameCtrl.text = user?.name ?? '';
+      _initialUsernameValue = _usernameCtrl.text;
+    });
+
+    ref.listenManual<ProfileState>(profileNotifierProvider, (previous, next) {
+      switch (next) {
+        case ProfileUpdateSuccess():
+          _handleProfileSuccess();
+          break;
+        case ProfileError(error: final errorState):
+          _handleProfileError(errorState);
+          break;
+        default:
+          break;
+      }
+    });
+  }
+
+  void _handleProfileSuccess() {
+    ref.read(currentUserProvider.notifier).refreshUser();
+    _initialUsernameValue = _usernameCtrl.text;
+    // Handle profile loaded successfully
+    final localizations = AppLocalizations.of(context);
+    context.showSuccessSnackBar(
+      message: localizations?.translate('profile_update_success') ??
+          'Profile updated successfully!',
+    );
+  }
+
+  void _handleProfileError(String error) {
+    // Handle profile load error
+    context.showErrorSnackBar(
+      message: error,
+    );
+  }
+
+  @override
   void dispose() {
-    _firstNameCtrl.dispose();
-    _lastNameCtrl.dispose();
     _usernameCtrl.dispose();
     super.dispose();
   }
@@ -30,264 +74,208 @@ class _ProfileSettingDetailsState extends State<ProfileSettingDetails> {
     final localizations = AppLocalizations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
     final isMobile = context.isMobile;
+    final currentUserState = ref.watch(currentUserProvider);
+
+    final profileNotifier = ref.read(profileNotifierProvider.notifier);
+    // Keep in sync if the provider later becomes "loaded"
+    ref.listen<CurrentUserState>(currentUserProvider, (prev, next) {
+      final user = next.user;
+      if (user != null && (_usernameCtrl.text.isEmpty || prev?.user == null)) {
+        _usernameCtrl.text = user.name;
+        _initialUsernameValue = _usernameCtrl.text;
+      }
+    });
+
+    final profileState = ref.watch(profileNotifierProvider);
 
     return ResponsiveSection(
       padding: EdgeInsets.zero,
-      child: Column(
-        children: [
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(24),
-            decoration: BoxDecoration(
-              color: colorScheme.surfaceContainerHighest.withAlpha(100),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: colorScheme.outlineVariant),
-            ),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // ─── Title ─────────────────────────────
-                  CommonText.titleLarge(
-                    localizations?.translate("profile_settings_title") ??
-                        "Profile Details",
-                    color: colorScheme.onSurface,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  const SizedBox(height: 24),
-                  // ─── Avatar ─────────────────────────────
-                  Center(
-                    child: Column(
-                      children: [
-                        Container(
-                          width: 90,
-                          height: 90,
-                          decoration: BoxDecoration(
-                            color: colorScheme.secondaryContainer,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Center(
-                            child: CommonText.titleLarge(
-                              "AU",
-                              color: colorScheme.onSecondaryContainer,
-                              fontWeight: FontWeight.bold,
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: colorScheme.surfaceContainerHighest.withAlpha(100),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: colorScheme.outlineVariant),
+        ),
+        child: Form(
+          key: _formKey,
+          child: Padding(
+            padding: EdgeInsets.all(isMobile ? 16 : 24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // ─── Title ─────────────────────────────
+                CommonText.titleLarge(
+                  localizations?.translate('profile_settings_title') ??
+                      'Profile Details',
+                  color: colorScheme.onSurface,
+                  fontWeight: FontWeight.bold,
+                ),
+                const SizedBox(height: 24),
+
+                // ─── Avatar ─────────────────────────────
+                Center(
+                  child: Column(
+                    children: [
+                      currentUserState.user?.name.isNotEmpty == true
+                          ? Container(
+                              width: 90,
+                              height: 90,
+                              decoration: BoxDecoration(
+                                color: colorScheme.onSurface,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Center(
+                                child: CommonText.titleLarge(
+                                  currentUserState.user!.name
+                                      .substring(0, 1)
+                                      .toUpperCase(),
+                                ),
+                              ),
+                            )
+                          : const CircleAvatar(
+                              backgroundColor: AppColors.websiteText,
+                              child: Icon(Icons.person,
+                                  size: 56, color: Colors.white),
                             ),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        CommonText.bodyMedium(
-                          localizations?.translate("profile_avatar") ??
-                              "Avatar",
-                          color: colorScheme.onSurfaceVariant,
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  const SizedBox(height: 32),
-
-                  // ─── Full Name ─────────────────────────────
-                  CommonText.bodyMedium(
-                    "${localizations?.translate("profile_full_name") ?? "Full Name"} *",
-                    color: colorScheme.onSurfaceVariant,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  const SizedBox(height: 8),
-
-                  if (isMobile)
-                    Column(
-                      children: [
-                        CommonTextField(
-                          controller: _firstNameCtrl,
-                          hintText:
-                              localizations?.translate("profile_first_name") ??
-                                  "First name",
-                          labelText:
-                              localizations?.translate("profile_first_name") ??
-                                  "First name",
-                          textInputAction: TextInputAction.next,
-                          validator: (value) => TextFieldValidators.required(
-                              value, context,
-                              fieldName: localizations
-                                      ?.translate("profile_first_name") ??
-                                  "First name"),
-                        ),
-                        const SizedBox(height: 12),
-                        CommonTextField(
-                          controller: _lastNameCtrl,
-                          hintText:
-                              localizations?.translate("profile_last_name") ??
-                                  "Last name",
-                          labelText:
-                              localizations?.translate("profile_last_name") ??
-                                  "Last name",
-                          textInputAction: TextInputAction.next,
-                          validator: (value) => TextFieldValidators.required(
-                              value, context,
-                              fieldName: localizations
-                                      ?.translate("profile_last_name") ??
-                                  "Last name"),
-                        ),
-                      ],
-                    )
-                  else
-                    Row(
-                      children: [
-                        Expanded(
-                          child: CommonTextField(
-                            controller: _firstNameCtrl,
-                            hintText: localizations
-                                    ?.translate("profile_first_name") ??
-                                "First name",
-                            labelText: localizations
-                                    ?.translate("profile_first_name") ??
-                                "First name",
-                            textInputAction: TextInputAction.next,
-                            validator: (value) => TextFieldValidators.required(
-                                value, context,
-                                fieldName: localizations
-                                        ?.translate("profile_first_name") ??
-                                    "First name"),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: CommonTextField(
-                            controller: _lastNameCtrl,
-                            hintText:
-                                localizations?.translate("profile_last_name") ??
-                                    "Last name",
-                            labelText:
-                                localizations?.translate("profile_last_name") ??
-                                    "Last name",
-                            textInputAction: TextInputAction.next,
-                            validator: (value) => TextFieldValidators.required(
-                                value, context,
-                                fieldName: localizations
-                                        ?.translate("profile_last_name") ??
-                                    "Last name"),
-                          ),
-                        ),
-                      ],
-                    ),
-
-                  const SizedBox(height: 24),
-
-                  // ─── Username ─────────────────────────────
-                  CommonText.bodyMedium(
-                    "${localizations?.translate("profile_username") ?? "Username"} *",
-                    color: colorScheme.onSurfaceVariant,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  const SizedBox(height: 8),
-
-                  CommonTextField(
-                    controller: _usernameCtrl,
-                    hintText: localizations?.translate("profile_username") ??
-                        "Username",
-                    labelText: localizations?.translate("profile_username") ??
-                        "Username",
-                    textInputAction: TextInputAction.done,
-                    validator: (value) => TextFieldValidators.minLength(
-                        value, 4, context,
-                        fieldName:
-                            localizations?.translate("profile_username") ??
-                                "Username"),
-                  ),
-
-                  const SizedBox(height: 8),
-
-                  CommonText.bodySmall(
-                    localizations?.translate("profile_username_note") ??
-                        "Your username can only be changed once every 30 days.",
-                    color: colorScheme.onSurfaceVariant,
-                  ),
-
-                  const SizedBox(height: 24),
-
-                  // ─── Enable 5% Interest ───────────────────────
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: CommonText.bodyMedium(
-                          "${localizations?.translate("profile_interest_label") ?? "Enable 5% Interest"} *",
-                          color: colorScheme.onSurfaceVariant,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Switch(
-                        value: enableInterest,
-                        onChanged: (value) =>
-                            setState(() => enableInterest = value),
-                        inactiveTrackColor: colorScheme.surfaceContainerHigh,
+                      CommonText.bodyMedium(
+                        localizations?.translate('profile_avatar') ?? 'Avatar',
+                        color: colorScheme.onSurfaceVariant,
                       ),
                     ],
                   ),
+                ),
 
-                  const SizedBox(height: 4),
+                const SizedBox(height: 32),
 
-                  CommonText.bodySmall(
-                    localizations?.translate("profile_interest_description") ??
-                        "Your account will earn 5% interest when you have more than 35,000 Coins. Interest is paid weekly.",
-                    color: colorScheme.onSurfaceVariant,
+                // ─── Username ─────────────────────────────
+                CommonText.bodyMedium(
+                  "${localizations?.translate('profile_username') ?? 'Username'} *",
+                  color: colorScheme.onSurfaceVariant,
+                  fontWeight: FontWeight.w500,
+                ),
+                const SizedBox(height: 8),
+
+                CommonTextField(
+                  controller: _usernameCtrl,
+                  hintText: localizations?.translate('profile_username') ??
+                      'Username',
+                  labelText: localizations?.translate('profile_username') ??
+                      'Username',
+                  textInputAction: TextInputAction.done,
+                  validator: (value) => TextFieldValidators.minLength(
+                    value,
+                    4,
+                    context,
+                    fieldName: localizations?.translate('profile_username') ??
+                        'Username',
                   ),
+                ),
 
-                  const SizedBox(height: 32),
+                const SizedBox(height: 8),
 
-                  // ─── Buttons ─────────────────────────────
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                          side: BorderSide(color: colorScheme.outline),
-                          foregroundColor: colorScheme.onSurfaceVariant,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 20,
-                            vertical: 14,
-                          ),
-                        ),
-                        onPressed: () {
-                          // TODO: discard
-                        },
-                        child: CommonText.bodyMedium(
-                          localizations?.translate("btn_discard") ?? "Discard",
-                          color: colorScheme.onSurfaceVariant,
+                CommonText.bodySmall(
+                  localizations?.translate('profile_username_note') ??
+                      'Your username can only be changed once every 30 days.',
+                  color: colorScheme.onSurfaceVariant,
+                ),
+
+                const SizedBox(height: 24),
+
+                // ─── Enable 5% Interest ───────────────────────
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: CommonText.bodyMedium(
+                        localizations?.translate('profile_interest_label') ??
+                            'Enable 5% Interest',
+                        color: colorScheme.onSurfaceVariant,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    Switch(
+                      value: enableInterest,
+                      onChanged: (value) =>
+                          setState(() => enableInterest = value),
+                      inactiveTrackColor: colorScheme.surfaceContainerHigh,
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 4),
+
+                CommonText.bodySmall(
+                  localizations?.translate('profile_interest_description') ??
+                      'Your account will earn 5% interest when you have more than 35,000 Coins. Interest is paid weekly.',
+                  color: colorScheme.onSurfaceVariant,
+                ),
+
+                const SizedBox(height: 32),
+
+                // ─── Buttons ─────────────────────────────
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        side: BorderSide(color: colorScheme.outline),
+                        foregroundColor: colorScheme.onSurfaceVariant,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 14,
                         ),
                       ),
-                      const SizedBox(width: 12),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: colorScheme.primary,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 24,
-                            vertical: 14,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        onPressed: () {
-                          if (_formKey.currentState?.validate() ?? false) {
-                            // TODO: save profile
-                          }
-                        },
-                        child: CommonText.bodyMedium(
-                          localizations?.translate("btn_save_changes") ??
-                              "Save Changes",
-                          color: colorScheme.onPrimary,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      onPressed: () => _usernameCtrl.clear(),
+                      child: CommonText.bodyMedium(
+                        localizations?.translate('btn_discard') ?? 'Discard',
+                        color: colorScheme.onSurfaceVariant,
                       ),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                    const SizedBox(width: 12),
+                    CommonButton(
+                      fontSize: 12,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                      ),
+                      text: localizations?.translate('btn_save_changes') ??
+                          'Save Changes',
+                      isLoading: profileState is ProfileLoading,
+                      onPressed: () {
+                        if (_usernameCtrl.text.trim() ==
+                            _initialUsernameValue) {
+                          context.showErrorSnackBar(
+                            message: localizations
+                                    ?.translate('no_changes_to_save') ??
+                                'No changes to save.',
+                          );
+                          return;
+                        }
+
+                        if (!(_formKey.currentState?.validate() ?? false)) {
+                          return;
+                        }
+
+                        final currentUser = currentUserState.user;
+
+                        if (currentUser == null) return;
+
+                        profileNotifier.updateProfile(
+                          UserUpdateRequest(
+                            id: currentUser.id.toString(),
+                            name: _usernameCtrl.text.trim(),
+                          ),
+                        );
+                      },
+                      backgroundColor: context.primary,
+                      textColor: context.onPrimary,
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }

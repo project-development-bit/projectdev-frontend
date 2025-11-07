@@ -158,7 +158,7 @@ class BurgerEatsAppRoutes {
                 path: '2fa',
                 name: '2fa',
                 pageBuilder: (context, state) {
-                      state.uri.queryParameters['sessionToken'];
+                  state.uri.queryParameters['sessionToken'];
                   return NoTransitionPage(
                     child: TwoFactorAuthExample(),
                     // child: TwoFactorAuthPage(

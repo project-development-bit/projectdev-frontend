@@ -6,7 +6,7 @@ export 'domain/usecases/update_user_profile.dart';
 export 'domain/usecases/upload_profile_picture.dart';
 export 'domain/usecases/get_profile_stats.dart';
 
-export 'data/models/user_profile_model.dart';
+export 'data/models/response/user_profile_model.dart';
 export 'data/datasources/profile_local_data_source.dart';
 export 'data/datasources/profile_remote_data_source.dart';
 export 'data/datasources/profile_database_data_source.dart';

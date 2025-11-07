@@ -1,3 +1,5 @@
+import 'package:cointiply_app/features/chat/presentation/provider/right_chat_overlay_provider.dart';
+import 'package:cointiply_app/features/common/widgets/custom_pointer_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -114,6 +116,16 @@ class CommonAppBar extends StatelessWidget {
                           icon: const Icon(Icons.person),
                           tooltip: 'Profile',
                         ),
+                        // Chat overlay button
+                        IconButton(
+                          onPressed: () {
+                            ref
+                                .read(rightChatOverlayProvider.notifier)
+                                .toggle();
+                          },
+                          icon: const Icon(Icons.chat),
+                          tooltip: 'Chat',
+                        ),
                         // Logout button
                         Consumer(
                           builder: (context, ref, child) {
@@ -171,22 +183,24 @@ class CommonAppBar extends StatelessWidget {
     // Show confirmation dialog
     final shouldLogout = await showDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(context.translate('logout')),
-        content: Text(context.translate('logout_confirmation')),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: Text(context.translate('cancel')),
-          ),
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(true),
-            style: TextButton.styleFrom(
-              foregroundColor: context.error,
+      builder: (context) => CustomPointerInterceptor(
+        child: AlertDialog(
+          title: Text(context.translate('logout')),
+          content: Text(context.translate('logout_confirmation')),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text(context.translate('cancel')),
             ),
-            child: Text(context.translate('logout')),
-          ),
-        ],
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              style: TextButton.styleFrom(
+                foregroundColor: context.error,
+              ),
+              child: Text(context.translate('logout')),
+            ),
+          ],
+        ),
       ),
     );
 
