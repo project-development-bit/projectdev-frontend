@@ -17,7 +17,7 @@ class RightChatOverlay extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final isChatOpen = ref.watch(rightChatOverlayProvider);
 
-    if (!RightChatOverlayConfig.isEnabled) {
+    if (!RightChatOverlayConfig.isEnabled || !isChatOpen) {
       return child;
     }
 
