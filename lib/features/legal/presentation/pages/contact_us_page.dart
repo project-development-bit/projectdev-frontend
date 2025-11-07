@@ -3,7 +3,6 @@ import 'package:cointiply_app/core/providers/turnstile_provider.dart';
 import 'package:cointiply_app/core/widgets/cloudflare_turnstille_widgte.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import '../../../../core/common/common_text.dart';
 import '../../../../core/common/common_container.dart';
 import '../../../../core/common/common_textfield.dart';
@@ -75,19 +74,6 @@ class _ContactUsPageState extends ConsumerState<ContactUsPage> {
     final error = ref.watch(legalErrorProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: CommonText.titleMedium(
-          context.translate('contact_us'),
-          color: context.onSurface,
-          fontWeight: FontWeight.w600,
-        ),
-        backgroundColor: context.surface,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: context.onSurface),
-          onPressed: () => context.pop(),
-        ),
-      ),
       body: ResponsiveContainer(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),

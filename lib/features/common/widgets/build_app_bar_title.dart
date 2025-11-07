@@ -152,14 +152,26 @@ class CommonAppBar extends StatelessWidget {
                     );
                   } else {
                     // Show login button for unauthenticated users
-                    return ElevatedButton.icon(
-                      onPressed: () => context.go('/auth/login'),
-                      icon: const Icon(Icons.login),
-                      label: const Text('Login'),
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: context.onPrimary,
-                        backgroundColor: context.primary,
-                      ),
+                    return Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.contact_mail),
+                          onPressed: () {
+                            context.go('/legal/contact-us');
+                          },
+                        ),
+                        SizedBox(width: 8),
+                        ElevatedButton.icon(
+                          onPressed: () => context.go('/auth/login'),
+                          icon: const Icon(Icons.login),
+                          label: const Text('Login'),
+                          style: ElevatedButton.styleFrom(
+                            foregroundColor: context.onPrimary,
+                            backgroundColor: context.primary,
+                          ),
+                        ),
+                      ],
                     );
                   }
                 },
