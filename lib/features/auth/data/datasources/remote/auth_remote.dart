@@ -99,7 +99,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         message: serverMessage ?? _getFallbackMessage(e),
       );
     } catch (e) {
-            // Handle any other unexpected exceptions
+      // Handle any other unexpected exceptions
       throw Exception('Unexpected error during code verification: $e');
     }
   }
@@ -313,7 +313,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       debugPrint('❌ Request URL: ${e.requestOptions.uri}');
       debugPrint('❌ Response status: ${e.response?.statusCode}');
       debugPrint('❌ Response data: ${e.response?.data}');
-      
+
       // Check for the specific "Client error" message
       if (e.response?.data?.toString().contains('Client error') == true ||
           e.message?.contains('Client error') == true) {
@@ -359,7 +359,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       debugPrint('❌ Request URL: ${e.requestOptions.uri}');
       debugPrint('❌ Response status: ${e.response?.statusCode}');
       debugPrint('❌ Response data: ${e.response?.data}');
-      
+
       // Check for the specific "Client error" message
       if (e.response?.data?.toString().contains('Client error') == true ||
           e.message?.contains('Client error') == true) {

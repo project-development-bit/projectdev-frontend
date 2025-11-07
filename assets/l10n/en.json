@@ -410,5 +410,7 @@
   "failed_to_load_privacy_policy": "Failed to Load Privacy Policy",
   "close": "Close",
   "failed_to_load_terms": "Failed to Load Terms",
-  "loading_terms_of_service": "Loading Terms of Service..."
+  "loading_terms_of_service": "Loading Terms of Service...",
+  "profile_update_success": "Profile updated successfully!",
+  "no_changes_to_save": "No changes to save."
 }

@@ -100,17 +100,17 @@ final profileNotifierProvider =
 /// Provider for current user profile (convenient access)
 final currentUserProfileProvider = Provider<UserProfile?>((ref) {
   final profileState = ref.watch(profileNotifierProvider);
-  return profileState.profile;
+  return profileState is ProfileSuccess ? profileState.profile : null;
 });
 
 /// Provider for profile loading state
 final profileLoadingProvider = Provider<bool>((ref) {
   final profileState = ref.watch(profileNotifierProvider);
-  return profileState.isLoading;
+  return profileState is ProfileLoading;
 });
 
 /// Provider for profile error
 final profileErrorProvider = Provider<String?>((ref) {
   final profileState = ref.watch(profileNotifierProvider);
-  return profileState.error;
+  return profileState is ProfileError ? profileState.error : null;
 });

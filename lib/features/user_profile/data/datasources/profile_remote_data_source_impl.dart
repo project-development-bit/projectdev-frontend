@@ -1,4 +1,5 @@
 import 'package:cointiply_app/core/network/base_dio_client.dart';
+import 'package:cointiply_app/features/user_profile/data/models/response/user_update_respons.dart';
 import 'package:universal_io/io.dart';
 import 'package:dio/dio.dart';
 import 'package:http_parser/http_parser.dart';
@@ -33,7 +34,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   }
 
   @override
-  Future<UserProfileModel> updateUserProfile(
+  Future<UserUpdateResponse> updateUserProfile(
     String userId,
     Map<String, dynamic> profileData,
   ) async {
@@ -43,7 +44,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
         data: profileData,
       );
       if (response.statusCode == 200) {
-        return UserProfileModel.fromJson(response.data['data']);
+        return UserUpdateResponse.fromJson(response.data);
       } else {
         throw Exception(
             'Failed to update user profile: ${response.statusCode}');

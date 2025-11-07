@@ -1,3 +1,4 @@
+import 'package:cointiply_app/features/user_profile/data/models/response/user_update_respons.dart';
 import 'package:universal_io/io.dart';
 import '../models/response/user_profile_model.dart';
 
@@ -11,7 +12,7 @@ abstract class ProfileRemoteDataSource {
   Future<UserProfileModel> getUserProfile(String userId);
 
   /// Updates user profile
-  Future<UserProfileModel> updateUserProfile(
+  Future<UserUpdateResponse> updateUserProfile(
     String userId,
     Map<String, dynamic> profileData,
   );

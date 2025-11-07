@@ -1,9 +1,8 @@
 import 'package:cointiply_app/core/core.dart';
 import 'package:cointiply_app/features/user_profile/data/models/request/user_update_request.dart';
-import 'package:cointiply_app/features/user_profile/domain/entities/user_profile.dart';
-import 'package:cointiply_app/features/user_profile/domain/usecases/update_user_profile.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/profile_providers.dart';
+import 'package:cointiply_app/features/user_profile/presentation/providers/profile_state_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -18,19 +17,50 @@ class ProfileSettingDetails extends ConsumerStatefulWidget {
 class _ProfileSettingDetailsState extends ConsumerState<ProfileSettingDetails> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _usernameCtrl = TextEditingController();
-
+  late String _initialUsernameValue;
   bool enableInterest = false;
 
   @override
   void initState() {
     super.initState();
-
     // Seed once from whatever is already in the provider
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final state = ref.read(currentUserProvider); // CurrentUserState
       final user = state.user; // uses the extension above
       _usernameCtrl.text = user?.name ?? '';
+      _initialUsernameValue = _usernameCtrl.text;
     });
+
+    ref.listenManual<ProfileState>(profileNotifierProvider, (previous, next) {
+      switch (next) {
+        case ProfileUpdateSuccess():
+          _handleProfileSuccess();
+          break;
+        case ProfileError(error: final errorState):
+          _handleProfileError(errorState);
+          break;
+        default:
+          break;
+      }
+    });
+  }
+
+  void _handleProfileSuccess() {
+    ref.read(currentUserProvider.notifier).refreshUser();
+    _initialUsernameValue = _usernameCtrl.text;
+    // Handle profile loaded successfully
+    final localizations = AppLocalizations.of(context);
+    context.showSuccessSnackBar(
+      message: localizations?.translate('profile_update_success') ??
+          'Profile updated successfully!',
+    );
+  }
+
+  void _handleProfileError(String error) {
+    // Handle profile load error
+    context.showErrorSnackBar(
+      message: error,
+    );
   }
 
   @override
@@ -52,14 +82,16 @@ class _ProfileSettingDetailsState extends ConsumerState<ProfileSettingDetails> {
       final user = next.user;
       if (user != null && (_usernameCtrl.text.isEmpty || prev?.user == null)) {
         _usernameCtrl.text = user.name;
+        _initialUsernameValue = _usernameCtrl.text;
       }
     });
+
     return ResponsiveSection(
-      padding: EdgeInsets.all(isMobile ? 16 : 24),
+      padding: EdgeInsets.zero,
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
-          color: colorScheme.surfaceContainerHighest,
+          color: colorScheme.surfaceContainerHighest.withAlpha(100),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: colorScheme.outlineVariant),
         ),
@@ -206,11 +238,20 @@ class _ProfileSettingDetailsState extends ConsumerState<ProfileSettingDetails> {
                         ),
                       ),
                       onPressed: () async {
-                        // print(
-                        //     'Save Changes pressed ${!(_formKey.currentState?.validate() ?? false)}');
-                        // if (!(_formKey.currentState?.validate() ?? false)) {
-                        //   return;
-                        // }
+                        //check if there are changes
+                        if (_usernameCtrl.text.trim() ==
+                            _initialUsernameValue) {
+                          context.showErrorSnackBar(
+                            message: localizations
+                                    ?.translate('no_changes_to_save') ??
+                                'No changes to save.',
+                          );
+                          return;
+                        }
+                        // Validate the form only if there are changes
+                        if (!(_formKey.currentState?.validate() ?? false)) {
+                          return;
+                        }
 
                         final currentUser = currentUserState.user;
 
