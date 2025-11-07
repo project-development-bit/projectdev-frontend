@@ -1,76 +1,91 @@
+import 'package:cointiply_app/features/user_profile/data/models/request/user_update_request.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/entities/user_profile.dart';
 import '../../domain/usecases/get_user_profile.dart';
-import 'profile_providers.dart';
+import '../../domain/usecases/update_user_profile.dart';
 
-/// State for profile operations
-class ProfileState {
-  final UserProfile? profile;
-  final bool isLoading;
-  final String? error;
-  final bool isUpdating;
+/// Profile state that handles loading, success, and error
+/// Profile state for handling various states
+sealed class ProfileState {}
 
-  const ProfileState({
-    this.profile,
-    this.isLoading = false,
-    this.error,
-    this.isUpdating = false,
-  });
+/// Loading state when the profile is being fetched or updated
+class ProfileLoading extends ProfileState {}
 
-  ProfileState copyWith({
-    UserProfile? profile,
-    bool? isLoading,
-    String? error,
-    bool? isUpdating,
-  }) {
-    return ProfileState(
-      profile: profile ?? this.profile,
-      isLoading: isLoading ?? this.isLoading,
-      error: error ?? this.error,
-      isUpdating: isUpdating ?? this.isUpdating,
-    );
-  }
+/// Success state when the profile is successfully loaded or updated
+class ProfileSuccess extends ProfileState {
+  final UserProfile profile;
+
+  ProfileSuccess(this.profile);
 }
 
-/// Profile state notifier
+class ProfileUpdateSuccess extends ProfileState {
+  final String message;
+  final bool success;
+
+  ProfileUpdateSuccess({required this.message, required this.success});
+}
+
+/// Error state when there is a failure in loading or updating the profile
+class ProfileError extends ProfileState {
+  final String error;
+
+  ProfileError(this.error);
+}
+
+/// Initial state when the profile has not been loaded yet
+class ProfileInitial extends ProfileState {}
+
 class ProfileNotifier extends StateNotifier<ProfileState> {
   final GetUserProfile _getUserProfile;
+  final UpdateUserProfile _updateUserProfile;
 
-  ProfileNotifier(this._getUserProfile) : super(const ProfileState());
+  ProfileNotifier(
+    this._getUserProfile,
+    this._updateUserProfile,
+  ) : super(ProfileInitial());
 
   /// Load user profile
   Future<void> loadProfile() async {
-    state = state.copyWith(isLoading: true, error: null);
+    state = ProfileLoading(); // Set loading state
 
     final result = await _getUserProfile();
 
     result.fold(
-      (failure) => state = state.copyWith(
-        isLoading: false,
-        error: failure.message ?? 'Failed to load profile',
-      ),
-      (profile) => state = state.copyWith(
-        isLoading: false,
-        profile: profile,
-        error: null,
-      ),
+      (failure) {
+        state = ProfileError(failure.message ?? 'Failed to load profile');
+      },
+      (profile) {
+        state = ProfileSuccess(profile);
+      },
+    );
+  }
+
+  /// Update user profile (remote + local)
+  Future<void> updateProfile(UserUpdateRequest updatedProfile) async {
+    state = ProfileLoading(); // Set loading state
+    final result = await _updateUserProfile(
+      UpdateUserProfileParams(profile: updatedProfile),
+    );
+    result.fold(
+      (failure) {
+        state = ProfileError(failure.message ?? 'Failed to update profile');
+      },
+      (profile) {
+        state = ProfileUpdateSuccess(
+          message: profile.message,
+          success: profile.success,
+        );
+      },
     );
   }
 
   /// Clear error
   void clearError() {
-    state = state.copyWith(error: null);
+    state = ProfileInitial(); // Reset to initial state
   }
 
   /// Update profile locally (optimistic update)
   void updateProfileLocally(UserProfile profile) {
-    state = state.copyWith(profile: profile);
+    state = ProfileSuccess(profile); // Set success state with updated profile
   }
 }
-
-/// Provider for profile state notifier
-final profileNotifierProvider =
-    StateNotifierProvider<ProfileNotifier, ProfileState>((ref) {
-  final getUserProfile = ref.read(getUserProfileUseCaseProvider);
-  return ProfileNotifier(getUserProfile);
-});

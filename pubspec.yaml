@@ -66,7 +66,7 @@ dependencies:
   qr_flutter: ^4.1.0
   dotted_decoration: ^2.0.0
   webview_all: ^0.5.2
-
+  pointer_interceptor: ^0.10.1+2
 dev_dependencies:
   flutter_test:
     sdk: flutter

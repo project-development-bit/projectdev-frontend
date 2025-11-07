@@ -4,7 +4,7 @@ import '../../../../core/services/database_service.dart';
 import '../../../../core/services/secure_storage_service.dart';
 import '../../../auth/data/models/user_model.dart';
 import '../../domain/entities/user_profile.dart';
-import '../models/user_profile_model.dart';
+import '../models/response/user_profile_model.dart';
 
 /// Database data source for profile operations
 ///

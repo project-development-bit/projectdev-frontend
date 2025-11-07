@@ -1,4 +1,5 @@
 import 'package:cointiply_app/core/error/error_model.dart';
+import 'package:cointiply_app/features/common/widgets/custom_pointer_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -55,7 +56,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   }
                 },
               );
-              
+
               // If user cancelled the dialog, reset login state
               if (result == false && mounted) {
                 ref.read(loginNotifierProvider.notifier).reset();
@@ -266,93 +267,95 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       context: context,
       barrierDismissible: false, // User must tap verify or cancel
       builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          title: Row(
-            children: [
-              Icon(
-                Icons.email_outlined,
-                color: context.primary,
-                size: 24,
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: CommonText.titleLarge(
-                  localizations?.translate('verify_email') ??
-                      'Verify Your Email',
-                  fontWeight: FontWeight.bold,
+        return CustomPointerInterceptor(
+          child: AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            title: Row(
+              children: [
+                Icon(
+                  Icons.email_outlined,
+                  color: context.primary,
+                  size: 24,
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: CommonText.titleLarge(
+                    localizations?.translate('verify_email') ??
+                        'Verify Your Email',
+                    fontWeight: FontWeight.bold,
+                    color: context.onSurface,
+                  ),
+                ),
+              ],
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CommonText.bodyLarge(
+                  localizations?.translate('verification_required_title') ??
+                      'Account Verification Required',
+                  fontWeight: FontWeight.w600,
                   color: context.onSurface,
                 ),
-              ),
-            ],
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CommonText.bodyLarge(
-                localizations?.translate('verification_required_title') ??
-                    'Account Verification Required',
-                fontWeight: FontWeight.w600,
-                color: context.onSurface,
-              ),
-              const SizedBox(height: 12),
-              CommonText.bodyMedium(
-                localizations?.translate('verification_required_message') ??
-                    'Your account needs to be verified before you can log in. We\'ll send a verification code to your email address.',
-                color: context.onSurface.withAlpha(179), // 0.7 opacity
-              ),
-              const SizedBox(height: 16),
-              CommonContainer(
-                padding: const EdgeInsets.all(12),
-                backgroundColor: context.primary.withAlpha(26), // 0.1 opacity
-                borderRadius: 8,
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.info_outline,
-                      color: context.primary,
-                      size: 20,
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: CommonText.bodySmall(
-                        email, // Use the actual email parameter instead of hardcoded text
-                        fontWeight: FontWeight.w600,
-                        color: context.primary,
-                      ),
-                    ),
-                  ],
+                const SizedBox(height: 12),
+                CommonText.bodyMedium(
+                  localizations?.translate('verification_required_message') ??
+                      'Your account needs to be verified before you can log in. We\'ll send a verification code to your email address.',
+                  color: context.onSurface.withAlpha(179), // 0.7 opacity
                 ),
+                const SizedBox(height: 16),
+                CommonContainer(
+                  padding: const EdgeInsets.all(12),
+                  backgroundColor: context.primary.withAlpha(26), // 0.1 opacity
+                  borderRadius: 8,
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.info_outline,
+                        color: context.primary,
+                        size: 20,
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: CommonText.bodySmall(
+                          email, // Use the actual email parameter instead of hardcoded text
+                          fontWeight: FontWeight.w600,
+                          color: context.primary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            actions: [
+              CommonButton(
+                text: localizations?.translate('cancel') ?? 'Cancel',
+                onPressed: () => Navigator.of(context).pop(),
+                isOutlined: true,
+                backgroundColor: Colors.transparent,
+                textColor: context.onSurface,
+              ),
+              const SizedBox(width: 8),
+              CommonButton(
+                text: localizations?.translate('verify_now') ?? 'Verify Now',
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  // Navigate to verification page
+                  context.pushToVerification(
+                    email: email,
+                    isSendCode: true,
+                    isFromForgotPassword: false,
+                  );
+                },
+                backgroundColor: context.primary,
+                textColor: context.onPrimary,
               ),
             ],
           ),
-          actions: [
-            CommonButton(
-              text: localizations?.translate('cancel') ?? 'Cancel',
-              onPressed: () => Navigator.of(context).pop(),
-              isOutlined: true,
-              backgroundColor: Colors.transparent,
-              textColor: context.onSurface,
-            ),
-            const SizedBox(width: 8),
-            CommonButton(
-              text: localizations?.translate('verify_now') ?? 'Verify Now',
-              onPressed: () {
-                Navigator.of(context).pop();
-                // Navigate to verification page
-                context.pushToVerification(
-                  email: email,
-                  isSendCode: true,
-                  isFromForgotPassword: false,
-                );
-              },
-              backgroundColor: context.primary,
-              textColor: context.onPrimary,
-            ),
-          ],
         );
       },
     );

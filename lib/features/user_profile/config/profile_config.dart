@@ -9,7 +9,7 @@ class ProfileConfig {
   /// 🌐 API MODE: Makes real HTTP requests to the backend API
   ///
   /// Default: true (mock mode enabled for development)
-  static const bool useMockData = true;
+  static const bool useMockData = false;
 
   /// Mock data delay in milliseconds
   ///
