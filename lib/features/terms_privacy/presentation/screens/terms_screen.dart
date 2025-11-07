@@ -16,7 +16,6 @@ class _TermsScreenState extends ConsumerState<TermsScreen> {
   @override
   void initState() {
     super.initState();
-    // Fetch terms and privacy data when screen loads
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(termsPrivacyNotifierProvider.notifier).fetchTermsAndPrivacy();
     });
@@ -68,10 +67,21 @@ class _TermsScreenState extends ConsumerState<TermsScreen> {
   }
 
   Widget _buildWebView(String url) {
-    return WebViewWrapper(
-      url: url,
-      title: AppLocalizations.of(context)!.translate("terms_of_service"),
-      onClose: () => Navigator.of(context).pop(),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return CustomScrollView(
+          slivers: [
+            SliverFillRemaining(
+              hasScrollBody: true,
+              child: WebViewWrapper(
+                useScaffold: false,
+                url: url,
+                onClose: () => Navigator.of(context).pop(),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 

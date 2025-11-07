@@ -1,7 +1,11 @@
+import 'package:cointiply_app/features/common/widgets/build_app_bar_title.dart';
+import 'package:cointiply_app/features/home/widgets/mobile_drawer.dart';
 import 'package:flutter/material.dart';
+import '../../../core/extensions/context_extensions.dart';
 
-/// A wrapper widget for shell routes that provides common layout structure
-/// This can be used to add navigation bars, side menus, or other shared UI elements
+/// A wrapper widget for shell routes that provides a common sliver-based layout.
+/// This allows all pages under the ShellRoute (e.g., Home, Profile, Chat) to share
+/// the same scrollable app bar and common UI elements.
 class ShellRouteWrapper extends StatelessWidget {
   final Widget child;
 
@@ -12,41 +16,48 @@ class ShellRouteWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width < 768;
+
     return Scaffold(
-      // You can add common app bar, drawer, bottom navigation here
-      // For now, just return the child
-      body: child,
+      drawer: isMobile ? const MobileDrawer() : null,
+      body: CustomScrollView(
+        slivers: [
+          // Shared SliverAppBar that hides/shows on scroll
+          SliverAppBar(
+            expandedHeight: 80.0,
+            floating: true,
+            pinned: false,
+            snap: true,
+            backgroundColor: context.surface.withAlpha(242), // 0.95 * 255
+            surfaceTintColor: Colors.transparent,
+            elevation: 0,
+            scrolledUnderElevation: 1,
+            automaticallyImplyLeading: MediaQuery.of(context).size.width < 768,
+            flexibleSpace: FlexibleSpaceBar(
+              background: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      context.surface.withAlpha(250), // 0.98 * 255
+                      context.surface.withAlpha(235), // 0.92 * 255
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            title: CommonAppBar(),
+            titleSpacing: 16,
+          ),
 
-      // Example: Add a common app bar
-      // appBar: AppBar(
-      //   title: const Text('Gigafaucet'),
-      //   actions: [
-      //     IconButton(
-      //       icon: const Icon(Icons.logout),
-      //       onPressed: () {
-      //         // Handle logout
-      //       },
-      //     ),
-      //   ],
-      // ),
-
-      // Example: Add bottom navigation
-      // bottomNavigationBar: BottomNavigationBar(
-      //   items: const [
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.home),
-      //       label: 'Home',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.local_offer),
-      //       label: 'Offers',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.person),
-      //       label: 'Profile',
-      //     ),
-      //   ],
-      // ),
+          // Route-specific child content
+          SliverFillRemaining(
+            hasScrollBody: true,
+            child: child,
+          ),
+        ],
+      ),
     );
   }
 }

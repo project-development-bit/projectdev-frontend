@@ -67,10 +67,21 @@ class _PrivacyScreenState extends ConsumerState<PrivacyScreen> {
   }
 
   Widget _buildWebView(String url) {
-    return WebViewWrapper(
-      url: url,
-      title: AppLocalizations.of(context)!.translate("privacy_policy"),
-      onClose: () => Navigator.of(context).pop(),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return CustomScrollView(
+          slivers: [
+            SliverFillRemaining(
+              hasScrollBody: true,
+              child: WebViewWrapper(
+                useScaffold: false,
+                url: url,
+                onClose: () => Navigator.of(context).pop(),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 

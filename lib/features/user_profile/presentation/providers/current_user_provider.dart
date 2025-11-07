@@ -36,7 +36,8 @@ class CurrentUserNotifier extends StateNotifier<CurrentUserState> {
   final GetCurrentUserUseCase _getCurrentUserUseCase;
   final Ref _ref;
 
-  CurrentUserNotifier(this._getCurrentUserUseCase, this._ref) : super(const CurrentUserState());
+  CurrentUserNotifier(this._getCurrentUserUseCase, this._ref)
+      : super(const CurrentUserState());
 
   /// Get current user from API (whoami)
   Future<void> getCurrentUser() async {
@@ -113,7 +114,8 @@ class CurrentUserNotifier extends StateNotifier<CurrentUserState> {
 }
 
 /// Provider for current user state management in profile context
-final currentUserProvider = StateNotifierProvider<CurrentUserNotifier, CurrentUserState>((ref) {
+final currentUserProvider =
+    StateNotifierProvider<CurrentUserNotifier, CurrentUserState>((ref) {
   final getCurrentUserUseCase = ref.read(getCurrentUserUseCaseProvider);
   return CurrentUserNotifier(getCurrentUserUseCase, ref);
 });

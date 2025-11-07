@@ -108,6 +108,9 @@ flutter:
   assets:
     - assets/l10n/
     - assets/images/
+    - assets/images/bg/
+    - assets/images/levels/
+    - assets/images/rewards/
     - assets/tutorial/
 
   # An image asset can refer to one or more resolution-specific "variants", see
