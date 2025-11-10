@@ -1,4 +1,5 @@
 import 'package:cointiply_app/features/common/widgets/custom_pointer_interceptor.dart';
+import 'package:cointiply_app/routing/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -68,7 +69,7 @@ class _TwoFactorLoginVerificationDialogState
               );
 
               // Close dialog
-              Navigator.of(context).pop(true);
+              context.pop(true);
 
               // Call success callback
               widget.onSuccess?.call();
@@ -240,7 +241,7 @@ class _TwoFactorLoginVerificationDialogState
                   }
                 },
               ),
-              
+
               // Error Text
               if (_errorText != null) ...[
                 const SizedBox(height: 8),
@@ -251,7 +252,7 @@ class _TwoFactorLoginVerificationDialogState
                   textAlign: TextAlign.center,
                 ),
               ],
-              
+
               const SizedBox(height: 32),
 
               // Continue Button

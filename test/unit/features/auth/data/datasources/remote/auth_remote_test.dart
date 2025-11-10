@@ -473,12 +473,12 @@ void main() {
         expect(result, isA<LoginResponseModel>());
         expect(result.success, true);
         expect(result.message, 'Login successful.');
-        expect(result.user.id, 11);
-        expect(result.user.name, 'User 7');
-        expect(result.user.email, 'user8@gmail.com');
-        expect(result.user.role, UserRole.normalUser);
-        expect(result.tokens.tokenType, 'Bearer');
-        expect(result.tokens.accessTokenExpiresIn, '15m');
+        expect(result.user?.id, 11);
+        expect(result.user?.name, 'User 7');
+        expect(result.user?.email, 'user8@gmail.com');
+        expect(result.user?.role, UserRole.normalUser);
+        expect(result.tokens?.tokenType, 'Bearer');
+        expect(result.tokens?.accessTokenExpiresIn, '15m');
 
         verify(() => mockDioClient.post(
               loginEndpoints,

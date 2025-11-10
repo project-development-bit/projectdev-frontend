@@ -60,35 +60,21 @@ class ProfileTestData {
 
   /// Creates test profile state for different scenarios
   static ProfileState createLoadingState() {
-    return ProfileState(
-      profile: null,
-      isLoading: true,
-      error: null,
-    );
+    return ProfileLoading();
   }
 
   static ProfileState createErrorState([String? error]) {
-    return ProfileState(
-      profile: null,
-      isLoading: false,
-      error: error ?? 'Test error message',
-    );
+    return ProfileError(error ?? 'An error occurred while loading profile');
   }
 
   static ProfileState createSuccessState([UserProfile? profile]) {
-    return ProfileState(
-      profile: profile ?? createTestProfile(),
-      isLoading: false,
-      error: null,
+    return ProfileSuccess(
+      profile ?? createTestProfile(),
     );
   }
 
   static ProfileState createEmptyState() {
-    return ProfileState(
-      profile: null,
-      isLoading: false,
-      error: null,
-    );
+    return ProfileError('No profile data available');
   }
 
   /// Creates a new user profile with minimal data

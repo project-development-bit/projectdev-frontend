@@ -334,7 +334,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             actions: [
               CommonButton(
                 text: localizations?.translate('cancel') ?? 'Cancel',
-                onPressed: () => Navigator.of(context).pop(),
+                onPressed: () => GoRouter.of(context).pop(),
                 isOutlined: true,
                 backgroundColor: Colors.transparent,
                 textColor: context.onSurface,
@@ -343,7 +343,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               CommonButton(
                 text: localizations?.translate('verify_now') ?? 'Verify Now',
                 onPressed: () {
-                  Navigator.of(context).pop();
+                  GoRouter.of(context).pop();
                   // Navigate to verification page
                   context.pushToVerification(
                     email: email,

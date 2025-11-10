@@ -1,4 +1,5 @@
 import 'package:cointiply_app/core/localization/app_localizations.dart';
+import 'package:cointiply_app/routing/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/common/common_text.dart';
@@ -76,7 +77,7 @@ class _TermsScreenState extends ConsumerState<TermsScreen> {
               child: WebViewWrapper(
                 useScaffold: false,
                 url: url,
-                onClose: () => Navigator.of(context).pop(),
+                onClose: () => context.pop(),
               ),
             ),
           ],
@@ -126,7 +127,7 @@ class _TermsScreenState extends ConsumerState<TermsScreen> {
             ),
             const SizedBox(height: 12),
             TextButton(
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () => context.pop(),
               child: CommonText.titleSmall(
                   AppLocalizations.of(context)!.translate("close")),
             ),

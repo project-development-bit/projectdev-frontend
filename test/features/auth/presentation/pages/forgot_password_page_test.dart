@@ -208,11 +208,10 @@ class TestForgotPasswordNotifier extends ForgotPasswordNotifier {
   TestForgotPasswordNotifier(this._testState)
       : super(throw UnimplementedError());
 
-  @override
   ForgotPasswordState build() => _testState;
 
   @override
-  Future<void> forgotPassword(String email) async {
+  Future<void> forgotPassword(String email, String turnstileToken) async {
     // Do nothing in test
   }
 

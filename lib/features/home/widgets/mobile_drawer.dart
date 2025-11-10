@@ -31,53 +31,55 @@ class MobileDrawer extends ConsumerWidget {
       });
     }
 
-    return Drawer(
-      child: Column(
-        children: [
-          // Drawer Header
-          _buildDrawerHeader(context, ref, isAuthenticated, currentUserState),
+    return CustomPointerInterceptor(
+      child: Drawer(
+        child: Column(
+          children: [
+            // Drawer Header
+            _buildDrawerHeader(context, ref, isAuthenticated, currentUserState),
 
-          // Main content
-          Expanded(
-            child: ListView(
-              padding: EdgeInsets.zero,
-              children: [
-                // Settings Section
-                _buildSectionHeader(context, context.translate('settings')),
+            // Main content
+            Expanded(
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: [
+                  // Settings Section
+                  _buildSectionHeader(context, context.translate('settings')),
 
-                // Theme Switch
-                _buildThemeItem(context, ref),
+                  // Theme Switch
+                  _buildThemeItem(context, ref),
 
-                // Locale Switch
-                _buildLocaleItem(context, ref),
-
-                const Divider(),
-
-                // User Section (only if authenticated)
-                if (isAuthenticated) ...[
-                  _buildSectionHeader(context, context.translate('account')),
-
-                  // Profile
-                  _buildProfileItem(context, currentUserState),
-                  _buildSectionHeader(context, context.translate('support')),
-                  _buildChatItem(context),
+                  // Locale Switch
+                  _buildLocaleItem(context, ref),
 
                   const Divider(),
 
-                  // Logout
-                  _buildLogoutItem(context, ref),
-                ] else ...[
-                  // Login option for unauthenticated users
-                  _buildSectionHeader(context, context.translate('account')),
-                  _buildLoginItem(context),
-                ],
-              ],
-            ),
-          ),
+                  // User Section (only if authenticated)
+                  if (isAuthenticated) ...[
+                    _buildSectionHeader(context, context.translate('account')),
 
-          // Footer
-          _buildFooter(context),
-        ],
+                    // Profile
+                    _buildProfileItem(context, currentUserState),
+                    _buildSectionHeader(context, context.translate('support')),
+                    _buildChatItem(context),
+
+                    const Divider(),
+
+                    // Logout
+                    _buildLogoutItem(context, ref),
+                  ] else ...[
+                    // Login option for unauthenticated users
+                    _buildSectionHeader(context, context.translate('account')),
+                    _buildLoginItem(context),
+                  ],
+                ],
+              ),
+            ),
+
+            // Footer
+            _buildFooter(context),
+          ],
+        ),
       ),
     );
   }
@@ -92,7 +94,7 @@ class MobileDrawer extends ConsumerWidget {
         end: Alignment.bottomRight,
         colors: [
           context.primary,
-          context.primary.withOpacity(0.8),
+          context.primary.withValues(alpha: 0.8),
         ],
       ),
       padding: const EdgeInsets.fromLTRB(16, 40, 16, 16),
@@ -142,7 +144,7 @@ class MobileDrawer extends ConsumerWidget {
         children: [
           Icon(
             Icons.account_circle,
-            color: context.onPrimary.withOpacity(0.7),
+            color: context.onPrimary.withValues(alpha: 0.7),
             size: 36,
           ),
           const SizedBox(width: 12),
@@ -169,7 +171,7 @@ class MobileDrawer extends ConsumerWidget {
             child: CircularProgressIndicator(
               strokeWidth: 2,
               valueColor: AlwaysStoppedAnimation<Color>(
-                context.onPrimary.withOpacity(0.7),
+                context.onPrimary.withValues(alpha: 0.7),
               ),
             ),
           ),
@@ -177,7 +179,7 @@ class MobileDrawer extends ConsumerWidget {
           Expanded(
             child: CommonText.titleSmall(
               context.translate('loading_user_info'),
-              color: context.onPrimary.withOpacity(0.8),
+              color: context.onPrimary.withValues(alpha: 0.8),
               fontWeight: FontWeight.w500,
               overflow: TextOverflow.ellipsis,
               maxLines: 1,
@@ -193,7 +195,7 @@ class MobileDrawer extends ConsumerWidget {
         children: [
           Icon(
             Icons.error_outline,
-            color: context.onPrimary.withOpacity(0.7),
+            color: context.onPrimary.withValues(alpha: 0.7),
             size: 36,
           ),
           const SizedBox(width: 12),
@@ -212,7 +214,7 @@ class MobileDrawer extends ConsumerWidget {
                 const SizedBox(height: 2),
                 CommonText.bodySmall(
                   context.translate('tap_to_retry'),
-                  color: context.onPrimary.withOpacity(0.8),
+                  color: context.onPrimary.withValues(alpha: 0.8),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
@@ -230,7 +232,7 @@ class MobileDrawer extends ConsumerWidget {
         children: [
           CircleAvatar(
             radius: 18,
-            backgroundColor: context.onPrimary.withOpacity(0.2),
+            backgroundColor: context.onPrimary.withValues(alpha: 0.2),
             child: CommonText.titleSmall(
               user.name.isNotEmpty
                   ? user.name.substring(0, 1).toUpperCase()
@@ -255,7 +257,7 @@ class MobileDrawer extends ConsumerWidget {
                 const SizedBox(height: 2),
                 CommonText.bodySmall(
                   user.email,
-                  color: context.onPrimary.withOpacity(0.8),
+                  color: context.onPrimary.withValues(alpha: 0.8),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
@@ -271,14 +273,14 @@ class MobileDrawer extends ConsumerWidget {
       children: [
         Icon(
           Icons.account_circle,
-          color: context.onPrimary.withOpacity(0.7),
+          color: context.onPrimary.withValues(alpha: 0.7),
           size: 36,
         ),
         const SizedBox(width: 12),
         Expanded(
           child: CommonText.titleSmall(
             context.translate('user_not_found'),
-            color: context.onPrimary.withOpacity(0.8),
+            color: context.onPrimary.withValues(alpha: 0.8),
             fontWeight: FontWeight.w500,
             overflow: TextOverflow.ellipsis,
             maxLines: 1,
@@ -344,7 +346,7 @@ class MobileDrawer extends ConsumerWidget {
     return ListTile(
       leading: CircleAvatar(
         radius: 18,
-        backgroundColor: context.primary.withOpacity(0.1),
+        backgroundColor: context.primary.withValues(alpha: 0.1),
         child: Icon(
           Icons.person,
           color: context.primary,
@@ -372,7 +374,7 @@ class MobileDrawer extends ConsumerWidget {
     return ListTile(
       leading: CircleAvatar(
         radius: 18,
-        backgroundColor: context.primary.withOpacity(0.1),
+        backgroundColor: context.primary.withValues(alpha: 0.1),
         child: Icon(
           Icons.chat,
           color: context.primary,
@@ -460,7 +462,6 @@ class MobileDrawer extends ConsumerWidget {
           onTap: isLoading
               ? null
               : () {
-                  print('🔴 Logout ListTile onTap triggered');
                   debugPrint('🔴 Logout ListTile onTap triggered - debugPrint');
                   _handleLogout(context, ref);
                 },
@@ -487,7 +488,7 @@ class MobileDrawer extends ConsumerWidget {
           const SizedBox(height: 4),
           CommonText.bodySmall(
             '${context.translate('version')} 1.0.0',
-            color: context.onSurfaceVariant.withOpacity(0.7),
+            color: context.onSurfaceVariant.withValues(alpha: 0.7),
           ),
         ],
       ),
@@ -496,16 +497,13 @@ class MobileDrawer extends ConsumerWidget {
 
   /// Handle logout functionality
   Future<void> _handleLogout(BuildContext context, WidgetRef ref) async {
-    print('🔴 Logout button pressed - starting logout process');
     debugPrint('🔴 Logout button pressed - starting logout process');
 
     // Store references early before any navigation that might dispose the widget
-    final navigator = Navigator.of(context);
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     final logoutNotifier = ref.read(logoutNotifierProvider.notifier);
-
     // Close drawer first
-    navigator.pop();
+    Navigator.of(context).pop();
 
     // Show confirmation dialog
     final shouldLogout = await showDialog<bool>(
@@ -517,14 +515,14 @@ class MobileDrawer extends ConsumerWidget {
           actions: [
             TextButton(
               onPressed: () {
-                print('🔴 User pressed Cancel in logout dialog');
+                debugPrint('🔴 User pressed Cancel in logout dialog');
                 Navigator.of(dialogContext).pop(false);
               },
               child: Text(dialogContext.translate('cancel')),
             ),
             TextButton(
               onPressed: () {
-                print('🔴 User pressed Logout in logout dialog');
+                debugPrint('🔴 User pressed Logout in logout dialog');
                 Navigator.of(dialogContext).pop(true);
               },
               style: TextButton.styleFrom(
@@ -537,30 +535,25 @@ class MobileDrawer extends ConsumerWidget {
       ),
     );
 
-    print('🔴 User logout choice: $shouldLogout');
     debugPrint('🔴 User logout choice: $shouldLogout');
 
     if (shouldLogout == true) {
       try {
-        print('🔴 Calling logout notifier...');
         debugPrint('🔴 Calling logout notifier...');
 
         // Perform logout using the stored reference
         await logoutNotifier.logout();
 
-        print('🔴 Logout call completed successfully');
         debugPrint('🔴 Logout call completed successfully');
 
         // Navigate to home using GoRouter directly without context dependency
         if (context.mounted) {
-          print('🔴 Navigating to home...');
           debugPrint('🔴 Navigating to home...');
           context.go('/');
         } else {
-          print('🔴 Context no longer mounted, skipping navigation');
+          debugPrint('🔴 Context no longer mounted, skipping navigation');
         }
       } catch (e) {
-        print('🔴 Exception during logout: $e');
         debugPrint('🔴 Exception during logout: $e');
 
         // Show error message using stored reference if context is mounted
@@ -576,7 +569,7 @@ class MobileDrawer extends ConsumerWidget {
               ),
             );
           } catch (snackBarError) {
-            print('🔴 Could not show error snackbar: $snackBarError');
+            debugPrint('🔴 Could not show error snackbar: $snackBarError');
           }
         }
       }

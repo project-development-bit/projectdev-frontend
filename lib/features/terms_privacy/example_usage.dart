@@ -1,8 +1,8 @@
+import 'package:cointiply_app/routing/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../core/common/common_text.dart';
-import 'presentation/screens/terms_screen.dart';
-import 'presentation/screens/privacy_screen.dart';
 import 'presentation/providers/terms_privacy_provider.dart';
 
 /// Example usage of Terms & Privacy feature
@@ -41,11 +41,7 @@ class TermsPrivacyExample extends ConsumerWidget {
             // Terms of Service Button
             ElevatedButton.icon(
               onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const TermsScreen(),
-                  ),
-                );
+                context.goNamed(AppRoutes.terms);
               },
               icon: const Icon(Icons.article_outlined),
               label: const Text('Terms of Service'),
@@ -59,11 +55,7 @@ class TermsPrivacyExample extends ConsumerWidget {
             // Privacy Policy Button
             ElevatedButton.icon(
               onPressed: () {
-                // Navigator.of(context).push(
-                //   MaterialPageRoute(
-                //     builder: (context) => const PrivacyScreen(),
-                //   ),
-                // );
+                context.goNamed(AppRoutes.privacy);
               },
               icon: const Icon(Icons.privacy_tip_outlined),
               label: const Text('Privacy Policy'),
@@ -181,22 +173,14 @@ class TermsPrivacyQuickAccess extends StatelessWidget {
       children: [
         TextButton(
           onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => const TermsScreen(),
-              ),
-            );
+            context.goNamed(AppRoutes.terms);
           },
           child: const Text('Terms'),
         ),
         const Text('•'),
         TextButton(
           onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => const PrivacyScreen(),
-              ),
-            );
+            context.goNamed(AppRoutes.privacy);
           },
           child: const Text('Privacy'),
         ),

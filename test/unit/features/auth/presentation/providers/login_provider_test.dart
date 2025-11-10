@@ -144,10 +144,11 @@ void main() {
         // Assert
         expect(result.isRight(), true);
         verify(() => mockLoginUseCase(request)).called(1);
-        
-        final loginResponse = result.getOrElse(() => throw Exception('Should not happen'));
-        expect(loginResponse.user.email, testEmail);
-        expect(loginResponse.tokens.accessToken, 'access_token');
+
+        final loginResponse =
+            result.getOrElse(() => throw Exception('Should not happen'));
+        expect(loginResponse.user?.email, testEmail);
+        expect(loginResponse.tokens?.accessToken, 'access_token');
       });
 
       test('should call login use case without reCAPTCHA token', () async {
@@ -177,8 +178,8 @@ void main() {
           recaptchaToken: testRecaptchaToken,
         );
 
-        when(() => mockLoginUseCase(any()))
-            .thenAnswer((_) async => Left(ServerFailure(message: 'Invalid credentials')));
+        when(() => mockLoginUseCase(any())).thenAnswer(
+            (_) async => Left(ServerFailure(message: 'Invalid credentials')));
 
         // Act
         final result = await mockLoginUseCase(request);
@@ -186,8 +187,9 @@ void main() {
         // Assert
         expect(result.isLeft(), true);
         verify(() => mockLoginUseCase(request)).called(1);
-        
-        final failure = result.fold((l) => l, (r) => throw Exception('Should not happen'));
+
+        final failure =
+            result.fold((l) => l, (r) => throw Exception('Should not happen'));
         expect(failure.message, 'Invalid credentials');
       });
     });

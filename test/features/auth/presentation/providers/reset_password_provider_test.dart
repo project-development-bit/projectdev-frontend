@@ -105,7 +105,7 @@ void main() {
       ]);
 
       final successState = states.last as ResetPasswordSuccess;
-      expect(successState.response.user.email, testEmail);
+      expect(successState.response.user?.email, testEmail);
     });
 
     test('should emit loading and error states when reset password fails',

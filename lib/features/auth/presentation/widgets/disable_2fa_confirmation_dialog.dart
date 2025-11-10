@@ -7,6 +7,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/localization/app_localizations.dart';
 import '../providers/disable_2fa_provider.dart';
 import '../providers/check_2fa_status_provider.dart';
+import 'package:go_router/go_router.dart';
 
 /// Confirmation dialog for disabling 2FA
 ///
@@ -23,7 +24,7 @@ class Disable2FAConfirmationDialog extends ConsumerWidget {
     ref.listen<Disable2FAState>(disable2FAProvider, (previous, next) {
       if (next is Disable2FASuccess) {
         // Close dialog on success
-        Navigator.of(context).pop();
+        context.pop();
 
         // Refresh 2FA status
         ref.read(check2FAStatusProvider.notifier).check2FAStatus();
@@ -159,7 +160,7 @@ class Disable2FAConfirmationDialog extends ConsumerWidget {
           onPressed: disable2FAState is Disable2FALoading
               ? null
               : () {
-                  Navigator.of(context).pop();
+                  context.pop();
                   ref.read(disable2FAProvider.notifier).reset();
                 },
           style: TextButton.styleFrom(

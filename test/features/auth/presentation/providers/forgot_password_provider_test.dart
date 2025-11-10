@@ -39,7 +39,7 @@ void main() {
 
       for (final email in invalidEmails) {
         // Act
-        notifier.forgotPassword(email);
+        notifier.forgotPassword(email, '');
 
         // Assert
         final state = container.read(forgotPasswordProvider);
@@ -69,7 +69,12 @@ void main() {
 
         // This will fail at the repository level since we don't have a mock
         // But it shows the email validation passes
-        expect(() => notifier.forgotPassword(email), returnsNormally);
+        expect(
+            () => notifier.forgotPassword(
+                  email,
+                  '',
+                ),
+            returnsNormally);
 
         // Reset for next test
         notifier.reset();
@@ -81,7 +86,7 @@ void main() {
       final notifier = container.read(forgotPasswordProvider.notifier);
 
       // Set an error state first
-      notifier.forgotPassword(''); // This will create an error state
+      notifier.forgotPassword('', ''); // This will create an error state
       expect(
           container.read(forgotPasswordProvider), isA<ForgotPasswordError>());
 
@@ -147,7 +152,7 @@ void main() {
 
       test('should reject empty email', () {
         // Act
-        notifier.forgotPassword('');
+        notifier.forgotPassword('', '');
 
         // Assert
         final state = container.read(forgotPasswordProvider);
@@ -158,7 +163,7 @@ void main() {
 
       test('should reject email without @', () {
         // Act
-        notifier.forgotPassword('userexample.com');
+        notifier.forgotPassword('userexample.com', 'test');
 
         // Assert
         final state = container.read(forgotPasswordProvider);
@@ -167,7 +172,7 @@ void main() {
 
       test('should reject email without domain', () {
         // Act
-        notifier.forgotPassword('user@');
+        notifier.forgotPassword('user@', 'test');
 
         // Assert
         final state = container.read(forgotPasswordProvider);
@@ -176,7 +181,7 @@ void main() {
 
       test('should reject email without local part', () {
         // Act
-        notifier.forgotPassword('@example.com');
+        notifier.forgotPassword('@example.com', 'test');
 
         // Assert
         final state = container.read(forgotPasswordProvider);
