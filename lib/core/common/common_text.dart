@@ -27,7 +27,7 @@ class CommonText extends StatelessWidget {
     this.maxLines,
     this.overflow,
     this.decoration,
-  }) : style = _TextStyle.displayLarge;
+  }) : style = TextStyleEnum.displayLarge; // Display large text style (57px)
 
   const CommonText.displayMedium(
     this.text, {
@@ -39,7 +39,7 @@ class CommonText extends StatelessWidget {
     this.maxLines,
     this.overflow,
     this.decoration,
-  }) : style = _TextStyle.displayMedium;
+  }) : style = TextStyleEnum.displayMedium; // Display medium text style (45px)
 
   const CommonText.displaySmall(
     this.text, {
@@ -51,7 +51,7 @@ class CommonText extends StatelessWidget {
     this.maxLines,
     this.overflow,
     this.decoration,
-  }) : style = _TextStyle.displaySmall;
+  }) : style = TextStyleEnum.displaySmall; // Display small text style (36px)
 
   /// Headline text styles
   const CommonText.headlineLarge(
@@ -64,7 +64,7 @@ class CommonText extends StatelessWidget {
     this.maxLines,
     this.overflow,
     this.decoration,
-  }) : style = _TextStyle.headlineLarge;
+  }) : style = TextStyleEnum.headlineLarge; // Headline large text style (32px)
 
   const CommonText.headlineMedium(
     this.text, {
@@ -76,7 +76,8 @@ class CommonText extends StatelessWidget {
     this.maxLines,
     this.overflow,
     this.decoration,
-  }) : style = _TextStyle.headlineMedium;
+  }) : style =
+            TextStyleEnum.headlineMedium; // Headline medium text style (28px)
 
   const CommonText.headlineSmall(
     this.text, {
@@ -88,7 +89,7 @@ class CommonText extends StatelessWidget {
     this.maxLines,
     this.overflow,
     this.decoration,
-  }) : style = _TextStyle.headlineSmall;
+  }) : style = TextStyleEnum.headlineSmall; // Headline small text style (24px)
 
   /// Title text styles
   const CommonText.titleLarge(
@@ -101,7 +102,7 @@ class CommonText extends StatelessWidget {
     this.maxLines,
     this.overflow,
     this.decoration,
-  }) : style = _TextStyle.titleLarge;
+  }) : style = TextStyleEnum.titleLarge; // Title large text style (22px)
 
   const CommonText.titleMedium(
     this.text, {
@@ -113,7 +114,7 @@ class CommonText extends StatelessWidget {
     this.maxLines,
     this.overflow,
     this.decoration,
-  }) : style = _TextStyle.titleMedium;
+  }) : style = TextStyleEnum.titleMedium; // Title medium text style (16px)
 
   const CommonText.titleSmall(
     this.text, {
@@ -125,7 +126,7 @@ class CommonText extends StatelessWidget {
     this.maxLines,
     this.overflow,
     this.decoration,
-  }) : style = _TextStyle.titleSmall;
+  }) : style = TextStyleEnum.titleSmall; // Title small text style (14px)
 
   /// Body text styles
   const CommonText.bodyLarge(
@@ -138,7 +139,7 @@ class CommonText extends StatelessWidget {
     this.maxLines,
     this.overflow,
     this.decoration,
-  }) : style = _TextStyle.bodyLarge;
+  }) : style = TextStyleEnum.bodyLarge; // Body large text style (16px)
 
   const CommonText.bodyMedium(
     this.text, {
@@ -150,7 +151,7 @@ class CommonText extends StatelessWidget {
     this.maxLines,
     this.overflow,
     this.decoration,
-  }) : style = _TextStyle.bodyMedium;
+  }) : style = TextStyleEnum.bodyMedium; // Body medium text style (14px)
 
   const CommonText.bodySmall(
     this.text, {
@@ -162,7 +163,7 @@ class CommonText extends StatelessWidget {
     this.maxLines,
     this.overflow,
     this.decoration,
-  }) : style = _TextStyle.bodySmall;
+  }) : style = TextStyleEnum.bodySmall; // Body small text style (12px)
 
   /// Label text styles
   const CommonText.labelLarge(
@@ -175,7 +176,7 @@ class CommonText extends StatelessWidget {
     this.maxLines,
     this.overflow,
     this.decoration,
-  }) : style = _TextStyle.labelLarge;
+  }) : style = TextStyleEnum.labelLarge; // Label large text style (14px)
 
   const CommonText.labelMedium(
     this.text, {
@@ -187,7 +188,7 @@ class CommonText extends StatelessWidget {
     this.maxLines,
     this.overflow,
     this.decoration,
-  }) : style = _TextStyle.labelMedium;
+  }) : style = TextStyleEnum.labelMedium; // Label medium text style (12px)
 
   const CommonText.labelSmall(
     this.text, {
@@ -199,7 +200,7 @@ class CommonText extends StatelessWidget {
     this.maxLines,
     this.overflow,
     this.decoration,
-  }) : style = _TextStyle.labelSmall;
+  }) : style = TextStyleEnum.labelSmall; // Label small text style (10px)
 
   /// Special crypto display text style (Orbitron with effects)
   const CommonText.cryptoDisplay(
@@ -212,7 +213,7 @@ class CommonText extends StatelessWidget {
     this.maxLines,
     this.overflow,
     this.decoration,
-  }) : style = _TextStyle.cryptoDisplay;
+  }) : style = TextStyleEnum.cryptoDisplay; // Crypto display text style
 
   /// Special crypto amount text style (Orbitron for numbers)
   const CommonText.cryptoAmount(
@@ -225,7 +226,7 @@ class CommonText extends StatelessWidget {
     this.maxLines,
     this.overflow,
     this.decoration,
-  }) : style = _TextStyle.cryptoAmount;
+  }) : style = TextStyleEnum.cryptoAmount; // Crypto amount text style
 
   /// Button text style (Orbitron for buttons)
   const CommonText.button(
@@ -238,10 +239,10 @@ class CommonText extends StatelessWidget {
     this.maxLines,
     this.overflow,
     this.decoration,
-  }) : style = _TextStyle.button;
+  }) : style = TextStyleEnum.button; // Button text style
 
   final String text;
-  final _TextStyle? style;
+  final TextStyleEnum? style;
   final Color? color;
   final double? fontSize;
   final FontWeight? fontWeight;
@@ -256,79 +257,79 @@ class CommonText extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     switch (style) {
-      case _TextStyle.displayLarge:
+      case TextStyleEnum.displayLarge:
         baseStyle = isDark
             ? AppTypography.displayLargeDark
             : AppTypography.displayLarge;
         break;
-      case _TextStyle.displayMedium:
+      case TextStyleEnum.displayMedium:
         baseStyle = isDark
             ? AppTypography.displayMediumDark
             : AppTypography.displayMedium;
         break;
-      case _TextStyle.displaySmall:
+      case TextStyleEnum.displaySmall:
         baseStyle = isDark
             ? AppTypography.displaySmallDark
             : AppTypography.displaySmall;
         break;
-      case _TextStyle.headlineLarge:
+      case TextStyleEnum.headlineLarge:
         baseStyle = isDark
             ? AppTypography.headlineLargeDark
             : AppTypography.headlineLarge;
         break;
-      case _TextStyle.headlineMedium:
+      case TextStyleEnum.headlineMedium:
         baseStyle = isDark
             ? AppTypography.headlineMediumDark
             : AppTypography.headlineMedium;
         break;
-      case _TextStyle.headlineSmall:
+      case TextStyleEnum.headlineSmall:
         baseStyle = isDark
             ? AppTypography.headlineSmallDark
             : AppTypography.headlineSmall;
         break;
-      case _TextStyle.titleLarge:
+      case TextStyleEnum.titleLarge:
         baseStyle =
             isDark ? AppTypography.titleLargeDark : AppTypography.titleLarge;
         break;
-      case _TextStyle.titleMedium:
+      case TextStyleEnum.titleMedium:
         baseStyle =
             isDark ? AppTypography.titleMediumDark : AppTypography.titleMedium;
         break;
-      case _TextStyle.titleSmall:
+      case TextStyleEnum.titleSmall:
         baseStyle =
             isDark ? AppTypography.titleSmallDark : AppTypography.titleSmall;
         break;
-      case _TextStyle.bodyLarge:
+      case TextStyleEnum.bodyLarge:
         baseStyle =
             isDark ? AppTypography.bodyLargeDark : AppTypography.bodyLarge;
         break;
-      case _TextStyle.bodyMedium:
+      case TextStyleEnum.bodyMedium:
         baseStyle =
             isDark ? AppTypography.bodyMediumDark : AppTypography.bodyMedium;
         break;
-      case _TextStyle.bodySmall:
+      case TextStyleEnum.bodySmall:
         baseStyle =
             isDark ? AppTypography.bodySmallDark : AppTypography.bodySmall;
         break;
-      case _TextStyle.labelLarge:
+      case TextStyleEnum.labelLarge:
         baseStyle =
             isDark ? AppTypography.labelLargeDark : AppTypography.labelLarge;
         break;
-      case _TextStyle.labelMedium:
+      case TextStyleEnum.labelMedium:
         baseStyle =
             isDark ? AppTypography.labelMediumDark : AppTypography.labelMedium;
         break;
-      case _TextStyle.labelSmall:
+      case TextStyleEnum.labelSmall:
         baseStyle =
             isDark ? AppTypography.labelSmallDark : AppTypography.labelSmall;
         break;
-      case _TextStyle.cryptoDisplay:
+      case TextStyleEnum.cryptoDisplay:
         baseStyle = AppTypography.cryptoDisplay;
         break;
-      case _TextStyle.cryptoAmount:
+      case TextStyleEnum.cryptoAmount:
         baseStyle = AppTypography.cryptoAmount;
         break;
-      case _TextStyle.button:
+      case TextStyleEnum.button:
         baseStyle = AppTypography.buttonText;
         break;
       case null:
@@ -354,23 +355,23 @@ class CommonText extends StatelessWidget {
   }
 }
 
-enum _TextStyle {
-  displayLarge,
-  displayMedium,
-  displaySmall,
-  headlineLarge,
-  headlineMedium,
-  headlineSmall,
-  titleLarge,
-  titleMedium,
-  titleSmall,
-  bodyLarge,
-  bodyMedium,
-  bodySmall,
-  labelLarge,
-  labelMedium,
-  labelSmall,
-  cryptoDisplay,
-  cryptoAmount,
-  button,
+enum TextStyleEnum {
+  displayLarge, // Display large text style (57px)
+  displayMedium, // Display medium text style (45px)
+  displaySmall, // Display small text style (36px)
+  headlineLarge, // Headline large text style (32px)
+  headlineMedium, // Headline medium text style (28px)
+  headlineSmall, // Headline small text style (24px)
+  titleLarge, // Title large text style (22px)
+  titleMedium, // Title medium text style (16px)
+  titleSmall, // Title small text style (14px)
+  bodyLarge, // Body large text style (16px)
+  bodyMedium, // Body medium text style (14px)
+  bodySmall, // Body small text style (12px)
+  labelLarge, // Label large text style (14px)
+  labelMedium, // Label medium text style (12px)
+  labelSmall, // Label small text style (10px)
+  cryptoDisplay, // Crypto display text style
+  cryptoAmount, // Crypto amount text style
+  button, // Button text style
 }

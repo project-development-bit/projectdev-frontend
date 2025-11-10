@@ -174,7 +174,7 @@ class _ColorSwatch extends StatelessWidget {
           ),
           const SizedBox(width: 12),
           Expanded(
-            child: CommonText.bodyMedium('$name'),
+            child: CommonText.bodyMedium(name),
           ),
           CommonText.bodySmall(
             color.value.toRadixString(16).toUpperCase().padLeft(8, '0'),

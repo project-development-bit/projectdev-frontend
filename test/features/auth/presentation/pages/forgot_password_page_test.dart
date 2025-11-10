@@ -112,7 +112,7 @@ void main() {
     testWidgets('should navigate back when back button is pressed',
         (WidgetTester tester) async {
       // Arrange
-      bool backPressed = false;
+      // bool backPressed = false;
       await tester.pumpWidget(
         ProviderScope(
           child: MaterialApp(
@@ -131,7 +131,7 @@ void main() {
             ),
             onGenerateRoute: (settings) {
               if (settings.name == '/') {
-                backPressed = true;
+                // backPressed = true;
               }
               return null;
             },
