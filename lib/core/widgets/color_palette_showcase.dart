@@ -95,7 +95,8 @@ class ColorPaletteShowcase extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.websiteCard,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.websiteBorder.withOpacity(0.3)),
+        border:
+            Border.all(color: AppColors.websiteBorder.withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -148,10 +149,11 @@ class ColorPaletteShowcase extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.websiteCard,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.websiteBorder.withOpacity(0.3)),
+        border:
+            Border.all(color: AppColors.websiteBorder.withValues(alpha: 0.3)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.3),
+            color: Colors.black.withValues(alpha: 0.3),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -269,10 +271,11 @@ class _ColorItem extends StatelessWidget {
       decoration: BoxDecoration(
         color: color,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.websiteBorder.withOpacity(0.3)),
+        border:
+            Border.all(color: AppColors.websiteBorder.withValues(alpha: 0.3)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: Colors.black.withValues(alpha: 0.2),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -317,10 +320,11 @@ class _GradientItem extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(colors: colors),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.websiteBorder.withOpacity(0.3)),
+        border:
+            Border.all(color: AppColors.websiteBorder.withValues(alpha: 0.3)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: Colors.black.withValues(alpha: 0.2),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),

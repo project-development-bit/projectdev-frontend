@@ -44,7 +44,7 @@ class TwoFactorAuthExample extends ConsumerWidget {
                     onSuccess: () {
                       // This callback is called when verification succeeds
                       debugPrint('✅ 2FA verification successful!');
-                      
+
                       // Navigate to home or next screen
                       context.goToHome();
                     },

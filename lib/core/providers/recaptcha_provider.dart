@@ -171,24 +171,24 @@ class RecaptchaNotifier extends StateNotifier<RecaptchaState> {
 
   /// Reset verification state
   void reset() {
-    print(
+    debugPrint(
         'reCAPTCHA Provider: reset() called, current state: ${state.runtimeType}');
     if (state is RecaptchaVerified || state is RecaptchaError) {
       final config = FlavorManager.currentConfig;
 
       // Check if site key is configured (regardless of flavor now)
       if (config.recaptchaSiteKey == null || config.recaptchaSiteKey!.isEmpty) {
-        print(
+        debugPrint(
             'reCAPTCHA Provider: No site key, setting to RecaptchaNotAvailable');
         state = const RecaptchaNotAvailable(
             reason: 'reCAPTCHA site key not configured');
       } else {
-        print(
+        debugPrint(
             'reCAPTCHA Provider: Site key available, setting to RecaptchaReady');
         state = const RecaptchaReady();
       }
     } else {
-      print(
+      debugPrint(
           'reCAPTCHA Provider: reset() ignored, state is ${state.runtimeType}');
     }
   }

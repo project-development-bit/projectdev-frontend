@@ -48,7 +48,7 @@ class CommonContainer extends StatelessWidget {
     final effectiveBorderColor = borderColor ??
         (isDark
             ? AppColors.websiteBorder
-            : AppColors.websiteBorder.withOpacity(0.2));
+            : AppColors.websiteBorder.withValues(alpha: 0.2));
     final effectiveBorderWidth = borderWidth ?? 1.0;
 
     final effectiveBoxShadow = boxShadow ??
@@ -56,8 +56,8 @@ class CommonContainer extends StatelessWidget {
             ? [
                 BoxShadow(
                   color: isDark
-                      ? Colors.black.withOpacity(0.3)
-                      : AppColors.primary.withOpacity(0.1),
+                      ? Colors.black.withValues(alpha: 0.3)
+                      : AppColors.primary.withValues(alpha: 0.1),
                   blurRadius: isDark ? 8 : 4,
                   offset: Offset(0, isDark ? 4 : 2),
                 ),
@@ -92,9 +92,9 @@ class CommonContainer extends StatelessWidget {
           onTap: onTap,
           borderRadius: BorderRadius.circular(effectiveBorderRadius),
           splashColor: (isDark ? AppColors.primaryLight : AppColors.primary)
-              .withOpacity(0.1),
+              .withValues(alpha: 0.1),
           highlightColor: (isDark ? AppColors.primaryLight : AppColors.primary)
-              .withOpacity(0.05),
+              .withValues(alpha: 0.05),
           child: containerWidget,
         ),
       );
@@ -139,14 +139,14 @@ class CryptoContainer extends StatelessWidget {
       onTap: onTap,
       showBorder: true,
       showShadow: true,
-      borderColor: effectiveAccentColor.withOpacity(0.3),
+      borderColor: effectiveAccentColor.withValues(alpha: 0.3),
       borderWidth: 2,
       gradient: LinearGradient(
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
         colors: [
-          effectiveAccentColor.withOpacity(0.1),
-          effectiveAccentColor.withOpacity(0.05),
+          effectiveAccentColor.withValues(alpha: 0.1),
+          effectiveAccentColor.withValues(alpha: 0.05),
         ],
       ),
       child: child,
@@ -299,7 +299,7 @@ class ErrorContainer extends StatelessWidget {
       margin: margin,
       showBorder: true,
       showShadow: true,
-      borderColor: Colors.red.withOpacity(0.3),
+      borderColor: Colors.red.withValues(alpha: 0.3),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,

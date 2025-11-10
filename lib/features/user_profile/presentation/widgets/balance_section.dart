@@ -198,7 +198,8 @@ class BalanceSection extends StatelessWidget {
       width: 150,
       height: 90,
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey.withOpacity(0.25), width: 1),
+        border:
+            Border.all(color: Colors.grey.withValues(alpha: 0.25), width: 1),
         borderRadius: BorderRadius.circular(8),
       ),
       padding: const EdgeInsets.all(12),

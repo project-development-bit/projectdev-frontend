@@ -8,7 +8,6 @@ import '../../../../core/widgets/locale_switch_widget.dart';
 import '../../../../core/widgets/responsive_container.dart';
 import '../../../../core/extensions/context_extensions.dart';
 import '../providers/verify_2fa_provider.dart';
-import '../../../../routing/app_router.dart';
 
 class TwoFactorAuthPage extends ConsumerStatefulWidget {
   const TwoFactorAuthPage({
@@ -195,7 +194,8 @@ class _TwoFactorAuthPageState extends ConsumerState<TwoFactorAuthPage> {
                       hintText: '● ● ● ● ● ●',
                       hintStyle: TextStyle(
                         letterSpacing: 24,
-                        color: colorScheme.onSurfaceVariant.withOpacity(0.3),
+                        color:
+                            colorScheme.onSurfaceVariant.withValues(alpha: 0.3),
                         fontSize: 28,
                       ),
                       filled: true,
@@ -258,7 +258,8 @@ class _TwoFactorAuthPageState extends ConsumerState<TwoFactorAuthPage> {
                     onPressed: isLoading ? null : _handleVerify,
                     isLoading: isLoading,
                     height: 56,
-                    backgroundColor: const Color(0xFFE53945), // Red color as requested
+                    backgroundColor:
+                        const Color(0xFFE53945), // Red color as requested
                     textColor: Colors.white,
                     borderRadius: 12,
                   ),
@@ -271,7 +272,7 @@ class _TwoFactorAuthPageState extends ConsumerState<TwoFactorAuthPage> {
                       width: context.isMobile ? 120 : 140,
                       height: context.isMobile ? 120 : 140,
                       decoration: BoxDecoration(
-                        color: colorScheme.primary.withOpacity(0.1),
+                        color: colorScheme.primary.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(70),
                       ),
                       child: Icon(
@@ -299,7 +300,8 @@ class _TwoFactorAuthPageState extends ConsumerState<TwoFactorAuthPage> {
                     onPressed: () {
                       // TODO: Navigate to support or open support URL
                       context.showSuccessSnackBar(
-                        message: 'Please contact support at support@example.com',
+                        message:
+                            'Please contact support at support@example.com',
                       );
                     },
                     style: TextButton.styleFrom(

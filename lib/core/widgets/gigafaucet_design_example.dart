@@ -67,10 +67,11 @@ class GigafaucetDesignExample extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.websiteCard,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.websiteBorder.withOpacity(0.3)),
+        border:
+            Border.all(color: AppColors.websiteBorder.withValues(alpha: 0.3)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.3),
+            color: Colors.black.withValues(alpha: 0.3),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -140,7 +141,8 @@ class GigafaucetDesignExample extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.websiteCard,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.websiteBorder.withOpacity(0.3)),
+        border:
+            Border.all(color: AppColors.websiteBorder.withValues(alpha: 0.3)),
       ),
       child: Column(
         children: [
@@ -170,7 +172,8 @@ class GigafaucetDesignExample extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.websiteCard,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.websiteBorder.withOpacity(0.3)),
+        border:
+            Border.all(color: AppColors.websiteBorder.withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -199,7 +202,7 @@ class GigafaucetDesignExample extends StatelessWidget {
           width: 40,
           height: 40,
           decoration: BoxDecoration(
-            color: color.withOpacity(0.2),
+            color: color.withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(20),
             border: Border.all(color: color, width: 2),
           ),
@@ -287,7 +290,8 @@ class GigafaucetDesignExample extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.websiteCard,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.websiteBorder.withOpacity(0.3)),
+        border:
+            Border.all(color: AppColors.websiteBorder.withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -306,7 +310,7 @@ class GigafaucetDesignExample extends StatelessWidget {
               ),
               hintText: 'Enter your wallet address',
               hintStyle: AppTypography.bodyMedium.copyWith(
-                color: AppColors.websiteText.withOpacity(0.6),
+                color: AppColors.websiteText.withValues(alpha: 0.6),
               ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
@@ -334,7 +338,7 @@ class GigafaucetDesignExample extends StatelessWidget {
               ),
               hintText: '0.00',
               hintStyle: AppTypography.bodyMedium.copyWith(
-                color: AppColors.websiteText.withOpacity(0.6),
+                color: AppColors.websiteText.withValues(alpha: 0.6),
               ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),

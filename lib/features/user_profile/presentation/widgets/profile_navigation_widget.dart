@@ -53,8 +53,9 @@ class ProfileNavigationWidget extends StatelessWidget {
         ),
         child: CommonText.bodyMedium(
           title,
-          color:
-              isSelected ? context.primary : context.onSurface.withOpacity(0.7),
+          color: isSelected
+              ? context.primary
+              : context.onSurface.withValues(alpha: 0.7),
           fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
         ),
       ),

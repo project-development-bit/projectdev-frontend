@@ -24,7 +24,7 @@ class HeroSection extends ConsumerWidget {
           end: Alignment.bottomRight,
           colors: [
             context.primary,
-            context.primary.withOpacity(0.8),
+            context.primary.withValues(alpha: 0.8),
             context.secondary,
           ],
         ),
@@ -48,7 +48,7 @@ class HeroSection extends ConsumerWidget {
             CommonText.headlineSmall(
               context.translate('hero_subheading'),
               textAlign: TextAlign.center,
-              color: context.onPrimary.withOpacity(0.9),
+              color: context.onPrimary.withValues(alpha: 0.9),
             ),
             const SizedBox(height: 32),
 
@@ -75,10 +75,10 @@ class HeroSection extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: BoxDecoration(
-                color: context.onPrimary.withOpacity(0.1),
+                color: context.onPrimary.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
-                  color: context.onPrimary.withOpacity(0.3),
+                  color: context.onPrimary.withValues(alpha: 0.3),
                 ),
               ),
               child: Row(

@@ -106,7 +106,7 @@ class CommonButton extends StatelessWidget {
           ),
           padding: effectivePadding,
           elevation: isLoading ? 0 : 3,
-          shadowColor: effectiveBackgroundColor.withOpacity(0.3),
+          shadowColor: effectiveBackgroundColor.withValues(alpha: 0.3),
         ),
         child: child,
       ),

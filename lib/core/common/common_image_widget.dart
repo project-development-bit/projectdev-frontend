@@ -52,7 +52,7 @@ class CommonImage extends StatelessWidget {
           height: height,
           decoration: BoxDecoration(
             color: isDark
-                ? AppColors.websiteCard.withOpacity(0.5)
+                ? AppColors.websiteCard.withValues(alpha: 0.5)
                 : context.errorContainer,
             borderRadius: borderRadius,
           ),

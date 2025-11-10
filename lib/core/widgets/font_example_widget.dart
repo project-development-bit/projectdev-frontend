@@ -110,7 +110,7 @@ class FontExampleWidget extends StatelessWidget {
                   color: AppColors.websiteCard,
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
-                      color: AppColors.websiteBorder.withOpacity(0.3)),
+                      color: AppColors.websiteBorder.withValues(alpha: 0.3)),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -175,7 +175,8 @@ class FontExampleWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.websiteCard,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.websiteBorder.withOpacity(0.3)),
+        border:
+            Border.all(color: AppColors.websiteBorder.withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

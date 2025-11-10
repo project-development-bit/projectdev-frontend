@@ -294,7 +294,7 @@ class ThemeSelectorCard extends ConsumerWidget {
                   ),
                 ),
               );
-            }).toList(),
+            }),
           ],
         ),
       ),

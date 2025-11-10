@@ -46,7 +46,7 @@ class CommonCard extends StatelessWidget {
     final effectiveMargin = margin ?? const EdgeInsets.all(8);
     final effectiveBorderColor = borderColor ??
         (isDark
-            ? AppColors.websiteBorder.withOpacity(0.3)
+            ? AppColors.websiteBorder.withValues(alpha: 0.3)
             : Colors.transparent);
     final effectiveBorderWidth = borderWidth ?? (isDark ? 1.0 : 0.0);
 
@@ -64,8 +64,8 @@ class CommonCard extends StatelessWidget {
             ? [
                 BoxShadow(
                   color: isDark
-                      ? Colors.black.withOpacity(0.3)
-                      : AppColors.primary.withOpacity(0.1),
+                      ? Colors.black.withValues(alpha: 0.3)
+                      : AppColors.primary.withValues(alpha: 0.1),
                   blurRadius: isDark ? 8 : 4,
                   offset: Offset(0, isDark ? 4 : 2),
                 ),
@@ -120,9 +120,9 @@ class CommonCard extends StatelessWidget {
           onTap: onTap,
           borderRadius: BorderRadius.circular(effectiveBorderRadius),
           splashColor: (isDark ? AppColors.primaryLight : AppColors.primary)
-              .withOpacity(0.1),
+            ..withValues(alpha: 0.1),
           highlightColor: (isDark ? AppColors.primaryLight : AppColors.primary)
-              .withOpacity(0.05),
+            ..withValues(alpha: 0.05),
           child: cardContent,
         ),
       );
@@ -171,7 +171,7 @@ class CryptoCard extends StatelessWidget {
               width: 50,
               height: 50,
               decoration: BoxDecoration(
-                color: effectiveAccentColor.withOpacity(0.2),
+                color: effectiveAccentColor..withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(25),
                 border: Border.all(
                   color: effectiveAccentColor,

@@ -121,7 +121,7 @@ extension MediaQueryExtension on BuildContext {
   double get devicePixelRatio => mediaQuery.devicePixelRatio;
 
   /// Text scale factor
-  double get textScaleFactor => mediaQuery.textScaleFactor;
+  // double get textScaleFactor => mediaQuery.textScaleFactor;
 
   /// Platform brightness
   Brightness get platformBrightness => mediaQuery.platformBrightness;

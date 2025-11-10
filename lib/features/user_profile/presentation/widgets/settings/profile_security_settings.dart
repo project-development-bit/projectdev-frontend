@@ -14,9 +14,7 @@ class ProfileSecuritySettings extends ConsumerStatefulWidget {
 
 class _ProfileSecuritySettingsState
     extends ConsumerState<ProfileSecuritySettings> {
-  
   bool enableSecurityPin = false;
-
 
   @override
   void initState() {
@@ -243,7 +241,6 @@ class _ProfileSecuritySettingsState
     );
   }
 
-
   Widget _build2FASection(BuildContext context, {bool isMobile = false}) {
     final check2FAState = ref.watch(check2FAStatusProvider);
     final localizations = AppLocalizations.of(context);
@@ -308,7 +305,7 @@ class _ProfileSecuritySettingsState
     final buttonColor = is2FAEnabled
         ? AppColors.error
         : AppColors.success; // Always red for both states
-    
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
