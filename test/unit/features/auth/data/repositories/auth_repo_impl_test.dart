@@ -100,19 +100,19 @@ void main() {
           (loginResponse) {
             expect(loginResponse.success, true);
             expect(loginResponse.message, 'Login successful.');
-            expect(loginResponse.user.id, 11);
-            expect(loginResponse.user.email, 'user8@gmail.com');
-            expect(loginResponse.user.role, UserRole.normalUser);
+            expect(loginResponse.user?.id, 11);
+            expect(loginResponse.user?.email, 'user8@gmail.com');
+            expect(loginResponse.user?.role, UserRole.normalUser);
           },
         );
 
         verify(() => mockRemoteDataSource.login(loginRequest)).called(1);
         verify(() => mockSecureStorage
-            .saveAuthToken(loginResponseModel.tokens.accessToken)).called(1);
+            .saveAuthToken(loginResponseModel.tokens?.accessToken ?? '')).called(1);
         verify(() => mockSecureStorage.saveRefreshToken(
-            loginResponseModel.tokens.refreshToken)).called(1);
+            loginResponseModel.tokens?.refreshToken ?? '')).called(1);
         verify(() => mockSecureStorage
-            .saveUserId(loginResponseModel.user.id.toString())).called(1);
+            .saveUserId(loginResponseModel.user?.id.toString() ?? '')).called(1);
       });
 
       test('should return ServerFailure when DioException occurs', () async {

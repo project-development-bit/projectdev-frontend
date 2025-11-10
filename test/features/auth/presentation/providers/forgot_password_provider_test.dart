@@ -23,7 +23,7 @@ void main() {
       expect(state, isA<ForgotPasswordInitial>());
     });
 
-    test('should validate email format correctly', () {
+    test('should validate email format correctly', () async {
       // Arrange
       final notifier = container.read(forgotPasswordProvider.notifier);
 
@@ -39,7 +39,7 @@ void main() {
 
       for (final email in invalidEmails) {
         // Act
-        notifier.forgotPassword(email);
+        await notifier.forgotPassword(email, 'mock-turnstile-token');
 
         // Assert
         final state = container.read(forgotPasswordProvider);
@@ -69,19 +69,19 @@ void main() {
 
         // This will fail at the repository level since we don't have a mock
         // But it shows the email validation passes
-        expect(() => notifier.forgotPassword(email), returnsNormally);
+        expect(() => notifier.forgotPassword(email, 'mock-turnstile-token'), returnsNormally);
 
         // Reset for next test
         notifier.reset();
       }
     });
 
-    test('reset should return to initial state', () {
+    test('reset should return to initial state', () async {
       // Arrange
       final notifier = container.read(forgotPasswordProvider.notifier);
 
       // Set an error state first
-      notifier.forgotPassword(''); // This will create an error state
+      await notifier.forgotPassword('', 'mock-turnstile-token'); // This will create an error state
       expect(
           container.read(forgotPasswordProvider), isA<ForgotPasswordError>());
 
@@ -147,7 +147,7 @@ void main() {
 
       test('should reject empty email', () {
         // Act
-        notifier.forgotPassword('');
+        notifier.forgotPassword('', 'mock-turnstile-token');
 
         // Assert
         final state = container.read(forgotPasswordProvider);
@@ -158,7 +158,7 @@ void main() {
 
       test('should reject email without @', () {
         // Act
-        notifier.forgotPassword('userexample.com');
+        notifier.forgotPassword('userexample.com', 'mock-turnstile-token');
 
         // Assert
         final state = container.read(forgotPasswordProvider);
@@ -167,7 +167,7 @@ void main() {
 
       test('should reject email without domain', () {
         // Act
-        notifier.forgotPassword('user@');
+        notifier.forgotPassword('user@', 'mock-turnstile-token');
 
         // Assert
         final state = container.read(forgotPasswordProvider);
@@ -176,7 +176,7 @@ void main() {
 
       test('should reject email without local part', () {
         // Act
-        notifier.forgotPassword('@example.com');
+        notifier.forgotPassword('@example.com', 'mock-turnstile-token');
 
         // Assert
         final state = container.read(forgotPasswordProvider);
