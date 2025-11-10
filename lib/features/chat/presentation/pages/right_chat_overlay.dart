@@ -21,38 +21,40 @@ class RightChatOverlay extends ConsumerWidget {
       return child;
     }
 
-    return Stack(
-      children: [
-        // Base app content (interactable when chat closed)
-        AbsorbPointer(
-          absorbing: isChatOpen, // disable base taps only when chat is open
-          child: child,
-        ),
-
-        // Optional dim background (click to close)
-        if (isChatOpen)
-          Positioned.fill(
-            child: GestureDetector(
-              behavior: HitTestBehavior.translucent,
-              onTap: () {
-                ref.read(rightChatOverlayProvider.notifier).close();
-              },
-              child: Container(
-                color: Colors.black.withOpacity(0.3),
-              ),
-            ),
+    return CustomPointerInterceptor(
+      child: Stack(
+        children: [
+          // Base app content (interactable when chat closed)
+          AbsorbPointer(
+            absorbing: isChatOpen, // disable base taps only when chat is open
+            child: child,
           ),
 
-        // Chat panel (interactive and always above dim layer)
-        AnimatedPositioned(
-          duration: const Duration(milliseconds: 300),
-          top: 0,
-          bottom: 0,
-          right: isChatOpen ? 0 : -RightChatOverlayConfig.panelWidth,
-          width: RightChatOverlayConfig.panelWidth,
-          child: _ChatPanel(),
-        ),
-      ],
+          // Optional dim background (click to close)
+          if (isChatOpen)
+            Positioned.fill(
+              child: GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onTap: () {
+                  ref.read(rightChatOverlayProvider.notifier).close();
+                },
+                child: Container(
+                  color: Colors.black.withAlpha(100),
+                ),
+              ),
+            ),
+
+          // Chat panel (interactive and always above dim layer)
+          AnimatedPositioned(
+            duration: const Duration(milliseconds: 300),
+            top: 0,
+            bottom: 0,
+            right: isChatOpen ? 0 : -RightChatOverlayConfig.panelWidth,
+            width: RightChatOverlayConfig.panelWidth,
+            child: _ChatPanel(),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -65,27 +67,27 @@ class _ChatPanel extends ConsumerWidget {
 
     return Column(
       children: [
-        // Container(
-        //   alignment: Alignment.centerRight,
-        //   width: double.infinity,
-        //   decoration: const BoxDecoration(
-        //     color: Colors.white,
-        //     boxShadow: [
-        //       BoxShadow(
-        //         color: Colors.black26,
-        //         blurRadius: 4,
-        //         offset: Offset(-2, 0),
-        //       ),
-        //     ],
-        //   ),
-        //   child: IconButton(
-        //     icon: const Icon(Icons.close, color: Colors.black87),
-        //     onPressed: () {
-        //       notifier.close();
-        //     },
-        //     tooltip: AppLocalizations.of(context)!.translate('close_chat'),
-        //   ),
-        // ),
+        Container(
+          alignment: Alignment.centerRight,
+          width: double.infinity,
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 4,
+                offset: Offset(-2, 0),
+              ),
+            ],
+          ),
+          child: IconButton(
+            icon: const Icon(Icons.close, color: Colors.black87),
+            onPressed: () {
+              notifier.close();
+            },
+            tooltip: AppLocalizations.of(context)!.translate('close_chat'),
+          ),
+        ),
         Expanded(
           child: Material(
             color: Colors.black87,
