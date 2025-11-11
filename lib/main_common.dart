@@ -3,13 +3,13 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/foundation.dart';
 import 'package:url_strategy/url_strategy.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cointiply_app/core/services/database_service.dart';
 import 'package:cointiply_app/core/localization/app_localizations.dart';
 import 'core/providers/locale_provider.dart';
 import 'core/providers/theme_provider.dart';
 import 'core/theme/app_theme.dart';
-import 'core/theme/presentation/providers/theme_providers.dart';
-import 'core/theme/data/datasources/theme_database_source.dart';
+import 'core/theme/presentation/providers/app_settings_theme_provider.dart';
 import 'core/config/app_flavor.dart';
 import 'core/config/flavor_manager.dart';
 import 'core/widgets/flavor_banner.dart';
@@ -76,6 +76,9 @@ Future<void> runAppWithFlavor(AppFlavor flavor) async {
   // Initialize SQLite database
   await DatabaseService.init();
 
+  // Initialize SharedPreferences
+  final sharedPreferences = await SharedPreferences.getInstance();
+
   // Print flavor information for debugging
   debugPrint('🚀 Starting app with flavor: ${flavor.displayName}');
   debugPrint('📱 App Name: ${FlavorManager.appName}');
@@ -87,9 +90,9 @@ Future<void> runAppWithFlavor(AppFlavor flavor) async {
   runApp(
     ProviderScope(
       overrides: [
-        // Override theme database source with initialized instance
-        themeDatabaseSourceProvider.overrideWithValue(
-          ThemeDatabaseSourceImpl(),
+        // Override shared preferences for app settings theme
+        sharedPreferencesProviderForAppSettings.overrideWithValue(
+          sharedPreferences,
         ),
       ],
       child: const MyApp(),
@@ -108,9 +111,9 @@ class _MyAppState extends ConsumerState<MyApp> {
   @override
   void initState() {
     super.initState();
-    // Load dynamic theme on app start
+    // Load app settings theme from server on app start
     Future.microtask(() {
-      ref.read(dynamicThemeProvider.notifier).loadTheme();
+      ref.read(appSettingsThemeProvider.notifier).loadThemeConfig();
     });
   }
 
@@ -120,16 +123,16 @@ class _MyAppState extends ConsumerState<MyApp> {
     final currentThemeMode = ref.watch(themeProvider);
     final themeNotifier = ref.read(themeProvider.notifier);
     final currentFlavor = ref.watch(flavorProvider);
-    final dynamicThemeState = ref.watch(dynamicThemeProvider);
+    final appSettingsThemeState = ref.watch(appSettingsThemeProvider);
 
     debugPrint(
         'MyApp building with locale: ${currentLocale.languageCode}-${currentLocale.countryCode}');
     debugPrint('MyApp building with theme: ${currentThemeMode.name}');
     debugPrint('MyApp building with flavor: ${currentFlavor.displayName}');
-    debugPrint('Dynamic theme loading: ${dynamicThemeState.isLoading}');
+    debugPrint('App settings theme loading: ${appSettingsThemeState.isLoading}');
 
     // Show splash screen while theme is loading
-    if (dynamicThemeState.isLoading) {
+    if (appSettingsThemeState.isLoading) {
       return MaterialApp(
         debugShowCheckedModeBanner: false,
         home: Scaffold(
@@ -193,9 +196,9 @@ class _MyAppState extends ConsumerState<MyApp> {
         locale: currentLocale,
         title: FlavorManager.appName, // Use flavor-specific app name
 
-        // Theme configuration - Use dynamic themes from API/Database
-        theme: dynamicThemeState.lightTheme,
-        darkTheme: dynamicThemeState.darkTheme,
+        // Theme configuration - Use app settings theme from server, fallback to default theme
+        theme: appSettingsThemeState.lightTheme ?? AppTheme.lightTheme,
+        darkTheme: appSettingsThemeState.darkTheme ?? AppTheme.darkTheme,
         themeMode: themeNotifier.getEffectiveThemeMode(
           MediaQuery.platformBrightnessOf(context),
         ),
