@@ -10,6 +10,7 @@ class ContactSubmission {
   final String? phone;
   final String? userId;
   final String? turnstileToken;
+  final String action;
 
   const ContactSubmission({
     required this.name,
@@ -22,6 +23,7 @@ class ContactSubmission {
     this.phone,
     this.userId,
     this.turnstileToken,
+    this.action = 'contact_us',
   });
 
   ContactSubmission copyWith({

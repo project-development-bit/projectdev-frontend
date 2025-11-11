@@ -1,8 +1,8 @@
 import 'package:cointiply_app/features/legal/data/datasource/legal_remote_data_source.dart';
+import 'package:cointiply_app/features/legal/data/models/request/contact_us_request.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/entities/legal_document.dart';
-import '../../domain/entities/contact_submission.dart';
 import '../../domain/usecases/get_privacy_policy_usecase.dart';
 import '../../domain/usecases/get_terms_of_service_usecase.dart';
 import '../../domain/usecases/submit_contact_form_usecase.dart';
@@ -96,14 +96,13 @@ class LegalNotifier extends StateNotifier<LegalState> {
   }
 
   /// Submit contact form
-  Future<void> submitContactForm(ContactSubmission submission) async {
+  Future<void> submitContactForm(ContactUsRequest submission) async {
     state = const LegalLoading();
 
     try {
       final useCase =
           SubmitContactFormUseCase(_ref.read(legalRepositoryProvider));
-      final result =
-          await useCase.call(SubmitContactFormParams(submission: submission));
+      final result = await useCase.call(submission);
 
       result.fold(
         (failure) {

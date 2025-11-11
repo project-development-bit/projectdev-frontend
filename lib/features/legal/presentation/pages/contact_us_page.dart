@@ -1,6 +1,7 @@
 import 'package:cointiply_app/core/localization/app_localizations.dart';
 import 'package:cointiply_app/core/providers/turnstile_provider.dart';
 import 'package:cointiply_app/core/widgets/cloudflare_turnstille_widgte.dart';
+import 'package:cointiply_app/features/legal/data/models/request/contact_us_request.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/common/common_text.dart';
@@ -378,13 +379,12 @@ class _ContactUsPageState extends ConsumerState<ContactUsPage> {
 
       // Get the Turnstile token
       final turnstileToken = ref.read(turnstileTokenProvider);
-      final submission = ContactSubmission(
+      final submission = ContactUsRequest(
           name: _nameController.text.trim(),
           email: _emailController.text.trim(),
           subject: _subjectController.text.trim(),
           message: _messageController.text.trim(),
-          category: _selectedCategory,
-          createdAt: DateTime.now(),
+          category: _selectedCategory.value,
           phone: _phoneController.text.trim().isNotEmpty
               ? _phoneController.text.trim()
               : null,

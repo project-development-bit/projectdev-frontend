@@ -1,12 +1,12 @@
 import 'package:cointiply_app/core/error/error_handling.dart'
     show ErrorHandling;
 import 'package:cointiply_app/features/legal/data/datasource/legal_remote_data_source.dart';
+import 'package:cointiply_app/features/legal/data/models/request/contact_us_request.dart';
 import 'package:dartz/dartz.dart';
 import '../../../../core/error/failures.dart';
 import '../../domain/entities/legal_document.dart';
-import '../../domain/entities/contact_submission.dart';
 import '../../domain/repositories/legal_repository.dart';
-import '../models/legal_document_model.dart';
+import '../models/response/legal_document_model.dart';
 
 /// Repository implementation for legal documents and contact forms
 class LegalRepositoryImpl implements LegalRepository {
@@ -148,16 +148,10 @@ These terms and conditions are governed by and construed in accordance with the 
 
   @override
   Future<Either<Failure, void>> submitContactForm(
-      ContactSubmission submission) async {
+      ContactUsRequest submission) async {
     try {
       await _remoteDataSource.submitContactForm(
-        submission.name,
-        submission.category.displayName,
-        submission.subject,
-        submission.message,
-        submission.email,
-        submission.phone,
-        submission.turnstileToken,
+        submission,
       );
       return const Right(null);
     } catch (e) {

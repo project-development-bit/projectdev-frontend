@@ -91,10 +91,12 @@ class TokenInterceptor extends Interceptor {
   bool _isTokenRequired(RequestOptions options) {
     // Add any logic to check if a route requires a token.
     // For example, assume any POST request to `/contact` needs a token.
-    if (options.path.contains('/api/v1/contact')) {
-      return false;
-    }
-    return true; // For all other routes, no token is added
+
+    bool isPublicRoute = options.path.contains('/api/v1/contact') ||
+        options.path.contains('/contact');
+    debugPrint(
+        "isTokenRequired for PATH: ${options.path} => ${!isPublicRoute}");
+    return !isPublicRoute; // For all other routes, no token is added
   }
 
   FutureOr refreshToken(

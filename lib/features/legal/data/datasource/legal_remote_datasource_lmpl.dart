@@ -1,5 +1,6 @@
 import 'package:cointiply_app/core/network/base_dio_client.dart';
 import 'package:cointiply_app/features/legal/data/datasource/legal_remote_data_source.dart';
+import 'package:cointiply_app/features/legal/data/models/request/contact_us_request.dart';
 
 class LegalRemoteDataSourceImpl implements LegalRemoteDataSource {
   final DioClient _dio;
@@ -8,23 +9,8 @@ class LegalRemoteDataSourceImpl implements LegalRemoteDataSource {
 
   @override
   Future<Map<String, dynamic>> submitContactForm(
-    String name,
-    String category,
-    String subject,
-    String message,
-    String? email,
-    String? phone,
-    String? turnstileToken,
-  ) async {
-    final response = await _dio.post('/contact', data: {
-      'name': name,
-      'category': category,
-      'subject': subject,
-      'message': message,
-      'phone': phone,
-      'email': email,
-      'turnstileToken': turnstileToken,
-    });
+      ContactUsRequest submission) async {
+    final response = await _dio.post('/contact', data: submission.toJson());
 
     return response.data;
   }
