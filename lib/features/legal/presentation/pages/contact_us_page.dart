@@ -39,19 +39,9 @@ class _ContactUsPageState extends ConsumerState<ContactUsPage> {
       if (next && mounted) {
         // Clear form
         _clearForm();
-
-        // Show success message
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: CommonText.bodyMedium(
-              context.translate('contact_form_submitted_successfully'),
-              color: context.onPrimary,
-            ),
-            backgroundColor: context.primary,
-            duration: const Duration(seconds: 3),
-          ),
+        context.showSuccessSnackBar(
+          message: context.translate('contact_form_submitted_successfully'),
         );
-
         // Reset provider state
         ref.read(legalNotifierProvider.notifier).resetState();
       }
