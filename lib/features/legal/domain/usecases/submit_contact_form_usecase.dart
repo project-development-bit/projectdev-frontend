@@ -12,7 +12,8 @@ class SubmitContactFormParams {
 }
 
 /// Use case for submitting contact form
-class SubmitContactFormUseCase implements UseCase<void, SubmitContactFormParams> {
+class SubmitContactFormUseCase
+    implements UseCase<void, SubmitContactFormParams> {
   final LegalRepository repository;
 
   SubmitContactFormUseCase(this.repository);

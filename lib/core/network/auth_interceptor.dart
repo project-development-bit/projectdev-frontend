@@ -22,32 +22,34 @@ class TokenInterceptor extends Interceptor {
     final path = options.uri.path;
     log('REQUEST => PATH: $path, METHOD: ${options.method}, HEADERS: ${options.headers}',
         name: name);
-    final accessToken = await tokenService.getAuthToken() ?? '';
-    if (kDebugMode) {
-      logger.log("Current Token : $accessToken", name: name);
-    }
-    if (accessToken.isNotEmpty) {
-      options.headers['Authorization'] = "Bearer $accessToken";
-    }
-
-    if (path.contains('upload')) {
-      options.headers['Content-Type'] = 'multipart/form-data';
-    } else {
-      options.headers['Content-Type'] = 'application/json';
-    }
-
-    try {
-      String platform = "WEB"; // Default to web
-      if (PlatformRecaptchaService.isIOS) {
-        platform = "ios";
-      } else if (PlatformRecaptchaService.isAndroid) {
-        platform = "android";
+    if (_isTokenRequired(options)) {
+      // Add the token to the headers if available
+      final accessToken = await tokenService.getAuthToken() ?? '';
+      if (kDebugMode) {
+        logger.log("Current Token : $accessToken", name: name);
       }
-      options.headers['API_REQUEST_FROM'] = platform;
-    } catch (_) {
-      options.headers['API_REQUEST_FROM'] = "WEB";
-    }
+      if (accessToken.isNotEmpty) {
+        options.headers['Authorization'] = "Bearer $accessToken";
+      }
 
+      if (path.contains('upload')) {
+        options.headers['Content-Type'] = 'multipart/form-data';
+      } else {
+        options.headers['Content-Type'] = 'application/json';
+      }
+
+      try {
+        String platform = "WEB"; // Default to web
+        if (PlatformRecaptchaService.isIOS) {
+          platform = "ios";
+        } else if (PlatformRecaptchaService.isAndroid) {
+          platform = "android";
+        }
+        options.headers['API_REQUEST_FROM'] = platform;
+      } catch (_) {
+        options.headers['API_REQUEST_FROM'] = "WEB";
+      }
+    }
     return handler.next(options);
   }
 
@@ -62,12 +64,12 @@ class TokenInterceptor extends Interceptor {
       'ERROR[${err.response?.statusCode}] => PATH: ${err.requestOptions.path}, IS REFRESHING: ${isRefreshing.toString()}',
       name: name,
     );
-    
+
     if (err.response?.statusCode == 401 || err.response?.statusCode == 403) {
       if (!isRefreshing) {
         log("ACCESS TOKEN EXPIRED, GETTING NEW TOKEN PAIR", name: name);
         isRefreshing = true;
-        
+
         // Try to refresh the token
         try {
           await refreshToken(err, handler);
@@ -86,6 +88,15 @@ class TokenInterceptor extends Interceptor {
     }
   }
 
+  bool _isTokenRequired(RequestOptions options) {
+    // Add any logic to check if a route requires a token.
+    // For example, assume any POST request to `/contact` needs a token.
+    if (options.path.contains('/api/v1/contact')) {
+      return false;
+    }
+    return true; // For all other routes, no token is added
+  }
+
   FutureOr refreshToken(
     DioException err,
     ErrorInterceptorHandler handler,
@@ -99,7 +110,7 @@ class TokenInterceptor extends Interceptor {
 
     try {
       final refreshToken = await tokenService.getRefreshToken();
-      
+
       // Check if refresh token exists
       if (refreshToken == null || refreshToken.isEmpty) {
         log("NO REFRESH TOKEN AVAILABLE, LOGGING OUT", name: name);
@@ -118,14 +129,14 @@ class TokenInterceptor extends Interceptor {
 
       log("REFRESHING TOKEN WITH: ${refreshToken.substring(0, 20)}...",
           name: name);
-      
+
       final response = await retryDio.post(
         'users/refresh-token',
         data: {"refreshToken": refreshToken},
       );
-      
+
       final parsedResponse = response.data;
-      
+
       // Check if response is successful
       if (response.statusCode == null || response.statusCode! >= 400) {
         log("REFRESH TOKEN INVALID: ${response.statusCode} - ${response.data}",
@@ -205,13 +216,13 @@ class TokenInterceptor extends Interceptor {
 
       // Clear all tokens on refresh failure
       await tokenService.clearAllAuthData();
-      
+
       rethrow;
     } catch (e) {
       log("REFRESH TOKEN UNEXPECTED ERROR: $e", name: name);
       isRefreshing = false;
       failedRequests = [];
-      
+
       // Clear all tokens on any failure
       await tokenService.clearAllAuthData();
 

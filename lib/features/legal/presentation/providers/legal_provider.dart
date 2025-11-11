@@ -106,11 +106,15 @@ class LegalNotifier extends StateNotifier<LegalState> {
           await useCase.call(SubmitContactFormParams(submission: submission));
 
       result.fold(
-        (failure) => state =
-            LegalError(failure.message ?? 'Failed to submit contact form'),
+        (failure) {
+          state =
+              LegalError(failure.message ?? 'Failed to submit contact form');
+          debugPrint(" Error submitting contact form: $failure");
+        },
         (_) => state = const ContactFormSubmitted(),
       );
     } catch (e) {
+      debugPrint(" Error submitting contact form: $e");
       state = LegalError('An unexpected error occurred: $e');
     }
   }

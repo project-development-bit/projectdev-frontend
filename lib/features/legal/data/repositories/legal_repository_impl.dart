@@ -1,3 +1,5 @@
+import 'package:cointiply_app/core/error/error_handling.dart'
+    show ErrorHandling;
 import 'package:cointiply_app/features/legal/data/datasource/legal_remote_data_source.dart';
 import 'package:dartz/dartz.dart';
 import '../../../../core/error/failures.dart';
@@ -159,7 +161,7 @@ These terms and conditions are governed by and construed in accordance with the 
       );
       return const Right(null);
     } catch (e) {
-      return Left(ServerFailure(message: e.toString()));
+      return Left(ServerFailure(message: ErrorHandling.getErrorMessage(e)));
     }
   }
 
