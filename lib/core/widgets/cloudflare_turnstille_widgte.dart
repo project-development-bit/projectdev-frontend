@@ -1,5 +1,6 @@
 import 'package:cloudflare_turnstile/cloudflare_turnstile.dart'
     hide TurnstileError;
+import 'package:cointiply_app/core/theme/app_colors.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -207,6 +208,7 @@ class _CloudflareTurnstileWidgetState
       language: _getLanguage,
       retryAutomatically: widget.retryAutomatically,
     );
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
       width: double.infinity,
@@ -223,7 +225,9 @@ class _CloudflareTurnstileWidgetState
             ),
             decoration: BoxDecoration(
               border: Border.all(
-                color: Colors.grey.shade300,
+                color: isDarkMode
+                    ? AppColors.darkTextTertiary
+                    : AppColors.lightTextTertiary,
                 width: 1,
               ),
               borderRadius: BorderRadius.circular(8),
@@ -293,6 +297,7 @@ class _CloudflareTurnstileWidgetState
   }
 
   Widget _buildStatusSection(TurnstileState state, BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -306,7 +311,9 @@ class _CloudflareTurnstileWidgetState
             width: double.infinity,
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: Colors.grey.shade100,
+              color: isDarkMode
+                  ? AppColors.darkTextTertiary
+                  : AppColors.lightTextTertiary,
               borderRadius: BorderRadius.circular(4),
             ),
             child: Column(
@@ -314,7 +321,9 @@ class _CloudflareTurnstileWidgetState
               children: [
                 CommonText.bodySmall(
                   'Debug - Token (first 50 chars):',
-                  color: Colors.grey.shade600,
+                  color: isDarkMode
+                      ? AppColors.darkTextTertiary.withValues(alpha: 0.8)
+                      : AppColors.lightTextTertiary.withValues(alpha: 0.8),
                   fontWeight: FontWeight.w500,
                 ),
                 const SizedBox(height: 4),
@@ -322,7 +331,9 @@ class _CloudflareTurnstileWidgetState
                   state.token.length > 50
                       ? '${state.token.substring(0, 50)}...'
                       : state.token,
-                  color: Colors.grey.shade800,
+                  color: isDarkMode
+                      ? AppColors.darkTextTertiary
+                      : AppColors.lightTextTertiary,
                 ),
               ],
             ),
@@ -371,6 +382,7 @@ class _CloudflareTurnstileWidgetState
   }
 
   Widget _buildStatusIndicator(TurnstileState state, BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     switch (state) {
       case TurnstileLoading():
         return Row(
@@ -391,11 +403,11 @@ class _CloudflareTurnstileWidgetState
       case TurnstileSuccess():
         return Row(
           children: [
-            const Icon(Icons.check_circle, size: 16, color: Colors.green),
+            const Icon(Icons.check_circle, size: 16, color: AppColors.success),
             const SizedBox(width: 8),
             CommonText.bodySmall(
               'Security verification successful',
-              color: Colors.green,
+              color: AppColors.success,
               fontWeight: FontWeight.w500,
             ),
           ],
@@ -404,12 +416,12 @@ class _CloudflareTurnstileWidgetState
       case TurnstileError(message: final message):
         return Row(
           children: [
-            const Icon(Icons.error, size: 16, color: Colors.red),
+            Icon(Icons.error, size: 16, color: colorScheme.error),
             const SizedBox(width: 8),
             Expanded(
               child: CommonText.bodySmall(
                 'Verification failed: $message',
-                color: Colors.red,
+                color: colorScheme.error,
               ),
             ),
           ],
@@ -418,11 +430,11 @@ class _CloudflareTurnstileWidgetState
       case TurnstileExpired():
         return Row(
           children: [
-            const Icon(Icons.access_time, size: 16, color: Colors.orange),
+            Icon(Icons.access_time, size: 16, color: colorScheme.primary),
             const SizedBox(width: 8),
             CommonText.bodySmall(
               'Security verification expired',
-              color: Colors.orange,
+              color: colorScheme.onPrimary,
             ),
           ],
         );
@@ -430,7 +442,7 @@ class _CloudflareTurnstileWidgetState
       default:
         return Row(
           children: [
-            const Icon(Icons.security, size: 16, color: Colors.blue),
+            Icon(Icons.security, size: 16, color: AppColors.info),
             const SizedBox(width: 8),
             CommonText.bodySmall(
               'Security verification required',

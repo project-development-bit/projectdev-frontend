@@ -433,6 +433,7 @@ class _QRCodeSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Column(
       children: [
         CommonText.labelLarge(
@@ -442,11 +443,11 @@ class _QRCodeSection extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: colorScheme.onError,
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withAlpha(26), // 0.1 * 255
+                color: colorScheme.scrim.withAlpha(26), // 0.1 * 255
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
@@ -455,7 +456,7 @@ class _QRCodeSection extends StatelessWidget {
           child: QrImageView(
             data: qrCodeData,
             size: 200,
-            backgroundColor: Colors.white,
+            backgroundColor: colorScheme.onError,
           ),
         ),
       ],

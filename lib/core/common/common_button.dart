@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/core.dart';
 import 'package:flutter/material.dart';
 import '../theme/app_typography.dart';
 
@@ -86,7 +87,7 @@ class CommonButton extends StatelessWidget {
               borderRadius: BorderRadius.circular(effectiveBorderRadius),
             ),
             padding: effectivePadding,
-            backgroundColor: Colors.transparent,
+            backgroundColor: AppColors.transparent,
           ),
           child: child,
         ),

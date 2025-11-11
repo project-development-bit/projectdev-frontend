@@ -32,7 +32,7 @@ class WebViewWrapper extends StatelessWidget {
     }
 
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppColors.transparent,
       appBar: title != null
           ? AppBar(
               title: CommonText.titleMedium(

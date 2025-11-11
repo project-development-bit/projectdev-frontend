@@ -37,6 +37,9 @@ class AppColors {
   static const Color gold = Color(0xFFE6A030);
   static const Color silver = Color(0xFF9692BC);
 
+  //Transparent Color
+  static const Color transparent = Colors.transparent;
+
   // Light Theme Color Scheme - Using Gigafaucet website colors
   static const ColorScheme lightColorScheme = ColorScheme(
     brightness: Brightness.light,

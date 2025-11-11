@@ -41,7 +41,7 @@ A higher-level widget that combines background styling with responsive container
 **Usage:**
 ```dart
 ResponsiveSection(
-  backgroundColor: Colors.blue.shade50,
+  backgroundColor: AppColors.info.shade50,
   padding: EdgeInsets.symmetric(vertical: 40),
   child: YourContent(),
 )

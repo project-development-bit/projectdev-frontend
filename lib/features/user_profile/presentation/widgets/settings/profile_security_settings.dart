@@ -305,7 +305,7 @@ class _ProfileSecuritySettingsState
     final buttonColor = is2FAEnabled
         ? AppColors.error
         : AppColors.success; // Always red for both states
-
+    final colorScheme = Theme.of(context).colorScheme;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
@@ -326,7 +326,7 @@ class _ProfileSecuritySettingsState
             child: Icon(
               is2FAEnabled ? Icons.verified_rounded : Icons.security,
               size: 18,
-              color: Colors.white,
+              color: colorScheme.onError,
             ),
           ),
           const SizedBox(width: 12),
@@ -385,7 +385,7 @@ class _ProfileSecuritySettingsState
               is2FAEnabled
                   ? (localizations?.translate('2fa_disable') ?? 'Disable')
                   : (localizations?.translate('2fa_enable') ?? 'Enable'),
-              color: Colors.white,
+              color: colorScheme.onError,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -397,12 +397,13 @@ class _ProfileSecuritySettingsState
   // Error State
   Widget _build2FAError(
       BuildContext context, AppLocalizations? localizations, String message) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.error.withValues(alpha: 0.1),
-        border: Border.all(color: AppColors.error, width: 1),
+        color: colorScheme.error.withValues(alpha: 0.1),
+        border: Border.all(color: colorScheme.error, width: 1),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -410,14 +411,14 @@ class _ProfileSecuritySettingsState
         children: [
           Container(
             decoration: BoxDecoration(
-              color: AppColors.error,
+              color: colorScheme.error,
               borderRadius: BorderRadius.circular(6),
             ),
             padding: const EdgeInsets.all(6),
-            child: const Icon(
+            child: Icon(
               Icons.error_outline,
               size: 18,
-              color: Colors.white,
+              color: colorScheme.onError,
             ),
           ),
           const SizedBox(width: 12),
@@ -442,7 +443,7 @@ class _ProfileSecuritySettingsState
           const SizedBox(width: 12),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.error,
+              backgroundColor: colorScheme.error,
               padding: const EdgeInsets.symmetric(
                 horizontal: 18,
                 vertical: 12,
@@ -456,7 +457,7 @@ class _ProfileSecuritySettingsState
             },
             child: CommonText.bodyMedium(
               localizations?.translate('btn_retry') ?? 'Retry',
-              color: Colors.white,
+              color: colorScheme.onError,
               fontWeight: FontWeight.bold,
             ),
           ),

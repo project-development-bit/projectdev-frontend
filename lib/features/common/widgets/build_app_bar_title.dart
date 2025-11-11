@@ -3,6 +3,7 @@ import 'package:cointiply_app/features/common/widgets/custom_pointer_interceptor
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/locale_switch_widget.dart';
 import '../../../core/widgets/theme_switch_widget.dart';
 import '../../../core/extensions/context_extensions.dart';
@@ -218,7 +219,7 @@ class CommonAppBar extends StatelessWidget {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text('Logged out successfully'),
-                backgroundColor: Colors.green,
+                backgroundColor: AppColors.success,
               ),
             );
           }

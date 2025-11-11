@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/theme/app_colors.dart';
 import 'package:cointiply_app/features/common/widgets/custom_pointer_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -106,7 +107,7 @@ class _InternalVerificationOverlayState
           // ScaffoldMessenger.of(context).showSnackBar(
           //   const SnackBar(
           //     content: Text('✅ Internal verification successful'),
-          //     backgroundColor: Colors.green,
+          //     backgroundColor: AppColors.success,
           //     duration: Duration(seconds: 2),
           //   ),
           // );
@@ -139,7 +140,7 @@ class _InternalVerificationOverlayState
 
     // Show verification popup
     return Material(
-      color: Colors.black87, // Dark overlay
+      color: AppColors.lightTextPrimary, // Dark overlay
       child: Stack(
         children: [
           // App content (blurred/disabled)
@@ -167,7 +168,7 @@ class _InternalVerificationOverlayState
                       BorderRadius.circular(context.isMobile ? 16 : 20),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.3),
+                      color: AppColors.lightTextPrimary.withValues(alpha: 0.3),
                       blurRadius: 20,
                       offset: const Offset(0, 10),
                     ),

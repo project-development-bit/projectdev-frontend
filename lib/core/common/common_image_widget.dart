@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../extensions/context_extensions.dart';
-import '../theme/app_colors.dart';
 
 /// A common image widget that handles network images with loading and error states
 class CommonImage extends StatelessWidget {
@@ -29,19 +28,21 @@ class CommonImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final colorScheme = Theme.of(context).colorScheme;
     final defaultLoadingWidget = loadingWidget ??
         Container(
           width: width,
           height: height,
           decoration: BoxDecoration(
-            color: isDark ? AppColors.websiteCard : context.surfaceContainer,
+            color: isDark
+                ? colorScheme.secondaryContainer
+                : context.surfaceContainer,
             borderRadius: borderRadius,
           ),
           child: Center(
             child: CircularProgressIndicator(
               strokeWidth: 2,
-              valueColor: AlwaysStoppedAnimation(
-                  isDark ? AppColors.primaryLight : AppColors.primary),
+              valueColor: AlwaysStoppedAnimation(colorScheme.primary),
             ),
           ),
         );
@@ -52,13 +53,15 @@ class CommonImage extends StatelessWidget {
           height: height,
           decoration: BoxDecoration(
             color: isDark
-                ? AppColors.websiteCard.withValues(alpha: 0.5)
+                ? colorScheme.tertiaryContainer.withValues(alpha: 0.5)
                 : context.errorContainer,
             borderRadius: borderRadius,
           ),
           child: Icon(
             Icons.image_not_supported_outlined,
-            color: isDark ? AppColors.websiteText : context.onErrorContainer,
+            color: isDark
+                ? colorScheme.onPrimaryContainer
+                : context.onErrorContainer,
             size: (width != null && height != null)
                 ? (width! < height! ? width! * 0.4 : height! * 0.4)
                 : 24,

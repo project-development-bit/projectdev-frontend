@@ -9,15 +9,16 @@ class GigafaucetDesignExample extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       backgroundColor: AppColors.websiteBackground,
       appBar: AppBar(
         title: Text(
           'Gigafaucet Design',
-          style: AppTypography.titleLarge.copyWith(color: Colors.white),
+          style: AppTypography.titleLarge.copyWith(color: colorScheme.onError),
         ),
         backgroundColor: AppColors.websiteCard,
-        iconTheme: const IconThemeData(color: Colors.white),
+        iconTheme: IconThemeData(color: colorScheme.onError),
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -36,7 +37,7 @@ class GigafaucetDesignExample extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Hero Section
-              _buildHeroSection(),
+              _buildHeroSection(colorScheme),
               const SizedBox(height: 24),
 
               // Stats Cards
@@ -44,15 +45,15 @@ class GigafaucetDesignExample extends StatelessWidget {
               const SizedBox(height: 24),
 
               // Crypto Rewards Section
-              _buildCryptoSection(),
+              _buildCryptoSection(colorScheme),
               const SizedBox(height: 24),
 
               // Action Buttons
-              _buildActionButtons(),
+              _buildActionButtons(colorScheme),
               const SizedBox(height: 24),
 
               // Website-style Form
-              _buildFormExample(),
+              _buildFormExample(colorScheme),
             ],
           ),
         ),
@@ -60,7 +61,7 @@ class GigafaucetDesignExample extends StatelessWidget {
     );
   }
 
-  Widget _buildHeroSection() {
+  Widget _buildHeroSection(ColorScheme colorScheme) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(24),
@@ -71,7 +72,7 @@ class GigafaucetDesignExample extends StatelessWidget {
             Border.all(color: AppColors.websiteBorder.withValues(alpha: 0.3)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.3),
+            color: colorScheme.scrim.withValues(alpha: 0.3),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -106,7 +107,7 @@ class GigafaucetDesignExample extends StatelessWidget {
             child: Text(
               'Level 19 • Pro User',
               style: AppTypography.labelMedium.copyWith(
-                color: Colors.white,
+                color: colorScheme.onError,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -166,7 +167,7 @@ class GigafaucetDesignExample extends StatelessWidget {
     );
   }
 
-  Widget _buildCryptoSection() {
+  Widget _buildCryptoSection(ColorScheme colorScheme) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -180,22 +181,25 @@ class GigafaucetDesignExample extends StatelessWidget {
         children: [
           Text(
             'Crypto Rewards',
-            style: AppTypography.headlineSmall.copyWith(color: Colors.white),
+            style: AppTypography.headlineSmall
+                .copyWith(color: colorScheme.onError),
           ),
           const SizedBox(height: 16),
-          _buildCryptoRow('Bitcoin', 'BTC', '0.00234', AppColors.bitcoin),
-          const SizedBox(height: 12),
-          _buildCryptoRow('Ethereum', 'ETH', '0.1456', AppColors.ethereum),
+          _buildCryptoRow(
+              'Bitcoin', 'BTC', '0.00234', AppColors.bitcoin, colorScheme),
           const SizedBox(height: 12),
           _buildCryptoRow(
-              'Gigafaucet Token', 'GFT', '1,250', AppColors.websiteGold),
+              'Ethereum', 'ETH', '0.1456', AppColors.ethereum, colorScheme),
+          const SizedBox(height: 12),
+          _buildCryptoRow('Gigafaucet Token', 'GFT', '1,250',
+              AppColors.websiteGold, colorScheme),
         ],
       ),
     );
   }
 
-  Widget _buildCryptoRow(
-      String name, String symbol, String amount, Color color) {
+  Widget _buildCryptoRow(String name, String symbol, String amount, Color color,
+      ColorScheme colorScheme) {
     return Row(
       children: [
         Container(
@@ -223,7 +227,8 @@ class GigafaucetDesignExample extends StatelessWidget {
             children: [
               Text(
                 name,
-                style: AppTypography.bodyMedium.copyWith(color: Colors.white),
+                style: AppTypography.bodyMedium
+                    .copyWith(color: colorScheme.onError),
               ),
               Text(
                 symbol,
@@ -240,7 +245,7 @@ class GigafaucetDesignExample extends StatelessWidget {
     );
   }
 
-  Widget _buildActionButtons() {
+  Widget _buildActionButtons(ColorScheme colorScheme) {
     return Row(
       children: [
         Expanded(
@@ -248,7 +253,7 @@ class GigafaucetDesignExample extends StatelessWidget {
             onPressed: () {},
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
-              foregroundColor: Colors.white,
+              foregroundColor: colorScheme.onError,
               padding: const EdgeInsets.symmetric(vertical: 16),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
@@ -284,7 +289,7 @@ class GigafaucetDesignExample extends StatelessWidget {
     );
   }
 
-  Widget _buildFormExample() {
+  Widget _buildFormExample(ColorScheme colorScheme) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -298,11 +303,13 @@ class GigafaucetDesignExample extends StatelessWidget {
         children: [
           Text(
             'Withdraw Funds',
-            style: AppTypography.titleLarge.copyWith(color: Colors.white),
+            style:
+                AppTypography.titleLarge.copyWith(color: colorScheme.onError),
           ),
           const SizedBox(height: 16),
           TextFormField(
-            style: AppTypography.bodyMedium.copyWith(color: Colors.white),
+            style:
+                AppTypography.bodyMedium.copyWith(color: colorScheme.onError),
             decoration: InputDecoration(
               labelText: 'Wallet Address',
               labelStyle: AppTypography.bodyMedium.copyWith(
@@ -330,7 +337,8 @@ class GigafaucetDesignExample extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           TextFormField(
-            style: AppTypography.bodyMedium.copyWith(color: Colors.white),
+            style:
+                AppTypography.bodyMedium.copyWith(color: colorScheme.onError),
             decoration: InputDecoration(
               labelText: 'Amount',
               labelStyle: AppTypography.bodyMedium.copyWith(
@@ -367,7 +375,7 @@ class GigafaucetDesignExample extends StatelessWidget {
               onPressed: () {},
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.websiteGold,
-                foregroundColor: Colors.black,
+                foregroundColor: colorScheme.scrim,
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -375,7 +383,8 @@ class GigafaucetDesignExample extends StatelessWidget {
               ),
               child: Text(
                 'Withdraw',
-                style: AppTypography.buttonText.copyWith(color: Colors.black),
+                style:
+                    AppTypography.buttonText.copyWith(color: colorScheme.scrim),
               ),
             ),
           ),

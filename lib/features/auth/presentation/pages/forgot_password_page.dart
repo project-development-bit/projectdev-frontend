@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/common/common_textfield.dart';
@@ -74,7 +75,8 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
           message: next.response.message,
         );
       } else if (next is ForgotPasswordError) {
-        _showErrorSnackBar(context, next.message, localizations);
+        _showErrorSnackBar(
+            context, next.message, localizations, colorScheme.onError);
       }
     });
 
@@ -84,7 +86,7 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
     return Scaffold(
       backgroundColor: colorScheme.surface,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.transparent,
         elevation: 0,
         leading: IconButton(
           icon: Icon(
@@ -198,10 +200,10 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
                     Container(
                       padding: const EdgeInsets.all(24),
                       decoration: BoxDecoration(
-                        color: Colors.green.withAlpha(25),
+                        color: AppColors.success.withAlpha(25),
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
-                          color: Colors.green.withAlpha(75),
+                          color: AppColors.success.withAlpha(75),
                         ),
                       ),
                       child: Column(
@@ -209,20 +211,20 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
                           const Icon(
                             Icons.check_circle,
                             size: 48,
-                            color: Colors.green,
+                            color: AppColors.success,
                           ),
                           const SizedBox(height: 16),
                           CommonText.titleLarge(
                             localizations?.translate('email_sent') ??
                                 'Email Sent!',
-                            color: Colors.green.shade700,
+                            color: AppColors.success.withValues(alpha: 0.8),
                             fontWeight: FontWeight.bold,
                           ),
                           const SizedBox(height: 8),
                           CommonText.bodyMedium(
                             localizations?.translate('check_email_for_reset') ??
                                 'Check your email for the reset link',
-                            color: Colors.green.shade600,
+                            color: AppColors.success.withValues(alpha: 0.8),
                           ),
                         ],
                       ),
@@ -281,12 +283,13 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
     );
   }
 
-  void _showErrorSnackBar(BuildContext context, String message, localizations) {
+  void _showErrorSnackBar(
+      BuildContext context, String message, localizations, Color textColor) {
     context.showErrorSnackBar(
       message: message,
       action: SnackBarAction(
         label: localizations?.translate('dismiss') ?? 'Dismiss',
-        textColor: Colors.white,
+        textColor: textColor,
         onPressed: () {
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
         },

@@ -1,8 +1,7 @@
-import 'package:cointiply_app/core/localization/app_localizations.dart';
+import 'package:cointiply_app/core/core.dart';
 import 'package:cointiply_app/routing/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/common/common_text.dart';
 import '../providers/terms_privacy_provider.dart';
 import '../../../../core/common/webview_wrapper.dart';
 
@@ -37,7 +36,8 @@ class _PrivacyScreenState extends ConsumerState<PrivacyScreen> {
       TermsPrivacyInitial() => _buildInitialView(),
       TermsPrivacyLoading() => _buildLoadingView(),
       TermsPrivacySuccess(data: final data) => _buildWebView(data.privacyUrl),
-      TermsPrivacyError(message: final message) => _buildErrorView(message),
+      TermsPrivacyError(message: final message) =>
+        _buildErrorView(message, Theme.of(context).colorScheme),
     };
   }
 
@@ -86,7 +86,7 @@ class _PrivacyScreenState extends ConsumerState<PrivacyScreen> {
     );
   }
 
-  Widget _buildErrorView(String message) {
+  Widget _buildErrorView(String message, ColorScheme colorScheme) {
     return Container(
       padding: const EdgeInsets.all(24),
       child: Center(
@@ -96,7 +96,7 @@ class _PrivacyScreenState extends ConsumerState<PrivacyScreen> {
             Icon(
               Icons.error_outline,
               size: 64,
-              color: Colors.red[400],
+              color: colorScheme.error.withValues(alpha: 700),
             ),
             const SizedBox(height: 16),
             CommonText(
@@ -110,7 +110,7 @@ class _PrivacyScreenState extends ConsumerState<PrivacyScreen> {
             CommonText(
               message,
               fontSize: 14,
-              color: Colors.grey[600],
+              color: AppColors.lightTextSecondary,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 24),

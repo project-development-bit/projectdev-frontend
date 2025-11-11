@@ -36,7 +36,8 @@ class _TermsScreenState extends ConsumerState<TermsScreen> {
       TermsPrivacyInitial() => _buildInitialView(),
       TermsPrivacyLoading() => _buildLoadingView(),
       TermsPrivacySuccess(data: final data) => _buildWebView(data.termsUrl),
-      TermsPrivacyError(message: final message) => _buildErrorView(message),
+      TermsPrivacyError(message: final message) =>
+        _buildErrorView(message, Theme.of(context).colorScheme),
     };
   }
 
@@ -86,7 +87,7 @@ class _TermsScreenState extends ConsumerState<TermsScreen> {
     );
   }
 
-  Widget _buildErrorView(String message) {
+  Widget _buildErrorView(String message, ColorScheme colorScheme) {
     return Container(
       padding: const EdgeInsets.all(24),
       child: Center(
@@ -96,7 +97,7 @@ class _TermsScreenState extends ConsumerState<TermsScreen> {
             Icon(
               Icons.error_outline,
               size: 64,
-              color: Colors.red[400],
+              color: colorScheme.error.withValues(alpha: 0.5),
             ),
             const SizedBox(height: 16),
             CommonText(
@@ -109,7 +110,7 @@ class _TermsScreenState extends ConsumerState<TermsScreen> {
             CommonText(
               message,
               fontSize: 14,
-              color: Colors.grey[600],
+              color: colorScheme.tertiaryFixed.withValues(alpha: 0.7),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 24),
@@ -122,7 +123,7 @@ class _TermsScreenState extends ConsumerState<TermsScreen> {
               icon: const Icon(Icons.refresh),
               label: CommonText.titleSmall(
                 AppLocalizations.of(context)!.translate("retry"),
-                color: Colors.white,
+                color: colorScheme.onError,
               ),
             ),
             const SizedBox(height: 12),

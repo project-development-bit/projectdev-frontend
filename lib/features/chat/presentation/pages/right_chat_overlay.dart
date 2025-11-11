@@ -53,9 +53,10 @@ class _ChatPanel extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final notifier = ref.read(rightChatOverlayProvider.notifier);
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Material(
-      color: Colors.black87,
+      color: colorScheme.onSecondary,
       elevation: 8,
       child: Stack(
         children: [
@@ -69,7 +70,7 @@ class _ChatPanel extends ConsumerWidget {
             top: 8,
             right: 8,
             child: IconButton(
-              icon: const Icon(Icons.close, color: Colors.black),
+              icon: Icon(Icons.close, color: colorScheme.scrim),
               onPressed: notifier.close,
               tooltip: AppLocalizations.of(context)!.translate('close_chat'),
             ),

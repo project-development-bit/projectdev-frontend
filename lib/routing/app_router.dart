@@ -404,7 +404,7 @@ class BurgerEatsAppRoutes {
         ],
 
         // Error handling
-        errorPageBuilder: (context, state) => const NoTransitionPage(
+        errorPageBuilder: (context, state) => NoTransitionPage(
           child: Scaffold(
             body: Center(
               child: Column(
@@ -413,7 +413,7 @@ class BurgerEatsAppRoutes {
                   Icon(
                     Icons.error_outline,
                     size: 64,
-                    color: Colors.red,
+                    color: Theme.of(context).colorScheme.error,
                   ),
                   SizedBox(height: 16),
                   Text(

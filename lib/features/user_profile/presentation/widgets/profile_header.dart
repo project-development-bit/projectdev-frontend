@@ -61,10 +61,10 @@ class ProfileHeader extends ConsumerWidget {
                             ),
                           ),
                         )
-                      : const CircleAvatar(
+                      : CircleAvatar(
                           backgroundColor: AppColors.websiteText,
-                          child:
-                              Icon(Icons.person, size: 56, color: Colors.white),
+                          child: Icon(Icons.person,
+                              size: 56, color: colorScheme.onError),
                         ),
 
                   const SizedBox(width: 16),

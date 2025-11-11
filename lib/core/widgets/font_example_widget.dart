@@ -9,15 +9,16 @@ class FontExampleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       backgroundColor: AppColors.websiteBackground,
       appBar: AppBar(
-        title: const CommonText.titleLarge(
+        title: CommonText.titleLarge(
           'Font Example',
-          color: Colors.white,
+          color: colorScheme.onError,
         ),
         backgroundColor: AppColors.websiteCard,
-        iconTheme: const IconThemeData(color: Colors.white),
+        iconTheme: IconThemeData(color: colorScheme.onError),
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -115,9 +116,9 @@ class FontExampleWidget extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const CommonText.titleLarge(
+                    CommonText.titleLarge(
                       'Real Usage Example',
-                      color: Colors.white,
+                      color: colorScheme.onError,
                     ),
                     const SizedBox(height: 16),
                     const CommonText.cryptoDisplay('BITCOIN REWARDS'),
@@ -135,7 +136,7 @@ class FontExampleWidget extends StatelessWidget {
                             onPressed: () {},
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColors.primary,
-                              foregroundColor: Colors.white,
+                              foregroundColor: colorScheme.onError,
                               padding: const EdgeInsets.symmetric(vertical: 12),
                             ),
                             child: const CommonText.button('WITHDRAW'),

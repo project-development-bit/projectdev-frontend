@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -113,7 +114,7 @@ class _TwoFactorAuthPageState extends ConsumerState<TwoFactorAuthPage> {
     return Scaffold(
       backgroundColor: colorScheme.surface,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.transparent,
         elevation: 0,
         leading: IconButton(
           icon: Icon(
@@ -258,9 +259,8 @@ class _TwoFactorAuthPageState extends ConsumerState<TwoFactorAuthPage> {
                     onPressed: isLoading ? null : _handleVerify,
                     isLoading: isLoading,
                     height: 56,
-                    backgroundColor:
-                        const Color(0xFFE53945), // Red color as requested
-                    textColor: Colors.white,
+                    backgroundColor: colorScheme.error,
+                    textColor: colorScheme.onError,
                     borderRadius: 12,
                   ),
 
@@ -312,7 +312,7 @@ class _TwoFactorAuthPageState extends ConsumerState<TwoFactorAuthPage> {
                     child: CommonText.bodySmall(
                       localizations?.translate('contact_support') ??
                           'contact support',
-                      color: const Color(0xFFE53945), // Red color
+                      color: colorScheme.error, // Red color
                       fontWeight: FontWeight.w600,
                       textAlign: TextAlign.center,
                     ),

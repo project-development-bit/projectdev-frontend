@@ -1,5 +1,6 @@
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/extensions/extensions.dart';
+import 'package:cointiply_app/core/theme/app_colors.dart';
 import 'package:cointiply_app/core/widgets/responsive_container.dart';
 import 'package:flutter/material.dart';
 
@@ -198,8 +199,9 @@ class BalanceSection extends StatelessWidget {
       width: 150,
       height: 90,
       decoration: BoxDecoration(
-        border:
-            Border.all(color: Colors.grey.withValues(alpha: 0.25), width: 1),
+        border: Border.all(
+            color: AppColors.darkTextTertiary.withValues(alpha: 0.25),
+            width: 1),
         borderRadius: BorderRadius.circular(8),
       ),
       padding: const EdgeInsets.all(12),
@@ -224,7 +226,7 @@ class BalanceSection extends StatelessWidget {
   Widget _buildEqualSign(BuildContext context) {
     return CommonText.titleLarge(
       '=',
-      color: Colors.grey[400],
+      color: AppColors.lightTextTertiary,
       fontWeight: FontWeight.bold,
     );
   }
