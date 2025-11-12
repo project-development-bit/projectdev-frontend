@@ -112,6 +112,7 @@ flutter:
     - assets/images/levels/
     - assets/images/rewards/
     - assets/tutorial/
+    - assets/theme/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

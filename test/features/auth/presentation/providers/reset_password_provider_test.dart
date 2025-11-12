@@ -105,7 +105,7 @@ void main() {
       ]);
 
       final successState = states.last as ResetPasswordSuccess;
-      expect(successState.response.user.email, testEmail);
+      expect(successState.response.user?.email, testEmail);
     });
 
     test('should emit loading and error states when reset password fails',
@@ -225,10 +225,9 @@ void main() {
         confirmPassword: testConfirmPassword,
       );
 
-      state = container.read(
-          resetPasswordProvider as ProviderListenable<ResetPasswordError>);
+      state = container.read(resetPasswordProvider as ProviderListenable<ResetPasswordError>);
       expect(state, isA<ResetPasswordError>());
-      errorState = state;
+      errorState = state as ResetPasswordError;
       expect(errorState.message, 'Please enter a password');
 
       // Reset state
@@ -241,10 +240,9 @@ void main() {
         confirmPassword: '',
       );
 
-      state = container.read(
-          resetPasswordProvider as ProviderListenable<ResetPasswordError>);
+      state = container.read(resetPasswordProvider as ProviderListenable<ResetPasswordError>);
       expect(state, isA<ResetPasswordError>());
-      errorState = state;
+      errorState = state as ResetPasswordError;
       expect(errorState.message, 'Please confirm your password');
     });
 

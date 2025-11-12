@@ -112,7 +112,6 @@ void main() {
     testWidgets('should navigate back when back button is pressed',
         (WidgetTester tester) async {
       // Arrange
-      bool backPressed = false;
       await tester.pumpWidget(
         ProviderScope(
           child: MaterialApp(
@@ -120,21 +119,13 @@ void main() {
               builder: (context) => Scaffold(
                 body: ElevatedButton(
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => const ForgotPasswordPage()));
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (_) => const ForgotPasswordPage()));
                   },
                   child: const Text('Go to Forgot Password'),
                 ),
               ),
             ),
-            onGenerateRoute: (settings) {
-              if (settings.name == '/') {
-                backPressed = true;
-              }
-              return null;
-            },
           ),
         ),
       );
@@ -208,11 +199,10 @@ class TestForgotPasswordNotifier extends ForgotPasswordNotifier {
   TestForgotPasswordNotifier(this._testState)
       : super(throw UnimplementedError());
 
-  @override
   ForgotPasswordState build() => _testState;
 
   @override
-  Future<void> forgotPassword(String email) async {
+  Future<void> forgotPassword(String email, String turnstileToken) async {
     // Do nothing in test
   }
 
