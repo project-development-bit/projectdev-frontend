@@ -17,6 +17,8 @@ class _TutorialOverlayState extends ConsumerState<TutorialOverlay> {
   Widget build(BuildContext context) {
     final tutorialShown = ref.watch(tutorialProvider);
     final authState = ref.watch(authProvider);
+    debugPrint(
+        'Tutorial Overlay - shown: $tutorialShown | !auth: ${!authState.isAuthenticated}');
 
     if (tutorialShown || !authState.isAuthenticated) {
       return widget.child;

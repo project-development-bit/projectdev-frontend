@@ -16,7 +16,7 @@ class TutorialNotifier extends StateNotifier<bool> {
     final prefs = await SharedPreferences.getInstance();
     final userID = prefs.getString('user_id') ?? 'unknown_user';
     final shown = prefs.getBool(_tutorialShownKey + userID) ?? false;
-    debugPrint('Tutorial shown: $shown');
+    debugPrint('Tutorial shown: $_tutorialShownKey $userID $shown');
     state = shown;
   }
 
@@ -35,6 +35,9 @@ class TutorialNotifier extends StateNotifier<bool> {
     final prefs = await SharedPreferences.getInstance();
     final userID = prefs.getString('user_id') ?? 'unknown_user';
     await prefs.remove(_tutorialShownKey + userID);
+    bool? shown = prefs.getBool(_tutorialShownKey + userID);
+    debugPrint(
+        'Tutorial reset: Clearing tutorial status for $userID to $shown');
     state = true;
   }
 
@@ -43,6 +46,9 @@ class TutorialNotifier extends StateNotifier<bool> {
     final prefs = await SharedPreferences.getInstance();
     final userID = prefs.getString('user_id') ?? 'unknown_user';
     await prefs.remove(_tutorialShownKey + userID);
+    bool? shown = prefs.getBool(_tutorialShownKey + userID);
+    debugPrint(
+        'Tutorial reset: Resetting tutorial status for $userID to $shown');
     state = false;
   }
 }

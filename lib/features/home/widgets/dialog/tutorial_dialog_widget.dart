@@ -77,16 +77,17 @@ class _FirstTimeTutorialDialogState extends State<FirstTimeTutorialDialog> {
     return Container(
       margin: EdgeInsets.all(context.isMobile ? 20 : 32),
       constraints: BoxConstraints(
+        minHeight: context.heightPercent(35),
         maxWidth: context.isMobile
             ? double.infinity
-            : data['final'] == true
-                ? 500
-                : 400,
+            : context.isTablet
+                ? context.widthPercent(50)
+                : context.widthPercent(40),
         maxHeight: context.isMobile
             ? double.infinity
-            : data['final'] == true
-                ? 800
-                : 600,
+            : context.isTablet
+                ? context.heightPercent(80)
+                : context.heightPercent(70),
       ),
       decoration: BoxDecoration(
         color: context.surface,
@@ -101,22 +102,28 @@ class _FirstTimeTutorialDialogState extends State<FirstTimeTutorialDialog> {
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-
-        // ✅ Make scrollable here
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
               // ─── Header ────────────────────────────────
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CommonText.titleSmall(
-                    context.translate(data['title']),
-                    color: context.inverseSurface,
+                  //  Expanded title to prevent overflow
+                  Expanded(
+                    child: CommonText.titleSmall(
+                      context.translate(data['title']),
+                      color: context.inverseSurface,
+                      fontSize: context.isMobile ? 13 : 14,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
+                  const SizedBox(width: 8),
                   Consumer(
                     builder: (context, ref, child) {
                       return GestureDetector(
@@ -124,7 +131,8 @@ class _FirstTimeTutorialDialogState extends State<FirstTimeTutorialDialog> {
                             ref.read(tutorialProvider.notifier).closes(),
                         child: CommonText.labelMedium(
                           context.translate('dismiss_hide'),
-                          color: context.inverseSurface,
+                          color: colorScheme.primary,
+                          fontSize: context.isMobile ? 12 : 13,
                         ),
                       );
                     },
@@ -177,12 +185,17 @@ class _FirstTimeTutorialDialogState extends State<FirstTimeTutorialDialog> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  CommonText.labelMedium(
-                    context
-                        .translate('step_of')
-                        .replaceAll('{step}', '$step')
-                        .replaceAll('{totalSteps}', '$totalSteps'),
-                    color: colorScheme.tertiary,
+                  Expanded(
+                    child: CommonText.labelMedium(
+                      context
+                          .translate('step_of')
+                          .replaceAll('{step}', '$step')
+                          .replaceAll('{totalSteps}', '$totalSteps'),
+                      color: colorScheme.tertiary,
+                      fontSize: context.isMobile ? 13 : 14,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                   Row(
                     children: [
@@ -197,7 +210,7 @@ class _FirstTimeTutorialDialogState extends State<FirstTimeTutorialDialog> {
                           color: colorScheme.inverseSurface,
                         ),
                       ),
-                      const SizedBox(width: 8),
+                      SizedBox(width: context.isMobile ? 4 : 8),
                       ElevatedButton(
                         onPressed: () {
                           if (step < totalSteps) {
@@ -211,12 +224,17 @@ class _FirstTimeTutorialDialogState extends State<FirstTimeTutorialDialog> {
                               ? colorScheme.tertiary
                               : colorScheme.primary,
                           foregroundColor: colorScheme.inversePrimary,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: context.isMobile ? 8 : 20,
+                            vertical: context.isMobile ? 8 : 12,
+                          ),
                         ),
                         child: CommonText.labelMedium(
                           step == totalSteps
                               ? context.translate('claim_tutorial_reward')
                               : context.translate('continue'),
                           color: AppColors.lightSurfaceVariant,
+                          fontSize: context.isMobile ? 12 : 13,
                         ),
                       ),
                     ],
