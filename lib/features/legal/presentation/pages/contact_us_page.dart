@@ -1,6 +1,9 @@
+import 'package:cointiply_app/core/localization/app_localizations.dart';
+import 'package:cointiply_app/core/providers/turnstile_provider.dart';
+import 'package:cointiply_app/core/widgets/cloudflare_turnstille_widgte.dart';
+import 'package:cointiply_app/features/legal/data/models/request/contact_us_request.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import '../../../../core/common/common_text.dart';
 import '../../../../core/common/common_container.dart';
 import '../../../../core/common/common_textfield.dart';
@@ -31,25 +34,15 @@ class _ContactUsPageState extends ConsumerState<ContactUsPage> {
   @override
   void initState() {
     super.initState();
-    
+
     // Listen for form submission success
     ref.listenManual(isContactFormSubmittedProvider, (previous, next) {
       if (next && mounted) {
         // Clear form
         _clearForm();
-        
-        // Show success message
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: CommonText.bodyMedium(
-              context.translate('contact_form_submitted_successfully'),
-              color: context.onPrimary,
-            ),
-            backgroundColor: context.primary,
-            duration: const Duration(seconds: 3),
-          ),
+        context.showSuccessSnackBar(
+          message: context.translate('contact_form_submitted_successfully'),
         );
-        
         // Reset provider state
         ref.read(legalNotifierProvider.notifier).resetState();
       }
@@ -72,19 +65,6 @@ class _ContactUsPageState extends ConsumerState<ContactUsPage> {
     final error = ref.watch(legalErrorProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: CommonText.titleMedium(
-          context.translate('contact_us'),
-          color: context.onSurface,
-          fontWeight: FontWeight.w600,
-        ),
-        backgroundColor: context.surface,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: context.onSurface),
-          onPressed: () => context.pop(),
-        ),
-      ),
       body: ResponsiveContainer(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
@@ -112,9 +92,9 @@ class _ContactUsPageState extends ConsumerState<ContactUsPage> {
                     ],
                   ),
                 ),
-                
+
                 const SizedBox(height: 16),
-                
+
                 // Contact Form
                 CommonContainer(
                   padding: const EdgeInsets.all(24),
@@ -138,9 +118,9 @@ class _ContactUsPageState extends ConsumerState<ContactUsPage> {
                           return null;
                         },
                       ),
-                      
+
                       const SizedBox(height: 16),
-                      
+
                       // Email field
                       CommonText.labelMedium(
                         '${context.translate('email')} *',
@@ -156,15 +136,16 @@ class _ContactUsPageState extends ConsumerState<ContactUsPage> {
                           if (value == null || value.trim().isEmpty) {
                             return context.translate('email_required');
                           }
-                          if (!RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$').hasMatch(value)) {
+                          if (!RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$')
+                              .hasMatch(value)) {
                             return context.translate('invalid_email');
                           }
                           return null;
                         },
                       ),
-                      
+
                       const SizedBox(height: 16),
-                      
+
                       // Phone field (optional)
                       CommonText.labelMedium(
                         context.translate('phone_optional'),
@@ -177,9 +158,9 @@ class _ContactUsPageState extends ConsumerState<ContactUsPage> {
                         hintText: context.translate('enter_your_phone'),
                         keyboardType: TextInputType.phone,
                       ),
-                      
+
                       const SizedBox(height: 16),
-                      
+
                       // Category dropdown
                       CommonText.labelMedium(
                         '${context.translate('category')} *',
@@ -201,7 +182,8 @@ class _ContactUsPageState extends ConsumerState<ContactUsPage> {
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(color: context.primary, width: 2),
+                            borderSide:
+                                BorderSide(color: context.primary, width: 2),
                           ),
                         ),
                         items: ContactCategory.values.map((category) {
@@ -221,9 +203,9 @@ class _ContactUsPageState extends ConsumerState<ContactUsPage> {
                           }
                         },
                       ),
-                      
+
                       const SizedBox(height: 16),
-                      
+
                       // Subject field
                       CommonText.labelMedium(
                         '${context.translate('subject')} *',
@@ -241,9 +223,9 @@ class _ContactUsPageState extends ConsumerState<ContactUsPage> {
                           return null;
                         },
                       ),
-                      
+
                       const SizedBox(height: 16),
-                      
+
                       // Message field
                       CommonText.labelMedium(
                         '${context.translate('message')} *',
@@ -265,9 +247,9 @@ class _ContactUsPageState extends ConsumerState<ContactUsPage> {
                           return null;
                         },
                       ),
-                      
+
                       const SizedBox(height: 24),
-                      
+
                       // Error message
                       if (error != null) ...[
                         CommonContainer(
@@ -275,7 +257,8 @@ class _ContactUsPageState extends ConsumerState<ContactUsPage> {
                           backgroundColor: context.errorContainer,
                           child: Row(
                             children: [
-                              Icon(Icons.error_outline, color: context.onErrorContainer),
+                              Icon(Icons.error_outline,
+                                  color: context.onErrorContainer),
                               const SizedBox(width: 8),
                               Expanded(
                                 child: CommonText.bodyMedium(
@@ -288,7 +271,14 @@ class _ContactUsPageState extends ConsumerState<ContactUsPage> {
                         ),
                         const SizedBox(height: 16),
                       ],
-                      
+                      const SizedBox(height: 24),
+
+                      // Cloudflare Turnstile Security Widget
+                      const CloudflareTurnstileWidget(
+                        action: 'contact_us',
+                      ),
+
+                      const SizedBox(height: 24),
                       // Submit button
                       SizedBox(
                         width: double.infinity,
@@ -303,9 +293,9 @@ class _ContactUsPageState extends ConsumerState<ContactUsPage> {
                     ],
                   ),
                 ),
-                
+
                 const SizedBox(height: 16),
-                
+
                 // Additional contact info
                 CommonContainer(
                   padding: const EdgeInsets.all(24),
@@ -318,7 +308,7 @@ class _ContactUsPageState extends ConsumerState<ContactUsPage> {
                         fontWeight: FontWeight.w600,
                       ),
                       const SizedBox(height: 16),
-                      
+
                       // Email support
                       Row(
                         children: [
@@ -340,9 +330,9 @@ class _ContactUsPageState extends ConsumerState<ContactUsPage> {
                           ),
                         ],
                       ),
-                      
+
                       const SizedBox(height: 16),
-                      
+
                       // Response time
                       Row(
                         children: [
@@ -377,15 +367,30 @@ class _ContactUsPageState extends ConsumerState<ContactUsPage> {
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
-      final submission = ContactSubmission(
-        name: _nameController.text.trim(),
-        email: _emailController.text.trim(),
-        subject: _subjectController.text.trim(),
-        message: _messageController.text.trim(),
-        category: _selectedCategory,
-        createdAt: DateTime.now(),
-        phone: _phoneController.text.trim().isNotEmpty ? _phoneController.text.trim() : null,
-      );
+      // Check Turnstile verification
+      final turnstileCanAttempt = ref.read(turnstileCanAttemptLoginProvider);
+
+      if (!turnstileCanAttempt) {
+        final localizations = AppLocalizations.of(context);
+        context.showErrorSnackBar(
+          message: localizations?.translate('turnstile_required') ??
+              'Please complete the security verification',
+        );
+        return;
+      }
+
+      // Get the Turnstile token
+      final turnstileToken = ref.read(turnstileTokenProvider);
+      final submission = ContactUsRequest(
+          name: _nameController.text.trim(),
+          email: _emailController.text.trim(),
+          subject: _subjectController.text.trim(),
+          message: _messageController.text.trim(),
+          category: _selectedCategory,
+          phone: _phoneController.text.trim().isNotEmpty
+              ? _phoneController.text.trim()
+              : null,
+          turnstileToken: turnstileToken);
 
       ref.read(legalNotifierProvider.notifier).submitContactForm(submission);
     }

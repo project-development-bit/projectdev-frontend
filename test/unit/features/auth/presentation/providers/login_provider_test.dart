@@ -146,8 +146,8 @@ void main() {
         verify(() => mockLoginUseCase(request)).called(1);
         
         final loginResponse = result.getOrElse(() => throw Exception('Should not happen'));
-        expect(loginResponse.user.email, testEmail);
-        expect(loginResponse.tokens.accessToken, 'access_token');
+        expect(loginResponse.user?.email, testEmail);
+        expect(loginResponse.tokens?.accessToken, 'access_token');
       });
 
       test('should call login use case without reCAPTCHA token', () async {

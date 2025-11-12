@@ -1,4 +1,4 @@
-import '../../domain/entities/contact_submission.dart';
+import '../../../domain/entities/contact_submission.dart';
 
 /// Contact submission model for JSON serialization
 class ContactSubmissionModel extends ContactSubmission {

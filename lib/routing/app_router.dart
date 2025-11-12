@@ -188,15 +188,6 @@ class BurgerEatsAppRoutes {
             ],
           ),
 
-          // Legal Routes - Public access
-          GoRoute(
-            path: AppRoutes.contactUs,
-            name: 'contact-us',
-            pageBuilder: (context, state) => const NoTransitionPage(
-              child: ContactUsPage(),
-            ),
-          ),
-
           // Main App Shell Route - Wraps non-auth routes with login popup
           ShellRoute(
             navigatorKey: _shellNavigatorKey,
@@ -255,7 +246,14 @@ class BurgerEatsAppRoutes {
                   child: PrivacyScreen(),
                 ),
               ),
-
+              // Legal Routes - Public access
+              GoRoute(
+                path: AppRoutes.contactUs,
+                name: 'contact-us',
+                pageBuilder: (context, state) => const NoTransitionPage(
+                  child: ContactUsPage(),
+                ),
+              ),
               // Offers Routes - Requires Authentication
               GoRoute(
                 path: AppRoutes.offers,

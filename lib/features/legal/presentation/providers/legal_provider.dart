@@ -1,7 +1,8 @@
+import 'package:cointiply_app/features/legal/data/datasource/legal_remote_data_source.dart';
+import 'package:cointiply_app/features/legal/data/models/request/contact_us_request.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/entities/legal_document.dart';
-import '../../domain/entities/contact_submission.dart';
 import '../../domain/usecases/get_privacy_policy_usecase.dart';
 import '../../domain/usecases/get_terms_of_service_usecase.dart';
 import '../../domain/usecases/submit_contact_form_usecase.dart';
@@ -30,7 +31,7 @@ class LegalLoading extends LegalState {
 /// Success state for legal document
 class LegalDocumentLoaded extends LegalState {
   final LegalDocument document;
-  
+
   const LegalDocumentLoaded(this.document);
 }
 
@@ -42,7 +43,7 @@ class ContactFormSubmitted extends LegalState {
 /// Error state
 class LegalError extends LegalState {
   final String message;
-  
+
   const LegalError(this.message);
 }
 
@@ -59,13 +60,15 @@ class LegalNotifier extends StateNotifier<LegalState> {
   /// Get privacy policy
   Future<void> getPrivacyPolicy() async {
     state = const LegalLoading();
-    
+
     try {
-      final useCase = GetPrivacyPolicyUseCase(_ref.read(legalRepositoryProvider));
+      final useCase =
+          GetPrivacyPolicyUseCase(_ref.read(legalRepositoryProvider));
       final result = await useCase.call();
-      
+
       result.fold(
-        (failure) => state = LegalError(failure.message ?? 'Failed to load privacy policy'),
+        (failure) => state =
+            LegalError(failure.message ?? 'Failed to load privacy policy'),
         (document) => state = LegalDocumentLoaded(document),
       );
     } catch (e) {
@@ -76,13 +79,15 @@ class LegalNotifier extends StateNotifier<LegalState> {
   /// Get terms of service
   Future<void> getTermsOfService() async {
     state = const LegalLoading();
-    
+
     try {
-      final useCase = GetTermsOfServiceUseCase(_ref.read(legalRepositoryProvider));
+      final useCase =
+          GetTermsOfServiceUseCase(_ref.read(legalRepositoryProvider));
       final result = await useCase.call();
-      
+
       result.fold(
-        (failure) => state = LegalError(failure.message ?? 'Failed to load terms of service'),
+        (failure) => state =
+            LegalError(failure.message ?? 'Failed to load terms of service'),
         (document) => state = LegalDocumentLoaded(document),
       );
     } catch (e) {
@@ -91,18 +96,24 @@ class LegalNotifier extends StateNotifier<LegalState> {
   }
 
   /// Submit contact form
-  Future<void> submitContactForm(ContactSubmission submission) async {
+  Future<void> submitContactForm(ContactUsRequest submission) async {
     state = const LegalLoading();
-    
+
     try {
-      final useCase = SubmitContactFormUseCase(_ref.read(legalRepositoryProvider));
-      final result = await useCase.call(SubmitContactFormParams(submission: submission));
-      
+      final useCase =
+          SubmitContactFormUseCase(_ref.read(legalRepositoryProvider));
+      final result = await useCase.call(submission);
+
       result.fold(
-        (failure) => state = LegalError(failure.message ?? 'Failed to submit contact form'),
+        (failure) {
+          state =
+              LegalError(failure.message ?? 'Failed to submit contact form');
+          debugPrint(" Error submitting contact form: $failure");
+        },
         (_) => state = const ContactFormSubmitted(),
       );
     } catch (e) {
+      debugPrint(" Error submitting contact form: $e");
       state = LegalError('An unexpected error occurred: $e');
     }
   }
@@ -119,11 +130,12 @@ class LegalNotifier extends StateNotifier<LegalState> {
 
 /// Legal repository provider
 final legalRepositoryProvider = Provider<LegalRepositoryImpl>((ref) {
-  return LegalRepositoryImpl();
+  return LegalRepositoryImpl(ref.read(legalRemoteDataSourceProvider));
 });
 
 /// Legal notifier provider
-final legalNotifierProvider = StateNotifierProvider<LegalNotifier, LegalState>((ref) {
+final legalNotifierProvider =
+    StateNotifierProvider<LegalNotifier, LegalState>((ref) {
   return LegalNotifier(ref);
 });
 

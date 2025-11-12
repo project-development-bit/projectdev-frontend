@@ -3,11 +3,13 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/foundation.dart';
 import 'package:url_strategy/url_strategy.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cointiply_app/core/services/database_service.dart';
 import 'package:cointiply_app/core/localization/app_localizations.dart';
 import 'core/providers/locale_provider.dart';
 import 'core/providers/theme_provider.dart';
 import 'core/theme/app_theme.dart';
+import 'core/theme/presentation/providers/app_settings_theme_provider.dart';
 import 'core/config/app_flavor.dart';
 import 'core/config/flavor_manager.dart';
 import 'core/widgets/flavor_banner.dart';
@@ -74,6 +76,9 @@ Future<void> runAppWithFlavor(AppFlavor flavor) async {
   // Initialize SQLite database
   await DatabaseService.init();
 
+  // Initialize SharedPreferences
+  final sharedPreferences = await SharedPreferences.getInstance();
+
   // Print flavor information for debugging
   debugPrint('🚀 Starting app with flavor: ${flavor.displayName}');
   debugPrint('📱 App Name: ${FlavorManager.appName}');
@@ -81,27 +86,107 @@ Future<void> runAppWithFlavor(AppFlavor flavor) async {
   debugPrint('🔧 Debug Features: ${FlavorManager.areDebugFeaturesEnabled}');
   debugPrint('📝 Logging: ${FlavorManager.isLoggingEnabled}');
 
-  // Run the app
-  runApp(const ProviderScope(child: MyApp()));
+  // Run the app with provider overrides
+  runApp(
+    ProviderScope(
+      overrides: [
+        // Override shared preferences for app settings theme
+        sharedPreferencesProviderForAppSettings.overrideWithValue(
+          sharedPreferences,
+        ),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
-class MyApp extends ConsumerWidget {
+class MyApp extends ConsumerStatefulWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends ConsumerState<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    // Load app settings theme from server on app start
+    Future.microtask(() {
+      ref.read(appSettingsThemeProvider.notifier).loadThemeConfig();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final currentLocale = ref.watch(localeProvider);
     final currentThemeMode = ref.watch(themeProvider);
     final themeNotifier = ref.read(themeProvider.notifier);
     final currentFlavor = ref.watch(flavorProvider);
-
-    // Use the new router provider (fallback to simple router for now)
-    // final appRouter = router; // ref.read(routerProvider).routerConfig;
+    final appSettingsThemeState = ref.watch(appSettingsThemeProvider);
 
     debugPrint(
         'MyApp building with locale: ${currentLocale.languageCode}-${currentLocale.countryCode}');
     debugPrint('MyApp building with theme: ${currentThemeMode.name}');
     debugPrint('MyApp building with flavor: ${currentFlavor.displayName}');
+    debugPrint('App settings theme loading: ${appSettingsThemeState.isLoading}');
+
+    // Show splash screen while theme is loading
+    if (appSettingsThemeState.isLoading) {
+      return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: Scaffold(
+          body: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  AppTheme.lightTheme.colorScheme.primary,
+                  AppTheme.lightTheme.colorScheme.secondary,
+                ],
+              ),
+            ),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // App Logo/Icon
+                  Icon(
+                    Icons.restaurant_menu,
+                    size: 80,
+                    color: Colors.white,
+                  ),
+                  const SizedBox(height: 24),
+                  // App Name
+                  Text(
+                    FlavorManager.appName,
+                    style: const TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(height: 48),
+                  // Loading indicator
+                  const CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'Loading theme...',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white70,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    }
 
     return FlavorBanner(
       child: MaterialApp.router(
@@ -111,9 +196,9 @@ class MyApp extends ConsumerWidget {
         locale: currentLocale,
         title: FlavorManager.appName, // Use flavor-specific app name
 
-        // Theme configuration
-        theme: AppTheme.lightTheme,
-        darkTheme: AppTheme.darkTheme,
+        // Theme configuration - Use app settings theme from server, fallback to default theme
+        theme: appSettingsThemeState.lightTheme ?? AppTheme.lightTheme,
+        darkTheme: appSettingsThemeState.darkTheme ?? AppTheme.darkTheme,
         themeMode: themeNotifier.getEffectiveThemeMode(
           MediaQuery.platformBrightnessOf(context),
         ),

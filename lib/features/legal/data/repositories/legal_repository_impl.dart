@@ -1,15 +1,17 @@
+import 'package:cointiply_app/core/error/error_handling.dart'
+    show ErrorHandling;
+import 'package:cointiply_app/features/legal/data/datasource/legal_remote_data_source.dart';
+import 'package:cointiply_app/features/legal/data/models/request/contact_us_request.dart';
 import 'package:dartz/dartz.dart';
-import 'package:flutter/foundation.dart';
 import '../../../../core/error/failures.dart';
 import '../../domain/entities/legal_document.dart';
-import '../../domain/entities/contact_submission.dart';
 import '../../domain/repositories/legal_repository.dart';
-import '../models/legal_document_model.dart';
-import '../models/contact_submission_model.dart';
+import '../models/response/legal_document_model.dart';
 
 /// Repository implementation for legal documents and contact forms
 class LegalRepositoryImpl implements LegalRepository {
-  LegalRepositoryImpl();
+  final LegalRemoteDataSource _remoteDataSource;
+  LegalRepositoryImpl(this._remoteDataSource);
 
   @override
   Future<Either<Failure, LegalDocument>> getPrivacyPolicy() async {
@@ -56,13 +58,15 @@ If you have any questions about this privacy policy, please contact us at suppor
           LegalSectionModel(
             id: 'information-usage',
             title: 'How We Use Your Information',
-            content: 'We use the information we collect to provide, maintain, and improve our services...',
+            content:
+                'We use the information we collect to provide, maintain, and improve our services...',
             order: 2,
           ),
           LegalSectionModel(
             id: 'information-sharing',
             title: 'Information Sharing',
-            content: 'We do not sell, trade, or otherwise transfer your personal information...',
+            content:
+                'We do not sell, trade, or otherwise transfer your personal information...',
             order: 3,
           ),
         ],
@@ -116,7 +120,8 @@ These terms and conditions are governed by and construed in accordance with the 
           LegalSectionModel(
             id: 'acceptance',
             title: 'Acceptance of Terms',
-            content: 'By accessing and using Gigafaucet, you accept and agree to be bound...',
+            content:
+                'By accessing and using Gigafaucet, you accept and agree to be bound...',
             order: 1,
           ),
           LegalSectionModel(
@@ -128,7 +133,8 @@ These terms and conditions are governed by and construed in accordance with the 
           LegalSectionModel(
             id: 'disclaimer',
             title: 'Disclaimer',
-            content: 'The materials on Gigafaucet are provided on an as is basis...',
+            content:
+                'The materials on Gigafaucet are provided on an as is basis...',
             order: 3,
           ),
         ],
@@ -141,26 +147,21 @@ These terms and conditions are governed by and construed in accordance with the 
   }
 
   @override
-  Future<Either<Failure, void>> submitContactForm(ContactSubmission submission) async {
+  Future<Either<Failure, void>> submitContactForm(
+      ContactUsRequest submission) async {
     try {
-      // Mock API call - replace with actual implementation
-      final model = ContactSubmissionModel.fromEntity(submission);
-      
-      // Simulate network delay
-      await Future.delayed(const Duration(seconds: 2));
-      
-      // Here you would make the actual API call
-      // await apiClient.post('/contact', data: model.toJson());
-      debugPrint('Contact form submitted: ${model.toJson()}');
-      
+      await _remoteDataSource.submitContactForm(
+        submission,
+      );
       return const Right(null);
     } catch (e) {
-      return Left(ServerFailure(message: e.toString()));
+      return Left(ServerFailure(message: ErrorHandling.getErrorMessage(e)));
     }
   }
 
   @override
-  Future<Either<Failure, LegalDocument>> getLegalDocument(String documentType) async {
+  Future<Either<Failure, LegalDocument>> getLegalDocument(
+      String documentType) async {
     try {
       switch (documentType.toLowerCase()) {
         case 'privacy':
@@ -170,7 +171,8 @@ These terms and conditions are governed by and construed in accordance with the 
         case 'terms-of-service':
           return await getTermsOfService();
         default:
-          return Left(ServerFailure(message: 'Unknown document type: $documentType'));
+          return Left(
+              ServerFailure(message: 'Unknown document type: $documentType'));
       }
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));
