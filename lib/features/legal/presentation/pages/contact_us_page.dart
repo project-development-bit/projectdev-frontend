@@ -1,6 +1,8 @@
+import 'package:cointiply_app/core/localization/app_localizations.dart';
+import 'package:cointiply_app/core/providers/turnstile_provider.dart';
+import 'package:cointiply_app/features/legal/data/models/request/contact_us_request.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import '../../../../core/common/common_text.dart';
 import '../../../../core/common/common_container.dart';
 import '../../../../core/common/common_textfield.dart';
@@ -37,19 +39,9 @@ class _ContactUsPageState extends ConsumerState<ContactUsPage> {
       if (next && mounted) {
         // Clear form
         _clearForm();
-
-        // Show success message
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: CommonText.bodyMedium(
-              context.translate('contact_form_submitted_successfully'),
-              color: context.onPrimary,
-            ),
-            backgroundColor: context.primary,
-            duration: const Duration(seconds: 3),
-          ),
+        context.showSuccessSnackBar(
+          message: context.translate('contact_form_submitted_successfully'),
         );
-
         // Reset provider state
         ref.read(legalNotifierProvider.notifier).resetState();
       }
@@ -72,19 +64,6 @@ class _ContactUsPageState extends ConsumerState<ContactUsPage> {
     final error = ref.watch(legalErrorProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: CommonText.titleMedium(
-          context.translate('contact_us'),
-          color: context.onSurface,
-          fontWeight: FontWeight.w600,
-        ),
-        backgroundColor: context.surface,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: context.onSurface),
-          onPressed: () => context.pop(),
-        ),
-      ),
       body: ResponsiveContainer(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
@@ -380,17 +359,30 @@ class _ContactUsPageState extends ConsumerState<ContactUsPage> {
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
-      final submission = ContactSubmission(
-        name: _nameController.text.trim(),
-        email: _emailController.text.trim(),
-        subject: _subjectController.text.trim(),
-        message: _messageController.text.trim(),
-        category: _selectedCategory,
-        createdAt: DateTime.now(),
-        phone: _phoneController.text.trim().isNotEmpty
-            ? _phoneController.text.trim()
-            : null,
-      );
+      // Check Turnstile verification
+      final turnstileCanAttempt = ref.read(turnstileCanAttemptLoginProvider);
+
+      if (!turnstileCanAttempt) {
+        final localizations = AppLocalizations.of(context);
+        context.showErrorSnackBar(
+          message: localizations?.translate('turnstile_required') ??
+              'Please complete the security verification',
+        );
+        return;
+      }
+
+      // Get the Turnstile token
+      final turnstileToken = ref.read(turnstileTokenProvider);
+      final submission = ContactUsRequest(
+          name: _nameController.text.trim(),
+          email: _emailController.text.trim(),
+          subject: _subjectController.text.trim(),
+          message: _messageController.text.trim(),
+          category: _selectedCategory,
+          phone: _phoneController.text.trim().isNotEmpty
+              ? _phoneController.text.trim()
+              : null,
+          turnstileToken: turnstileToken);
 
       ref.read(legalNotifierProvider.notifier).submitContactForm(submission);
     }

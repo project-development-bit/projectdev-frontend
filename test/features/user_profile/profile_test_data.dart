@@ -64,17 +64,15 @@ class ProfileTestData {
   }
 
   static ProfileState createErrorState([String? error]) {
-    return ProfileError(error ?? 'An error occurred while loading profile');
+    return ProfileError(error ?? 'Test error message');
   }
 
   static ProfileState createSuccessState([UserProfile? profile]) {
-    return ProfileSuccess(
-      profile ?? createTestProfile(),
-    );
+    return ProfileSuccess(profile ?? createTestProfile());
   }
 
   static ProfileState createEmptyState() {
-    return ProfileError('No profile data available');
+    return ProfileInitial();
   }
 
   /// Creates a new user profile with minimal data

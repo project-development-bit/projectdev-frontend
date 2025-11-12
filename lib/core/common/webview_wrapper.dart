@@ -35,6 +35,7 @@ class WebViewWrapper extends StatelessWidget {
       backgroundColor: AppColors.transparent,
       appBar: title != null
           ? AppBar(
+              toolbarHeight: 46,
               title: CommonText.titleMedium(
                 title ?? '',
                 color: context.onSurface,

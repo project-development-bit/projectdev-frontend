@@ -225,10 +225,9 @@ void main() {
         confirmPassword: testConfirmPassword,
       );
 
-      state = container.read(
-          resetPasswordProvider as ProviderListenable<ResetPasswordError>);
+      state = container.read(resetPasswordProvider as ProviderListenable<ResetPasswordError>);
       expect(state, isA<ResetPasswordError>());
-      errorState = state;
+      errorState = state as ResetPasswordError;
       expect(errorState.message, 'Please enter a password');
 
       // Reset state
@@ -241,10 +240,9 @@ void main() {
         confirmPassword: '',
       );
 
-      state = container.read(
-          resetPasswordProvider as ProviderListenable<ResetPasswordError>);
+      state = container.read(resetPasswordProvider as ProviderListenable<ResetPasswordError>);
       expect(state, isA<ResetPasswordError>());
-      errorState = state;
+      errorState = state as ResetPasswordError;
       expect(errorState.message, 'Please confirm your password');
     });
 

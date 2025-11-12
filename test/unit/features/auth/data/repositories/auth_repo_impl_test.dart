@@ -108,11 +108,11 @@ void main() {
 
         verify(() => mockRemoteDataSource.login(loginRequest)).called(1);
         verify(() => mockSecureStorage.saveAuthToken(
-            loginResponseModel.tokens?.accessToken ?? "")).called(1);
+            loginResponseModel.tokens?.accessToken ?? '')).called(1);
         verify(() => mockSecureStorage.saveRefreshToken(
-            loginResponseModel.tokens?.refreshToken ?? "")).called(1);
+            loginResponseModel.tokens?.refreshToken ?? '')).called(1);
         verify(() => mockSecureStorage.saveUserId(
-            loginResponseModel.user?.id.toString() ?? "")).called(1);
+            loginResponseModel.user?.id.toString() ?? '')).called(1);
       });
 
       test('should return ServerFailure when DioException occurs', () async {

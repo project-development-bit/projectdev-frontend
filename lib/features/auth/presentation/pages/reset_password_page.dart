@@ -329,9 +329,11 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
               color: Theme.of(context).colorScheme.primary,
             ),
             const SizedBox(width: 8),
-            CommonText.bodyMedium(
-              l10n?.translate('back_to_login') ?? 'Back to Login',
-              color: Theme.of(context).colorScheme.primary,
+            Flexible(
+              child: CommonText.bodyMedium(
+                l10n?.translate('back_to_login') ?? 'Back to Login',
+                color: Theme.of(context).colorScheme.primary,
+              ),
             ),
           ],
         ),

@@ -112,7 +112,6 @@ void main() {
     testWidgets('should navigate back when back button is pressed',
         (WidgetTester tester) async {
       // Arrange
-      // bool backPressed = false;
       await tester.pumpWidget(
         ProviderScope(
           child: MaterialApp(
@@ -120,21 +119,13 @@ void main() {
               builder: (context) => Scaffold(
                 body: ElevatedButton(
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => const ForgotPasswordPage()));
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (_) => const ForgotPasswordPage()));
                   },
                   child: const Text('Go to Forgot Password'),
                 ),
               ),
             ),
-            onGenerateRoute: (settings) {
-              if (settings.name == '/') {
-                // backPressed = true;
-              }
-              return null;
-            },
           ),
         ),
       );

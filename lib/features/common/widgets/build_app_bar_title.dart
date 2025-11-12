@@ -1,5 +1,6 @@
 import 'package:cointiply_app/features/chat/presentation/provider/right_chat_overlay_provider.dart';
 import 'package:cointiply_app/features/common/widgets/custom_pointer_interceptor.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -113,7 +114,9 @@ class CommonAppBar extends StatelessWidget {
                       children: [
                         // Profile button
                         IconButton(
-                          onPressed: () => context.pushNamedProfile(),
+                          onPressed: () => kIsWeb
+                              ? context.goNamedProfile()
+                              : context.pushNamedProfile(),
                           icon: const Icon(Icons.person),
                           tooltip: 'Profile',
                         ),
@@ -126,6 +129,13 @@ class CommonAppBar extends StatelessWidget {
                           },
                           icon: const Icon(Icons.chat),
                           tooltip: 'Chat',
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.contact_mail),
+                          onPressed: () {
+                            context.go(
+                                '/legal/contact-us'); // Navigate to Contact Us screen
+                          },
                         ),
                         // Logout button
                         Consumer(
@@ -157,14 +167,26 @@ class CommonAppBar extends StatelessWidget {
                     );
                   } else {
                     // Show login button for unauthenticated users
-                    return ElevatedButton.icon(
-                      onPressed: () => context.go('/auth/login'),
-                      icon: const Icon(Icons.login),
-                      label: const Text('Login'),
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: context.onPrimary,
-                        backgroundColor: context.primary,
-                      ),
+                    return Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.contact_mail),
+                          onPressed: () {
+                            context.go('/legal/contact-us');
+                          },
+                        ),
+                        SizedBox(width: 8),
+                        ElevatedButton.icon(
+                          onPressed: () => context.go('/auth/login'),
+                          icon: const Icon(Icons.login),
+                          label: const Text('Login'),
+                          style: ElevatedButton.styleFrom(
+                            foregroundColor: context.onPrimary,
+                            backgroundColor: context.primary,
+                          ),
+                        ),
+                      ],
                     );
                   }
                 },

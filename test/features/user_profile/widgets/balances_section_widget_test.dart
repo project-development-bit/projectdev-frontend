@@ -1,3 +1,18 @@
+import 'package:flutter_test/flutter_test.dart';
+
+// NOTE: This test file is currently disabled because BalancesSectionWidget
+// has been refactored. To enable these tests, they need to be rewritten
+// to match the new widget implementation.
+
+void main() {
+  group('BalancesSectionWidget Tests', () {
+    test('BalancesSectionWidget test - PENDING REFACTOR', () {
+      // This test is skipped pending refactor
+    }, skip: true);
+  });
+}
+
+// ===== OLD COMMENTED OUT TESTS =====
 // import 'package:flutter/material.dart';
 // import 'package:flutter_test/flutter_test.dart';
 // import 'package:cointiply_app/features/user_profile/presentation/widgets/balances_section_widget.dart';
@@ -20,6 +35,7 @@
 //         ),
 //       );
 //     }
+
 
 //     group('Widget Structure', () {
 //       testWidgets('renders main container correctly', (tester) async {

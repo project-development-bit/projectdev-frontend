@@ -1,4 +1,5 @@
 import 'package:cointiply_app/features/common/widgets/custom_pointer_interceptor.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -53,15 +54,18 @@ class MobileDrawer extends ConsumerWidget {
                   _buildLocaleItem(context, ref),
 
                   const Divider(),
-
+                  // Home
+                  _buildSectionHeader(context, context.translate('home')),
+                  _buildHomeItem(context, currentUserState),
                   // User Section (only if authenticated)
                   if (isAuthenticated) ...[
+                    // Account
                     _buildSectionHeader(context, context.translate('account')),
-
                     // Profile
                     _buildProfileItem(context, currentUserState),
                     _buildSectionHeader(context, context.translate('support')),
                     _buildChatItem(context),
+                    _buildContactUSItem(context),
 
                     const Divider(),
 
@@ -340,6 +344,36 @@ class MobileDrawer extends ConsumerWidget {
     );
   }
 
+  /// Build Home item
+  Widget _buildHomeItem(
+      BuildContext context, CurrentUserState currentUserState) {
+    return ListTile(
+      leading: CircleAvatar(
+        radius: 18,
+        backgroundColor: context.primary.withOpacity(0.1),
+        child: Icon(
+          Icons.home,
+          color: context.primary,
+          size: 20,
+        ),
+      ),
+      title: CommonText.bodyLarge(context.translate('home')),
+      subtitle: CommonText.bodySmall(
+        context.translate('view_home'),
+        color: context.onSurfaceVariant,
+      ),
+      trailing: Icon(
+        Icons.arrow_forward_ios,
+        size: 16,
+        color: context.onSurfaceVariant,
+      ),
+      onTap: () {
+        Navigator.of(context).pop(); // Close drawer
+        context.goNamedHome();
+      },
+    );
+  }
+
   /// Build profile item
   Widget _buildProfileItem(
       BuildContext context, CurrentUserState currentUserState) {
@@ -365,7 +399,7 @@ class MobileDrawer extends ConsumerWidget {
       ),
       onTap: () {
         Navigator.of(context).pop(); // Close drawer
-        context.pushNamedProfile();
+        kIsWeb ? context.goNamedProfile() : context.pushNamedProfile();
       },
     );
   }
@@ -394,6 +428,34 @@ class MobileDrawer extends ConsumerWidget {
       onTap: () {
         Navigator.of(context).pop(); // Close drawer
         context.pushNamedChat();
+      },
+    );
+  }
+
+  Widget _buildContactUSItem(BuildContext context) {
+    return ListTile(
+      leading: CircleAvatar(
+        radius: 18,
+        backgroundColor: context.primary.withOpacity(0.1),
+        child: Icon(
+          Icons.contact_mail,
+          color: context.primary,
+          size: 20,
+        ),
+      ),
+      title: CommonText.bodyLarge(context.translate('contact_us')),
+      subtitle: CommonText.bodySmall(
+        context.translate('contact_us'),
+        color: context.onSurfaceVariant,
+      ),
+      trailing: Icon(
+        Icons.arrow_forward_ios,
+        size: 16,
+        color: context.onSurfaceVariant,
+      ),
+      onTap: () {
+        Navigator.of(context).pop(); // Close drawer
+        context.go('/legal/contact-us'); //
       },
     );
   }

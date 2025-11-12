@@ -61,7 +61,7 @@ class ProfileMockDataSource implements ProfileRemoteDataSource {
     await Future.delayed(_mockDelay);
 
     // Simulate updating the profile with new data
-    await getUserProfile(userId);
+    // final currentProfile = await getUserProfile(userId);
 
     return UserUpdateResponse(
       success: true,
