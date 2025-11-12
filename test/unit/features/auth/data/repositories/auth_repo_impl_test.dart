@@ -60,6 +60,7 @@ void main() {
             name: 'User 7',
             email: 'user8@gmail.com',
             role: UserRole.normalUser,
+            showOnboarding: true,
             refreshToken: '',
             securityCode: '',
             isBanned: 0,
@@ -107,12 +108,12 @@ void main() {
         );
 
         verify(() => mockRemoteDataSource.login(loginRequest)).called(1);
-        verify(() => mockSecureStorage
-            .saveAuthToken(loginResponseModel.tokens?.accessToken ?? '')).called(1);
+        verify(() => mockSecureStorage.saveAuthToken(
+            loginResponseModel.tokens?.accessToken ?? '')).called(1);
         verify(() => mockSecureStorage.saveRefreshToken(
             loginResponseModel.tokens?.refreshToken ?? '')).called(1);
-        verify(() => mockSecureStorage
-            .saveUserId(loginResponseModel.user?.id.toString() ?? '')).called(1);
+        verify(() => mockSecureStorage.saveUserId(
+            loginResponseModel.user?.id.toString() ?? '')).called(1);
       });
 
       test('should return ServerFailure when DioException occurs', () async {

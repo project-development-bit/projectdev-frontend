@@ -34,10 +34,9 @@ class TutorialNotifier extends StateNotifier<bool> {
   Future<void> closes() async {
     final prefs = await SharedPreferences.getInstance();
     final userID = prefs.getString('user_id') ?? 'unknown_user';
-    await prefs.remove(_tutorialShownKey + userID);
-    bool? shown = prefs.getBool(_tutorialShownKey + userID);
+    await prefs.setBool(_tutorialShownKey + userID, true);
     debugPrint(
-        'Tutorial reset: Clearing tutorial status for $userID to $shown');
+        'Tutorial shown : Tutorial marked as shown ${prefs.getBool(_tutorialShownKey) ?? false}');
     state = true;
   }
 

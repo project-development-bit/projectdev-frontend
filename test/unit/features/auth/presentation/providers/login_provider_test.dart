@@ -27,6 +27,7 @@ void main() {
       name: 'Test User',
       email: testEmail,
       role: UserRole.normalUser,
+      showOnboarding: true,
       refreshToken: 'test_refresh_token',
       securityCode: 'test_security_code',
       isBanned: 0,
@@ -144,8 +145,9 @@ void main() {
         // Assert
         expect(result.isRight(), true);
         verify(() => mockLoginUseCase(request)).called(1);
-        
-        final loginResponse = result.getOrElse(() => throw Exception('Should not happen'));
+
+        final loginResponse =
+            result.getOrElse(() => throw Exception('Should not happen'));
         expect(loginResponse.user?.email, testEmail);
         expect(loginResponse.tokens?.accessToken, 'access_token');
       });
@@ -177,8 +179,8 @@ void main() {
           recaptchaToken: testRecaptchaToken,
         );
 
-        when(() => mockLoginUseCase(any()))
-            .thenAnswer((_) async => Left(ServerFailure(message: 'Invalid credentials')));
+        when(() => mockLoginUseCase(any())).thenAnswer(
+            (_) async => Left(ServerFailure(message: 'Invalid credentials')));
 
         // Act
         final result = await mockLoginUseCase(request);
@@ -186,8 +188,9 @@ void main() {
         // Assert
         expect(result.isLeft(), true);
         verify(() => mockLoginUseCase(request)).called(1);
-        
-        final failure = result.fold((l) => l, (r) => throw Exception('Should not happen'));
+
+        final failure =
+            result.fold((l) => l, (r) => throw Exception('Should not happen'));
         expect(failure.message, 'Invalid credentials');
       });
     });
