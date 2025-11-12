@@ -6,22 +6,22 @@ import 'package:cointiply_app/features/home/providers/tutorial_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class CointiplyTutorialDialog extends StatefulWidget {
+class FirstTimeTutorialDialog extends StatefulWidget {
   final VoidCallback onComplete;
-  const CointiplyTutorialDialog({super.key, required this.onComplete});
+  const FirstTimeTutorialDialog({super.key, required this.onComplete});
 
   @override
-  State<CointiplyTutorialDialog> createState() =>
-      _CointiplyTutorialDialogState();
+  State<FirstTimeTutorialDialog> createState() =>
+      _FirstTimeTutorialDialogState();
 }
 
-class _CointiplyTutorialDialogState extends State<CointiplyTutorialDialog> {
+class _FirstTimeTutorialDialogState extends State<FirstTimeTutorialDialog> {
   int step = 1;
   final int totalSteps = 9;
 
   final List<Map<String, dynamic>> steps = [
     {
-      'title': 'welcome_to_cointiply',
+      'title': 'welcome_to_gigafaucet',
       'image': 'assets/tutorial/welcome.png',
       'gradient': true,
       'description': 'welcome_description',

@@ -36,7 +36,7 @@ class _TutorialOverlayState extends ConsumerState<TutorialOverlay> {
             ),
           ),
           Center(
-            child: CointiplyTutorialDialog(
+            child: FirstTimeTutorialDialog(
               onComplete: () {
                 ref.read(tutorialProvider.notifier).markAsShown();
               },
