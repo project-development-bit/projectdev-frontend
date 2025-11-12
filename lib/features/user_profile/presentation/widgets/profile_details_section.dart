@@ -1,4 +1,5 @@
 import 'package:cointiply_app/core/core.dart';
+import 'package:cointiply_app/features/auth/presentation/providers/check_2fa_status_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
@@ -6,11 +7,21 @@ import 'package:cointiply_app/features/user_profile/presentation/providers/curre
 class ProfileDetailsSection extends ConsumerWidget {
   const ProfileDetailsSection({super.key});
 
+  bool _shouldShow2FAWarning(bool isLoading, bool isEnabled) {
+    return !isLoading && !isEnabled;
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final colorScheme = Theme.of(context).colorScheme;
     final localizations = AppLocalizations.of(context);
     final currentUserState = ref.watch(currentUserProvider);
+
+    final check2FAStatusState = ref.watch(check2FAStatusProvider);
+    final is2FALoading = check2FAStatusState is! Check2FAStatusSuccess;
+    bool isEnabled2FA = check2FAStatusState is Check2FAStatusSuccess
+        ? check2FAStatusState.is2FAEnabled
+        : false;
 
     return ResponsiveSection(
       padding: EdgeInsets.zero,
@@ -52,44 +63,46 @@ class ProfileDetailsSection extends ConsumerWidget {
               value: "EwAN",
             ),
             const SizedBox(height: 24),
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: colorScheme.surfaceContainerLow,
-                border: Border.all(
-                  color: colorScheme.tertiaryContainer,
-                  width: 1.2,
-                ),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Icon(Icons.warning_amber_rounded,
-                      color: colorScheme.tertiary, size: 28),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CommonText.titleMedium(
-                          localizations?.translate("profile_2fa_title") ?? '',
-                          color: colorScheme.onSurface,
-                          fontWeight: FontWeight.w700,
-                        ),
-                        const SizedBox(height: 4),
-                        CommonText.bodySmall(
-                          localizations?.translate("profile_2fa_description") ??
-                              '',
-                          color: colorScheme.onSurfaceVariant,
-                        ),
-                      ],
-                    ),
+            if (_shouldShow2FAWarning(is2FALoading, isEnabled2FA))
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: colorScheme.surfaceContainerLow,
+                  border: Border.all(
+                    color: colorScheme.tertiaryContainer,
+                    width: 1.2,
                   ),
-                ],
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Icon(Icons.warning_amber_rounded,
+                        color: colorScheme.tertiary, size: 28),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CommonText.titleMedium(
+                            localizations?.translate("profile_2fa_title") ?? '',
+                            color: colorScheme.onSurface,
+                            fontWeight: FontWeight.w700,
+                          ),
+                          const SizedBox(height: 4),
+                          CommonText.bodySmall(
+                            localizations
+                                    ?.translate("profile_2fa_description") ??
+                                '',
+                            color: colorScheme.onSurfaceVariant,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
           ],
         ),
       ),
