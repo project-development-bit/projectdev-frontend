@@ -1,24 +1,17 @@
+import 'package:cointiply_app/features/legal/data/models/request/contact_us_request.dart';
 import 'package:dartz/dartz.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/usecases/usecase.dart';
-import '../entities/contact_submission.dart';
 import '../repositories/legal_repository.dart';
 
-/// Parameters for submitting contact form
-class SubmitContactFormParams {
-  final ContactSubmission submission;
-
-  SubmitContactFormParams({required this.submission});
-}
-
 /// Use case for submitting contact form
-class SubmitContactFormUseCase implements UseCase<void, SubmitContactFormParams> {
+class SubmitContactFormUseCase implements UseCase<void, ContactUsRequest> {
   final LegalRepository repository;
 
   SubmitContactFormUseCase(this.repository);
 
   @override
-  Future<Either<Failure, void>> call(SubmitContactFormParams params) async {
-    return await repository.submitContactForm(params.submission);
+  Future<Either<Failure, void>> call(ContactUsRequest params) async {
+    return await repository.submitContactForm(params);
   }
 }

@@ -6,8 +6,11 @@ class ContactSubmission {
   final String message;
   final ContactCategory category;
   final DateTime createdAt;
+  final String? status;
   final String? phone;
   final String? userId;
+  final String? turnstileToken;
+  final String action;
 
   const ContactSubmission({
     required this.name,
@@ -16,8 +19,11 @@ class ContactSubmission {
     required this.message,
     required this.category,
     required this.createdAt,
+    this.status,
     this.phone,
     this.userId,
+    this.turnstileToken,
+    this.action = 'contact_us',
   });
 
   ContactSubmission copyWith({
@@ -29,17 +35,20 @@ class ContactSubmission {
     DateTime? createdAt,
     String? phone,
     String? userId,
+    String? status,
+    String? turnstileToken,
   }) {
     return ContactSubmission(
-      name: name ?? this.name,
-      email: email ?? this.email,
-      subject: subject ?? this.subject,
-      message: message ?? this.message,
-      category: category ?? this.category,
-      createdAt: createdAt ?? this.createdAt,
-      phone: phone ?? this.phone,
-      userId: userId ?? this.userId,
-    );
+        name: name ?? this.name,
+        email: email ?? this.email,
+        subject: subject ?? this.subject,
+        message: message ?? this.message,
+        category: category ?? this.category,
+        createdAt: createdAt ?? this.createdAt,
+        phone: phone ?? this.phone,
+        userId: userId ?? this.userId,
+        status: status ?? this.status,
+        turnstileToken: turnstileToken ?? this.turnstileToken);
   }
 }
 
