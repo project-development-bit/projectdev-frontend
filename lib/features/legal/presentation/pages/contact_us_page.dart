@@ -386,7 +386,7 @@ class _ContactUsPageState extends ConsumerState<ContactUsPage> {
           email: _emailController.text.trim(),
           subject: _subjectController.text.trim(),
           message: _messageController.text.trim(),
-          category: _selectedCategory.value,
+          category: _selectedCategory,
           phone: _phoneController.text.trim().isNotEmpty
               ? _phoneController.text.trim()
               : null,

@@ -1,9 +1,11 @@
+import 'package:cointiply_app/features/legal/domain/entities/contact_submission.dart';
+
 class ContactUsRequest {
   final String name;
   final String email;
   final String subject;
   final String message;
-  final String category;
+  final ContactCategory category;
   final String? phone;
   final String? turnstileToken;
 
@@ -20,12 +22,12 @@ class ContactUsRequest {
   Map<String, dynamic> toJson() {
     return {
       'name': name,
-      'category': category,
+      'category': category.displayName,
       'subject': subject,
       'message': message,
       'phone': phone,
       'email': email,
-      'turnstileToken': turnstileToken,
+      'turnstile_token': turnstileToken,
     };
   }
 
@@ -34,7 +36,7 @@ class ContactUsRequest {
     String? email,
     String? subject,
     String? message,
-    String? category,
+    ContactCategory? category,
     String? phone,
     String? turnstileToken,
   }) {
