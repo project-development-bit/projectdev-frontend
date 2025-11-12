@@ -209,6 +209,7 @@ class BurgerEatsAppRoutes {
                         builder: (context, ref, _) {
                           final isVerified =
                               ref.watch(internalVerificationProvider);
+
                           return isVerified
                               ? TutorialOverlay(child: child)
                               : child;

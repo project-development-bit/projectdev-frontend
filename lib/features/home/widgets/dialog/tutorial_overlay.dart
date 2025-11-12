@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/providers/auth_provider.dart';
 import 'package:cointiply_app/features/home/providers/tutorial_provider.dart';
 import 'package:cointiply_app/features/home/widgets/dialog/tutorial_dialog_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,8 +16,12 @@ class _TutorialOverlayState extends ConsumerState<TutorialOverlay> {
   @override
   Widget build(BuildContext context) {
     final tutorialShown = ref.watch(tutorialProvider);
+    final authState = ref.watch(authProvider);
 
-    if (tutorialShown) return widget.child;
+    if (tutorialShown || !authState.isAuthenticated) {
+      return widget.child;
+    }
+
     return Material(
       color: Theme.of(context).colorScheme.scrim,
       child: Stack(
