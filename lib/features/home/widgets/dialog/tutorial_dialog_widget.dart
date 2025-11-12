@@ -21,7 +21,7 @@ class _CointiplyTutorialDialogState extends State<CointiplyTutorialDialog> {
 
   final List<Map<String, dynamic>> steps = [
     {
-      'title': 'welcome_to_cointiply',
+      'title': 'welcome_to_gigafaucet',
       'image': 'assets/tutorial/welcome.png',
       'gradient': true,
       'description': 'welcome_description',
