@@ -274,7 +274,9 @@ class _ContactUsPageState extends ConsumerState<ContactUsPage> {
                       const SizedBox(height: 24),
 
                       // Cloudflare Turnstile Security Widget
-                      const CloudflareTurnstileWidget(),
+                      const CloudflareTurnstileWidget(
+                        action: 'contact_us',
+                      ),
 
                       const SizedBox(height: 24),
                       // Submit button

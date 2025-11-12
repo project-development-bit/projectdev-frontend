@@ -60,12 +60,15 @@ class TokenInterceptor extends Interceptor {
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
+    final isTokenRequired = _isTokenRequired(err.requestOptions);
     log(
-      'ERROR[${err.response?.statusCode}] => PATH: ${err.requestOptions.path}, IS REFRESHING: ${isRefreshing.toString()}',
+      'ERROR[${err.response?.statusCode}] => PATH: ${err.requestOptions.path}, IS REFRESHING: ${isRefreshing.toString()} IS TOKEN REQUIRED: ${isTokenRequired.toString()}',
       name: name,
     );
-
-    if (err.response?.statusCode == 401 || err.response?.statusCode == 403) {
+    if (!isTokenRequired) {
+      return handler.next(err);
+    } else if (err.response?.statusCode == 401 ||
+        err.response?.statusCode == 403) {
       if (!isRefreshing) {
         log("ACCESS TOKEN EXPIRED, GETTING NEW TOKEN PAIR", name: name);
         isRefreshing = true;
