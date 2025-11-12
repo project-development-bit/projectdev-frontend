@@ -61,6 +61,7 @@ class MobileDrawer extends ConsumerWidget {
                   _buildProfileItem(context, currentUserState),
                   _buildSectionHeader(context, context.translate('support')),
                   _buildChatItem(context),
+                  _buildContactUSItem(context),
 
                   const Divider(),
 
@@ -70,6 +71,8 @@ class MobileDrawer extends ConsumerWidget {
                   // Login option for unauthenticated users
                   _buildSectionHeader(context, context.translate('account')),
                   _buildLoginItem(context),
+                  _buildSectionHeader(context, context.translate('support')),
+                  _buildContactUSItem(context),
                 ],
               ],
             ),
@@ -392,6 +395,34 @@ class MobileDrawer extends ConsumerWidget {
       onTap: () {
         Navigator.of(context).pop(); // Close drawer
         context.pushNamedChat();
+      },
+    );
+  }
+
+  Widget _buildContactUSItem(BuildContext context) {
+    return ListTile(
+      leading: CircleAvatar(
+        radius: 18,
+        backgroundColor: context.primary.withOpacity(0.1),
+        child: Icon(
+          Icons.contact_mail,
+          color: context.primary,
+          size: 20,
+        ),
+      ),
+      title: CommonText.bodyLarge(context.translate('contact_us')),
+      subtitle: CommonText.bodySmall(
+        context.translate('contact_us'),
+        color: context.onSurfaceVariant,
+      ),
+      trailing: Icon(
+        Icons.arrow_forward_ios,
+        size: 16,
+        color: context.onSurfaceVariant,
+      ),
+      onTap: () {
+        Navigator.of(context).pop(); // Close drawer
+        context.go('/legal/contact-us'); //
       },
     );
   }

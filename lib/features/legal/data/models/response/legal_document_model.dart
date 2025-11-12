@@ -1,4 +1,4 @@
-import '../../domain/entities/legal_document.dart';
+import '../../../domain/entities/legal_document.dart';
 
 /// Legal document model for JSON serialization
 class LegalDocumentModel extends LegalDocument {
@@ -19,7 +19,8 @@ class LegalDocumentModel extends LegalDocument {
       lastUpdated: DateTime.parse(json['lastUpdated'] as String),
       version: json['version'] as String,
       sections: (json['sections'] as List<dynamic>?)
-              ?.map((section) => LegalSectionModel.fromJson(section as Map<String, dynamic>))
+              ?.map((section) =>
+                  LegalSectionModel.fromJson(section as Map<String, dynamic>))
               .toList() ??
           [],
     );
@@ -32,7 +33,9 @@ class LegalDocumentModel extends LegalDocument {
       'content': content,
       'lastUpdated': lastUpdated.toIso8601String(),
       'version': version,
-      'sections': sections.map((section) => (section as LegalSectionModel).toJson()).toList(),
+      'sections': sections
+          .map((section) => (section as LegalSectionModel).toJson())
+          .toList(),
     };
   }
 
@@ -65,7 +68,8 @@ class LegalSectionModel extends LegalSection {
       content: json['content'] as String,
       order: json['order'] as int,
       subsections: (json['subsections'] as List<dynamic>?)
-          ?.map((subsection) => LegalSubsectionModel.fromJson(subsection as Map<String, dynamic>))
+          ?.map((subsection) =>
+              LegalSubsectionModel.fromJson(subsection as Map<String, dynamic>))
           .toList(),
     );
   }
@@ -76,7 +80,9 @@ class LegalSectionModel extends LegalSection {
       'title': title,
       'content': content,
       'order': order,
-      'subsections': subsections?.map((subsection) => (subsection as LegalSubsectionModel).toJson()).toList(),
+      'subsections': subsections
+          ?.map((subsection) => (subsection as LegalSubsectionModel).toJson())
+          .toList(),
     };
   }
 }

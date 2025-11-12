@@ -1,7 +1,7 @@
+import 'package:cointiply_app/features/legal/data/models/request/contact_us_request.dart';
 import 'package:dartz/dartz.dart';
 import '../../../../core/error/failures.dart';
 import '../entities/legal_document.dart';
-import '../entities/contact_submission.dart';
 
 /// Repository interface for legal documents and contact forms
 abstract class LegalRepository {
@@ -12,7 +12,7 @@ abstract class LegalRepository {
   Future<Either<Failure, LegalDocument>> getTermsOfService();
 
   /// Submit contact form
-  Future<Either<Failure, void>> submitContactForm(ContactSubmission submission);
+  Future<Either<Failure, void>> submitContactForm(ContactUsRequest submission);
 
   /// Get legal document by type
   Future<Either<Failure, LegalDocument>> getLegalDocument(String documentType);
