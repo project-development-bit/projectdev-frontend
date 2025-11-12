@@ -465,5 +465,7 @@
   "referral_banner_bb": "BB Code",
   "referral_banner_note": "Click to copy the code and use these banners on your website or blog to attract referrals.",
   "referral_get_started_warning": "IMPORTANT: Invalid, fake or duplicate referrals will not be counted. Your account may be terminated and all Coins forfeited if you are found to be sending invalid referrals. We have automated measures to detect and prevent invalid referrals. You’ve been warned.",
-  "copied_link_message": "Referral link copied to clipboard!"
+  "copied_link_message": "Referral link copied to clipboard!",
+  "home": "Home",
+  "view_home": "View your home"
 }
