@@ -18,7 +18,7 @@ class CointiplyTutorialDialog extends StatefulWidget {
 class _CointiplyTutorialDialogState extends State<CointiplyTutorialDialog> {
   int step = 1;
   final int totalSteps = 9;
-
+  bool _isHovering = false;
   final List<Map<String, dynamic>> steps = [
     {
       'title': 'welcome_to_cointiply',
@@ -119,12 +119,32 @@ class _CointiplyTutorialDialogState extends State<CointiplyTutorialDialog> {
                   ),
                   Consumer(
                     builder: (context, ref, child) {
-                      return GestureDetector(
-                        onTap: () =>
-                            ref.read(tutorialProvider.notifier).closes(),
-                        child: CommonText.labelMedium(
-                          context.translate('dismiss_hide'),
-                          color: context.inverseSurface,
+                      return MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        onEnter: (_) => setState(() => _isHovering = true),
+                        onExit: (_) => setState(() => _isHovering = false),
+                        child: GestureDetector(
+                          onTap: () =>
+                              ref.read(tutorialProvider.notifier).closes(),
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 150),
+                            decoration: BoxDecoration(
+                              color: _isHovering
+                                  ? Theme.of(context).colorScheme.primary
+                                  : Colors.transparent,
+                              shape: BoxShape.circle,
+                            ),
+                            padding: const EdgeInsets.all(4),
+                            child: Icon(
+                              Icons.close,
+                              size: 20,
+                              color: _isHovering
+                                  ? Theme.of(context).colorScheme.onPrimary
+                                  : Theme.of(context)
+                                      .colorScheme
+                                      .inverseSurface,
+                            ),
+                          ),
                         ),
                       );
                     },
