@@ -60,6 +60,14 @@ abstract class AuthRepository {
   Future<Either<Failure, ResendCodeResponse>> resendCode(
       ResendCodeRequest request);
 
+  /// Resend verification code for forgot password flow
+  Future<Either<Failure, ResendCodeResponse>> resendCodeForForgotPassword(
+      ResendCodeRequest request);
+
+  // Verify email with verification code for forgot password flow
+  Future<Either<Failure, VerifyCodeResponse>> verifyCodeForForgotPassword(
+      VerifyCodeRequest request);
+
   /// Verify email with verification code
   Future<Either<Failure, VerifyCodeResponse>> verifyCode(
       VerifyCodeRequest request);

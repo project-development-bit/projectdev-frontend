@@ -380,4 +380,38 @@ class AuthRepositoryImpl implements AuthRepository {
       return Left(ServerFailure(message: e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, ResendCodeResponse>> resendCodeForForgotPassword(
+      ResendCodeRequest request) async {
+    try {
+      final response =
+          await remoteDataSource.resendCodeForForgotPassword(request);
+      return Right(response);
+    } on DioException catch (e) {
+      return Left(ServerFailure(
+        message: e.message ?? 'Failed to resend verification code',
+        statusCode: e.response?.statusCode,
+      ));
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, VerifyCodeResponse>> verifyCodeForForgotPassword(
+      VerifyCodeRequest request) async {
+    try {
+      final response =
+          await remoteDataSource.verifyCodeForForgotPassword(request);
+      return Right(response);
+    } on DioException catch (e) {
+      return Left(ServerFailure(
+        message: e.message ?? 'Failed to verify code',
+        statusCode: e.response?.statusCode,
+      ));
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
 }
