@@ -111,18 +111,33 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
   }
 
   void _verifyCode(String code) {
-    ref.read(verificationNotifierProvider.notifier).verifyCode(
-          email: widget.email,
-          code: code,
-        );
+    if (widget.isFromForgotPassword) {
+      ref
+          .read(verificationNotifierProvider.notifier)
+          .verifyCodeForForgotPassword(
+            email: widget.email,
+            code: code,
+          );
+    } else {
+      ref.read(verificationNotifierProvider.notifier).verifyCode(
+            email: widget.email,
+            code: code,
+          );
+    }
   }
 
   void _resendCode() {
     final canResend = ref.read(canResendProvider);
     if (canResend && mounted) {
-      ref.read(verificationNotifierProvider.notifier).resendCode(
-            email: widget.email,
-          );
+      if (widget.isFromForgotPassword) {
+        ref
+            .read(verificationNotifierProvider.notifier)
+            .resendCodeForForgotPassword(email: widget.email);
+      } else {
+        ref.read(verificationNotifierProvider.notifier).resendCode(
+              email: widget.email,
+            );
+      }
       // Restart timer after resending
       ref.read(resendTimerProvider.notifier).startTimer();
     }

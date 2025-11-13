@@ -1,3 +1,5 @@
+import 'package:cointiply_app/features/auth/domain/usecases/forget_password_resend_code_usecase.dart';
+import 'package:cointiply_app/features/auth/domain/usecases/verify_code_forgot_password_usecase.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/models/resend_code_request.dart';
@@ -56,8 +58,14 @@ class ResendCodeSuccess extends VerificationState {
 class VerificationNotifier extends StateNotifier<VerificationState> {
   final ResendCodeUseCase _resendCodeUseCase;
   final VerifyCodeUseCase _verifyCodeUseCase;
+  final ForgetPasswordResendCodeUsecase _forgetPasswordResendCodeUsecase;
+  final VerifyCodeForgotPasswordUsecase _verifyCodeForgotPasswordUsecase;
 
-  VerificationNotifier(this._resendCodeUseCase, this._verifyCodeUseCase)
+  VerificationNotifier(
+      this._resendCodeUseCase,
+      this._verifyCodeUseCase,
+      this._forgetPasswordResendCodeUsecase,
+      this._verifyCodeForgotPasswordUsecase)
       : super(const VerificationInitial());
 
   /// Verify email with the provided code
@@ -133,6 +141,77 @@ class VerificationNotifier extends StateNotifier<VerificationState> {
     }
   }
 
+  Future<void> verifyCodeForForgotPassword({
+    required String email,
+    required String code,
+  }) async {
+    try {
+      state = const VerificationLoading();
+
+      // Create request with email and code
+      final request = VerifyCodeRequest(email: email, code: code);
+
+      // Call use case to verify code
+      final result = await _verifyCodeForgotPasswordUsecase(request);
+
+      result.fold(
+        (failure) {
+          debugPrint('❌ Email verification error: ${failure.message}');
+          state = VerificationError(
+            message: failure.message ??
+                'Invalid verification code. Please try again.',
+          );
+        },
+        (response) {
+          debugPrint('✅ Email verification successful for: $email');
+          state = VerificationSuccess(
+            message: response.message,
+          );
+        },
+      );
+    } catch (e) {
+      debugPrint('❌ Unexpected verification error: $e');
+      state = const VerificationError(
+        message: 'Invalid verification code. Please try again.',
+      );
+    }
+  }
+
+  Future<void> resendCodeForForgotPassword({
+    required String email,
+  }) async {
+    try {
+      state = const VerificationLoading();
+
+      // Create request with email
+      final request = ResendCodeRequest(email: email);
+
+      // Call use case to resend code
+      final result = await _forgetPasswordResendCodeUsecase(request);
+
+      result.fold(
+        (failure) {
+          debugPrint('❌ Resend code error: ${failure.message}');
+          state = VerificationError(
+            message: failure.message ??
+                'Failed to resend verification code. Please try again.',
+          );
+        },
+        (response) {
+          debugPrint('✅ Verification code resent to: $email');
+          state = ResendCodeSuccess(
+            message: response.message,
+          );
+        },
+      );
+    } catch (e) {
+      debugPrint('❌ Unexpected resend code error: $e');
+      state = const VerificationError(
+        message: 'Failed to resend verification code. Please try again.',
+      );
+    }
+  }
+
   /// Clear error state
   void clearError() {
     if (state is VerificationError) {
@@ -160,14 +239,27 @@ final verifyCodeUseCaseProvider = Provider<VerifyCodeUseCase>((ref) {
   return VerifyCodeUseCase(ref.watch(authRepositoryProvider));
 });
 
+/// Provider for ForgetPasswordResendCodeUsecase
+final forgetPasswordResendCodeUsecaseProvider =
+    Provider<ForgetPasswordResendCodeUsecase>((ref) {
+  return ForgetPasswordResendCodeUsecase(ref.watch(authRepositoryProvider));
+});
+
+/// Provider for VerifyCodeForgotPasswordUsecase
+final verifyCodeForgotPasswordUsecaseProvider =
+    Provider<VerifyCodeForgotPasswordUsecase>((ref) {
+  return VerifyCodeForgotPasswordUsecase(ref.watch(authRepositoryProvider));
+});
+
 /// Provider for verification state notifier
 final verificationNotifierProvider =
     StateNotifierProvider<VerificationNotifier, VerificationState>(
-  (ref) => VerificationNotifier(
-    ref.watch(resendCodeUseCaseProvider),
-    ref.watch(verifyCodeUseCaseProvider),
-  ),
-);
+        (ref) => VerificationNotifier(
+              ref.watch(resendCodeUseCaseProvider),
+              ref.watch(verifyCodeUseCaseProvider),
+              ref.watch(forgetPasswordResendCodeUsecaseProvider),
+              ref.watch(verifyCodeForgotPasswordUsecaseProvider),
+            ));
 
 /// Provider for checking if verification is loading
 final isVerificationLoadingProvider = Provider<bool>((ref) {
