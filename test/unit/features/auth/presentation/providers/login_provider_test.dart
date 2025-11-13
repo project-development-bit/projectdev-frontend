@@ -27,6 +27,7 @@ void main() {
       name: 'Test User',
       email: testEmail,
       role: UserRole.normalUser,
+      showOnboarding: true,
       refreshToken: 'test_refresh_token',
       securityCode: 'test_security_code',
       isBanned: 0,

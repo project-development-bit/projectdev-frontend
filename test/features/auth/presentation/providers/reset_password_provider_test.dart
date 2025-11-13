@@ -42,6 +42,7 @@ void main() {
       name: 'Test User',
       email: testEmail,
       role: UserRole.normalUser,
+      showOnboarding: true,
       refreshToken: 'refresh_token',
       securityCode: 'security_code',
       isBanned: 0,
@@ -225,7 +226,8 @@ void main() {
         confirmPassword: testConfirmPassword,
       );
 
-      state = container.read(resetPasswordProvider as ProviderListenable<ResetPasswordError>);
+      state = container.read(
+          resetPasswordProvider as ProviderListenable<ResetPasswordError>);
       expect(state, isA<ResetPasswordError>());
       errorState = state as ResetPasswordError;
       expect(errorState.message, 'Please enter a password');
@@ -240,7 +242,8 @@ void main() {
         confirmPassword: '',
       );
 
-      state = container.read(resetPasswordProvider as ProviderListenable<ResetPasswordError>);
+      state = container.read(
+          resetPasswordProvider as ProviderListenable<ResetPasswordError>);
       expect(state, isA<ResetPasswordError>());
       errorState = state as ResetPasswordError;
       expect(errorState.message, 'Please confirm your password');

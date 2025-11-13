@@ -6,16 +6,16 @@ import 'package:cointiply_app/features/home/providers/tutorial_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class CointiplyTutorialDialog extends StatefulWidget {
+class FirstTimeTutorialDialog extends StatefulWidget {
   final VoidCallback onComplete;
-  const CointiplyTutorialDialog({super.key, required this.onComplete});
+  const FirstTimeTutorialDialog({super.key, required this.onComplete});
 
   @override
-  State<CointiplyTutorialDialog> createState() =>
-      _CointiplyTutorialDialogState();
+  State<FirstTimeTutorialDialog> createState() =>
+      _FirstTimeTutorialDialogState();
 }
 
-class _CointiplyTutorialDialogState extends State<CointiplyTutorialDialog> {
+class _FirstTimeTutorialDialogState extends State<FirstTimeTutorialDialog> {
   int step = 1;
   final int totalSteps = 9;
   bool _isHovering = false;
@@ -77,16 +77,17 @@ class _CointiplyTutorialDialogState extends State<CointiplyTutorialDialog> {
     return Container(
       margin: EdgeInsets.all(context.isMobile ? 20 : 32),
       constraints: BoxConstraints(
+        minHeight: context.heightPercent(35),
         maxWidth: context.isMobile
             ? double.infinity
-            : data['final'] == true
-                ? 500
-                : 400,
+            : context.isTablet
+                ? context.widthPercent(50)
+                : context.widthPercent(40),
         maxHeight: context.isMobile
             ? double.infinity
-            : data['final'] == true
-                ? 800
-                : 600,
+            : context.isTablet
+                ? context.heightPercent(80)
+                : context.heightPercent(70),
       ),
       decoration: BoxDecoration(
         color: context.surface,
@@ -101,22 +102,28 @@ class _CointiplyTutorialDialogState extends State<CointiplyTutorialDialog> {
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-
-        // ✅ Make scrollable here
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
               // ─── Header ────────────────────────────────
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CommonText.titleSmall(
-                    context.translate(data['title']),
-                    color: context.inverseSurface,
+                  //  Expanded title to prevent overflow
+                  Expanded(
+                    child: CommonText.titleSmall(
+                      context.translate(data['title']),
+                      color: context.inverseSurface,
+                      fontSize: context.isMobile ? 13 : 14,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
+                  const SizedBox(width: 8),
                   Consumer(
                     builder: (context, ref, child) {
                       return MouseRegion(
@@ -197,12 +204,17 @@ class _CointiplyTutorialDialogState extends State<CointiplyTutorialDialog> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  CommonText.labelMedium(
-                    context
-                        .translate('step_of')
-                        .replaceAll('{step}', '$step')
-                        .replaceAll('{totalSteps}', '$totalSteps'),
-                    color: colorScheme.tertiary,
+                  Expanded(
+                    child: CommonText.labelMedium(
+                      context
+                          .translate('step_of')
+                          .replaceAll('{step}', '$step')
+                          .replaceAll('{totalSteps}', '$totalSteps'),
+                      color: colorScheme.tertiary,
+                      fontSize: context.isMobile ? 13 : 14,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                   Row(
                     children: [
@@ -217,7 +229,7 @@ class _CointiplyTutorialDialogState extends State<CointiplyTutorialDialog> {
                           color: colorScheme.inverseSurface,
                         ),
                       ),
-                      const SizedBox(width: 8),
+                      SizedBox(width: context.isMobile ? 4 : 8),
                       ElevatedButton(
                         onPressed: () {
                           if (step < totalSteps) {
@@ -231,12 +243,17 @@ class _CointiplyTutorialDialogState extends State<CointiplyTutorialDialog> {
                               ? colorScheme.tertiary
                               : colorScheme.primary,
                           foregroundColor: colorScheme.inversePrimary,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: context.isMobile ? 8 : 20,
+                            vertical: context.isMobile ? 8 : 12,
+                          ),
                         ),
                         child: CommonText.labelMedium(
                           step == totalSteps
                               ? context.translate('claim_tutorial_reward')
                               : context.translate('continue'),
                           color: AppColors.lightSurfaceVariant,
+                          fontSize: context.isMobile ? 12 : 13,
                         ),
                       ),
                     ],

@@ -11,6 +11,7 @@ class User extends Equatable {
     required this.email,
     required this.refreshToken,
     required this.role,
+    required this.showOnboarding,
     this.country,
     this.language,
     this.referralCode,
@@ -38,6 +39,9 @@ class User extends Equatable {
 
   /// User's role in the system
   final UserRole role;
+
+  // show_onboarding
+  final bool showOnboarding;
 
   /// User's country (optional)
   final String? country;
@@ -85,6 +89,7 @@ class User extends Equatable {
     String? email,
     String? refreshToken,
     UserRole? role,
+    bool? showOnboarding,
     String? country,
     String? language,
     String? referralCode,
@@ -103,6 +108,7 @@ class User extends Equatable {
       email: email ?? this.email,
       refreshToken: refreshToken ?? this.refreshToken,
       role: role ?? this.role,
+      showOnboarding: showOnboarding ?? this.showOnboarding,
       country: country ?? this.country,
       language: language ?? this.language,
       referralCode: referralCode ?? this.referralCode,

@@ -11,6 +11,7 @@ class UserUpdateRequest extends Equatable {
   final String? country;
   final String? language;
   final String? profilePictureUrl;
+  final int? showOnboarding;
 
   const UserUpdateRequest({
     required this.id,
@@ -22,6 +23,7 @@ class UserUpdateRequest extends Equatable {
     this.country,
     this.language,
     this.profilePictureUrl,
+    this.showOnboarding,
   });
 
   /// Convert JSON → Model
@@ -31,6 +33,7 @@ class UserUpdateRequest extends Equatable {
         name: json['name'] as String,
         password: json['password'] as String?,
         confirmPassword: json['confirm_password'] as String?,
+        showOnboarding: json['show_onboarding'] as int?,
         email: json['email'] as String?,
         role: json['role'] as String?,
         country: json['country'] as String?,
@@ -40,11 +43,12 @@ class UserUpdateRequest extends Equatable {
 
   /// Convert Model → JSON (for API request)
   Map<String, dynamic> toJson() => {
-        "name": name,
+        if (name != null) "name": name,
         if (password != null) "password": password,
         if (confirmPassword != null) "confirm_password": confirmPassword,
         if (email != null) "email": email,
         if (role != null) "role": role,
+        if (showOnboarding != null) "show_onboarding": showOnboarding,
         if (country != null) "country": country,
         if (language != null) "language": language,
       };
@@ -57,6 +61,7 @@ class UserUpdateRequest extends Equatable {
     String? confirmPassword,
     String? email,
     String? role,
+    int? showOnboarding,
     String? country,
     String? language,
   }) {
@@ -67,6 +72,7 @@ class UserUpdateRequest extends Equatable {
       confirmPassword: confirmPassword ?? this.confirmPassword,
       email: email ?? this.email,
       role: role ?? this.role,
+      showOnboarding: showOnboarding ?? this.showOnboarding,
       country: country ?? this.country,
       language: language ?? this.language,
     );
@@ -79,6 +85,7 @@ class UserUpdateRequest extends Equatable {
         confirmPassword,
         email,
         role,
+        showOnboarding,
         country,
         language,
       ];
