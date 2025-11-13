@@ -67,6 +67,7 @@ dependencies:
   dotted_decoration: ^2.0.0
   webview_all: ^0.5.2
   pointer_interceptor: ^0.10.1+2
+  flutter_svg: ^2.2.2
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -112,7 +113,9 @@ flutter:
     - assets/images/levels/
     - assets/images/rewards/
     - assets/tutorial/
+    - assets/images/user/
     - assets/theme/
+    - assets/images/icons/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
