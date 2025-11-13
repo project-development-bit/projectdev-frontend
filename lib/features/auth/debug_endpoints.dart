@@ -2,6 +2,8 @@
 // This file contains alternative endpoints to test against the actual backend
 
 // Current endpoints (from api_endpoints.dart)
+import 'package:flutter/widgets.dart';
+
 const String currentVerifyEndpoint =
     'users/verify'; // POST with /{email}/{code}
 const String currentResendEndpoint =
@@ -27,8 +29,8 @@ const String resendCommonEndpoint = 'resend-verification-code';
 
 // Debug function to test endpoint
 Future<void> testEndpoint(String endpoint, Map<String, dynamic> data) async {
-  print('Testing endpoint: $endpoint');
-  print('With data: $data');
+  debugPrint('Testing endpoint: $endpoint');
+  debugPrint('With data: $data');
 }
 
 // Alternative verify code implementation for testing

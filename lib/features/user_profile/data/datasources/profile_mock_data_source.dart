@@ -1,4 +1,5 @@
 import 'package:cointiply_app/features/user_profile/data/models/response/user_update_respons.dart';
+import 'package:flutter/material.dart';
 import 'package:universal_io/io.dart';
 import '../../domain/entities/user_profile.dart';
 import '../models/response/user_profile_model.dart';
@@ -148,7 +149,7 @@ class ProfileMockDataSource implements ProfileRemoteDataSource {
     await Future.delayed(_mockDelay);
 
     // Simulate sending verification email
-    print('Mock: Verification email sent to user $userId');
+    debugPrint('Mock: Verification email sent to user $userId');
   }
 
   @override
@@ -156,7 +157,7 @@ class ProfileMockDataSource implements ProfileRemoteDataSource {
     await Future.delayed(_mockDelay);
 
     // Simulate sending verification SMS
-    print('Mock: Verification SMS sent to user $userId');
+    debugPrint('Mock: Verification SMS sent to user $userId');
   }
 
   @override
@@ -169,7 +170,7 @@ class ProfileMockDataSource implements ProfileRemoteDataSource {
     }
 
     // Simulate successful account deactivation
-    print('Mock: Account $userId deactivated successfully');
+    debugPrint('Mock: Account $userId deactivated successfully');
   }
 
   @override
@@ -182,7 +183,7 @@ class ProfileMockDataSource implements ProfileRemoteDataSource {
     }
 
     // Simulate successful account deletion
-    print('Mock: Account $userId deleted permanently');
+    debugPrint('Mock: Account $userId deleted permanently');
   }
 }
 

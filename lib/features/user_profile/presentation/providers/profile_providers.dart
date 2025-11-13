@@ -1,4 +1,5 @@
 import 'package:cointiply_app/core/network/base_dio_client.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/services/secure_storage_service.dart';
 import '../../config/profile_config.dart';
@@ -25,14 +26,14 @@ final profileRemoteDataSourceProvider =
   if (ProfileConfig.useMockData) {
     // 🎭 Mock mode: Using fake data for development/testing
     if (ProfileConfig.enableDebugLogging) {
-      print('🎭 Profile Module: Using MOCK data source');
-      print(ProfileConfig.configSummary);
+      debugPrint('🎭 Profile Module: Using MOCK data source');
+      debugPrint(ProfileConfig.configSummary);
     }
     return ProfileMockDataSource();
   } else {
     // 🌐 API mode: Using real backend calls
     if (ProfileConfig.enableDebugLogging) {
-      print('🌐 Profile Module: Using REAL API data source');
+      debugPrint('🌐 Profile Module: Using REAL API data source');
     }
     final dio = ref.read(dioClientProvider);
     return ProfileRemoteDataSourceImpl(dioClient: dio);

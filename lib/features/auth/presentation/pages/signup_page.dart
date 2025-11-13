@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/common/common_textfield.dart';
@@ -52,7 +53,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
             SnackBar(
               content: Text(
                   'Registration successful! Please check your email for the verification code.'),
-              backgroundColor: Colors.green,
+              backgroundColor: AppColors.success,
             ),
           );
           break;
@@ -61,7 +62,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(next.message),
-              backgroundColor: Colors.red,
+              backgroundColor: Theme.of(context).colorScheme.error,
             ),
           );
           break;
@@ -109,7 +110,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
         SnackBar(
           content: Text(localizations?.translate('agree_to_terms_error') ??
               'Please agree to the terms and conditions'),
-          backgroundColor: Colors.red,
+          backgroundColor: Theme.of(context).colorScheme.error,
         ),
       );
       return;
@@ -154,7 +155,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
     return Scaffold(
       backgroundColor: colorScheme.surface,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.transparent,
         elevation: 0,
         leading: IconButton(
           icon: Icon(

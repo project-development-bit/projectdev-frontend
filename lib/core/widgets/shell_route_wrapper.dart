@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/theme/app_colors.dart';
 import 'package:cointiply_app/features/common/widgets/build_app_bar_title.dart';
 import 'package:cointiply_app/features/home/widgets/mobile_drawer.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +30,7 @@ class ShellRouteWrapper extends StatelessWidget {
             pinned: false,
             snap: true,
             backgroundColor: context.surface.withAlpha(242), // 0.95 * 255
-            surfaceTintColor: Colors.transparent,
+            surfaceTintColor: AppColors.transparent,
             elevation: 0,
             scrolledUnderElevation: 1,
             automaticallyImplyLeading: MediaQuery.of(context).size.width < 768,

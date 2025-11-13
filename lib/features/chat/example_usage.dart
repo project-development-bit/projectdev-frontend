@@ -12,10 +12,11 @@ class RightChatOverlayExample extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final chatNotifier = ref.read(rightChatOverlayProvider.notifier);
+    final colorScheme = Theme.of(context).colorScheme;
 
     return RightChatOverlay(
       child: Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: colorScheme.scrim,
         appBar: AppBar(
           title: const Text("Right Chat Overlay Example"),
           actions: [
@@ -25,10 +26,10 @@ class RightChatOverlayExample extends ConsumerWidget {
             ),
           ],
         ),
-        body: const Center(
+        body: Center(
           child: CommonText.titleMedium(
             "Main App Content",
-            color: Colors.white,
+            color: colorScheme.onError,
           ),
         ),
       ),

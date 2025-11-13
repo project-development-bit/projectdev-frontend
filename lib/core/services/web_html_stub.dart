@@ -3,31 +3,32 @@
 
 class Window {
   Location get location => Location();
-  
+
   bool hasProperty(dynamic property) {
     throw UnsupportedError('HTML API not available on non-web platforms');
   }
-  
+
   dynamic getProperty(dynamic property) {
     throw UnsupportedError('HTML API not available on non-web platforms');
   }
-  
+
   dynamic callMethod(dynamic method, List<dynamic> args) {
     throw UnsupportedError('HTML API not available on non-web platforms');
   }
 }
 
 class Location {
-  String get hostname => throw UnsupportedError('HTML API not available on non-web platforms');
+  String get hostname =>
+      throw UnsupportedError('HTML API not available on non-web platforms');
 }
 
 class Document {
   HeadElement? get head => HeadElement();
-  
+
   Element? querySelector(String selector) {
     throw UnsupportedError('HTML API not available on non-web platforms');
   }
-  
+
   Element createElement(String tagName) {
     throw UnsupportedError('HTML API not available on non-web platforms');
   }
@@ -42,11 +43,11 @@ class HeadElement {
 class Element {
   String? src;
   bool? async;
-  
+
   void remove() {
     throw UnsupportedError('HTML API not available on non-web platforms');
   }
-  
+
   void addEventListener(String type, dynamic listener) {
     throw UnsupportedError('HTML API not available on non-web platforms');
   }

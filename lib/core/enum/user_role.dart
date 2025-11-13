@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 /// User role enumeration for different user types in the application
 enum UserRole {
   /// Developer role - typically for development and testing purposes
@@ -44,7 +46,7 @@ enum UserRole {
         return UserRole.normalUser;
       default:
         // Log the invalid value for debugging
-        print(
+        debugPrint(
             '⚠️ Invalid user role received: "$value". Defaulting to normalUser.');
         return UserRole
             .normalUser; // Default to normal user instead of throwing
@@ -58,7 +60,7 @@ enum UserRole {
       return fromString(value);
     } catch (e) {
       // Log the error for debugging
-      print('⚠️ Failed to parse user role: "$value". Error: $e');
+      debugPrint('⚠️ Failed to parse user role: "$value". Error: $e');
       return UserRole.normalUser; // Default to normal user instead of null
     }
   }

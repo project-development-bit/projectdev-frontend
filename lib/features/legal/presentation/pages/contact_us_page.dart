@@ -1,5 +1,6 @@
 import 'package:cointiply_app/core/localization/app_localizations.dart';
 import 'package:cointiply_app/core/providers/turnstile_provider.dart';
+import 'package:cointiply_app/core/theme/app_colors.dart';
 import 'package:cointiply_app/core/widgets/cloudflare_turnstille_widgte.dart';
 import 'package:cointiply_app/features/legal/data/models/request/contact_us_request.dart';
 import 'package:flutter/material.dart';
@@ -74,224 +75,225 @@ class _ContactUsPageState extends ConsumerState<ContactUsPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Header
-                CommonContainer(
-                  padding: const EdgeInsets.all(24),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      CommonText.headlineSmall(
-                        context.translate('get_in_touch'),
-                        color: context.onSurface,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      const SizedBox(height: 8),
-                      CommonText.bodyMedium(
-                        context.translate('contact_us_description'),
-                        color: context.onSurfaceVariant,
-                      ),
-                    ],
-                  ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CommonText.headlineSmall(
+                      context.translate('get_in_touch'),
+                      color: context.onSurface,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    const SizedBox(height: 8),
+                    CommonText.bodyMedium(
+                      context.translate('contact_us_description'),
+                      color: context.onSurfaceVariant,
+                    ),
+                  ],
                 ),
 
                 const SizedBox(height: 16),
 
                 // Contact Form
-                CommonContainer(
-                  padding: const EdgeInsets.all(24),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Name field
-                      CommonText.labelMedium(
-                        '${context.translate('name')} *',
-                        color: context.onSurface,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      const SizedBox(height: 8),
-                      CommonTextField(
-                        controller: _nameController,
-                        hintText: context.translate('enter_your_name'),
-                        validator: (value) {
-                          if (value == null || value.trim().isEmpty) {
-                            return context.translate('name_required');
-                          }
-                          return null;
-                        },
-                      ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Name field
+                    CommonText.labelMedium(
+                      '${context.translate('name')} *',
+                      color: context.onSurface,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    const SizedBox(height: 8),
+                    CommonTextField(
+                      controller: _nameController,
+                      hintText: context.translate('enter_your_name'),
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return context.translate('name_required');
+                        }
+                        return null;
+                      },
+                    ),
 
-                      const SizedBox(height: 16),
+                    const SizedBox(height: 16),
 
-                      // Email field
-                      CommonText.labelMedium(
-                        '${context.translate('email')} *',
-                        color: context.onSurface,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      const SizedBox(height: 8),
-                      CommonTextField(
-                        controller: _emailController,
-                        hintText: context.translate('enter_your_email'),
-                        keyboardType: TextInputType.emailAddress,
-                        validator: (value) {
-                          if (value == null || value.trim().isEmpty) {
-                            return context.translate('email_required');
-                          }
-                          if (!RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$')
-                              .hasMatch(value)) {
-                            return context.translate('invalid_email');
-                          }
-                          return null;
-                        },
-                      ),
+                    // Email field
+                    CommonText.labelMedium(
+                      '${context.translate('email')} *',
+                      color: context.onSurface,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    const SizedBox(height: 8),
+                    CommonTextField(
+                      controller: _emailController,
+                      hintText: context.translate('enter_your_email'),
+                      keyboardType: TextInputType.emailAddress,
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return context.translate('email_required');
+                        }
+                        if (!RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$')
+                            .hasMatch(value)) {
+                          return context.translate('invalid_email');
+                        }
+                        return null;
+                      },
+                    ),
 
-                      const SizedBox(height: 16),
+                    const SizedBox(height: 16),
 
-                      // Phone field (optional)
-                      CommonText.labelMedium(
-                        context.translate('phone_optional'),
-                        color: context.onSurface,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      const SizedBox(height: 8),
-                      CommonTextField(
-                        controller: _phoneController,
-                        hintText: context.translate('enter_your_phone'),
-                        keyboardType: TextInputType.phone,
-                      ),
+                    // Phone field (optional)
+                    CommonText.labelMedium(
+                      context.translate('phone_optional'),
+                      color: context.onSurface,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    const SizedBox(height: 8),
+                    CommonTextField(
+                      controller: _phoneController,
+                      hintText: context.translate('enter_your_phone'),
+                      keyboardType: TextInputType.phone,
+                    ),
 
-                      const SizedBox(height: 16),
+                    const SizedBox(height: 16),
 
-                      // Category dropdown
-                      CommonText.labelMedium(
-                        '${context.translate('category')} *',
-                        color: context.onSurface,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      const SizedBox(height: 8),
-                      DropdownButtonFormField<ContactCategory>(
-                        value: _selectedCategory,
-                        decoration: InputDecoration(
-                          hintText: context.translate('select_category'),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(color: context.outline),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(color: context.outline),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide:
-                                BorderSide(color: context.primary, width: 2),
-                          ),
+                    // Category dropdown
+                    CommonText.labelMedium(
+                      '${context.translate('category')} *',
+                      color: context.onSurface,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    const SizedBox(height: 8),
+                    DropdownButtonFormField<ContactCategory>(
+                      value: _selectedCategory,
+                      decoration: InputDecoration(
+                        fillColor:
+                            (Theme.of(context).brightness == Brightness.dark
+                                ? AppColors.websiteCard
+                                : Theme.of(context)
+                                    .colorScheme
+                                    .surfaceContainerHighest
+                                    .withOpacity(0.1)),
+                        hintText: context.translate('select_category'),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: context.outline),
                         ),
-                        items: ContactCategory.values.map((category) {
-                          return DropdownMenuItem<ContactCategory>(
-                            value: category,
-                            child: CommonText.bodyMedium(
-                              category.displayName,
-                              color: context.onSurface,
-                            ),
-                          );
-                        }).toList(),
-                        onChanged: (ContactCategory? newValue) {
-                          if (newValue != null) {
-                            setState(() {
-                              _selectedCategory = newValue;
-                            });
-                          }
-                        },
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: context.outline),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide:
+                              BorderSide(color: context.primary, width: 2),
+                        ),
                       ),
+                      items: ContactCategory.values.map((category) {
+                        return DropdownMenuItem<ContactCategory>(
+                          value: category,
+                          child: CommonText.bodyMedium(
+                            category.displayName,
+                            color: context.onSurface,
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (ContactCategory? newValue) {
+                        if (newValue != null) {
+                          setState(() {
+                            _selectedCategory = newValue;
+                          });
+                        }
+                      },
+                    ),
 
-                      const SizedBox(height: 16),
+                    const SizedBox(height: 16),
 
-                      // Subject field
-                      CommonText.labelMedium(
-                        '${context.translate('subject')} *',
-                        color: context.onSurface,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      const SizedBox(height: 8),
-                      CommonTextField(
-                        controller: _subjectController,
-                        hintText: context.translate('enter_subject'),
-                        validator: (value) {
-                          if (value == null || value.trim().isEmpty) {
-                            return context.translate('subject_required');
-                          }
-                          return null;
-                        },
-                      ),
+                    // Subject field
+                    CommonText.labelMedium(
+                      '${context.translate('subject')} *',
+                      color: context.onSurface,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    const SizedBox(height: 8),
+                    CommonTextField(
+                      controller: _subjectController,
+                      hintText: context.translate('enter_subject'),
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return context.translate('subject_required');
+                        }
+                        return null;
+                      },
+                    ),
 
-                      const SizedBox(height: 16),
+                    const SizedBox(height: 16),
 
-                      // Message field
-                      CommonText.labelMedium(
-                        '${context.translate('message')} *',
-                        color: context.onSurface,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      const SizedBox(height: 8),
-                      CommonTextField(
-                        controller: _messageController,
-                        hintText: context.translate('enter_your_message'),
-                        maxLines: 6,
-                        validator: (value) {
-                          if (value == null || value.trim().isEmpty) {
-                            return context.translate('message_required');
-                          }
-                          if (value.trim().length < 10) {
-                            return context.translate('message_too_short');
-                          }
-                          return null;
-                        },
-                      ),
+                    // Message field
+                    CommonText.labelMedium(
+                      '${context.translate('message')} *',
+                      color: context.onSurface,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    const SizedBox(height: 8),
+                    CommonTextField(
+                      controller: _messageController,
+                      hintText: context.translate('enter_your_message'),
+                      maxLines: 6,
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return context.translate('message_required');
+                        }
+                        if (value.trim().length < 10) {
+                          return context.translate('message_too_short');
+                        }
+                        return null;
+                      },
+                    ),
 
-                      const SizedBox(height: 24),
+                    const SizedBox(height: 24),
 
-                      // Error message
-                      if (error != null) ...[
-                        CommonContainer(
-                          padding: const EdgeInsets.all(12),
-                          backgroundColor: context.errorContainer,
-                          child: Row(
-                            children: [
-                              Icon(Icons.error_outline,
-                                  color: context.onErrorContainer),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: CommonText.bodyMedium(
-                                  error,
-                                  color: context.onErrorContainer,
-                                ),
+                    // Error message
+                    if (error != null) ...[
+                      CommonContainer(
+                        padding: const EdgeInsets.all(12),
+                        backgroundColor: context.errorContainer,
+                        child: Row(
+                          children: [
+                            Icon(Icons.error_outline,
+                                color: context.onErrorContainer),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: CommonText.bodyMedium(
+                                error,
+                                color: context.onErrorContainer,
                               ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                      ],
-                      const SizedBox(height: 24),
-
-                      // Cloudflare Turnstile Security Widget
-                      const CloudflareTurnstileWidget(
-                        action: 'contact_us',
-                      ),
-
-                      const SizedBox(height: 24),
-                      // Submit button
-                      SizedBox(
-                        width: double.infinity,
-                        child: CommonButton(
-                          text: context.translate('send_message'),
-                          onPressed: isLoading ? null : _submitForm,
-                          isLoading: isLoading,
-                          backgroundColor: context.primary,
-                          textColor: context.onPrimary,
+                            ),
+                          ],
                         ),
                       ),
+                      const SizedBox(height: 16),
                     ],
-                  ),
+                    const SizedBox(height: 24),
+
+                    // Cloudflare Turnstile Security Widget
+                    const CloudflareTurnstileWidget(
+                      action: 'contact_us',
+                    ),
+
+                    const SizedBox(height: 24),
+                    // Submit button
+                    SizedBox(
+                      width: double.infinity,
+                      child: CommonButton(
+                        text: context.translate('send_message'),
+                        onPressed: isLoading ? null : _submitForm,
+                        isLoading: isLoading,
+                        backgroundColor: context.primary,
+                        textColor: context.onPrimary,
+                      ),
+                    ),
+                  ],
                 ),
 
                 const SizedBox(height: 16),

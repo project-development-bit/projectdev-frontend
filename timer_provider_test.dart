@@ -55,7 +55,7 @@ class TimerTestPage extends ConsumerWidget {
               onPressed: canResend
                   ? () {
                       // Simulate resend code
-                      print('Resending code...');
+                      debugPrint('Resending code...');
                       ref.read(resendTimerProvider.notifier).startTimer();
                     }
                   : null,

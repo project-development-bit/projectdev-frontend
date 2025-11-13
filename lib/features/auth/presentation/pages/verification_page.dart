@@ -1,10 +1,6 @@
+import 'package:cointiply_app/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/common/common_text.dart';
-import '../../../../core/extensions/context_extensions.dart';
-import '../../../../core/widgets/responsive_container.dart';
-import '../../../../core/localization/app_localizations.dart';
-import '../../../../core/widgets/locale_switch_widget.dart';
 import '../../../../routing/routing.dart';
 import '../providers/verification_provider.dart';
 import '../providers/resend_timer_provider.dart';
@@ -59,7 +55,7 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(next.message),
-            backgroundColor: Colors.green,
+            backgroundColor: AppColors.success,
           ),
         );
         if (widget.isFromForgotPassword) {
@@ -72,7 +68,7 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(next.message),
-            backgroundColor: Colors.red,
+            backgroundColor: Theme.of(context).colorScheme.error,
           ),
         );
         _clearCode();
@@ -81,7 +77,7 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(next.message),
-            backgroundColor: Colors.green,
+            backgroundColor: AppColors.success,
           ),
         );
         // Timer is restarted in _resendCode method
@@ -160,10 +156,10 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
     final verificationState = ref.watch(verificationNotifierProvider);
     final canResend = ref.watch(canResendProvider);
     final countdown = ref.watch(countdownProvider);
-
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.transparent,
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: context.onSurface),
@@ -250,13 +246,13 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
                   children: [
                     Icon(
                       Icons.error_outline,
-                      color: Colors.red,
+                      color: Theme.of(context).colorScheme.error,
                       size: 24,
                     ),
                     const SizedBox(height: 8),
                     CommonText.bodyMedium(
                       'Please try again',
-                      color: Colors.red,
+                      color: colorScheme.error,
                     ),
                   ],
                 ),
