@@ -1,3 +1,4 @@
+import 'package:cointiply_app/features/auth/data/models/verify_code_forgot_password_response.dart';
 import 'package:dartz/dartz.dart';
 import '../../../../core/error/failures.dart';
 import '../entities/login_response.dart';
@@ -65,8 +66,8 @@ abstract class AuthRepository {
       ResendCodeRequest request);
 
   // Verify email with verification code for forgot password flow
-  Future<Either<Failure, VerifyCodeResponse>> verifyCodeForForgotPassword(
-      VerifyCodeRequest request);
+  Future<Either<Failure, VerifyCodeForForgotPasswordResponse>>
+      verifyCodeForForgotPassword(VerifyCodeRequest request);
 
   /// Verify email with verification code
   Future<Either<Failure, VerifyCodeResponse>> verifyCode(

@@ -1,3 +1,4 @@
+import 'package:cointiply_app/features/auth/data/models/verify_code_forgot_password_response.dart';
 import 'package:dartz/dartz.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/usecases/usecase.dart';
@@ -10,7 +11,7 @@ import '../../data/models/verify_code_response.dart';
 /// This use case handles the business logic for email verification,
 /// including API communication and token storage.
 class VerifyCodeForgotPasswordUsecase
-    implements UseCase<VerifyCodeResponse, VerifyCodeRequest> {
+    implements UseCase<VerifyCodeForForgotPasswordResponse, VerifyCodeRequest> {
   /// Authentication repository for API calls
   final AuthRepository repository;
 
@@ -22,7 +23,7 @@ class VerifyCodeForgotPasswordUsecase
   /// Takes a [VerifyCodeRequest] with email and code,
   /// returns either a [Failure] or [VerifyCodeResponse]
   @override
-  Future<Either<Failure, VerifyCodeResponse>> call(
+  Future<Either<Failure, VerifyCodeForForgotPasswordResponse>> call(
       VerifyCodeRequest params) async {
     return await repository.verifyCodeForForgotPassword(params);
   }

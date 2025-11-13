@@ -6,6 +6,7 @@ import 'package:cointiply_app/features/auth/data/models/login_response_model.dar
 import 'package:cointiply_app/features/auth/data/models/user_model.dart';
 import 'package:cointiply_app/features/auth/data/models/resend_code_request.dart';
 import 'package:cointiply_app/features/auth/data/models/resend_code_response.dart';
+import 'package:cointiply_app/features/auth/data/models/verify_code_forgot_password_response.dart';
 import 'package:cointiply_app/features/auth/data/models/verify_code_request.dart';
 import 'package:cointiply_app/features/auth/data/models/verify_code_response.dart';
 import 'package:cointiply_app/features/auth/data/models/verify_2fa_request.dart';
@@ -58,7 +59,7 @@ abstract class AuthRemoteDataSource {
       ResendCodeRequest request);
 
   // Verify email with verification code for forgot password flow
-  Future<VerifyCodeResponse> verifyCodeForForgotPassword(
+  Future<VerifyCodeForForgotPasswordResponse> verifyCodeForForgotPassword(
       VerifyCodeRequest request);
 
   /// Verify email with verification code
@@ -644,7 +645,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<VerifyCodeResponse> verifyCodeForForgotPassword(
+  Future<VerifyCodeForForgotPasswordResponse> verifyCodeForForgotPassword(
       VerifyCodeRequest request) async {
     try {
       // First try the GET endpoint that expects path parameters
@@ -661,7 +662,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
       final response = await dioClient.get(url);
 
-      return VerifyCodeResponse.fromJson(response.data as Map<String, dynamic>);
+      return VerifyCodeForForgotPasswordResponse.fromJson(
+          response.data as Map<String, dynamic>);
     } on DioException catch (e) {
       debugPrint('❌ Verify code DioException (path params): ${e.message}');
       debugPrint('❌ Request URL: ${e.requestOptions.uri}');
@@ -678,7 +680,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
           );
 
           debugPrint('✅ Alternative approach with request body succeeded!');
-          return VerifyCodeResponse.fromJson(
+          return VerifyCodeForForgotPasswordResponse.fromJson(
               response.data as Map<String, dynamic>);
         } on DioException catch (bodyException) {
           debugPrint(
