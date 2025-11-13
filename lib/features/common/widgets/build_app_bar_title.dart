@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/locale_switch_widget.dart';
 import '../../../core/widgets/theme_switch_widget.dart';
 import '../../../core/extensions/context_extensions.dart';
@@ -76,14 +77,14 @@ class CommonAppBar extends StatelessWidget {
                             return Text(
                               'Welcome, ${profile.displayName ?? profile.username}!',
                               style: context.bodySmall?.copyWith(
-                                color: context.onSurface.withOpacity(0.7),
+                                color: context.onSurface.withValues(alpha: 0.7),
                               ),
                             );
                           } else {
                             return Text(
                               'Welcome to Gigafaucet!',
                               style: context.bodySmall?.copyWith(
-                                color: context.onSurface.withOpacity(0.7),
+                                color: context.onSurface.withValues(alpha: 0.7),
                               ),
                             );
                           }
@@ -211,11 +212,11 @@ class CommonAppBar extends StatelessWidget {
           content: Text(context.translate('logout_confirmation')),
           actions: [
             TextButton(
-              onPressed: () => Navigator.of(context).pop(false),
+              onPressed: () => context.pop(false),
               child: Text(context.translate('cancel')),
             ),
             TextButton(
-              onPressed: () => Navigator.of(context).pop(true),
+              onPressed: () => context.pop(true),
               style: TextButton.styleFrom(
                 foregroundColor: context.error,
               ),
@@ -240,7 +241,7 @@ class CommonAppBar extends StatelessWidget {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text('Logged out successfully'),
-                backgroundColor: Colors.green,
+                backgroundColor: AppColors.success,
               ),
             );
           }

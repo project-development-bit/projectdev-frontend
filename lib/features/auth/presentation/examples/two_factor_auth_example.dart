@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/common/common_button.dart';
@@ -44,7 +45,7 @@ class TwoFactorAuthExample extends ConsumerWidget {
                     onSuccess: () {
                       // This callback is called when verification succeeds
                       debugPrint('✅ 2FA verification successful!');
-                      
+
                       // Navigate to home or next screen
                       context.goToHome();
                     },
@@ -76,7 +77,7 @@ class TwoFactorAuthExample extends ConsumerWidget {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.grey[200],
+                  color: AppColors.darkTextTertiary,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: const Text(

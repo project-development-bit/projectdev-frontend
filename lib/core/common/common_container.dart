@@ -41,12 +41,13 @@ class CommonContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final colorScheme = Theme.of(context).colorScheme;
 
     final effectiveBorderRadius = borderRadius ?? 12.0;
     final effectiveBorderColor = borderColor ??
         (isDark
-            ? AppColors.websiteBorder
-            : AppColors.websiteBorder.withOpacity(0.2));
+            ? colorScheme.outline
+            : AppColors.websiteBorder.withValues(alpha: 0.2));
     final effectiveBorderWidth = borderWidth ?? 1.0;
 
     final effectiveBoxShadow = boxShadow ??
@@ -54,8 +55,8 @@ class CommonContainer extends StatelessWidget {
             ? [
                 BoxShadow(
                   color: isDark
-                      ? Colors.black.withOpacity(0.3)
-                      : AppColors.primary.withOpacity(0.1),
+                      ? colorScheme.scrim.withValues(alpha: 0.3)
+                      : colorScheme.primary.withValues(alpha: 0.1),
                   blurRadius: isDark ? 8 : 4,
                   offset: Offset(0, isDark ? 4 : 2),
                 ),
@@ -83,14 +84,15 @@ class CommonContainer extends StatelessWidget {
     );
 
     if (onTap != null) {
-      return InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(effectiveBorderRadius),
-        splashColor: (isDark ? AppColors.primaryLight : AppColors.primary)
-            .withOpacity(0.1),
-        highlightColor: (isDark ? AppColors.primaryLight : AppColors.primary)
-            .withOpacity(0.05),
-        child: containerWidget,
+      return Material(
+        color: AppColors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(effectiveBorderRadius),
+          splashColor: (colorScheme.primary).withValues(alpha: 0.1),
+          highlightColor: (colorScheme.primary).withValues(alpha: 0.05),
+          child: containerWidget,
+        ),
       );
     }
 
@@ -121,9 +123,8 @@ class CryptoContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final effectiveAccentColor =
-        accentColor ?? (isDark ? AppColors.primaryLight : AppColors.primary);
+    final colorScheme = Theme.of(context).colorScheme;
+    final effectiveAccentColor = accentColor ?? (colorScheme.primary);
 
     return CommonContainer(
       width: width,
@@ -133,14 +134,14 @@ class CryptoContainer extends StatelessWidget {
       onTap: onTap,
       showBorder: true,
       showShadow: true,
-      borderColor: effectiveAccentColor.withOpacity(0.3),
+      borderColor: effectiveAccentColor.withValues(alpha: 0.3),
       borderWidth: 2,
       gradient: LinearGradient(
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
         colors: [
-          effectiveAccentColor.withOpacity(0.1),
-          effectiveAccentColor.withOpacity(0.05),
+          effectiveAccentColor.withValues(alpha: 0.1),
+          effectiveAccentColor.withValues(alpha: 0.05),
         ],
       ),
       child: child,
@@ -222,7 +223,7 @@ class LoadingContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-
+    final colorScheme = Theme.of(context).colorScheme;
     return CommonContainer(
       width: width,
       height: height,
@@ -237,7 +238,7 @@ class LoadingContainer extends StatelessWidget {
             width: size,
             height: size,
             child: CircularProgressIndicator(
-              color: isDark ? AppColors.primaryLight : AppColors.primary,
+              color: colorScheme.primary,
               strokeWidth: 3,
             ),
           ),
@@ -248,8 +249,9 @@ class LoadingContainer extends StatelessWidget {
               fontFamily: 'Barlow',
               fontSize: 16,
               fontWeight: FontWeight.w500,
-              color:
-                  isDark ? AppColors.websiteText : AppColors.websiteBackground,
+              color: isDark
+                  ? colorScheme.onPrimaryContainer
+                  : AppColors.websiteBackground,
             ),
             textAlign: TextAlign.center,
           ),
@@ -285,7 +287,7 @@ class ErrorContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-
+    final colorScheme = Theme.of(context).colorScheme;
     return CommonContainer(
       width: width,
       height: height,
@@ -293,7 +295,7 @@ class ErrorContainer extends StatelessWidget {
       margin: margin,
       showBorder: true,
       showShadow: true,
-      borderColor: Colors.red.withOpacity(0.3),
+      borderColor: colorScheme.error.withValues(alpha: 0.3),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -302,7 +304,7 @@ class ErrorContainer extends StatelessWidget {
               Icon(
                 Icons.error_outline,
                 size: 48,
-                color: Colors.red,
+                color: colorScheme.error,
               ),
           const SizedBox(height: 16),
           Text(
@@ -311,8 +313,9 @@ class ErrorContainer extends StatelessWidget {
               fontFamily: 'Barlow',
               fontSize: 16,
               fontWeight: FontWeight.w500,
-              color:
-                  isDark ? AppColors.websiteText : AppColors.websiteBackground,
+              color: isDark
+                  ? colorScheme.onPrimaryContainer
+                  : AppColors.websiteBackground,
             ),
             textAlign: TextAlign.center,
           ),
@@ -321,9 +324,8 @@ class ErrorContainer extends StatelessWidget {
             ElevatedButton(
               onPressed: onRetry,
               style: ElevatedButton.styleFrom(
-                backgroundColor:
-                    isDark ? AppColors.primaryLight : AppColors.primary,
-                foregroundColor: Colors.white,
+                backgroundColor: colorScheme.primary,
+                foregroundColor: colorScheme.onError,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                 shape: RoundedRectangleBorder(

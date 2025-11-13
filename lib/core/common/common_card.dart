@@ -38,16 +38,17 @@ class CommonCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final colorScheme = Theme.of(context).colorScheme;
 
     final effectiveBackgroundColor =
-        backgroundColor ?? (isDark ? AppColors.websiteCard : Colors.white);
+        backgroundColor ?? (colorScheme.secondaryContainer);
     final effectiveBorderRadius = borderRadius ?? 16.0;
     final effectivePadding = padding ?? const EdgeInsets.all(20);
     final effectiveMargin = margin ?? const EdgeInsets.all(8);
     final effectiveBorderColor = borderColor ??
         (isDark
-            ? AppColors.websiteBorder.withOpacity(0.3)
-            : Colors.transparent);
+            ? colorScheme.outline.withValues(alpha: 0.3)
+            : AppColors.transparent);
     final effectiveBorderWidth = borderWidth ?? (isDark ? 1.0 : 0.0);
 
     Widget cardContent = Container(
@@ -64,8 +65,8 @@ class CommonCard extends StatelessWidget {
             ? [
                 BoxShadow(
                   color: isDark
-                      ? Colors.black.withOpacity(0.3)
-                      : AppColors.primary.withOpacity(0.1),
+                      ? colorScheme.scrim.withValues(alpha: 0.3)
+                      : colorScheme.primary.withValues(alpha: 0.1),
                   blurRadius: isDark ? 8 : 4,
                   offset: Offset(0, isDark ? 4 : 2),
                 ),
@@ -115,14 +116,12 @@ class CommonCard extends StatelessWidget {
 
     if (onTap != null) {
       return Material(
-        color: Colors.transparent,
+        color: AppColors.transparent,
         child: InkWell(
           onTap: onTap,
           borderRadius: BorderRadius.circular(effectiveBorderRadius),
-          splashColor: (isDark ? AppColors.primaryLight : AppColors.primary)
-              .withOpacity(0.1),
-          highlightColor: (isDark ? AppColors.primaryLight : AppColors.primary)
-              .withOpacity(0.05),
+          splashColor: (colorScheme.primary)..withValues(alpha: 0.1),
+          highlightColor: (colorScheme.primary)..withValues(alpha: 0.05),
           child: cardContent,
         ),
       );
@@ -157,9 +156,9 @@ class CryptoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final effectiveAccentColor =
-        accentColor ?? (isDark ? AppColors.primaryLight : AppColors.primary);
+    final effectiveAccentColor = accentColor ?? (colorScheme.primary);
 
     return CommonCard(
       onTap: onTap,
@@ -171,7 +170,7 @@ class CryptoCard extends StatelessWidget {
               width: 50,
               height: 50,
               decoration: BoxDecoration(
-                color: effectiveAccentColor.withOpacity(0.2),
+                color: effectiveAccentColor..withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(25),
                 border: Border.all(
                   color: effectiveAccentColor,

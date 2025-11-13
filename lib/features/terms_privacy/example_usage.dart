@@ -1,8 +1,9 @@
+import 'package:cointiply_app/routing/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../core/common/common_text.dart';
-import 'presentation/screens/terms_screen.dart';
-import 'presentation/screens/privacy_screen.dart';
+import '../../core/theme/app_colors.dart';
 import 'presentation/providers/terms_privacy_provider.dart';
 
 /// Example usage of Terms & Privacy feature
@@ -31,21 +32,17 @@ class TermsPrivacyExample extends ConsumerWidget {
               fontWeight: FontWeight.bold,
             ),
             const SizedBox(height: 8),
-            const CommonText(
+            CommonText(
               'Please review our terms and privacy policy.',
               fontSize: 14,
-              color: Colors.grey,
+              color: AppColors.darkTextTertiary,
             ),
             const SizedBox(height: 32),
 
             // Terms of Service Button
             ElevatedButton.icon(
               onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const TermsScreen(),
-                  ),
-                );
+                context.goNamed(AppRoutes.terms);
               },
               icon: const Icon(Icons.article_outlined),
               label: const Text('Terms of Service'),
@@ -59,11 +56,7 @@ class TermsPrivacyExample extends ConsumerWidget {
             // Privacy Policy Button
             ElevatedButton.icon(
               onPressed: () {
-                // Navigator.of(context).push(
-                //   MaterialPageRoute(
-                //     builder: (context) => const PrivacyScreen(),
-                //   ),
-                // );
+                context.goNamed(AppRoutes.privacy);
               },
               icon: const Icon(Icons.privacy_tip_outlined),
               label: const Text('Privacy Policy'),
@@ -90,7 +83,8 @@ class TermsPrivacyExample extends ConsumerWidget {
                           fontWeight: FontWeight.w600,
                         ),
                         const SizedBox(height: 8),
-                        _buildStatusIndicator(state),
+                        _buildStatusIndicator(
+                            state, Theme.of(context).colorScheme),
                         if (state is TermsPrivacySuccess) ...[
                           const SizedBox(height: 12),
                           _buildVersionInfo(state.data),
@@ -107,16 +101,17 @@ class TermsPrivacyExample extends ConsumerWidget {
     );
   }
 
-  Widget _buildStatusIndicator(TermsPrivacyState state) {
+  Widget _buildStatusIndicator(
+      TermsPrivacyState state, ColorScheme colorScheme) {
     return switch (state) {
       TermsPrivacyInitial() => const Row(
           children: [
-            Icon(Icons.info_outline, color: Colors.blue),
+            Icon(Icons.info_outline, color: AppColors.info),
             SizedBox(width: 8),
-            CommonText('Not loaded', color: Colors.blue),
+            CommonText('Not loaded', color: AppColors.info),
           ],
         ),
-      TermsPrivacyLoading() => const Row(
+      TermsPrivacyLoading() => Row(
           children: [
             SizedBox(
               width: 16,
@@ -124,24 +119,24 @@ class TermsPrivacyExample extends ConsumerWidget {
               child: CircularProgressIndicator(strokeWidth: 2),
             ),
             SizedBox(width: 8),
-            CommonText('Loading...', color: Colors.orange),
+            CommonText('Loading...', color: colorScheme.primary),
           ],
         ),
-      TermsPrivacySuccess() => const Row(
+      TermsPrivacySuccess() => Row(
           children: [
-            Icon(Icons.check_circle_outline, color: Colors.green),
+            Icon(Icons.check_circle_outline, color: AppColors.success),
             SizedBox(width: 8),
-            CommonText('Ready', color: Colors.green),
+            CommonText('Ready', color: AppColors.success),
           ],
         ),
       TermsPrivacyError(message: final message) => Row(
           children: [
-            const Icon(Icons.error_outline, color: Colors.red),
+            Icon(Icons.error_outline, color: colorScheme.error),
             const SizedBox(width: 8),
             Expanded(
               child: CommonText(
                 'Error: $message',
-                color: Colors.red,
+                color: colorScheme.error,
                 fontSize: 12,
               ),
             ),
@@ -157,13 +152,13 @@ class TermsPrivacyExample extends ConsumerWidget {
         CommonText(
           'Terms Version: ${data.termsVersion}',
           fontSize: 12,
-          color: Colors.grey,
+          color: AppColors.darkTextTertiary,
         ),
         const SizedBox(height: 4),
         CommonText(
           'Privacy Version: ${data.privacyVersion}',
           fontSize: 12,
-          color: Colors.grey,
+          color: AppColors.darkTextTertiary,
         ),
       ],
     );
@@ -181,22 +176,14 @@ class TermsPrivacyQuickAccess extends StatelessWidget {
       children: [
         TextButton(
           onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => const TermsScreen(),
-              ),
-            );
+            context.goNamed(AppRoutes.terms);
           },
           child: const Text('Terms'),
         ),
         const Text('•'),
         TextButton(
           onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => const PrivacyScreen(),
-              ),
-            );
+            context.goNamed(AppRoutes.privacy);
           },
           child: const Text('Privacy'),
         ),

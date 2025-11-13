@@ -69,7 +69,8 @@ void main() {
 
         // This will fail at the repository level since we don't have a mock
         // But it shows the email validation passes
-        expect(() => notifier.forgotPassword(email, 'mock-turnstile-token'), returnsNormally);
+        expect(() => notifier.forgotPassword(email, 'mock-turnstile-token'),
+            returnsNormally);
 
         // Reset for next test
         notifier.reset();
@@ -81,7 +82,8 @@ void main() {
       final notifier = container.read(forgotPasswordProvider.notifier);
 
       // Set an error state first
-      await notifier.forgotPassword('', 'mock-turnstile-token'); // This will create an error state
+      await notifier.forgotPassword(
+          '', 'mock-turnstile-token'); // This will create an error state
       expect(
           container.read(forgotPasswordProvider), isA<ForgotPasswordError>());
 

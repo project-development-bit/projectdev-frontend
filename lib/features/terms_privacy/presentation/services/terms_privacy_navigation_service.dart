@@ -76,20 +76,10 @@ class TermsPrivacyNavigationService {
 
   // Private methods for mobile platform
   static void _showTermsScreen(BuildContext context) {
-    // Navigator.of(context).push(
-    //   MaterialPageRoute(
-    //     builder: (context) => const TermsScreen(),
-    //   ),
-    // );
     context.goNamed(AppRoutes.terms);
   }
 
   static void _showPrivacyScreen(BuildContext context) {
-    // Navigator.of(context).push(
-    //   MaterialPageRoute(
-    //     builder: (context) => const PrivacyScreen(),
-    //   ),
-    // );
     context.goNamed(AppRoutes.privacy);
   }
 

@@ -80,7 +80,7 @@ class _LevelTierRowWidgetState extends State<LevelTierRowWidget> {
                             ? colorScheme.primary
                             : isHovered
                                 ? colorScheme.primaryContainer
-                                : Colors.transparent,
+                                : AppColors.transparent,
                         width: isSelected ? 1.5 : 1,
                       ),
                       boxShadow: [
