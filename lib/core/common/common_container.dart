@@ -42,8 +42,6 @@ class CommonContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    final effectiveBackgroundColor =
-        backgroundColor ?? (isDark ? AppColors.websiteCard : Colors.white);
     final effectiveBorderRadius = borderRadius ?? 12.0;
     final effectiveBorderColor = borderColor ??
         (isDark
@@ -71,7 +69,6 @@ class CommonContainer extends StatelessWidget {
       padding: padding,
       alignment: alignment,
       decoration: BoxDecoration(
-        color: gradient == null ? effectiveBackgroundColor : null,
         gradient: gradient,
         borderRadius: BorderRadius.circular(effectiveBorderRadius),
         border: showBorder
@@ -86,17 +83,14 @@ class CommonContainer extends StatelessWidget {
     );
 
     if (onTap != null) {
-      return Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(effectiveBorderRadius),
-          splashColor: (isDark ? AppColors.primaryLight : AppColors.primary)
-              .withOpacity(0.1),
-          highlightColor: (isDark ? AppColors.primaryLight : AppColors.primary)
-              .withOpacity(0.05),
-          child: containerWidget,
-        ),
+      return InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(effectiveBorderRadius),
+        splashColor: (isDark ? AppColors.primaryLight : AppColors.primary)
+            .withOpacity(0.1),
+        highlightColor: (isDark ? AppColors.primaryLight : AppColors.primary)
+            .withOpacity(0.05),
+        child: containerWidget,
       );
     }
 
