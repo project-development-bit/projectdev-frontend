@@ -43,8 +43,6 @@ class CommonContainer extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final colorScheme = Theme.of(context).colorScheme;
 
-    final effectiveBackgroundColor = backgroundColor ??
-        (isDark ? AppColors.websiteCard : colorScheme.onError);
     final effectiveBorderRadius = borderRadius ?? 12.0;
     final effectiveBorderColor = borderColor ??
         (isDark
@@ -72,7 +70,6 @@ class CommonContainer extends StatelessWidget {
       padding: padding,
       alignment: alignment,
       decoration: BoxDecoration(
-        color: gradient == null ? effectiveBackgroundColor : null,
         gradient: gradient,
         borderRadius: BorderRadius.circular(effectiveBorderRadius),
         border: showBorder
