@@ -9,9 +9,9 @@ import 'package:flutter/foundation.dart';
 import '../../../../core/error/failures.dart';
 
 class ReferralBannerRepositoryImpl implements ReferralBannerRepository {
-  final ReferralBannerRemoteService _remote;
+  final ReferralBannerRemoteService remote;
 
-  ReferralBannerRepositoryImpl(this._remote);
+  ReferralBannerRepositoryImpl(this.remote);
 
   @override
   Future<Either<Failure, List<ReferalBannerEntity>>>

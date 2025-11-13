@@ -22,13 +22,14 @@ class _ThemeShowcaseWidgetState extends State<ThemeShowcaseWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       appBar: AppBar(
         title: const CommonText.titleLarge('Theme Showcase'),
-        backgroundColor: Theme.of(context).brightness == Brightness.dark
-            ? AppColors.websiteBackground
-            : AppColors.primary,
-        foregroundColor: Colors.white,
+        backgroundColor:
+            isDarkMode ? AppColors.websiteBackground : colorScheme.primary,
+        foregroundColor: colorScheme.onError,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -58,22 +59,28 @@ class _ThemeShowcaseWidgetState extends State<ThemeShowcaseWidget> {
               children: [
                 CommonButton(
                   text: 'Primary Button',
-                  onPressed: () => _showSnackBar('Primary button pressed'),
+                  onPressed: () =>
+                      _showSnackBar('Primary button pressed', colorScheme),
                 ),
                 CommonButton(
                   text: 'Secondary Button',
-                  backgroundColor: Colors.grey,
-                  onPressed: () => _showSnackBar('Secondary button pressed'),
+                  backgroundColor: isDarkMode
+                      ? AppColors.darkTextTertiary
+                      : AppColors.lightTextTertiary,
+                  onPressed: () =>
+                      _showSnackBar('Secondary button pressed', colorScheme),
                 ),
                 CommonButton(
                   text: 'Outlined Button',
                   isOutlined: true,
-                  onPressed: () => _showSnackBar('Outlined button pressed'),
+                  onPressed: () =>
+                      _showSnackBar('Outlined button pressed', colorScheme),
                 ),
                 CommonButton(
                   text: 'With Icon',
-                  icon: const Icon(Icons.star, size: 20, color: Colors.white),
-                  onPressed: () => _showSnackBar('Icon button pressed'),
+                  icon: Icon(Icons.star, size: 20, color: colorScheme.onError),
+                  onPressed: () =>
+                      _showSnackBar('Icon button pressed', colorScheme),
                 ),
               ],
             ),
@@ -124,7 +131,7 @@ class _ThemeShowcaseWidgetState extends State<ThemeShowcaseWidget> {
             CommonCard(
               title: 'Basic Card',
               subtitle: 'This is a basic card with title and subtitle',
-              onTap: () => _showSnackBar('Basic card tapped'),
+              onTap: () => _showSnackBar('Basic card tapped', colorScheme),
               child: const CommonText.bodyMedium(
                 'Card content goes here. This card demonstrates the basic styling with website colors and typography.',
               ),
@@ -135,8 +142,8 @@ class _ThemeShowcaseWidgetState extends State<ThemeShowcaseWidget> {
               subtitle: 'Main wallet balance',
               amount: '0.00123456',
               currency: 'BTC',
-              icon: const Icon(Icons.currency_bitcoin, color: Colors.orange),
-              onTap: () => _showSnackBar('Crypto card tapped'),
+              icon: Icon(Icons.currency_bitcoin, color: colorScheme.secondary),
+              onTap: () => _showSnackBar('Crypto card tapped', colorScheme),
             ),
             const SizedBox(height: 16),
             const GradientCard(
@@ -163,7 +170,10 @@ class _ThemeShowcaseWidgetState extends State<ThemeShowcaseWidget> {
               padding: const EdgeInsets.all(20),
               child: Row(
                 children: [
-                  const Icon(Icons.trending_up, color: Colors.green),
+                  Icon(Icons.trending_up,
+                      color: isDarkMode
+                          ? AppColors.darkSuccess
+                          : AppColors.lightSuccess),
                   const SizedBox(width: 12),
                   const Expanded(
                     child: CommonText.bodyMedium('Crypto-themed container'),
@@ -173,11 +183,11 @@ class _ThemeShowcaseWidgetState extends State<ThemeShowcaseWidget> {
               ),
             ),
             const SizedBox(height: 16),
-            const GradientContainer(
+            GradientContainer(
               padding: EdgeInsets.all(20),
               child: CommonText.bodyMedium(
                 'Gradient container with website colors',
-                color: Colors.white,
+                color: colorScheme.onError,
               ),
             ),
             const SizedBox(height: 32),
@@ -205,7 +215,7 @@ class _ThemeShowcaseWidgetState extends State<ThemeShowcaseWidget> {
             ErrorContainer(
               message:
                   'Failed to load data. Please check your internet connection.',
-              onRetry: () => _showSnackBar('Retry button pressed'),
+              onRetry: () => _showSnackBar('Retry button pressed', colorScheme),
             ),
             const SizedBox(height: 32),
 
@@ -240,10 +250,10 @@ class _ThemeShowcaseWidgetState extends State<ThemeShowcaseWidget> {
     );
   }
 
-  void _showSnackBar(String message) {
+  void _showSnackBar(String message, ColorScheme colorScheme) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: CommonText.bodyMedium(message, color: Colors.white),
+        content: CommonText.bodyMedium(message, color: colorScheme.onError),
         backgroundColor: Theme.of(context).brightness == Brightness.dark
             ? AppColors.primaryLight
             : AppColors.primary,

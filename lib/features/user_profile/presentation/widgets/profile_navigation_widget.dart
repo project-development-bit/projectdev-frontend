@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/common/common_text.dart';
 import '../../../../core/extensions/context_extensions.dart';
@@ -46,15 +47,16 @@ class ProfileNavigationWidget extends StatelessWidget {
         decoration: BoxDecoration(
           border: Border(
             bottom: BorderSide(
-              color: isSelected ? context.primary : Colors.transparent,
+              color: isSelected ? context.primary : AppColors.transparent,
               width: 2,
             ),
           ),
         ),
         child: CommonText.bodyMedium(
           title,
-          color:
-              isSelected ? context.primary : context.onSurface.withOpacity(0.7),
+          color: isSelected
+              ? context.primary
+              : context.onSurface.withValues(alpha: 0.7),
           fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
         ),
       ),

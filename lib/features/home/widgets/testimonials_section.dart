@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/extensions/context_extensions.dart';
 import '../../../core/common/common_text.dart';
+import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/responsive_container.dart';
 import '../providers/home_providers.dart';
 
@@ -150,12 +151,12 @@ class _TestimonialCard extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                   decoration: BoxDecoration(
-                    color: Colors.green.withAlpha(26), // 0.1 * 255
+                    color: AppColors.success.withAlpha(26), // 0.1 * 255
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: CommonText.bodySmall(
                     '+\$${testimonial.earning.toStringAsFixed(0)}',
-                    color: Colors.green,
+                    color: AppColors.success,
                     fontSize: 11,
                     fontWeight: FontWeight.bold,
                   ),

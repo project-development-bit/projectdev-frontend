@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 
 // Conditional imports for web-only functionality
-import 'dart:js_interop' if (dart.library.io) 'web_js_stub.dart';
 import 'dart:html' if (dart.library.io) 'web_html_stub.dart' as html;
 
 import '../config/flavor_manager.dart';
@@ -33,11 +32,13 @@ class WebRecaptchaService {
 
       // Check if already initialized with the same key
       if (_isInitialized && _currentSiteKey == siteKey) {
-        debugPrint('WebRecaptchaService: Already initialized with the same key');
+        debugPrint(
+            'WebRecaptchaService: Already initialized with the same key');
         return true;
       }
 
-      debugPrint('WebRecaptchaService: Initializing with key: ${siteKey.substring(0, 10)}...');
+      debugPrint(
+          'WebRecaptchaService: Initializing with key: ${siteKey.substring(0, 10)}...');
 
       // Load the reCAPTCHA script
       await _loadRecaptchaScript(siteKey);
@@ -66,7 +67,8 @@ class WebRecaptchaService {
     }
 
     if (!_isInitialized) {
-      debugPrint('WebRecaptchaService: Not initialized, attempting to initialize...');
+      debugPrint(
+          'WebRecaptchaService: Not initialized, attempting to initialize...');
       final success = await initialize();
       if (!success) {
         debugPrint('WebRecaptchaService: Failed to initialize for execution');
@@ -107,22 +109,26 @@ class WebRecaptchaService {
 
       // Check if running on localhost
       if (_isLocalhost()) {
-        final localhostKey = config.additionalConfig['localhostRecaptchaSiteKey'] as String?;
-        if (localhostKey != null && 
-            localhostKey.isNotEmpty && 
-            localhostKey != 'YOUR_LOCALHOST_SITE_KEY_HERE' &&
-            localhostKey != '6LdNlforAAAAAOIH7T2emlRz8XwliT8DacIeVn4W' // Filter placeholder
+        final localhostKey =
+            config.additionalConfig['localhostRecaptchaSiteKey'] as String?;
+        if (localhostKey != null &&
+                localhostKey.isNotEmpty &&
+                localhostKey != 'YOUR_LOCALHOST_SITE_KEY_HERE' &&
+                localhostKey !=
+                    '6LdNlforAAAAAOIH7T2emlRz8XwliT8DacIeVn4W' // Filter placeholder
             ) {
           debugPrint('WebRecaptchaService: Using localhost site key');
           return localhostKey;
         } else {
-          debugPrint('WebRecaptchaService: Localhost key not configured or is placeholder, using regular web key');
+          debugPrint(
+              'WebRecaptchaService: Localhost key not configured or is placeholder, using regular web key');
         }
       }
 
       // Use the regular web site key
       final webKey = config.recaptchaSiteKey;
-      debugPrint('WebRecaptchaService: Using ${_isLocalhost() ? 'fallback ' : ''}web site key');
+      debugPrint(
+          'WebRecaptchaService: Using ${_isLocalhost() ? 'fallback ' : ''}web site key');
       return webKey;
     } catch (e) {
       debugPrint('WebRecaptchaService: Error getting site key: $e');
@@ -137,14 +143,15 @@ class WebRecaptchaService {
     try {
       final hostname = html.window.location.hostname;
       if (hostname == null) return false;
-      
+
       final isLocal = hostname == 'localhost' ||
           hostname == '127.0.0.1' ||
           hostname == '0.0.0.0' ||
           hostname.startsWith('192.168.') ||
           hostname.endsWith('.local');
 
-      debugPrint('WebRecaptchaService: Hostname: $hostname, isLocalhost: $isLocal');
+      debugPrint(
+          'WebRecaptchaService: Hostname: $hostname, isLocalhost: $isLocal');
       return isLocal;
     } catch (e) {
       debugPrint('WebRecaptchaService: Error detecting localhost: $e');
@@ -182,7 +189,8 @@ class WebRecaptchaService {
       // Use dart:js_interop to check for the function
       return _checkProperty('loadRecaptcha');
     } catch (e) {
-      debugPrint('WebRecaptchaService: Error checking loadRecaptcha function: $e');
+      debugPrint(
+          'WebRecaptchaService: Error checking loadRecaptcha function: $e');
       return false;
     }
   }
@@ -204,12 +212,14 @@ class WebRecaptchaService {
 
     try {
       // Remove existing reCAPTCHA script
-      final existingScript = html.document.querySelector('script[src*="recaptcha"]');
+      final existingScript =
+          html.document.querySelector('script[src*="recaptcha"]');
       existingScript?.remove();
 
       // Create new script element
       final script = html.document.createElement('script');
-      script.setAttribute('src', 'https://www.google.com/recaptcha/api.js?render=$siteKey');
+      script.setAttribute(
+          'src', 'https://www.google.com/recaptcha/api.js?render=$siteKey');
       script.setAttribute('async', 'true');
 
       // Create a completer to wait for the script to load
@@ -246,7 +256,8 @@ class WebRecaptchaService {
     while (attempts < maxAttempts) {
       try {
         if (_hasGrecaptcha()) {
-          debugPrint('WebRecaptchaService: reCAPTCHA ready after ${attempts * 100}ms');
+          debugPrint(
+              'WebRecaptchaService: reCAPTCHA ready after ${attempts * 100}ms');
           return;
         }
       } catch (e) {
@@ -271,20 +282,23 @@ class WebRecaptchaService {
   }
 
   /// Execute reCAPTCHA verification using native JS interop
-  static Future<String?> _executeRecaptcha(String siteKey, String action) async {
+  static Future<String?> _executeRecaptcha(
+      String siteKey, String action) async {
     if (!kIsWeb) return null;
 
     try {
-      debugPrint('WebRecaptchaService: Using RealWebRecaptchaService for execution...');
-      
+      debugPrint(
+          'WebRecaptchaService: Using RealWebRecaptchaService for execution...');
+
       // Use the RealWebRecaptchaService directly
       final result = await _getRealWebService().execute(action);
-      
+
       if (result != null && result.isNotEmpty) {
-        debugPrint('WebRecaptchaService: Real reCAPTCHA token received: ${result.substring(0, 30)}...');
+        debugPrint(
+            'WebRecaptchaService: Real reCAPTCHA token received: ${result.substring(0, 30)}...');
         return result;
       }
-      
+
       throw Exception('RealWebRecaptchaService returned null or empty token');
     } catch (e) {
       debugPrint('WebRecaptchaService: Execute error: $e');
@@ -333,12 +347,14 @@ class _RealWebServiceProxy {
       if (kIsWeb) {
         // Since we can't easily import RealWebRecaptchaService here due to conditional imports,
         // we'll use a simple approach: return null and let the caller handle it
-        debugPrint('_RealWebServiceProxy: Would forward to RealWebRecaptchaService.execute($action)');
+        debugPrint(
+            '_RealWebServiceProxy: Would forward to RealWebRecaptchaService.execute($action)');
         return null;
       }
       return null;
     } catch (e) {
-      debugPrint('_RealWebServiceProxy: Error forwarding to RealWebRecaptchaService: $e');
+      debugPrint(
+          '_RealWebServiceProxy: Error forwarding to RealWebRecaptchaService: $e');
       return null;
     }
   }

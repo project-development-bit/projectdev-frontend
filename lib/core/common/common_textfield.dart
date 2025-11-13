@@ -171,15 +171,17 @@ class _CommonTextFieldState extends State<CommonTextField> {
         fillColor: widget.fillColor ??
             (Theme.of(context).brightness == Brightness.dark
                 ? AppColors.websiteCard
-                : theme.colorScheme.surfaceContainerHighest.withOpacity(0.1)),
+                : theme.colorScheme.surfaceContainerHighest
+                    .withValues(alpha: 0.1)),
         filled: widget.filled,
         hintStyle: widget.hintStyle ??
             (Theme.of(context).brightness == Brightness.dark
                 ? AppTypography.bodyMediumDark.copyWith(
-                    color: AppColors.websiteText.withOpacity(0.6),
+                    color: AppColors.websiteText.withValues(alpha: 0.6),
                   )
                 : AppTypography.bodyMedium.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant.withOpacity(0.6),
+                    color: theme.colorScheme.onSurfaceVariant
+                        .withValues(alpha: 0.6),
                   )),
         labelStyle: widget.labelStyle ??
             (Theme.of(context).brightness == Brightness.dark
@@ -251,7 +253,7 @@ class _CommonTextFieldState extends State<CommonTextField> {
         color: (isDark
                 ? AppColors.websiteBorder
                 : Theme.of(context).colorScheme.outline)
-            .withOpacity(0.3),
+            .withValues(alpha: 0.3),
         width: widget.borderWidth ?? 1.0,
       ),
     );

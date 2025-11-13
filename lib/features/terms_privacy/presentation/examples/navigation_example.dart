@@ -1,10 +1,11 @@
+import 'package:cointiply_app/core/theme/app_colors.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../services/terms_privacy_navigation_service.dart';
 
 /// Example widget showing how to use the Terms & Privacy navigation service
-/// 
+///
 /// This service automatically handles platform differences:
 /// - Web: Opens URLs in new tabs
 /// - Mobile: Shows WebView screens
@@ -37,67 +38,69 @@ class TermsPrivacyNavigationExample extends ConsumerWidget {
                     Text('Current Platform: ${kIsWeb ? 'Web' : 'Mobile'}'),
                     const SizedBox(height: 4),
                     Text(
-                      kIsWeb 
-                        ? 'URLs will open in new browser tabs'
-                        : 'URLs will open in WebView screens',
+                      kIsWeb
+                          ? 'URLs will open in new browser tabs'
+                          : 'URLs will open in WebView screens',
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                   ],
                 ),
               ),
             ),
-            
+
             const SizedBox(height: 24),
-            
+
             // Example buttons
             const Text(
               'Navigation Examples:',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             // Method 1: Using the extension methods
             ElevatedButton.icon(
               onPressed: () => context.showTerms(ref),
               icon: const Icon(Icons.article),
               label: const Text('Show Terms of Service'),
             ),
-            
+
             const SizedBox(height: 12),
-            
+
             ElevatedButton.icon(
               onPressed: () => context.showPrivacy(ref),
               icon: const Icon(Icons.privacy_tip),
               label: const Text('Show Privacy Policy'),
             ),
-            
+
             const SizedBox(height: 24),
-            
+
             // Method 2: Using the service directly
             const Text(
               'Alternative Usage (Direct Service Call):',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
-            
+
             const SizedBox(height: 12),
-            
+
             OutlinedButton.icon(
-              onPressed: () => TermsPrivacyNavigationService.showTerms(context, ref),
+              onPressed: () =>
+                  TermsPrivacyNavigationService.showTerms(context, ref),
               icon: const Icon(Icons.article_outlined),
               label: const Text('Terms (Direct Service)'),
             ),
-            
+
             const SizedBox(height: 8),
-            
+
             OutlinedButton.icon(
-              onPressed: () => TermsPrivacyNavigationService.showPrivacy(context, ref),
+              onPressed: () =>
+                  TermsPrivacyNavigationService.showPrivacy(context, ref),
               icon: const Icon(Icons.privacy_tip_outlined),
               label: const Text('Privacy (Direct Service)'),
             ),
-            
+
             const SizedBox(height: 24),
-            
+
             // Usage instructions
             Expanded(
               child: Card(
@@ -119,7 +122,7 @@ class TermsPrivacyNavigationExample extends ConsumerWidget {
                       Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          color: Colors.grey[100],
+                          color: AppColors.darkTextSecondary,
                           borderRadius: BorderRadius.circular(4),
                         ),
                         child: const Text(
@@ -139,7 +142,7 @@ class TermsPrivacyNavigationExample extends ConsumerWidget {
                       Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          color: Colors.grey[100],
+                          color: AppColors.darkTextSecondary,
                           borderRadius: BorderRadius.circular(4),
                         ),
                         child: const Text(
@@ -160,7 +163,7 @@ class TermsPrivacyNavigationExample extends ConsumerWidget {
                       Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          color: Colors.grey[100],
+                          color: AppColors.darkTextSecondary,
                           borderRadius: BorderRadius.circular(4),
                         ),
                         child: const Text(

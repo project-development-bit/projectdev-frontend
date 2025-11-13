@@ -71,6 +71,8 @@ class _HomePageState extends ConsumerState<HomePage> {
   /// Handle logout functionality
 
   Widget _buildFooterCTA(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Container(
       width: double.infinity,
       color: Theme.of(context).primaryColor,
@@ -83,7 +85,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           Text(
             context.translate('ready_to_earn'),
             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  color: Colors.white,
+                  color: colorScheme.onError,
                   fontWeight: FontWeight.bold,
                 ),
             textAlign: TextAlign.center,
@@ -92,7 +94,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           Text(
             context.translate('join_thousands'),
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: Colors.white.withAlpha(230), // 0.9 * 255
+                  color: colorScheme.onError.withAlpha(230), // 0.9 * 255
                 ),
             textAlign: TextAlign.center,
           ),
@@ -103,7 +105,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               context.goToLogin();
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.white,
+              backgroundColor: colorScheme.onError,
               foregroundColor: Theme.of(context).primaryColor,
               padding: const EdgeInsets.symmetric(
                 horizontal: 32,

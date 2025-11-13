@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../config/flavor_manager.dart';
 import '../config/app_flavor.dart';
 import '../extensions/context_extensions.dart';
+import '../theme/app_colors.dart';
 
 /// A banner widget that displays the current flavor information
 /// Only visible in non-production builds
@@ -23,14 +24,15 @@ class FlavorBanner extends ConsumerWidget {
       return child;
     }
 
+    final colorScheme = Theme.of(context).colorScheme;
     return Directionality(
       textDirection: TextDirection.ltr,
       child: Banner(
         message: flavor.displayName.toUpperCase(),
         location: BannerLocation.topEnd,
         color: _getBannerColor(flavor),
-        textStyle: const TextStyle(
-          color: Colors.white,
+        textStyle: TextStyle(
+          color: colorScheme.onError,
           fontSize: 12,
           fontWeight: FontWeight.bold,
           letterSpacing: 1,
@@ -43,11 +45,11 @@ class FlavorBanner extends ConsumerWidget {
   Color _getBannerColor(AppFlavor flavor) {
     switch (flavor) {
       case AppFlavor.dev:
-        return Colors.green;
+        return AppColors.success;
       case AppFlavor.staging:
-        return Colors.orange;
+        return AppColors.warning;
       case AppFlavor.prod:
-        return Colors.red;
+        return AppColors.error;
     }
   }
 }

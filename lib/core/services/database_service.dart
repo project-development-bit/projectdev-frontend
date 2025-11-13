@@ -22,7 +22,7 @@ class DatabaseService {
   static const String _databaseName = 'burger_eats.db';
   static const int _databaseVersion = 1;
   static bool _isInitialized = false;
-  static Map<int, UserModel> _webUsers = {}; // In-memory storage for web
+  static final Map<int, UserModel> _webUsers = {}; // In-memory storage for web
 
   // Table names
   static const String _usersTable = 'users';

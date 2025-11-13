@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../core/providers/recaptcha_provider.dart';
@@ -137,7 +138,7 @@ class RecaptchaExamplePage extends ConsumerWidget {
                               authActions.resetRecaptcha();
                             },
                             isOutlined: true,
-                            backgroundColor: Colors.transparent,
+                            backgroundColor: AppColors.transparent,
                             textColor: context.primary,
                           ),
                         ),

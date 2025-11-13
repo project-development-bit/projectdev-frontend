@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/extensions/context_extensions.dart';
 import '../../../core/common/common_text.dart';
 import '../../../core/common/common_button.dart';
+import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/responsive_container.dart';
 import '../providers/home_providers.dart';
 
@@ -240,7 +241,7 @@ class _OfferWallCard extends StatelessWidget {
               children: [
                 Icon(
                   Icons.star,
-                  color: Colors.amber,
+                  color: AppColors.lightWarning,
                   size: 16,
                 ),
                 const SizedBox(width: 2),
