@@ -64,6 +64,7 @@ class _ChatPanel extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final notifier = ref.read(rightChatOverlayProvider.notifier);
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Column(
       children: [

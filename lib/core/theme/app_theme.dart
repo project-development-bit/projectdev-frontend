@@ -193,7 +193,7 @@ class AppTheme {
           if (states.contains(WidgetState.selected)) {
             return AppColors.lightColorScheme.primary;
           }
-          return Colors.transparent;
+          return AppColors.transparent;
         }),
         checkColor:
             WidgetStateProperty.all(AppColors.lightColorScheme.onPrimary),
@@ -403,7 +403,7 @@ class AppTheme {
           if (states.contains(WidgetState.selected)) {
             return AppColors.darkColorScheme.primary;
           }
-          return Colors.transparent;
+          return AppColors.transparent;
         }),
         checkColor:
             WidgetStateProperty.all(AppColors.darkColorScheme.onPrimary),

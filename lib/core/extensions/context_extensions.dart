@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/theme/app_colors.dart';
 import 'package:cointiply_app/features/common/widgets/custom_pointer_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -121,7 +122,7 @@ extension MediaQueryExtension on BuildContext {
   double get devicePixelRatio => mediaQuery.devicePixelRatio;
 
   /// Text scale factor
-  double get textScaleFactor => mediaQuery.textScaleFactor;
+  // double get textScaleFactor => mediaQuery.textScaleFactor;
 
   /// Platform brightness
   Brightness get platformBrightness => mediaQuery.platformBrightness;
@@ -454,8 +455,8 @@ extension DialogExtension on BuildContext {
       message: message,
       duration: duration,
       action: action,
-      backgroundColor: Colors.green,
-      textColor: Colors.white,
+      backgroundColor: AppColors.success,
+      textColor: AppColors.darkTextPrimary,
     );
   }
 
@@ -469,8 +470,8 @@ extension DialogExtension on BuildContext {
       message: message,
       duration: duration,
       action: action,
-      backgroundColor: Colors.orange,
-      textColor: Colors.white,
+      backgroundColor: AppColors.primary,
+      textColor: AppColors.primaryContainer,
     );
   }
 

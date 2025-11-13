@@ -7,6 +7,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/localization/app_localizations.dart';
 import '../providers/disable_2fa_provider.dart';
 import '../providers/check_2fa_status_provider.dart';
+import 'package:go_router/go_router.dart';
 
 /// Confirmation dialog for disabling 2FA
 ///
@@ -18,12 +19,13 @@ class Disable2FAConfirmationDialog extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final disable2FAState = ref.watch(disable2FAProvider);
     final localizations = AppLocalizations.of(context);
+    final colorScheme = Theme.of(context).colorScheme;
 
     // Listen to state changes and handle success/error
     ref.listen<Disable2FAState>(disable2FAProvider, (previous, next) {
       if (next is Disable2FASuccess) {
         // Close dialog on success
-        Navigator.of(context).pop();
+        context.pop();
 
         // Refresh 2FA status
         ref.read(check2FAStatusProvider.notifier).check2FAStatus();
@@ -33,7 +35,7 @@ class Disable2FAConfirmationDialog extends ConsumerWidget {
           SnackBar(
             content: CommonText(
               next.response.message,
-              color: Colors.white,
+              color: colorScheme.onError,
             ),
             backgroundColor: AppColors.success,
             behavior: SnackBarBehavior.floating,
@@ -45,13 +47,13 @@ class Disable2FAConfirmationDialog extends ConsumerWidget {
           SnackBar(
             content: CommonText(
               next.message,
-              color: Colors.white,
+              color: colorScheme.onError,
             ),
             backgroundColor: AppColors.error,
             behavior: SnackBarBehavior.floating,
             action: SnackBarAction(
               label: localizations?.translate('retry') ?? 'Retry',
-              textColor: Colors.white,
+              textColor: colorScheme.onError,
               onPressed: () {
                 ref.read(disable2FAProvider.notifier).disable2FA();
               },
@@ -87,7 +89,7 @@ class Disable2FAConfirmationDialog extends ConsumerWidget {
                   'Disable 2FA?',
               fontSize: 20,
               fontWeight: FontWeight.bold,
-              color: Colors.white,
+              color: colorScheme.onError,
             ),
           ),
         ],
@@ -106,18 +108,18 @@ class Disable2FAConfirmationDialog extends ConsumerWidget {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: AppColors.error.withValues(alpha: 0.1),
+              color: colorScheme.error.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
               border: Border.all(
-                color: AppColors.error.withValues(alpha: 0.3),
+                color: colorScheme.error.withValues(alpha: 0.3),
                 width: 1,
               ),
             ),
             child: Row(
               children: [
-                const Icon(
+                Icon(
                   Icons.info_outline,
-                  color: AppColors.error,
+                  color: colorScheme.error,
                   size: 20,
                 ),
                 const SizedBox(width: 8),
@@ -126,7 +128,7 @@ class Disable2FAConfirmationDialog extends ConsumerWidget {
                     localizations?.translate('disable_2fa_security_note') ??
                         'Your account will be protected only by your password.',
                     fontSize: 12,
-                    color: AppColors.error,
+                    color: colorScheme.error,
                   ),
                 ),
               ],
@@ -159,7 +161,7 @@ class Disable2FAConfirmationDialog extends ConsumerWidget {
           onPressed: disable2FAState is Disable2FALoading
               ? null
               : () {
-                  Navigator.of(context).pop();
+                  context.pop();
                   ref.read(disable2FAProvider.notifier).reset();
                 },
           style: TextButton.styleFrom(
@@ -181,8 +183,8 @@ class Disable2FAConfirmationDialog extends ConsumerWidget {
                   ref.read(disable2FAProvider.notifier).disable2FA();
                 },
           style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.error,
-            foregroundColor: Colors.white,
+            backgroundColor: colorScheme.error,
+            foregroundColor: colorScheme.onError,
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
@@ -192,7 +194,7 @@ class Disable2FAConfirmationDialog extends ConsumerWidget {
             localizations?.translate('disable_2fa') ?? 'Disable 2FA',
             fontSize: 14,
             fontWeight: FontWeight.w600,
-            color: Colors.white,
+            color: colorScheme.onError,
           ),
         ),
       ],

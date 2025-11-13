@@ -1,4 +1,5 @@
 import 'package:cointiply_app/core/error/error_model.dart';
+import 'package:cointiply_app/core/theme/app_colors.dart';
 import 'package:cointiply_app/features/common/widgets/custom_pointer_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -334,16 +335,16 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             actions: [
               CommonButton(
                 text: localizations?.translate('cancel') ?? 'Cancel',
-                onPressed: () => Navigator.of(context).pop(),
+                onPressed: () => GoRouter.of(context).pop(),
                 isOutlined: true,
-                backgroundColor: Colors.transparent,
+                backgroundColor: AppColors.transparent,
                 textColor: context.onSurface,
               ),
               const SizedBox(width: 8),
               CommonButton(
                 text: localizations?.translate('verify_now') ?? 'Verify Now',
                 onPressed: () {
-                  Navigator.of(context).pop();
+                  GoRouter.of(context).pop();
                   // Navigate to verification page
                   context.pushToVerification(
                     email: email,

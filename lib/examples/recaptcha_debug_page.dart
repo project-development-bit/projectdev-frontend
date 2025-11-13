@@ -15,12 +15,13 @@ class RecaptchaDebugPage extends ConsumerWidget {
     final isVerified = ref.watch(isRecaptchaVerifiedProvider);
     final isLoading = ref.watch(isRecaptchaLoadingProvider);
     final errorMessage = ref.watch(recaptchaErrorProvider);
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('reCAPTCHA Debug'),
         backgroundColor: Theme.of(context).primaryColor,
-        foregroundColor: Colors.white,
+        foregroundColor: colorScheme.onError,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

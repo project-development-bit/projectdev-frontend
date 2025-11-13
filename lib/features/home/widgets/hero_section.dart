@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/extensions/context_extensions.dart';
 import '../../../core/common/common_text.dart';
 import '../../../core/common/common_button.dart';
+import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/responsive_container.dart';
 import '../providers/home_providers.dart';
 
@@ -24,7 +25,7 @@ class HeroSection extends ConsumerWidget {
           end: Alignment.bottomRight,
           colors: [
             context.primary,
-            context.primary.withOpacity(0.8),
+            context.primary.withValues(alpha: 0.8),
             context.secondary,
           ],
         ),
@@ -48,7 +49,7 @@ class HeroSection extends ConsumerWidget {
             CommonText.headlineSmall(
               context.translate('hero_subheading'),
               textAlign: TextAlign.center,
-              color: context.onPrimary.withOpacity(0.9),
+              color: context.onPrimary.withValues(alpha: 0.9),
             ),
             const SizedBox(height: 32),
 
@@ -75,10 +76,10 @@ class HeroSection extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: BoxDecoration(
-                color: context.onPrimary.withOpacity(0.1),
+                color: context.onPrimary.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
-                  color: context.onPrimary.withOpacity(0.3),
+                  color: context.onPrimary.withValues(alpha: 0.3),
                 ),
               ),
               child: Row(
@@ -153,7 +154,7 @@ class HeroSection extends ConsumerWidget {
                         5,
                         (index) => Icon(
                               Icons.star,
-                              color: Colors.amber,
+                              color: AppColors.lightWarning,
                               size: 16,
                             )),
                   ),
@@ -197,18 +198,19 @@ class _AppStoreBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: Colors.black,
+          color: colorScheme.scrim,
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: Colors.white, width: 1),
+          border: Border.all(color: colorScheme.onError, width: 1),
         ),
         child: CommonText.bodySmall(
           text,
-          color: Colors.white,
+          color: colorScheme.onError,
           textAlign: TextAlign.center,
         ),
       ),

@@ -3,6 +3,7 @@ import '../../../core/extensions/context_extensions.dart';
 import '../../../core/common/common_text.dart';
 import '../../../core/common/common_image_widget.dart';
 import '../../../core/common/common_button.dart';
+import '../../../core/theme/app_colors.dart';
 import '../models/offer_model.dart';
 
 /// Widget to display an individual offer card
@@ -20,6 +21,7 @@ class OfferCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(
@@ -60,12 +62,12 @@ class OfferCard extends StatelessWidget {
                               vertical: 2,
                             ),
                             decoration: BoxDecoration(
-                              color: Colors.red,
+                              color: colorScheme.error,
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: CommonText.labelSmall(
                               'HOT',
-                              color: Colors.white,
+                              color: colorScheme.onError,
                               fontSize: 10,
                               fontWeight: FontWeight.bold,
                             ),
@@ -165,7 +167,7 @@ class OfferCard extends StatelessWidget {
                   if (offer.rating != null) ...[
                     Icon(
                       Icons.star,
-                      color: Colors.amber,
+                      color: AppColors.lightWarning,
                       size: 16,
                     ),
                     const SizedBox(width: 4),

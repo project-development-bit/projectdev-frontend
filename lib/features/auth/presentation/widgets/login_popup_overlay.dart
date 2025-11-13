@@ -58,9 +58,10 @@ class _LoginPopupModal extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final localizations = AppLocalizations.of(context);
-
+    final colorScheme = Theme.of(context).colorScheme;
     return Material(
-      color: Colors.black.withOpacity(0.7), // Semi-transparent background
+      color: colorScheme.scrim
+          .withValues(alpha: 0.7), // Semi-transparent background
       child: Center(
         child: Container(
           margin: EdgeInsets.all(context.isMobile ? 16 : 24),
@@ -73,7 +74,7 @@ class _LoginPopupModal extends ConsumerWidget {
             borderRadius: BorderRadius.circular(context.isMobile ? 16 : 20),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.3),
+                color: colorScheme.scrim.withValues(alpha: 0.3),
                 blurRadius: 20,
                 offset: const Offset(0, 10),
               ),
@@ -88,7 +89,7 @@ class _LoginPopupModal extends ConsumerWidget {
                 decoration: BoxDecoration(
                   border: Border(
                     bottom: BorderSide(
-                      color: context.outline.withOpacity(0.2),
+                      color: context.outline.withValues(alpha: 0.2),
                       width: 1,
                     ),
                   ),
@@ -169,7 +170,7 @@ class _LoginPopupModal extends ConsumerWidget {
                 decoration: BoxDecoration(
                   border: Border(
                     top: BorderSide(
-                      color: context.outline.withOpacity(0.2),
+                      color: context.outline.withValues(alpha: 0.2),
                       width: 1,
                     ),
                   ),

@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'lib/features/auth/presentation/providers/verification_provider.dart';
@@ -24,6 +25,8 @@ class ApiTestPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final verificationState = ref.watch(verificationNotifierProvider);
+    final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       appBar: AppBar(
@@ -43,39 +46,51 @@ class ApiTestPage extends ConsumerWidget {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.red.shade50,
-                  border: Border.all(color: Colors.red),
+                  color: colorScheme.onError.withValues(alpha: 0.1),
+                  border: Border.all(color: colorScheme.error),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
                   'Error: ${verificationState.message}',
-                  style: const TextStyle(color: Colors.red),
+                  style: TextStyle(color: colorScheme.error),
                 ),
               ),
             if (verificationState is VerificationSuccess)
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.green.shade50,
-                  border: Border.all(color: Colors.green),
+                  color: isDark
+                      ? AppColors.darkSuccess.withValues(alpha: 0.1)
+                      : AppColors.lightSuccess.withValues(alpha: 0.1),
+                  border: Border.all(
+                      color: isDark
+                          ? AppColors.darkSuccess
+                          : AppColors.lightSuccess),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
                   'Success: ${verificationState.message}',
-                  style: const TextStyle(color: Colors.green),
+                  style: TextStyle(
+                      color: isDark
+                          ? AppColors.darkSuccess
+                          : AppColors.lightSuccess),
                 ),
               ),
             if (verificationState is ResendCodeSuccess)
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.blue.shade50,
-                  border: Border.all(color: Colors.blue),
+                  color: isDark
+                      ? AppColors.darkInfo.withValues(alpha: 0.1)
+                      : AppColors.lightInfo.withValues(alpha: 0.1),
+                  border: Border.all(
+                      color: isDark ? AppColors.darkInfo : AppColors.lightInfo),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
                   'Resend Success: ${verificationState.message}',
-                  style: const TextStyle(color: Colors.blue),
+                  style: TextStyle(
+                      color: isDark ? AppColors.darkInfo : AppColors.lightInfo),
                 ),
               ),
             const SizedBox(height: 20),

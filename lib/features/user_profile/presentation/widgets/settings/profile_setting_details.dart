@@ -133,10 +133,10 @@ class _ProfileSettingDetailsState extends ConsumerState<ProfileSettingDetails> {
                                 ),
                               ),
                             )
-                          : const CircleAvatar(
+                          : CircleAvatar(
                               backgroundColor: AppColors.websiteText,
                               child: Icon(Icons.person,
-                                  size: 56, color: Colors.white),
+                                  size: 56, color: colorScheme.onError),
                             ),
                       CommonText.bodyMedium(
                         localizations?.translate('profile_avatar') ?? 'Avatar',

@@ -18,7 +18,7 @@ class FirstTimeTutorialDialog extends StatefulWidget {
 class _FirstTimeTutorialDialogState extends State<FirstTimeTutorialDialog> {
   int step = 1;
   final int totalSteps = 9;
-
+  bool _isHovering = false;
   final List<Map<String, dynamic>> steps = [
     {
       'title': 'welcome_to_gigafaucet',
@@ -126,13 +126,32 @@ class _FirstTimeTutorialDialogState extends State<FirstTimeTutorialDialog> {
                   const SizedBox(width: 8),
                   Consumer(
                     builder: (context, ref, child) {
-                      return GestureDetector(
-                        onTap: () =>
-                            ref.read(tutorialProvider.notifier).closes(),
-                        child: CommonText.labelMedium(
-                          context.translate('dismiss_hide'),
-                          color: colorScheme.primary,
-                          fontSize: context.isMobile ? 12 : 13,
+                      return MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        onEnter: (_) => setState(() => _isHovering = true),
+                        onExit: (_) => setState(() => _isHovering = false),
+                        child: GestureDetector(
+                          onTap: () =>
+                              ref.read(tutorialProvider.notifier).closes(),
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 150),
+                            decoration: BoxDecoration(
+                              color: _isHovering
+                                  ? Theme.of(context).colorScheme.primary
+                                  : Colors.transparent,
+                              shape: BoxShape.circle,
+                            ),
+                            padding: const EdgeInsets.all(4),
+                            child: Icon(
+                              Icons.close,
+                              size: 20,
+                              color: _isHovering
+                                  ? Theme.of(context).colorScheme.onPrimary
+                                  : Theme.of(context)
+                                      .colorScheme
+                                      .inverseSurface,
+                            ),
+                          ),
                         ),
                       );
                     },

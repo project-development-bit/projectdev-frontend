@@ -8,12 +8,13 @@ class WebsiteColorTestPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
       appBar: AppBar(
         title: const CommonText.titleLarge('Website Colors Test'),
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        foregroundColor: Theme.of(context).colorScheme.onPrimary,
+        backgroundColor: colorScheme.primary,
+        foregroundColor: colorScheme.onPrimary,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
@@ -106,18 +107,18 @@ class WebsiteColorTestPage extends StatelessWidget {
               title: 'Bitcoin Balance',
               amount: '0.00123456',
               currency: 'BTC',
-              icon: const Icon(Icons.currency_bitcoin, color: Colors.orange),
+              icon: Icon(Icons.currency_bitcoin, color: colorScheme.primary),
               subtitle: 'Main wallet',
             ),
 
             const SizedBox(height: 16),
 
             // Gradient card
-            const GradientCard(
+            GradientCard(
               title: 'Gradient Card',
               child: CommonText.bodyMedium(
                 'This uses the website gradient colors.',
-                color: Colors.white,
+                color: colorScheme.onError,
               ),
             ),
 
@@ -159,6 +160,7 @@ class _ColorSwatch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
@@ -169,12 +171,15 @@ class _ColorSwatch extends StatelessWidget {
             decoration: BoxDecoration(
               color: color,
               borderRadius: BorderRadius.circular(4),
-              border: Border.all(color: Colors.grey.withOpacity(0.3)),
+              border: Border.all(
+                  color: isDarkMode
+                      ? AppColors.darkTextTertiary.withValues(alpha: 0.3)
+                      : AppColors.lightTextTertiary.withValues(alpha: 0.3)),
             ),
           ),
           const SizedBox(width: 12),
           Expanded(
-            child: CommonText.bodyMedium('$name'),
+            child: CommonText.bodyMedium(name),
           ),
           CommonText.bodySmall(
             color.value.toRadixString(16).toUpperCase().padLeft(8, '0'),

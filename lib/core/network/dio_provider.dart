@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import '../config/flavor_manager.dart';
@@ -34,22 +35,22 @@ final dioProvider = Provider<Dio>((ref) {
   if (config.enableDebugFeatures) {
     dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) {
-        print('🚀 ${options.method.toUpperCase()} ${options.uri}');
+        debugPrint('🚀 ${options.method.toUpperCase()} ${options.uri}');
         if (options.data != null) {
-          print('📤 Request Data: ${options.data}');
+          debugPrint('📤 Request Data: ${options.data}');
         }
         handler.next(options);
       },
       onResponse: (response, handler) {
-        print('✅ ${response.statusCode} ${response.requestOptions.uri}');
+        debugPrint('✅ ${response.statusCode} ${response.requestOptions.uri}');
         handler.next(response);
       },
       onError: (error, handler) {
-        print(
+        debugPrint(
             '❌ ${error.requestOptions.method.toUpperCase()} ${error.requestOptions.uri}');
-        print('💥 Error: ${error.message}');
+        debugPrint('💥 Error: ${error.message}');
         if (error.response != null) {
-          print('📥 Response: ${error.response?.data}');
+          debugPrint('📥 Response: ${error.response?.data}');
         }
         handler.next(error);
       },

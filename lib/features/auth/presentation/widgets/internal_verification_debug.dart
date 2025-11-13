@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'internal_verification_overlay.dart';
@@ -10,14 +11,16 @@ class InternalVerificationDebugHelper extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isVerified = ref.watch(internalVerificationProvider);
-
+    final colorScheme = Theme.of(context).colorScheme;
+    final isDarkMode =
+        MediaQuery.of(context).platformBrightness == Brightness.dark;
     return Container(
       padding: const EdgeInsets.all(8),
       margin: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.black87,
+        color: colorScheme.scrim,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.orange, width: 2),
+        border: Border.all(color: colorScheme.primary, width: 2),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -27,14 +30,14 @@ class InternalVerificationDebugHelper extends ConsumerWidget {
             children: [
               Icon(
                 Icons.bug_report,
-                color: Colors.orange,
+                color: colorScheme.primary,
                 size: 16,
               ),
               const SizedBox(width: 8),
               Text(
                 'Internal Verification Debug',
                 style: TextStyle(
-                  color: Colors.orange,
+                  color: colorScheme.primary,
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
                 ),
@@ -45,7 +48,7 @@ class InternalVerificationDebugHelper extends ConsumerWidget {
           Text(
             'Status: ${isVerified ? "✅ VERIFIED" : "❌ NOT VERIFIED"}',
             style: TextStyle(
-              color: isVerified ? Colors.green : Colors.red,
+              color: isVerified ? AppColors.success : colorScheme.error,
               fontSize: 11,
               fontWeight: FontWeight.w600,
             ),
@@ -54,7 +57,9 @@ class InternalVerificationDebugHelper extends ConsumerWidget {
           Text(
             'Code: "2026"',
             style: TextStyle(
-              color: Colors.white70,
+              color: isDarkMode
+                  ? AppColors.darkTextTertiary
+                  : AppColors.lightTextTertiary,
               fontSize: 10,
               fontFamily: 'monospace',
             ),
@@ -62,7 +67,9 @@ class InternalVerificationDebugHelper extends ConsumerWidget {
           Text(
             'Enabled: ${true}', // Can be made dynamic later
             style: TextStyle(
-              color: Colors.white60,
+              color: isDarkMode
+                  ? AppColors.darkTextTertiary
+                  : AppColors.lightTextTertiary,
               fontSize: 9,
             ),
           ),
@@ -77,7 +84,7 @@ class InternalVerificationDebugHelper extends ConsumerWidget {
                       .markVerified();
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
+                  backgroundColor: AppColors.success,
                   minimumSize: const Size(60, 30),
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                 ),
@@ -92,7 +99,7 @@ class InternalVerificationDebugHelper extends ConsumerWidget {
                   ref.read(internalVerificationProvider.notifier).reset();
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
+                  backgroundColor: colorScheme.error,
                   minimumSize: const Size(60, 30),
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                 ),

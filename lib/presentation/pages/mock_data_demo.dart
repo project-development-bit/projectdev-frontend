@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../core/theme/app_colors.dart';
+
 /// Demo page to showcase all available mock data for the profile module
 ///
 /// This page displays all the mock user profiles that are available
@@ -170,19 +172,19 @@ class MockDataDemo extends StatelessWidget {
           children: [
             Text(
               title,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: Colors.blue,
+                color: AppColors.info,
               ),
             ),
             const SizedBox(height: 8),
             Text(
               description,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 14,
                 fontStyle: FontStyle.italic,
-                color: Colors.grey,
+                color: AppColors.darkTextTertiary,
               ),
             ),
             const SizedBox(height: 12),
@@ -190,8 +192,8 @@ class MockDataDemo extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 2.0),
                   child: Row(
                     children: [
-                      const Icon(Icons.check_circle,
-                          size: 16, color: Colors.green),
+                      Icon(Icons.check_circle,
+                          size: 16, color: AppColors.success),
                       const SizedBox(width: 8),
                       Expanded(child: Text(detail)),
                     ],

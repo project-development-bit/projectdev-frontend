@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/theme/app_colors.dart';
 import 'package:cointiply_app/core/widgets/cloudflare_turnstille_widgte.dart';
 import 'package:cointiply_app/core/providers/turnstile_provider.dart';
 import 'package:flutter/material.dart';
@@ -127,7 +128,7 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
             //     SnackBar(
             //       content: Text(localizations?.translate('login_successful') ??
             //           'Login successful!'),
-            //       backgroundColor: Colors.green,
+            //       backgroundColor: AppColors.success,
             //     ),
             //   );
             // }
@@ -136,7 +137,7 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(v),
-                backgroundColor: Colors.red,
+                backgroundColor: Theme.of(context).colorScheme.error,
               ),
             );
           });
@@ -303,7 +304,7 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
                       },
                       icon: const Icon(Icons.g_mobiledata, size: 24),
                       isOutlined: true,
-                      backgroundColor: Colors.transparent,
+                      backgroundColor: AppColors.transparent,
                       textColor: context.onSurface,
                       height: 48,
                     ),
@@ -322,7 +323,7 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
                       },
                       icon: const Icon(Icons.facebook, size: 24),
                       isOutlined: true,
-                      backgroundColor: Colors.transparent,
+                      backgroundColor: AppColors.transparent,
                       textColor: context.onSurface,
                       height: 48,
                     ),

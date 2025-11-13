@@ -1,3 +1,4 @@
+import 'package:cointiply_app/features/common/widgets/custom_pointer_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/theme_provider.dart';
@@ -36,42 +37,45 @@ class ThemeSwitchWidget extends ConsumerWidget {
       itemBuilder: (BuildContext context) {
         return AppThemeMode.values.map((AppThemeMode themeMode) {
           final isSelected = themeMode == currentThemeMode;
-
+    
           return PopupMenuItem<AppThemeMode>(
             value: themeMode,
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 4),
-              decoration: isSelected
-                  ? BoxDecoration(
-                      color: context.primary.withAlpha(26), // 0.1 * 255
-                      borderRadius: BorderRadius.circular(6),
-                    )
-                  : null,
-              child: Row(
-                children: [
-                  Icon(
-                    themeNotifier.getThemeModeIcon(themeMode),
-                    size: 20,
-                    color: isSelected ? context.primary : context.onSurface,
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Text(
-                      themeNotifier.getThemeModeDisplayName(themeMode),
-                      style: context.bodyMedium?.copyWith(
-                        color: isSelected ? context.primary : context.onSurface,
-                        fontWeight:
-                            isSelected ? FontWeight.w600 : FontWeight.w400,
+            child: CustomPointerInterceptor(
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                decoration: isSelected
+                    ? BoxDecoration(
+                        color: context.primary.withAlpha(26), // 0.1 * 255
+                        borderRadius: BorderRadius.circular(6),
+                      )
+                    : null,
+                child: Row(
+                  children: [
+                    Icon(
+                      themeNotifier.getThemeModeIcon(themeMode),
+                      size: 20,
+                      color: isSelected ? context.primary : context.onSurface,
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        themeNotifier.getThemeModeDisplayName(themeMode),
+                        style: context.bodyMedium?.copyWith(
+                          color:
+                              isSelected ? context.primary : context.onSurface,
+                          fontWeight:
+                              isSelected ? FontWeight.w600 : FontWeight.w400,
+                        ),
                       ),
                     ),
-                  ),
-                  if (isSelected)
-                    Icon(
-                      Icons.check,
-                      size: 16,
-                      color: context.primary,
-                    ),
-                ],
+                    if (isSelected)
+                      Icon(
+                        Icons.check,
+                        size: 16,
+                        color: context.primary,
+                      ),
+                  ],
+                ),
               ),
             ),
           );
@@ -294,7 +298,7 @@ class ThemeSelectorCard extends ConsumerWidget {
                   ),
                 ),
               );
-            }).toList(),
+            }),
           ],
         ),
       ),

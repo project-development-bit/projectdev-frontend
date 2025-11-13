@@ -9,15 +9,17 @@ class ColorPaletteShowcase extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       backgroundColor: AppColors.websiteBackground,
       appBar: AppBar(
         title: Text(
           'Gigafaucet Design System',
-          style: AppTypography.headlineSmall.copyWith(color: Colors.white),
+          style:
+              AppTypography.headlineSmall.copyWith(color: colorScheme.onError),
         ),
         backgroundColor: AppColors.websiteCard,
-        iconTheme: const IconThemeData(color: Colors.white),
+        iconTheme: IconThemeData(color: colorScheme.onError),
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -35,7 +37,7 @@ class ColorPaletteShowcase extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildTypographySection(),
+              _buildTypographySection(context),
               const SizedBox(height: 24),
               _buildSection('Primary Website Colors', [
                 _ColorItem('Primary Orange', AppColors.primary),
@@ -81,7 +83,7 @@ class ColorPaletteShowcase extends StatelessWidget {
                 ]),
               ]),
               const SizedBox(height: 24),
-              _buildWebsiteStyleCard(),
+              _buildWebsiteStyleCard(context),
             ],
           ),
         ),
@@ -89,20 +91,23 @@ class ColorPaletteShowcase extends StatelessWidget {
     );
   }
 
-  Widget _buildTypographySection() {
+  Widget _buildTypographySection(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: AppColors.websiteCard,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.websiteBorder.withOpacity(0.3)),
+        border:
+            Border.all(color: AppColors.websiteBorder.withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             'Typography System',
-            style: AppTypography.headlineMedium.copyWith(color: Colors.white),
+            style: AppTypography.headlineMedium
+                .copyWith(color: colorScheme.onError),
           ),
           const SizedBox(height: 16),
           Text(
@@ -119,7 +124,8 @@ class ColorPaletteShowcase extends StatelessWidget {
           const SizedBox(height: 16),
           Text(
             'Barlow Body Font',
-            style: AppTypography.titleLarge.copyWith(color: Colors.white),
+            style:
+                AppTypography.titleLarge.copyWith(color: colorScheme.onError),
           ),
           const SizedBox(height: 8),
           Text(
@@ -142,16 +148,18 @@ class ColorPaletteShowcase extends StatelessWidget {
     );
   }
 
-  Widget _buildWebsiteStyleCard() {
+  Widget _buildWebsiteStyleCard(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: AppColors.websiteCard,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.websiteBorder.withOpacity(0.3)),
+        border:
+            Border.all(color: AppColors.websiteBorder.withValues(alpha: 0.3)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.3),
+            color: colorScheme.scrim.withValues(alpha: 0.3),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -170,8 +178,8 @@ class ColorPaletteShowcase extends StatelessWidget {
                   borderRadius: BorderRadius.circular(30),
                   border: Border.all(color: AppColors.websiteGold, width: 3),
                 ),
-                child:
-                    Icon(Icons.monetization_on, color: Colors.white, size: 30),
+                child: Icon(Icons.monetization_on,
+                    color: colorScheme.onError, size: 30),
               ),
               const SizedBox(width: 16),
               Expanded(
@@ -181,7 +189,7 @@ class ColorPaletteShowcase extends StatelessWidget {
                     Text(
                       'Gigafaucet Style Card',
                       style: AppTypography.titleLarge
-                          .copyWith(color: Colors.white),
+                          .copyWith(color: colorScheme.onError),
                     ),
                     Text(
                       'Website-inspired design',
@@ -258,8 +266,10 @@ class _ColorItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textColor =
-        color.computeLuminance() > 0.5 ? Colors.black : Colors.white;
+    final colorScheme = Theme.of(context).colorScheme;
+    final textColor = color.computeLuminance() > 0.5
+        ? colorScheme.scrim
+        : colorScheme.onError;
     final hexColor =
         '#${color.value.toRadixString(16).padLeft(8, '0').substring(2).toUpperCase()}';
 
@@ -269,10 +279,11 @@ class _ColorItem extends StatelessWidget {
       decoration: BoxDecoration(
         color: color,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.websiteBorder.withOpacity(0.3)),
+        border:
+            Border.all(color: AppColors.websiteBorder.withValues(alpha: 0.3)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: colorScheme.scrim.withValues(alpha: 0.2),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -311,16 +322,18 @@ class _GradientItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Container(
       margin: const EdgeInsets.only(bottom: 8.0),
       height: 60,
       decoration: BoxDecoration(
         gradient: LinearGradient(colors: colors),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.websiteBorder.withOpacity(0.3)),
+        border:
+            Border.all(color: AppColors.websiteBorder.withValues(alpha: 0.3)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: colorScheme.scrim.withValues(alpha: 0.2),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -330,13 +343,13 @@ class _GradientItem extends StatelessWidget {
         child: Text(
           name,
           style: AppTypography.titleMedium.copyWith(
-            color: Colors.white,
+            color: colorScheme.onError,
             fontWeight: FontWeight.w600,
             shadows: [
-              const Shadow(
+              Shadow(
                 offset: Offset(1, 1),
                 blurRadius: 2,
-                color: Colors.black26,
+                color: colorScheme.scrim.withValues(alpha: 0.26),
               ),
             ],
           ),
