@@ -35,7 +35,7 @@ class UserModel extends User {
       role: UserRole.tryFromString(json['role'] as String?) ??
           UserRole.normalUser,
       //show_onboarding is 1 and 0 in the API response
-      showOnboarding: _parseBool(json['show_onboarding']) == 0,
+      showOnboarding: _parseBool(json['show_onboarding']) == 1,
       country: json['country'] as String?,
       language: json['language'] as String?,
       referralCode: json['referral_code'] as String?,
