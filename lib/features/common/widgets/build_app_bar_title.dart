@@ -152,7 +152,8 @@ class CommonAppBar extends ConsumerWidget {
                               ),
                             ),
                           ],
-                          child: UserProfileImageWidget(size: 20),
+                          child: UserProfileImageWidget(
+                              size: 20, borderColor: context.primary),
                         ),
                       ],
                     );

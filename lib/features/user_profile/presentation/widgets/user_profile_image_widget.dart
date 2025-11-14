@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class UserProfileImageWidget extends ConsumerWidget {
-  const UserProfileImageWidget({super.key, this.size = 50});
+  const UserProfileImageWidget({super.key, this.size = 50, this.borderColor});
+  final Color? borderColor;
   final double size;
 
   @override
@@ -18,7 +19,7 @@ class UserProfileImageWidget extends ConsumerWidget {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: Border.all(
-          color: Color(0xFF00A0DC),
+          color: borderColor ?? Color(0xFF00A0DC),
           width: 4,
         ),
       ),
