@@ -30,7 +30,7 @@ class _CloseSquareButtonState extends State<CloseSquareButton> {
           decoration: BoxDecoration(
             border: Border.all(
               color: isHover ? hoverColor : normalColor,
-              width: 2,
+              width: 0.5,
             ),
             color: isHover ? hoverColor : Colors.transparent,
             borderRadius: BorderRadius.circular(12), // Rounded square

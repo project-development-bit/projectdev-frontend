@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:cointiply_app/features/auth/presentation/providers/logout_provider.dart';
 import 'package:cointiply_app/features/common/widgets/custom_pointer_interceptor.dart';
@@ -26,7 +27,7 @@ class ProfileMenu extends StatelessWidget {
         color: colorScheme.surfaceContainerLowest, // deep navy
         borderRadius: BorderRadius.circular(26),
         border: Border.all(
-          color: colorScheme.primary.withValues(alpha: 0.35),
+          color: const Color(0xFF003248), // TODO use from colorScheme
           width: 1.4,
         ),
         boxShadow: [
@@ -71,30 +72,15 @@ class ProfileMenu extends StatelessWidget {
           Consumer(
             builder: (context, ref, child) {
               final isLoading = ref.watch(isLogoutLoadingProvider);
-              return IconButton(
-                onPressed: isLoading
-                    ? null
+              return CustomButtonWidget(
+                onTap: isLoading
+                    ? () {}
                     : () {
                         _handleLogout(context, ref);
                       },
-                icon: isLoading
-                    ? SizedBox(
-                        width: 16,
-                        height: 16,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                            context.primary,
-                          ),
-                        ),
-                      )
-                    : Center(
-                        child: CommonText.titleMedium(
-                          "Sign Out",
-                          color: colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                tooltip: isLoading ? 'Logging out...' : '"Sign Out',
+                padding: EdgeInsets.symmetric(vertical: 12),
+                margin: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
+                title: isLoading ? "Logging out..." : "Sign Out",
               );
             },
           )

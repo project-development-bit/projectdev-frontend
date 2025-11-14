@@ -25,7 +25,7 @@ class CoinsEarnedHistoryCard extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: colorScheme.primaryContainer,
+          color: Color(0x8000131E), // TODO use from colorScheme,
           width: 1.2,
         ),
       ),
@@ -37,12 +37,14 @@ class CoinsEarnedHistoryCard extends StatelessWidget {
             children: [
               CommonText.titleMedium(
                 title,
+                fontWeight: FontWeight.w700,
                 color: colorScheme.onPrimary,
               ),
               const SizedBox(height: 4),
-              CommonText.bodySmall(
+              CommonText.titleMedium(
                 subtitle,
-                color: colorScheme.onSecondary,
+                fontWeight: FontWeight.w500,
+                color: Color(0xFF98989A), //TODO use from theme,
               ),
             ],
           ),
@@ -60,6 +62,7 @@ class CoinsEarnedHistoryCard extends StatelessWidget {
               children: [
                 CommonText.titleMedium(
                   amount.toString(),
+                  fontWeight: FontWeight.w700,
                   color: colorScheme.onPrimary,
                 ),
                 const SizedBox(width: 6),
@@ -74,8 +77,9 @@ class CoinsEarnedHistoryCard extends StatelessWidget {
           const SizedBox(width: 20),
 
           // Time ago
-          CommonText.bodyMedium(
+          CommonText.titleMedium(
             timeAgo,
+            fontWeight: FontWeight.w700,
             color: colorScheme.onPrimary,
           ),
         ],

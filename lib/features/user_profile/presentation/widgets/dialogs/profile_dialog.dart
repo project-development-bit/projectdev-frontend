@@ -63,7 +63,7 @@ class _ProfileDialogState extends State<ProfileDialog> {
                     children: [
                       Consumer(builder: (context, ref, _) {
                         final currentUserState = ref.watch(currentUserProvider);
-                        return CommonText.titleMedium(
+                        return CommonText.headlineLarge(
                           currentUserState.user?.name ?? "Unknown User",
                           color: colorScheme.onPrimary,
                         );
@@ -74,7 +74,7 @@ class _ProfileDialogState extends State<ProfileDialog> {
                 ),
 
                 Divider(
-                  color: colorScheme.outline,
+                  color: const Color(0xFF003248), // TODO use from colorScheme,
                   height: 40,
                   thickness: 1,
                 ),
@@ -102,10 +102,11 @@ class _ProfileDialogState extends State<ProfileDialog> {
                             width: 40,
                           ),
                           const SizedBox(height: 5),
-                          CommonText.bodyMedium(
+                          CommonText.titleMedium(
                             localizations
                                     ?.translate('profile_level_bronze_1') ??
                                 'Bronze 1',
+                            fontWeight: FontWeight.w700,
                             color: colorScheme.onPrimary,
                           ),
                         ],
@@ -132,9 +133,11 @@ class _ProfileDialogState extends State<ProfileDialog> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      CommonText.labelLarge("1542",
+                                      CommonText.titleMedium("1542",
+                                          fontWeight: FontWeight.w700,
                                           color: colorScheme.onPrimary),
-                                      CommonText.labelSmall(
+                                      CommonText.titleMedium(
+                                        fontWeight: FontWeight.w700,
                                         localizations?.translate(
                                                 'profile_message') ??
                                             "Message",
@@ -143,7 +146,7 @@ class _ProfileDialogState extends State<ProfileDialog> {
                                   )
                                 ],
                               ),
-                              const SizedBox(width: 16),
+                              const SizedBox(width: 20),
                               Row(
                                 children: [
                                   SvgPicture.asset(
@@ -152,19 +155,21 @@ class _ProfileDialogState extends State<ProfileDialog> {
                                     height: 38,
                                   ),
                                   const SizedBox(width: 4),
-                                  CommonText.labelLarge(
+                                  CommonText.titleMedium(
                                     "Thailand",
+                                    fontWeight: FontWeight.w700,
                                     color: colorScheme.onPrimary,
                                   ),
                                 ],
                               ),
                             ],
                           ),
-                          const SizedBox(height: 5),
-                          CommonText.labelSmall(
+                          const SizedBox(height: 31),
+                          CommonText.titleMedium(
                             localizations?.translate('profile_created_days') ??
                                 "Created 5 Days Ago",
-                            color: colorScheme.onSecondary,
+                            color:
+                                Color(0xFF98989A), // TODO use from colorScheme
                           ),
                         ],
                       ),
@@ -172,7 +177,7 @@ class _ProfileDialogState extends State<ProfileDialog> {
                   ),
                 ),
 
-                const SizedBox(height: 25),
+                const SizedBox(height: 34 + 16),
 
                 // Tabs
                 ProfileTabs(onTabChanged: (int i) {
