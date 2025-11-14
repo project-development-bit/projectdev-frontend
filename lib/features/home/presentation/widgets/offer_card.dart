@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import '../../../core/extensions/context_extensions.dart';
-import '../../../core/common/common_text.dart';
-import '../../../core/common/common_image_widget.dart';
-import '../../../core/common/common_button.dart';
-import '../../../core/theme/app_colors.dart';
-import '../models/offer_model.dart';
+import '../../../../core/extensions/context_extensions.dart';
+import '../../../../core/common/common_text.dart';
+import '../../../../core/common/common_image_widget.dart';
+import '../../../../core/common/common_button.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../data/models/offer_model.dart';
 
 /// Widget to display an individual offer card
 class OfferCard extends StatelessWidget {

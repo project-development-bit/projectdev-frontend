@@ -1,6 +1,6 @@
 import 'package:cointiply_app/core/theme/app_colors.dart';
 import 'package:cointiply_app/features/common/widgets/build_app_bar_title.dart';
-import 'package:cointiply_app/features/home/widgets/mobile_drawer.dart';
+import 'package:cointiply_app/features/home/presentation/widgets/mobile_drawer.dart';
 import 'package:flutter/material.dart';
 import '../../../core/extensions/context_extensions.dart';
 
@@ -21,43 +21,41 @@ class ShellRouteWrapper extends StatelessWidget {
 
     return Scaffold(
       drawer: isMobile ? const MobileDrawer() : null,
-      body: CustomScrollView(
-        slivers: [
-          // Shared SliverAppBar that hides/shows on scroll
-          SliverAppBar(
-            expandedHeight: 80.0,
-            floating: true,
-            pinned: false,
-            snap: true,
-            backgroundColor: context.surface.withAlpha(242), // 0.95 * 255
-            surfaceTintColor: AppColors.transparent,
-            elevation: 0,
-            scrolledUnderElevation: 1,
-            automaticallyImplyLeading: MediaQuery.of(context).size.width < 768,
-            flexibleSpace: FlexibleSpaceBar(
-              background: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      context.surface.withAlpha(250), // 0.98 * 255
-                      context.surface.withAlpha(235), // 0.92 * 255
-                    ],
+      body: NestedScrollView(
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          return [
+            // Shared SliverAppBar that hides/shows on scroll
+            SliverAppBar(
+              expandedHeight: 80.0,
+              floating: true,
+              pinned: false,
+              snap: true,
+              backgroundColor: context.surface.withAlpha(242), // 0.95 * 255
+              surfaceTintColor: AppColors.transparent,
+              elevation: 0,
+              scrolledUnderElevation: 1,
+              automaticallyImplyLeading:
+                  MediaQuery.of(context).size.width < 768,
+              flexibleSpace: FlexibleSpaceBar(
+                background: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        context.surface.withAlpha(250), // 0.98 * 255
+                        context.surface.withAlpha(235), // 0.92 * 255
+                      ],
+                    ),
                   ),
                 ),
               ),
+              title: CommonAppBar(),
+              titleSpacing: 16,
             ),
-            title: CommonAppBar(),
-            titleSpacing: 16,
-          ),
-
-          // Route-specific child content
-          SliverFillRemaining(
-            hasScrollBody: true,
-            child: child,
-          ),
-        ],
+          ];
+        },
+        body: child,
       ),
     );
   }

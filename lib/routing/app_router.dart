@@ -1,7 +1,7 @@
 // 📦 Package imports
 import 'package:cointiply_app/features/auth/presentation/examples/two_factor_auth_example.dart';
 import 'package:cointiply_app/features/auth/presentation/widgets/internal_verification_overlay.dart';
-import 'package:cointiply_app/features/home/widgets/dialog/tutorial_overlay.dart';
+import 'package:cointiply_app/features/home/presentation/widgets/dialog/tutorial_overlay.dart';
 import 'package:cointiply_app/features/chat/presentation/pages/chat_page.dart';
 import 'package:cointiply_app/features/chat/presentation/pages/right_chat_overlay.dart';
 import 'package:cointiply_app/features/terms_privacy/presentation/screens/privacy_screen.dart';
@@ -16,7 +16,7 @@ import '../features/auth/presentation/pages/signup_page.dart';
 import '../features/auth/presentation/pages/forgot_password_page.dart';
 import '../features/auth/presentation/pages/verification_page.dart';
 import '../features/auth/presentation/pages/reset_password_page.dart';
-import '../features/home/pages/home_page.dart';
+import '../features/home/presentation/pages/home_page.dart';
 import '../features/user_profile/presentation/pages/profile_page.dart';
 import '../features/legal/presentation/pages/contact_us_page.dart';
 import '../core/providers/auth_provider.dart';

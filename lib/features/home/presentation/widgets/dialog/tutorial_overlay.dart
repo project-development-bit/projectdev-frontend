@@ -1,5 +1,5 @@
-import 'package:cointiply_app/features/home/providers/tutorial_provider.dart';
-import 'package:cointiply_app/features/home/widgets/dialog/tutorial_dialog_widget.dart';
+import 'package:cointiply_app/features/home/presentation/providers/tutorial_provider.dart';
+import 'package:cointiply_app/features/home/presentation/widgets/dialog/tutorial_dialog_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 

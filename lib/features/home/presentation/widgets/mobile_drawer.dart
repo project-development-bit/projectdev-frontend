@@ -3,14 +3,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../../core/common/common_container.dart';
-import '../../../core/common/common_text.dart';
-import '../../../core/extensions/context_extensions.dart';
-import '../../../core/providers/auth_provider.dart';
-import '../../../core/widgets/locale_switch_widget.dart';
-import '../../../core/widgets/theme_switch_widget.dart';
-import '../../auth/presentation/providers/logout_provider.dart';
-import '../../user_profile/presentation/providers/current_user_provider.dart';
+import '../../../../core/common/common_container.dart';
+import '../../../../core/common/common_text.dart';
+import '../../../../core/extensions/context_extensions.dart';
+import '../../../../core/providers/auth_provider.dart';
+import '../../../../core/widgets/locale_switch_widget.dart';
+import '../../../../core/widgets/theme_switch_widget.dart';
+import '../../../auth/presentation/providers/logout_provider.dart';
+import '../../../user_profile/presentation/providers/current_user_provider.dart';
 
 /// Mobile drawer widget containing navigation options, settings, and user controls
 class MobileDrawer extends ConsumerStatefulWidget {

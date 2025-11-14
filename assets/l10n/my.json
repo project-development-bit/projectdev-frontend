@@ -467,5 +467,14 @@
   "referral_get_started_warning": "အရေးကြီးပါသည်။ မမှန်သော၊ မမှန်မကန် သို့မဟုတ် တူညီသော အကြိမ်များဖြင့် ပြန်ဖြည့်ထားသည့်အညွှန်းများကို ရေတွက်မည်မဟုတ်ပါ။ သင်အကောင့်မှ မမှန်သောအညွှန်းများကို ပေးပို့နေသည်ဟု တွေ့ရှိပါက သင်၏အကောင့်ကို ပိတ်သိမ်းနိုင်ပြီး ရရှိထားသော Coins များအားလုံး ပယ်ဖျက်နိုင်ပါသည်။ မမှန်သောအညွှန်းများကို လိုက်ဖမ်းဖို့ အလိုအလျောက်စနစ်များကို အသုံးပြုထားပါသည်။ သတိပေးပြီးဖြစ်ပါသည်။",
   "copied_link_message": "လင့်ခ်ကို ကလစ်ဘုတ်သို့ ကူးယူပြီးပါပြီ။",
   "home": "ပင်မစာမျက်နှာ",
-  "view_home": "ပင်မစာမျက်နှာကို ကြည့်ပါ"
+  "view_home": "ပင်မစာမျက်နှာကို ကြည့်ပါ",
+  "home_features_section_title": "ဒီနေ့ \n[အခမဲ့ Crypto] ဘယ်လိုရှာချင်လဲ။",
+  "home_level_and_reward_section_title": "အဆင့်များနှင့် [ဆုများ]",
+  "level_stat_widget_button_text": "အသေးစိတ်ကြည့်ရန်",
+  "home_reward_widget_title": "လက်ရှိ [ဆုများ]",
+  "home_reward_boost_and_serveys_text": "Offer Boostနှင့် စစ်တမ်းများ",
+  "home_reward_discount_text": "PTC ကြော်ငြာလျှော့စျေး",
+  "earn_play_and_collect_crypto_text": "ရှာဖွေရန်၊ ကစားရန်နှင့် Crypto စုဆောင်းရန်",
+  "join_crypto_event_widget_text": "Gigafaucet Crypto ပွဲများတွင် ပါဝင်ပါ",
+  "join_crypto_event_description_widget_text": "Gigafaucet ၏ အခမဲ့ Crypto ရှာဖွေရေး ပွဲများတွင် ပါဝင်ပြီး ပိုမိုများစွာ ရယူပါ။"
 }
