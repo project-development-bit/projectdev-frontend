@@ -1,5 +1,7 @@
 import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
+import 'package:cointiply_app/core/common/doted_line_divider.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
+import 'package:cointiply_app/core/theme/theme.dart';
 import 'package:cointiply_app/features/auth/presentation/providers/logout_provider.dart';
 import 'package:cointiply_app/features/common/widgets/custom_pointer_interceptor.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/profile_dialog.dart';
@@ -24,7 +26,7 @@ class ProfileMenu extends StatelessWidget {
       width: 260,
       padding: const EdgeInsets.symmetric(vertical: 18),
       decoration: BoxDecoration(
-        color: colorScheme.surfaceContainerLowest, // deep navy
+        color: const Color(0xFF0C0B38), // deep navy#0C0B38
         borderRadius: BorderRadius.circular(26),
         border: Border.all(
           color: const Color(0xFF003248), // TODO use from colorScheme
@@ -42,33 +44,39 @@ class ProfileMenu extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           _MenuHeaderProgress(),
-
-          const SizedBox(height: 14),
-
+          DotedLineDivider(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 10, horizontal: 22)),
           _MenuItem(
-            title: "Profile",
+            title: context.translate("profile"),
             onTap: () {
               closeMenu();
               _showProfileDialog(context);
             },
           ),
-
-          _MenuItem(title: "Manage Your Account", onTap: () {}),
-          _MenuItem(title: "Rewards", onTap: () {}),
-          _MenuItem(title: "Transactions", onTap: () {}),
-          _MenuItem(title: "Referrals", onTap: () {}),
-          const SizedBox(height: 4),
-          // dotted divider (thin + low opacity)
-          Container(
-            height: 1,
-            // width: 140,
-            margin: const EdgeInsets.symmetric(horizontal: 22),
-            decoration: BoxDecoration(
-              color: colorScheme.outline,
-              borderRadius: BorderRadius.circular(10),
-            ),
+          _MenuItem(
+            title: context.translate("manage_your_account"),
+            onTap: () {},
           ),
-          const SizedBox(height: 6),
+
+          _MenuItem(
+            title: context.translate("rewards"),
+            onTap: () {},
+          ),
+
+          _MenuItem(
+            title: context.translate("transactions"),
+            onTap: () {},
+          ),
+
+          _MenuItem(
+            title: context.translate("referrals"),
+            onTap: () {},
+          ),
+          // dotted divider (thin + low opacity)
+          DotedLineDivider(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 10, horizontal: 22)),
           Consumer(
             builder: (context, ref, child) {
               final isLoading = ref.watch(isLogoutLoadingProvider);
@@ -78,9 +86,12 @@ class ProfileMenu extends StatelessWidget {
                     : () {
                         _handleLogout(context, ref);
                       },
-                padding: EdgeInsets.symmetric(vertical: 12),
+                width: 150,
+                padding: EdgeInsets.symmetric(vertical: 8, horizontal: 0),
                 margin: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
-                title: isLoading ? "Logging out..." : "Sign Out",
+                title: isLoading
+                    ? context.translate("logging_out")
+                    : context.translate("sign_out"),
               );
             },
           )
@@ -138,7 +149,7 @@ class ProfileMenu extends StatelessWidget {
           if (context.mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text('Logged out successfully'),
+                content: Text(context.translate('logout_successful')),
                 backgroundColor: Colors.green,
               ),
             );
@@ -159,7 +170,7 @@ class ProfileMenu extends StatelessWidget {
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Logout failed: $e'),
+              content: Text(context.translate('logout_failed', args: ['$e'])),
               backgroundColor: context.error,
             ),
           );
@@ -184,11 +195,13 @@ class _MenuHeaderProgress extends StatelessWidget {
             children: [
               CommonText.titleMedium(
                 "Your Progress",
+                fontWeight: FontWeight.w700,
                 color: colorScheme.onSurfaceVariant,
               ),
               CommonText.titleMedium(
                 "78%",
-                color: colorScheme.primary,
+                fontWeight: FontWeight.w700,
+                color: Color(0xFF00A0DC),
               ),
             ],
           ),
@@ -218,7 +231,8 @@ class _MenuHeaderProgress extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 10),
-              CommonText.titleMedium("Lvl 20", color: colorScheme.onPrimary),
+              CommonText.titleMedium("Lvl 20",
+                  fontWeight: FontWeight.w500, color: colorScheme.onPrimary),
             ],
           ),
         ],
@@ -227,7 +241,7 @@ class _MenuHeaderProgress extends StatelessWidget {
   }
 }
 
-class _MenuItem extends StatelessWidget {
+class _MenuItem extends StatefulWidget {
   final String title;
   final VoidCallback onTap;
 
@@ -237,18 +251,41 @@ class _MenuItem extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    final color = Theme.of(context).colorScheme.onPrimary;
+  State<_MenuItem> createState() => _MenuItemState();
+}
 
-    return InkWell(
-      onTap: onTap,
-      hoverColor: Colors.white.withValues(alpha: 0.05),
-      child: Container(
-        alignment: Alignment.centerLeft,
-        padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 6),
-        child: CommonText.titleMedium(
-          title,
-          color: color,
+class _MenuItemState extends State<_MenuItem> {
+  bool isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return MouseRegion(
+      onEnter: (_) => setState(() => isHovered = true),
+      onExit: (_) => setState(() => isHovered = false),
+      child: InkWell(
+        onTap: widget.onTap,
+        hoverColor: AppColors.transparent, // we control hover manually
+        child: Container(
+          alignment: Alignment.centerLeft,
+          padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 9),
+
+          // Background on hover
+          decoration: BoxDecoration(
+            color: isHovered
+                ? Colors.white.withValues(alpha: 0.05)
+                : AppColors.transparent,
+          ),
+
+          // Text
+          child: CommonText.titleMedium(
+            widget.title,
+            fontWeight: FontWeight.w700,
+            color: isHovered
+                ? Color(0xFF00A0DC) // TODO from colorScheme
+                : colorScheme.onPrimary,
+          ),
         ),
       ),
     );

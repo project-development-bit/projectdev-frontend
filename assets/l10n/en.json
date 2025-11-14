@@ -475,5 +475,12 @@
   "profile_coins_earned_history": "Coins Earned History",
   "coins_history_title": "Last Coins Earned History. Past 7 Days",
   "number": "Number",
-  "total_earned": "Total Earned"
+  "total_earn": "Total Earn",
+  "manage_your_account": "Manage Your Account",
+  "rewards": "Rewards",
+  "transactions": "Transactions",
+  "referrals": "Referrals",
+  "logout_successful": "Logout successful!",
+  "logging_out": "Logging out...",
+  "sign_out": "Sign Out"
 }

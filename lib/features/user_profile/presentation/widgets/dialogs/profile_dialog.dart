@@ -1,12 +1,11 @@
 import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
 import 'package:cointiply_app/core/common/dialog_gradient_backgroud.dart';
-import 'package:cointiply_app/core/localization/app_localizations.dart';
+import 'package:cointiply_app/core/extensions/context_extensions.dart';
+import 'package:cointiply_app/features/user_profile/presentation/widgets/overview/avatar_badge_info.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/sections/coins_history_section.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/sections/statistics_section.dart';
-import 'package:cointiply_app/features/user_profile/presentation/widgets/user_profile_image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:cointiply_app/core/common/close_square_button.dart';
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
@@ -20,12 +19,13 @@ class ProfileDialog extends StatefulWidget {
 
 class _ProfileDialogState extends State<ProfileDialog> {
   int selectedTab = 0;
+
   double _getDialogWidth(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
 
-    if (width <= 600) return width; // mobile → full width
-    if (width <= 1100) return width * 0.8; // tablet → 80%
-    return width * 0.4; // desktop → 40%
+    if (width <= 600) return width; // Mobile → full width
+    if (width <= 1100) return width * 0.8; // Tablet → 80%
+    return width * 0.4; // Desktop → 40%
   }
 
   double _getDialogHeight(BuildContext context) {
@@ -36,7 +36,6 @@ class _ProfileDialogState extends State<ProfileDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context);
     final width = _getDialogWidth(context);
     final height = _getDialogHeight(context);
     final colorScheme = Theme.of(context).colorScheme;
@@ -52,151 +51,59 @@ class _ProfileDialogState extends State<ProfileDialog> {
             width: width,
             height: height,
             padding: const EdgeInsets.symmetric(vertical: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Header
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Consumer(builder: (context, ref, _) {
-                        final currentUserState = ref.watch(currentUserProvider);
-                        return CommonText.headlineLarge(
-                          currentUserState.user?.name ?? "Unknown User",
-                          color: colorScheme.onPrimary,
-                        );
-                      }),
-                      CloseSquareButton(onTap: () => Navigator.pop(context)),
-                    ],
-                  ),
-                ),
-
-                Divider(
-                  color: const Color(0xFF003248), // TODO use from colorScheme,
-                  height: 40,
-                  thickness: 1,
-                ),
-
-                const SizedBox(height: 20),
-
-                // --------------------------
-                // Avatar + Badge + Info Row
-                // --------------------------
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      UserProfileImageWidget(size: 50),
-                      const SizedBox(width: 24),
-
-                      // Level Badge
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+            child: SizedBox(
+              height: height,
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Image(
-                            image: const AssetImage(
-                                "assets/images/levels/bronze.png"),
-                            width: 40,
-                          ),
-                          const SizedBox(height: 5),
-                          CommonText.titleMedium(
-                            localizations
-                                    ?.translate('profile_level_bronze_1') ??
-                                'Bronze 1',
-                            fontWeight: FontWeight.w700,
-                            color: colorScheme.onPrimary,
-                          ),
+                          Consumer(builder: (context, ref, _) {
+                            final currentUserState =
+                                ref.watch(currentUserProvider);
+                            return CommonText.headlineLarge(
+                              currentUserState.user?.name ?? "Unknown User",
+                              color: colorScheme.onPrimary,
+                            );
+                          }),
+                          CloseSquareButton(
+                              onTap: () => Navigator.pop(context)),
                         ],
                       ),
-
-                      const Spacer(),
-
-                      // Messages + Location
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  SvgPicture.asset(
-                                    "assets/images/icons/message.svg",
-                                    width: 38,
-                                    height: 38,
-                                  ),
-                                  const SizedBox(width: 4),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      CommonText.titleMedium("1542",
-                                          fontWeight: FontWeight.w700,
-                                          color: colorScheme.onPrimary),
-                                      CommonText.titleMedium(
-                                        fontWeight: FontWeight.w700,
-                                        localizations?.translate(
-                                                'profile_message') ??
-                                            "Message",
-                                      ),
-                                    ],
-                                  )
-                                ],
-                              ),
-                              const SizedBox(width: 20),
-                              Row(
-                                children: [
-                                  SvgPicture.asset(
-                                    "assets/images/icons/location.svg",
-                                    width: 38,
-                                    height: 38,
-                                  ),
-                                  const SizedBox(width: 4),
-                                  CommonText.titleMedium(
-                                    "Thailand",
-                                    fontWeight: FontWeight.w700,
-                                    color: colorScheme.onPrimary,
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 31),
-                          CommonText.titleMedium(
-                            localizations?.translate('profile_created_days') ??
-                                "Created 5 Days Ago",
-                            color:
-                                Color(0xFF98989A), // TODO use from colorScheme
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(height: 34 + 16),
-
-                // Tabs
-                ProfileTabs(onTabChanged: (int i) {
-                  setState(() {
-                    selectedTab = i;
-                  });
-                }),
-
-                const SizedBox(height: 25),
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: selectedTab == 0
+                    ),
+                    Divider(
+                      color: const Color(0xFF003248),
+                      height: 40,
+                      thickness: 1,
+                    ),
+                    const SizedBox(height: 20),
+                    AvatarBadgeInfo(
+                      levelImage: "assets/images/levels/bronze.png",
+                      levelText: context.translate("profile_level_bronze_1"),
+                      messageCount: "1542",
+                      location: "Thailand",
+                      createdText: context.translate("profile_created_days"),
+                    ),
+                    const SizedBox(height: 50),
+                    ProfileTabs(
+                      onTabChanged: (i) => setState(() => selectedTab = i),
+                    ),
+                    const SizedBox(height: 25),
+                    selectedTab == 0
                         ? const StatisticsSection()
                         : const CoinsHistorySection(),
-                  ),
+                    const SizedBox(height: 20),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
+          )
         ],
       ),
     );
@@ -217,36 +124,60 @@ class _ProfileTabsState extends State<ProfileTabs> {
 
   @override
   Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context);
-
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Row(
-        children: [
-          Expanded(
-            child: CustomButtonWidget(
-              title: localizations?.translate('profile_statistics') ??
-                  "Statistics",
-              isActive: selected == 0,
-              onTap: () {
-                setState(() => selected = 0);
-                widget.onTabChanged?.call(0);
-              },
-            ),
-          ),
-          const SizedBox(width: 15),
-          Expanded(
-            child: CustomButtonWidget(
-              title: localizations?.translate('profile_coins_earned_history') ??
-                  "Coins Earned History",
-              isActive: selected == 1,
-              onTap: () {
-                setState(() => selected = 1);
-                widget.onTabChanged?.call(1);
-              },
-            ),
-          ),
-        ],
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final isMobile = context.isMobile;
+          return isMobile
+              ? Column(
+                  children: [
+                    CustomButtonWidget(
+                      title: context.translate('profile_statistics'),
+                      isActive: selected == 0,
+                      onTap: () {
+                        setState(() => selected = 0);
+                        widget.onTabChanged?.call(0);
+                      },
+                    ),
+                    const SizedBox(height: 12),
+                    CustomButtonWidget(
+                      title: context.translate('profile_coins_earned_history'),
+                      isActive: selected == 1,
+                      onTap: () {
+                        setState(() => selected = 1);
+                        widget.onTabChanged?.call(1);
+                      },
+                    ),
+                  ],
+                )
+              : Row(
+                  children: [
+                    Expanded(
+                      child: CustomButtonWidget(
+                        title: context.translate('profile_statistics'),
+                        isActive: selected == 0,
+                        onTap: () {
+                          setState(() => selected = 0);
+                          widget.onTabChanged?.call(0);
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 15),
+                    Expanded(
+                      child: CustomButtonWidget(
+                        title:
+                            context.translate('profile_coins_earned_history'),
+                        isActive: selected == 1,
+                        onTap: () {
+                          setState(() => selected = 1);
+                          widget.onTabChanged?.call(1);
+                        },
+                      ),
+                    ),
+                  ],
+                );
+        },
       ),
     );
   }
