@@ -160,15 +160,15 @@ class AppTypography {
       );
 
   static TextStyle get titleLargeDark => titleLarge.copyWith(
-        color: Colors.white,
+        color: AppColors.darkTextPrimary,
       );
 
   static TextStyle get titleMediumDark => titleMedium.copyWith(
-        color: Colors.white,
+        color: AppColors.darkTextPrimary,
       );
 
   static TextStyle get titleSmallDark => titleSmall.copyWith(
-        color: Colors.white,
+        color: AppColors.darkTextPrimary,
       );
 
   static TextStyle get labelLargeDark => labelLarge.copyWith(
@@ -205,7 +205,7 @@ class AppTypography {
           const Shadow(
             offset: Offset(2, 2),
             blurRadius: 4,
-            color: Colors.black26,
+            color: AppColors.lightTextPrimary,
           ),
         ],
       );
@@ -220,7 +220,7 @@ class AppTypography {
   static TextStyle get buttonText => GoogleFonts.orbitron(
         fontSize: 16,
         fontWeight: FontWeight.w600,
-        color: Colors.white,
+        color: AppColors.darkTextPrimary,
         letterSpacing: 0.5,
       );
 
@@ -306,7 +306,7 @@ extension AppTypographyExtension on TextStyle {
         const Shadow(
           offset: Offset(2, 2),
           blurRadius: 4,
-          color: Colors.black26,
+          color: AppColors.lightTextPrimary,
         ),
       ],
     );

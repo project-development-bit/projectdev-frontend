@@ -1,4 +1,3 @@
-import 'package:cointiply_app/features/user_profile/data/models/request/user_update_request.dart';
 import 'package:json_annotation/json_annotation.dart';
 import '../../../domain/entities/user_profile.dart';
 import 'user_profile_stats_model.dart';

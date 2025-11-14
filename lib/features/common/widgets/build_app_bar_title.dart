@@ -75,14 +75,14 @@ class CommonAppBar extends ConsumerWidget {
                             return Text(
                               'Welcome, ${profile.displayName ?? profile.username}!',
                               style: context.bodySmall?.copyWith(
-                                color: context.onSurface.withOpacity(0.7),
+                                color: context.onSurface.withValues(alpha: 0.7),
                               ),
                             );
                           } else {
                             return Text(
                               'Welcome to Gigafaucet!',
                               style: context.bodySmall?.copyWith(
-                                color: context.onSurface.withOpacity(0.7),
+                                color: context.onSurface.withValues(alpha: 0.7),
                               ),
                             );
                           }

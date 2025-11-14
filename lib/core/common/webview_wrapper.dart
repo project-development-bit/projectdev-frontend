@@ -1,4 +1,5 @@
 import 'package:cointiply_app/core/core.dart';
+import 'package:cointiply_app/routing/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_all/webview_all.dart';
 
@@ -31,7 +32,7 @@ class WebViewWrapper extends StatelessWidget {
     }
 
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppColors.transparent,
       appBar: title != null
           ? AppBar(
               toolbarHeight: 46,
@@ -49,7 +50,7 @@ class WebViewWrapper extends StatelessWidget {
                   if (onClose != null) {
                     onClose!();
                   } else {
-                    Navigator.of(context).pop();
+                    context.pop();
                   }
                 },
               ),

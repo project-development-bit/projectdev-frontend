@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import '../widgets/responsive_container.dart';
 
@@ -7,6 +8,8 @@ class ResponsiveContainerExample extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Responsive Container Demo'),
@@ -16,7 +19,9 @@ class ResponsiveContainerExample extends StatelessWidget {
           children: [
             // Full width background with constrained content
             ResponsiveSection(
-              backgroundColor: Colors.blue.shade50,
+              backgroundColor: isDark
+                  ? AppColors.darkInfo.withValues(alpha: 0.1)
+                  : AppColors.lightInfo.withValues(alpha: 0.1),
               child: Column(
                 children: [
                   Text(
@@ -27,7 +32,7 @@ class ResponsiveContainerExample extends StatelessWidget {
                   Container(
                     height: 100,
                     width: double.infinity,
-                    color: Colors.blue.shade200,
+                    color: isDark ? AppColors.darkInfo : AppColors.lightInfo,
                     child: const Center(
                       child: Text('Content is constrained by container width'),
                     ),
@@ -38,7 +43,9 @@ class ResponsiveContainerExample extends StatelessWidget {
 
             // Another section with different background
             ResponsiveSection(
-              backgroundColor: Colors.green.shade50,
+              backgroundColor: isDark
+                  ? AppColors.darkSuccess.withValues(alpha: 0.1)
+                  : AppColors.lightSuccess.withValues(alpha: 0.1),
               child: Column(
                 children: [
                   Text(
@@ -49,7 +56,9 @@ class ResponsiveContainerExample extends StatelessWidget {
                   Container(
                     height: 100,
                     width: double.infinity,
-                    color: Colors.green.shade200,
+                    color: isDark
+                        ? AppColors.darkSuccess.withValues(alpha: 0.1)
+                        : AppColors.lightSuccess.withValues(alpha: 0.1),
                     child: const Center(
                       child: Text('Each section has its own background'),
                     ),
@@ -60,7 +69,9 @@ class ResponsiveContainerExample extends StatelessWidget {
 
             // Section with custom max width
             ResponsiveSection(
-              backgroundColor: Colors.orange.shade50,
+              backgroundColor: isDark
+                  ? AppColors.darkInfo.withValues(alpha: 0.1)
+                  : AppColors.lightInfo.withValues(alpha: 0.1),
               maxWidth: 600, // Custom max width
               child: Column(
                 children: [
@@ -72,7 +83,7 @@ class ResponsiveContainerExample extends StatelessWidget {
                   Container(
                     height: 100,
                     width: double.infinity,
-                    color: Colors.orange.shade200,
+                    color: colorScheme.secondary.withValues(alpha: 0.3),
                     child: const Center(
                       child: Text('This section has a custom max width'),
                     ),

@@ -1,4 +1,5 @@
 import 'package:cointiply_app/features/common/widgets/custom_pointer_interceptor.dart';
+import 'package:cointiply_app/routing/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -68,7 +69,7 @@ class _TwoFactorLoginVerificationDialogState
               );
 
               // Close dialog
-              Navigator.of(context).pop(true);
+              context.pop(true);
 
               // Call success callback
               widget.onSuccess?.call();
@@ -129,6 +130,7 @@ class _TwoFactorLoginVerificationDialogState
     final isLoading = verifyLogin2FAState is VerifyLogin2FALoading;
     final appName = FlavorManager.appName;
 
+    final colorScheme = Theme.of(context).colorScheme;
     return PopScope(
       canPop: !isLoading,
       child: AlertDialog(
@@ -146,7 +148,7 @@ class _TwoFactorLoginVerificationDialogState
                 appName.toUpperCase(),
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
-                color: AppColors.error,
+                color: colorScheme.error,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 32),
@@ -240,7 +242,7 @@ class _TwoFactorLoginVerificationDialogState
                   }
                 },
               ),
-              
+
               // Error Text
               if (_errorText != null) ...[
                 const SizedBox(height: 8),
@@ -251,7 +253,7 @@ class _TwoFactorLoginVerificationDialogState
                   textAlign: TextAlign.center,
                 ),
               ],
-              
+
               const SizedBox(height: 32),
 
               // Continue Button
@@ -260,31 +262,31 @@ class _TwoFactorLoginVerificationDialogState
                 child: ElevatedButton(
                   onPressed: isLoading ? null : _handleVerify,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.error,
-                    foregroundColor: Colors.white,
+                    backgroundColor: colorScheme.error,
+                    foregroundColor: colorScheme.onError,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
                     elevation: 0,
                     disabledBackgroundColor:
-                        AppColors.error.withValues(alpha: 0.5),
+                        colorScheme.error.withValues(alpha: 0.5),
                   ),
                   child: isLoading
-                      ? const SizedBox(
+                      ? SizedBox(
                           height: 20,
                           width: 20,
                           child: CircularProgressIndicator(
                             strokeWidth: 2,
-                            valueColor:
-                                AlwaysStoppedAnimation<Color>(Colors.white),
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                                colorScheme.onError),
                           ),
                         )
                       : CommonText(
                           localizations?.translate('continue') ?? 'Continue',
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
-                          color: Colors.white,
+                          color: colorScheme.onError,
                         ),
                 ),
               ),

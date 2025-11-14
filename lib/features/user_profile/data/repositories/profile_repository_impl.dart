@@ -1,6 +1,7 @@
 import 'package:cointiply_app/features/user_profile/data/models/request/user_update_request.dart';
 import 'package:cointiply_app/features/user_profile/data/models/response/user_update_respons.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter/material.dart';
 import 'package:universal_io/io.dart';
 import '../../../../core/error/failures.dart';
 import '../../domain/entities/user_profile.dart';
@@ -78,7 +79,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
     UserUpdateRequest profile,
   ) async {
     try {
-      print('Updating user profile: ${profile.toJson()}');
+      debugPrint('Updating user profile: ${profile.toJson()}');
       // Convert request → model
       // UserProfileModel? cachedModel =
       //     await localDataSource.getCachedUserProfile(profile.id);
@@ -86,7 +87,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
       //   username: profile.name,
       //   email: profile.email,
       // );
-      print('Profile model to update: 1');
+      debugPrint('Profile model to update: 1');
 
       // Try to update via database first
       // final databaseResult = await databaseDataSource
@@ -118,7 +119,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
         profile.id,
         profile.toJson(),
       );
-      print('Profile model to update: 3 $updatedProfile');
+      debugPrint('Profile model to update: 3 $updatedProfile');
       return Right(updatedProfile);
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));
