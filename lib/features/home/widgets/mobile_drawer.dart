@@ -13,24 +13,33 @@ import '../../auth/presentation/providers/logout_provider.dart';
 import '../../user_profile/presentation/providers/current_user_provider.dart';
 
 /// Mobile drawer widget containing navigation options, settings, and user controls
-class MobileDrawer extends ConsumerWidget {
+class MobileDrawer extends ConsumerStatefulWidget {
   const MobileDrawer({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<MobileDrawer> createState() => _MobileDrawerState();
+}
+
+class _MobileDrawerState extends ConsumerState<MobileDrawer> {
+  bool _hasInitialized = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize user data once when drawer is first created
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final isAuthenticated = ref.read(isAuthenticatedObservableProvider);
+      if (isAuthenticated && !_hasInitialized) {
+        ref.read(currentUserProvider.notifier).initializeUser();
+        _hasInitialized = true;
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final isAuthenticated = ref.watch(isAuthenticatedObservableProvider);
     final currentUserState = ref.watch(currentUserProvider);
-
-    // Initialize user data when authenticated and no user data exists
-    // Only call this when we actually need the user data
-    if (isAuthenticated &&
-        currentUserState.user == null &&
-        !currentUserState.isLoading &&
-        currentUserState.error == null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        ref.read(currentUserProvider.notifier).initializeUser();
-      });
-    }
 
     return CustomPointerInterceptor(
       child: Drawer(
