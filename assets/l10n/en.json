@@ -476,5 +476,7 @@
   "home_reward_discount_text": "Discount on\nPTC ads",
   "earn_play_and_collect_crypto_text": "Earn, Play & Collect Crypto",
   "join_crypto_event_widget_text": "Join the Daily Crypto Adventure",
-  "join_crypto_event_description_widget_text": "Earn, play, and collect rewards every day through exclusive events, streak bonuses,\nand community contests."
+  "join_crypto_event_description_widget_text": "Earn, play, and collect rewards every day through exclusive events, streak bonuses,\nand community contests.",
+  "event_info_widget_title_text": "Event",
+  "event_info_widget_subtitle_text": "Private Treasure Hunt"
 }

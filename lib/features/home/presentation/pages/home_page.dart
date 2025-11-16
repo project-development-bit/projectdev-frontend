@@ -59,6 +59,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 children: [
                   HomeFeaturesSection(),
                   HomeLevelAndRewardSection(),
+                  SizedBox(height: 50),
                   HomeEventSection(),
                   SizedBox(height: 2400),
                 ],
