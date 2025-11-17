@@ -1,4 +1,4 @@
-import 'package:cointiply_app/features/home/providers/tutorial_provider.dart';
+import 'package:cointiply_app/features/home/presentation/providers/tutorial_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/services/database_service.dart';
