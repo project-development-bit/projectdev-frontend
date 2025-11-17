@@ -8,22 +8,22 @@ class EventInfoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isColumn = context.isMobile || context.isTablet;
+    final isSmallSize = context.isMobile || context.isTablet;
     return Flex(
-      direction: isColumn ? Axis.vertical : Axis.horizontal,
+      direction: isSmallSize ? Axis.vertical : Axis.horizontal,
       mainAxisSize: MainAxisSize.min,
       spacing: 32,
       children: [
         Flexible(
-          flex: isColumn ? 0 : 2,
-          child: _eventStatusWidget(context, isColumn),
+          flex: isSmallSize ? 1 : 2,
+          child: _eventStatusWidget(context, isSmallSize),
         ),
-        Flexible(flex: 1, child: _moreEventWidget(context))
+        Flexible(flex: 1, child: _moreEventWidget(context, isSmallSize))
       ],
     );
   }
 
-  Widget _eventStatusWidget(BuildContext context, bool isColumn) {
+  Widget _eventStatusWidget(BuildContext context, bool isSmallSize) {
     return Container(
       decoration: BoxDecoration(
         color: Color(0xff00131E).withAlpha(127),
@@ -31,7 +31,7 @@ class EventInfoWidget extends StatelessWidget {
       ),
       child: Flex(
         direction:
-            isColumn && context.isMobile ? Axis.vertical : Axis.horizontal,
+            isSmallSize && context.isMobile ? Axis.vertical : Axis.horizontal,
         mainAxisSize: MainAxisSize.min,
         spacing: 18,
         children: [
@@ -39,12 +39,12 @@ class EventInfoWidget extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.horizontal(
                 left: Radius.circular(20),
-                right: isColumn ? Radius.circular(20) : Radius.circular(0),
+                right: isSmallSize ? Radius.circular(20) : Radius.circular(0),
               ),
               child: Image.asset(
                 'assets/images/event_poster_image.png',
                 width: double.infinity,
-                height: isColumn ? null : 370,
+                height: isSmallSize ? null : 370,
                 fit: BoxFit.cover,
               ),
             ),
@@ -71,7 +71,8 @@ class EventInfoWidget extends StatelessWidget {
                       color: Colors.white),
                 ),
                 SizedBox(height: 24),
-                Row(
+                Flex(
+                  direction: isSmallSize ? Axis.vertical : Axis.horizontal,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   spacing: 24,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -128,53 +129,68 @@ class EventInfoWidget extends StatelessWidget {
     );
   }
 
-  Widget _moreEventWidget(BuildContext context) {
-    return Column(
+  Widget _moreEventWidget(BuildContext context, bool isSmallSize) {
+    return Flex(
+      direction: isSmallSize ? Axis.horizontal : Axis.vertical,
       spacing: 16,
       children: [
         _moreEventItemWidget(
             image: 'assets/images/event_visit_shop.png',
-            title: "Visit The Shop"),
+            title: "Visit The Shop",
+            isSmallSize: isSmallSize),
         _moreEventItemWidget(
             image: 'assets/images/event_our_quest_today.png',
-            title: "Our Quests Today!"),
+            title: "Our Quests Today!",
+            isSmallSize: isSmallSize),
       ],
     );
   }
 
-  Widget _moreEventItemWidget({required String image, required String title}) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(20),
-      child: Stack(
-        children: [
-          Image.asset(
-            image,
-            width: double.infinity,
-            height: 175,
-            fit: BoxFit.cover,
-          ),
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: Container(
+  Widget _moreEventItemWidget(
+      {required String image,
+      required String title,
+      required bool isSmallSize}) {
+    final widget = SizedBox(
+      height: isSmallSize ? null : 175,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: Stack(
+          children: [
+            Image.asset(
+              image,
               width: double.infinity,
-              padding: EdgeInsets.all(16.0),
-              decoration: BoxDecoration(
-                color: Colors.black.withAlpha(160),
-              ),
-              child: Center(
-                child: CommonText.titleLarge(
-                  title,
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
+              height: 175,
+              fit: BoxFit.cover,
+            ),
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                width: double.infinity,
+                padding: EdgeInsets.all(16.0),
+                decoration: BoxDecoration(
+                  color: Colors.black.withAlpha(160),
+                ),
+                child: Center(
+                  child: CommonText.titleLarge(
+                    title,
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
+  
+    if (isSmallSize) {
+      return Expanded(child: widget);
+    } else {
+      return widget;
+    }
   }
 }

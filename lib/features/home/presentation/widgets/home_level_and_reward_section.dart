@@ -10,12 +10,14 @@ class HomeLevelAndRewardSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isSmallSize = context.isMobile || context.isTablet;
     return HomeSectionContainer(
       width: double.infinity,
       child: Center(
         child: Container(
             constraints: BoxConstraints(maxWidth: 1240),
             padding: const EdgeInsets.symmetric(vertical: 25.0),
+            margin: EdgeInsets.symmetric(horizontal: 25),
             child: Column(
               children: [
                 CommonText.titleLarge(
@@ -25,14 +27,17 @@ class HomeLevelAndRewardSection extends StatelessWidget {
                   fontSize: 40,
                 ),
                 SizedBox(height: 42),
-                Wrap(
-                  spacing: 40,
-                  runSpacing: 20,
-                  alignment: WrapAlignment.center,
-                  children: [
-                    _levelWidget(context),
-                    _rewardWidget(context),
-                  ],
+                SizedBox(
+                  height: isSmallSize ? null : 300,
+                  child: Flex(
+                    direction: isSmallSize ? Axis.vertical : Axis.horizontal,
+                    mainAxisSize: MainAxisSize.min,
+                    spacing: 30,
+                    children: [
+                      Flexible(child: _levelWidget(context, isSmallSize)),
+                      Flexible(child: _rewardWidget(context, isSmallSize)),
+                    ],
+                  ),
                 ),
               ],
             )),
@@ -40,10 +45,8 @@ class HomeLevelAndRewardSection extends StatelessWidget {
     );
   }
 
-  Container _levelWidget(BuildContext context) {
+  Widget _levelWidget(BuildContext context, bool isSmallSize) {
     return Container(
-      width: 600,
-      height: 250,
       decoration: BoxDecoration(
         color: context.surface.withAlpha(127),
         border: Border.all(color: Colors.white, width: 1),
@@ -51,14 +54,15 @@ class HomeLevelAndRewardSection extends StatelessWidget {
       ),
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 34),
       child: Container(
-        height: 106,
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Row(
+        child: Flex(
+          direction: isSmallSize ? Axis.vertical : Axis.horizontal,
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             _profileWidget(context),
             SizedBox(width: 27),
-            Expanded(child: _levelStatWidget(context)),
+            Flexible(child: _levelStatWidget(context, isSmallSize)),
           ],
         ),
       ),
@@ -83,10 +87,8 @@ class HomeLevelAndRewardSection extends StatelessWidget {
     );
   }
 
-  Container _rewardWidget(BuildContext context) {
+  Container _rewardWidget(BuildContext context, bool isSmallSize) {
     return Container(
-      width: 600,
-      height: 250,
       decoration: BoxDecoration(
         color: context.surface.withAlpha(127),
         border: Border.all(color: Colors.white, width: 1),
@@ -101,7 +103,9 @@ class HomeLevelAndRewardSection extends StatelessWidget {
             fontSize: 20,
           ),
           SizedBox(height: 34),
-          Row(
+          Flex(
+            direction: isSmallSize ? Axis.vertical : Axis.horizontal,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Flexible(
                 child: Row(
@@ -128,9 +132,11 @@ class HomeLevelAndRewardSection extends StatelessWidget {
                 ),
               ),
               Container(
-                width: 1,
-                height: 40,
-                margin: EdgeInsets.symmetric(horizontal: 20),
+                width: isSmallSize ? 40 : 1,
+                height: isSmallSize ? 1 : 40,
+                margin: isSmallSize
+                    ? EdgeInsets.symmetric(vertical: 20)
+                    : EdgeInsets.symmetric(horizontal: 20),
                 color: Color(0xff333333),
               ),
               Flexible(
@@ -159,7 +165,7 @@ class HomeLevelAndRewardSection extends StatelessWidget {
               ),
             ],
           ),
-          Spacer(),
+          SizedBox(height: 34),
           Center(
             child: CommonButton(
                 text: context.translate("level_stat_widget_button_text"),
@@ -170,10 +176,11 @@ class HomeLevelAndRewardSection extends StatelessWidget {
     );
   }
 
-  Widget _levelStatWidget(BuildContext context) {
+  Widget _levelStatWidget(BuildContext context, bool isSmallSize) {
     return Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment:
+            isSmallSize ? CrossAxisAlignment.center : CrossAxisAlignment.start,
         children: [
           CommonText.titleMedium(
             'Jack',
@@ -187,8 +194,9 @@ class HomeLevelAndRewardSection extends StatelessWidget {
                 'assets/images/rewards/shield_icon.png',
                 width: 32,
               ),
-              Expanded(
+              Flexible(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CommonText.titleMedium(
                       "[78] %",
@@ -219,7 +227,7 @@ class HomeLevelAndRewardSection extends StatelessWidget {
               ),
             ],
           ),
-          Spacer(),
+          SizedBox(height: 34),
           Center(
             child: CommonButton(
                 text: context.translate("level_stat_widget_button_text"),
