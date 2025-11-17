@@ -1,5 +1,7 @@
 import 'package:cointiply_app/features/home/presentation/providers/tutorial_provider.dart';
 import 'package:cointiply_app/features/home/presentation/widgets/dialog/tutorial_dialog_widget.dart';
+import 'package:cointiply_app/core/providers/auth_provider.dart';
+import 'package:cointiply_app/features/auth/presentation/providers/login_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 
@@ -15,8 +17,17 @@ class _TutorialOverlayState extends ConsumerState<TutorialOverlay> {
   @override
   Widget build(BuildContext context) {
     final tutorialShown = ref.watch(tutorialProvider);
+    final authState = ref.watch(authProvider);
 
-    if (tutorialShown) return widget.child;
+    final currentUserState = ref.watch(loggedInUserProvider);
+    debugPrint(
+        'Tutorial Overlay - shown: $tutorialShown | !auth: ${!authState.isAuthenticated} showOnboarding : ${currentUserState != null ? !currentUserState.showOnboarding : 'N/A'}');
+    if (tutorialShown ||
+        !authState.isAuthenticated ||
+        (currentUserState != null && !currentUserState.showOnboarding)) {
+      return widget.child;
+    }
+
     return Material(
       color: Theme.of(context).colorScheme.scrim,
       child: Stack(
@@ -31,7 +42,7 @@ class _TutorialOverlayState extends ConsumerState<TutorialOverlay> {
             ),
           ),
           Center(
-            child: CointiplyTutorialDialog(
+            child: FirstTimeTutorialDialog(
               onComplete: () {
                 ref.read(tutorialProvider.notifier).markAsShown();
               },

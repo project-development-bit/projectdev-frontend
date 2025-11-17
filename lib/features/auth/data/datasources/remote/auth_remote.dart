@@ -6,6 +6,7 @@ import 'package:cointiply_app/features/auth/data/models/login_response_model.dar
 import 'package:cointiply_app/features/auth/data/models/user_model.dart';
 import 'package:cointiply_app/features/auth/data/models/resend_code_request.dart';
 import 'package:cointiply_app/features/auth/data/models/resend_code_response.dart';
+import 'package:cointiply_app/features/auth/data/models/verify_code_forgot_password_response.dart';
 import 'package:cointiply_app/features/auth/data/models/verify_code_request.dart';
 import 'package:cointiply_app/features/auth/data/models/verify_code_response.dart';
 import 'package:cointiply_app/features/auth/data/models/verify_2fa_request.dart';
@@ -52,6 +53,14 @@ abstract class AuthRemoteDataSource {
 
   /// Resend verification code to user's email
   Future<ResendCodeResponse> resendCode(ResendCodeRequest request);
+
+  // Resend verification code for forgot password flow
+  Future<ResendCodeResponse> resendCodeForForgotPassword(
+      ResendCodeRequest request);
+
+  // Verify email with verification code for forgot password flow
+  Future<VerifyCodeForForgotPasswordResponse> verifyCodeForForgotPassword(
+      VerifyCodeRequest request);
 
   /// Verify email with verification code
   Future<VerifyCodeResponse> verifyCode(VerifyCodeRequest request);
@@ -545,18 +554,20 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<VerifyLogin2FAResponse> verifyLogin2FA(VerifyLogin2FARequest request) async {
+  Future<VerifyLogin2FAResponse> verifyLogin2FA(
+      VerifyLogin2FARequest request) async {
     try {
       debugPrint('🔐 Verifying 2FA during login...');
       debugPrint('Token: ${request.token}, UserId: ${request.userId}');
-      
+
       final response = await dioClient.post(
         verifyLogin2FAEndpoints,
         data: request.toJson(),
       );
 
       debugPrint('✅ Verify Login 2FA successful');
-      return VerifyLogin2FAResponse.fromJson(response.data as Map<String, dynamic>);
+      return VerifyLogin2FAResponse.fromJson(
+          response.data as Map<String, dynamic>);
     } on DioException catch (e) {
       debugPrint('❌ Verify Login 2FA DioException: ${e.message}');
       debugPrint('❌ Request URL: ${e.requestOptions.uri}');
@@ -593,6 +604,110 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         return 'Unprocessable Entity';
       default:
         return exception.message ?? 'Authentication failed';
+    }
+  }
+
+  @override
+  Future<ResendCodeResponse> resendCodeForForgotPassword(
+      ResendCodeRequest request) async {
+    try {
+      debugPrint('📤 Resending code to: ${request.email}');
+      debugPrint('📤 Request URL: $resendCodeEndpoints');
+      debugPrint(
+          '📤 Base URL from DioClient: ${dioClient.client.options.baseUrl}');
+      debugPrint('📤 Request data: ${request.toJson()}');
+
+      final response = await dioClient.post(
+        forgetPasswordResendCodeEndpoints,
+        data: request.toJson(),
+      );
+
+      return ResendCodeResponse.fromJson(response.data as Map<String, dynamic>);
+    } on DioException catch (e) {
+      debugPrint('❌ Resend code DioException: ${e.message}');
+      debugPrint('❌ Request URL: ${e.requestOptions.uri}');
+      debugPrint('❌ Response status: ${e.response?.statusCode}');
+      debugPrint('❌ Response data: ${e.response?.data}');
+
+      // Extract server error message from response data
+      final serverMessage = _extractServerErrorMessage(e.response?.data);
+
+      // Create new DioException with server message or appropriate fallback
+      throw DioException(
+        requestOptions: e.requestOptions,
+        response: e.response,
+        message: serverMessage ?? _getFallbackMessage(e),
+      );
+    } catch (e) {
+      // Handle any other unexpected exceptions
+      throw Exception('Unexpected error during resend code: $e');
+    }
+  }
+
+  @override
+  Future<VerifyCodeForForgotPasswordResponse> verifyCodeForForgotPassword(
+      VerifyCodeRequest request) async {
+    try {
+      // First try the GET endpoint that expects path parameters
+      final encodedEmail = Uri.encodeComponent(request.email);
+      final encodedCode = Uri.encodeComponent(request.code);
+      final url =
+          '$forgetPasswordVerifyCodeEndpoints/$encodedEmail/$encodedCode';
+
+      debugPrint('🔍 Verifying code with URL: $url');
+      debugPrint(
+          '🔍 Base URL from DioClient: ${dioClient.client.options.baseUrl}');
+      debugPrint(
+          '🔍 Full URL will be: ${dioClient.client.options.baseUrl}$url');
+
+      final response = await dioClient.get(url);
+
+      return VerifyCodeForForgotPasswordResponse.fromJson(
+          response.data as Map<String, dynamic>);
+    } on DioException catch (e) {
+      debugPrint('❌ Verify code DioException (path params): ${e.message}');
+      debugPrint('❌ Request URL: ${e.requestOptions.uri}');
+      debugPrint('❌ Response status: ${e.response?.statusCode}');
+      debugPrint('❌ Response data: ${e.response?.data}');
+
+      // If path parameter approach fails with 404, try with POST body
+      if (e.response?.statusCode == 404) {
+        debugPrint('🔄 Trying alternative approach with request body...');
+        try {
+          final response = await dioClient.post(
+            forgetPasswordVerifyCodeEndpoints,
+            data: request.toJson(),
+          );
+
+          debugPrint('✅ Alternative approach with request body succeeded!');
+          return VerifyCodeForForgotPasswordResponse.fromJson(
+              response.data as Map<String, dynamic>);
+        } on DioException catch (bodyException) {
+          debugPrint(
+              '❌ Alternative approach also failed: ${bodyException.message}');
+
+          final serverMessage =
+              _extractServerErrorMessage(bodyException.response?.data);
+          throw DioException(
+            requestOptions: bodyException.requestOptions,
+            response: bodyException.response,
+            message: serverMessage ?? _getFallbackMessage(bodyException),
+          );
+        }
+      }
+
+      // Extract server error message from response data
+      final serverMessage = _extractServerErrorMessage(e.response?.data);
+
+      // Create new DioException with server message or appropriate fallback
+      throw DioException(
+        requestOptions: e.requestOptions,
+        response: e.response,
+        message: serverMessage ?? _getFallbackMessage(e),
+      );
+    } catch (e) {
+      // Handle any other unexpected exceptions
+      throw Exception('Unexpected error during verification: $e');
     }
   }
 }
