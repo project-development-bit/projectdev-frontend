@@ -1,4 +1,5 @@
 import 'package:cointiply_app/core/error/error_model.dart';
+import 'package:cointiply_app/features/auth/data/models/verify_code_forgot_password_response.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -374,6 +375,40 @@ class AuthRepositoryImpl implements AuthRepository {
     } on DioException catch (e) {
       return Left(ServerFailure(
         message: e.message ?? 'Failed to verify 2FA code',
+        statusCode: e.response?.statusCode,
+      ));
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, ResendCodeResponse>> resendCodeForForgotPassword(
+      ResendCodeRequest request) async {
+    try {
+      final response =
+          await remoteDataSource.resendCodeForForgotPassword(request);
+      return Right(response);
+    } on DioException catch (e) {
+      return Left(ServerFailure(
+        message: e.message ?? 'Failed to resend verification code',
+        statusCode: e.response?.statusCode,
+      ));
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, VerifyCodeForForgotPasswordResponse>>
+      verifyCodeForForgotPassword(VerifyCodeRequest request) async {
+    try {
+      final response =
+          await remoteDataSource.verifyCodeForForgotPassword(request);
+      return Right(response);
+    } on DioException catch (e) {
+      return Left(ServerFailure(
+        message: e.message ?? 'Failed to verify code',
         statusCode: e.response?.statusCode,
       ));
     } catch (e) {

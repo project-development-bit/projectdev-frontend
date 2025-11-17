@@ -2,6 +2,7 @@ import 'package:cointiply_app/features/home/providers/tutorial_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/services/database_service.dart';
+import '../../../user_profile/presentation/providers/current_user_provider.dart';
 import 'auth_providers.dart';
 import 'login_provider.dart';
 
@@ -82,6 +83,10 @@ class LogoutNotifier extends StateNotifier<LogoutState> {
             debugPrint('⚠️ Failed to clear user data from database: $dbError');
             // Don't fail the logout process if database clear fails
           }
+
+          // Clear current user state
+          _ref.read(currentUserProvider.notifier).clearUser();
+          debugPrint('✅ Current user state cleared');
 
           // Clear login state to ensure UI updates properly
           _ref.read(loginNotifierProvider.notifier).resetToInitial();
