@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../../core/extensions/context_extensions.dart';
-import '../../../core/common/common_text.dart';
-import '../../../core/widgets/responsive_container.dart';
+import '../../../../core/extensions/context_extensions.dart';
+import '../../../../core/common/common_text.dart';
+import '../../../../core/widgets/responsive_container.dart';
 
 /// Section explaining how the platform works
 class HowItWorksSection extends StatelessWidget {

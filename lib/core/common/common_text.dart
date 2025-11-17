@@ -14,6 +14,8 @@ class CommonText extends StatelessWidget {
     this.maxLines,
     this.overflow,
     this.decoration,
+    this.highlightColor,
+    this.highlightFontSize,
   });
 
   /// Display text styles
@@ -27,6 +29,8 @@ class CommonText extends StatelessWidget {
     this.maxLines,
     this.overflow,
     this.decoration,
+    this.highlightColor,
+    this.highlightFontSize,
   }) : style = TextStyleEnum.displayLarge; // Display large text style (57px)
 
   const CommonText.displayMedium(
@@ -39,6 +43,8 @@ class CommonText extends StatelessWidget {
     this.maxLines,
     this.overflow,
     this.decoration,
+    this.highlightColor,
+    this.highlightFontSize,
   }) : style = TextStyleEnum.displayMedium; // Display medium text style (45px)
 
   const CommonText.displaySmall(
@@ -51,6 +57,8 @@ class CommonText extends StatelessWidget {
     this.maxLines,
     this.overflow,
     this.decoration,
+    this.highlightColor,
+    this.highlightFontSize,
   }) : style = TextStyleEnum.displaySmall; // Display small text style (36px)
 
   /// Headline text styles
@@ -64,6 +72,8 @@ class CommonText extends StatelessWidget {
     this.maxLines,
     this.overflow,
     this.decoration,
+    this.highlightColor,
+    this.highlightFontSize,
   }) : style = TextStyleEnum.headlineLarge; // Headline large text style (32px)
 
   const CommonText.headlineMedium(
@@ -76,6 +86,8 @@ class CommonText extends StatelessWidget {
     this.maxLines,
     this.overflow,
     this.decoration,
+    this.highlightColor,
+    this.highlightFontSize,
   }) : style =
             TextStyleEnum.headlineMedium; // Headline medium text style (28px)
 
@@ -89,6 +101,8 @@ class CommonText extends StatelessWidget {
     this.maxLines,
     this.overflow,
     this.decoration,
+    this.highlightColor,
+    this.highlightFontSize,
   }) : style = TextStyleEnum.headlineSmall; // Headline small text style (24px)
 
   /// Title text styles
@@ -102,6 +116,8 @@ class CommonText extends StatelessWidget {
     this.maxLines,
     this.overflow,
     this.decoration,
+    this.highlightColor,
+    this.highlightFontSize,
   }) : style = TextStyleEnum.titleLarge; // Title large text style (22px)
 
   const CommonText.titleMedium(
@@ -114,6 +130,8 @@ class CommonText extends StatelessWidget {
     this.maxLines,
     this.overflow,
     this.decoration,
+    this.highlightColor,
+    this.highlightFontSize,
   }) : style = TextStyleEnum.titleMedium; // Title medium text style (16px)
 
   const CommonText.titleSmall(
@@ -126,6 +144,8 @@ class CommonText extends StatelessWidget {
     this.maxLines,
     this.overflow,
     this.decoration,
+    this.highlightColor,
+    this.highlightFontSize,
   }) : style = TextStyleEnum.titleSmall; // Title small text style (14px)
 
   /// Body text styles
@@ -139,6 +159,8 @@ class CommonText extends StatelessWidget {
     this.maxLines,
     this.overflow,
     this.decoration,
+    this.highlightColor,
+    this.highlightFontSize,
   }) : style = TextStyleEnum.bodyLarge; // Body large text style (16px)
 
   const CommonText.bodyMedium(
@@ -151,6 +173,8 @@ class CommonText extends StatelessWidget {
     this.maxLines,
     this.overflow,
     this.decoration,
+    this.highlightColor,
+    this.highlightFontSize,
   }) : style = TextStyleEnum.bodyMedium; // Body medium text style (14px)
 
   const CommonText.bodySmall(
@@ -163,6 +187,8 @@ class CommonText extends StatelessWidget {
     this.maxLines,
     this.overflow,
     this.decoration,
+    this.highlightColor,
+    this.highlightFontSize,
   }) : style = TextStyleEnum.bodySmall; // Body small text style (12px)
 
   /// Label text styles
@@ -176,6 +202,8 @@ class CommonText extends StatelessWidget {
     this.maxLines,
     this.overflow,
     this.decoration,
+    this.highlightColor,
+    this.highlightFontSize,
   }) : style = TextStyleEnum.labelLarge; // Label large text style (14px)
 
   const CommonText.labelMedium(
@@ -188,6 +216,8 @@ class CommonText extends StatelessWidget {
     this.maxLines,
     this.overflow,
     this.decoration,
+    this.highlightColor,
+    this.highlightFontSize,
   }) : style = TextStyleEnum.labelMedium; // Label medium text style (12px)
 
   const CommonText.labelSmall(
@@ -200,6 +230,8 @@ class CommonText extends StatelessWidget {
     this.maxLines,
     this.overflow,
     this.decoration,
+    this.highlightColor,
+    this.highlightFontSize,
   }) : style = TextStyleEnum.labelSmall; // Label small text style (10px)
 
   /// Special crypto display text style (Orbitron with effects)
@@ -213,6 +245,8 @@ class CommonText extends StatelessWidget {
     this.maxLines,
     this.overflow,
     this.decoration,
+    this.highlightColor,
+    this.highlightFontSize,
   }) : style = TextStyleEnum.cryptoDisplay; // Crypto display text style
 
   /// Special crypto amount text style (Orbitron for numbers)
@@ -226,6 +260,8 @@ class CommonText extends StatelessWidget {
     this.maxLines,
     this.overflow,
     this.decoration,
+    this.highlightColor,
+    this.highlightFontSize,
   }) : style = TextStyleEnum.cryptoAmount; // Crypto amount text style
 
   /// Button text style (Orbitron for buttons)
@@ -239,6 +275,8 @@ class CommonText extends StatelessWidget {
     this.maxLines,
     this.overflow,
     this.decoration,
+    this.highlightColor,
+    this.highlightFontSize,
   }) : style = TextStyleEnum.button; // Button text style
 
   final String text;
@@ -250,6 +288,8 @@ class CommonText extends StatelessWidget {
   final int? maxLines;
   final TextOverflow? overflow;
   final TextDecoration? decoration;
+  final Color? highlightColor;
+  final double? highlightFontSize;
 
   @override
   Widget build(BuildContext context) {
@@ -345,9 +385,58 @@ class CommonText extends StatelessWidget {
       decoration: decoration,
     );
 
+    // Check if text contains brackets for highlighting
+    if (text.contains('[') && text.contains(']')) {
+      return _buildRichText(context, effectiveStyle);
+    }
+
     return Text(
       text,
       style: effectiveStyle,
+      textAlign: textAlign,
+      maxLines: maxLines,
+      overflow: overflow,
+    );
+  }
+
+  /// Build rich text with highlighted brackets content
+  Widget _buildRichText(BuildContext context, TextStyle effectiveStyle) {
+    final primaryColor = Theme.of(context).colorScheme.primary;
+    final spans = <TextSpan>[];
+
+    // Regex to match text in brackets: [text]
+    final regex = RegExp(r'\[([^\]]+)\]');
+    int lastIndex = 0;
+
+    for (final match in regex.allMatches(text)) {
+      // Add text before the bracket
+      if (match.start > lastIndex) {
+        spans.add(TextSpan(
+          text: text.substring(lastIndex, match.start),
+          style: effectiveStyle,
+        ));
+      }
+
+      // Add highlighted text (content inside brackets)
+      spans.add(TextSpan(
+        text: match.group(1), // Text without brackets
+        style: effectiveStyle.copyWith(
+            color: highlightColor ?? primaryColor, fontSize: highlightFontSize),
+      ));
+
+      lastIndex = match.end;
+    }
+
+    // Add remaining text after last match
+    if (lastIndex < text.length) {
+      spans.add(TextSpan(
+        text: text.substring(lastIndex),
+        style: effectiveStyle,
+      ));
+    }
+
+    return Text.rich(
+      TextSpan(children: spans),
       textAlign: textAlign,
       maxLines: maxLines,
       overflow: overflow,

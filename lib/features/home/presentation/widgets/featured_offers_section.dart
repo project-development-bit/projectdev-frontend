@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../core/extensions/context_extensions.dart';
-import '../../../core/common/common_text.dart';
-import '../../../core/common/common_button.dart';
-import '../../../core/widgets/responsive_container.dart';
+import '../../../../core/extensions/context_extensions.dart';
+import '../../../../core/common/common_text.dart';
+import '../../../../core/common/common_button.dart';
+import '../../../../core/widgets/responsive_container.dart';
 import '../providers/home_providers.dart';
 import 'offer_card.dart';
 
