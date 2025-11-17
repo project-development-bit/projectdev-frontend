@@ -60,6 +60,7 @@ void main() {
             name: 'User 7',
             email: 'user8@gmail.com',
             role: UserRole.normalUser,
+            showOnboarding: true,
             refreshToken: '',
             securityCode: '',
             isBanned: 0,

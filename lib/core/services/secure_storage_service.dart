@@ -21,6 +21,7 @@ class SecureStorageService {
   static const String _authTokenKey = 'auth_token';
   static const String _refreshTokenKey = 'refresh_token';
   static const String _userIdKey = 'user_id';
+  static const String _tutorialShownKey = 'tutorial_shown';
 
   // Track if we've logged the storage type already
   static bool _hasLoggedStorageType = false;
@@ -169,7 +170,9 @@ class SecureStorageService {
     try {
       if (_isWeb) {
         final prefs = await _prefs;
+        final userID = prefs.getString(_userIdKey) ?? 'unknown_user';
         await Future.wait([
+          prefs.remove(_tutorialShownKey + userID),
           prefs.remove(_authTokenKey),
           prefs.remove(_refreshTokenKey),
           prefs.remove(_userIdKey),
