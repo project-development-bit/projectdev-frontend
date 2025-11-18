@@ -271,14 +271,6 @@ class _MenuItemState extends State<_MenuItem> {
         child: Container(
           alignment: Alignment.centerLeft,
           padding: const EdgeInsets.symmetric(vertical: 9),
-
-          // Background on hover
-          decoration: BoxDecoration(
-            color: isHovered
-                ? Colors.white.withValues(alpha: 0.05)
-                : AppColors.transparent,
-          ),
-
           // Text
           child: CommonText.bodyLarge(
             widget.title,
