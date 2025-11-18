@@ -9,16 +9,18 @@ class CoinsHistorySection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context);
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        SizedBox(height: 16),
         Center(
           child: CommonText.titleMedium(
             localizations?.translate('coins_history_title') ??
                 "Last Coins Earned History. Past 7 Days",
             fontWeight: FontWeight.w500,
-            color: Color(0xFF98989A), // TODO use from colorScheme
+            color: colorScheme.onPrimary,
           ),
         ),
         CoinsEarnedHistoryCard(

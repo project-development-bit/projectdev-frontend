@@ -60,14 +60,14 @@ class _ProfileDialogState extends State<ProfileDialog> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      padding: const EdgeInsets.symmetric(horizontal: 35),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Consumer(builder: (context, ref, _) {
                             final currentUserState =
                                 ref.watch(currentUserProvider);
-                            return CommonText.headlineLarge(
+                            return CommonText.headlineSmall(
                               currentUserState.user?.name ?? "Unknown User",
                               color: colorScheme.onPrimary,
                             );
@@ -90,11 +90,11 @@ class _ProfileDialogState extends State<ProfileDialog> {
                       location: "Thailand",
                       createdText: context.translate("profile_created_days"),
                     ),
-                    const SizedBox(height: 50),
+                    const SizedBox(height: 40),
                     ProfileTabs(
                       onTabChanged: (i) => setState(() => selectedTab = i),
                     ),
-                    const SizedBox(height: 25),
+                    const SizedBox(height: 4),
                     selectedTab == 0
                         ? const StatisticsSection()
                         : const CoinsHistorySection(),
@@ -125,7 +125,7 @@ class _ProfileTabsState extends State<ProfileTabs> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 35),
       child: LayoutBuilder(
         builder: (context, constraints) {
           final isMobile = context.isMobile;
@@ -134,6 +134,8 @@ class _ProfileTabsState extends State<ProfileTabs> {
                   children: [
                     CustomButtonWidget(
                       title: context.translate('profile_statistics'),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
                       isActive: selected == 0,
                       onTap: () {
                         setState(() => selected = 0);
@@ -143,6 +145,8 @@ class _ProfileTabsState extends State<ProfileTabs> {
                     const SizedBox(height: 12),
                     CustomButtonWidget(
                       title: context.translate('profile_coins_earned_history'),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
                       isActive: selected == 1,
                       onTap: () {
                         setState(() => selected = 1);
@@ -155,6 +159,8 @@ class _ProfileTabsState extends State<ProfileTabs> {
                   children: [
                     Expanded(
                       child: CustomButtonWidget(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
                         title: context.translate('profile_statistics'),
                         isActive: selected == 0,
                         onTap: () {
@@ -166,6 +172,8 @@ class _ProfileTabsState extends State<ProfileTabs> {
                     const SizedBox(width: 15),
                     Expanded(
                       child: CustomButtonWidget(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
                         title:
                             context.translate('profile_coins_earned_history'),
                         isActive: selected == 1,

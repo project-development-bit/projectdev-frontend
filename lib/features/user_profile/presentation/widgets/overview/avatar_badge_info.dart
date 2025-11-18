@@ -26,7 +26,7 @@ class AvatarBadgeInfo extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 35),
       child: isMobile
           ? _buildMobile(context, colorScheme)
           : _buildDesktop(context, colorScheme),
@@ -75,7 +75,7 @@ class AvatarBadgeInfo extends StatelessWidget {
                   width: 32,
                   height: 32,
                 ),
-                const SizedBox(width: 6),
+                const SizedBox(width: 12),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -86,7 +86,7 @@ class AvatarBadgeInfo extends StatelessWidget {
                     ),
                     CommonText.titleMedium(
                       context.translate("profile_message"),
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w500,
                       color: colorScheme.onPrimary,
                     ),
                   ],
@@ -103,7 +103,7 @@ class AvatarBadgeInfo extends StatelessWidget {
                   width: 32,
                   height: 32,
                 ),
-                const SizedBox(width: 6),
+                const SizedBox(width: 12),
                 CommonText.titleMedium(
                   location,
                   fontWeight: FontWeight.w700,
@@ -118,7 +118,8 @@ class AvatarBadgeInfo extends StatelessWidget {
 
         CommonText.titleMedium(
           createdText,
-          color: const Color(0xFF98989A),
+          fontWeight: FontWeight.w500,
+          color: const Color(0xFF98989A), // TODO: use from theme
         ),
       ],
     );
@@ -166,7 +167,7 @@ class AvatarBadgeInfo extends StatelessWidget {
                       width: 38,
                       height: 38,
                     ),
-                    const SizedBox(width: 4),
+                    const SizedBox(width: 12),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -195,7 +196,7 @@ class AvatarBadgeInfo extends StatelessWidget {
                       width: 38,
                       height: 38,
                     ),
-                    const SizedBox(width: 4),
+                    const SizedBox(width: 12),
                     CommonText.titleMedium(
                       location,
                       fontWeight: FontWeight.w700,
@@ -208,7 +209,7 @@ class AvatarBadgeInfo extends StatelessWidget {
             const SizedBox(height: 31),
             CommonText.titleMedium(
               createdText,
-              color: const Color(0xFF98989A),
+              color: colorScheme.onPrimary,
             ),
           ],
         ),

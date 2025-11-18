@@ -20,13 +20,13 @@ class StatCard extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
-      padding: const EdgeInsets.all(20),
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      padding: const EdgeInsets.symmetric(vertical: 23, horizontal: 14),
+      margin: const EdgeInsets.symmetric(horizontal: 35, vertical: 4),
       decoration: BoxDecoration(
         color: AppColors.transparent,
         borderRadius: BorderRadius.circular(18),
         border: Border.all(
-          color: const Color(0x8000131E),
+          color: const Color(0x83333333),
           width: 1.2,
         ),
       ),
