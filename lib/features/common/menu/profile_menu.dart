@@ -280,7 +280,7 @@ class _MenuItemState extends State<_MenuItem> {
           ),
 
           // Text
-          child: CommonText.titleMedium(
+          child: CommonText.bodyLarge(
             widget.title,
             fontWeight: FontWeight.w700,
             color: isHovered

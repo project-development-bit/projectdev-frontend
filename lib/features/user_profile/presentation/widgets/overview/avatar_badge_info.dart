@@ -84,7 +84,7 @@ class AvatarBadgeInfo extends StatelessWidget {
                       fontWeight: FontWeight.w700,
                       color: colorScheme.onPrimary,
                     ),
-                    CommonText.titleMedium(
+                    CommonText.bodyLarge(
                       context.translate("profile_message"),
                       fontWeight: FontWeight.w500,
                       color: colorScheme.onPrimary,
@@ -116,7 +116,7 @@ class AvatarBadgeInfo extends StatelessWidget {
 
         const SizedBox(height: 24),
 
-        CommonText.titleMedium(
+        CommonText.bodyLarge(
           createdText,
           fontWeight: FontWeight.w500,
           color: const Color(0xFF98989A), // TODO: use from theme
@@ -176,7 +176,7 @@ class AvatarBadgeInfo extends StatelessWidget {
                           fontWeight: FontWeight.w700,
                           color: colorScheme.onPrimary,
                         ),
-                        CommonText.titleMedium(
+                        CommonText.bodyLarge(
                           context.translate("profile_message"),
                           fontWeight: FontWeight.w700,
                           color: colorScheme.onPrimary,
@@ -207,7 +207,7 @@ class AvatarBadgeInfo extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 31),
-            CommonText.titleMedium(
+            CommonText.bodyLarge(
               createdText,
               color: colorScheme.onPrimary,
             ),

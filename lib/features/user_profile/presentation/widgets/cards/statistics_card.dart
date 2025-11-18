@@ -75,7 +75,7 @@ class StatCard extends StatelessWidget {
         // Number
         Row(
           children: [
-            CommonText.titleMedium(
+            CommonText.bodyLarge(
               context.translate('number'),
               fontWeight: FontWeight.w700,
               color: colorScheme.onSecondary,
@@ -90,7 +90,7 @@ class StatCard extends StatelessWidget {
         // Total Earn
         Row(
           children: [
-            CommonText.titleMedium(
+            CommonText.bodyLarge(
               context.translate('total_earn'),
               fontWeight: FontWeight.w700,
               color: colorScheme.onSecondary,
@@ -115,7 +115,7 @@ class StatCard extends StatelessWidget {
       children: [
         Row(
           children: [
-            CommonText.titleMedium(
+            CommonText.bodyLarge(
               context.translate('number'),
               fontWeight: FontWeight.w700,
               color: colorScheme.onSecondary,

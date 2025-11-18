@@ -56,14 +56,14 @@ class CoinsEarnedHistoryCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CommonText.titleMedium(
+                  CommonText.bodyLarge(
                     title,
                     fontWeight: FontWeight.w700,
                     color: colorScheme.onPrimary,
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 4),
-                  CommonText.titleMedium(
+                  CommonText.bodyLarge(
                     subtitle,
                     fontWeight: FontWeight.w500,
                     color: colorScheme.onPrimary,
@@ -80,7 +80,7 @@ class CoinsEarnedHistoryCard extends StatelessWidget {
         const SizedBox(height: 10),
 
         // Time ago (below everything)
-        CommonText.titleMedium(
+        CommonText.bodyLarge(
           timeAgo,
           fontWeight: FontWeight.w700,
           color: colorScheme.onPrimary,
@@ -101,14 +101,14 @@ class CoinsEarnedHistoryCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CommonText.titleMedium(
+              CommonText.bodyLarge(
                 title,
                 fontWeight: FontWeight.w700,
                 color: colorScheme.onPrimary,
                 overflow: TextOverflow.ellipsis,
               ),
               const SizedBox(height: 4),
-              CommonText.titleMedium(
+              CommonText.bodyLarge(
                 subtitle,
                 fontWeight: FontWeight.w500,
                 color: colorScheme.onPrimary,
@@ -126,7 +126,7 @@ class CoinsEarnedHistoryCard extends StatelessWidget {
         const SizedBox(width: 16),
 
         // Time ago
-        CommonText.titleMedium(
+        CommonText.bodyLarge(
           timeAgo,
           fontWeight: FontWeight.w700,
           color: colorScheme.onPrimary,

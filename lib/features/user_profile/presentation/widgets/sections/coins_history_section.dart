@@ -16,7 +16,7 @@ class CoinsHistorySection extends StatelessWidget {
       children: [
         SizedBox(height: 16),
         Center(
-          child: CommonText.titleMedium(
+          child: CommonText.bodyLarge(
             localizations?.translate('coins_history_title') ??
                 "Last Coins Earned History. Past 7 Days",
             fontWeight: FontWeight.w500,
