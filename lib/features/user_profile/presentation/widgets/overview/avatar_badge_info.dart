@@ -53,7 +53,7 @@ class AvatarBadgeInfo extends StatelessWidget {
               children: [
                 // Level Badge
                 Image.asset(levelImage, width: 40),
-                const SizedBox(height: 5),
+                const SizedBox(height: 4),
                 CommonText.titleMedium(
                   levelText,
                   fontWeight: FontWeight.w700,
@@ -63,7 +63,7 @@ class AvatarBadgeInfo extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 24),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -114,7 +114,7 @@ class AvatarBadgeInfo extends StatelessWidget {
           ],
         ),
 
-        const SizedBox(height: 24),
+        const SizedBox(height: 31.5),
 
         CommonText.bodyLarge(
           createdText,
@@ -138,10 +138,10 @@ class AvatarBadgeInfo extends StatelessWidget {
 
         // Level Badge
         Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Image.asset(levelImage, width: 40),
-            const SizedBox(height: 5),
+            const SizedBox(height: 4),
             CommonText.titleMedium(
               levelText,
               fontWeight: FontWeight.w700,
@@ -176,6 +176,7 @@ class AvatarBadgeInfo extends StatelessWidget {
                           fontWeight: FontWeight.w700,
                           color: colorScheme.onPrimary,
                         ),
+                        const SizedBox(height: 4),
                         CommonText.bodyLarge(
                           context.translate("profile_message"),
                           fontWeight: FontWeight.w700,
@@ -186,7 +187,7 @@ class AvatarBadgeInfo extends StatelessWidget {
                   ],
                 ),
 
-                const SizedBox(width: 20),
+                const SizedBox(width: 16),
 
                 // Location
                 Row(
@@ -206,7 +207,7 @@ class AvatarBadgeInfo extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 31),
+            const SizedBox(height: 31.5),
             CommonText.bodyLarge(
               createdText,
               color: colorScheme.onPrimary,

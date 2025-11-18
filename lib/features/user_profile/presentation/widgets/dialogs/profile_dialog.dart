@@ -25,7 +25,7 @@ class _ProfileDialogState extends State<ProfileDialog> {
 
     if (width <= 600) return width; // Mobile → full width
     if (width <= 1100) return width * 0.8; // Tablet → 80%
-    return 674; //Fixed width for desktop
+    return 632; //Fixed width for desktop
   }
 
   double _getDialogHeight(BuildContext context) {
@@ -60,7 +60,7 @@ class _ProfileDialogState extends State<ProfileDialog> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 35),
+                      padding: const EdgeInsets.symmetric(horizontal: 32),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -82,7 +82,7 @@ class _ProfileDialogState extends State<ProfileDialog> {
                       height: 40,
                       thickness: 1,
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 24),
                     AvatarBadgeInfo(
                       levelImage: "assets/images/levels/bronze.png",
                       levelText: context.translate("profile_level_bronze_1"),
@@ -94,7 +94,7 @@ class _ProfileDialogState extends State<ProfileDialog> {
                     ProfileTabs(
                       onTabChanged: (i) => setState(() => selectedTab = i),
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 23),
                     selectedTab == 0
                         ? const StatisticsSection()
                         : const CoinsHistorySection(),
@@ -142,7 +142,7 @@ class _ProfileTabsState extends State<ProfileTabs> {
                         widget.onTabChanged?.call(0);
                       },
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 16),
                     CustomButtonWidget(
                       title: context.translate('profile_coins_earned_history'),
                       fontSize: 16,
@@ -169,7 +169,7 @@ class _ProfileTabsState extends State<ProfileTabs> {
                         },
                       ),
                     ),
-                    const SizedBox(width: 15),
+                    const SizedBox(width: 16),
                     Expanded(
                       child: CustomButtonWidget(
                         fontSize: 16,

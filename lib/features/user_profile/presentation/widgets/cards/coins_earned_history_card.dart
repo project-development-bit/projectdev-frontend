@@ -20,7 +20,7 @@ class CoinsEarnedHistoryCard extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.symmetric(vertical: 36, horizontal: 32),
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
@@ -138,7 +138,10 @@ class CoinsEarnedHistoryCard extends StatelessWidget {
 
   Widget _buildAmountPill(ColorScheme colorScheme) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+      // padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+      width: 200,
+      height: 40,
+      alignment: Alignment.center,
       decoration: BoxDecoration(
         color: colorScheme.scrim,
         borderRadius: BorderRadius.circular(40),

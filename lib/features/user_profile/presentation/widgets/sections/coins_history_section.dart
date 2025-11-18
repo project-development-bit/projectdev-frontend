@@ -14,7 +14,7 @@ class CoinsHistorySection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: 16),
+        SizedBox(height: 10),
         Center(
           child: CommonText.bodyLarge(
             localizations?.translate('coins_history_title') ??
@@ -23,6 +23,7 @@ class CoinsHistorySection extends StatelessWidget {
             color: colorScheme.onPrimary,
           ),
         ),
+        SizedBox(height: 28),
         CoinsEarnedHistoryCard(
           title: "Treasure Chest",
           subtitle: "Treasure Chest Reward",
