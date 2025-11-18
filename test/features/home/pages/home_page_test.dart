@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:cointiply_app/features/home/pages/home_page.dart';
-import 'package:cointiply_app/features/home/widgets/hero_section.dart';
+import 'package:cointiply_app/features/home/presentation/pages/home_page.dart';
+import 'package:cointiply_app/features/home/presentation/widgets/hero_section.dart';
 
 void main() {
   group('HomePage Widget Tests', () {

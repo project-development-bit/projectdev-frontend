@@ -11,6 +11,7 @@ class UserModel extends User {
     required super.email,
     required super.refreshToken,
     required super.role,
+    required super.showOnboarding,
     super.country,
     super.language,
     super.referralCode,
@@ -31,7 +32,10 @@ class UserModel extends User {
       name: json['name'] as String? ?? '',
       email: json['email'] as String? ?? '',
       refreshToken: json['refresh_token'] as String? ?? '',
-      role: UserRole.tryFromString(json['role'] as String?) ?? UserRole.normalUser,
+      role: UserRole.tryFromString(json['role'] as String?) ??
+          UserRole.normalUser,
+      //show_onboarding is 1 and 0 in the API response
+      showOnboarding: _parseBool(json['show_onboarding']) == 1,
       country: json['country'] as String?,
       language: json['language'] as String?,
       referralCode: json['referral_code'] as String?,
@@ -40,14 +44,16 @@ class UserModel extends User {
       isBanned: _parseBool(json['is_banned']),
       isVerified: _parseBool(json['is_verified']),
       riskScore: _parseInt(json['risk_score']),
-      lastLoginAt: json['last_login_at'] != null 
-          ? DateTime.tryParse(json['last_login_at'] as String? ?? '') 
+      lastLoginAt: json['last_login_at'] != null
+          ? DateTime.tryParse(json['last_login_at'] as String? ?? '')
           : null,
       createdAt: json['created_at'] != null
-          ? DateTime.tryParse(json['created_at'] as String? ?? '') ?? DateTime.now()
+          ? DateTime.tryParse(json['created_at'] as String? ?? '') ??
+              DateTime.now()
           : DateTime.now(),
       updatedAt: json['updated_at'] != null
-          ? DateTime.tryParse(json['updated_at'] as String? ?? '') ?? DateTime.now()
+          ? DateTime.tryParse(json['updated_at'] as String? ?? '') ??
+              DateTime.now()
           : DateTime.now(),
     );
   }
@@ -114,6 +120,7 @@ class UserModel extends User {
       email: user.email,
       refreshToken: user.refreshToken,
       role: user.role,
+      showOnboarding: user.showOnboarding,
       country: user.country,
       language: user.language,
       referralCode: user.referralCode,
@@ -135,7 +142,9 @@ class UserModel extends User {
       name: json['name'] as String,
       email: json['email'] as String,
       refreshToken: json['refresh_token'] as String? ?? '',
-      role: UserRole.tryFromString(json['role'] as String?) ?? UserRole.normalUser,
+      role: UserRole.tryFromString(json['role'] as String?) ??
+          UserRole.normalUser,
+      showOnboarding: _parseBool(json['show_onboarding']) == 1,
       country: json['country'] as String?,
       language: json['language'] as String?,
       referralCode: json['referral_code'] as String?,
@@ -144,13 +153,13 @@ class UserModel extends User {
       isBanned: json['is_banned'] as int? ?? 0,
       isVerified: json['is_verified'] as int? ?? 0,
       riskScore: json['risk_score'] as int? ?? 0,
-      lastLoginAt: json['last_login_at'] != null 
+      lastLoginAt: json['last_login_at'] != null
           ? DateTime.parse(json['last_login_at'] as String)
           : null,
-      createdAt: json['created_at'] != null 
+      createdAt: json['created_at'] != null
           ? DateTime.parse(json['created_at'] as String)
           : DateTime.now(),
-      updatedAt: json['updated_at'] != null 
+      updatedAt: json['updated_at'] != null
           ? DateTime.parse(json['updated_at'] as String)
           : DateTime.now(),
     );
@@ -164,6 +173,7 @@ class UserModel extends User {
       email: email,
       refreshToken: refreshToken,
       role: role,
+      showOnboarding: showOnboarding,
       country: country,
       language: language,
       referralCode: referralCode,
@@ -186,6 +196,7 @@ class UserModel extends User {
     String? email,
     String? refreshToken,
     UserRole? role,
+    bool? showOnboarding,
     String? country,
     String? language,
     String? referralCode,
@@ -204,6 +215,7 @@ class UserModel extends User {
       email: email ?? this.email,
       refreshToken: refreshToken ?? this.refreshToken,
       role: role ?? this.role,
+      showOnboarding: showOnboarding ?? this.showOnboarding,
       country: country ?? this.country,
       language: language ?? this.language,
       referralCode: referralCode ?? this.referralCode,

@@ -114,6 +114,7 @@ flutter:
     - assets/images/bg/
     - assets/images/levels/
     - assets/images/rewards/
+    - assets/images/features/
     - assets/tutorial/
     - assets/images/user/
     - assets/theme/
