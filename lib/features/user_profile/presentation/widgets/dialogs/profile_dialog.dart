@@ -25,7 +25,7 @@ class _ProfileDialogState extends State<ProfileDialog> {
 
     if (width <= 600) return width; // Mobile → full width
     if (width <= 1100) return width * 0.8; // Tablet → 80%
-    return width * 0.4; // Desktop → 40%
+    return 674; //Fixed width for desktop
   }
 
   double _getDialogHeight(BuildContext context) {
