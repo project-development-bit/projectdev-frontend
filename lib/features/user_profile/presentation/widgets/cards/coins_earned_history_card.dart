@@ -21,7 +21,7 @@ class CoinsEarnedHistoryCard extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 36, horizontal: 32),
-      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      margin: const EdgeInsets.symmetric(horizontal: 35, vertical: 8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
