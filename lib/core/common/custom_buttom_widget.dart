@@ -9,6 +9,8 @@ class CustomButtonWidget extends StatelessWidget {
   final EdgeInsetsGeometry? padding;
   final EdgeInsetsGeometry? margin;
   final double? width;
+  final double? fontSize;
+  final FontWeight? fontWeight;
   const CustomButtonWidget({
     super.key,
     required this.title,
@@ -17,6 +19,8 @@ class CustomButtonWidget extends StatelessWidget {
     this.padding,
     this.margin,
     this.width,
+    this.fontSize,
+    this.fontWeight,
   });
 
   @override
@@ -56,8 +60,8 @@ class CustomButtonWidget extends StatelessWidget {
         child: Center(
           child: CommonText.titleMedium(
             title,
-            fontSize: 18,
-            fontWeight: FontWeight.w700,
+            fontSize: fontSize ?? 18,
+            fontWeight: fontWeight ?? FontWeight.w700,
             color: isActive
                 ? Color(0xFF333333) //TODO use from theme
                 : Color(0xFF98989A), //TODO use from theme

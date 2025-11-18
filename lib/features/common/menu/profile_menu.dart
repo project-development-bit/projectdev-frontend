@@ -24,12 +24,12 @@ class ProfileMenu extends StatelessWidget {
 
     return Container(
       width: 260,
-      padding: const EdgeInsets.symmetric(vertical: 18),
+      padding: EdgeInsets.only(top: 22, left: 32, right: 32, bottom: 15),
       decoration: BoxDecoration(
         color: const Color(0xFF0C0B38), // deep navy#0C0B38
         borderRadius: BorderRadius.circular(26),
         border: Border.all(
-          color: const Color(0xFF003248), // TODO use from colorScheme
+          color: const Color(0xFF333333), // TODO use from colorScheme
           width: 1.4,
         ),
         boxShadow: [
@@ -45,8 +45,9 @@ class ProfileMenu extends StatelessWidget {
         children: [
           _MenuHeaderProgress(),
           DotedLineDivider(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 10, horizontal: 22)),
+              padding: const EdgeInsets.symmetric(
+            vertical: 10,
+          )),
           _MenuItem(
             title: context.translate("profile"),
             onTap: () {
@@ -75,8 +76,9 @@ class ProfileMenu extends StatelessWidget {
           ),
           // dotted divider (thin + low opacity)
           DotedLineDivider(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 10, horizontal: 22)),
+              padding: const EdgeInsets.symmetric(
+            vertical: 10,
+          )),
           Consumer(
             builder: (context, ref, child) {
               final isLoading = ref.watch(isLogoutLoadingProvider);
@@ -86,9 +88,11 @@ class ProfileMenu extends StatelessWidget {
                     : () {
                         _handleLogout(context, ref);
                       },
-                width: 150,
-                padding: EdgeInsets.symmetric(vertical: 8, horizontal: 0),
-                margin: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                width: 105,
+                padding: EdgeInsets.symmetric(vertical: 4, horizontal: 0),
+                margin: const EdgeInsets.symmetric(vertical: 8),
                 title: isLoading
                     ? context.translate("logging_out")
                     : context.translate("sign_out"),
@@ -185,58 +189,55 @@ class _MenuHeaderProgress extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 22),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              CommonText.titleMedium(
-                "Your Progress",
-                fontWeight: FontWeight.w700,
-                color: colorScheme.onSurfaceVariant,
-              ),
-              CommonText.titleMedium(
-                "78%",
-                fontWeight: FontWeight.w700,
-                color: Color(0xFF00A0DC),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              Expanded(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: SizedBox(
-                    height: 10,
-                    child: Row(
-                      children: [
-                        Expanded(
-                          flex: 78,
-                          child: Container(color: colorScheme.primary),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            CommonText.titleMedium(
+              "Your Progress",
+              fontWeight: FontWeight.w700,
+              color: colorScheme.onSurfaceVariant,
+            ),
+            CommonText.titleMedium(
+              "78%",
+              fontWeight: FontWeight.w700,
+              color: Color(0xFF00A0DC),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            Expanded(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: SizedBox(
+                  height: 10,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 78,
+                        child: Container(color: colorScheme.primary),
+                      ),
+                      Expanded(
+                        flex: 22,
+                        child: Container(
+                          color: colorScheme.scrim.withValues(alpha: 0.45),
                         ),
-                        Expanded(
-                          flex: 22,
-                          child: Container(
-                            color: colorScheme.scrim.withValues(alpha: 0.45),
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),
-              const SizedBox(width: 10),
-              CommonText.titleMedium("Lvl 20",
-                  fontWeight: FontWeight.w500, color: colorScheme.onPrimary),
-            ],
-          ),
-        ],
-      ),
+            ),
+            const SizedBox(width: 10),
+            CommonText.titleMedium("Lvl 20",
+                fontWeight: FontWeight.w500, color: colorScheme.onPrimary),
+          ],
+        ),
+      ],
     );
   }
 }
@@ -269,7 +270,7 @@ class _MenuItemState extends State<_MenuItem> {
         hoverColor: AppColors.transparent, // we control hover manually
         child: Container(
           alignment: Alignment.centerLeft,
-          padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 9),
+          padding: const EdgeInsets.symmetric(vertical: 9),
 
           // Background on hover
           decoration: BoxDecoration(
