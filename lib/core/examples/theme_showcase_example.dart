@@ -43,7 +43,7 @@ class _ThemeShowcaseWidgetState extends State<ThemeShowcaseWidget> {
             const CommonText.titleLarge('Title Large Text'),
             const CommonText.titleMedium('Title Medium Text'),
             const CommonText.bodyLarge(
-                'Body Large - Regular paragraph text using Barlow font'),
+                'Body Large - Regular paragraph text using Inter font'),
             const CommonText.bodyMedium('Body Medium - Standard text content'),
             const CommonText.bodySmall('Body Small - Fine print and captions'),
             const CommonText.cryptoDisplay('₿ 0.00123456'),

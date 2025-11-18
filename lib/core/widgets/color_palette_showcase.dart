@@ -123,7 +123,7 @@ class ColorPaletteShowcase extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            'Barlow Body Font',
+            'Inter Body Font',
             style:
                 AppTypography.titleLarge.copyWith(color: colorScheme.onError),
           ),

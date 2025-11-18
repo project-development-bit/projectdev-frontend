@@ -246,7 +246,7 @@ class LoadingContainer extends StatelessWidget {
           Text(
             message,
             style: TextStyle(
-              fontFamily: 'Barlow',
+              fontFamily: 'Inter',
               fontSize: 16,
               fontWeight: FontWeight.w500,
               color: isDark
@@ -310,7 +310,7 @@ class ErrorContainer extends StatelessWidget {
           Text(
             message,
             style: TextStyle(
-              fontFamily: 'Barlow',
+              fontFamily: 'Inter',
               fontSize: 16,
               fontWeight: FontWeight.w500,
               color: isDark
