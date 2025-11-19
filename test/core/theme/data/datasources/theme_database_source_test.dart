@@ -19,9 +19,9 @@ void main() {
       version: '1.0.0',
       lastUpdated: DateTime.parse('2025-11-10T10:00:00.000Z'),
       fonts: const FontConfigModel(
-        primary: 'Barlow',
+        primary: 'Inter',
         title: 'Orbitron',
-        fallback: ['Barlow', 'system-ui'],
+        fallback: ['Inter', 'system-ui'],
       ),
       customColors: const CustomColorsConfigModel(
         websiteGold: Color(0xFFE6A030),

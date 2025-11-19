@@ -45,7 +45,7 @@ Based on the Gigafaucet website font usage:
 - Character: Futuristic, tech-inspired, clean geometric design
 - Usage: Headlines, button labels, crypto displays, important text
 
-#### Body Font: **Barlow**
+#### Body Font: **Inter**
 - Used for: Normal text, body content, descriptions
 - Source: Google Fonts
 - Character: Clean, modern, highly readable sans-serif
@@ -74,7 +74,7 @@ Based on the Gigafaucet website font usage:
 - **Title Medium**: 16px, 500 weight, 0.15 letter-spacing
 - **Title Small**: 14px, 500 weight, 0.1 letter-spacing
 
-#### Body Styles (Barlow)
+#### Body Styles (Inter)
 - **Body Large**: 16px, 400 weight, 0.5 letter-spacing
 - **Body Medium**: 14px, 400 weight, 0.25 letter-spacing
 - **Body Small**: 12px, 400 weight, 0.4 letter-spacing
@@ -161,7 +161,7 @@ Based on the Gigafaucet website font usage:
 
 ### Typography Usage
 - **Orbitron**: Titles, headers, buttons, labels, crypto amounts
-- **Barlow**: Body text, descriptions, captions, normal content
+- **Inter**: Body text, descriptions, captions, normal content
 - **Roboto Mono**: Technical information, addresses, codes only
 
 ### Accessibility
@@ -189,7 +189,7 @@ Navigator.push(
 CommonText.cryptoDisplay('Crypto Rewards')
 CommonText.cryptoAmount('1,000')
 CommonText.titleLarge('Page Title') // Uses Orbitron
-CommonText.bodyMedium('Body content') // Uses Barlow
+CommonText.bodyMedium('Body content') // Uses Inter
 CommonText.button('Click Me') // Uses Orbitron for buttons
 ```
 

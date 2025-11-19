@@ -1,22 +1,20 @@
 import 'package:cointiply_app/features/chat/presentation/provider/right_chat_overlay_provider.dart';
-import 'package:cointiply_app/features/common/widgets/custom_pointer_interceptor.dart';
-import 'package:flutter/foundation.dart';
+import 'package:cointiply_app/features/common/menu/profile_menu.dart';
+import 'package:cointiply_app/features/user_profile/presentation/widgets/user_profile_image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/locale_switch_widget.dart';
 import '../../../core/widgets/theme_switch_widget.dart';
 import '../../../core/extensions/context_extensions.dart';
 import '../../../core/providers/auth_provider.dart';
-import '../../auth/presentation/providers/logout_provider.dart';
 import '../../user_profile/presentation/providers/profile_providers.dart';
 
-class CommonAppBar extends StatelessWidget {
+class CommonAppBar extends ConsumerWidget {
   const CommonAppBar({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final isMobile = MediaQuery.of(context).size.width < 768;
 
     if (isMobile) {
@@ -112,14 +110,6 @@ class CommonAppBar extends StatelessWidget {
                     return Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        // Profile button
-                        IconButton(
-                          onPressed: () => kIsWeb
-                              ? context.goNamedProfile()
-                              : context.pushNamedProfile(),
-                          icon: const Icon(Icons.person),
-                          tooltip: 'Profile',
-                        ),
                         // Chat overlay button
                         IconButton(
                           onPressed: () {
@@ -137,31 +127,33 @@ class CommonAppBar extends StatelessWidget {
                                 '/legal/contact-us'); // Navigate to Contact Us screen
                           },
                         ),
-                        // Logout button
-                        Consumer(
-                          builder: (context, ref, child) {
-                            final isLoading =
-                                ref.watch(isLogoutLoadingProvider);
-                            return IconButton(
-                              onPressed: isLoading
-                                  ? null
-                                  : () => _handleLogout(context, ref),
-                              icon: isLoading
-                                  ? SizedBox(
-                                      width: 16,
-                                      height: 16,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2,
-                                        valueColor:
-                                            AlwaysStoppedAnimation<Color>(
-                                          context.primary,
-                                        ),
-                                      ),
-                                    )
-                                  : const Icon(Icons.logout),
-                              tooltip: isLoading ? 'Logging out...' : 'Logout',
-                            );
-                          },
+                        // Profile button
+                        PopupMenuButton(
+                          position: PopupMenuPosition.under,
+                          offset: const Offset(0, 8),
+                          elevation: 0,
+                          color: Colors.transparent,
+                          clipBehavior: Clip.none,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(26),
+                          ),
+                          constraints: const BoxConstraints(
+                            minWidth: 0,
+                            maxWidth: 260,
+                          ),
+                          itemBuilder: (ext) => [
+                            PopupMenuItem(
+                              enabled: false,
+                              padding: EdgeInsets.zero,
+                              child: ProfileMenu(
+                                closeMenu: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ),
+                          ],
+                          child: UserProfileImageWidget(
+                              size: 20, borderColor: context.primary),
                         ),
                       ],
                     );
@@ -199,74 +191,6 @@ class CommonAppBar extends StatelessWidget {
           ),
         ],
       );
-    }
-  }
-
-  Future<void> _handleLogout(BuildContext context, WidgetRef ref) async {
-    // Show confirmation dialog
-    final shouldLogout = await showDialog<bool>(
-      context: context,
-      builder: (context) => CustomPointerInterceptor(
-        child: AlertDialog(
-          title: Text(context.translate('logout')),
-          content: Text(context.translate('logout_confirmation')),
-          actions: [
-            TextButton(
-              onPressed: () => context.pop(false),
-              child: Text(context.translate('cancel')),
-            ),
-            TextButton(
-              onPressed: () => context.pop(true),
-              style: TextButton.styleFrom(
-                foregroundColor: context.error,
-              ),
-              child: Text(context.translate('logout')),
-            ),
-          ],
-        ),
-      ),
-    );
-
-    if (shouldLogout == true) {
-      try {
-        // Perform logout - the UI should automatically update via the observable provider
-        await ref.read(logoutNotifierProvider.notifier).logout();
-
-        // Check the final state after logout
-        final logoutState = ref.read(logoutNotifierProvider);
-
-        if (logoutState is LogoutSuccess) {
-          // Show success message but don't navigate - let UI update naturally
-          if (context.mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Logged out successfully'),
-                backgroundColor: AppColors.success,
-              ),
-            );
-          }
-        } else if (logoutState is LogoutError) {
-          // Show error message
-          if (context.mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(logoutState.message),
-                backgroundColor: context.error,
-              ),
-            );
-          }
-        }
-      } catch (e) {
-        // Handle any unexpected errors
-        if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Logout failed: $e'),
-              backgroundColor: context.error,
-            ),
-          );
-        }
-      }
     }
   }
 }
