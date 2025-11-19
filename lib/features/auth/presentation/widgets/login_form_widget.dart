@@ -59,6 +59,8 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
     // Load saved credentials after the first frame
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadSavedCredentials();
+      _emailController.addListener(_handleAutoFillBehavior);
+      _passwordController.addListener(_handleAutoFillBehavior);
     });
 
     // Listen to login state changes
@@ -216,6 +218,29 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
     widget.onSignUp?.call();
   }
 
+  bool _isValidEmail(String email) {
+    final regex = RegExp(r'^[^@]+@[^@]+\.[a-zA-Z]{3,}$');
+    return regex.hasMatch(email.trim());
+  }
+
+  void _handleAutoFillBehavior() {
+    final email = _emailController.text.trim();
+    final validEmail = _isValidEmail(email);
+    final passwordFilled = _passwordController.text.isNotEmpty;
+
+    // 1 Email autofilled + VALID + password empty → focus password
+    if (validEmail && !passwordFilled) {
+      if (!_passwordFocusNode.hasFocus) {
+        _passwordFocusNode.requestFocus();
+      }
+    }
+
+    // 2 Both valid email + password autofilled → enable login button
+    if (validEmail && passwordFilled) {
+      setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context);
@@ -230,40 +255,46 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
           children: [
             // Email Field
             CommonTextField(
-                key: const ValueKey('emailField'),
-                controller: _emailController,
-                focusNode: _emailFocusNode,
-                hintText: localizations?.translate('email_hint') ??
-                    'Enter your email',
-                labelText: localizations?.translate('email') ?? 'Email',
-                keyboardType: TextInputType.emailAddress,
-                textInputAction: TextInputAction.next,
-                prefixIcon: const Icon(Icons.email_outlined),
-                validator: (value) => TextFieldValidators.email(value, context),
-                onSubmitted: (_) => _passwordFocusNode.requestFocus(),
-                autofillHints: [AutofillHints.email, AutofillHints.username]),
+              key: const ValueKey('emailField'),
+              controller: _emailController,
+              focusNode: _emailFocusNode,
+              hintText:
+                  localizations?.translate('email_hint') ?? 'Enter your email',
+              labelText: localizations?.translate('email') ?? 'Email',
+              keyboardType: TextInputType.emailAddress,
+              textInputAction: TextInputAction.next,
+              prefixIcon: const Icon(Icons.email_outlined),
+              validator: (value) => TextFieldValidators.email(value, context),
+              onSubmitted: (_) => _passwordFocusNode.requestFocus(),
+              autofillHints: const [
+                AutofillHints.email,
+                AutofillHints.username
+              ],
+            ),
 
             const SizedBox(height: 16),
 
             // Password Field
             CommonTextField(
-                key: const ValueKey('passwordField'),
-                controller: _passwordController,
-                focusNode: _passwordFocusNode,
-                hintText: localizations?.translate('password_hint') ??
-                    'Enter your password',
-                labelText: localizations?.translate('password') ?? 'Password',
-                obscureText: true,
-                textInputAction: TextInputAction.done,
-                prefixIcon: const Icon(Icons.lock_outlined),
-                validator: (value) => TextFieldValidators.minLength(
-                    value, 6, context,
-                    fieldName:
-                        localizations?.translate('password') ?? 'Password'),
-                onSubmitted: (_) => _handleLogin(),
-                enableSuggestions: false,
-                autofillHints: [AutofillHints.password]),
-
+              key: const ValueKey('passwordField'),
+              controller: _passwordController,
+              focusNode: _passwordFocusNode,
+              hintText: localizations?.translate('password_hint') ??
+                  'Enter your password',
+              labelText: localizations?.translate('password') ?? 'Password',
+              obscureText: true,
+              textInputAction: TextInputAction.done,
+              prefixIcon: const Icon(Icons.lock_outlined),
+              validator: (value) => TextFieldValidators.minLength(
+                value,
+                6,
+                context,
+                fieldName: localizations?.translate('password') ?? 'Password',
+              ),
+              onSubmitted: (_) => _handleLogin(),
+              enableSuggestions: false,
+              autofillHints: const [AutofillHints.password],
+            ),
             const SizedBox(height: 16),
 
             // Remember Me & Forgot Password Row
@@ -324,7 +355,10 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
             const SizedBox(height: 24),
 
             // Cloudflare Turnstile Security Widget
-            const CloudflareTurnstileWidget(),
+            IgnorePointer(
+              ignoring: true,
+              child: CloudflareTurnstileWidget(),
+            ),
 
             const SizedBox(height: 24),
 
@@ -332,7 +366,9 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
             CommonButton(
               text: localizations?.translate('sign_in') ?? 'Sign In',
               onPressed: isLoading ? null : _handleLogin,
-              backgroundColor: context.primary,
+              backgroundColor: isLoading
+                  ? context.primary.withValues(alpha: 0.5)
+                  : context.primary,
               textColor: context.onPrimary,
               height: 56,
               borderRadius: 12,
