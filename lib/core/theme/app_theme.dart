@@ -7,11 +7,11 @@ import 'app_typography.dart';
 class AppTheme {
   AppTheme._();
 
-  static const String fontFamily = 'Barlow'; // Normal text
+  static const String fontFamily = 'Inter'; // Normal text
   static const String titleFontFamily = 'Orbitron'; // Titles, captions, headers
   static const List<String> fontFamilyFallback = [
     'Orbitron',
-    'Barlow',
+    'Inter',
     '-apple-system',
     'BlinkMacSystemFont',
     'Segoe UI',

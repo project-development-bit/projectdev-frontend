@@ -26,20 +26,21 @@ class ThemeRepositoryImpl implements ThemeRepository {
     try {
       // Check stored theme version
       final storedVersion = await databaseSource.getStoredThemeVersion();
-      
+
       // Fetch theme from API
       final remoteConfig = await remoteDataSource.getThemeConfig();
-      
+
       // Check if we need to update (version changed or no stored theme)
       if (storedVersion == null || storedVersion != remoteConfig.version) {
-        debugPrint('🔄 Theme version changed: $storedVersion → ${remoteConfig.version}');
+        debugPrint(
+            '🔄 Theme version changed: $storedVersion → ${remoteConfig.version}');
         // Save new theme to database
         await databaseSource.saveThemeConfig(remoteConfig);
         debugPrint('✅ New theme saved to database');
       } else {
         debugPrint('✓ Theme is up to date (version: $storedVersion)');
       }
-      
+
       return Right(remoteConfig);
     } on DioException catch (e) {
       debugPrint('⚠️ API fetch failed, using cached theme');
@@ -69,50 +70,51 @@ class ThemeRepositoryImpl implements ThemeRepository {
         debugPrint('✅ Theme loaded from database');
         return Right(cachedConfig);
       }
-      
+
       // Step 2: No database theme found - try to fetch from API
       debugPrint('⚠️ No theme in database, fetching from API...');
       try {
         final remoteConfig = await remoteDataSource.getThemeConfig();
-        
+
         // Save API theme to database
         await databaseSource.saveThemeConfig(remoteConfig);
         debugPrint('✅ Theme fetched from API and saved to database');
-        
+
         return Right(remoteConfig);
       } on DioException catch (apiError) {
         // Step 3: API failed - try to load from default JSON file
         debugPrint('⚠️ API fetch failed: ${apiError.message}');
         debugPrint('📦 Loading from assets/theme/default_theme.json...');
-        
+
         try {
           final defaultTheme = await assetDataSource.loadDefaultTheme();
-          
+
           // Save the default theme to database for future use
           await databaseSource.saveThemeConfig(defaultTheme);
           debugPrint('✅ Default theme loaded from JSON and saved to database');
-          
+
           return Right(defaultTheme);
         } catch (assetError) {
           // Step 4: JSON file also fails - use hardcoded default theme
           debugPrint('⚠️ Failed to load default_theme.json: $assetError');
           debugPrint('📦 Using hardcoded default theme as final fallback');
           final hardcodedDefault = _getDefaultThemeConfig();
-          
+
           // Try to save hardcoded default to database
           try {
-            await databaseSource.saveThemeConfig(hardcodedDefault as ThemeConfigModel);
+            await databaseSource
+                .saveThemeConfig(hardcodedDefault as ThemeConfigModel);
           } catch (_) {
             // Ignore save errors for hardcoded default
           }
-          
+
           return Right(hardcodedDefault);
         }
       } catch (e) {
         // Unexpected error - try JSON file
         debugPrint('⚠️ Unexpected error fetching from API: $e');
         debugPrint('📦 Loading from assets/theme/default_theme.json...');
-        
+
         try {
           final defaultTheme = await assetDataSource.loadDefaultTheme();
           await databaseSource.saveThemeConfig(defaultTheme);
@@ -166,11 +168,11 @@ class ThemeRepositoryImpl implements ThemeRepository {
       version: '1.0.0',
       lastUpdated: DateTime.now(),
       fonts: const FontConfigModel(
-        primary: 'Barlow',
+        primary: 'Inter',
         title: 'Orbitron',
         fallback: [
           'Orbitron',
-          'Barlow',
+          'Inter',
           '-apple-system',
           'BlinkMacSystemFont',
           'Segoe UI',

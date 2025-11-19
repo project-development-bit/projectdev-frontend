@@ -2,11 +2,11 @@
   "version": "1.0.0",
   "lastUpdated": "2025-11-10T00:00:00.000Z",
   "fonts": {
-    "primary": "Barlow",
+    "primary": "Inter",
     "title": "Orbitron",
     "fallback": [
       "Orbitron",
-      "Barlow",
+      "Inter",
       "-apple-system",
       "BlinkMacSystemFont",
       "Segoe UI",

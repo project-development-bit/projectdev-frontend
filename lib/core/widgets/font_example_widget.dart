@@ -3,7 +3,7 @@ import '../common/common_text.dart';
 import '../theme/app_colors.dart';
 
 /// Example widget showing proper usage of CommonText with Gigafaucet fonts
-/// Demonstrates Orbitron for titles/headers and Barlow for body text
+/// Demonstrates Orbitron for titles/headers and Inter for body text
 class FontExampleWidget extends StatelessWidget {
   const FontExampleWidget({super.key});
 
@@ -66,18 +66,18 @@ class FontExampleWidget extends StatelessWidget {
                 ],
               ),
 
-              // Body Text Examples (Barlow)
+              // Body Text Examples (Inter)
               _buildSection(
-                'Body Text (Barlow)',
+                'Body Text (Inter)',
                 [
                   const CommonText.bodyLarge(
-                    'This is body large text using Barlow font. It\'s used for main content and descriptions.',
+                    'This is body large text using Inter font. It\'s used for main content and descriptions.',
                   ),
                   const CommonText.bodyMedium(
-                    'This is body medium text using Barlow font. It\'s the most common text style.',
+                    'This is body medium text using Inter font. It\'s the most common text style.',
                   ),
                   const CommonText.bodySmall(
-                    'This is body small text using Barlow font. Used for secondary information.',
+                    'This is body small text using Inter font. Used for secondary information.',
                   ),
                 ],
               ),

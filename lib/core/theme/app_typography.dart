@@ -3,15 +3,15 @@ import 'package:google_fonts/google_fonts.dart';
 import 'app_colors.dart';
 
 /// Typography system based on Gigafaucet website
-/// Uses "Orbitron" for titles/headers and "Barlow" for normal text
+/// Uses "Orbitron" for titles/headers and "Inter" for normal text
 class AppTypography {
   AppTypography._();
 
   // Font Families from Gigafaucet website
   static String get titleFontFamily =>
       'Orbitron'; // For titles, captions, headers
-  static String get bodyFontFamily => 'Barlow'; // For normal text
-  static String get monoFontFamily => 'Roboto Mono';
+  static String get bodyFontFamily => 'Inter'; // For normal text
+  // static String get monoFontFamily => 'Roboto Mono';
 
   // Base Text Styles for Light Theme
   static TextStyle get displayLarge => GoogleFonts.orbitron(
@@ -110,7 +110,7 @@ class AppTypography {
         height: 1.45,
       );
 
-  static TextStyle get bodyLarge => GoogleFonts.barlow(
+  static TextStyle get bodyLarge => GoogleFonts.inter(
         fontSize: 16,
         fontWeight: FontWeight.w400,
         letterSpacing: 0.5,
@@ -118,7 +118,7 @@ class AppTypography {
         height: 1.50,
       );
 
-  static TextStyle get bodyMedium => GoogleFonts.barlow(
+  static TextStyle get bodyMedium => GoogleFonts.inter(
         fontSize: 14,
         fontWeight: FontWeight.w400,
         letterSpacing: 0.25,
@@ -126,7 +126,7 @@ class AppTypography {
         height: 1.43,
       );
 
-  static TextStyle get bodySmall => GoogleFonts.barlow(
+  static TextStyle get bodySmall => GoogleFonts.inter(
         fontSize: 12,
         fontWeight: FontWeight.w400,
         letterSpacing: 0.4,
@@ -224,7 +224,7 @@ class AppTypography {
         letterSpacing: 0.5,
       );
 
-  static TextStyle get captionText => GoogleFonts.barlow(
+  static TextStyle get captionText => GoogleFonts.inter(
         fontSize: 12,
         fontWeight: FontWeight.w400,
         color: AppColors.websiteText,

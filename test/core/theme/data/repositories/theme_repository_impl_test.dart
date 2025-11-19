@@ -9,8 +9,7 @@ import 'package:cointiply_app/core/theme/data/datasources/theme_database_source.
 import 'package:cointiply_app/core/theme/data/datasources/theme_asset_data_source.dart';
 import 'package:cointiply_app/core/theme/data/models/theme_config_model.dart';
 
-class MockThemeRemoteDataSource extends Mock
-    implements ThemeRemoteDataSource {}
+class MockThemeRemoteDataSource extends Mock implements ThemeRemoteDataSource {}
 
 class MockThemeDatabaseSource extends Mock implements ThemeDatabaseSource {}
 
@@ -37,9 +36,9 @@ void main() {
     version: '1.0.0',
     lastUpdated: DateTime.parse('2025-11-10T10:00:00.000Z'),
     fonts: const FontConfigModel(
-      primary: 'Barlow',
+      primary: 'Inter',
       title: 'Orbitron',
-      fallback: ['Barlow', 'system-ui'],
+      fallback: ['Inter', 'system-ui'],
     ),
     customColors: const CustomColorsConfigModel(
       websiteGold: Color(0xFFE6A030),
@@ -141,12 +140,12 @@ void main() {
             fontSize: 16.0, fontWeight: 600, lineHeight: 1.5),
         titleSmall: TextStyleConfigModel(
             fontSize: 14.0, fontWeight: 600, lineHeight: 1.43),
-        bodyLarge:
-            TextStyleConfigModel(fontSize: 16.0, fontWeight: 400, lineHeight: 1.5),
+        bodyLarge: TextStyleConfigModel(
+            fontSize: 16.0, fontWeight: 400, lineHeight: 1.5),
         bodyMedium: TextStyleConfigModel(
             fontSize: 14.0, fontWeight: 400, lineHeight: 1.43),
-        bodySmall:
-            TextStyleConfigModel(fontSize: 12.0, fontWeight: 400, lineHeight: 1.33),
+        bodySmall: TextStyleConfigModel(
+            fontSize: 12.0, fontWeight: 400, lineHeight: 1.33),
         labelLarge: TextStyleConfigModel(
             fontSize: 14.0, fontWeight: 600, lineHeight: 1.43),
         labelMedium: TextStyleConfigModel(
@@ -250,12 +249,12 @@ void main() {
             fontSize: 16.0, fontWeight: 600, lineHeight: 1.5),
         titleSmall: TextStyleConfigModel(
             fontSize: 14.0, fontWeight: 600, lineHeight: 1.43),
-        bodyLarge:
-            TextStyleConfigModel(fontSize: 16.0, fontWeight: 400, lineHeight: 1.5),
+        bodyLarge: TextStyleConfigModel(
+            fontSize: 16.0, fontWeight: 400, lineHeight: 1.5),
         bodyMedium: TextStyleConfigModel(
             fontSize: 14.0, fontWeight: 400, lineHeight: 1.43),
-        bodySmall:
-            TextStyleConfigModel(fontSize: 12.0, fontWeight: 400, lineHeight: 1.33),
+        bodySmall: TextStyleConfigModel(
+            fontSize: 12.0, fontWeight: 400, lineHeight: 1.33),
         labelLarge: TextStyleConfigModel(
             fontSize: 14.0, fontWeight: 600, lineHeight: 1.43),
         labelMedium: TextStyleConfigModel(
@@ -422,7 +421,7 @@ void main() {
         (failure) => fail('Should return Right with default theme'),
         (config) {
           expect(config.version, '1.0.0'); // Default hardcoded version
-          expect(config.fonts.primary, 'Barlow');
+          expect(config.fonts.primary, 'Inter');
         },
       );
     });
