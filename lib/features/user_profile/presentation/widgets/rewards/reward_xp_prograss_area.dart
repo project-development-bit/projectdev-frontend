@@ -10,8 +10,9 @@ class RewardXpPrograssArea extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final isMobile = context.isMobile;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 35),
+      padding: EdgeInsets.symmetric(horizontal: isMobile ? 26 : 35),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -21,10 +22,9 @@ class RewardXpPrograssArea extends StatelessWidget {
             width: 42,
             fit: BoxFit.contain,
           ),
-
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 31),
+              padding: EdgeInsets.symmetric(horizontal: isMobile ? 16 : 31),
               child: Column(
                 children: [
                   /// 78%
@@ -36,7 +36,7 @@ class RewardXpPrograssArea extends StatelessWidget {
                     secondaryColor: colorScheme.onPrimary,
                   ),
 
-                  const SizedBox(height: 8),
+                  SizedBox(height: isMobile ? 4 : 8),
 
                   /// Percent Bar
                   PerceantProcessBar(
@@ -45,8 +45,7 @@ class RewardXpPrograssArea extends StatelessWidget {
                     backgroundColor: const Color(0xFF262626),
                     borderColor: const Color(0xFFB28F0C),
                   ),
-
-                  const SizedBox(height: 8),
+                  SizedBox(height: isMobile ? 4 : 8),
 
                   /// XP to next level
                   CommonRichTextAB(

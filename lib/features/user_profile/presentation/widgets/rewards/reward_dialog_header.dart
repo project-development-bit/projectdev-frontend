@@ -10,10 +10,11 @@ class RewardDialogHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final isMobile = context.isMobile;
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 32),
+          padding: EdgeInsets.symmetric(horizontal: isMobile ? 26 : 35),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -39,7 +40,7 @@ class RewardDialogHeader extends StatelessWidget {
 
         /// DESCRIPTION
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 35),
+          padding: EdgeInsets.symmetric(horizontal: isMobile ? 26 : 35),
           child: CommonRichTextWithIcon(
             prefixText: context.translate("reward_description_prefix"),
             boldNumber: "5",

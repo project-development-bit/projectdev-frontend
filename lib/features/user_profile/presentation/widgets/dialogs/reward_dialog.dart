@@ -1,4 +1,5 @@
 import 'package:cointiply_app/core/common/dialog_gradient_backgroud.dart';
+import 'package:cointiply_app/core/core.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/rewards/reward_dialog_header.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/rewards/reward_xp_prograss_area.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/rewards/status_reward_widget.dart';
@@ -31,6 +32,7 @@ class _RewardDialogState extends State<RewardDialog> {
   Widget build(BuildContext context) {
     final width = _getDialogWidth(context);
     final height = _getDialogHeight(context);
+    final isMobile = context.isMobile;
 
     return Dialog(
       backgroundColor: Colors.transparent,
@@ -51,7 +53,7 @@ class _RewardDialogState extends State<RewardDialog> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     RewardDialogHeader(),
-                    const SizedBox(height: 25),
+                    SizedBox(height: isMobile ? 15 : 25),
                     RewardXpPrograssArea(),
                     StatusRewardsWidget(selectedTier: "bronze"),
                     StatusRewardsTable(),

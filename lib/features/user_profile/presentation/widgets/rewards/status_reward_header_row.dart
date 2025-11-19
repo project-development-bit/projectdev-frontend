@@ -1,5 +1,4 @@
-import 'package:cointiply_app/core/common/common_text.dart';
-import 'package:cointiply_app/core/localization/app_localizations.dart';
+import 'package:cointiply_app/core/core.dart';
 import 'package:flutter/material.dart';
 
 class StatusRewardHeaderRow extends StatelessWidget {
@@ -9,16 +8,18 @@ class StatusRewardHeaderRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-    return Row(
+    final row = Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const SizedBox(width: 70), // left spacer for bronze column
+        const SizedBox(width: 70), // spacer for bronze icon
+
         CommonText.titleSmall(
           localizations?.translate("status_level_required") ??
               "Level\nRequired",
           fontWeight: FontWeight.w700,
           color: colorScheme.onPrimary,
         ),
+
         _HeaderItem(
           image: "assets/images/rewards/daily_spin.png",
           label: localizations?.translate("status_daily_spin") ?? "Daily Spin",
@@ -40,6 +41,20 @@ class StatusRewardHeaderRow extends StatelessWidget {
         ),
       ],
     );
+
+    /// -------- Mobile: SCROLLABLE --------
+    // if (context.screenWidth < 700) {
+    //   return SingleChildScrollView(
+    //     scrollDirection: Axis.horizontal,
+    //     child: ConstrainedBox(
+    //       constraints: const BoxConstraints(minWidth: 650),
+    //       child: row,
+    //     ),
+    //   );
+    // }
+
+    /// -------- Desktop/Tablet: No scroll --------
+    return row;
   }
 }
 
@@ -55,13 +70,12 @@ class _HeaderItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+
     return Container(
       alignment: Alignment.center,
       width: 89,
       height: 99,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Image.asset(image, width: 42),
           const SizedBox(height: 6),
