@@ -97,29 +97,30 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
       debugPrint('🔍 Loading saved credentials...');
       final secureStorage = ref.read(secureStorageServiceProvider);
       final rememberMeEnabled = await secureStorage.isRememberMeEnabled();
-      
+
       debugPrint('🔍 Remember me enabled: $rememberMeEnabled');
-      
+
       if (rememberMeEnabled) {
         final savedEmail = await secureStorage.getSavedEmail();
         final savedPassword = await secureStorage.getSavedPassword();
-        
+
         debugPrint('🔍 Saved email: $savedEmail');
         debugPrint('🔍 Saved password exists: ${savedPassword != null}');
-        
+
         if (savedEmail != null && savedPassword != null && mounted) {
           // Set text directly on controllers (they handle their own notifications)
           _emailController.text = savedEmail;
           _passwordController.text = savedPassword;
-          
+
           // Update remember me state
           setState(() {
             _rememberMe = true;
           });
-          
+
           debugPrint('✅ Saved credentials loaded for: $savedEmail');
           debugPrint('✅ Email controller text: ${_emailController.text}');
-          debugPrint('✅ Password controller text length: ${_passwordController.text.length}');
+          debugPrint(
+              '✅ Password controller text length: ${_passwordController.text.length}');
         } else {
           debugPrint('⚠️ No saved credentials found or widget not mounted');
         }
@@ -183,7 +184,7 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
           onSuccess: () async {
             // Save credentials if remember me is checked
             await _saveCredentialsIfNeeded();
-            
+
             widget.onLoginSuccess?.call();
             // if (mounted) {
             //   final localizations = AppLocalizations.of(context);
@@ -220,15 +221,16 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
     final localizations = AppLocalizations.of(context);
     final isLoading = ref.watch(isAnyAuthLoadingProvider);
 
-    return Form(
-      key: _formKey,
-      child: AutofillGroup(
+    return AutofillGroup(
+      child: Form(
+        key: _formKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisSize: MainAxisSize.min,
           children: [
             // Email Field
             CommonTextField(
+                key: const ValueKey('emailField'),
                 controller: _emailController,
                 focusNode: _emailFocusNode,
                 hintText: localizations?.translate('email_hint') ??
@@ -239,12 +241,13 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
                 prefixIcon: const Icon(Icons.email_outlined),
                 validator: (value) => TextFieldValidators.email(value, context),
                 onSubmitted: (_) => _passwordFocusNode.requestFocus(),
-                autofillHints: [AutofillHints.email]),
+                autofillHints: [AutofillHints.email, AutofillHints.username]),
 
             const SizedBox(height: 16),
 
             // Password Field
             CommonTextField(
+                key: const ValueKey('passwordField'),
                 controller: _passwordController,
                 focusNode: _passwordFocusNode,
                 hintText: localizations?.translate('password_hint') ??
@@ -258,6 +261,7 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
                     fieldName:
                         localizations?.translate('password') ?? 'Password'),
                 onSubmitted: (_) => _handleLogin(),
+                enableSuggestions: false,
                 autofillHints: [AutofillHints.password]),
 
             const SizedBox(height: 16),
@@ -276,15 +280,19 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
                             setState(() {
                               _rememberMe = value ?? false;
                             });
-                            
+
                             // If unchecked, clear saved credentials immediately
                             if (!_rememberMe) {
                               try {
-                                final secureStorage = ref.read(secureStorageServiceProvider);
-                                await secureStorage.clearRememberMeCredentials();
-                                debugPrint('✅ Remember me unchecked - credentials cleared');
+                                final secureStorage =
+                                    ref.read(secureStorageServiceProvider);
+                                await secureStorage
+                                    .clearRememberMeCredentials();
+                                debugPrint(
+                                    '✅ Remember me unchecked - credentials cleared');
                               } catch (e) {
-                                debugPrint('⚠️ Failed to clear credentials on uncheck: $e');
+                                debugPrint(
+                                    '⚠️ Failed to clear credentials on uncheck: $e');
                               }
                             }
                           },
