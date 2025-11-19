@@ -503,5 +503,12 @@
   "status_daily_spin": "နေ့စဉ် လှည့်ပွဲ",
   "status_treasure_chest": "ဂန္ဓာမင်္ဂလာသဲသောင်",
   "status_offer_boost": "ဆုကြေးတိုး",
-  "status_ptc_discount": "PTC ကြော်ငြာလျှော့ဈေး"
+  "status_ptc_discount": "PTC ကြော်ငြာလျှော့ဈေး",
+  "status_level_required": "အဆင့်\nလိုအပ်သည်",
+  "rewards_title": "ဆုများ",
+  "reward_description_prefix": "XP အမှတ်များ ရယူပြီး အဆင့်မြှင့်ကာ ဆုများကို ဖွင့်နိုင်ပါသည်။ XP ၁ ကိုရရန် ",
+  "reward_description_suffix": "အမှတ် ရယူရန်လိုအပ်သည်။",
+  "reward_progress_percent_symbol": "%",
+  "reward_next_level_label": "XP အမှတ်များ လိုအပ်သည် (နောက်အဆင့်သို့)",
+  "reward_level_label": "အဆင့်"
 }
