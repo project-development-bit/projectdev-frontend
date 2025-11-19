@@ -10,6 +10,7 @@ import '../../../../core/localization/app_localizations.dart';
 import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/config/app_constant.dart';
 import '../../../../core/providers/consolidated_auth_provider.dart';
+import '../../../../core/services/secure_storage_service.dart';
 import '../providers/login_provider.dart';
 
 /// Reusable login form widget that can be used in both login page and popup
@@ -55,6 +56,11 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
   void initState() {
     super.initState();
 
+    // Load saved credentials after the first frame
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadSavedCredentials();
+    });
+
     // Listen to login state changes
     ref.listenManual<LoginState>(loginNotifierProvider, (previous, next) async {
       if (!mounted) return;
@@ -83,6 +89,60 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
     _emailFocusNode.dispose();
     _passwordFocusNode.dispose();
     super.dispose();
+  }
+
+  /// Load saved credentials if remember me was enabled
+  Future<void> _loadSavedCredentials() async {
+    try {
+      debugPrint('🔍 Loading saved credentials...');
+      final secureStorage = ref.read(secureStorageServiceProvider);
+      final rememberMeEnabled = await secureStorage.isRememberMeEnabled();
+      
+      debugPrint('🔍 Remember me enabled: $rememberMeEnabled');
+      
+      if (rememberMeEnabled) {
+        final savedEmail = await secureStorage.getSavedEmail();
+        final savedPassword = await secureStorage.getSavedPassword();
+        
+        debugPrint('🔍 Saved email: $savedEmail');
+        debugPrint('🔍 Saved password exists: ${savedPassword != null}');
+        
+        if (savedEmail != null && savedPassword != null && mounted) {
+          // Set text directly on controllers (they handle their own notifications)
+          _emailController.text = savedEmail;
+          _passwordController.text = savedPassword;
+          
+          // Update remember me state
+          setState(() {
+            _rememberMe = true;
+          });
+          
+          debugPrint('✅ Saved credentials loaded for: $savedEmail');
+          debugPrint('✅ Email controller text: ${_emailController.text}');
+          debugPrint('✅ Password controller text length: ${_passwordController.text.length}');
+        } else {
+          debugPrint('⚠️ No saved credentials found or widget not mounted');
+        }
+      }
+    } catch (e) {
+      debugPrint('⚠️ Failed to load saved credentials: $e');
+    }
+  }
+
+  /// Save credentials when remember me is checked and login is successful
+  Future<void> _saveCredentialsIfNeeded() async {
+    try {
+      debugPrint('🔍 Saving credentials... Remember me: $_rememberMe');
+      final secureStorage = ref.read(secureStorageServiceProvider);
+      await secureStorage.saveRememberMeCredentials(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+        rememberMe: _rememberMe,
+      );
+      debugPrint('✅ Credentials save operation completed');
+    } catch (e) {
+      debugPrint('⚠️ Failed to save remember me credentials: $e');
+    }
   }
 
   void _handleLogin() async {
@@ -120,7 +180,10 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
       await authActions.login(
           email: _emailController.text.trim(),
           password: _passwordController.text.trim(),
-          onSuccess: () {
+          onSuccess: () async {
+            // Save credentials if remember me is checked
+            await _saveCredentialsIfNeeded();
+            
             widget.onLoginSuccess?.call();
             // if (mounted) {
             //   final localizations = AppLocalizations.of(context);
@@ -209,10 +272,21 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
                       children: [
                         Checkbox(
                           value: _rememberMe,
-                          onChanged: (value) {
+                          onChanged: (value) async {
                             setState(() {
                               _rememberMe = value ?? false;
                             });
+                            
+                            // If unchecked, clear saved credentials immediately
+                            if (!_rememberMe) {
+                              try {
+                                final secureStorage = ref.read(secureStorageServiceProvider);
+                                await secureStorage.clearRememberMeCredentials();
+                                debugPrint('✅ Remember me unchecked - credentials cleared');
+                              } catch (e) {
+                                debugPrint('⚠️ Failed to clear credentials on uncheck: $e');
+                              }
+                            }
                           },
                         ),
                         CommonText.bodyMedium(
