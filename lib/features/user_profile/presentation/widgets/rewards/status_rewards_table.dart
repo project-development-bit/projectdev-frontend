@@ -35,18 +35,15 @@ class StatusRewardsTable extends StatelessWidget {
       ),
     ];
 
-    // This width acts as the "virtual screen size" for the scrolling table.
-    // It must be large enough to fit all your columns without squishing.
     const double fixedTableWidth = 800.0;
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 32),
-      child: context.screenWidth < 700
+      padding: EdgeInsets.only(bottom: context.isMobile ? 0 : 27),
+      child: context.screenWidth < 750
           ? SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: SizedBox(
-                // CHANGED: Use width (fixed), not minWidth.
-                // This tells the children: "You have exactly 800px, calculate your Expansions based on that."
                 width: fixedTableWidth,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,

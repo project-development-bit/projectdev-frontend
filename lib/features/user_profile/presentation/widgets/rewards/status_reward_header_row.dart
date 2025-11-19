@@ -8,7 +8,7 @@ class StatusRewardHeaderRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-    final row = Row(
+    return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         const SizedBox(width: 70), // spacer for bronze icon
@@ -41,20 +41,6 @@ class StatusRewardHeaderRow extends StatelessWidget {
         ),
       ],
     );
-
-    /// -------- Mobile: SCROLLABLE --------
-    // if (context.screenWidth < 700) {
-    //   return SingleChildScrollView(
-    //     scrollDirection: Axis.horizontal,
-    //     child: ConstrainedBox(
-    //       constraints: const BoxConstraints(minWidth: 650),
-    //       child: row,
-    //     ),
-    //   );
-    // }
-
-    /// -------- Desktop/Tablet: No scroll --------
-    return row;
   }
 }
 

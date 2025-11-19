@@ -44,7 +44,8 @@ class _RewardDialogState extends State<RewardDialog> {
           Container(
             width: width,
             height: height,
-            padding: const EdgeInsets.only(top: 32, bottom: 16),
+            padding:
+                EdgeInsets.only(top: 32, bottom: context.isMobile ? 26 : 40),
             child: SizedBox(
               height: height,
               child: SingleChildScrollView(

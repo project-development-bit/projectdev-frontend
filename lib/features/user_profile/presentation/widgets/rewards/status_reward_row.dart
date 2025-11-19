@@ -1,5 +1,5 @@
+import 'package:cointiply_app/core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/rewards/reward_rich_text.dart';
 
 class StatusRewardRow extends StatelessWidget {
@@ -10,11 +10,10 @@ class StatusRewardRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    // We use a consistent width to match the header items
-    const double columnWidth = 89.0;
+    const double columnWidth = 89.0; // Fixed width to match Header
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
+      padding: EdgeInsets.only(bottom: context.isMobile ? 8 : 11),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -58,7 +57,7 @@ class StatusRewardRow extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SizedBox(
-                    width: 60,
+                    width: 64,
                     child: Center(
                       child: CommonText.bodyMedium(
                         row.levelRequired,
@@ -68,7 +67,7 @@ class StatusRewardRow extends StatelessWidget {
                     ),
                   ),
 
-                  /// 2. Daily Spin (Fixed width to match Header)
+                  /// 2. Daily Spin
                   SizedBox(
                     width: columnWidth,
                     child: Center(
@@ -79,7 +78,7 @@ class StatusRewardRow extends StatelessWidget {
                     ),
                   ),
 
-                  /// 3. Treasure Chest (Fixed width to match Header)
+                  /// 3. Treasure Chest
                   SizedBox(
                     width: columnWidth,
                     child: Center(
@@ -90,7 +89,7 @@ class StatusRewardRow extends StatelessWidget {
                     ),
                   ),
 
-                  /// 4. Offer Boost (Fixed width to match Header)
+                  /// 4. Offer Boost
                   SizedBox(
                     width: columnWidth,
                     child: Center(
@@ -102,7 +101,7 @@ class StatusRewardRow extends StatelessWidget {
                     ),
                   ),
 
-                  /// 5. PTC Discount (Fixed width to match Header)
+                  /// 5. PTC Discount
                   SizedBox(
                     width: columnWidth,
                     child: Center(
