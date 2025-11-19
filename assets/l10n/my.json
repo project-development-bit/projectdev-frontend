@@ -492,5 +492,16 @@
   "join_crypto_event_widget_text": "Gigafaucet Crypto ပွဲများတွင် ပါဝင်ပါ",
   "join_crypto_event_description_widget_text": "Gigafaucet ၏ အခမဲ့ Crypto ရှာဖွေရေး ပွဲများတွင် ပါဝင်ပြီး ပိုမိုများစွာ ရယူပါ။",
   "event_info_widget_title_text": "Event",
-  "event_info_widget_subtitle_text": "အခမဲ့ Crypto ရှာဖွေရေး ပွဲများ"
+  "event_info_widget_subtitle_text": "အခမဲ့ Crypto ရှာဖွေရေး ပွဲများ",
+  "status_rewards_title": "အဆင့်အထား ဆုတံဆိပ်များ",
+  "status_bronze": "ကြေး",
+  "status_silver": "ငွေ",
+  "status_gold": "ရွှေ",
+  "status_diamond": "စိန်",
+  "status_legend": "ဒဏ္ဍာရီ",
+  "status_tier": "အဆင့်",
+  "status_daily_spin": "နေ့စဉ် လှည့်ပွဲ",
+  "status_treasure_chest": "ဂန္ဓာမင်္ဂလာသဲသောင်",
+  "status_offer_boost": "ဆုကြေးတိုး",
+  "status_ptc_discount": "PTC ကြော်ငြာလျှော့ဈေး"
 }

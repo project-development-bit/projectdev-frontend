@@ -492,5 +492,16 @@
   "join_crypto_event_widget_text": "Join the Daily Crypto Adventure",
   "join_crypto_event_description_widget_text": "Earn, play, and collect rewards every day through exclusive events, streak bonuses,\nand community contests.",
   "event_info_widget_title_text": "Event",
-  "event_info_widget_subtitle_text": "Private Treasure Hunt"
+  "event_info_widget_subtitle_text": "Private Treasure Hunt",
+  "status_rewards_title": "Status Rewards",
+  "status_bronze": "Bronze",
+  "status_silver": "Silver",
+  "status_gold": "Gold",
+  "status_diamond": "Diamond",
+  "status_legend": "Legend",
+  "status_tier": "Tier",
+  "status_daily_spin": "Daily Spin",
+  "status_treasure_chest": "Treasure Chest",
+  "status_offer_boost": "Offer Boost",
+  "status_ptc_discount": "PTC Ad Discount"
 }
