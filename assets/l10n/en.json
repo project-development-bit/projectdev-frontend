@@ -186,6 +186,7 @@
   "verification_required_message": "Your account needs to be verified before you can log in. We'll send a verification code to your email address.",
   "verify_now": "Verify Now",
   "_reset_password_section": "Reset Password Section",
+  "reset_password": "Reset Password",
   "update_password": "Update Password",
   "create_new_password": "Create New Password",
   "for_email": "For",

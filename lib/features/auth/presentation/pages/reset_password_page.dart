@@ -139,7 +139,7 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
     return Scaffold(
       appBar: AppBar(
         title: CommonText.titleLarge(
-          context.translate('update_password'),
+          context.translate('reset_password'),
           color: colorScheme.onError,
         ),
         backgroundColor: colorScheme.primary,
