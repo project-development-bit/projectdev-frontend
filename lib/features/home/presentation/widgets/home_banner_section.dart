@@ -1,5 +1,5 @@
 import 'package:cointiply_app/core/common/common_image_widget.dart';
-import 'package:cointiply_app/core/theme/presentation/providers/app_settings_theme_provider.dart';
+import 'package:cointiply_app/core/theme/presentation/providers/app_setting_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

@@ -1,16 +1,8 @@
+import 'package:cointiply_app/core/theme/domain/usecases/app_settings_usecase.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../data/models/app_settings_model.dart';
-import '../../data/repositories/app_settings_repository_impl.dart';
 import '../../dynamic_app_theme.dart';
-import '../../../providers/theme_provider.dart' as theme_provider;
-
-/// Provider for SharedPreferences
-final sharedPreferencesProviderForAppSettings =
-    Provider<SharedPreferences>((ref) {
-  throw UnimplementedError('SharedPreferences must be initialized in main()');
-});
 
 /// State class for app settings theme
 class AppSettingsState {
@@ -55,17 +47,17 @@ class AppSettingsState {
 
 /// Notifier for managing app settings  from server
 class AppSettingsNotifier extends StateNotifier<AppSettingsState> {
-  final AppSettingsRepository repository;
+  final GetAppSettingsUseCase getAppSettingsUseCase;
 
   AppSettingsNotifier({
-    required this.repository,
+    required this.getAppSettingsUseCase,
   }) : super(const AppSettingsState());
 
   /// Load theme configuration from server
   Future<void> loadConfig({bool forceRefresh = false}) async {
     state = state.copyWith(isLoading: true, error: null);
 
-    final result = await repository.getAppSettings(forceRefresh: forceRefresh);
+    final result = await getAppSettingsUseCase.call(forceRefresh);
 
     result.fold(
       (failure) {
@@ -124,55 +116,3 @@ class AppSettingsNotifier extends StateNotifier<AppSettingsState> {
   /// Get current config
   AppConfigData? get currentConfig => state.config;
 }
-
-/// Provider for app settings theme notifier
-final appSettingsThemeProvider =
-    StateNotifierProvider<AppSettingsNotifier, AppSettingsState>((ref) {
-  return AppSettingsNotifier(
-    repository: ref.watch(appSettingsRepositoryProvider),
-  );
-});
-
-/// Provider to get current theme colors based on theme mode
-final currentAppThemeColorsProvider = Provider<ThemeColorsConfig?>((ref) {
-  final appSettingsTheme = ref.watch(appSettingsThemeProvider);
-
-  if (appSettingsTheme.config == null) return null;
-
-  // Watch the existing theme provider to determine if dark mode is active
-  final themeMode = ref.watch(theme_provider.themeProvider);
-  final isDark = themeMode == theme_provider.AppThemeMode.dark;
-
-  return isDark
-      ? appSettingsTheme.config!.colors.dark
-      : appSettingsTheme.config!.colors.light;
-});
-
-/// Provider for fonts config
-final appFontsConfigProvider = Provider<FontsConfig?>((ref) {
-  final appSettingsTheme = ref.watch(appSettingsThemeProvider);
-  return appSettingsTheme.config?.fonts;
-});
-
-/// Provider for typography config
-final appTypographyConfigProvider = Provider<TypographyConfig?>((ref) {
-  final appSettingsTheme = ref.watch(appSettingsThemeProvider);
-  return appSettingsTheme.config?.typography;
-});
-
-/// Provider for banners config
-final appBannersConfigProvider = Provider<List<BannerConfig>>((ref) {
-  final appSettingsTheme = ref.watch(appSettingsThemeProvider);
-  return appSettingsTheme.config?.banners ?? [];
-});
-
-/// Provider for texts config
-final appTextsConfigProvider = Provider<TextsConfig?>((ref) {
-  final appSettingsTheme = ref.watch(appSettingsThemeProvider);
-  return appSettingsTheme.config?.texts;
-});
-
-final bannersConfigProvider = Provider<List<BannerConfig>>((ref) {
-  final appSettingsTheme = ref.watch(appSettingsThemeProvider);
-  return !appSettingsTheme.isLoading ? appSettingsTheme.banners : [];
-});

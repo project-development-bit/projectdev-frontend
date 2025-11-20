@@ -4,7 +4,7 @@
 export 'data/models/app_settings_model.dart';
 
 // Providers
-export 'presentation/providers/app_settings_theme_provider.dart';
+export 'presentation/providers/app_settings_norifier.dart';
 
 // Theme Builder
 export 'dynamic_app_theme.dart';
