@@ -9,6 +9,13 @@ class HomeBannerSection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final banners = ref.watch(bannersConfigProvider);
+
+    final image = Image.asset(
+      'assets/images/bg/test_banner.png',
+      width: double.infinity,
+      height: 350,
+      fit: BoxFit.cover,
+    );
     return SizedBox(
       width: double.infinity,
       height: 350,
@@ -17,12 +24,8 @@ class HomeBannerSection extends ConsumerWidget {
         width: double.infinity,
         height: 350,
         fit: BoxFit.cover,
-        loadingWidget: Image.asset(
-          'assets/images/bg/test_banner.png',
-          width: double.infinity,
-          height: 350,
-          fit: BoxFit.cover,
-        ),
+        errorWidget: image,
+        loadingWidget: image,
       ),
     );
   }
