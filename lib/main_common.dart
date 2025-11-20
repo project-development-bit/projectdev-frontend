@@ -113,7 +113,7 @@ class _MyAppState extends ConsumerState<MyApp> {
     super.initState();
     // Load app settings theme from server on app start
     Future.microtask(() {
-      ref.read(appSettingsThemeProvider.notifier).loadThemeConfig();
+      ref.read(appSettingsThemeProvider.notifier).loadConfig();
     });
   }
 
@@ -129,7 +129,8 @@ class _MyAppState extends ConsumerState<MyApp> {
         'MyApp building with locale: ${currentLocale.languageCode}-${currentLocale.countryCode}');
     debugPrint('MyApp building with theme: ${currentThemeMode.name}');
     debugPrint('MyApp building with flavor: ${currentFlavor.displayName}');
-    debugPrint('App settings theme loading: ${appSettingsThemeState.isLoading}');
+    debugPrint(
+        'App settings theme loading: ${appSettingsThemeState.isLoading}');
 
     // Show splash screen while theme is loading
     if (appSettingsThemeState.isLoading) {
