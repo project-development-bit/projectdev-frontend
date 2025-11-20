@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/services/secure_storage_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../features/auth/presentation/providers/auth_providers.dart';
 import '../../features/auth/presentation/providers/login_provider.dart';
@@ -9,6 +10,9 @@ import '../../features/auth/presentation/providers/logout_provider.dart';
 /// New authentication logic should use the separated login/register providers
 class AuthProvider extends StateNotifier<AuthState> {
   AuthProvider(this._ref) : super(const AuthStateUnauthenticated()) {
+    // Initialize auth state by checking stored tokens
+    _initializeAuthState();
+    
     // Listen to login state changes to keep auth state in sync
     _ref.listen<LoginState>(loginNotifierProvider, (previous, next) {
       if (next is LoginSuccess) {
@@ -27,6 +31,24 @@ class AuthProvider extends StateNotifier<AuthState> {
   }
 
   final Ref _ref;
+
+  /// Initialize auth state by checking stored tokens
+  Future<void> _initializeAuthState() async {
+    try {
+      final secureStorage = _ref.read(secureStorageServiceProvider);
+      final accessToken = await secureStorage.getAuthToken();
+      final userId = await secureStorage.getUserId();
+      
+      if (accessToken != null && accessToken.isNotEmpty && 
+          userId != null && userId.isNotEmpty) {
+        state = const AuthStateAuthenticated();
+      } else {
+        state = const AuthStateUnauthenticated();
+      }
+    } catch (e) {
+      state = const AuthStateUnauthenticated();
+    }
+  }
 
   /// Check if user is currently authenticated
   Future<bool> isAuthenticated() async {
@@ -152,12 +174,30 @@ final authProvider = StateNotifierProvider<AuthProvider, AuthState>(
   (ref) => AuthProvider(ref),
 );
 
-/// Observable authentication status provider
+/// Observable authentication status provider (synchronous)
 /// This provider automatically updates when login/logout state changes
+/// Returns the immediate auth state without async token checking
 final isAuthenticatedObservableProvider = Provider<bool>((ref) {
-  // Watch the auth state to make it reactive
-  final authState = ref.watch(authProvider);
+  // Watch login state for immediate updates - highest priority
+  final loginState = ref.watch(loginNotifierProvider);
+  if (loginState is LoginSuccess) {
+    return true;
+  }
 
+  // Watch logout state for immediate updates
+  final logoutState = ref.watch(logoutNotifierProvider);
+  if (logoutState is LogoutSuccess) {
+    return false;
+  }
+
+  // Watch the auth state as fallback
+  final authState = ref.watch(authProvider);
+  return authState.isAuthenticated;
+});
+
+/// Observable authentication status provider with token validation (async)
+/// This provider checks if access token actually exists in storage
+final isAuthenticatedWithTokenProvider = FutureProvider<bool>((ref) async {
   // Watch login state for immediate updates
   final loginState = ref.watch(loginNotifierProvider);
   if (loginState is LoginSuccess) {
@@ -170,8 +210,16 @@ final isAuthenticatedObservableProvider = Provider<bool>((ref) {
     return false;
   }
 
-  // Check the auth state directly
-  return authState.isAuthenticated;
+  // Check if access token exists in storage
+  try {
+    final secureStorage = ref.watch(secureStorageServiceProvider);
+    final accessToken = await secureStorage.getAuthToken();
+    final userId = await secureStorage.getUserId();
+    return accessToken != null && accessToken.isNotEmpty && 
+           userId != null && userId.isNotEmpty;
+  } catch (e) {
+    return false;
+  }
 });
 
 /// Async version of authentication status provider

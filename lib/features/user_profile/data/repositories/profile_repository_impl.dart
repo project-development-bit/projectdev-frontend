@@ -85,6 +85,10 @@ class ProfileRepositoryImpl implements ProfileRepository {
       final imageUrl = await remoteDataSource.uploadProfilePicture(file);
       return Right(imageUrl);
     } catch (e) {
+      if (e is Failure) {
+        return Left(e);
+      }
+      
       return Left(ServerFailure(message: e.toString()));
     }
   }

@@ -3,7 +3,6 @@ import 'package:cointiply_app/core/utils/utils.dart';
 import 'package:cointiply_app/features/user_profile/data/models/response/upload_profile_avatar_response_model.dart';
 import 'package:cointiply_app/features/user_profile/data/models/response/user_update_respons.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
 import 'profile_remote_data_source.dart';
 
@@ -45,18 +44,11 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   Future<UploadProfileAvatarResponseModel> uploadProfilePicture(
       PlatformFile file) async {
     try {
-      // 1. Convert dart:html File to bytes
-      Uint8List? bytes;
-      if (kIsWeb) {
-        bytes = file.bytes;
-      } else {
-        bytes = await compressImage(file, quality: 20).then((compressedFile) {
-          return compressedFile.readAsBytesSync();
-        });
-      }
+      // Compress image and get bytes (works on both web and mobile)
+      final bytes = await compressImageToBytes(file, quality: 5);
 
-      if (bytes == null) {
-        throw ServerFailure(message: 'File bytes are null');
+      if (bytes.isEmpty) {
+        throw ServerFailure(message: 'File bytes are empty');
       }
 
       final formData = FormData.fromMap({
@@ -80,7 +72,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
 
       if ((response.statusCode ?? 0) >= 200 &&
           (response.statusCode ?? 0) < 300) {
-        return response.data['data']['imageUrl'];
+        return UploadProfileAvatarResponseModel.fromJson(response.data);
       } else {
         throw ServerFailure(message: response.data["message"]);
       }
@@ -88,8 +80,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
       throw ServerFailure(
           message: e.response?.data['message'] ?? 'Unexpected error');
     } catch (e) {
-      e;
-      throw ServerFailure(message: 'Unknown error occurred');
+      throw ServerFailure(message: 'Unknown error occurred: $e');
     }
   }
 

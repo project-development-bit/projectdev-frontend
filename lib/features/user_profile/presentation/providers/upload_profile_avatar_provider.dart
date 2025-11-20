@@ -81,7 +81,7 @@ class UploadProfileAvatarProvider extends StateNotifier<UploadProfileAvatarState
     final file = await FilePicker.platform.pickFiles(
       type: FileType.image,
       allowMultiple: false,
-      withData: true,
+      withData: true, // Must be true for web to load bytes
       compressionQuality: 1,
     );
     if (file != null && file.files.isNotEmpty) {
