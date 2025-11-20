@@ -25,47 +25,4 @@ abstract class ProfileRepository {
   Future<Either<Failure, UploadProfileAvatarResponseModel>>
       uploadProfilePicture(PlatformFile file);
 
-
-  /// Update user's password
-  ///
-  /// [currentPassword] - Current password for verification
-  /// [newPassword] - New password to set
-  /// Returns [Unit] on success or [Failure] on error
-  Future<Either<Failure, Unit>> updatePassword({
-    required String currentPassword,
-    required String newPassword,
-  });
-
-  /// Update user's email address
-  ///
-  /// [newEmail] - New email address
-  /// [password] - Current password for verification
-  /// Returns [Unit] on success or [Failure] on error
-  Future<Either<Failure, Unit>> updateEmail({
-    required String newEmail,
-    required String password,
-  });
-
-  /// Verify user's email address
-  ///
-  /// [verificationCode] - Code sent to email for verification
-  /// Returns [Unit] on success or [Failure] on error
-  Future<Either<Failure, Unit>> verifyEmail(String verificationCode);
-
-  /// Verify user's phone number
-  ///
-  /// [phoneNumber] - Phone number to verify
-  /// [verificationCode] - Code sent via SMS for verification
-  /// Returns [Unit] on success or [Failure] on error
-  Future<Either<Failure, Unit>> verifyPhoneNumber({
-    required String phoneNumber,
-    required String verificationCode,
-  });
-
-  /// Delete user account
-  ///
-  /// [password] - Current password for verification
-  /// Returns [Unit] on success or [Failure] on error
-  Future<Either<Failure, Unit>> deleteAccount(String password);
-
 }

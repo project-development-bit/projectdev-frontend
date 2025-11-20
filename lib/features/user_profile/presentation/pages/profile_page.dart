@@ -1,6 +1,5 @@
 import 'package:cointiply_app/core/core.dart';
 import 'package:cointiply_app/features/user_profile/data/enum/profile_tab_type.dart';
-import 'package:cointiply_app/features/user_profile/presentation/providers/profile_providers.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/profile_tab_provider.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/profile_footer.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/profile_header.dart';

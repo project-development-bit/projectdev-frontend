@@ -1,5 +1,6 @@
 import 'package:cointiply_app/features/chat/presentation/provider/right_chat_overlay_provider.dart';
 import 'package:cointiply_app/features/common/menu/profile_menu.dart';
+import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/user_profile_image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,7 +9,6 @@ import '../../../core/widgets/locale_switch_widget.dart';
 import '../../../core/widgets/theme_switch_widget.dart';
 import '../../../core/extensions/context_extensions.dart';
 import '../../../core/providers/auth_provider.dart';
-import '../../user_profile/presentation/providers/profile_providers.dart';
 
 class CommonAppBar extends ConsumerWidget {
   const CommonAppBar({super.key});
@@ -69,11 +69,11 @@ class CommonAppBar extends ConsumerWidget {
                             ref.read(authProvider.notifier).isAuthenticated(),
                         builder: (context, snapshot) {
                           final isAuthenticated = snapshot.data ?? false;
-                          final profile = ref.watch(currentUserProfileProvider);
+                          final profile = ref.watch(currentUserProvider).user;
 
                           if (isAuthenticated && profile != null) {
                             return Text(
-                              'Welcome, ${profile.displayName ?? profile.username}!',
+                              'Welcome, ${profile.name}!',
                               style: context.bodySmall?.copyWith(
                                 color: context.onSurface.withValues(alpha: 0.7),
                               ),
