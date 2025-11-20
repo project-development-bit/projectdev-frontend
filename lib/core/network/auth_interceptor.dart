@@ -67,24 +67,49 @@ class TokenInterceptor extends Interceptor {
     );
     if (!isTokenRequired) {
       return handler.next(err);
-    } else if (err.response?.statusCode == 401 ||
+    } else if (err.response?.statusCode == 400 ||
+        err.response?.statusCode == 401 ||
         err.response?.statusCode == 403) {
-      if (!isRefreshing) {
-        log("ACCESS TOKEN EXPIRED, GETTING NEW TOKEN PAIR", name: name);
-        isRefreshing = true;
+      // Check if it's a token-related error (expired token, invalid token, etc.)
+      final responseData = err.response?.data;
+      bool isTokenError = false;
 
-        // Try to refresh the token
-        try {
-          await refreshToken(err, handler);
-        } catch (e) {
-          log("REFRESH TOKEN FAILED: $e", name: name);
-          isRefreshing = false;
-          failedRequests = [];
-          return handler.reject(err);
+      if (responseData is Map<String, dynamic>) {
+        final message = responseData['message']?.toString().toLowerCase() ?? '';
+        final error = responseData['error']?.toString().toLowerCase() ?? '';
+        isTokenError = message.contains('token') ||
+            message.contains('expired') ||
+            message.contains('unauthorized') ||
+            error.contains('token') ||
+            error.contains('expired') ||
+            error.contains('unauthorized');
+      }
+
+      // For 401/403, always treat as token error. For 400, check the message
+      if (err.response?.statusCode == 401 ||
+          err.response?.statusCode == 403 ||
+          isTokenError) {
+        // Always add the failed request to the queue first
+        log("ADDING REQUEST TO FAILED QUEUE", name: name);
+        failedRequests.add({'err': err, 'handler': handler});
+        
+        if (!isRefreshing) {
+          log("ACCESS TOKEN EXPIRED, GETTING NEW TOKEN PAIR", name: name);
+          isRefreshing = true;
+
+          // Try to refresh the token
+          try {
+            await refreshToken(err, handler);
+          } catch (e) {
+            log("REFRESH TOKEN FAILED: $e", name: name);
+            isRefreshing = false;
+            failedRequests = [];
+            return handler.reject(err);
+          }
         }
       } else {
-        log("ADDING ERROR REQUEST TO FAILED QUEUE", name: name);
-        failedRequests.add({'err': err, 'handler': handler});
+        // 400 error but not token-related
+        return handler.next(err);
       }
     } else {
       return handler.next(err);
@@ -123,7 +148,7 @@ class TokenInterceptor extends Interceptor {
         failedRequests = [];
 
         // Clear all tokens
-        // await tokenService.clearAllAuthData();
+        await tokenService.clearAllAuthData();
 
         throw DioException(
           requestOptions: err.requestOptions,
@@ -150,7 +175,7 @@ class TokenInterceptor extends Interceptor {
         failedRequests = [];
 
         // Clear all tokens
-        // await tokenService.clearAllAuthData();
+        await tokenService.clearAllAuthData();
 
         throw DioException(
           requestOptions: err.requestOptions,
@@ -220,7 +245,7 @@ class TokenInterceptor extends Interceptor {
       failedRequests = [];
 
       // Clear all tokens on refresh failure
-      // await tokenService.clearAllAuthData();
+      await tokenService.clearAllAuthData();
 
       rethrow;
     } catch (e) {
@@ -229,7 +254,7 @@ class TokenInterceptor extends Interceptor {
       failedRequests = [];
 
       // Clear all tokens on any failure
-      // await tokenService.clearAllAuthData();
+      await tokenService.clearAllAuthData();
 
       rethrow;
     }
