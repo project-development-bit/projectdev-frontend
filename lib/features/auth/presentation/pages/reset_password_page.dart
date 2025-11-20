@@ -139,7 +139,7 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
     return Scaffold(
       appBar: AppBar(
         title: CommonText.titleLarge(
-          l10n?.translate('reset_password') ?? 'Reset Password',
+          context.translate('update_password'),
           color: colorScheme.onError,
         ),
         backgroundColor: colorScheme.primary,
@@ -305,7 +305,7 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
   Widget _buildResetButton(
       BuildContext context, AppLocalizations? l10n, bool isLoading) {
     return CommonButton(
-      text: l10n?.translate('reset_password') ?? 'Reset Password',
+      text: l10n?.translate('update_password') ?? 'Reset Password',
       onPressed: isLoading ? null : _onResetPasswordPressed,
       isLoading: isLoading,
       height: context.isMobile ? 50 : 56,
