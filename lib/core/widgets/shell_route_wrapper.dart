@@ -51,7 +51,6 @@ class ShellRouteWrapper extends StatelessWidget {
                   ),
                   child: GigaFaucetHeader(
                     coinBalance: "14,212,568",
-                    profileImageUrl: "https://your-img-url",
                   ),
                 ),
               ),
