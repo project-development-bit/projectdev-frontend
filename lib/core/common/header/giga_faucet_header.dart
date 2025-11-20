@@ -23,24 +23,27 @@ class GigaFaucetHeader extends StatelessWidget {
 
     return HomeSectionContainer(
         width: double.infinity,
+        decoration: BoxDecoration(
+          color: colorScheme.surface,
+          border: Border(
+            bottom: BorderSide(
+              width: 1,
+              color: Color(0xFF333333),
+            ),
+          ),
+        ),
         child: Center(
           child: Container(
             alignment: Alignment.center,
             constraints: const BoxConstraints(maxWidth: 1240),
             margin: EdgeInsets.symmetric(horizontal: 25),
-            decoration: BoxDecoration(
-              color: colorScheme.surface,
-              border: Border(
-                bottom: BorderSide(
-                  width: 1,
-                  color: Color(0xFF333333),
-                ),
-              ),
+            padding: EdgeInsets.symmetric(
+              horizontal: isMobile || isTablet ? 30 : 0,
             ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                if (isMobile && isTablet) SizedBox(width: 30),
+                // if (isMobile || isTablet) SizedBox(width: 30),
                 Image.asset(
                   "assets/images/giga_faucet_text_logo.png",
                   height: 28,
