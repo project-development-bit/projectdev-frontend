@@ -9,6 +9,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../user_profile_image_widget.dart';
 
+part 'tab/profile_tab_content_widget.dart';
+part 'tab/security_tab_content_widget.dart';
+part 'tab/setting_tab_content_widget.dart';
+
 /// Provider to manage the selected tab index in the Manage Profile dialog
 final tabBarIndexProvider = StateProvider.autoDispose<int>((ref) => 0);
 
@@ -35,22 +39,25 @@ class _ManageProfileDialogState extends ConsumerState<ManageProfileDialog> {
   @override
   Widget build(BuildContext context) {
     return DialogBgWidget(
+      dialogHeight: 526,
       body: _manageDialogBody(),
       title: context.translate("manage_profile_title"),
     );
   }
 
   _manageDialogBody() {
-    return SingleChildScrollView(
-      physics: const AlwaysScrollableScrollPhysics(),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _manageProfileTabBar(),
-          _manageProfileTabBody(),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _manageProfileTabBar(),
+        Expanded(
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: _manageProfileTabBody(),
+          ),
+        ),
+      ],
     );
   }
 
@@ -109,136 +116,12 @@ class _ManageProfileDialogState extends ConsumerState<ManageProfileDialog> {
   Widget _manageProfileTabBody() {
     final selectedIndex = ref.watch(tabBarIndexProvider);
     if (selectedIndex == 0) {
-      return _ProfileTabContent();
+      return ProfileTabContent();
     } else if (selectedIndex == 1) {
-      return SizedBox(); // TODO: Implement Security tab content
+      return SecurityTabContentWidget(); 
     } else if (selectedIndex == 2) {
-      return SizedBox(); // TODO: Implement Settings tab content
+      return SettingTabContentWidget(); 
     }
     return SizedBox();
-  }
-}
-
-class _ProfileTabContent extends ConsumerWidget {
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final email = ref.watch(profileCurrentUserProvider)?.email ?? '';
-    // final country = ref.watch(profileCurrentUserProvider)?.country ?? '';
-    return Column(
-      children: [
-        _profileTabContentItem(
-          title: "Avatar",
-          child: UserProfileImageWidget(size: 25),
-          btnTitle: context.translate("change_your_avatar"),
-          onPressed: () {
-            context.pop();
-
-            showUploadAvatarDialog(context);
-          },
-        ),
-        _profileTabContentItem(
-          title: "Email",
-          child: email.isNotEmpty
-              ? CommonText.bodyMedium(
-                  email,
-                  fontWeight: FontWeight.w500,
-                )
-              : CommonText.bodyMedium(
-                  "No email set",
-                  fontWeight: FontWeight.w500,
-                ),
-          btnTitle: context.translate("change_your_email"),
-          onPressed: () {},
-        ),
-        _profileTabContentItem(
-          title: "Country",
-          child: CommonText.bodyMedium(
-             "No country set",
-            fontWeight: FontWeight.w500,
-          ),
-          btnTitle: context.translate("change_your_country"),
-          onPressed: () {},
-        ),
-        _profileTabContentItem(
-          title: "Offer Token",
-          child: CommonText.bodyMedium(
-            "95f...h45",
-            fontWeight: FontWeight.w500,
-          ),
-          btnTitle: context.translate("show_offer_token"),
-          onPressed: () {},
-        ),
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 12),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            spacing: 12.0,
-            children: [
-              Expanded(
-                  child: CommonText.titleMedium(
-                "",
-                fontWeight: FontWeight.w700,
-              )),
-              Expanded(
-                flex: 4,
-                child: CommonText.bodyMedium(
-                    context.translate("offer_token_description"),
-                    color: Color(0xff98989A)),
-              ),
-            ],
-          ),
-        )
-      ],
-    );
-  }
-
-  Widget _profileTabContentItem(
-      {required String title,
-      required Widget child,
-      required String btnTitle,
-      required Function() onPressed}) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        mainAxisSize: MainAxisSize.max,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        spacing: 21.0,
-        children: [
-          Expanded(
-              child: CommonText.titleMedium(
-            title,
-            fontWeight: FontWeight.w700,
-          )),
-          Expanded(
-            flex: 2,
-            child: Align(alignment: Alignment.centerLeft, child: child),
-          ),
-          Expanded(
-            flex: 2,
-            child: ElevatedButton(
-                onPressed: onPressed,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF262626),
-                  foregroundColor: Colors.black,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(13.0),
-                  child: CommonText.titleSmall(
-                    btnTitle,
-                    color: Color(0xff98989A),
-                  ),
-                )),
-          ),
-        ],
-      ),
-    );
   }
 }

@@ -9,7 +9,13 @@ class DialogBgWidget extends StatelessWidget {
   final Widget body;
   final String title;
   final Function()? onClose;
-  const DialogBgWidget({super.key, required this.body, required this.title, this.onClose});
+  final double? dialogHeight;
+  const DialogBgWidget(
+      {super.key,
+      required this.body,
+      required this.title,
+      this.onClose,
+      this.dialogHeight});
 
   double _getDialogWidth(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -22,7 +28,7 @@ class DialogBgWidget extends StatelessWidget {
   double _getDialogHeight(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     if (context.isTablet) return height * 0.9;
-    return 470;
+    return dialogHeight ?? 470;
   }
 
   @override
@@ -37,7 +43,6 @@ class DialogBgWidget extends StatelessWidget {
         child: Stack(
           children: [
             DialogGradientBackground(width: width, height: height),
-            
             Container(
               width: width,
               height: height,
@@ -51,15 +56,15 @@ class DialogBgWidget extends StatelessWidget {
                       height: 88,
                       child: Row(
                         children: [
-                         CommonText.headlineSmall(
+                          CommonText.headlineSmall(
                             title,
                             fontWeight: FontWeight.w700,
                             color: Colors.white,
                           ),
                           Spacer(),
-                          CloseSquareButton(onTap: (){
+                          CloseSquareButton(onTap: () {
                             context.pop();
-                            if(onClose != null){
+                            if (onClose != null) {
                               onClose!();
                             }
                           })

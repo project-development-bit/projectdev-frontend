@@ -123,7 +123,7 @@ class TokenInterceptor extends Interceptor {
         failedRequests = [];
 
         // Clear all tokens
-        await tokenService.clearAllAuthData();
+        // await tokenService.clearAllAuthData();
 
         throw DioException(
           requestOptions: err.requestOptions,
@@ -150,7 +150,7 @@ class TokenInterceptor extends Interceptor {
         failedRequests = [];
 
         // Clear all tokens
-        await tokenService.clearAllAuthData();
+        // await tokenService.clearAllAuthData();
 
         throw DioException(
           requestOptions: err.requestOptions,
@@ -220,7 +220,7 @@ class TokenInterceptor extends Interceptor {
       failedRequests = [];
 
       // Clear all tokens on refresh failure
-      await tokenService.clearAllAuthData();
+      // await tokenService.clearAllAuthData();
 
       rethrow;
     } catch (e) {
@@ -229,7 +229,7 @@ class TokenInterceptor extends Interceptor {
       failedRequests = [];
 
       // Clear all tokens on any failure
-      await tokenService.clearAllAuthData();
+      // await tokenService.clearAllAuthData();
 
       rethrow;
     }
