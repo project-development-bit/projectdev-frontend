@@ -30,8 +30,8 @@ class _HeaderMenuItemState extends State<HeaderMenuItem> {
         onTap: widget.onTap,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-          margin: const EdgeInsets.only(right: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+          // margin: const EdgeInsets.only(right: 4),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(6),
           ),
