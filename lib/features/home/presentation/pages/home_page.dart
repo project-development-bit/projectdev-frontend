@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/providers/auth_provider.dart';
-import '../../../user_profile/presentation/providers/profile_providers.dart';
 import '../widgets/home_banner_section.dart';
 import '../widgets/home_level_and_reward_section.dart';
 
@@ -20,7 +19,6 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(profileNotifierProvider.notifier).loadProfile();
       // Only initialize user if authenticated
       final isAuthenticated = ref.read(isAuthenticatedObservableProvider);
       if (isAuthenticated) {
@@ -71,61 +69,62 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   /// Handle logout functionality
 
-  Widget _buildFooterCTA(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+  // Widget _buildFooterCTA(BuildContext context) {
+  //   final colorScheme = Theme.of(context).colorScheme;
 
-    return Container(
-      width: double.infinity,
-      color: Theme.of(context).primaryColor,
-      padding: const EdgeInsets.symmetric(
-        horizontal: 24,
-        vertical: 40,
-      ),
-      child: Column(
-        children: [
-          Text(
-            context.translate('ready_to_earn'),
-            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  color: colorScheme.onError,
-                  fontWeight: FontWeight.bold,
-                ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 12),
-          Text(
-            context.translate('join_thousands'),
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: colorScheme.onError.withAlpha(230), // 0.9 * 255
-                ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 24),
-          ElevatedButton(
-            onPressed: () {
-              // Navigate to login page
-              context.goToLogin();
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: colorScheme.onError,
-              foregroundColor: Theme.of(context).primaryColor,
-              padding: const EdgeInsets.symmetric(
-                horizontal: 32,
-                vertical: 16,
-              ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-            child: Text(
-              context.translate('start_earning_now'),
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  //   return Container(
+  //     width: double.infinity,
+  //     color: Theme.of(context).primaryColor,
+  //     padding: const EdgeInsets.symmetric(
+  //       horizontal: 24,
+  //       vertical: 40,
+  //     ),
+  //     child: Column(
+  //       children: [
+  //         Text(
+  //           context.translate('ready_to_earn'),
+  //           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+  //                 color: colorScheme.onError,
+  //                 fontWeight: FontWeight.bold,
+  //               ),
+  //           textAlign: TextAlign.center,
+  //         ),
+  //         const SizedBox(height: 12),
+  //         Text(
+  //           context.translate('join_thousands'),
+  //           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+  //                 color: colorScheme.onError.withAlpha(230), // 0.9 * 255
+  //               ),
+  //           textAlign: TextAlign.center,
+  //         ),
+  //         const SizedBox(height: 24),
+  //         ElevatedButton(
+  //           onPressed: () {
+  //             // Navigate to login page
+  //             context.goToLogin();
+  //           },
+  //           style: ElevatedButton.styleFrom(
+  //             backgroundColor: colorScheme.onError,
+  //             foregroundColor: Theme.of(context).primaryColor,
+  //             padding: const EdgeInsets.symmetric(
+  //               horizontal: 32,
+  //               vertical: 16,
+  //             ),
+  //             shape: RoundedRectangleBorder(
+  //               borderRadius: BorderRadius.circular(8),
+  //             ),
+  //           ),
+  //           child: Text(
+  //             context.translate('start_earning_now'),
+  //             style: const TextStyle(
+  //               fontSize: 18,
+  //               fontWeight: FontWeight.w600,
+  //             ),
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
+
 }

@@ -1,8 +1,10 @@
-import 'package:cointiply_app/core/network/base_dio_client.dart';
+import 'package:cointiply_app/core/core.dart';
+import 'package:cointiply_app/core/utils/utils.dart';
+import 'package:cointiply_app/features/user_profile/data/models/response/upload_profile_avatar_response_model.dart';
 import 'package:cointiply_app/features/user_profile/data/models/response/user_update_respons.dart';
-import 'package:universal_io/io.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
-import 'package:http_parser/http_parser.dart';
 import '../models/response/user_profile_model.dart';
 import 'profile_remote_data_source.dart';
 
@@ -57,34 +59,54 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   }
 
   @override
-  Future<String> uploadProfilePicture(String userId, File imageFile) async {
+  Future<UploadProfileAvatarResponseModel> uploadProfilePicture(
+      PlatformFile file) async {
     try {
-      String fileName = imageFile.path.split('/').last;
-      String mimeType = _getMimeType(fileName);
+      // 1. Convert dart:html File to bytes
+      Uint8List? bytes;
+      if (kIsWeb) {
+        bytes = file.bytes;
+      } else {
+        bytes = await compressImage(file, quality: 20).then((compressedFile) {
+          return compressedFile.readAsBytesSync();
+        });
+      }
 
-      FormData formData = FormData.fromMap({
-        'profile_picture': await MultipartFile.fromFile(
-          imageFile.path,
-          filename: fileName,
-          contentType: MediaType.parse(mimeType),
+      if (bytes == null) {
+        throw ServerFailure(message: 'File bytes are null');
+      }
+
+      final formData = FormData.fromMap({
+        'avatar': MultipartFile.fromBytes(
+          bytes,
+          filename: file.name,
+          contentType: DioMediaType(
+            'image',
+            file.extension?.toLowerCase() ?? 'jpeg',
+          ),
         ),
       });
 
       final response = await _dio.post(
-        '/users/$userId/profile/picture',
+        'users/profile/avatar',
         data: formData,
+        options: Options(
+          contentType: 'multipart/form-data',
+        ),
       );
 
-      if (response.statusCode == 200) {
-        return response.data['data']['profile_picture_url'];
+      if ((response.statusCode ?? 0) >= 200 &&
+          (response.statusCode ?? 0) < 300) {
+        return response.data['data']['imageUrl'];
       } else {
-        throw Exception(
-            'Failed to upload profile picture: ${response.statusCode}');
+        throw ServerFailure(message: response.data["message"]);
       }
     } on DioException catch (e) {
-      throw _handleDioException(e);
+      throw ServerFailure(
+          message: e.response?.data['message'] ?? 'Unexpected error');
     } catch (e) {
-      throw Exception('Unexpected error uploading profile picture: $e');
+      e;
+      throw ServerFailure(message: 'Unknown error occurred');
     }
   }
 
@@ -264,21 +286,4 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
     }
   }
 
-  /// Gets MIME type for file extension
-  String _getMimeType(String fileName) {
-    final extension = fileName.split('.').last.toLowerCase();
-    switch (extension) {
-      case 'jpg':
-      case 'jpeg':
-        return 'image/jpeg';
-      case 'png':
-        return 'image/png';
-      case 'gif':
-        return 'image/gif';
-      case 'webp':
-        return 'image/webp';
-      default:
-        return 'image/jpeg';
-    }
-  }
 }

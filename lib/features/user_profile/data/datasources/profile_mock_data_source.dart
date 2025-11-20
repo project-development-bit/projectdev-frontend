@@ -1,4 +1,6 @@
+import 'package:cointiply_app/features/user_profile/data/models/response/upload_profile_avatar_response_model.dart';
 import 'package:cointiply_app/features/user_profile/data/models/response/user_update_respons.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:universal_io/io.dart';
 import '../../domain/entities/user_profile.dart';
@@ -70,7 +72,8 @@ class ProfileMockDataSource implements ProfileRemoteDataSource {
   }
 
   @override
-  Future<String> uploadProfilePicture(String userId, File imageFile) async {
+  Future<UploadProfileAvatarResponseModel> uploadProfilePicture(
+      PlatformFile imageFile) async {
     await Future.delayed(_mockDelay);
 
     // Simulate uploading and return a mock URL
@@ -85,7 +88,10 @@ class ProfileMockDataSource implements ProfileRemoteDataSource {
     // Return a random mock image URL
     final randomIndex =
         DateTime.now().millisecondsSinceEpoch % mockImageUrls.length;
-    return mockImageUrls[randomIndex];
+    return UploadProfileAvatarResponseModel(
+      success: true,
+      avatarUrl: mockImageUrls[randomIndex],
+    );
   }
 
   @override

@@ -1,4 +1,6 @@
+import 'package:cointiply_app/features/user_profile/data/models/response/upload_profile_avatar_response_model.dart';
 import 'package:cointiply_app/features/user_profile/data/models/response/user_update_respons.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:universal_io/io.dart';
 import '../models/response/user_profile_model.dart';
 
@@ -18,7 +20,8 @@ abstract class ProfileRemoteDataSource {
   );
 
   /// Uploads profile picture
-  Future<String> uploadProfilePicture(String userId, File imageFile);
+  Future<UploadProfileAvatarResponseModel> uploadProfilePicture(
+      PlatformFile imageFile);
 
   /// Updates user password
   Future<void> updatePassword(

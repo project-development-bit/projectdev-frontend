@@ -1,7 +1,8 @@
 import 'package:cointiply_app/features/user_profile/data/models/request/user_update_request.dart';
+import 'package:cointiply_app/features/user_profile/data/models/response/upload_profile_avatar_response_model.dart';
 import 'package:cointiply_app/features/user_profile/data/models/response/user_update_respons.dart';
 import 'package:dartz/dartz.dart';
-import '../entities/user_profile.dart';
+import 'package:file_picker/file_picker.dart';
 import '../../../../core/error/failures.dart';
 
 /// Abstract repository interface for profile operations
@@ -10,11 +11,6 @@ import '../../../../core/error/failures.dart';
 /// It uses the repository pattern to abstract data sources and
 /// implements clean architecture principles.
 abstract class ProfileRepository {
-  /// Get the current user's profile
-  ///
-  /// Returns [UserProfile] on success or [Failure] on error
-  Future<Either<Failure, UserProfile>> getUserProfile();
-
   /// Update the user's profile
   ///
   /// [profile] - Updated profile data
@@ -26,12 +22,9 @@ abstract class ProfileRepository {
   ///
   /// [imagePath] - Local path to the image file
   /// Returns the new image URL on success or [Failure] on error
-  Future<Either<Failure, String>> uploadProfilePicture(String imagePath);
+  Future<Either<Failure, UploadProfileAvatarResponseModel>>
+      uploadProfilePicture(PlatformFile file);
 
-  /// Delete the user's profile picture
-  ///
-  /// Returns [Unit] on success or [Failure] on error
-  Future<Either<Failure, Unit>> deleteProfilePicture();
 
   /// Update user's password
   ///
@@ -75,8 +68,4 @@ abstract class ProfileRepository {
   /// Returns [Unit] on success or [Failure] on error
   Future<Either<Failure, Unit>> deleteAccount(String password);
 
-  /// Get user's profile statistics
-  ///
-  /// Returns [UserProfileStats] on success or [Failure] on error
-  Future<Either<Failure, UserProfileStats>> getProfileStats();
 }

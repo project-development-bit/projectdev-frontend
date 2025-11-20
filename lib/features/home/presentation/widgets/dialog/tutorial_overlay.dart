@@ -21,10 +21,10 @@ class _TutorialOverlayState extends ConsumerState<TutorialOverlay> {
 
     final currentUserState = ref.watch(loggedInUserProvider);
     debugPrint(
-        'Tutorial Overlay - shown: $tutorialShown | !auth: ${!authState.isAuthenticated} showOnboarding : ${currentUserState != null ? !currentUserState.showOnboarding : 'N/A'}');
+        'Tutorial Overlay - shown: $tutorialShown | !auth: ${!authState.isAuthenticated} showOnboarding : ${currentUserState != null ? !currentUserState.shouldShowOnboarding : 'N/A'}');
     if (tutorialShown ||
         !authState.isAuthenticated ||
-        (currentUserState != null && !currentUserState.showOnboarding)) {
+        (currentUserState != null && !currentUserState.shouldShowOnboarding)) {
       return widget.child;
     }
 

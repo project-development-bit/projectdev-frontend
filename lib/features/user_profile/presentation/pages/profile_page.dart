@@ -32,7 +32,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     super.initState();
     // Load profile data and current user data when page is initialized
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(profileNotifierProvider.notifier).loadProfile();
+      ref.read(currentUserProvider.notifier).getCurrentUser();
       // Only initialize user if authenticated
       final isAuthenticated = ref.read(isAuthenticatedObservableProvider);
       if (isAuthenticated) {

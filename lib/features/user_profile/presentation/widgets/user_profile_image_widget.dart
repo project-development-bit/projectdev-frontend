@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/theme/app_colors.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
@@ -12,7 +13,10 @@ class UserProfileImageWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final colorScheme = Theme.of(context).colorScheme;
-    final currentUserState = ref.watch(currentUserProvider);
+    final currentUser = ref.watch(currentUserProvider).user;
+    final avatarUrl = currentUser?.avatarUrl;
+    final userName = currentUser?.name ?? 'U';
+
     return Container(
       width: size + 20,
       height: size + 20,
@@ -24,7 +28,7 @@ class UserProfileImageWidget extends ConsumerWidget {
         ),
       ),
       child: ClipOval(
-        child: currentUserState.user?.name.isNotEmpty == true
+        child: avatarUrl == null || avatarUrl.isEmpty
             ? Container(
                 width: size,
                 height: size,
@@ -33,7 +37,7 @@ class UserProfileImageWidget extends ConsumerWidget {
                     shape: BoxShape.circle),
                 child: Center(
                   child: CommonText.titleLarge(
-                    currentUserState.user!.name.substring(0, 1).toUpperCase(),
+                    userName.substring(0, 1).toUpperCase(),
                   ),
                 ),
               )
@@ -42,7 +46,7 @@ class UserProfileImageWidget extends ConsumerWidget {
                 height: size,
                 child: CircleAvatar(
                   backgroundColor: AppColors.websiteText,
-                  child: Icon(Icons.person, size: 28, color: Colors.white),
+                  child: CachedNetworkImage(imageUrl: avatarUrl),
                 ),
               ),
       ),

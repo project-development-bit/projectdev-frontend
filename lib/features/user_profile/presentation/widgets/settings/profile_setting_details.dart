@@ -1,8 +1,7 @@
 import 'package:cointiply_app/core/core.dart';
 import 'package:cointiply_app/features/user_profile/data/models/request/user_update_request.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
-import 'package:cointiply_app/features/user_profile/presentation/providers/profile_providers.dart';
-import 'package:cointiply_app/features/user_profile/presentation/providers/profile_state_notifier.dart';
+import 'package:cointiply_app/features/user_profile/presentation/providers/update_profile_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -31,13 +30,15 @@ class _ProfileSettingDetailsState extends ConsumerState<ProfileSettingDetails> {
       _initialUsernameValue = _usernameCtrl.text;
     });
 
-    ref.listenManual<ProfileState>(profileNotifierProvider, (previous, next) {
-      switch (next) {
-        case ProfileUpdateSuccess():
+    ref.listenManual<UpdateProfileState>(updateProfileProvider,
+        (previous, next) {
+      switch (next.status) {
+        case UpdateProfileStatus.success:
           _handleProfileSuccess();
           break;
-        case ProfileError(error: final errorState):
-          _handleProfileError(errorState);
+        case UpdateProfileStatus.failure:
+          _handleProfileError(
+              next.errorMessage ?? 'An unknown error occurred.');
           break;
         default:
           break;
@@ -76,7 +77,7 @@ class _ProfileSettingDetailsState extends ConsumerState<ProfileSettingDetails> {
     final isMobile = context.isMobile;
     final currentUserState = ref.watch(currentUserProvider);
 
-    final profileNotifier = ref.read(profileNotifierProvider.notifier);
+    final profileNotifier = ref.read(updateProfileProvider.notifier);
     // Keep in sync if the provider later becomes "loaded"
     ref.listen<CurrentUserState>(currentUserProvider, (prev, next) {
       final user = next.user;
@@ -86,7 +87,7 @@ class _ProfileSettingDetailsState extends ConsumerState<ProfileSettingDetails> {
       }
     });
 
-    final profileState = ref.watch(profileNotifierProvider);
+    final profileState = ref.watch(updateProfileProvider);
 
     return ResponsiveSection(
       padding: EdgeInsets.zero,
@@ -240,7 +241,7 @@ class _ProfileSettingDetailsState extends ConsumerState<ProfileSettingDetails> {
                       ),
                       text: localizations?.translate('btn_save_changes') ??
                           'Save Changes',
-                      isLoading: profileState is ProfileLoading,
+                      isLoading: profileState.isLoading,
                       onPressed: () {
                         if (_usernameCtrl.text.trim() ==
                             _initialUsernameValue) {

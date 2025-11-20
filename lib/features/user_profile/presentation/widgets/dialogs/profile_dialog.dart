@@ -10,6 +10,8 @@ import 'package:cointiply_app/core/common/close_square_button.dart';
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
 
+
+
 class ProfileDialog extends StatefulWidget {
   const ProfileDialog({super.key});
 
@@ -23,14 +25,14 @@ class _ProfileDialogState extends State<ProfileDialog> {
   double _getDialogWidth(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
 
-    if (width <= 600) return width; // Mobile → full width
-    if (width <= 1100) return width * 0.8; // Tablet → 80%
+    if (context.isMobile) return width; // Mobile → full width
+    if (context.isTablet) return width * 0.8; // Tablet → 80%
     return 650; //Fixed width for desktop
   }
 
   double _getDialogHeight(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
-    if (height <= 700) return height * 0.9;
+    if (context.isTablet) return height * 0.9;
     return 680;
   }
 
