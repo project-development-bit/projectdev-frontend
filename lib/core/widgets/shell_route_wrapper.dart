@@ -1,5 +1,5 @@
+import 'package:cointiply_app/core/common/header/giga_faucet_header.dart';
 import 'package:cointiply_app/core/theme/app_colors.dart';
-import 'package:cointiply_app/features/common/widgets/build_app_bar_title.dart';
 import 'package:cointiply_app/features/home/presentation/widgets/mobile_drawer.dart';
 import 'package:flutter/material.dart';
 import '../../../core/extensions/context_extensions.dart';
@@ -38,6 +38,7 @@ class ShellRouteWrapper extends StatelessWidget {
                   MediaQuery.of(context).size.width < 768,
               flexibleSpace: FlexibleSpaceBar(
                 background: Container(
+                  alignment: Alignment.center,
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
@@ -48,9 +49,12 @@ class ShellRouteWrapper extends StatelessWidget {
                       ],
                     ),
                   ),
+                  child: GigaFaucetHeader(
+                    coinBalance: "14,212,568",
+                    profileImageUrl: "https://your-img-url",
+                  ),
                 ),
               ),
-              title: CommonAppBar(),
               titleSpacing: 16,
             ),
           ];

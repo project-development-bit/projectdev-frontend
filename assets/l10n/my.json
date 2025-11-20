@@ -492,5 +492,12 @@
   "join_crypto_event_widget_text": "Gigafaucet Crypto ပွဲများတွင် ပါဝင်ပါ",
   "join_crypto_event_description_widget_text": "Gigafaucet ၏ အခမဲ့ Crypto ရှာဖွေရေး ပွဲများတွင် ပါဝင်ပြီး ပိုမိုများစွာ ရယူပါ။",
   "event_info_widget_title_text": "Event",
-  "event_info_widget_subtitle_text": "အခမဲ့ Crypto ရှာဖွေရေး ပွဲများ"
+  "event_info_widget_subtitle_text": "အခမဲ့ Crypto ရှာဖွေရေး ပွဲများ",
+  "menu_earn_cryptos": "Crypto ပြန်လာမည့်အမှတ်များ",
+  "menu_contests": "ပြိုင်ပွဲများ",
+  "menu_events": "အစီအစဉ်များ",
+  "menu_shop": "စျေးဝယ်ရန်",
+  "menu_help": "အကူအညီ",
+  "menu_blog": "ဘလော့ဂ်",
+  "profile_title": "ကျွန်ုပ်၏ပရိုဖိုင်"
 }

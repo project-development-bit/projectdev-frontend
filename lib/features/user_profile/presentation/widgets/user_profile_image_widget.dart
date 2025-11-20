@@ -20,7 +20,7 @@ class UserProfileImageWidget extends ConsumerWidget {
         shape: BoxShape.circle,
         border: Border.all(
           color: borderColor ?? Color(0xFF00A0DC), // TODO use from colorScheme
-          width: 2.5,
+          width: 2,
         ),
       ),
       child: ClipOval(
@@ -33,7 +33,9 @@ class UserProfileImageWidget extends ConsumerWidget {
                     shape: BoxShape.circle),
                 child: Center(
                   child: CommonText.titleLarge(
-                    currentUserState.user!.name.substring(0, 1).toUpperCase(),
+                    currentUserState.user!.name
+                        .substring(0, 1)
+                        .toUpperCase(), // TODO : to use image from user profile
                   ),
                 ),
               )

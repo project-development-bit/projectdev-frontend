@@ -492,5 +492,12 @@
   "join_crypto_event_widget_text": "Join the Daily Crypto Adventure",
   "join_crypto_event_description_widget_text": "Earn, play, and collect rewards every day through exclusive events, streak bonuses,\nand community contests.",
   "event_info_widget_title_text": "Event",
-  "event_info_widget_subtitle_text": "Private Treasure Hunt"
+  "event_info_widget_subtitle_text": "Private Treasure Hunt",
+  "menu_earn_cryptos": "Earn Cryptos",
+  "menu_contests": "Contests",
+  "menu_events": "Events",
+  "menu_shop": "Shop",
+  "menu_help": "Help",
+  "menu_blog": "Blog",
+  "profile_title": "My Profile"
 }
