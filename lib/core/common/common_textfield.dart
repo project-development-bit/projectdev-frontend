@@ -48,6 +48,7 @@ class CommonTextField extends StatefulWidget {
   final Color? borderColor;
   final double? borderWidth;
   final Iterable<String>? autofillHints;
+  final bool? enableSuggestions;
 
   const CommonTextField({
     super.key,
@@ -94,6 +95,7 @@ class CommonTextField extends StatefulWidget {
     this.borderColor,
     this.borderWidth,
     this.autofillHints,
+    this.enableSuggestions,
   });
 
   @override
@@ -120,6 +122,7 @@ class _CommonTextFieldState extends State<CommonTextField> {
     final theme = Theme.of(context);
 
     return TextFormField(
+      key: widget.key,
       controller: widget.controller,
       keyboardType: widget.keyboardType,
       textInputAction: widget.textInputAction,
@@ -131,6 +134,7 @@ class _CommonTextFieldState extends State<CommonTextField> {
       maxLength: widget.maxLength,
       onChanged: widget.onChanged,
       onTap: widget.onTap,
+      enableSuggestions: widget.enableSuggestions ?? true,
       onFieldSubmitted: widget.onSubmitted,
       onEditingComplete: widget.onEditingComplete,
       validator: widget.validator,

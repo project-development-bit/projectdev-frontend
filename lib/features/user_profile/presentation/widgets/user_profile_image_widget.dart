@@ -22,7 +22,7 @@ class UserProfileImageWidget extends ConsumerWidget {
         shape: BoxShape.circle,
         border: Border.all(
           color: borderColor ?? Color(0xFF00A0DC), // TODO use from colorScheme
-          width: 2.5,
+          width: 2,
         ),
       ),
       child: ClipOval(

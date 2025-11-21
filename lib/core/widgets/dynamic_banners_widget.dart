@@ -1,7 +1,7 @@
+import 'package:cointiply_app/core/theme/presentation/providers/app_setting_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../theme/presentation/providers/app_settings_theme_provider.dart';
 import '../theme/data/models/app_settings_model.dart';
 
 /// Widget to display banners from app settings

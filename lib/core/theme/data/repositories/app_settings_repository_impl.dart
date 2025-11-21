@@ -1,14 +1,32 @@
+import 'package:cointiply_app/core/network/base_dio_client.dart';
+import 'package:cointiply_app/core/theme/presentation/providers/app_setting_providers.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../error/failures.dart';
 import '../datasources/app_settings_local_data_source.dart';
 import '../datasources/app_settings_remote_data_source.dart';
 import '../models/app_settings_model.dart';
 
+/// Provider for AppSettingsRepository
+final appSettingsRepositoryProvider = Provider<AppSettingsRepository>((ref) {
+  final dioClient = ref.watch(dioClientProvider);
+
+  return AppSettingsRepositoryImpl(
+    remoteDataSource: AppSettingsRemoteDataSourceImpl(
+      dioClient: dioClient,
+    ),
+    localDataSource: AppSettingsLocalDataSourceImpl(
+      sharedPreferences: ref.watch(sharedPreferencesProviderForAppSettings),
+    ),
+  );
+});
+
 abstract class AppSettingsRepository {
   /// Get app settings from server or cache
   /// Returns [Right] with [AppConfigData] on success
   /// Returns [Left] with [Failure] on error
-  Future<Either<Failure, AppConfigData>> getAppSettings({bool forceRefresh = false});
+  Future<Either<Failure, AppConfigData>> getAppSettings(
+      {bool forceRefresh = false});
 }
 
 class AppSettingsRepositoryImpl implements AppSettingsRepository {
@@ -35,9 +53,10 @@ class AppSettingsRepositoryImpl implements AppSettingsRepository {
 
       // Fetch from server
       final response = await remoteDataSource.getAppSettings();
-      
+
       if (!response.success || response.data.isEmpty) {
-        return const Left(ServerFailure(message: 'Failed to fetch app settings'));
+        return const Left(
+            ServerFailure(message: 'Failed to fetch app settings'));
       }
 
       // Cache the response
