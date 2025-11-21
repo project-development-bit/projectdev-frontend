@@ -1,8 +1,11 @@
 import 'package:cointiply_app/core/common/header/giga_faucet_header.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:cointiply_app/core/theme/app_colors.dart';
+import 'package:cointiply_app/features/chat/presentation/provider/right_chat_overlay_provider.dart';
 import 'package:cointiply_app/features/home/presentation/widgets/mobile_drawer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 
 /// A wrapper widget for shell routes that provides a common sliver-based layout.
 /// This allows all pages under the ShellRoute (e.g., Home, Profile, Chat) to share
@@ -57,6 +60,22 @@ class ShellRouteWrapper extends StatelessWidget {
         },
         body: child,
       ),
+      floatingActionButton: Consumer(builder: (context, ref, child) {
+        final isChatOpen = ref.watch(rightChatOverlayProvider);
+        if (isChatOpen) {
+          return const SizedBox.shrink();
+        }
+        return GestureDetector(
+          onTap: () {
+            ref.read(rightChatOverlayProvider.notifier).toggle();
+          },
+          child: SvgPicture.asset(
+            'assets/images/icons/chat_message.svg',
+            width: 72,
+            height: 72,
+          ),
+        );
+      }),
     );
   }
 }
