@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/common/header/header_coin_balance_box.dart';
 import 'package:cointiply_app/features/common/widgets/custom_pointer_interceptor.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -70,8 +71,16 @@ class _MobileDrawerState extends ConsumerState<MobileDrawer> {
                   if (isAuthenticated) ...[
                     // Account
                     _buildSectionHeader(context, context.translate('account')),
+                    // Coin Balance
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                      child: HeaderCoinBalanceBox(
+                        coinBalance: "14,212,568",
+                      ),
+                    ),
                     // Profile
                     _buildProfileItem(context, currentUserState),
+
                     _buildSectionHeader(context, context.translate('support')),
                     _buildChatItem(context),
                     _buildContactUSItem(context),

@@ -533,6 +533,54 @@
       <p class="loading-text">Loading...</p>
     </div>
   </div>
+  <script>
+    // This script helps browsers detect password/email fields in Flutter Web
+    // by injecting standard HTML attributes when inputs are rendered.
+
+    const autofillObserver = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.addedNodes.length) {
+          setupAutofillAttributes();
+        }
+      });
+    });
+
+    // Start observing changes in the body
+    window.addEventListener('DOMContentLoaded', () => {
+      autofillObserver.observe(document.body, {
+        childList: true,
+        subtree: true,
+      });
+    });
+
+    function setupAutofillAttributes() {
+      // 1. Detect Password Fields
+      const passwordInputs = document.querySelectorAll('input[type="password"]');
+      passwordInputs.forEach(input => {
+        // Set name="password"
+        if (input.getAttribute('name') !== 'password') {
+          input.setAttribute('name', 'password');
+        }
+        // Set autocomplete="current-password"
+        if (input.getAttribute('autocomplete') !== 'current-password') {
+          input.setAttribute('autocomplete', 'current-password');
+        }
+      });
+
+      // 2. Detect Email/Username Fields
+      // We specifically look for inputs with type="email" which Flutter sets
+      // when you use TextInputType.emailAddress
+      const emailInputs = document.querySelectorAll('input[type="email"]');
+      emailInputs.forEach(input => {
+        if (!input.getAttribute('name')) {
+          input.setAttribute('name', 'email');
+        }
+        if (!input.getAttribute('autocomplete')) {
+          input.setAttribute('autocomplete', 'username');
+        }
+      });
+    }
+  </script>
   <script src="flutter_bootstrap.js" async=""></script>
 </body>
 

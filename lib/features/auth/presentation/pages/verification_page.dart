@@ -1,10 +1,11 @@
 import 'package:cointiply_app/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pinput/pinput.dart';
+
 import '../../../../routing/routing.dart';
 import '../providers/verification_provider.dart';
 import '../providers/resend_timer_provider.dart';
-import '../widgets/verification_code_input.dart';
 
 class VerificationPage extends ConsumerStatefulWidget {
   final String email;
@@ -23,131 +24,98 @@ class VerificationPage extends ConsumerStatefulWidget {
 }
 
 class _VerificationPageState extends ConsumerState<VerificationPage> {
-  final List<TextEditingController> _controllers = List.generate(
-    4,
-    (index) => TextEditingController(),
-  );
-  final List<FocusNode> _focusNodes = List.generate(
-    4,
-    (index) => FocusNode(),
-  );
+  late final TextEditingController _pinController;
 
   @override
   void initState() {
     super.initState();
+    _pinController = TextEditingController();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // Start timer when page loads
       ref.read(resendTimerProvider.notifier).startTimer();
 
       if (widget.isSendCode) {
-        ref
-            .read(verificationNotifierProvider.notifier)
-            .resendCode(email: widget.email);
+        ref.read(verificationNotifierProvider.notifier).resendCode(
+              email: widget.email,
+            );
       }
     });
 
-    // Listen to state changes for navigation
-    ref.listenManual<VerificationState>(verificationNotifierProvider,
-        (previous, next) {
-      if (next is VerificationSuccess) {
-        // Show success message and navigate to login
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(next.message),
-            backgroundColor: AppColors.success,
-          ),
-        );
-        if (widget.isFromForgotPassword) {
-          context.goToResetPassword(email: widget.email);
-          return;
+    ref.listenManual<VerificationState>(
+      verificationNotifierProvider,
+      (previous, next) {
+        if (next is VerificationSuccess) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(next.message),
+              backgroundColor: AppColors.success,
+            ),
+          );
+
+          if (widget.isFromForgotPassword) {
+            context.goToResetPassword(email: widget.email);
+            return;
+          }
+
+          GoRouterExtension(context).go('/auth/login');
         }
-        GoRouterExtension(context).go('/auth/login');
-      } else if (next is VerificationError) {
-        // Show error message and clear code
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(next.message),
-            backgroundColor: Theme.of(context).colorScheme.error,
-          ),
-        );
-        _clearCode();
-      } else if (next is ResendCodeSuccess) {
-        // Show success message for resend code
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(next.message),
-            backgroundColor: AppColors.success,
-          ),
-        );
-        // Timer is restarted in _resendCode method
-      }
-    });
+
+        if (next is VerificationError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(next.message),
+              backgroundColor: Theme.of(context).colorScheme.error,
+            ),
+          );
+          _pinController.clear();
+        }
+
+        if (next is ResendCodeSuccess) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(next.message),
+              backgroundColor: AppColors.success,
+            ),
+          );
+        }
+      },
+    );
   }
 
   @override
   void dispose() {
-    for (final controller in _controllers) {
-      controller.dispose();
-    }
-    for (final focusNode in _focusNodes) {
-      focusNode.dispose();
-    }
+    _pinController.dispose();
     super.dispose();
-  }
-
-  void _onCodeChanged(int index, String value) {
-    if (value.isNotEmpty && index < 3) {
-      _focusNodes[index + 1].requestFocus();
-    } else if (value.isEmpty && index > 0) {
-      _focusNodes[index - 1].requestFocus();
-    }
-
-    // Check if all fields are filled
-    if (_controllers.every((controller) => controller.text.isNotEmpty)) {
-      final code = _controllers.map((controller) => controller.text).join();
-      _verifyCode(code);
-    }
   }
 
   void _verifyCode(String code) {
     if (widget.isFromForgotPassword) {
       ref
           .read(verificationNotifierProvider.notifier)
-          .verifyCodeForForgotPassword(
-            email: widget.email,
-            code: code,
-          );
+          .verifyCodeForForgotPassword(email: widget.email, code: code);
     } else {
-      ref.read(verificationNotifierProvider.notifier).verifyCode(
-            email: widget.email,
-            code: code,
-          );
+      ref
+          .read(verificationNotifierProvider.notifier)
+          .verifyCode(email: widget.email, code: code);
     }
   }
 
   void _resendCode() {
     final canResend = ref.read(canResendProvider);
-    if (canResend && mounted) {
-      if (widget.isFromForgotPassword) {
-        ref
-            .read(verificationNotifierProvider.notifier)
-            .resendCodeForForgotPassword(email: widget.email);
-      } else {
-        ref.read(verificationNotifierProvider.notifier).resendCode(
-              email: widget.email,
-            );
-      }
-      // Restart timer after resending
-      ref.read(resendTimerProvider.notifier).startTimer();
-    }
-  }
 
-  void _clearCode() {
-    for (final controller in _controllers) {
-      controller.clear();
+    if (!canResend) return;
+
+    if (widget.isFromForgotPassword) {
+      ref
+          .read(verificationNotifierProvider.notifier)
+          .resendCodeForForgotPassword(email: widget.email);
+    } else {
+      ref
+          .read(verificationNotifierProvider.notifier)
+          .resendCode(email: widget.email);
     }
-    _focusNodes[0].requestFocus();
+
+    ref.read(resendTimerProvider.notifier).startTimer();
   }
 
   @override
@@ -157,12 +125,47 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
     final canResend = ref.watch(canResendProvider);
     final countdown = ref.watch(countdownProvider);
     final colorScheme = Theme.of(context).colorScheme;
+
+    final isLoading = verificationState is VerificationLoading;
+
+    // === PIN THEME ============================================================
+    final defaultPinTheme = PinTheme(
+      width: 60,
+      height: 60,
+      textStyle: Theme.of(context).textTheme.headlineSmall?.copyWith(
+            fontWeight: FontWeight.bold,
+            color: colorScheme.onPrimary,
+          ),
+      decoration: BoxDecoration(
+        color: colorScheme.surface,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: context.outline.withAlpha(200),
+        ),
+      ),
+    );
+
+    final focusedPinTheme = defaultPinTheme.copyDecorationWith(
+      border: Border.all(
+        color: Theme.of(context).colorScheme.primary,
+        width: 2,
+      ),
+      color: Theme.of(context).colorScheme.surface,
+    );
+
+    final disabledPinTheme = defaultPinTheme.copyDecorationWith(
+      color: colorScheme.surface.withAlpha(128),
+    );
+
+    // ==========================================================================
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: context.onSurface),
+          icon: Icon(Icons.arrow_back,
+              color: Theme.of(context).colorScheme.onSurface),
           onPressed: () => GoRouterExtension(context).pop(),
         ),
         actions: const [
@@ -182,27 +185,28 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
             children: [
               const SizedBox(height: 32),
 
-              // Header Icon
+              // Icon
               Container(
                 width: context.isMobile ? 70 : 80,
                 height: context.isMobile ? 70 : 80,
                 decoration: BoxDecoration(
-                  color: context.primary.withAlpha(26), // 0.1 * 255 = 26
+                  color: Theme.of(context).colorScheme.primary.withAlpha(26),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
                   Icons.email_outlined,
                   size: context.isMobile ? 35 : 40,
-                  color: context.primary,
+                  color: Theme.of(context).colorScheme.primary,
                 ),
               ),
+
               const SizedBox(height: 24),
 
               // Title
               CommonText.headlineMedium(
                 localizations?.translate('verify_email') ?? 'Verify Your Email',
                 fontWeight: FontWeight.bold,
-                color: context.onSurface,
+                color: Theme.of(context).colorScheme.onSurface,
                 textAlign: TextAlign.center,
               ),
 
@@ -212,13 +216,13 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
               CommonText.bodyLarge(
                 localizations?.translate('verification_description') ??
                     'We have sent a 4-digit verification code to',
-                color: context.onSurface.withAlpha(179), // 0.7 * 255 = 179
+                color: Theme.of(context).colorScheme.onSurface.withAlpha(179),
                 textAlign: TextAlign.center,
               ),
 
               const SizedBox(height: 8),
 
-              // Email display
+              // Email text
               CommonText.bodyLarge(
                 widget.email,
                 fontWeight: FontWeight.w600,
@@ -228,17 +232,20 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
 
               const SizedBox(height: 32),
 
-              // Verification Code Input
-              VerificationCodeInput(
-                controllers: _controllers,
-                focusNodes: _focusNodes,
-                onChanged: _onCodeChanged,
-                enabled: verificationState is! VerificationLoading,
+              // === PIN INPUT ====================================================
+              Pinput(
+                controller: _pinController,
+                enabled: !isLoading,
+                length: 4,
+                defaultPinTheme: defaultPinTheme,
+                focusedPinTheme: focusedPinTheme,
+                disabledPinTheme: disabledPinTheme,
+                onCompleted: (value) => _verifyCode(value),
               ),
+              // ==================================================================
 
               const SizedBox(height: 24),
 
-              // Loading indicator or error state
               if (verificationState is VerificationLoading)
                 const CircularProgressIndicator()
               else if (verificationState is VerificationError)
@@ -259,7 +266,7 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
 
               const Spacer(),
 
-              // Resend code section
+              // Resend text
               Column(
                 children: [
                   CommonText.bodyMedium(
