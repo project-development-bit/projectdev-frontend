@@ -1,7 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/core.dart';
-import 'package:cointiply_app/core/theme/app_colors.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
