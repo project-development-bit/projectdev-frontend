@@ -1,6 +1,6 @@
+import 'package:cointiply_app/core/theme/presentation/providers/app_setting_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../theme/presentation/providers/app_settings_theme_provider.dart';
 import '../widgets/dynamic_banners_widget.dart';
 
 /// Example page demonstrating dynamic theme features
@@ -36,13 +36,16 @@ class DynamicThemeExamplePage extends ConsumerWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.error_outline, size: 64, color: Colors.red),
+                      const Icon(Icons.error_outline,
+                          size: 64, color: Colors.red),
                       const SizedBox(height: 16),
                       Text('Error: ${themeState.error}'),
                       const SizedBox(height: 16),
                       ElevatedButton(
                         onPressed: () {
-                          ref.read(appSettingsThemeProvider.notifier).refreshThemeConfig();
+                          ref
+                              .read(appSettingsThemeProvider.notifier)
+                              .refreshThemeConfig();
                         },
                         child: const Text('Retry'),
                       ),
@@ -69,8 +72,10 @@ class DynamicThemeExamplePage extends ConsumerWidget {
                                 ),
                               ),
                               const SizedBox(height: 8),
-                              Text('Version: ${themeState.config?.configVersion ?? 'N/A'}'),
-                              Text('Color Scheme: ${themeState.config?.colorScheme ?? 'N/A'}'),
+                              Text(
+                                  'Version: ${themeState.config?.configVersion ?? 'N/A'}'),
+                              Text(
+                                  'Color Scheme: ${themeState.config?.colorScheme ?? 'N/A'}'),
                               Text('Heading Font: ${fonts?.heading ?? 'N/A'}'),
                               Text('Body Font: ${fonts?.body ?? 'N/A'}'),
                               Text('Banners: ${banners.length}'),

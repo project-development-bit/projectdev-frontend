@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/theme/presentation/providers/app_setting_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,7 +10,6 @@ import 'package:cointiply_app/core/localization/app_localizations.dart';
 import 'core/providers/locale_provider.dart';
 import 'core/providers/theme_provider.dart';
 import 'core/theme/app_theme.dart';
-import 'core/theme/presentation/providers/app_settings_theme_provider.dart';
 import 'core/config/app_flavor.dart';
 import 'core/config/flavor_manager.dart';
 import 'core/widgets/flavor_banner.dart';
@@ -113,7 +113,7 @@ class _MyAppState extends ConsumerState<MyApp> {
     super.initState();
     // Load app settings theme from server on app start
     Future.microtask(() {
-      ref.read(appSettingsThemeProvider.notifier).loadThemeConfig();
+      ref.read(appSettingsThemeProvider.notifier).loadConfig();
     });
   }
 
@@ -129,7 +129,8 @@ class _MyAppState extends ConsumerState<MyApp> {
         'MyApp building with locale: ${currentLocale.languageCode}-${currentLocale.countryCode}');
     debugPrint('MyApp building with theme: ${currentThemeMode.name}');
     debugPrint('MyApp building with flavor: ${currentFlavor.displayName}');
-    debugPrint('App settings theme loading: ${appSettingsThemeState.isLoading}');
+    debugPrint(
+        'App settings theme loading: ${appSettingsThemeState.isLoading}');
 
     // Show splash screen while theme is loading
     if (appSettingsThemeState.isLoading) {

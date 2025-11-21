@@ -1,5 +1,5 @@
 import 'package:cointiply_app/core/network/base_dio_client.dart';
-import 'package:cointiply_app/features/reward/response/reward_response.dart';
+import 'package:cointiply_app/features/reward/data/models/response/reward_response.dart';
 
 class RewardRemoteDataSource {
   final DioClient _dio;
