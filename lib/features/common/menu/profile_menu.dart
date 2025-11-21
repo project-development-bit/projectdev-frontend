@@ -5,6 +5,7 @@ import 'package:cointiply_app/core/theme/theme.dart';
 import 'package:cointiply_app/features/auth/presentation/providers/logout_provider.dart';
 import 'package:cointiply_app/features/common/widgets/custom_pointer_interceptor.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/profile_dialog.dart';
+import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/reward_dialog.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cointiply_app/core/common/common_text.dart';
@@ -62,7 +63,10 @@ class ProfileMenu extends StatelessWidget {
 
           _MenuItem(
             title: context.translate("rewards"),
-            onTap: () {},
+            onTap: () {
+              closeMenu();
+              _showRewardDialog(context);
+            },
           ),
 
           _MenuItem(
@@ -112,6 +116,17 @@ class ProfileMenu extends StatelessWidget {
       barrierDismissible: true,
       barrierColor: colorScheme.scrim.withValues(alpha: 0.6),
       builder: (context) => const ProfileDialog(),
+    );
+  }
+
+  void _showRewardDialog(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      barrierColor: colorScheme.scrim.withValues(alpha: 0.6),
+      builder: (context) => const RewardDialog(),
     );
   }
 
