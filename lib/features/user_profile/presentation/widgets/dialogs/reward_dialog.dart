@@ -1,6 +1,5 @@
 import 'package:cointiply_app/core/common/dialog_gradient_backgroud.dart';
 import 'package:cointiply_app/core/core.dart';
-import 'package:cointiply_app/features/reward/data/models/response/reward_data.dart';
 import 'package:cointiply_app/features/reward/presentation/providers/reward_provider.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/rewards/reward_dialog_header.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/rewards/reward_xp_prograss_area.dart';
@@ -14,12 +13,6 @@ class RewardDialog extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final rewardState = ref.watch(rewardProvider);
-    final rewards = rewardState.rewards?.data;
-
-    final isLoading = rewardState.isLoading;
-    final error = rewardState.error;
-
     final width = _dialogWidth(context);
     final height = _dialogHeight(context);
 
@@ -29,29 +22,14 @@ class RewardDialog extends ConsumerWidget {
       child: Stack(
         children: [
           DialogGradientBackground(width: width, height: height),
-          if (isLoading) const Center(child: CircularProgressIndicator()),
-          if (!isLoading && error != null)
-            Center(
-              child: CommonText.bodyLarge(
-                error,
-                color: Colors.redAccent,
-              ),
-            ),
-          if (!isLoading && error == null && rewards != null)
-            _RewardDialogContent(
-              width: width,
-              height: height,
-              data: rewards,
-            ),
+          _RewardDialogContent(width: width, height: height),
         ],
       ),
     );
   }
 
   double _dialogWidth(BuildContext context) =>
-      MediaQuery.of(context).size.width <= 600
-          ? MediaQuery.of(context).size.width
-          : 650;
+      context.isMobile ? MediaQuery.of(context).size.width : 650;
 
   double _dialogHeight(BuildContext context) =>
       MediaQuery.of(context).size.height <= 700
@@ -62,12 +40,10 @@ class RewardDialog extends ConsumerWidget {
 class _RewardDialogContent extends StatelessWidget {
   final double width;
   final double height;
-  final RewardData data;
 
   const _RewardDialogContent({
     required this.width,
     required this.height,
-    required this.data,
   });
 
   @override
@@ -78,18 +54,71 @@ class _RewardDialogContent extends StatelessWidget {
       width: width,
       height: height,
       padding: EdgeInsets.only(top: 32, bottom: isMobile ? 26 : 40),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            RewardDialogHeader(),
-            SizedBox(height: isMobile ? 15 : 25),
-            RewardXpPrograssArea(data: data),
-            StatusRewardsWidget(
-                selectedTier: data.currentTier, tiers: data.tiers),
-            StatusRewardsTable(levels: data.levels),
-          ],
-        ),
+      child: Consumer(
+        builder: (context, ref, _) {
+          final state = ref.watch(rewardProvider);
+          final isLoading = state.isLoading;
+          final error = state.error;
+          final data = state.rewards?.data;
+
+          return SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                RewardDialogHeader(),
+                SizedBox(height: isMobile ? 15 : 25),
+
+                /// ---------------------------
+                /// LOADING
+                /// ---------------------------
+                if (isLoading)
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 24),
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        strokeWidth: 3,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+
+                /// ---------------------------
+                /// ERROR
+                /// ---------------------------
+                if (!isLoading && error != null)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 20,
+                      horizontal: 24,
+                    ),
+                    child: Center(
+                      child: CommonText.bodyLarge(
+                        error,
+                        color: Colors.redAccent,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+
+                /// ---------------------------
+                /// SUCCESS CONTENT
+                /// ---------------------------
+                if (!isLoading && error == null && data != null)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      RewardXpPrograssArea(data: data),
+                      StatusRewardsWidget(
+                        selectedTier: data.currentTier,
+                        tiers: data.tiers,
+                      ),
+                      StatusRewardsTable(levels: data.levels),
+                    ],
+                  ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
