@@ -1,5 +1,5 @@
 import 'package:cointiply_app/core/core.dart';
-import 'package:cointiply_app/features/common/menu/profile_menu.dart';
+import 'package:cointiply_app/core/common/menu/profile_menu.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/user_profile_image_widget.dart';
 import 'package:flutter/material.dart';
 

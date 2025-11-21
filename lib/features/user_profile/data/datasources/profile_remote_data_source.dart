@@ -1,3 +1,4 @@
+import 'package:cointiply_app/features/user_profile/data/models/profile_detail_model.dart';
 import 'package:cointiply_app/features/user_profile/data/models/response/upload_profile_avatar_response_model.dart';
 import 'package:cointiply_app/features/user_profile/data/models/response/user_update_respons.dart';
 import 'package:file_picker/file_picker.dart';
@@ -8,8 +9,8 @@ import 'package:file_picker/file_picker.dart';
 /// from remote APIs. Implementations will handle HTTP requests,
 /// authentication, and error responses.
 abstract class ProfileRemoteDataSource {
-  /// Gets user profile by ID
-  // Future<UserProfileModel> getUserProfile(String userId);
+  /// Gets the complete user profile
+  Future<ProfileDetailModel> getProfile();
 
   /// Updates user profile
   Future<UserUpdateResponse> updateUserProfile(

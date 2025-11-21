@@ -3,7 +3,7 @@ import 'package:cointiply_app/core/common/doted_line_divider.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:cointiply_app/core/theme/theme.dart';
 import 'package:cointiply_app/features/auth/presentation/providers/logout_provider.dart';
-import 'package:cointiply_app/features/common/widgets/custom_pointer_interceptor.dart';
+import 'package:cointiply_app/core/common/widgets/custom_pointer_interceptor.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/profile_dialog.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/reward_dialog.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../user_profile/presentation/widgets/dialogs/manage_profile/manage_profile_dialog.dart';
+import '../../../features/user_profile/presentation/widgets/dialogs/manage_profile/manage_profile_dialog.dart';
 
 class ProfileMenu extends StatelessWidget {
   final VoidCallback closeMenu;

@@ -4,6 +4,7 @@ import 'package:cointiply_app/features/user_profile/data/models/response/user_up
 import 'package:dartz/dartz.dart';
 import 'package:file_picker/file_picker.dart';
 import '../../../../core/error/failures.dart';
+import '../entities/profile_detail.dart';
 
 /// Abstract repository interface for profile operations
 ///
@@ -11,6 +12,11 @@ import '../../../../core/error/failures.dart';
 /// It uses the repository pattern to abstract data sources and
 /// implements clean architecture principles.
 abstract class ProfileRepository {
+  /// Get the user's complete profile
+  ///
+  /// Returns [ProfileDetail] on success or [Failure] on error
+  Future<Either<Failure, ProfileDetail>> getProfile();
+
   /// Update the user's profile
   ///
   /// [profile] - Updated profile data

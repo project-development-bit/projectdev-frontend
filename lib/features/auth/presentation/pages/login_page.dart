@@ -1,6 +1,6 @@
 import 'package:cointiply_app/core/error/error_model.dart';
 import 'package:cointiply_app/core/theme/app_colors.dart';
-import 'package:cointiply_app/features/common/widgets/custom_pointer_interceptor.dart';
+import 'package:cointiply_app/core/common/widgets/custom_pointer_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';

@@ -1,9 +1,11 @@
 import 'package:cointiply_app/core/core.dart';
 import 'package:cointiply_app/core/utils/utils.dart';
+import 'package:cointiply_app/features/user_profile/data/models/profile_detail_model.dart';
 import 'package:cointiply_app/features/user_profile/data/models/response/upload_profile_avatar_response_model.dart';
 import 'package:cointiply_app/features/user_profile/data/models/response/user_update_respons.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'profile_remote_data_source.dart';
 
 /// Implementation of [ProfileRemoteDataSource] using Dio HTTP client
@@ -16,7 +18,31 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   ProfileRemoteDataSourceImpl({required DioClient dioClient})
       : _dio = dioClient;
 
+  @override
+  Future<ProfileDetailModel> getProfile() async {
+    try {
+      debugPrint('📱 Fetching user profile...');
 
+      final response = await _dio.get('/users/profile');
+
+      debugPrint('✅ Profile fetched successfully: ${response.statusCode}');
+
+      if ((response.statusCode ?? 0) >= 200 &&
+          (response.statusCode ?? 0) < 300) {
+        return ProfileDetailModel.fromJson(response.data as Map<String, dynamic>);
+      } else {
+        throw Exception('Failed to fetch profile: ${response.statusCode}');
+      }
+    } on DioException catch (e) {
+      debugPrint('❌ Profile fetch DioException: ${e.message}');
+      debugPrint('❌ Response status: ${e.response?.statusCode}');
+      debugPrint('❌ Response data: ${e.response?.data}');
+      throw _handleDioException(e);
+    } catch (e) {
+      debugPrint('❌ Unexpected error fetching profile: $e');
+      throw Exception('Unexpected error fetching profile: $e');
+    }
+  }
   @override
   Future<UserUpdateResponse> updateUserProfile(
     String userId,
