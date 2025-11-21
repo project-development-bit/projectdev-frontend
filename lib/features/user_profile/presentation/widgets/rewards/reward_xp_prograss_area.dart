@@ -1,4 +1,3 @@
-import 'package:cointiply_app/core/common/common_rich_text_ab.dart';
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/common/perceant_process_bar.dart';
 import 'package:cointiply_app/core/extensions/extensions.dart';
@@ -28,12 +27,11 @@ class RewardXpPrograssArea extends StatelessWidget {
               child: Column(
                 children: [
                   /// 78%
-                  CommonRichTextAB(
-                    primary: "78",
-                    secondary:
-                        context.translate("reward_progress_percent_symbol"),
-                    primaryColor: const Color(0xFF00A0DC),
-                    secondaryColor: colorScheme.onPrimary,
+                  CommonText.titleMedium(
+                    "[78]${context.translate("reward_progress_percent_symbol")}",
+                    highlightColor: context.secondary,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
                   ),
 
                   SizedBox(height: isMobile ? 4 : 8),
@@ -48,11 +46,11 @@ class RewardXpPrograssArea extends StatelessWidget {
                   SizedBox(height: isMobile ? 4 : 8),
 
                   /// XP to next level
-                  CommonRichTextAB(
-                    primary: "2,452 ",
-                    secondary: context.translate("reward_next_level_label"),
-                    primaryColor: const Color(0xFF00A0DC),
-                    secondaryColor: colorScheme.onPrimary,
+                  CommonText.titleMedium(
+                    "[2,452]${context.translate("reward_next_level_label")}",
+                    highlightColor: context.secondary,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
                   ),
                 ],
               ),

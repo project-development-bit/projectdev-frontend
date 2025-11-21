@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/core.dart';
 import 'package:cointiply_app/core/theme/app_typography.dart';
 import 'package:flutter/material.dart';
 
@@ -34,6 +35,7 @@ class CommonRichTextWithIcon extends StatelessWidget {
           TextSpan(text: prefixText),
           TextSpan(
             text: boldNumber,
+            style: baseStyle.copyWith(fontWeight: FontWeight.w700,fontSize: 16,color: context.primary),
           ),
           WidgetSpan(
             alignment: PlaceholderAlignment.middle,
