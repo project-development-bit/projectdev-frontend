@@ -81,7 +81,9 @@ class CommonImage extends StatelessWidget {
         placeholder:
             placeholder != null ? (context, url) => placeholder! : null,
         errorWidget: (context, url, error) => defaultErrorWidget,
-        progressIndicatorBuilder: loadingWidget != null
+        progressIndicatorBuilder: placeholder != null
+            ? null
+            : loadingWidget != null
             ? (context, url, progress) => loadingWidget!
             : (context, url, progress) => defaultLoadingWidget,
       );

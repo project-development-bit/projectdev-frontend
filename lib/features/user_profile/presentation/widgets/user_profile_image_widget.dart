@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cointiply_app/core/common/common_text.dart';
+import 'package:cointiply_app/core/core.dart';
 import 'package:cointiply_app/core/theme/app_colors.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +47,12 @@ class UserProfileImageWidget extends ConsumerWidget {
                 height: size,
                 child: CircleAvatar(
                   backgroundColor: AppColors.websiteText,
-                  child: CachedNetworkImage(imageUrl: avatarUrl),
+                  child: CommonImage(
+                    imageUrl: avatarUrl,
+                    placeholder: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
                 ),
               ),
       ),
