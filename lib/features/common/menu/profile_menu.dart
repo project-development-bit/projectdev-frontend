@@ -11,6 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../user_profile/presentation/widgets/dialogs/manage_profile/manage_profile_dialog.dart';
+
 class ProfileMenu extends StatelessWidget {
   final VoidCallback closeMenu;
 
@@ -58,7 +60,10 @@ class ProfileMenu extends StatelessWidget {
           ),
           _MenuItem(
             title: context.translate("manage_your_account"),
-            onTap: () {},
+            onTap: () {
+              closeMenu();
+              showManageProfileDialog(context);
+            },
           ),
 
           _MenuItem(

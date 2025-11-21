@@ -1,7 +1,7 @@
+import 'package:cointiply_app/features/auth/data/models/user_model.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/common/common_text.dart';
 import '../../../../core/extensions/context_extensions.dart';
-import '../../domain/entities/user_profile.dart';
 
 /// Individual reward icon widget
 class RewardIconWidget extends StatelessWidget {
@@ -41,7 +41,7 @@ class RewardIconWidget extends StatelessWidget {
 
 /// Level rewards section widget with progress and reward icons
 class LevelRewardsSectionWidget extends StatelessWidget {
-  final UserProfile profile;
+  final UserModel profile;
 
   const LevelRewardsSectionWidget({
     super.key,
@@ -80,8 +80,10 @@ class LevelRewardsSectionWidget extends StatelessWidget {
   }
 
   Widget _buildLevelProgress(BuildContext context) {
-    final currentLevel = profile.stats?.currentLevel ?? 1;
-    final currentXP = profile.stats?.experiencePoints ?? 0;
+    // final currentLevel = profile.stats?.currentLevel ?? 1;
+    // final currentXP = profile.stats?.experiencePoints ?? 0;
+    final currentLevel = 1;
+    final currentXP = 0;
     final nextLevelXP = (currentLevel + 1) * 1000;
     final progress = currentXP / nextLevelXP;
 

@@ -1,3 +1,4 @@
+import 'package:cointiply_app/features/auth/data/models/user_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mocktail/mocktail.dart';
@@ -37,13 +38,21 @@ void main() {
     const testPassword = 'password123';
     const testConfirmPassword = 'password123';
 
-    final testUser = User(
+    final testUser = UserModel(
       id: 1,
       name: 'Test User',
       email: testEmail,
       role: UserRole.normalUser,
-      showOnboarding: true,
+      showOnboarding: 0,
       refreshToken: 'refresh_token',
+      twofaEnabled: 0,
+      twofaSecret: 'twofa_secret',
+      securityPinEnabled: 0,
+      avatarUrl: 'http://example.com/avatar.png',
+      interestEnable: 1,
+      notificationsEnabled: 1,
+      showStatsEnabled: 1,
+      anonymousInContests: 0,
       securityCode: 'security_code',
       isBanned: 0,
       isVerified: 1,

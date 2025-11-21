@@ -3,7 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import '../extensions/context_extensions.dart';
 
 /// A common image widget that handles network images with loading and error states
-class CommonImage extends StatelessWidget {
+class CommonImage extends StatefulWidget {
   const CommonImage({
     super.key,
     required this.imageUrl,
@@ -26,18 +26,25 @@ class CommonImage extends StatelessWidget {
   final Widget? loadingWidget;
 
   @override
+  State<CommonImage> createState() => _CommonImageState();
+}
+
+class _CommonImageState extends State<CommonImage> {
+  @override
   Widget build(BuildContext context) {
+    if (!mounted) return const SizedBox.shrink();
+    
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final colorScheme = Theme.of(context).colorScheme;
-    final defaultLoadingWidget = loadingWidget ??
+    final defaultLoadingWidget = widget.loadingWidget ??
         Container(
-          width: width,
-          height: height,
+          width: widget.width,
+          height: widget.height,
           decoration: BoxDecoration(
             color: isDark
                 ? colorScheme.secondaryContainer
                 : context.surfaceContainer,
-            borderRadius: borderRadius,
+            borderRadius: widget.borderRadius,
           ),
           child: Center(
             child: CircularProgressIndicator(
@@ -47,58 +54,78 @@ class CommonImage extends StatelessWidget {
           ),
         );
 
-    final defaultErrorWidget = errorWidget ??
+    final defaultErrorWidget = widget.errorWidget ??
         Container(
-          width: width,
-          height: height,
+          width: widget.width,
+          height: widget.height,
           decoration: BoxDecoration(
             color: isDark
                 ? colorScheme.tertiaryContainer.withValues(alpha: 0.5)
                 : context.errorContainer,
-            borderRadius: borderRadius,
+            borderRadius: widget.borderRadius,
           ),
           child: Icon(
             Icons.image_not_supported_outlined,
             color: isDark
                 ? colorScheme.onPrimaryContainer
                 : context.onErrorContainer,
-            size: (width != null && height != null)
-                ? (width! < height! ? width! * 0.4 : height! * 0.4)
+            size: (widget.width != null && widget.height != null)
+                ? (widget.width! < widget.height!
+                    ? widget.width! * 0.4
+                    : widget.height! * 0.4)
                 : 24,
           ),
         );
 
     Widget imageWidget;
 
-    if (imageUrl.isEmpty) {
+    if (widget.imageUrl.isEmpty) {
       imageWidget = defaultErrorWidget;
-    } else if (imageUrl.startsWith('http')) {
+    } else if (widget.imageUrl.startsWith('http')) {
       imageWidget = CachedNetworkImage(
-        imageUrl: imageUrl,
-        width: width,
-        height: height,
-        fit: fit,
-        placeholder:
-            placeholder != null ? (context, url) => placeholder! : null,
-        errorWidget: (context, url, error) => defaultErrorWidget,
-        progressIndicatorBuilder: loadingWidget != null
-            ? (context, url, progress) => loadingWidget!
-            : (context, url, progress) => defaultLoadingWidget,
+        imageUrl: widget.imageUrl,
+        width: widget.width,
+        height: widget.height,
+        fit: widget.fit,
+        placeholder: widget.placeholder != null
+            ? (context, url) {
+                if (!mounted) return const SizedBox.shrink();
+                return widget.placeholder!;
+              }
+            : null,
+        errorWidget: (context, url, error) {
+          if (!mounted) return const SizedBox.shrink();
+          return defaultErrorWidget;
+        },
+        progressIndicatorBuilder: widget.placeholder != null
+            ? null
+            : widget.loadingWidget != null
+                ? (context, url, progress) {
+                    if (!mounted) return const SizedBox.shrink();
+                    return widget.loadingWidget!;
+                  }
+                : (context, url, progress) {
+                    if (!mounted) return const SizedBox.shrink();
+                    return defaultLoadingWidget;
+                  },
       );
     } else {
       // Handle asset images
       imageWidget = Image.asset(
-        imageUrl,
-        width: width,
-        height: height,
-        fit: fit,
-        errorBuilder: (context, error, stackTrace) => defaultErrorWidget,
+        widget.imageUrl,
+        width: widget.width,
+        height: widget.height,
+        fit: widget.fit,
+        errorBuilder: (context, error, stackTrace) {
+          if (!mounted) return const SizedBox.shrink();
+          return defaultErrorWidget;
+        },
       );
     }
 
-    if (borderRadius != null) {
+    if (widget.borderRadius != null) {
       return ClipRRect(
-        borderRadius: borderRadius!,
+        borderRadius: widget.borderRadius!,
         child: imageWidget,
       );
     }

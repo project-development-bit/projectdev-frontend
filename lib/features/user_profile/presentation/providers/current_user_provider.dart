@@ -35,6 +35,7 @@ class CurrentUserState {
 /// Notifier for managing current user state in profile context
 class CurrentUserNotifier extends StateNotifier<CurrentUserState> {
   final GetCurrentUserUseCase _getCurrentUserUseCase;
+  
   final Ref _ref;
 
   CurrentUserNotifier(this._getCurrentUserUseCase, this._ref)
@@ -112,6 +113,13 @@ class CurrentUserNotifier extends StateNotifier<CurrentUserState> {
   /// Clear error state
   void clearError() {
     state = state.copyWith(error: null);
+  }
+
+  /// Update profile locally (optimistic update)
+  void updateProfileLocally(User user) {
+    state = state.copyWith(
+      user: user,
+    );
   }
 }
 

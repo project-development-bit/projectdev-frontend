@@ -1,6 +1,5 @@
 import 'package:cointiply_app/core/core.dart';
 import 'package:cointiply_app/features/user_profile/data/enum/profile_tab_type.dart';
-import 'package:cointiply_app/features/user_profile/presentation/providers/profile_providers.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/profile_tab_provider.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/profile_footer.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/profile_header.dart';
@@ -32,7 +31,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     super.initState();
     // Load profile data and current user data when page is initialized
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(profileNotifierProvider.notifier).loadProfile();
+      ref.read(currentUserProvider.notifier).getCurrentUser();
       // Only initialize user if authenticated
       final isAuthenticated = ref.read(isAuthenticatedObservableProvider);
       if (isAuthenticated) {

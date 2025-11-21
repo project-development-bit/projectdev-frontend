@@ -1,4 +1,5 @@
-import '../models/response/user_profile_model.dart';
+import 'package:cointiply_app/features/auth/data/models/user_model.dart';
+
 
 /// Abstract class for profile local data source
 ///
@@ -7,10 +8,10 @@ import '../models/response/user_profile_model.dart';
 /// and performance optimization.
 abstract class ProfileLocalDataSource {
   /// Gets cached user profile
-  Future<UserProfileModel?> getCachedUserProfile(String userId);
+  Future<UserModel> getCachedUserProfile(String userId);
 
   /// Caches user profile locally
-  Future<void> cacheUserProfile(UserProfileModel profile);
+  Future<void> cacheUserProfile(UserModel profile);
 
   /// Removes cached user profile
   Future<void> removeCachedUserProfile(String userId);
