@@ -187,6 +187,7 @@
   "verify_now": "ယခုအတည်ပြုရန်",
   "_reset_password_section": "စကားဝှက်ပြန်လည်သတ်မှတ်ခြင်း ကဏ္ဍ",
   "reset_password": "စကားဝှက်ပြန်လည်သတ်မှတ်ပါ",
+  "update_password": "စကားဝှက်ကို အပ်ဒိတ်လုပ်ပါ",
   "create_new_password": "စကားဝှက်အသစ်ဖန်တီးပါ",
   "for_email": "အတွက်",
   "password_requirements": "စကားဝှက်သည် အနည်းဆုံး ၈ လုံး ရှိရမည်",

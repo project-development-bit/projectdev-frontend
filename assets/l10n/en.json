@@ -187,6 +187,7 @@
   "verify_now": "Verify Now",
   "_reset_password_section": "Reset Password Section",
   "reset_password": "Reset Password",
+  "update_password": "Update Password",
   "create_new_password": "Create New Password",
   "for_email": "For",
   "password_requirements": "Password must be at least 8 characters long",
