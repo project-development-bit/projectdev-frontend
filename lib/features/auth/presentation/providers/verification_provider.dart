@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/error/failures.dart';
 import 'package:cointiply_app/features/auth/domain/usecases/forget_password_resend_code_usecase.dart';
 import 'package:cointiply_app/features/auth/domain/usecases/verify_code_forgot_password_usecase.dart';
 import 'package:flutter/material.dart';
@@ -157,10 +158,16 @@ class VerificationNotifier extends StateNotifier<VerificationState> {
       result.fold(
         (failure) {
           debugPrint('❌ Email verification error: ${failure.message}');
-          state = VerificationError(
-            message: failure.message ??
-                'Invalid verification code. Please try again.',
-          );
+          if (failure is ServerFailure && failure.statusCode == 404) {
+            state = VerificationError(
+              message: 'Invalid verification code. Please try again.',
+            );
+          } else {
+            state = VerificationError(
+              message: failure.message ??
+                  'Invalid verification code. Please try again.',
+            );
+          }
         },
         (response) {
           debugPrint('✅ Email verification successful for: $email');
