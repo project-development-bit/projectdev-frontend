@@ -1,77 +1,67 @@
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/common/perceant_process_bar.dart';
 import 'package:cointiply_app/core/extensions/extensions.dart';
+import 'package:cointiply_app/features/reward/data/models/response/reward_data.dart';
 import 'package:flutter/material.dart';
 
 class RewardXpPrograssArea extends StatelessWidget {
-  const RewardXpPrograssArea({super.key});
+  final RewardData data;
+
+  const RewardXpPrograssArea({super.key, required this.data});
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     final isMobile = context.isMobile;
+
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: isMobile ? 26 : 35),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Image.asset(
-            "assets/images/levels/bronze.png",
+            "assets/images/levels/${data.currentTier}.png",
             height: 50,
             width: 42,
-            fit: BoxFit.contain,
           ),
           Expanded(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: isMobile ? 16 : 31),
               child: Column(
                 children: [
-                  /// 78%
                   CommonText.titleMedium(
-                    "[78]${context.translate("reward_progress_percent_symbol")}",
-                    highlightColor: context.secondary,
+                    "${data.levelProgressPct.toStringAsFixed(0)}%",
                     fontSize: 18,
                     fontWeight: FontWeight.w700,
                   ),
-
-                  SizedBox(height: isMobile ? 4 : 8),
-
-                  /// Percent Bar
+                  const SizedBox(height: 6),
                   PerceantProcessBar(
-                    percent: 0.78,
-                    startColor: colorScheme.primary,
+                    percent: data.levelProgressPct / 100,
+                    startColor: Theme.of(context).colorScheme.primary,
                     backgroundColor: const Color(0xFF262626),
                     borderColor: const Color(0xFFB28F0C),
                   ),
-                  SizedBox(height: isMobile ? 4 : 8),
-
-                  /// XP to next level
+                  const SizedBox(height: 6),
                   CommonText.titleMedium(
-                    "[2,452]${context.translate("reward_next_level_label")}",
-                    highlightColor: context.secondary,
+                    "${data.xpToNextLevel} XP to next level",
                     fontSize: 18,
                     fontWeight: FontWeight.w700,
-                  ),
+                  )
                 ],
               ),
             ),
           ),
-
-          /// Level column
           Column(
             children: [
               CommonText.titleMedium(
-                context.translate("reward_level_label"),
-                fontWeight: FontWeight.w700,
-                color: colorScheme.onPrimary,
+                "Level",
+                color: Colors.white,
               ),
               CommonText.titleMedium(
-                "20",
+                "${data.currentLevel}",
                 fontWeight: FontWeight.w700,
-                color: colorScheme.onPrimary,
+                color: Colors.white,
               ),
             ],
-          ),
+          )
         ],
       ),
     );
