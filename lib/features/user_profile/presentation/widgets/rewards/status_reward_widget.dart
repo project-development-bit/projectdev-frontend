@@ -15,6 +15,7 @@ class StatusRewardsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
     final isMobile = context.isMobile;
+    final isTablet = context.isTablet;
 
     final items = tiers.map((e) {
       final tier = e.toLowerCase();
@@ -28,12 +29,12 @@ class StatusRewardsWidget extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(
-        horizontal: isMobile ? 20 : 26,
-        vertical: isMobile ? 18 : 21,
+        horizontal: isMobile || isTablet ? 4 : 26,
+        vertical: isMobile ? 8 : 21,
       ),
       margin: EdgeInsets.only(
-        left: isMobile ? 20 : 35,
-        right: isMobile ? 20 : 35,
+        left: isMobile ? 4 : 35,
+        right: isMobile ? 4 : 35,
         top: isMobile ? 26 : 40,
         bottom: isMobile ? 26 : 32,
       ),
@@ -43,9 +44,9 @@ class StatusRewardsWidget extends StatelessWidget {
           width: 1.4,
           color: const Color(0xFF333333),
         ),
-        image: const DecorationImage(
+        image: DecorationImage(
           image: AssetImage("assets/images/rewards/status_rewards_bg.png"),
-          fit: BoxFit.contain,
+          fit: isMobile ? BoxFit.cover : BoxFit.contain,
         ),
       ),
       child: Column(
@@ -59,31 +60,24 @@ class StatusRewardsWidget extends StatelessWidget {
           const SizedBox(height: 18),
 
           /// ----------- MOBILE: 2 ROW GRID -------------
+
           if (isMobile)
             Center(
               child: ConstrainedBox(
-                constraints: BoxConstraints(
+                constraints: const BoxConstraints(
                   maxWidth: (90 * 3) + (16 * 2),
                 ),
-                child: GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  padding: EdgeInsets.zero,
-                  itemCount: items.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    childAspectRatio: 0.85,
-                    mainAxisSpacing: 16,
-                    crossAxisSpacing: 16,
-                  ),
-                  itemBuilder: (_, index) {
-                    final tier = items[index];
+                child: Wrap(
+                  alignment: WrapAlignment.center,
+                  spacing: 16,
+                  runSpacing: 16,
+                  children: items.map((tier) {
                     return StatusRewardItem(
                       tier: tier,
                       isSelected: tier.keyName == selectedTier,
                       spacing: 12,
                     );
-                  },
+                  }).toList(),
                 ),
               ),
             )
@@ -115,7 +109,6 @@ class StatusRewardsWidget extends StatelessWidget {
     );
   }
 
-  /// Pick image by tier
   String _tierImage(String tier) {
     switch (tier) {
       case "bronze":
