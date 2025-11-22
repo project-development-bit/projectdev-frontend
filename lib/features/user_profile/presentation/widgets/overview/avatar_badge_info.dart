@@ -63,7 +63,7 @@ class AvatarBadgeInfo extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 24),
+        const SizedBox(height: 18),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -114,12 +114,12 @@ class AvatarBadgeInfo extends StatelessWidget {
           ],
         ),
 
-        const SizedBox(height: 31.5),
+        const SizedBox(height: 18),
 
         CommonText.bodyLarge(
           createdText,
           fontWeight: FontWeight.w500,
-          color: const Color(0xFF98989A), // TODO: use from theme
+          color: colorScheme.onPrimary,
         ),
       ],
     );

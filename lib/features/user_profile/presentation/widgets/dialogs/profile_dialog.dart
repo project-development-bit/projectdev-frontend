@@ -10,8 +10,6 @@ import 'package:cointiply_app/core/common/close_square_button.dart';
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
 
-
-
 class ProfileDialog extends StatefulWidget {
   const ProfileDialog({super.key});
 
@@ -41,6 +39,8 @@ class _ProfileDialogState extends State<ProfileDialog> {
     final width = _getDialogWidth(context);
     final height = _getDialogHeight(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final isTablet = context.isTablet;
+    final isMobile = context.isMobile;
 
     return Dialog(
       backgroundColor: Colors.transparent,
@@ -92,11 +92,11 @@ class _ProfileDialogState extends State<ProfileDialog> {
                       location: "Thailand",
                       createdText: context.translate("profile_created_days"),
                     ),
-                    const SizedBox(height: 40),
+                    SizedBox(height: isMobile || isTablet ? 31 : 40),
                     ProfileTabs(
                       onTabChanged: (i) => setState(() => selectedTab = i),
                     ),
-                    const SizedBox(height: 23),
+                    SizedBox(height: isMobile || isTablet ? 16 : 23),
                     selectedTab == 0
                         ? const StatisticsSection()
                         : const CoinsHistorySection(),
@@ -144,7 +144,7 @@ class _ProfileTabsState extends State<ProfileTabs> {
                         widget.onTabChanged?.call(0);
                       },
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 8),
                     CustomButtonWidget(
                       title: context.translate('profile_coins_earned_history'),
                       fontSize: 16,

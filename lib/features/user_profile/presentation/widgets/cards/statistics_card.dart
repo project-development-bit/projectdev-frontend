@@ -18,13 +18,13 @@ class StatCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-
+    final isMobile = context.isMobile;
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: 14,
         vertical: 14,
       ),
-      margin: const EdgeInsets.symmetric(horizontal: 35, vertical: 4),
+      margin: EdgeInsets.only(left: 35, right: 35, bottom: isMobile ? 16 : 12),
       decoration: BoxDecoration(
         color: AppColors.transparent,
         borderRadius: BorderRadius.circular(18),
@@ -78,10 +78,13 @@ class StatCard extends StatelessWidget {
         // Number
         Row(
           children: [
-            CommonText.bodyLarge(
-              context.translate('number'),
-              fontWeight: FontWeight.w700,
-              color: colorScheme.onSecondary,
+            SizedBox(
+              width: 85,
+              child: CommonText.bodyMedium(
+                context.translate('number'),
+                fontWeight: FontWeight.w700,
+                color: colorScheme.onSecondary,
+              ),
             ),
             const SizedBox(width: 24),
             _buildNumberBadge(colorScheme, number),
@@ -91,13 +94,16 @@ class StatCard extends StatelessWidget {
         // Total Earn
         Row(
           children: [
-            CommonText.bodyLarge(
-              context.translate('total_earn'),
-              fontWeight: FontWeight.w700,
-              color: colorScheme.onSecondary,
+            SizedBox(
+              width: 80,
+              child: CommonText.bodyMedium(
+                context.translate('total_earn'),
+                fontWeight: FontWeight.w700,
+                color: colorScheme.onSecondary,
+              ),
             ),
             const SizedBox(width: 24),
-            _buildEarnBadge(colorScheme, totalEarn),
+            _buildEarnBadge(colorScheme, totalEarn, true),
           ],
         ),
       ],
@@ -128,13 +134,13 @@ class StatCard extends StatelessWidget {
         const Spacer(),
         Row(
           children: [
-            CommonText.titleMedium(
+            CommonText.bodyLarge(
               context.translate('total_earn'),
               fontWeight: FontWeight.w700,
               color: colorScheme.onSecondary,
             ),
             const SizedBox(width: 24),
-            _buildEarnBadge(colorScheme, totalEarn),
+            _buildEarnBadge(colorScheme, totalEarn, false),
           ],
         ),
       ],
@@ -164,10 +170,10 @@ class StatCard extends StatelessWidget {
     );
   }
 
-  Widget _buildEarnBadge(ColorScheme colorScheme, String value) {
+  Widget _buildEarnBadge(ColorScheme colorScheme, String value, bool isMobile) {
     return Container(
       alignment: Alignment.center,
-      width: 120,
+      width: isMobile ? 130 : 120,
       height: 40,
       decoration: BoxDecoration(
         color: Color(0xff100E1C),
