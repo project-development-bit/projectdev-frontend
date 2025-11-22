@@ -1,4 +1,4 @@
-]import 'package:cointiply_app/core/core.dart';
+import 'package:cointiply_app/core/core.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/cards/coins_earned_history_card.dart';
 import 'package:flutter/material.dart';
 
