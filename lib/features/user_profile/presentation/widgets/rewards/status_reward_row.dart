@@ -1,6 +1,5 @@
 import 'package:cointiply_app/core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:cointiply_app/features/user_profile/presentation/widgets/rewards/reward_rich_text.dart';
 
 class StatusRewardRow extends StatelessWidget {
   final StatusRewardRowModel row;
@@ -10,8 +9,15 @@ class StatusRewardRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    const double columnWidth = 89.0; // Fixed width to match Header
+    const double columnWidth = 89.0;
+    final localizations = AppLocalizations.of(context);
+    final dailySpinText =
+        (localizations?.translate('status_rewards_daily_spin') ?? '')
+            .replaceAll('{count}', row.dailySpin.toString());
 
+    final treasureChestText =
+        (localizations?.translate('status_rewards_treasure_chest') ?? '')
+            .replaceAll('{count}', row.treasureChest.toString());
     return Padding(
       padding: EdgeInsets.only(bottom: context.isMobile ? 8 : 11),
       child: Row(
@@ -71,9 +77,12 @@ class StatusRewardRow extends StatelessWidget {
                   SizedBox(
                     width: columnWidth,
                     child: Center(
-                      child: RewardRichText(
-                        boldNumber: "1",
-                        label: "Free Daily",
+                      child: CommonText.bodyMedium(
+                        dailySpinText,
+                        fontWeight: FontWeight.w700,
+                        color: colorScheme.onPrimary,
+                        highlightColor: const Color(
+                            0xFF00A0DC), // TODO: use from color scheme
                       ),
                     ),
                   ),
@@ -82,9 +91,12 @@ class StatusRewardRow extends StatelessWidget {
                   SizedBox(
                     width: columnWidth,
                     child: Center(
-                      child: RewardRichText(
-                        boldNumber: "1",
-                        label: "Free Per\nWeek",
+                      child: CommonText.bodyMedium(
+                        treasureChestText,
+                        fontWeight: FontWeight.w700,
+                        color: colorScheme.onPrimary,
+                        highlightColor: const Color(
+                            0xFF00A0DC), // TODO: use from color scheme
                       ),
                     ),
                   ),

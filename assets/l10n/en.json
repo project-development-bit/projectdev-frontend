@@ -541,5 +541,7 @@
   "reward_description_suffix": " earned.",
   "reward_progress_percent_symbol": "%",
   "reward_next_level_label": "XP points to next level",
-  "reward_level_label": "Lvl"
+  "reward_level_label": "Lvl",
+  "status_rewards_daily_spin": "[{count}] Free Daily",
+  "status_rewards_treasure_chest": "[{count}] Free Per\nWeek"
 }

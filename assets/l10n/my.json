@@ -540,5 +540,7 @@
   "reward_description_suffix": " အမှတ် ရယူရန်လိုအပ်သည်။",
   "reward_progress_percent_symbol": "%",
   "reward_next_level_label": "XP အမှတ်များ လိုအပ်သည် (နောက်အဆင့်သို့)",
-  "reward_level_label": "အဆင့်"
+  "reward_level_label": "အဆင့်",
+  "status_rewards_daily_spin": "နေ့စဉ် [{count}]ခု အခမဲ့",
+  "status_rewards_treasure_chest": "ပတ်စဉ် [{count}] ခု အခမဲ့"
 }
