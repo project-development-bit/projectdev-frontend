@@ -541,5 +541,8 @@
   "reward_description_suffix": "earned.",
   "reward_progress_percent_symbol": "%",
   "reward_next_level_label": "XP points to next level",
-  "reward_level_label": "Lvl"
+  "reward_level_label": "Lvl",
+  "manage_profile_tab_profile": "My Profile",
+  "manage_profile_tab_security": "Security",
+  "manage_profile_tab_settings": "Settings"
 }

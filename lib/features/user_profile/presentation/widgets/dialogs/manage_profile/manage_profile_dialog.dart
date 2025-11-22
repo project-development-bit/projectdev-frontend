@@ -76,12 +76,24 @@ class _ManageProfileDialogState extends ConsumerState<ManageProfileDialog> {
           mainAxisSize: MainAxisSize.min,
           spacing: 6.0,
           children: [
-            _tabBarMenuItem("My Profile",
-                index: 0, isSelected: selectedIndex == 0, width: 150),
-            _tabBarMenuItem("Security",
-                index: 1, isSelected: selectedIndex == 1, width: 150),
-            _tabBarMenuItem("Settings",
-                index: 2, isSelected: selectedIndex == 2, width: 150),
+            _tabBarMenuItem(
+              context.translate("manage_profile_tab_profile"),
+              index: 0,
+              isSelected: selectedIndex == 0,
+              width: 150,
+            ),
+            _tabBarMenuItem(
+              context.translate("manage_profile_tab_security"),
+              index: 1,
+              isSelected: selectedIndex == 1,
+              width: 150,
+            ),
+            _tabBarMenuItem(
+              context.translate("manage_profile_tab_settings"),
+              index: 2,
+              isSelected: selectedIndex == 2,
+              width: 150,
+            ),
           ],
         ),
       );
@@ -102,19 +114,19 @@ class _ManageProfileDialogState extends ConsumerState<ManageProfileDialog> {
             runSpacing: 12.0,
             children: [
               _tabBarMenuItem(
-                "My Profile",
+                context.translate("manage_profile_tab_profile"),
                 index: 0,
                 isSelected: selectedIndex == 0,
                 width: buttonWidth,
               ),
               _tabBarMenuItem(
-                "Security",
+                context.translate("manage_profile_tab_security"),
                 index: 1,
                 isSelected: selectedIndex == 1,
                 width: buttonWidth,
               ),
               _tabBarMenuItem(
-                "Settings",
+                context.translate("manage_profile_tab_settings"),
                 index: 2,
                 isSelected: selectedIndex == 2,
                 width: buttonWidth,
