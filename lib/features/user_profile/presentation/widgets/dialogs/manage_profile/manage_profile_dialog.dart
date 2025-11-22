@@ -38,8 +38,11 @@ class ManageProfileDialog extends ConsumerStatefulWidget {
 class _ManageProfileDialogState extends ConsumerState<ManageProfileDialog> {
   @override
   Widget build(BuildContext context) {
+    // Make height responsive based on screen height instead of fixed 526
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return DialogBgWidget(
-      dialogHeight: 526,
+      dialogHeight: screenHeight > 700 ? 526 : screenHeight * 0.85,
       body: _manageDialogBody(),
       title: context.translate("manage_profile_title"),
     );
@@ -64,30 +67,77 @@ class _ManageProfileDialogState extends ConsumerState<ManageProfileDialog> {
   Widget _manageProfileTabBar() {
     final selectedIndex = ref.watch(tabBarIndexProvider);
 
+    if (context.screenWidth > 600) {
+      return Container(
+        padding: const EdgeInsets.symmetric(vertical: 21.5),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          spacing: 6.0,
+          children: [
+            _tabBarMenuItem("My Profile",
+                index: 0, isSelected: selectedIndex == 0, width: 150),
+            _tabBarMenuItem("Security",
+                index: 1, isSelected: selectedIndex == 1, width: 150),
+            _tabBarMenuItem("Settings",
+                index: 2, isSelected: selectedIndex == 2, width: 150),
+          ],
+        ),
+      );
+    }
+
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 21.5),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        spacing: 6.0,
-        children: [
-          _tabBarMenuItem("My Profile",
-              index: 0, isSelected: selectedIndex == 0),
-          _tabBarMenuItem("Security", index: 1, isSelected: selectedIndex == 1),
-          _tabBarMenuItem("Settings", index: 2, isSelected: selectedIndex == 2),
-        ],
+      width: double.infinity,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          const double spacing = 8.0;
+          final double buttonWidth = (constraints.maxWidth - spacing) / 2;
+
+          return Wrap(
+            alignment: WrapAlignment.start,
+            runAlignment: WrapAlignment.center,
+            spacing: spacing,
+            runSpacing: 12.0,
+            children: [
+              _tabBarMenuItem(
+                "My Profile",
+                index: 0,
+                isSelected: selectedIndex == 0,
+                width: buttonWidth,
+              ),
+              _tabBarMenuItem(
+                "Security",
+                index: 1,
+                isSelected: selectedIndex == 1,
+                width: buttonWidth,
+              ),
+              _tabBarMenuItem(
+                "Settings",
+                index: 2,
+                isSelected: selectedIndex == 2,
+                width: buttonWidth,
+              ),
+            ],
+          );
+        },
       ),
     );
   }
 
-  Widget _tabBarMenuItem(String s,
-      {required int index, required bool isSelected}) {
+  Widget _tabBarMenuItem(
+    String s, {
+    required int index,
+    required bool isSelected,
+    required double width,
+  }) {
     final colorScheme = Theme.of(context).colorScheme;
     return GestureDetector(
       onTap: () => ref.read(tabBarIndexProvider.notifier).state = index,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 12),
+        width: width,
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
         decoration: BoxDecoration(
           color: isSelected ? colorScheme.primary : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
@@ -98,15 +148,14 @@ class _ManageProfileDialogState extends ConsumerState<ManageProfileDialog> {
                   color: colorScheme.onSurfaceVariant.withValues(alpha: 0.2),
                 ),
         ),
-        child: Container(
-          constraints: const BoxConstraints(maxWidth: 150),
-          child: Center(
-            child: CommonText.titleMedium(
-              s,
-              fontWeight: FontWeight.w700,
-              fontSize: isSelected ? 16 : 14,
-              color: isSelected ? Color(0xff333333) : Color(0xff98989A),
-            ),
+        child: Center(
+          child: CommonText.titleMedium(
+            s,
+            fontWeight: FontWeight.w700,
+            fontSize: isSelected ? 16 : 14,
+            color:
+                isSelected ? const Color(0xff333333) : const Color(0xff98989A),
+            overflow: TextOverflow.ellipsis,
           ),
         ),
       ),
@@ -116,12 +165,12 @@ class _ManageProfileDialogState extends ConsumerState<ManageProfileDialog> {
   Widget _manageProfileTabBody() {
     final selectedIndex = ref.watch(tabBarIndexProvider);
     if (selectedIndex == 0) {
-      return ProfileTabContent();
+      return const ProfileTabContent();
     } else if (selectedIndex == 1) {
-      return SecurityTabContentWidget(); 
+      return const SecurityTabContentWidget();
     } else if (selectedIndex == 2) {
-      return SettingTabContentWidget(); 
+      return const SettingTabContentWidget();
     }
-    return SizedBox();
+    return const SizedBox();
   }
 }
