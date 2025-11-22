@@ -35,7 +35,10 @@ class CommonRichTextWithIcon extends StatelessWidget {
           TextSpan(text: prefixText),
           TextSpan(
             text: boldNumber,
-            style: baseStyle.copyWith(fontWeight: FontWeight.w700,fontSize: 16,color: context.primary),
+            style: baseStyle.copyWith(
+                fontWeight: FontWeight.w700,
+                fontSize: 16,
+                color: context.primary),
           ),
           WidgetSpan(
             alignment: PlaceholderAlignment.middle,
