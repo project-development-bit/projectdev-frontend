@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/common/common_button.dart' show CommonButton;
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
@@ -8,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../user_profile_image_widget.dart';
+import 'change_email_dialog.dart';
 
 part 'tab/profile_tab_content_widget.dart';
 part 'tab/security_tab_content_widget.dart';

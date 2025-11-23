@@ -31,7 +31,9 @@ class ProfileTabContent extends ConsumerWidget {
                   fontWeight: FontWeight.w500,
                 ),
           btnTitle: context.translate("change_your_email"),
-          onPressed: () {},
+          onPressed: () {
+            showChangeEmailDialog(context);
+          },
         ),
         _profileTabContentItem(
           title: "Country",
@@ -101,24 +103,13 @@ class ProfileTabContent extends ConsumerWidget {
           ),
           Expanded(
             flex: 2,
-            child: ElevatedButton(
-                onPressed: onPressed,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF262626),
-                  foregroundColor: Colors.black,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(13.0),
-                  child: CommonText.titleSmall(
-                    btnTitle,
-                    color: Color(0xff98989A),
-                  ),
-                )),
+            child: CommonButton(
+              width: 233,
+              onPressed: onPressed,
+              text: btnTitle,
+              backgroundColor: Color(0xff333333),
+              textColor: Color(0xff98989A),
+            ),
           ),
         ],
       ),
