@@ -4,6 +4,7 @@ import 'package:cointiply_app/features/user_profile/data/models/response/user_up
 import 'package:dartz/dartz.dart';
 import 'package:file_picker/file_picker.dart';
 import '../../../../core/error/failures.dart';
+import '../entities/country.dart';
 import '../entities/profile_detail.dart';
 
 /// Abstract repository interface for profile operations
@@ -16,6 +17,11 @@ abstract class ProfileRepository {
   ///
   /// Returns [ProfileDetail] on success or [Failure] on error
   Future<Either<Failure, ProfileDetail>> getProfile();
+
+  /// Get list of available countries
+  ///
+  /// Returns list of [Country] on success or [Failure] on error
+  Future<Either<Failure, List<Country>>> getCountries();
 
   /// Update the user's profile
   ///

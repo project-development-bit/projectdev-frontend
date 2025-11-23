@@ -42,7 +42,9 @@ class ProfileTabContent extends ConsumerWidget {
             fontWeight: FontWeight.w500,
           ),
           btnTitle: context.translate("change_your_country"),
-          onPressed: () {},
+          onPressed: () {
+            showChangeCountryDialog(context);
+          },
         ),
         _profileTabContentItem(
           title: "Offer Token",

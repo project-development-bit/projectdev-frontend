@@ -2,6 +2,7 @@
 import 'package:cointiply_app/features/user_profile/data/models/request/user_update_request.dart';
 import 'package:cointiply_app/features/user_profile/data/models/response/upload_profile_avatar_response_model.dart';
 import 'package:cointiply_app/features/user_profile/data/models/response/user_update_respons.dart';
+import 'package:cointiply_app/features/user_profile/domain/entities/country.dart';
 import 'package:cointiply_app/features/user_profile/domain/entities/profile_detail.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
@@ -45,6 +46,33 @@ class ProfileRepositoryImpl implements ProfileRepository {
       }
       return Left(ServerFailure(
         message: e.message ?? 'Failed to fetch profile',
+        statusCode: e.response?.statusCode,
+        errorModel: errorModel,
+      ));
+    } catch (e) {
+      debugPrint('❌ Repository: Unexpected error - $e');
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<Country>>> getCountries() async {
+    try {
+      debugPrint('🔄 Repository: Fetching countries...');
+      final countryModels = await remoteDataSource.getCountries();
+
+      final countries = countryModels.map((model) => model.toEntity()).toList();
+      debugPrint(
+          '✅ Repository: ${countries.length} countries fetched successfully');
+      return Right(countries);
+    } on DioException catch (e) {
+      debugPrint('❌ Repository: DioException - ${e.message}');
+      ErrorModel? errorModel;
+      if (e.response?.data != null) {
+        errorModel = ErrorModel.fromJson(e.response!.data);
+      }
+      return Left(ServerFailure(
+        message: e.message ?? 'Failed to fetch countries',
         statusCode: e.response?.statusCode,
         errorModel: errorModel,
       ));
