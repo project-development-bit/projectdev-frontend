@@ -13,57 +13,54 @@ class RewardXpPrograssArea extends StatelessWidget {
   Widget build(BuildContext context) {
     final isMobile = context.isMobile;
 
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: isMobile ? 26 : 35),
-      child: Row(
-        children: [
-          Image.asset(
-            "assets/images/levels/${data.currentTier}.png",
-            height: 50,
-            width: 42,
-          ),
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: isMobile ? 16 : 31),
-              child: Column(
-                children: [
-                  CommonText.titleMedium(
-                    "${data.levelProgressPct.toStringAsFixed(0)}%",
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                  ),
-                  const SizedBox(height: 6),
-                  PerceantProcessBar(
-                    percent: data.levelProgressPct / 100,
-                    startColor: Theme.of(context).colorScheme.primary,
-                    backgroundColor: const Color(0xFF262626),
-                    borderColor: const Color(0xFFB28F0C),
-                  ),
-                  const SizedBox(height: 6),
-                  CommonText.titleMedium(
-                    "${data.xpToNextLevel} XP to next level",
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                  )
-                ],
-              ),
+    return Row(
+      children: [
+        Image.asset(
+          "assets/images/levels/${data.currentTier}.png",
+          height: 50,
+          width: 42,
+        ),
+        Expanded(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: isMobile ? 16 : 31),
+            child: Column(
+              children: [
+                CommonText.titleMedium(
+                  "${data.levelProgressPct.toStringAsFixed(0)}%",
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                ),
+                const SizedBox(height: 6),
+                PerceantProcessBar(
+                  percent: data.levelProgressPct / 100,
+                  startColor: Theme.of(context).colorScheme.primary,
+                  backgroundColor: const Color(0xFF262626),
+                  borderColor: const Color(0xFFB28F0C),
+                ),
+                const SizedBox(height: 6),
+                CommonText.titleMedium(
+                  "${data.xpToNextLevel} XP to next level",
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                )
+              ],
             ),
           ),
-          Column(
-            children: [
-              CommonText.titleMedium(
-                "Level",
-                color: Colors.white,
-              ),
-              CommonText.titleMedium(
-                "${data.currentLevel}",
-                fontWeight: FontWeight.w700,
-                color: Colors.white,
-              ),
-            ],
-          )
-        ],
-      ),
+        ),
+        Column(
+          children: [
+            CommonText.titleMedium(
+              "Level",
+              color: Colors.white,
+            ),
+            CommonText.titleMedium(
+              "${data.currentLevel}",
+              fontWeight: FontWeight.w700,
+              color: Colors.white,
+            ),
+          ],
+        )
+      ],
     );
   }
 }

@@ -33,8 +33,6 @@ class StatusRewardsWidget extends StatelessWidget {
         vertical: isMobile ? 8 : 21,
       ),
       margin: EdgeInsets.only(
-        left: isMobile ? 4 : 35,
-        right: isMobile ? 4 : 35,
         top: isMobile ? 26 : 40,
         bottom: isMobile ? 26 : 32,
       ),

@@ -33,11 +33,8 @@ class StatusRewardsTableSliver extends StatelessWidget {
       );
     }
 
-    // 👉 Wide: use real SliverList for rows
     return SliverPadding(
       padding: EdgeInsets.only(
-        left: 32,
-        right: 32,
         bottom: context.isMobile ? 0 : 27,
       ),
       sliver: SliverList(
