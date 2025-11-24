@@ -1,7 +1,7 @@
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/common/perceant_process_bar.dart';
 import 'package:cointiply_app/core/extensions/extensions.dart';
-import 'package:cointiply_app/features/reward/data/models/response/reward_data.dart';
+import 'package:cointiply_app/features/reward/domain/entities/reward_data.dart';
 import 'package:flutter/material.dart';
 
 class RewardXpPrograssArea extends StatelessWidget {

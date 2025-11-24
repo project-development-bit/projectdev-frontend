@@ -1,4 +1,4 @@
-import 'package:cointiply_app/features/reward/data/models/response/reward_response.dart';
+import 'package:cointiply_app/features/reward/domain/entities/reward_response.dart';
 
 class RewardState {
   final RewardResponse? rewards;
