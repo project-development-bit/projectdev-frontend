@@ -1,6 +1,7 @@
 import 'package:cointiply_app/core/common/dialog_gradient_backgroud.dart';
 import 'package:cointiply_app/core/core.dart';
 import 'package:cointiply_app/features/reward/presentation/providers/reward_provider.dart';
+import 'package:cointiply_app/features/reward/presentation/providers/reward_state.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/rewards/reward_dialog_header.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/rewards/reward_xp_prograss_area.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/rewards/status_reward_widget.dart';
@@ -56,8 +57,8 @@ class _RewardDialogContent extends StatelessWidget {
       padding: EdgeInsets.only(top: 32, bottom: isMobile ? 26 : 40),
       child: Consumer(
         builder: (context, ref, _) {
-          final state = ref.watch(rewardProvider);
-          final isLoading = state.isLoading;
+          final state = ref.watch(getRewardNotifierProvider);
+          final isLoading = state.status == GetRewardStatus.loading;
           final error = state.error;
           final data = state.rewards?.data;
 
