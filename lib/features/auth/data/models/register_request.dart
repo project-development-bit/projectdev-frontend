@@ -1,3 +1,5 @@
+import 'package:cointiply_app/core/services/device_info.dart';
+
 import '../../../../core/enum/user_role.dart';
 
 class RegisterRequest {
@@ -17,8 +19,12 @@ class RegisterRequest {
     this.recaptchaToken,
   });
 
-  Map<String, dynamic> toJson() {
+  Future<Map<String, dynamic>> toJson() async {
+    var userAgent = await DeviceInfo.getUserAgent();
+    String? deviceId = await DeviceInfo.getUniqueIdentifier();
     return {
+      'userAgent': userAgent,
+      'device_fingerprint': deviceId,
       "name": name,
       "email": email,
       "password": password,

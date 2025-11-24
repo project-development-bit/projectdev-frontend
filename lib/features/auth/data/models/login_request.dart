@@ -1,4 +1,6 @@
+import 'package:cointiply_app/core/services/device_info.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
 /// Login request model for API calls
 class LoginRequest extends Equatable {
@@ -18,8 +20,13 @@ class LoginRequest extends Equatable {
   final String? recaptchaToken;
 
   /// Convert to JSON for API request
-  Map<String, dynamic> toJson() {
+  Future<Map<String, dynamic>> toJson() async {
+    var userAgent = await DeviceInfo.getUserAgent();
+    debugPrint("device info User Agent: $userAgent");
+    String? deviceId = await DeviceInfo.getUniqueIdentifier();
     final json = {
+      'userAgent': userAgent,
+      'device_fingerprint': deviceId,
       'email': email,
       'password': password,
     };
