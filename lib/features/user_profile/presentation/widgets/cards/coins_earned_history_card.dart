@@ -58,7 +58,7 @@ class CoinsEarnedHistoryCard extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
               const SizedBox(height: 4),
-              CommonText.bodyLarge(
+              CommonText.bodyMedium(
                 subtitle,
                 fontWeight: FontWeight.w500,
                 color: colorScheme.onPrimary,
@@ -75,7 +75,7 @@ class CoinsEarnedHistoryCard extends StatelessWidget {
             // PASS isMobile: true
             _buildAmountPill(colorScheme, isMobile: true),
             const SizedBox(height: 4),
-            CommonText.bodyLarge(
+            CommonText.bodyMedium(
               timeAgo,
               fontWeight: FontWeight.w700,
               color: colorScheme.onPrimary,
@@ -102,7 +102,7 @@ class CoinsEarnedHistoryCard extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
               const SizedBox(height: 4),
-              CommonText.bodyMedium(
+              CommonText.bodyLarge(
                 subtitle,
                 fontWeight: FontWeight.w500,
                 color: colorScheme.onPrimary,
@@ -112,7 +112,6 @@ class CoinsEarnedHistoryCard extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 12),
-        // PASS isMobile: false (Default)
         _buildAmountPill(colorScheme, isMobile: false),
         const SizedBox(width: 16),
         CommonText.bodyLarge(
@@ -127,8 +126,8 @@ class CoinsEarnedHistoryCard extends StatelessWidget {
 
   Widget _buildAmountPill(ColorScheme colorScheme, {required bool isMobile}) {
     return Container(
-      width: isMobile ? null : 200,
-      height: isMobile ? 30 : 40,
+      width: isMobile ? 116 : 200,
+      height: 40,
       alignment: Alignment.center,
       padding: isMobile ? const EdgeInsets.symmetric(horizontal: 12) : null,
       decoration: BoxDecoration(
@@ -140,14 +139,14 @@ class CoinsEarnedHistoryCard extends StatelessWidget {
         children: [
           CommonText.titleMedium(
             amount.toString(),
-            fontSize: isMobile ? 14 : 20,
+            fontSize: 20,
             fontWeight: FontWeight.w700,
             color: colorScheme.onPrimary,
           ),
           const SizedBox(width: 6),
           Image.asset(
             "assets/images/rewards/coin.png",
-            width: isMobile ? 16 : 22,
+            width: 24,
           ),
         ],
       ),
