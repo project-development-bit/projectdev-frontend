@@ -11,7 +11,9 @@ import 'reward_state.dart';
 class GetRewardNotifier extends StateNotifier<RewardState> {
   final GetUserRewardsUseCase _getUserRewardsUseCase;
 
-  GetRewardNotifier(this._getUserRewardsUseCase) : super(const RewardState());
+  GetRewardNotifier(this._getUserRewardsUseCase) : super(const RewardState()) {
+    fetchUserRewards();
+  }
 
   Future<void> fetchUserRewards() async {
     // loading state
