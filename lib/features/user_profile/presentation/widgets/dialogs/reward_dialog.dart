@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/common/common_rich_text_with_icon.dart';
 import 'package:cointiply_app/core/common/dialog_gradient_backgroud.dart';
 import 'package:cointiply_app/core/core.dart';
 import 'package:cointiply_app/features/reward/presentation/providers/reward_provider.dart';
@@ -54,48 +55,75 @@ class _RewardDialogContent extends ConsumerWidget {
     final isLoading = state.status == GetRewardStatus.loading;
     final error = state.error;
     final data = state.rewards?.data;
+
     return Container(
       width: width,
       height: height,
       padding: EdgeInsets.only(top: 32, bottom: isMobile ? 26 : 40),
-      child: Consumer(
-        builder: (context, ref, _) {
-          return SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                RewardDialogHeader(),
-                SizedBox(height: isMobile ? 15 : 25),
-
-                /// ---------------------------
-                /// LOADING
-                /// ---------------------------
-                if (isLoading) _loadingWidget(),
-
-                /// ---------------------------
-                /// ERROR
-                /// ---------------------------
-                if (!isLoading && error != null) _errorWidget(error),
-
-                /// ---------------------------
-                /// SUCCESS CONTENT
-                /// ---------------------------
-                if (!isLoading && error == null && data != null)
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      RewardXpPrograssArea(data: data),
-                      StatusRewardsWidget(
-                        selectedTier: data.currentTier,
-                        tiers: data.tiers,
-                      ),
-                      StatusRewardsTable(levels: data.levels),
-                    ],
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const RewardDialogHeader(),
+          SizedBox(height: isMobile ? 15 : 25),
+          Expanded(
+            child: CustomScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              slivers: [
+                // ---------------------------
+                // LOADING
+                // ---------------------------
+                if (isLoading)
+                  SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: _loadingWidget(),
                   ),
+
+                // ---------------------------
+                // ERROR
+                // ---------------------------
+                if (!isLoading && error != null)
+                  SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: _errorWidget(error),
+                  ),
+
+                // ---------------------------
+                // SUCCESS CONTENT
+                // ---------------------------
+                if (!isLoading && error == null && data != null)
+                  SliverToBoxAdapter(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 27),
+
+                        /// DESCRIPTION
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: isMobile ? 26 : 35),
+                          child: CommonRichTextWithIcon(
+                            prefixText: LocalizationHelper(context)
+                                .translate("reward_description_prefix"),
+                            boldNumber: "5",
+                            suffixText: LocalizationHelper(context)
+                                .translate("reward_description_suffix"),
+                            iconPath: "assets/images/rewards/coin.png",
+                          ),
+                        ),
+                        RewardXpPrograssArea(data: data),
+                        StatusRewardsWidget(
+                          selectedTier: data.currentTier,
+                          tiers: data.tiers,
+                        )
+                      ],
+                    ),
+                  ),
+                if (!isLoading && error == null && data != null)
+                  StatusRewardsTableSliver(levels: data.levels),
               ],
             ),
-          );
-        },
+          ),
+        ],
       ),
     );
   }
