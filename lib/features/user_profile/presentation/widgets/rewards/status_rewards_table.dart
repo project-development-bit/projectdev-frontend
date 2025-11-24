@@ -20,7 +20,6 @@ class StatusRewardsTableSliver extends StatelessWidget {
     if (isNarrow) {
       return SliverToBoxAdapter(
         child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 32),
           padding: EdgeInsets.only(bottom: context.isMobile ? 0 : 27),
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
