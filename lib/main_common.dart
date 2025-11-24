@@ -113,9 +113,7 @@ class _MyAppState extends ConsumerState<MyApp> {
     super.initState();
     // Load app settings theme from server on app start
     Future.microtask(() {
-      ref
-          .read(appSettingsThemeProvider.notifier)
-          .loadConfig(forceRefresh: true);
+      ref.read(appSettingsThemeProvider.notifier).loadConfig();
     });
   }
 
