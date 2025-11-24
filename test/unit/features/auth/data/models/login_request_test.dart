@@ -20,7 +20,8 @@ void main() {
       expect(loginRequest.recaptchaToken, isNull);
     });
 
-    test('should create LoginRequest with email, password, and reCAPTCHA token', () {
+    test('should create LoginRequest with email, password, and reCAPTCHA token',
+        () {
       // Arrange
       const email = 'test@example.com';
       const password = 'password123';
@@ -40,7 +41,8 @@ void main() {
     });
 
     group('toJson', () {
-      test('should convert to JSON without reCAPTCHA token when token is null', () {
+      test('should convert to JSON without reCAPTCHA token when token is null',
+          () {
         // Arrange
         const loginRequest = LoginRequest(
           email: 'test@example.com',
@@ -58,7 +60,8 @@ void main() {
         expect(json.containsKey('recaptchaToken'), isFalse);
       });
 
-      test('should convert to JSON with reCAPTCHA token when token is provided', () {
+      test('should convert to JSON with reCAPTCHA token when token is provided',
+          () {
         // Arrange
         const loginRequest = LoginRequest(
           email: 'test@example.com',
@@ -193,7 +196,9 @@ void main() {
     });
 
     group('toString', () {
-      test('should return string representation without exposing sensitive data', () {
+      test(
+          'should return string representation without exposing sensitive data',
+          () {
         // Arrange
         const loginRequest = LoginRequest(
           email: 'test@example.com',
@@ -207,8 +212,10 @@ void main() {
         // Assert
         expect(stringRepresentation, contains('test@example.com'));
         expect(stringRepresentation, contains('hasRecaptcha: true'));
-        expect(stringRepresentation, isNot(contains('password123'))); // Should not expose password
-        expect(stringRepresentation, isNot(contains('token123'))); // Should not expose token
+        expect(stringRepresentation,
+            isNot(contains('password123'))); // Should not expose password
+        expect(stringRepresentation,
+            isNot(contains('token123'))); // Should not expose token
       });
 
       test('should show hasRecaptcha: false when token is null', () {

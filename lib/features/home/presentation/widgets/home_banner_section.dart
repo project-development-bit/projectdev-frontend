@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cointiply_app/core/common/common_image_widget.dart';
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
@@ -8,14 +9,24 @@ import 'package:cointiply_app/core/theme/presentation/providers/app_setting_prov
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class HomeBannerSection extends ConsumerWidget {
+class HomeBannerSection extends ConsumerStatefulWidget {
   const HomeBannerSection({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final localizations = AppLocalizations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+  ConsumerState<HomeBannerSection> createState() => HomeBannerSectionState();
+}
+
+class HomeBannerSectionState extends ConsumerState<HomeBannerSection> {
+  final CarouselSliderController bannerCarouselController =
+      CarouselSliderController();
+  int currentPageIndex = 0;
+
+  @override
+  Widget build(BuildContext context) {
     final banners = ref.watch(bannersConfigProvider);
+    if (banners.isEmpty) {
+      return const SizedBox.shrink();
+    }
 
     final size = MediaQuery.of(context).size;
     final isMobile = size.width < 768;
@@ -31,53 +42,13 @@ class HomeBannerSection extends ConsumerWidget {
       fit: BoxFit.cover,
     );
 
-    if (banners.isEmpty) {
-      // Just show static background if no banners from API
-      return SizedBox(
-        width: double.infinity,
-        height: bannerHeight,
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            fallbackImage,
-            Container(
-              alignment: Alignment.center,
-              padding: EdgeInsets.symmetric(
-                horizontal: isMobile ? 16 : 32,
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  CommonText.titleLarge(
-                    localizations?.translate('home_banner_fallback_title') ??
-                        'Trusted and Secure Bitcoin and Crypto Faucet',
-                    textAlign: TextAlign.center,
-                    fontWeight: FontWeight.w700,
-                    fontSize: isMobile ? 24 : 32,
-                    color: colorScheme.onPrimary,
-                  ),
-                  const SizedBox(height: 16),
-                  CommonText.bodyMedium(
-                    localizations
-                            ?.translate('home_banner_fallback_description') ??
-                        'We prioritize security, transparency, and a seamless user experience. So you can earn crypto with confidence, every day.',
-                    textAlign: TextAlign.center,
-                    color: colorScheme.onPrimary,
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
     return SizedBox(
       width: double.infinity,
       height: bannerHeight,
-      child: PageView.builder(
+      child: CarouselSlider.builder(
+        carouselController: bannerCarouselController,
         itemCount: banners.length,
-        itemBuilder: (context, index) {
+        itemBuilder: (context, index, realIndex) {
           final banner = banners[index];
           return BannerSlide(
             banner: banner,
@@ -85,6 +56,20 @@ class HomeBannerSection extends ConsumerWidget {
             fallbackImage: fallbackImage,
           );
         },
+        options: CarouselOptions(
+          height: bannerHeight,
+          viewportFraction: 1.0,
+          autoPlay: banners.length > 1,
+          autoPlayInterval: const Duration(seconds: 5),
+          autoPlayAnimationDuration: const Duration(milliseconds: 500),
+          autoPlayCurve: Curves.easeInOut,
+          enableInfiniteScroll: banners.length > 1,
+          onPageChanged: (index, reason) {
+            setState(() {
+              currentPageIndex = index;
+            });
+          },
+        ),
       ),
     );
   }
@@ -135,7 +120,7 @@ class BannerSlide extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                if (banner.badge.isNotEmpty)
+                if (banner.label.isNotEmpty)
                   Container(
                     margin: const EdgeInsets.only(bottom: 16),
                     padding: const EdgeInsets.symmetric(
@@ -145,15 +130,16 @@ class BannerSlide extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(999),
                       border: Border.all(
-                        color: Color(0xFF195DCC), //TODO: Use from theme
+                        color: const Color(0xFF195DCC), // TODO: use from theme
                         width: 1,
                       ),
                       color: Colors.transparent,
                     ),
                     child: CommonText.bodyMedium(
-                      banner.badge,
-                      color: Color(0xFF00A0DC), //TODO: Use from theme
-                      fontWeight: FontWeight.w600,
+                      banner.label,
+                      color: const Color(0xFF00A0DC), // TODO: use from theme
+                      fontSize: isMobile ? 8 : 14,
+                      fontWeight: FontWeight.w500,
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -164,7 +150,7 @@ class BannerSlide extends StatelessWidget {
                       banner.title,
                       textAlign: TextAlign.center,
                       fontWeight: FontWeight.w700,
-                      fontSize: isMobile ? 24 : 32,
+                      fontSize: isMobile ? 20 : 40,
                       color: colorScheme.onPrimary,
                     ),
                   ),
@@ -173,18 +159,22 @@ class BannerSlide extends StatelessWidget {
                     padding: const EdgeInsets.only(top: 8, bottom: 24),
                     child: CommonText.bodyMedium(
                       banner.description,
+                      fontSize: isMobile ? 10 : 16,
+                      fontWeight: FontWeight.w500,
                       textAlign: TextAlign.center,
                       color: colorScheme.onPrimary,
                     ),
                   ),
                 CustomUnderLineButtonWidget(
-                  onTap: () {},
+                  onTap: () {
+                    // context.goNamed(banner.link); // TODO: handle navigation when ready
+                  },
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
                   isActive: true,
                   width: 140,
                   title: ctaText,
-                )
+                ),
               ],
             ),
           ),

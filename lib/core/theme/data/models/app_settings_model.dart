@@ -400,7 +400,7 @@ class ParagraphColors {
 
 /// Banner configuration
 class BannerConfig {
-  final String badge;
+  final String label;
   final String title;
   final String description;
   final String link;
@@ -409,7 +409,7 @@ class BannerConfig {
   final String btnText;
 
   BannerConfig({
-    required this.badge,
+    required this.label,
     required this.title,
     required this.description,
     required this.link,
@@ -420,7 +420,7 @@ class BannerConfig {
 
   factory BannerConfig.fromJson(Map<String, dynamic> json) {
     return BannerConfig(
-      badge: (json['badge'] as String?) ?? '',
+      label: (json['label'] as String?) ?? '',
       title: (json['title'] as String?) ?? '',
       description: (json['description'] as String?) ?? '',
       link: (json['link'] as String?) ?? '',
@@ -432,7 +432,7 @@ class BannerConfig {
 
   Map<String, dynamic> toJson() {
     return {
-      'badge': badge,
+      'label': label,
       'title': title,
       'description': description,
       'link': link,

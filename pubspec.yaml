@@ -73,9 +73,9 @@ dependencies:
   flutter_image_compress: ^2.4.0
   pinput: ^6.0.0
   device_info_plus: ^12.2.0
-  # platform_device_id_plus: ^1.0.7
   package_info_plus: ^9.0.0
   unique_device_identifier: ^2.0.4
+  carousel_slider: ^5.1.1
   
   
 dev_dependencies:
