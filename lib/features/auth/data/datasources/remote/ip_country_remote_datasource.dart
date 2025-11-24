@@ -54,13 +54,13 @@ class IpCountryRemoteDataSource {
   String? _extractServerErrorMessage(dynamic responseData) {
     if (responseData is Map<String, dynamic>) {
       if (responseData['reason'] is String) {
-        return responseData['reason'] as String;
+        return responseData['reason'] as String? ?? "";
       }
       if (responseData['error'] is String) {
-        return responseData['error'] as String;
+        return responseData['error'] as String? ?? "";
       }
       if (responseData['message'] is String) {
-        return responseData['message'] as String;
+        return responseData['message'] as String? ?? "";
       }
     }
     return null;
