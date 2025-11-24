@@ -31,7 +31,7 @@ class DeviceInfo {
       final manufacturer = androidInfo.manufacturer;
       final model = androidInfo.model;
 
-      // Example: Cointiply/1.0.3 (Android 14; Google Pixel 7; build 123)
+      // Example: Gigafaucet/1.0.3 (Android 14; Google Pixel 7; build 123)
       return '$appName/$appVersion+$buildNumber '
           '(Android $osVersion; $manufacturer $model)';
     }
@@ -42,7 +42,7 @@ class DeviceInfo {
       final systemVersion = iosInfo.systemVersion;
       final model = iosInfo.utsname.machine;
 
-      // Example: Cointiply/1.0.3 (iOS 17.1; iPhone15,2)
+      // Example: Gigafaucet/1.0.3 (iOS 17.1; iPhone15,2)
       return '$appName/$appVersion+$buildNumber '
           '($systemName $systemVersion; $model)';
     }
