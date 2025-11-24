@@ -14,9 +14,9 @@ class AppSettingsResponse {
 
   factory AppSettingsResponse.fromJson(Map<String, dynamic> json) {
     return AppSettingsResponse(
-      success: json['success'] as bool,
-      message: json['message'] as String,
-      data: (json['data'] as List)
+      success: json['success'] as bool? ?? false,
+      message: json['message'] as String? ?? '',
+      data: (json['data'] as List? ?? [])
           .map((e) => AppSettingsData.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
@@ -51,13 +51,15 @@ class AppSettingsData {
 
   factory AppSettingsData.fromJson(Map<String, dynamic> json) {
     return AppSettingsData(
-      id: json['id'] as int,
-      configKey: json['config_key'] as String,
-      configData:
-          AppConfigData.fromJson(json['config_data'] as Map<String, dynamic>),
-      version: json['version'] as String,
-      createdAt: DateTime.parse(json['created_at'] as String),
-      updatedAt: DateTime.parse(json['updated_at'] as String),
+      id: json['id'] as int? ?? 0,
+      configKey: json['config_key'] as String? ?? '',
+      configData: AppConfigData.fromJson(
+          json['config_data'] as Map<String, dynamic>? ?? {}),
+      version: json['version'] as String? ?? '',
+      createdAt: DateTime.parse(
+          json['created_at'] as String? ?? DateTime.now().toIso8601String()),
+      updatedAt: DateTime.parse(
+          json['updated_at'] as String? ?? DateTime.now().toIso8601String()),
     );
   }
 
@@ -95,16 +97,17 @@ class AppConfigData {
 
   factory AppConfigData.fromJson(Map<String, dynamic> json) {
     return AppConfigData(
-      fonts: FontsConfig.fromJson(json['fonts'] as Map<String, dynamic>),
-      texts: TextsConfig.fromJson(json['texts'] as Map<String, dynamic>),
-      colors: ColorsConfig.fromJson(json['colors'] as Map<String, dynamic>),
-      banners: (json['banners'] as List)
-          .map((e) => BannerConfig.fromJson(e as Map<String, dynamic>))
+      fonts: FontsConfig.fromJson(json['fonts'] as Map<String, dynamic>? ?? {}),
+      texts: TextsConfig.fromJson(json['texts'] as Map<String, dynamic>? ?? {}),
+      colors:
+          ColorsConfig.fromJson(json['colors'] as Map<String, dynamic>? ?? {}),
+      banners: (json['banners'] as List? ?? [])
+          .map((e) => BannerConfig.fromJson(e as Map<String, dynamic>? ?? {}))
           .toList(),
-      typography:
-          TypographyConfig.fromJson(json['typography'] as Map<String, dynamic>),
-      colorScheme: json['colorScheme'] as String,
-      configVersion: json['config_version'] as String,
+      typography: TypographyConfig.fromJson(
+          json['typography'] as Map<String, dynamic>? ?? {}),
+      colorScheme: json['colorScheme'] as String? ?? '',
+      configVersion: json['config_version'] as String? ?? '',
     );
   }
 
@@ -133,8 +136,8 @@ class FontsConfig {
 
   factory FontsConfig.fromJson(Map<String, dynamic> json) {
     return FontsConfig(
-      body: json['body'] as String,
-      heading: json['heading'] as String,
+      body: json['body'] as String? ?? '',
+      heading: json['heading'] as String? ?? '',
     );
   }
 
@@ -158,8 +161,8 @@ class TextsConfig {
 
   factory TextsConfig.fromJson(Map<String, dynamic> json) {
     return TextsConfig(
-      ctaButton: json['cta_button'] as String,
-      homeTitle: json['home_title'] as String,
+      ctaButton: json['cta_button'] as String? ?? '',
+      homeTitle: json['home_title'] as String? ?? '',
     );
   }
 
@@ -183,8 +186,10 @@ class ColorsConfig {
 
   factory ColorsConfig.fromJson(Map<String, dynamic> json) {
     return ColorsConfig(
-      dark: ThemeColorsConfig.fromJson(json['dark'] as Map<String, dynamic>),
-      light: ThemeColorsConfig.fromJson(json['light'] as Map<String, dynamic>),
+      dark: ThemeColorsConfig.fromJson(
+          json['dark'] as Map<String, dynamic>? ?? {}),
+      light: ThemeColorsConfig.fromJson(
+          json['light'] as Map<String, dynamic>? ?? {}),
     );
   }
 
@@ -222,16 +227,18 @@ class ThemeColorsConfig {
 
   factory ThemeColorsConfig.fromJson(Map<String, dynamic> json) {
     return ThemeColorsConfig(
-      box: BoxColors.fromJson(json['box'] as Map<String, dynamic>),
-      body: json['body'] as String,
-      border: json['border'] as String,
-      button: json['button'] as String,
-      status: StatusColors.fromJson(json['status'] as Map<String, dynamic>),
-      heading: HeadingColors.fromJson(json['heading'] as Map<String, dynamic>),
-      primary: json['primary'] as String,
-      paragraph:
-          ParagraphColors.fromJson(json['paragraph'] as Map<String, dynamic>),
-      secondary: json['secondary'] as String,
+      box: BoxColors.fromJson(json['box'] as Map<String, dynamic>? ?? {}),
+      body: json['body'] as String? ?? '',
+      border: json['border'] as String? ?? '',
+      button: json['button'] as String? ?? '',
+      status:
+          StatusColors.fromJson(json['status'] as Map<String, dynamic>? ?? {}),
+      heading: HeadingColors.fromJson(
+          json['heading'] as Map<String, dynamic>? ?? {}),
+      primary: json['primary'] as String? ?? '',
+      paragraph: ParagraphColors.fromJson(
+          json['paragraph'] as Map<String, dynamic>? ?? {}),
+      secondary: json['secondary'] as String? ?? '',
     );
   }
 
@@ -269,8 +276,8 @@ class BoxColors {
 
   factory BoxColors.fromJson(Map<String, dynamic> json) {
     return BoxColors(
-      first: json['first'] as String,
-      second: json['second'] as String,
+      first: json['first'] as String? ?? '',
+      second: json['second'] as String? ?? '',
     );
   }
 
@@ -304,11 +311,11 @@ class StatusColors {
 
   factory StatusColors.fromJson(Map<String, dynamic> json) {
     return StatusColors(
-      info: json['info'] as String,
-      success: json['success'] as String,
-      warning: json['warning'] as String,
-      destructive: json['destructive'] as String,
-      seriousWarning: json['seriousWarning'] as String,
+      info: json['info'] as String? ?? '',
+      success: json['success'] as String? ?? '',
+      warning: json['warning'] as String? ?? '',
+      destructive: json['destructive'] as String? ?? '',
+      seriousWarning: json['seriousWarning'] as String? ?? '',
     );
   }
 
@@ -344,9 +351,9 @@ class HeadingColors {
 
   factory HeadingColors.fromJson(Map<String, dynamic> json) {
     return HeadingColors(
-      first: json['first'] as String,
-      third: json['third'] as String,
-      second: json['second'] as String,
+      first: json['first'] as String? ?? '',
+      third: json['third'] as String? ?? '',
+      second: json['second'] as String? ?? '',
     );
   }
 
@@ -378,9 +385,9 @@ class ParagraphColors {
 
   factory ParagraphColors.fromJson(Map<String, dynamic> json) {
     return ParagraphColors(
-      first: json['first'] as String,
-      third: json['third'] as String,
-      second: json['second'] as String,
+      first: json['first'] as String? ?? '',
+      third: json['third'] as String? ?? '',
+      second: json['second'] as String? ?? '',
     );
   }
 
@@ -459,10 +466,11 @@ class TypographyConfig {
 
   factory TypographyConfig.fromJson(Map<String, dynamic> json) {
     return TypographyConfig(
-      h1: TypographyStyle.fromJson(json['h1'] as Map<String, dynamic>),
-      h2: TypographyStyle.fromJson(json['h2'] as Map<String, dynamic>),
-      h3: TypographyStyle.fromJson(json['h3'] as Map<String, dynamic>),
-      body: TypographyStyle.fromJson(json['body'] as Map<String, dynamic>),
+      h1: TypographyStyle.fromJson(json['h1'] as Map<String, dynamic>? ?? {}),
+      h2: TypographyStyle.fromJson(json['h2'] as Map<String, dynamic>? ?? {}),
+      h3: TypographyStyle.fromJson(json['h3'] as Map<String, dynamic>? ?? {}),
+      body:
+          TypographyStyle.fromJson(json['body'] as Map<String, dynamic>? ?? {}),
     );
   }
 
@@ -490,9 +498,9 @@ class TypographyStyle {
 
   factory TypographyStyle.fromJson(Map<String, dynamic> json) {
     return TypographyStyle(
-      usage: json['usage'] as String,
-      fontSize: json['fontSize'] as String,
-      fontWeight: json['fontWeight'], // Can be int or String
+      usage: json['usage'] as String? ?? '',
+      fontSize: json['fontSize'] as String? ?? '',
+      fontWeight: json['fontWeight'] ?? '', // Can be int or String
     );
   }
 
