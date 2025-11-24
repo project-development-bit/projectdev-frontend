@@ -9,11 +9,11 @@ import 'package:cointiply_app/features/user_profile/presentation/widgets/rewards
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class RewardDialog extends ConsumerWidget {
+class RewardDialog extends StatelessWidget {
   const RewardDialog({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final width = _dialogWidth(context);
     final height = _dialogHeight(context);
 
@@ -38,7 +38,7 @@ class RewardDialog extends ConsumerWidget {
           : 800;
 }
 
-class _RewardDialogContent extends StatelessWidget {
+class _RewardDialogContent extends ConsumerWidget {
   final double width;
   final double height;
 
@@ -48,20 +48,18 @@ class _RewardDialogContent extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final isMobile = context.isMobile;
-
+    final state = ref.watch(getRewardNotifierProvider);
+    final isLoading = state.status == GetRewardStatus.loading;
+    final error = state.error;
+    final data = state.rewards?.data;
     return Container(
       width: width,
       height: height,
       padding: EdgeInsets.only(top: 32, bottom: isMobile ? 26 : 40),
       child: Consumer(
         builder: (context, ref, _) {
-          final state = ref.watch(getRewardNotifierProvider);
-          final isLoading = state.status == GetRewardStatus.loading;
-          final error = state.error;
-          final data = state.rewards?.data;
-
           return SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -72,34 +70,12 @@ class _RewardDialogContent extends StatelessWidget {
                 /// ---------------------------
                 /// LOADING
                 /// ---------------------------
-                if (isLoading)
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 24),
-                    child: Center(
-                      child: CircularProgressIndicator(
-                        strokeWidth: 3,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
+                if (isLoading) _loadingWidget(),
 
                 /// ---------------------------
                 /// ERROR
                 /// ---------------------------
-                if (!isLoading && error != null)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 20,
-                      horizontal: 24,
-                    ),
-                    child: Center(
-                      child: CommonText.bodyLarge(
-                        error,
-                        color: Colors.redAccent,
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
+                if (!isLoading && error != null) _errorWidget(error),
 
                 /// ---------------------------
                 /// SUCCESS CONTENT
@@ -123,4 +99,32 @@ class _RewardDialogContent extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget _loadingWidget() {
+  return const Padding(
+    padding: EdgeInsets.symmetric(vertical: 24),
+    child: Center(
+      child: CircularProgressIndicator(
+        strokeWidth: 3,
+        color: Colors.white,
+      ),
+    ),
+  );
+}
+
+Widget _errorWidget(String error) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(
+      vertical: 20,
+      horizontal: 24,
+    ),
+    child: Center(
+      child: CommonText.bodyLarge(
+        error,
+        color: Colors.redAccent,
+        textAlign: TextAlign.center,
+      ),
+    ),
+  );
 }
