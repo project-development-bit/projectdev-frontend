@@ -541,5 +541,7 @@
   "reward_description_suffix": "earned.",
   "reward_progress_percent_symbol": "%",
   "reward_next_level_label": "XP points to next level",
-  "reward_level_label": "Lvl"
+  "reward_level_label": "Lvl",
+  "select_country_title": "Select your country",
+  "country_label": "Country"
 }

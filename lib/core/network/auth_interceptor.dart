@@ -92,7 +92,7 @@ class TokenInterceptor extends Interceptor {
         // Always add the failed request to the queue first
         log("ADDING REQUEST TO FAILED QUEUE", name: name);
         failedRequests.add({'err': err, 'handler': handler});
-        
+
         if (!isRefreshing) {
           log("ACCESS TOKEN EXPIRED, GETTING NEW TOKEN PAIR", name: name);
           isRefreshing = true;
@@ -121,7 +121,8 @@ class TokenInterceptor extends Interceptor {
     // For example, assume any POST request to `/contact` needs a token.
 
     bool isPublicRoute = options.path.contains('/api/v1/contact') ||
-        options.path.contains('/contact');
+        options.path.contains('/contact') ||
+        options.path.contains('ipapi.co');
     debugPrint(
         "isTokenRequired for PATH: ${options.path} => ${!isPublicRoute}");
     return !isPublicRoute; // For all other routes, no token is added

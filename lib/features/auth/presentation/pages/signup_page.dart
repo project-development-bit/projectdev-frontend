@@ -1,4 +1,5 @@
 import 'package:cointiply_app/core/theme/app_colors.dart';
+import 'package:cointiply_app/features/auth/presentation/widgets/country_selector_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/common/common_textfield.dart';
@@ -242,6 +243,9 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                     onSubmitted: (_) => _passwordFocusNode.requestFocus(),
                   ),
 
+                  const SizedBox(height: 20),
+
+                  CountrySelectorField(),
                   const SizedBox(height: 20),
 
                   // Password Field
