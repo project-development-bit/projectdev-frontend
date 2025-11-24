@@ -407,8 +407,8 @@ class BannerConfig {
 
   factory BannerConfig.fromJson(Map<String, dynamic> json) {
     return BannerConfig(
-      link: json['link'] as String,
-      image: json['image'] as String,
+      link: json['link'] as String? ?? '',
+      image: json['image'] as String? ?? '',
     );
   }
 

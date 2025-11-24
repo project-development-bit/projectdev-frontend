@@ -548,5 +548,12 @@
   "reward_description_suffix": "အမှတ် ရယူရန်လိုအပ်သည်။",
   "reward_progress_percent_symbol": "%",
   "reward_next_level_label": "XP အမှတ်များ လိုအပ်သည် (နောက်အဆင့်သို့)",
-  "reward_level_label": "အဆင့်"
+  "reward_level_label": "အဆင့်",
+  "your_country": "သင့်နိုင်ငံ",
+  "change_your_country_note": "နိုင်ငံကို တနှစ်လျှင် သုံးကြိမ်သာ ပြောင်းလဲနိုင်ပါသည်။",
+  "setup_2fa_app_description": "[Google Authenticator, Microsoft Authenticator, Authy,] သို့မဟုတ် [1Password] ကဲ့သို့သော authenticator အက်ပ်ကို အသုံးပြုပါ။ အောက်ပါ QR ကုဒ်ကို စကင်န်ဖတ်ပါ။ ၎င်းသည် သင်အောက်တွင် ထည့်သွင်းရန်အတွက် ၆ လုံးပါ ကုဒ်ကို ထုတ်ပေးပါမည်။",
+  "setup_2fa_app_note": "QR ကုဒ်ကို စကင်န်ဖတ်ရာတွင် အခက်အခဲရှိပါက၊ သင့် authenticator အက်ပ်တွင် manual entry ကို ရွေးချယ်ပြီး သင့် username နှင့် အောက်ပါကုဒ်ကို ထည့်သွင်းပါ-",
+  "setup_2fa_app_title": "နှစ်ဆင့်အတည်ပြုချက် သတ်မှတ်ပါ",
+  "authentication_code": "အတည်ပြုကုဒ်",
+  "enable_2fa_button": "2FA ဖွင့်ရန်"
 }

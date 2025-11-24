@@ -555,5 +555,12 @@
   "new_email": "New Email",
   "confirm_new_email": "Confirm New Email",
   "change_your_email_description": "You will receive a code by email to confirm your new email address.",
-  "change_your_email_btn_text":"Change Your Email Address"
+  "change_your_email_btn_text": "Change Your Email Address",
+  "your_country": "Your Country",
+  "change_your_country_note": "You can change your country only 3 times per year.",
+  "setup_2fa_app_description": "Use an authenticator app like  [Google Authenticator, Microsoft Authenticator, Authy,] or [1Password]. Scan the QR code below. It will  generate a 6-digit code for you to enter below.",
+  "setup_2fa_app_note": "If you’re having trouble scanning the QR code, select manual entry in your authenticator app and enter your username and the following code:",
+  "setup_2fa_app_title": "Setup Two Factor Authentication",
+  "authentication_code": "Authentication Code",
+  "enable_2fa_button": "Enable 2FA"
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../providers/get_profile_state.dart';
+import '../providers/get_profile_notifier.dart';
 
 /// Example page demonstrating how to use the Get Profile API
 ///

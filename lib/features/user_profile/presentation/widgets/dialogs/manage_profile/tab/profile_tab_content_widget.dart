@@ -6,6 +6,7 @@ class ProfileTabContent extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final email = ref.watch(profileCurrentUserProvider)?.email ?? '';
+    final account = ref.watch(getProfileNotifierProvider).profile?.account;
     // final country = ref.watch(profileCurrentUserProvider)?.country ?? '';
     return Column(
       children: [
@@ -38,7 +39,7 @@ class ProfileTabContent extends ConsumerWidget {
         _profileTabContentItem(
           title: "Country",
           child: CommonText.bodyMedium(
-            "No country set",
+            account?.country ?? "No country set",
             fontWeight: FontWeight.w500,
           ),
           btnTitle: context.translate("change_your_country"),

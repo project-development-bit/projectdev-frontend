@@ -1,7 +1,10 @@
 import 'package:cointiply_app/core/common/common_button.dart' show CommonButton;
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
+import 'package:cointiply_app/features/auth/presentation/widgets/disable_2fa_confirmation_dialog.dart';
+import 'package:cointiply_app/features/auth/presentation/widgets/two_factor_auth_dialog.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
+import 'package:cointiply_app/features/user_profile/presentation/providers/get_profile_notifier.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/dialog_bg_widget.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/manage_profile/upload_avatar_dialog.dart';
 import 'package:cointiply_app/routing/routing.dart';
@@ -39,21 +42,52 @@ class ManageProfileDialog extends ConsumerStatefulWidget {
 }
 
 class _ManageProfileDialogState extends ConsumerState<ManageProfileDialog> {
+
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(getProfileNotifierProvider.notifier).fetchProfile();
+      ref.read(tabBarIndexProvider.notifier).state = 0;
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final getProfileStatus = ref.watch(getProfileNotifierProvider).status;
     return DialogBgWidget(
       dialogHeight: 526,
-      body: _manageDialogBody(),
+      body: _manageDialogBody(status: getProfileStatus),
       title: context.translate("manage_profile_title"),
     );
   }
 
-  _manageDialogBody() {
+  _manageDialogBody({required GetProfileStatus status}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
         _manageProfileTabBar(),
+        
+        if (status == GetProfileStatus.loading) ...[
+          const SizedBox(height: 50),
+          Center(
+            child: CircularProgressIndicator(
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          ),
+        ],
+        if (status == GetProfileStatus.failure) ...[
+          const SizedBox(height: 50),
+          Center(
+            child: CommonText.bodyMedium(
+              context.translate("manage_profile_load_error"),
+              color: Theme.of(context).colorScheme.error,
+            ),
+          ),
+        ],
+        if (status == GetProfileStatus.success) 
         Expanded(
           child: SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),

@@ -44,15 +44,16 @@ class GetProfileState {
 class GetProfileNotifier extends StateNotifier<GetProfileState> {
   final GetProfileUseCase _getProfileUseCase;
 
-  GetProfileNotifier(this._getProfileUseCase)
-      : super(GetProfileState());
+  GetProfileNotifier(this._getProfileUseCase) : super(GetProfileState());
 
   /// Fetch user profile
-  Future<void> fetchProfile() async {
-    state = state.copyWith(
-      status: GetProfileStatus.loading,
-      errorMessage: null,
-    );
+  Future<void> fetchProfile({bool isLoading = true}) async {
+    if (isLoading) {
+      state = state.copyWith(
+        status: GetProfileStatus.loading,
+        errorMessage: null,
+      );
+    }
 
     final result = await _getProfileUseCase.call();
 
@@ -104,4 +105,3 @@ final getProfileNotifierProvider =
   final useCase = ref.watch(getProfileUseCaseProvider);
   return GetProfileNotifier(useCase);
 });
-
