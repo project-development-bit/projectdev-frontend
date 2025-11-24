@@ -35,12 +35,12 @@ class StatusRewardRow extends StatelessWidget {
                 CommonText.bodyMedium(
                   row.bronzeLabel.split(" ").first,
                   color: colorScheme.onPrimary,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
                 ),
-                CommonText.bodySmall(
+                CommonText.bodyMedium(
                   row.bronzeLabel.split(" ").last,
                   color: colorScheme.onPrimary,
+                  fontWeight: FontWeight.w700,
                 ),
               ],
             ),
@@ -65,7 +65,7 @@ class StatusRewardRow extends StatelessWidget {
                   SizedBox(
                     width: 64,
                     child: Center(
-                      child: CommonText.bodyMedium(
+                      child: CommonText.bodyLarge(
                         row.levelRequired,
                         color: const Color(0xFF00A0DC),
                         fontWeight: FontWeight.w700,
