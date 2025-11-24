@@ -19,7 +19,7 @@ class Country {
   });
 }
 
-// Static list from your JSON
+// TODO: Replace with real country from API
 const List<Country> kCountries = [
   Country(
     code: 'AU',
