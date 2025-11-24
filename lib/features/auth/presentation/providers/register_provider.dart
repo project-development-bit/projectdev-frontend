@@ -57,6 +57,7 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
     required String email,
     required String password,
     required String confirmPassword,
+    required int countryID,
     required UserRole role,
     VoidCallback? onSuccess,
     Function(String)? onError,
@@ -74,16 +75,18 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
 
       debugPrint('🔐 Checking Turnstile verification...');
       final turnstileState = _ref.read(turnstileNotifierProvider);
-      
+
       if (turnstileState is TurnstileSuccess) {
         turnstileToken = turnstileState.token;
         debugPrint('✅ Turnstile token obtained successfully');
       } else {
         debugPrint('❌ Turnstile verification incomplete');
         state = const RegisterError(
-          message: 'Security verification required. Please complete the verification and try again.',
+          message:
+              'Security verification required. Please complete the verification and try again.',
         );
-        onError?.call('Security verification required. Please complete the verification and try again.');
+        onError?.call(
+            'Security verification required. Please complete the verification and try again.');
         return;
       }
 
@@ -92,8 +95,10 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
         email: email,
         password: password,
         confirmPassword: confirmPassword,
+        countryID: countryID,
         role: role,
-        recaptchaToken: turnstileToken, // Using recaptchaToken field for Turnstile token
+        recaptchaToken:
+            turnstileToken, // Using recaptchaToken field for Turnstile token
       );
 
       debugPrint('📤 Sending registration request with Turnstile token');
@@ -142,7 +147,8 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
       debugPrint('🔄 State set to RegisterError (catch block)');
     }
 
-    debugPrint('🔄 Registration process completed. Final state: ${state.runtimeType}');
+    debugPrint(
+        '🔄 Registration process completed. Final state: ${state.runtimeType}');
   }
 
   /// Clear error state

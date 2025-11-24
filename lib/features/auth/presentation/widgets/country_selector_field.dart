@@ -8,11 +8,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class Country {
+  final int id;
   final String code;
   final String name;
   final String flagUrl;
 
   const Country({
+    required this.id,
     required this.code,
     required this.name,
     required this.flagUrl,
@@ -22,51 +24,61 @@ class Country {
 // TODO: Replace with real country from API
 const List<Country> kCountries = [
   Country(
+    id: 1,
     code: 'AU',
     name: 'Australia',
     flagUrl: 'https://flagsapi.com/AU/flat/64.png',
   ),
   Country(
+    id: 2,
     code: 'CN',
     name: 'China',
     flagUrl: 'https://flagsapi.com/CN/flat/64.png',
   ),
   Country(
+    id: 3,
     code: 'FR',
     name: 'France',
     flagUrl: 'https://flagsapi.com/FR/flat/64.png',
   ),
   Country(
+    id: 4,
     code: 'DE',
     name: 'Germany',
     flagUrl: 'https://flagsapi.com/DE/flat/64.png',
   ),
   Country(
+    id: 5,
     code: 'IN',
     name: 'India',
     flagUrl: 'https://flagsapi.com/IN/flat/64.png',
   ),
   Country(
+    id: 6,
     code: 'JP',
     name: 'Japan',
     flagUrl: 'https://flagsapi.com/JP/flat/64.png',
   ),
   Country(
+    id: 7,
     code: 'MM',
     name: 'Myanmar',
     flagUrl: 'https://flagsapi.com/MM/flat/64.png',
   ),
   Country(
+    id: 8,
     code: 'SG',
     name: 'Singapore',
     flagUrl: 'https://flagsapi.com/SG/flat/64.png',
   ),
   Country(
+    id: 9,
     code: 'TH',
     name: 'Thailand',
     flagUrl: 'https://flagsapi.com/TH/flat/64.png',
   ),
   Country(
+    id: 10,
     code: 'US',
     name: 'United States',
     flagUrl: 'https://flagsapi.com/US/flat/64.png',

@@ -9,12 +9,14 @@ class RegisterRequest {
   final String confirmPassword;
   final UserRole role;
   final String? recaptchaToken;
+  final int? countryID;
 
   RegisterRequest({
     required this.name,
     required this.email,
     required this.password,
     required this.confirmPassword,
+    this.countryID,
     this.role = UserRole.normalUser,
     this.recaptchaToken,
   });
@@ -23,6 +25,7 @@ class RegisterRequest {
     var userAgent = await DeviceInfo.getUserAgent();
     String? deviceId = await DeviceInfo.getUniqueIdentifier();
     return {
+      'country_id': countryID,
       'userAgent': userAgent,
       'device_fingerprint': deviceId,
       "name": name,
@@ -36,6 +39,7 @@ class RegisterRequest {
 
   factory RegisterRequest.fromJson(Map<String, dynamic> json) {
     return RegisterRequest(
+      countryID: json['country'],
       name: json['name'] ?? '',
       email: json['email'] ?? '',
       password: json['password'] ?? '',
