@@ -12,6 +12,7 @@ class RewardXpPrograssArea extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isMobile = context.isMobile;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Row(
       children: [
@@ -27,20 +28,22 @@ class RewardXpPrograssArea extends StatelessWidget {
               children: [
                 CommonText.titleMedium(
                   "${data.levelProgressPct.toStringAsFixed(0)}%",
-                  fontSize: 18,
+                  fontSize: isMobile ? 16 : 18,
                   fontWeight: FontWeight.w700,
+                  color: colorScheme.onPrimary,
                 ),
                 const SizedBox(height: 6),
                 PerceantProcessBar(
                   percent: data.levelProgressPct / 100,
-                  startColor: Theme.of(context).colorScheme.primary,
+                  startColor: colorScheme.primary,
                   backgroundColor: const Color(0xFF262626),
                   borderColor: const Color(0xFFB28F0C),
                 ),
                 const SizedBox(height: 6),
                 CommonText.titleMedium(
                   "${data.xpToNextLevel} XP to next level",
-                  fontSize: 18,
+                  fontSize: isMobile ? 16 : 18,
+                  color: colorScheme.onPrimary,
                   fontWeight: FontWeight.w700,
                 )
               ],
@@ -51,12 +54,13 @@ class RewardXpPrograssArea extends StatelessWidget {
           children: [
             CommonText.titleMedium(
               "Level",
-              color: Colors.white,
+              fontWeight: FontWeight.w700,
+              color: colorScheme.onPrimary,
             ),
             CommonText.titleMedium(
               "${data.currentLevel}",
               fontWeight: FontWeight.w700,
-              color: Colors.white,
+              color: colorScheme.onPrimary,
             ),
           ],
         )
