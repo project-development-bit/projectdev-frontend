@@ -77,6 +77,7 @@ class StatCard extends StatelessWidget {
       children: [
         // Number
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             SizedBox(
               width: 85,
@@ -87,12 +88,13 @@ class StatCard extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 24),
-            _buildNumberBadge(colorScheme, number),
+            _buildNumberBadge(colorScheme, number, true),
           ],
         ),
         const SizedBox(height: 8),
         // Total Earn
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             SizedBox(
               width: 80,
@@ -128,7 +130,7 @@ class StatCard extends StatelessWidget {
               color: colorScheme.onSecondary,
             ),
             const SizedBox(width: 24),
-            _buildNumberBadge(colorScheme, number),
+            _buildNumberBadge(colorScheme, number, false),
           ],
         ),
         const Spacer(),
@@ -148,24 +150,29 @@ class StatCard extends StatelessWidget {
   }
 
   // Small widgets reused in both versions
-  Widget _buildNumberBadge(ColorScheme colorScheme, String value) {
+  Widget _buildNumberBadge(
+      ColorScheme colorScheme, String value, bool isMobile) {
     return Container(
-      alignment: Alignment.center,
-      width: 120,
-      height: 40,
-      decoration: BoxDecoration(
-        color: Color(0xff100E1C),
-        borderRadius: BorderRadius.circular(30),
-        border: Border.all(
-          color: const Color(0x83333333), //TODO: Replace with theme color
-          width: 1.2,
+      alignment: Alignment.centerLeft,
+      width: isMobile ? 150 : 120,
+      child: Container(
+        alignment: Alignment.center,
+        width: isMobile ? 100 : 120,
+        height: 40,
+        decoration: BoxDecoration(
+          color: Color(0xff100E1C),
+          borderRadius: BorderRadius.circular(30),
+          border: Border.all(
+            color: const Color(0x83333333), //TODO: Replace with theme color
+            width: 1.2,
+          ),
         ),
-      ),
-      child: CommonText.titleLarge(
-        value,
-        fontSize: 20,
-        fontWeight: FontWeight.w700,
-        color: colorScheme.onPrimary,
+        child: CommonText.titleLarge(
+          value,
+          fontSize: 20,
+          fontWeight: FontWeight.w700,
+          color: colorScheme.onPrimary,
+        ),
       ),
     );
   }
@@ -173,7 +180,7 @@ class StatCard extends StatelessWidget {
   Widget _buildEarnBadge(ColorScheme colorScheme, String value, bool isMobile) {
     return Container(
       alignment: Alignment.center,
-      width: isMobile ? 130 : 120,
+      width: isMobile ? 150 : 120,
       height: 40,
       decoration: BoxDecoration(
         color: Color(0xff100E1C),
