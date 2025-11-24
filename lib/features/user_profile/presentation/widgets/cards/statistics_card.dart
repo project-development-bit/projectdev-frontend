@@ -24,7 +24,7 @@ class StatCard extends StatelessWidget {
         horizontal: 14,
         vertical: 14,
       ),
-      margin: EdgeInsets.only(left: 35, right: 35, bottom: isMobile ? 16 : 12),
+      margin: EdgeInsets.only(bottom: isMobile ? 16 : 12),
       decoration: BoxDecoration(
         color: AppColors.transparent,
         borderRadius: BorderRadius.circular(18),

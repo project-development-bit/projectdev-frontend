@@ -25,12 +25,9 @@ class AvatarBadgeInfo extends StatelessWidget {
     final isMobile = context.isMobile;
     final colorScheme = Theme.of(context).colorScheme;
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 35),
-      child: isMobile
-          ? _buildMobile(context, colorScheme)
-          : _buildDesktop(context, colorScheme),
-    );
+    return isMobile
+        ? _buildMobile(context, colorScheme)
+        : _buildDesktop(context, colorScheme);
   }
 
   // ============================

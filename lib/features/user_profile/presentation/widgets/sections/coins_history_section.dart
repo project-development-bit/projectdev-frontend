@@ -15,18 +15,13 @@ class CoinsHistorySection extends StatelessWidget {
       children: [
         SizedBox(height: 10),
         Center(
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: 35,
-            ),
-            child: CommonText.bodyLarge(
-              localizations?.translate('coins_history_title') ??
-                  "Last Coins Earned History. Past 7 Days",
-              fontWeight: FontWeight.w500,
-              color: colorScheme.onPrimary,
-              textAlign: TextAlign.center,
-              maxLines: 2,
-            ),
+          child: CommonText.bodyLarge(
+            localizations?.translate('coins_history_title') ??
+                "Last Coins Earned History. Past 7 Days",
+            fontWeight: FontWeight.w500,
+            color: colorScheme.onPrimary,
+            textAlign: TextAlign.center,
+            maxLines: 2,
           ),
         ),
         SizedBox(height: isMobile ? 10 : 28),
