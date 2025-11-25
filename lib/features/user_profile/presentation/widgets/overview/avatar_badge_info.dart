@@ -25,12 +25,9 @@ class AvatarBadgeInfo extends StatelessWidget {
     final isMobile = context.isMobile;
     final colorScheme = Theme.of(context).colorScheme;
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 35),
-      child: isMobile
-          ? _buildMobile(context, colorScheme)
-          : _buildDesktop(context, colorScheme),
-    );
+    return isMobile
+        ? _buildMobile(context, colorScheme)
+        : _buildDesktop(context, colorScheme);
   }
 
   // ============================
@@ -63,7 +60,7 @@ class AvatarBadgeInfo extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 24),
+        const SizedBox(height: 18),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -114,12 +111,12 @@ class AvatarBadgeInfo extends StatelessWidget {
           ],
         ),
 
-        const SizedBox(height: 31.5),
+        const SizedBox(height: 18),
 
         CommonText.bodyLarge(
           createdText,
           fontWeight: FontWeight.w500,
-          color: const Color(0xFF98989A), // TODO: use from theme
+          color: colorScheme.onPrimary,
         ),
       ],
     );

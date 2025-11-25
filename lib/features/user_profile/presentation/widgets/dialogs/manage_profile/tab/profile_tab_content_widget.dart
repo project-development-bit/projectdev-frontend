@@ -7,6 +7,7 @@ class ProfileTabContent extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final email = ref.watch(profileCurrentUserProvider)?.email ?? '';
     // final country = ref.watch(profileCurrentUserProvider)?.country ?? '';
+    final isMobile = context.screenWidth < 600;
     return Column(
       children: [
         _profileTabContentItem(
@@ -18,6 +19,7 @@ class ProfileTabContent extends ConsumerWidget {
 
             showUploadAvatarDialog(context);
           },
+          isMobile: isMobile,
         ),
         _profileTabContentItem(
           title: "Email",
@@ -32,6 +34,7 @@ class ProfileTabContent extends ConsumerWidget {
                 ),
           btnTitle: context.translate("change_your_email"),
           onPressed: () {},
+          isMobile: isMobile,
         ),
         _profileTabContentItem(
           title: "Country",
@@ -41,6 +44,7 @@ class ProfileTabContent extends ConsumerWidget {
           ),
           btnTitle: context.translate("change_your_country"),
           onPressed: () {},
+          isMobile: isMobile,
         ),
         _profileTabContentItem(
           title: "Offer Token",
@@ -50,6 +54,7 @@ class ProfileTabContent extends ConsumerWidget {
           ),
           btnTitle: context.translate("show_offer_token"),
           onPressed: () {},
+          isMobile: isMobile,
         ),
         Container(
           padding: const EdgeInsets.symmetric(vertical: 12),
@@ -81,47 +86,91 @@ class ProfileTabContent extends ConsumerWidget {
       {required String title,
       required Widget child,
       required String btnTitle,
-      required Function() onPressed}) {
+      required Function() onPressed,
+      required bool isMobile}) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        mainAxisSize: MainAxisSize.max,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        spacing: 21.0,
-        children: [
-          Expanded(
-              child: CommonText.titleMedium(
-            title,
-            fontWeight: FontWeight.w700,
-          )),
-          Expanded(
-            flex: 2,
-            child: Align(alignment: Alignment.centerLeft, child: child),
-          ),
-          Expanded(
-            flex: 2,
-            child: ElevatedButton(
-                onPressed: onPressed,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF262626),
-                  foregroundColor: Colors.black,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
+      child: isMobile
+          ? Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  // mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  spacing: 21.0,
+                  children: [
+                    CommonText.titleMedium(
+                      title,
+                      fontWeight: FontWeight.w700,
+                    ),
+                    child
+                  ],
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(13.0),
-                  child: CommonText.titleSmall(
-                    btnTitle,
-                    color: Color(0xff98989A),
+                SizedBox(
+                  height: 16,
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: onPressed,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF262626),
+                      foregroundColor: Colors.black,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 10),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(13.0),
+                      child: CommonText.titleSmall(
+                        btnTitle,
+                        color: const Color(0xff98989A),
+                      ),
+                    ),
                   ),
+                )
+              ],
+            )
+          : Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              spacing: 21.0,
+              children: [
+                Expanded(
+                    child: CommonText.titleMedium(
+                  title,
+                  fontWeight: FontWeight.w700,
                 )),
-          ),
-        ],
-      ),
+                Expanded(
+                  flex: 2,
+                  child: Align(alignment: Alignment.centerLeft, child: child),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: ElevatedButton(
+                      onPressed: onPressed,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xFF262626),
+                        foregroundColor: Colors.black,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 10),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(13.0),
+                        child: CommonText.titleSmall(
+                          btnTitle,
+                          color: Color(0xff98989A),
+                        ),
+                      )),
+                ),
+              ],
+            ),
     );
   }
 }
