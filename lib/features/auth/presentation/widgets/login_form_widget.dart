@@ -369,7 +369,8 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
               // Login Button
               CustomUnderLineButtonWidget(
                 title: localizations?.translate('sign_in') ?? 'Sign In',
-                onTap: isLoading ? () {} : _handleLogin,
+                // onTap: isLoading ? () {} : _handleLogin,
+                onTap: () {},
                 height: 56,
                 borderRadius: 12,
                 isActive: !isLoading,

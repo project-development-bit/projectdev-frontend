@@ -295,9 +295,7 @@ class _MenuItemState extends State<_MenuItem> {
           child: CommonText.bodyLarge(
             widget.title,
             fontWeight: FontWeight.w700,
-            color: isHovered
-                ? colorScheme.primary
-                : colorScheme.onPrimary,
+            color: isHovered ? colorScheme.primary : colorScheme.onPrimary,
           ),
         ),
       ),

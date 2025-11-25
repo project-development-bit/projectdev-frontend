@@ -1,8 +1,7 @@
 import 'package:cointiply_app/core/common/common_text.dart';
-import 'package:cointiply_app/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
-class CustomUnderLineButtonWidget extends StatelessWidget {
+class CustomUnderLineButtonWidget extends StatefulWidget {
   final String title;
   final VoidCallback onTap;
 
@@ -16,6 +15,7 @@ class CustomUnderLineButtonWidget extends StatelessWidget {
   final double? width;
   final double? fontSize;
   final FontWeight? fontWeight;
+
   const CustomUnderLineButtonWidget({
     super.key,
     required this.title,
@@ -33,50 +33,81 @@ class CustomUnderLineButtonWidget extends StatelessWidget {
   });
 
   @override
+  State<CustomUnderLineButtonWidget> createState() =>
+      _CustomUnderLineButtonWidgetState();
+}
+
+class _CustomUnderLineButtonWidgetState
+    extends State<CustomUnderLineButtonWidget> {
+  bool _isHovering = false;
+
+  @override
   Widget build(BuildContext context) {
-    return InkWell(
-      hoverColor: AppColors.transparent,
-      onTap: onTap,
-      child: Container(
-        height: height,
-        width: width,
-        margin: margin,
-        padding: padding ??
-            const EdgeInsets.symmetric(
-              vertical: 12,
-              horizontal: 17,
+    final hoverColor = const Color(0xFFB28F0C);
+    final bottomHoverColor =
+        Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.1);
+    final defaultBorderColor = const Color(0xFF262626);
+
+    return MouseRegion(
+      onHover: (_) {
+        setState(() => _isHovering = true);
+      },
+      onEnter: (_) => setState(() => _isHovering = true),
+      onExit: (_) => setState(() => _isHovering = false),
+      cursor: SystemMouseCursors.click,
+      child: Material(
+        // <-- IMPORTANT
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: widget.onTap,
+          hoverColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          splashColor: Colors.transparent,
+          child: AnimatedContainer(
+            duration: Duration(milliseconds: 120),
+            height: widget.height,
+            width: widget.width,
+            margin: widget.margin,
+            padding: widget.padding ??
+                const EdgeInsets.symmetric(vertical: 12, horizontal: 17),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  _isHovering
+                      ? hoverColor
+                      : widget.isActive
+                          ? const Color(0xFFFFCC02)
+                          : const Color(0xFF333333),
+                  _isHovering
+                      ? hoverColor
+                      : widget.isActive
+                          ? const Color(0xFFFFCC02)
+                          : const Color(0xFF333333),
+                ],
+              ),
+              borderRadius: BorderRadius.circular(widget.borderRadius ?? 12),
+              border: Border(
+                bottom: BorderSide(
+                  color: _isHovering
+                      ? bottomHoverColor
+                      : widget.isActive
+                          ? hoverColor
+                          : defaultBorderColor,
+                  width: 5,
+                ),
+              ),
             ),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              if (isActive)
-                Color(0xFFFFCC02)
-              else
-                Color(0xFF333333), //TODO use from theme
-              if (isActive)
-                Color(0xFFFFCC02)
-              else
-                Color(0xFF333333), //TODO use from theme
-            ],
-          ),
-          borderRadius: BorderRadius.circular(borderRadius ?? 12),
-          border: Border(
-            bottom: BorderSide(
-              // TODO use from theme
-              color: isActive ? Color(0xFFB28F0C) : Color(0xFF262626),
-              width: 5,
+            child: Center(
+              child: CommonText.titleMedium(
+                widget.title,
+                fontSize: widget.fontSize ?? 18,
+                fontWeight: widget.fontWeight ?? FontWeight.w700,
+                color: widget.textColor ??
+                    (widget.isActive
+                        ? const Color(0xFF333333)
+                        : const Color(0xFF98989A)),
+              ),
             ),
-          ),
-        ),
-        child: Center(
-          child: CommonText.titleMedium(
-            title,
-            fontSize: fontSize ?? 18,
-            fontWeight: fontWeight ?? FontWeight.w700,
-            color: textColor ??
-                (isActive
-                    ? Color(0xFF333333) //TODO use from theme
-                    : Color(0xFF98989A)), //TODO use from theme
           ),
         ),
       ),
