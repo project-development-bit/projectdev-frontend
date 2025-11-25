@@ -1,6 +1,5 @@
 import 'package:cointiply_app/core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:cointiply_app/features/user_profile/presentation/widgets/rewards/reward_rich_text.dart';
 
 class StatusRewardRow extends StatelessWidget {
   final StatusRewardRowModel row;
@@ -10,8 +9,15 @@ class StatusRewardRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    const double columnWidth = 89.0; // Fixed width to match Header
+    const double columnWidth = 89.0;
+    final localizations = AppLocalizations.of(context);
+    final dailySpinText =
+        (localizations?.translate('status_rewards_daily_spin') ?? '')
+            .replaceAll('{count}', row.dailySpin.toString());
 
+    final treasureChestText =
+        (localizations?.translate('status_rewards_treasure_chest') ?? '')
+            .replaceAll('{count}', row.treasureChest.toString());
     return Padding(
       padding: EdgeInsets.only(bottom: context.isMobile ? 8 : 11),
       child: Row(
@@ -22,19 +28,19 @@ class StatusRewardRow extends StatelessWidget {
             child: Column(
               children: [
                 Image.asset(
-                  "assets/images/rewards/bronze_level.png",
+                  _tierImage(row.tier),
                   width: 42,
                 ),
                 const SizedBox(height: 4),
                 CommonText.bodyMedium(
-                  "Bronze",
+                  row.bronzeLabel.split(" ").first,
                   color: colorScheme.onPrimary,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
                 ),
-                CommonText.bodySmall(
+                CommonText.bodyMedium(
                   row.bronzeLabel.split(" ").last,
                   color: colorScheme.onPrimary,
+                  fontWeight: FontWeight.w700,
                 ),
               ],
             ),
@@ -59,7 +65,7 @@ class StatusRewardRow extends StatelessWidget {
                   SizedBox(
                     width: 64,
                     child: Center(
-                      child: CommonText.bodyMedium(
+                      child: CommonText.bodyLarge(
                         row.levelRequired,
                         color: const Color(0xFF00A0DC),
                         fontWeight: FontWeight.w700,
@@ -71,9 +77,12 @@ class StatusRewardRow extends StatelessWidget {
                   SizedBox(
                     width: columnWidth,
                     child: Center(
-                      child: RewardRichText(
-                        boldNumber: "1",
-                        label: "Free Daily",
+                      child: CommonText.bodyMedium(
+                        dailySpinText,
+                        fontWeight: FontWeight.w700,
+                        color: colorScheme.onPrimary,
+                        highlightColor: const Color(
+                            0xFF00A0DC), // TODO: use from color scheme
                       ),
                     ),
                   ),
@@ -82,9 +91,12 @@ class StatusRewardRow extends StatelessWidget {
                   SizedBox(
                     width: columnWidth,
                     child: Center(
-                      child: RewardRichText(
-                        boldNumber: "1",
-                        label: "Free Per\nWeek",
+                      child: CommonText.bodyMedium(
+                        treasureChestText,
+                        fontWeight: FontWeight.w700,
+                        color: colorScheme.onPrimary,
+                        highlightColor: const Color(
+                            0xFF00A0DC), // TODO: use from color scheme
                       ),
                     ),
                   ),
@@ -120,9 +132,27 @@ class StatusRewardRow extends StatelessWidget {
       ),
     );
   }
+
+  String _tierImage(String tier) {
+    switch (tier.toLowerCase()) {
+      case "bronze":
+        return "assets/images/levels/bronze.png";
+      case "silver":
+        return "assets/images/rewards/sliver.png";
+      case "gold":
+        return "assets/images/rewards/gold.png";
+      case "diamond":
+        return "assets/images/rewards/diamond.png";
+      case "legend":
+        return "assets/images/rewards/legend.png";
+      default:
+        return "assets/images/levels/bronze.png"; // fallback
+    }
+  }
 }
 
 class StatusRewardRowModel {
+  final String tier;
   final String bronzeLabel;
   final String levelRequired;
   final String dailySpin;
@@ -131,6 +161,7 @@ class StatusRewardRowModel {
   final String ptcDiscount;
 
   StatusRewardRowModel({
+    required this.tier,
     required this.bronzeLabel,
     required this.levelRequired,
     required this.dailySpin,
