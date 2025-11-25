@@ -31,6 +31,7 @@ class RememberMeWidget extends StatelessWidget {
           CommonText.bodyMedium(
             label,
             fontWeight: FontWeight.w500,
+            overflow: TextOverflow.ellipsis,
             color: colorScheme.onSurfaceVariant,
           ),
         ],

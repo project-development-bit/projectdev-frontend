@@ -35,7 +35,7 @@ class OnboardingBackground extends StatelessWidget {
             child: Image.asset(
               backgroundImagePath ??
                   'assets/images/bg/onboarding_background.png',
-              fit: BoxFit.fill,
+              fit: context.isMobile ? BoxFit.cover : BoxFit.fill,
               alignment: Alignment.topCenter,
             ),
           ),

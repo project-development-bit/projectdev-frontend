@@ -247,7 +247,6 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context);
     final isLoading = ref.watch(isAnyAuthLoadingProvider);
-
     return AutofillGroup(
       child: Form(
         key: _formKey,
@@ -311,41 +310,7 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
 
             // Remember Me & Forgot Password Row
             if (widget.showRememberMe || widget.onForgotPassword != null)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  if (widget.showRememberMe)
-                    RememberMeWidget(
-                      value: _rememberMe,
-                      label: localizations?.translate('remember_me') ??
-                          "Remember me",
-                      onChanged: (checked) async {
-                        setState(() => _rememberMe = checked);
-
-                        if (!checked) {
-                          final secureStorage =
-                              ref.read(secureStorageServiceProvider);
-                          await secureStorage.clearRememberMeCredentials();
-                        }
-                      },
-                    )
-                  else
-                    const SizedBox.shrink(),
-                  if (widget.onForgotPassword != null)
-                    TextButton(
-                      onPressed: _handleForgotPassword,
-                      child: CommonText.bodyMedium(
-                        localizations?.translate('forgot_password') ??
-                            'Forgot Password?',
-                        overflow: TextOverflow.ellipsis,
-                        color: context.primary,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    )
-                  else
-                    const SizedBox.shrink(),
-                ],
-              ),
+              _buildRememberForgotRow(context),
 
             const SizedBox(height: 24),
 
@@ -472,5 +437,52 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
         ),
       ),
     );
+  }
+
+  Widget _buildRememberForgotRow(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
+    final rememberMeWidget = widget.showRememberMe
+        ? RememberMeWidget(
+            value: _rememberMe,
+            label: localizations?.translate('remember_me') ?? "Remember me",
+            onChanged: (checked) async {
+              setState(() => _rememberMe = checked);
+
+              if (!checked) {
+                final secureStorage = ref.read(secureStorageServiceProvider);
+                await secureStorage.clearRememberMeCredentials();
+              }
+            },
+          )
+        : const SizedBox.shrink();
+
+    final forgotPasswordWidget = widget.onForgotPassword != null
+        ? TextButton(
+            onPressed: _handleForgotPassword,
+            child: CommonText.bodyMedium(
+              localizations?.translate('forgot_password') ?? 'Forgot Password?',
+              overflow: TextOverflow.ellipsis,
+              color: context.primary,
+              fontWeight: FontWeight.w500,
+            ),
+          )
+        : const SizedBox.shrink();
+
+    return context.screenWidth < 400
+        ? Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              rememberMeWidget,
+              const SizedBox(height: 8),
+              forgotPasswordWidget,
+            ],
+          )
+        : Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              rememberMeWidget,
+              forgotPasswordWidget,
+            ],
+          );
   }
 }
