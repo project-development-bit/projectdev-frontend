@@ -249,14 +249,14 @@ class AuthActions {
     required String password,
     required String confirmPassword,
     required String name,
-    required int countryID,
+    required String countryCode,
     dynamic role, // UserRole - made dynamic to avoid import issues
     VoidCallback? onSuccess,
     Function(String)? onError,
   }) async {
     final registerNotifier = _ref.read(registerNotifierProvider.notifier);
     await registerNotifier.register(
-      countryID: countryID,
+      countryCode: countryCode,
       email: email,
       password: password,
       confirmPassword: confirmPassword,

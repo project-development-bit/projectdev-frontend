@@ -57,7 +57,7 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
     required String email,
     required String password,
     required String confirmPassword,
-    required int countryID,
+    required String countryCode,
     required UserRole role,
     VoidCallback? onSuccess,
     Function(String)? onError,
@@ -95,7 +95,7 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
         email: email,
         password: password,
         confirmPassword: confirmPassword,
-        countryID: countryID,
+        countryCode: countryCode,
         role: role,
         recaptchaToken:
             turnstileToken, // Using recaptchaToken field for Turnstile token

@@ -135,7 +135,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
       name: _nameController.text.trim(),
       email: _emailController.text.trim(),
       password: _passwordController.text,
-      countryID: ref.read(selectedCountryProvider).id,
+      countryCode: ref.read(selectedCountryProvider).code,
       confirmPassword: _confirmPasswordController.text,
       role: UserRole.normalUser, // Default to normal user
       onSuccess: () {
