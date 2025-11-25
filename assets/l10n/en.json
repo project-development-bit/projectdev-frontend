@@ -538,8 +538,10 @@
   "rewards_title": "Rewards",
   "reward_description_prefix": "Level up as you earn & unlock new rewards. You earn 1XP point for every ",
   "reward_description_xp_number": "5 ",
-  "reward_description_suffix": "earned.",
+  "reward_description_suffix": " earned.",
   "reward_progress_percent_symbol": "%",
   "reward_next_level_label": "XP points to next level",
-  "reward_level_label": "Lvl"
+  "reward_level_label": "Lvl",
+  "status_rewards_daily_spin": "[{count}] Free Daily",
+  "status_rewards_treasure_chest": "[{count}] Free Per\nWeek"
 }
