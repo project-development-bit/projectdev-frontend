@@ -53,7 +53,8 @@ class AppSettingsData {
     return AppSettingsData(
       id: json['id'] as int,
       configKey: json['config_key'] as String,
-      configData: AppConfigData.fromJson(json['config_data'] as Map<String, dynamic>),
+      configData:
+          AppConfigData.fromJson(json['config_data'] as Map<String, dynamic>),
       version: json['version'] as String,
       createdAt: DateTime.parse(json['created_at'] as String),
       updatedAt: DateTime.parse(json['updated_at'] as String),
@@ -100,7 +101,8 @@ class AppConfigData {
       banners: (json['banners'] as List)
           .map((e) => BannerConfig.fromJson(e as Map<String, dynamic>))
           .toList(),
-      typography: TypographyConfig.fromJson(json['typography'] as Map<String, dynamic>),
+      typography:
+          TypographyConfig.fromJson(json['typography'] as Map<String, dynamic>),
       colorScheme: json['colorScheme'] as String,
       configVersion: json['config_version'] as String,
     );
@@ -227,7 +229,8 @@ class ThemeColorsConfig {
       status: StatusColors.fromJson(json['status'] as Map<String, dynamic>),
       heading: HeadingColors.fromJson(json['heading'] as Map<String, dynamic>),
       primary: json['primary'] as String,
-      paragraph: ParagraphColors.fromJson(json['paragraph'] as Map<String, dynamic>),
+      paragraph:
+          ParagraphColors.fromJson(json['paragraph'] as Map<String, dynamic>),
       secondary: json['secondary'] as String,
     );
   }
@@ -407,8 +410,8 @@ class BannerConfig {
 
   factory BannerConfig.fromJson(Map<String, dynamic> json) {
     return BannerConfig(
-      link: json['link'] as String,
-      image: json['image'] as String,
+      link: json['link'] as String? ?? "",
+      image: json['image'] as String? ?? "",
     );
   }
 
@@ -517,7 +520,7 @@ Color _parseColor(String colorString) {
           .split(',')
           .map((e) => e.trim())
           .toList();
-      
+
       if (values.length >= 4) {
         final r = int.parse(values[0]);
         final g = int.parse(values[1]);
@@ -526,7 +529,7 @@ Color _parseColor(String colorString) {
         return Color.fromRGBO(r, g, b, a);
       }
     }
-    
+
     // Handle hex format
     if (colorString.startsWith('#')) {
       final hexColor = colorString.replaceAll('#', '');
@@ -536,7 +539,7 @@ Color _parseColor(String colorString) {
         return Color(int.parse(hexColor, radix: 16));
       }
     }
-    
+
     // Default fallback
     return Colors.grey;
   } catch (e) {

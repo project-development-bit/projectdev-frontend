@@ -53,15 +53,17 @@ class DialogBgWidget extends StatelessWidget {
                 height: height,
                 child: Column(
                   children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(vertical: 29),
+                    SizedBox(
                       height: 88,
                       child: Row(
                         children: [
-                          CommonText.headlineSmall(
-                            title,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.white,
+                          Container(
+                            padding: const EdgeInsets.symmetric(vertical: 29),
+                            child: CommonText.headlineSmall(
+                              title,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white,
+                            ),
                           ),
                           Spacer(),
                           CloseSquareButton(onTap: () {
