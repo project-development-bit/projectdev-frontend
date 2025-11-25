@@ -1,4 +1,5 @@
 import 'package:cointiply_app/core/common/common_text.dart';
+import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:flutter/material.dart';
 
 class HeaderCoinBalanceBox extends StatelessWidget {
@@ -8,11 +9,17 @@ class HeaderCoinBalanceBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final screenWidth = context.screenWidth;
+
     return Container(
       alignment: Alignment.center,
       height: 41,
-      padding: const EdgeInsets.symmetric(
-        horizontal: 16.5,
+      padding: EdgeInsets.symmetric(
+        horizontal: screenWidth < 320
+            ? 6
+            : screenWidth > 1100
+                ? 16.5
+                : 4,
       ),
       decoration: BoxDecoration(
         color: Color(0xff100E1C),

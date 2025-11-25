@@ -1,4 +1,5 @@
 import 'package:cointiply_app/core/common/common_text.dart';
+import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:flutter/material.dart';
 
 class HeaderMenuItem extends StatefulWidget {
@@ -21,6 +22,7 @@ class _HeaderMenuItemState extends State<HeaderMenuItem> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final screenWidth = context.screenWidth;
 
     return MouseRegion(
       onEnter: (_) => setState(() => isHovered = true),
@@ -30,8 +32,8 @@ class _HeaderMenuItemState extends State<HeaderMenuItem> {
         onTap: widget.onTap,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-          // margin: const EdgeInsets.only(right: 4),
+          padding: EdgeInsets.symmetric(
+              horizontal: screenWidth > 1100 ? 16 : 3, vertical: 4),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(6),
           ),
