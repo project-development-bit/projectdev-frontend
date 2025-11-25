@@ -37,7 +37,7 @@ class _HeaderMenuItemState extends State<HeaderMenuItem> {
           ),
           child: Row(
             children: [
-              CommonText.titleMedium(
+              CommonText.bodyLarge(
                 widget.label,
                 color: isHovered ? colorScheme.primary : colorScheme.onPrimary,
                 fontWeight: FontWeight.w700,
