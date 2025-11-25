@@ -226,6 +226,7 @@ class AuthActions {
   Future<void> login({
     required String email,
     required String password,
+    required String countryCode,
     VoidCallback? onSuccess,
     Function(String)? onError,
   }) async {
@@ -233,6 +234,7 @@ class AuthActions {
     await loginNotifier.login(
         email: email,
         password: password,
+        countryCode: countryCode,
         onError: onError,
         onSuccess: onSuccess);
   }

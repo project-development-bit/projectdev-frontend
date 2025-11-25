@@ -64,6 +64,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
   Future<void> login({
     required String email,
     required String password,
+    required String countryCode,
     VoidCallback? onSuccess,
     Function(String)? onError,
   }) async {
@@ -80,7 +81,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
 
       debugPrint('🔐 Checking Turnstile verification...');
       final turnstileState = _ref.read(turnstileNotifierProvider);
-      
+
       if (turnstileState is TurnstileSuccess) {
         turnstileToken = turnstileState.token;
         debugPrint('✅ Turnstile token obtained successfully');
@@ -97,12 +98,12 @@ class LoginNotifier extends StateNotifier<LoginState> {
       final loginRequest = LoginRequest(
         email: email,
         password: password,
+        countryCode: countryCode,
         recaptchaToken:
             turnstileToken, // Using recaptchaToken field for Turnstile token
       );
 
-      debugPrint(
-          '📤 Sending login request with Turnstile token');
+      debugPrint('📤 Sending login request with Turnstile token');
 
       final loginUseCase = _ref.read(loginUseCaseProvider);
 
@@ -130,7 +131,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
         },
         (loginResponse) async {
           debugPrint('✅ Login successful for: $email');
-          
+
           // Check if this is a 2FA required response (user and tokens are null)
           if (loginResponse.user == null || loginResponse.tokens == null) {
             debugPrint('🔐 2FA required - userId: ${loginResponse.userId}');
@@ -143,7 +144,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
             onSuccess?.call();
             return;
           }
-          
+
           debugPrint(
               '✅ Access token length: ${loginResponse.tokens!.accessToken.length}');
           debugPrint(

@@ -8,9 +8,7 @@ class GetIpCountryNotifier extends StateNotifier<IpCountryState> {
   final GetIpCountryUseCase getIpCountryUseCase;
 
   GetIpCountryNotifier(this.getIpCountryUseCase)
-      : super(const IpCountryState()) {
-    detectCountry();
-  }
+      : super(const IpCountryState());
 
   Future<void> detectCountry() async {
     if (state.status == GetIpCountryStatus.loading) return;

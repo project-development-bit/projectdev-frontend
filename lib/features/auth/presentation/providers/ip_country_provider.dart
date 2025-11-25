@@ -7,9 +7,9 @@ import 'ip_country_state.dart';
 final getIpCountryNotifierProvider =
     StateNotifierProvider.autoDispose<GetIpCountryNotifier, IpCountryState>(
   (ref) {
+    ref.keepAlive();
     final usecase = ref.read(getIpCountryUseCaseProvider);
     final notifier = GetIpCountryNotifier(usecase);
-
     return notifier;
   },
 );
