@@ -21,11 +21,13 @@ class StatusRewardsTableSliver extends StatelessWidget {
       return SliverToBoxAdapter(
         child: Container(
           padding: EdgeInsets.only(bottom: context.isMobile ? 0 : 27),
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: SizedBox(
-              width: fixedTableWidth,
-              child: _buildTableColumn(),
+          child: Scrollbar(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: SizedBox(
+                width: fixedTableWidth,
+                child: _buildTableColumn(),
+              ),
             ),
           ),
         ),
