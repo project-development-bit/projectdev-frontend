@@ -1,22 +1,30 @@
 import 'package:cointiply_app/core/common/footer/bottom_nav_item.dart';
 import 'package:cointiply_app/core/core.dart';
+import 'package:cointiply_app/features/chat/presentation/provider/right_chat_overlay_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class MobileBottomNav extends StatefulWidget {
+class MobileBottomNav extends ConsumerStatefulWidget {
   const MobileBottomNav({
     super.key,
   });
 
   @override
-  State<MobileBottomNav> createState() => _MobileBottomNavState();
+  ConsumerState<MobileBottomNav> createState() => _MobileBottomNavState();
 }
 
-class _MobileBottomNavState extends State<MobileBottomNav> {
+class _MobileBottomNavState extends ConsumerState<MobileBottomNav> {
   int currentIndex = 0;
   void onTap(int index) {
     setState(() {
       currentIndex = index;
     });
+    if (index == 3) {
+      ref.read(rightChatOverlayProvider.notifier).toggle();
+    } else {
+      final isChatOpen = ref.read(rightChatOverlayProvider);
+      if (isChatOpen) ref.read(rightChatOverlayProvider.notifier).close();
+    }
   }
 
   @override
