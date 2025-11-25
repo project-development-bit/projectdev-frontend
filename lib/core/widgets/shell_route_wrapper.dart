@@ -2,6 +2,7 @@ import 'package:cointiply_app/core/common/header/giga_faucet_header.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:cointiply_app/core/theme/app_colors.dart';
 import 'package:cointiply_app/features/chat/presentation/provider/right_chat_overlay_provider.dart';
+import 'package:cointiply_app/features/home/presentation/widgets/mobile_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -19,9 +20,9 @@ class ShellRouteWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final screenWidth = context.screenWidth;
+    final screenWidth = context.screenWidth;
     return Scaffold(
-      // drawer: screenWidth < 850 ? const MobileDrawer() : null,
+      drawer: screenWidth < 850 ? const MobileDrawer() : null,
       body: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return [
@@ -30,12 +31,11 @@ class ShellRouteWrapper extends StatelessWidget {
               floating: true,
               pinned: false,
               snap: true,
-              backgroundColor: context.surface.withAlpha(242), // 0.95 * 255
+              backgroundColor: context.surface.withAlpha(242),
               surfaceTintColor: AppColors.transparent,
               elevation: 0,
               scrolledUnderElevation: 1,
-              automaticallyImplyLeading:
-                  MediaQuery.of(context).size.width < 800,
+              automaticallyImplyLeading: false,
               flexibleSpace: FlexibleSpaceBar(
                 background: Container(
                   alignment: Alignment.center,

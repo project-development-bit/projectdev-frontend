@@ -40,13 +40,24 @@ class GigaFaucetHeader extends ConsumerWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                if (screenWidth < 800) ...[
+                  GestureDetector(
+                    onTap: () => Scaffold.of(context).openDrawer(),
+                    child: Icon(
+                      Icons.menu,
+                      color: Theme.of(context).colorScheme.onSurface,
+                      size: 28,
+                    ),
+                  ),
+                  SizedBox(width: 4),
+                ],
                 Image.asset(
                   screenWidth < 456
                       ? "assets/images/gigafaucet_logo.png"
                       : "assets/images/giga_faucet_text_logo.png",
                   height: 28,
                 ),
-                SizedBox(width: 20),
+                SizedBox(width: (screenWidth < 800) ? 8 : 20),
                 if (screenWidth > 900) ...[
                   HeaderMenuItem(
                     label: localizations?.translate("menu_earn_cryptos") ??
