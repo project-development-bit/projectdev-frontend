@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/common/footer/mobile_bottom_nav.dart';
 import 'package:cointiply_app/core/common/header/giga_faucet_header.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:cointiply_app/core/theme/app_colors.dart';
@@ -58,9 +59,12 @@ class ShellRouteWrapper extends StatelessWidget {
         },
         body: child,
       ),
+      bottomNavigationBar: MobileBottomNav(),
       floatingActionButton: Consumer(builder: (context, ref, child) {
         final isChatOpen = ref.watch(rightChatOverlayProvider);
-        if (isChatOpen) {
+        final screenWidth = context.screenWidth;
+
+        if (isChatOpen || screenWidth < 768) {
           return const SizedBox.shrink();
         }
         return GestureDetector(

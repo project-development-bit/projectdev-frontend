@@ -15,29 +15,31 @@ class GigaFooter extends StatelessWidget {
     final isMobile = context.isMobile;
     final screenWidth = context.screenWidth;
 
-    return HomeSectionContainer(
-      width: double.infinity,
-      child: Center(
-        child: Container(
-          width: double.infinity,
-          color: colorScheme.surface,
-          constraints: const BoxConstraints(maxWidth: 1240),
-          padding: const EdgeInsets.symmetric(vertical: 40),
-          margin: EdgeInsets.symmetric(horizontal: 25),
-          child: Column(
-            children: [
-              _buildResponsiveLayout(context, screenWidth, isMobile),
-              const SizedBox(height: 40),
-              CommonText.bodyMedium(
-                "${DateTime.now().year} GigaFaucet",
-                fontWeight: FontWeight.w700,
-                color: colorScheme.onPrimary,
+    return screenWidth > 768
+        ? HomeSectionContainer(
+            width: double.infinity,
+            child: Center(
+              child: Container(
+                width: double.infinity,
+                color: colorScheme.surface,
+                constraints: const BoxConstraints(maxWidth: 1240),
+                padding: const EdgeInsets.symmetric(vertical: 40),
+                margin: EdgeInsets.symmetric(horizontal: 25),
+                child: Column(
+                  children: [
+                    _buildResponsiveLayout(context, screenWidth, isMobile),
+                    const SizedBox(height: 40),
+                    CommonText.bodyMedium(
+                      "${DateTime.now().year} GigaFaucet",
+                      fontWeight: FontWeight.w700,
+                      color: colorScheme.onPrimary,
+                    ),
+                  ],
+                ),
               ),
-            ],
-          ),
-        ),
-      ),
-    );
+            ),
+          )
+        : SizedBox.shrink();
   }
 
   // -----------------------------------------------------------

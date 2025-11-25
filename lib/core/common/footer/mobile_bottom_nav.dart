@@ -1,0 +1,106 @@
+import 'package:cointiply_app/core/common/footer/bottom_nav_item.dart';
+import 'package:cointiply_app/core/core.dart';
+import 'package:flutter/material.dart';
+
+class MobileBottomNav extends StatefulWidget {
+  const MobileBottomNav({
+    super.key,
+  });
+
+  @override
+  State<MobileBottomNav> createState() => _MobileBottomNavState();
+}
+
+class _MobileBottomNavState extends State<MobileBottomNav> {
+  int currentIndex = 0;
+  void onTap(int index) {
+    setState(() {
+      currentIndex = index;
+    });
+  }
+
+  @override
+  Widget build(
+    BuildContext context,
+  ) {
+    final localizations = AppLocalizations.of(context);
+    final screenWidth = context.screenWidth;
+
+    const backgroundColor = Color(0xFF00131E);
+
+    return screenWidth < 768
+        ? Container(
+            height: 83,
+            width: double.infinity,
+            clipBehavior: Clip.none,
+            decoration: const BoxDecoration(
+              color: backgroundColor,
+            ),
+            child: Stack(
+              clipBehavior: Clip.none,
+              alignment: Alignment.topCenter,
+              children: [
+                /// Bottom Navigation Items Row
+                Positioned.fill(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      BottomNavItem(
+                        index: 0,
+                        label: localizations?.translate("nav_home") ?? "Home",
+                        iconPath: "assets/images/icons/Home.svg",
+                        currentIndex: currentIndex,
+                        onTap: onTap,
+                      ),
+                      BottomNavItem(
+                        index: 1,
+                        label:
+                            localizations?.translate("nav_wallet") ?? "Wallet",
+                        iconPath: "assets/images/icons/wallet.svg",
+                        currentIndex: currentIndex,
+                        onTap: onTap,
+                      ),
+
+                      /// Gap for center big star
+                      const SizedBox(width: 60),
+
+                      BottomNavItem(
+                        index: 2,
+                        label: localizations?.translate("nav_account") ??
+                            "Account",
+                        iconPath: "assets/images/icons/account.svg",
+                        currentIndex: currentIndex,
+                        onTap: onTap,
+                      ),
+                      BottomNavItem(
+                        index: 3,
+                        label: localizations?.translate("nav_chat") ?? "Chat",
+                        iconPath: "assets/images/icons/chat.svg",
+                        currentIndex: currentIndex,
+                        onTap: onTap,
+                      ),
+                    ],
+                  ),
+                ),
+
+                /// Center BIG STAR button
+                Positioned(
+                  top: -25,
+                  child: GestureDetector(
+                    onTap: () => onTap(4),
+                    child: Container(
+                        width: 61,
+                        height: 61,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                        ),
+                        child: CommonImage(
+                            imageUrl: "assets/images/icons/star_nav_icon.png")),
+                  ),
+                ),
+              ],
+            ),
+          )
+        : SizedBox.shrink();
+  }
+}
