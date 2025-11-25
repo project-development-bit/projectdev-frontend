@@ -1,10 +1,15 @@
 import 'package:cointiply_app/core/common/common_text.dart';
+import 'package:cointiply_app/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class CustomUnderLineButtonWidget extends StatelessWidget {
   final String title;
   final VoidCallback onTap;
 
+  final Color? backgroundColor;
+  final Color? textColor;
+  final double? height;
+  final double? borderRadius;
   final bool isActive;
   final EdgeInsetsGeometry? padding;
   final EdgeInsetsGeometry? margin;
@@ -21,13 +26,19 @@ class CustomUnderLineButtonWidget extends StatelessWidget {
     this.width,
     this.fontSize,
     this.fontWeight,
+    this.backgroundColor,
+    this.textColor,
+    this.height,
+    this.borderRadius,
   });
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
+      hoverColor: AppColors.transparent,
       onTap: onTap,
       child: Container(
+        height: height,
         width: width,
         margin: margin,
         padding: padding ??
@@ -48,7 +59,7 @@ class CustomUnderLineButtonWidget extends StatelessWidget {
                 Color(0xFF333333), //TODO use from theme
             ],
           ),
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(borderRadius ?? 12),
           border: Border(
             bottom: BorderSide(
               // TODO use from theme
@@ -62,9 +73,10 @@ class CustomUnderLineButtonWidget extends StatelessWidget {
             title,
             fontSize: fontSize ?? 18,
             fontWeight: fontWeight ?? FontWeight.w700,
-            color: isActive
-                ? Color(0xFF333333) //TODO use from theme
-                : Color(0xFF98989A), //TODO use from theme
+            color: textColor ??
+                (isActive
+                    ? Color(0xFF333333) //TODO use from theme
+                    : Color(0xFF98989A)), //TODO use from theme
           ),
         ),
       ),

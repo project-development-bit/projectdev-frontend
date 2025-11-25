@@ -1,22 +1,11 @@
+import 'package:cointiply_app/core/core.dart';
 import 'package:cointiply_app/core/error/error_model.dart';
-import 'package:cointiply_app/core/theme/app_colors.dart';
 import 'package:cointiply_app/features/common/widgets/custom_pointer_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../core/common/common_text.dart';
-import '../../../../core/common/common_button.dart';
-import '../../../../core/common/common_container.dart';
-import '../../../../core/localization/app_localizations.dart';
-import '../../../../core/providers/locale_provider.dart';
-import '../../../../core/providers/translation_provider.dart';
 import '../../../../core/providers/auth_debug_provider.dart';
-import '../../../../core/widgets/locale_switch_widget.dart';
-import '../../../../core/widgets/theme_switch_widget.dart';
-import '../../../../core/widgets/responsive_container.dart';
-import '../../../../core/extensions/context_extensions.dart';
 import '../../../../routing/app_router.dart';
-import '../../../terms_privacy/presentation/services/terms_privacy_navigation_service.dart';
 import '../providers/login_provider.dart';
 import '../widgets/login_form_widget.dart';
 import '../widgets/two_factor_login_verification_dialog.dart';
@@ -104,17 +93,26 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     debugPrint('LoginPage building with locale: ${currentLocale.languageCode}');
     debugPrint(
         'Testing direct translation for "welcome_back": ${translate('welcome_back')}');
-
     return Scaffold(
       backgroundColor: context.surface,
       body: SafeArea(
-        child: Stack(
-          children: [
-            // Main login content
-            SingleChildScrollView(
-              child: Center(
+        child: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: Container(
+                width: double.infinity,
+                height: context.screenHeight,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage(
+                        'assets/images/bg/onboarding_background.png',
+                      ),
+                      fit: BoxFit.fitWidth,
+                      alignment: Alignment.topCenter),
+                ),
                 child: ResponsiveContainer(
-                  maxWidth: context.isMobile ? null : 400,
+                  maxWidth: context.isMobile ? null : 500,
                   padding: EdgeInsets.symmetric(
                     horizontal: context.isMobile ? 24 : 32,
                     vertical: 24,
@@ -124,39 +122,14 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       // App Logo/Icon
-                      Center(
-                        child: CommonContainer(
-                          width: context.isMobile ? 100 : 120,
-                          height: context.isMobile ? 100 : 120,
-                          backgroundColor: context.primary.withAlpha(25),
-                          borderRadius: context.isMobile ? 50 : 60,
-                          child: Icon(
-                            Icons.fastfood_rounded,
-                            size: context.isMobile ? 56 : 64,
-                            color: context.primary,
-                          ),
-                        ),
+                      CommonImage(
+                        imageUrl: "assets/images/giga_faucet_text_logo.png",
+                        width: 372.26,
+                        height: 52,
+                        fit: BoxFit.contain,
                       ),
 
-                      const SizedBox(height: 20),
-
-                      // Welcome Text - Testing direct translation provider
-                      CommonText.headlineMedium(
-                        translate('welcome_back'),
-                        fontWeight: FontWeight.bold,
-                        color: context.onSurface,
-                        textAlign: TextAlign.center,
-                      ),
-
-                      const SizedBox(height: 8),
-
-                      CommonText.bodyLarge(
-                        translate('sign_in_subtitle'),
-                        color: context.onSurfaceVariant,
-                        textAlign: TextAlign.center,
-                      ),
-
-                      const SizedBox(height: 40),
+                      const SizedBox(height: 31),
 
                       // Login Form Widget
                       LoginFormWidget(
@@ -172,79 +145,65 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       const SizedBox(height: 32),
 
                       // Legal Links Section
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Expanded(
-                            child: TextButton(
-                              onPressed: () => context.showPrivacy(ref),
-                              style: TextButton.styleFrom(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 8),
-                              ),
-                              child: CommonText.bodySmall(
-                                translate('privacy_policy'),
-                                color: context.primary,
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ),
-                          CommonText.bodySmall(
-                            '•',
-                            color: context.onSurfaceVariant,
-                          ),
-                          Expanded(
-                            child: TextButton(
-                              onPressed: () => context.showTerms(ref),
-                              style: TextButton.styleFrom(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 8),
-                              ),
-                              child: CommonText.bodySmall(
-                                translate('terms_of_service'),
-                                color: context.primary,
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ),
-                          CommonText.bodySmall(
-                            '•',
-                            color: context.onSurfaceVariant,
-                          ),
-                          Expanded(
-                            child: TextButton(
-                              onPressed: () => GoRouter.of(context)
-                                  .push(AppRoutes.contactUs),
-                              style: TextButton.styleFrom(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 8),
-                              ),
-                              child: CommonText.bodySmall(
-                                translate('contact_us'),
-                                color: context.primary,
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      //   children: [
+                      //     Expanded(
+                      //       child: TextButton(
+                      //         onPressed: () => context.showPrivacy(ref),
+                      //         style: TextButton.styleFrom(
+                      //           padding:
+                      //               const EdgeInsets.symmetric(vertical: 8),
+                      //         ),
+                      //         child: CommonText.bodySmall(
+                      //           translate('privacy_policy'),
+                      //           color: context.primary,
+                      //           textAlign: TextAlign.center,
+                      //         ),
+                      //       ),
+                      //     ),
+                      //     CommonText.bodySmall(
+                      //       '•',
+                      //       color: context.onSurfaceVariant,
+                      //     ),
+                      //     Expanded(
+                      //       child: TextButton(
+                      //         onPressed: () => context.showTerms(ref),
+                      //         style: TextButton.styleFrom(
+                      //           padding:
+                      //               const EdgeInsets.symmetric(vertical: 8),
+                      //         ),
+                      //         child: CommonText.bodySmall(
+                      //           translate('terms_of_service'),
+                      //           color: context.primary,
+                      //           textAlign: TextAlign.center,
+                      //         ),
+                      //       ),
+                      //     ),
+                      //     CommonText.bodySmall(
+                      //       '•',
+                      //       color: context.onSurfaceVariant,
+                      //     ),
+                      //     Expanded(
+                      //       child: TextButton(
+                      //         onPressed: () => GoRouter.of(context)
+                      //             .push(AppRoutes.contactUs),
+                      //         style: TextButton.styleFrom(
+                      //           padding:
+                      //               const EdgeInsets.symmetric(vertical: 8),
+                      //         ),
+                      //         child: CommonText.bodySmall(
+                      //           translate('contact_us'),
+                      //           color: context.primary,
+                      //           textAlign: TextAlign.center,
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
                     ],
                   ),
                 ),
-              ),
-            ),
-
-            // Locale and theme switch widgets positioned at top-right
-            Positioned(
-              top: 16,
-              right: 16,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const ThemeSwitchWidget(),
-                  const SizedBox(width: 8),
-                  const LocaleSwitchWidget(),
-                ],
               ),
             ),
           ],

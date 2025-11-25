@@ -1,6 +1,8 @@
+import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
 import 'package:cointiply_app/core/theme/app_colors.dart';
 import 'package:cointiply_app/core/widgets/cloudflare_turnstille_widgte.dart';
 import 'package:cointiply_app/core/providers/turnstile_provider.dart';
+import 'package:cointiply_app/features/auth/presentation/widgets/remember_me_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/common/common_textfield.dart';
@@ -246,238 +248,238 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
     final localizations = AppLocalizations.of(context);
     final isLoading = ref.watch(isAnyAuthLoadingProvider);
 
-    return AutofillGroup(
-      child: Form(
-        key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Email Field
-            CommonTextField(
-              key: const ValueKey('emailField'),
-              controller: _emailController,
-              focusNode: _emailFocusNode,
-              hintText:
-                  localizations?.translate('email_hint') ?? 'Enter your email',
-              labelText: localizations?.translate('email') ?? 'Email',
-              keyboardType: TextInputType.emailAddress,
-              textInputAction: TextInputAction.next,
-              prefixIcon: const Icon(Icons.email_outlined),
-              validator: (value) => TextFieldValidators.email(value, context),
-              onSubmitted: (_) => _passwordFocusNode.requestFocus(),
-              autofillHints: const [
-                AutofillHints.email,
-                AutofillHints.username
-              ],
-            ),
-
-            const SizedBox(height: 16),
-
-            // Password Field
-            CommonTextField(
-              key: const ValueKey('passwordField'),
-              controller: _passwordController,
-              focusNode: _passwordFocusNode,
-              hintText: localizations?.translate('password_hint') ??
-                  'Enter your password',
-              labelText: localizations?.translate('password') ?? 'Password',
-              obscureText: true,
-              textInputAction: TextInputAction.done,
-              prefixIcon: const Icon(Icons.lock_outlined),
-              validator: (value) => TextFieldValidators.minLength(
-                value,
-                6,
-                context,
-                fieldName: localizations?.translate('password') ?? 'Password',
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 43, vertical: 35.5),
+      decoration: BoxDecoration(
+        color: Color(0xFF00131E)
+            .withValues(alpha: 0.3), //TODO: use from theme scheme
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: context.outline.withAlpha(20),
+        ),
+      ),
+      child: AutofillGroup(
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CommonText.headlineLarge(
+                context.translate('sign_in'),
+                fontWeight: FontWeight.w700,
+                color: context.onSurface,
+                textAlign: TextAlign.center,
               ),
-              onSubmitted: (_) => _handleLogin(),
-              enableSuggestions: false,
-              autofillHints: const [AutofillHints.password],
-            ),
-            const SizedBox(height: 16),
 
-            // Remember Me & Forgot Password Row
-            if (widget.showRememberMe || widget.onForgotPassword != null)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  if (widget.showRememberMe)
-                    Row(
-                      children: [
-                        Checkbox(
-                          value: _rememberMe,
-                          onChanged: (value) async {
-                            setState(() {
-                              _rememberMe = value ?? false;
-                            });
+              const SizedBox(height: 32),
+              // Email Field
+              CommonTextField(
+                fillColor: Color(0xFF1A1A1A),
+                key: const ValueKey('emailField'),
+                controller: _emailController,
+                focusNode: _emailFocusNode,
+                hintText: localizations?.translate('email_hint') ??
+                    'Enter your email',
+                labelText: localizations?.translate('email') ?? 'Email',
+                keyboardType: TextInputType.emailAddress,
+                textInputAction: TextInputAction.next,
+                prefixIcon: const Icon(Icons.email_outlined),
+                validator: (value) => TextFieldValidators.email(value, context),
+                onSubmitted: (_) => _passwordFocusNode.requestFocus(),
+                autofillHints: const [
+                  AutofillHints.email,
+                  AutofillHints.username
+                ],
+              ),
 
-                            // If unchecked, clear saved credentials immediately
-                            if (!_rememberMe) {
-                              try {
-                                final secureStorage =
-                                    ref.read(secureStorageServiceProvider);
-                                await secureStorage
-                                    .clearRememberMeCredentials();
-                                debugPrint(
-                                    '✅ Remember me unchecked - credentials cleared');
-                              } catch (e) {
-                                debugPrint(
-                                    '⚠️ Failed to clear credentials on uncheck: $e');
-                              }
-                            }
-                          },
+              const SizedBox(height: 16),
+
+              // Password Field
+              CommonTextField(
+                fillColor: Color(0xFF1A1A1A),
+                key: const ValueKey('passwordField'),
+                controller: _passwordController,
+                focusNode: _passwordFocusNode,
+                hintText: localizations?.translate('password_hint') ??
+                    'Enter your password',
+                labelText: localizations?.translate('password') ?? 'Password',
+                obscureText: true,
+                textInputAction: TextInputAction.done,
+                prefixIcon: const Icon(Icons.lock_outlined),
+                validator: (value) => TextFieldValidators.minLength(
+                  value,
+                  6,
+                  context,
+                  fieldName: localizations?.translate('password') ?? 'Password',
+                ),
+                onSubmitted: (_) => _handleLogin(),
+                enableSuggestions: false,
+                autofillHints: const [AutofillHints.password],
+              ),
+              const SizedBox(height: 24),
+
+              // Remember Me & Forgot Password Row
+              if (widget.showRememberMe || widget.onForgotPassword != null)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    if (widget.showRememberMe)
+                      RememberMeWidget(
+                        value: _rememberMe,
+                        label: localizations?.translate('remember_me') ??
+                            "Remember me",
+                        onChanged: (checked) async {
+                          setState(() => _rememberMe = checked);
+
+                          if (!checked) {
+                            final secureStorage =
+                                ref.read(secureStorageServiceProvider);
+                            await secureStorage.clearRememberMeCredentials();
+                          }
+                        },
+                      )
+                    else
+                      const SizedBox.shrink(),
+                    if (widget.onForgotPassword != null)
+                      TextButton(
+                        onPressed: _handleForgotPassword,
+                        child: CommonText.bodyMedium(
+                          localizations?.translate('forgot_password') ??
+                              'Forgot Password?',
+                          color: context.primary,
+                          fontWeight: FontWeight.w500,
                         ),
-                        CommonText.bodyMedium(
-                          localizations?.translate('remember_me') ??
-                              'Remember me',
-                          color: context.onSurfaceVariant,
-                        ),
-                      ],
-                    )
-                  else
-                    const SizedBox.shrink(),
-                  if (widget.onForgotPassword != null)
-                    TextButton(
-                      onPressed: _handleForgotPassword,
-                      child: CommonText.bodyMedium(
-                        localizations?.translate('forgot_password') ??
-                            'Forgot Password?',
-                        color: context.primary,
+                      )
+                    else
+                      const SizedBox.shrink(),
+                  ],
+                ),
+
+              const SizedBox(height: 24),
+
+              // Cloudflare Turnstile Security Widget
+              IgnorePointer(
+                ignoring: true,
+                child: CloudflareTurnstileWidget(),
+              ),
+
+              const SizedBox(height: 24),
+
+              // Login Button
+              CustomUnderLineButtonWidget(
+                title: localizations?.translate('sign_in') ?? 'Sign In',
+                onTap: isLoading ? () {} : _handleLogin,
+                height: 56,
+                borderRadius: 12,
+                isActive: !isLoading,
+                fontSize: 14,
+              ),
+
+              // Social Login Section
+              if (isReadyScocial) ...[
+                const SizedBox(height: 24),
+
+                // Divider with OR
+                Row(
+                  children: [
+                    Expanded(
+                      child: Divider(
+                        color: context.outline.withAlpha(15),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: CommonText.bodySmall(
+                        localizations?.translate('or') ?? 'OR',
+                        color: context.onSurfaceVariant,
                         fontWeight: FontWeight.w500,
                       ),
-                    )
-                  else
-                    const SizedBox.shrink(),
-                ],
-              ),
-
-            const SizedBox(height: 24),
-
-            // Cloudflare Turnstile Security Widget
-            IgnorePointer(
-              ignoring: true,
-              child: CloudflareTurnstileWidget(),
-            ),
-
-            const SizedBox(height: 24),
-
-            // Login Button
-            CommonButton(
-              text: localizations?.translate('sign_in') ?? 'Sign In',
-              onPressed: isLoading ? null : _handleLogin,
-              backgroundColor: isLoading
-                  ? context.primary.withValues(alpha: 0.5)
-                  : context.primary,
-              textColor: context.onPrimary,
-              height: 56,
-              borderRadius: 12,
-              isLoading: isLoading,
-              fontSize: context.titleMedium?.fontSize,
-            ),
-
-            // Social Login Section
-            if (isReadyScocial) ...[
-              const SizedBox(height: 24),
-
-              // Divider with OR
-              Row(
-                children: [
-                  Expanded(
-                    child: Divider(
-                      color: context.outline.withAlpha(15),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: CommonText.bodySmall(
-                      localizations?.translate('or') ?? 'OR',
+                    Expanded(
+                      child: Divider(
+                        color: context.outline.withAlpha(15),
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 24),
+
+                // Social Login Buttons
+                Row(
+                  children: [
+                    Expanded(
+                      child: CommonButton(
+                        text: localizations?.translate('google') ?? 'Google',
+                        onPressed: () {
+                          // TODO: Implement Google login
+                          context.showErrorSnackBar(
+                            message: localizations
+                                    ?.translate('google_login_coming_soon') ??
+                                'Google login coming soon!',
+                          );
+                        },
+                        icon: const Icon(Icons.g_mobiledata, size: 24),
+                        isOutlined: true,
+                        backgroundColor: AppColors.transparent,
+                        textColor: context.onSurface,
+                        height: 48,
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: CommonButton(
+                        text:
+                            localizations?.translate('facebook') ?? 'Facebook',
+                        onPressed: () {
+                          // TODO: Implement Facebook login
+                          context.showErrorSnackBar(
+                            message: localizations
+                                    ?.translate('facebook_login_coming_soon') ??
+                                'Facebook login coming soon!',
+                          );
+                        },
+                        icon: const Icon(Icons.facebook, size: 24),
+                        isOutlined: true,
+                        backgroundColor: AppColors.transparent,
+                        textColor: context.onSurface,
+                        height: 48,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+
+              // Sign Up Link
+              if (widget.showSignUpLink && widget.onSignUp != null) ...[
+                const SizedBox(height: 24),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CommonText.bodyMedium(
+                      localizations?.translate('no_account') ??
+                          "Don't have an account? ",
                       color: context.onSurfaceVariant,
-                      fontWeight: FontWeight.w500,
                     ),
-                  ),
-                  Expanded(
-                    child: Divider(
-                      color: context.outline.withAlpha(15),
+                    TextButton(
+                      onPressed: _handleSignUp,
+                      style: TextButton.styleFrom(
+                        padding: EdgeInsets.zero,
+                        minimumSize: Size.zero,
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                      child: CommonText.bodyMedium(
+                        localizations?.translate('sign_up') ?? 'Sign Up',
+                        color: context.primary,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 24),
-
-              // Social Login Buttons
-              Row(
-                children: [
-                  Expanded(
-                    child: CommonButton(
-                      text: localizations?.translate('google') ?? 'Google',
-                      onPressed: () {
-                        // TODO: Implement Google login
-                        context.showErrorSnackBar(
-                          message: localizations
-                                  ?.translate('google_login_coming_soon') ??
-                              'Google login coming soon!',
-                        );
-                      },
-                      icon: const Icon(Icons.g_mobiledata, size: 24),
-                      isOutlined: true,
-                      backgroundColor: AppColors.transparent,
-                      textColor: context.onSurface,
-                      height: 48,
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: CommonButton(
-                      text: localizations?.translate('facebook') ?? 'Facebook',
-                      onPressed: () {
-                        // TODO: Implement Facebook login
-                        context.showErrorSnackBar(
-                          message: localizations
-                                  ?.translate('facebook_login_coming_soon') ??
-                              'Facebook login coming soon!',
-                        );
-                      },
-                      icon: const Icon(Icons.facebook, size: 24),
-                      isOutlined: true,
-                      backgroundColor: AppColors.transparent,
-                      textColor: context.onSurface,
-                      height: 48,
-                    ),
-                  ),
-                ],
-              ),
+                  ],
+                ),
+              ],
             ],
-
-            // Sign Up Link
-            if (widget.showSignUpLink && widget.onSignUp != null) ...[
-              const SizedBox(height: 24),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CommonText.bodyMedium(
-                    localizations?.translate('no_account') ??
-                        "Don't have an account? ",
-                    color: context.onSurfaceVariant,
-                  ),
-                  TextButton(
-                    onPressed: _handleSignUp,
-                    style: TextButton.styleFrom(
-                      padding: EdgeInsets.zero,
-                      minimumSize: Size.zero,
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    ),
-                    child: CommonText.bodyMedium(
-                      localizations?.translate('sign_up') ?? 'Sign Up',
-                      color: context.primary,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ],
+          ),
         ),
       ),
     );
