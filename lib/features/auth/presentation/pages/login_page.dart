@@ -1,5 +1,6 @@
 import 'package:cointiply_app/core/core.dart';
 import 'package:cointiply_app/core/error/error_model.dart';
+import 'package:cointiply_app/features/auth/presentation/widgets/onboarding_background.dart';
 import 'package:cointiply_app/features/common/widgets/custom_pointer_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -93,123 +94,73 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     debugPrint('LoginPage building with locale: ${currentLocale.languageCode}');
     debugPrint(
         'Testing direct translation for "welcome_back": ${translate('welcome_back')}');
-    return Scaffold(
-      backgroundColor: context.surface,
-      body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            SliverToBoxAdapter(
-              child: Container(
-                width: double.infinity,
-                height: context.screenHeight,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage(
-                        'assets/images/bg/onboarding_background.png',
-                      ),
-                      fit: BoxFit.fitWidth,
-                      alignment: Alignment.topCenter),
-                ),
-                child: ResponsiveContainer(
-                  maxWidth: context.isMobile ? null : 500,
-                  padding: EdgeInsets.symmetric(
-                    horizontal: context.isMobile ? 24 : 32,
-                    vertical: 24,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // App Logo/Icon
-                      CommonImage(
-                        imageUrl: "assets/images/giga_faucet_text_logo.png",
-                        width: 372.26,
-                        height: 52,
-                        fit: BoxFit.contain,
-                      ),
 
-                      const SizedBox(height: 31),
-
-                      // Login Form Widget
-                      LoginFormWidget(
-                        onLoginSuccess: () {
-                          // Navigation is handled in the login listener above
-                        },
-                        onForgotPassword: _handleForgotPassword,
-                        onSignUp: _handleSignUp,
-                        showSignUpLink: true,
-                        showRememberMe: true,
-                      ),
-
-                      const SizedBox(height: 32),
-
-                      // Legal Links Section
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      //   children: [
-                      //     Expanded(
-                      //       child: TextButton(
-                      //         onPressed: () => context.showPrivacy(ref),
-                      //         style: TextButton.styleFrom(
-                      //           padding:
-                      //               const EdgeInsets.symmetric(vertical: 8),
-                      //         ),
-                      //         child: CommonText.bodySmall(
-                      //           translate('privacy_policy'),
-                      //           color: context.primary,
-                      //           textAlign: TextAlign.center,
-                      //         ),
-                      //       ),
-                      //     ),
-                      //     CommonText.bodySmall(
-                      //       '•',
-                      //       color: context.onSurfaceVariant,
-                      //     ),
-                      //     Expanded(
-                      //       child: TextButton(
-                      //         onPressed: () => context.showTerms(ref),
-                      //         style: TextButton.styleFrom(
-                      //           padding:
-                      //               const EdgeInsets.symmetric(vertical: 8),
-                      //         ),
-                      //         child: CommonText.bodySmall(
-                      //           translate('terms_of_service'),
-                      //           color: context.primary,
-                      //           textAlign: TextAlign.center,
-                      //         ),
-                      //       ),
-                      //     ),
-                      //     CommonText.bodySmall(
-                      //       '•',
-                      //       color: context.onSurfaceVariant,
-                      //     ),
-                      //     Expanded(
-                      //       child: TextButton(
-                      //         onPressed: () => GoRouter.of(context)
-                      //             .push(AppRoutes.contactUs),
-                      //         style: TextButton.styleFrom(
-                      //           padding:
-                      //               const EdgeInsets.symmetric(vertical: 8),
-                      //         ),
-                      //         child: CommonText.bodySmall(
-                      //           translate('contact_us'),
-                      //           color: context.primary,
-                      //           textAlign: TextAlign.center,
-                      //         ),
-                      //       ),
-                      //     ),
-                      //   ],
-                      // ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+    return OnboardingBackground(
+      child: LoginFormWidget(
+        onLoginSuccess: () {},
+        onForgotPassword: _handleForgotPassword,
+        onSignUp: _handleSignUp,
+        showSignUpLink: true,
+        showRememberMe: true,
       ),
     );
+    // Legal Links Section If Needed To ReUse Later
+    // Row(
+    //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    //   children: [
+    //     Expanded(
+    //       child: TextButton(
+    //         onPressed: () => context.showPrivacy(ref),
+    //         style: TextButton.styleFrom(
+    //           padding:
+    //               const EdgeInsets.symmetric(vertical: 8),
+    //         ),
+    //         child: CommonText.bodySmall(
+    //           translate('privacy_policy'),
+    //           color: context.primary,
+    //           textAlign: TextAlign.center,
+    //         ),
+    //       ),
+    //     ),
+    //     CommonText.bodySmall(
+    //       '•',
+    //       color: context.onSurfaceVariant,
+    //     ),
+    //     Expanded(
+    //       child: TextButton(
+    //         onPressed: () => context.showTerms(ref),
+    //         style: TextButton.styleFrom(
+    //           padding:
+    //               const EdgeInsets.symmetric(vertical: 8),
+    //         ),
+    //         child: CommonText.bodySmall(
+    //           translate('terms_of_service'),
+    //           color: context.primary,
+    //           textAlign: TextAlign.center,
+    //         ),
+    //       ),
+    //     ),
+    //     CommonText.bodySmall(
+    //       '•',
+    //       color: context.onSurfaceVariant,
+    //     ),
+    //     Expanded(
+    //       child: TextButton(
+    //         onPressed: () => GoRouter.of(context)
+    //             .push(AppRoutes.contactUs),
+    //         style: TextButton.styleFrom(
+    //           padding:
+    //               const EdgeInsets.symmetric(vertical: 8),
+    //         ),
+    //         child: CommonText.bodySmall(
+    //           translate('contact_us'),
+    //           color: context.primary,
+    //           textAlign: TextAlign.center,
+    //         ),
+    //       ),
+    //     ),
+    //   ],
+    // ),
   }
 
   void _checkVerifyCode(ErrorModel? errorModel, String email) {
