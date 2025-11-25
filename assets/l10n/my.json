@@ -537,12 +537,17 @@
   "status_level_required": "အဆင့်\nလိုအပ်သည်",
   "rewards_title": "ဆုများ",
   "reward_description_prefix": "XP အမှတ်များ ရယူပြီး အဆင့်မြှင့်ကာ ဆုများကို ဖွင့်နိုင်ပါသည်။ XP ၁ ကိုရရန် ",
-  "reward_description_suffix": "အမှတ် ရယူရန်လိုအပ်သည်။",
+  "reward_description_suffix": " အမှတ် ရယူရန်လိုအပ်သည်။",
   "reward_progress_percent_symbol": "%",
   "reward_next_level_label": "XP အမှတ်များ လိုအပ်သည် (နောက်အဆင့်သို့)",
   "reward_level_label": "အဆင့်",
   "nav_home": "ပင်မ",
   "nav_wallet": "ပိုက်ဆံအိတ်",
   "nav_account": "အကောင့်",
-  "nav_chat": "စာရင်း"
+  "nav_chat": "စာရင်း",
+  "manage_profile_tab_profile": "ကိုယ်ရေးအချက်အလက်",
+  "manage_profile_tab_security": "လုံခြုံရေး",
+  "manage_profile_tab_settings": "အပြင်အဆင်များ",
+  "status_rewards_daily_spin": "နေ့စဉ် [{count}]ခု အခမဲ့",
+  "status_rewards_treasure_chest": "ပတ်စဉ် [{count}] ခု အခမဲ့"
 }

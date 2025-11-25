@@ -21,11 +21,11 @@ class CoinsEarnedHistoryCard extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 36, horizontal: 32),
-      margin: const EdgeInsets.symmetric(horizontal: 35, vertical: 8),
+      margin: const EdgeInsets.symmetric(vertical: 6.5),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: const Color(0xFF333333), // TODO use from colorScheme
+          color: const Color(0xFF333333),
           width: 1.2,
         ),
       ),
@@ -41,62 +41,56 @@ class CoinsEarnedHistoryCard extends StatelessWidget {
     );
   }
 
-  // ======================
   // MOBILE LAYOUT
-  // ======================
   Widget _buildMobileLayout(ColorScheme colorScheme) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        // Top row: text + amount pill
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CommonText.bodyLarge(
-                    title,
-                    fontWeight: FontWeight.w700,
-                    color: colorScheme.onPrimary,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 4),
-                  CommonText.bodyLarge(
-                    subtitle,
-                    fontWeight: FontWeight.w500,
-                    color: colorScheme.onPrimary,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CommonText.bodyLarge(
+                title,
+                fontWeight: FontWeight.w700,
+                color: colorScheme.onPrimary,
+                overflow: TextOverflow.ellipsis,
               ),
+              const SizedBox(height: 4),
+              CommonText.bodyMedium(
+                subtitle,
+                fontWeight: FontWeight.w500,
+                color: colorScheme.onPrimary,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(width: 10),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // PASS isMobile: true
+            _buildAmountPill(colorScheme, isMobile: true),
+            const SizedBox(height: 4),
+            CommonText.bodyMedium(
+              timeAgo,
+              fontWeight: FontWeight.w700,
+              color: colorScheme.onPrimary,
+              overflow: TextOverflow.ellipsis,
             ),
-            const SizedBox(width: 12),
-            _buildAmountPill(colorScheme),
           ],
-        ),
-
-        const SizedBox(height: 10),
-
-        // Time ago (below everything)
-        CommonText.bodyLarge(
-          timeAgo,
-          fontWeight: FontWeight.w700,
-          color: colorScheme.onPrimary,
-          overflow: TextOverflow.ellipsis,
-        ),
+        )
       ],
     );
   }
 
-  // ======================
-  //  DESKTOP / TABLET
-  // ======================
+  // DESKTOP LAYOUT
   Widget _buildDesktopLayout(ColorScheme colorScheme) {
     return Row(
       children: [
-        // Left text section
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -117,15 +111,9 @@ class CoinsEarnedHistoryCard extends StatelessWidget {
             ],
           ),
         ),
-
         const SizedBox(width: 12),
-
-        // Coin amount pill
-        _buildAmountPill(colorScheme),
-
+        _buildAmountPill(colorScheme, isMobile: false),
         const SizedBox(width: 16),
-
-        // Time ago
         CommonText.bodyLarge(
           timeAgo,
           fontWeight: FontWeight.w700,
@@ -136,12 +124,12 @@ class CoinsEarnedHistoryCard extends StatelessWidget {
     );
   }
 
-  Widget _buildAmountPill(ColorScheme colorScheme) {
+  Widget _buildAmountPill(ColorScheme colorScheme, {required bool isMobile}) {
     return Container(
-      // padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
-      width: 200,
+      width: isMobile ? 116 : 200,
       height: 40,
       alignment: Alignment.center,
+      padding: isMobile ? const EdgeInsets.symmetric(horizontal: 12) : null,
       decoration: BoxDecoration(
         color: colorScheme.scrim,
         borderRadius: BorderRadius.circular(40),
@@ -158,7 +146,7 @@ class CoinsEarnedHistoryCard extends StatelessWidget {
           const SizedBox(width: 6),
           Image.asset(
             "assets/images/rewards/coin.png",
-            width: 22,
+            width: 24,
           ),
         ],
       ),

@@ -68,7 +68,7 @@ class _HeaderItem extends StatelessWidget {
           CommonText.titleSmall(
             label,
             textAlign: TextAlign.center,
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w700,
             color: colorScheme.onPrimary,
           ),
         ],
