@@ -30,7 +30,7 @@ class _HeaderMenuItemState extends State<HeaderMenuItem> {
         onTap: widget.onTap,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
-          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
           // margin: const EdgeInsets.only(right: 4),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(6),
@@ -42,7 +42,7 @@ class _HeaderMenuItemState extends State<HeaderMenuItem> {
                 color: isHovered ? colorScheme.primary : colorScheme.onPrimary,
                 fontWeight: FontWeight.w700,
               ),
-              const SizedBox(width: 2),
+              const SizedBox(width: 4),
               Icon(
                 Icons.keyboard_arrow_down_rounded,
                 size: 18,
