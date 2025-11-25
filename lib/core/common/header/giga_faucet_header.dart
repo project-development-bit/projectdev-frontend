@@ -5,6 +5,7 @@ import 'package:cointiply_app/core/core.dart';
 import 'package:cointiply_app/features/home/presentation/widgets/home_section_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 
 class GigaFaucetHeader extends ConsumerWidget {
@@ -33,31 +34,33 @@ class GigaFaucetHeader extends ConsumerWidget {
           child: Container(
             alignment: Alignment.center,
             constraints: const BoxConstraints(maxWidth: 1240),
-            margin: EdgeInsets.symmetric(horizontal: 25),
+            margin: EdgeInsets.symmetric(horizontal: 17),
             padding: EdgeInsets.symmetric(
               horizontal: screenWidth > 1000 ? 30 : 0,
             ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                if (screenWidth < 800) ...[
+                if (screenWidth < 900) ...[
                   GestureDetector(
                     onTap: () => Scaffold.of(context).openDrawer(),
-                    child: Icon(
-                      Icons.menu,
-                      color: Theme.of(context).colorScheme.onSurface,
-                      size: 28,
+                    child: SvgPicture.asset(
+                      "assets/images/icons/menu.svg",
+                      height: 32,
+                      width: 32,
                     ),
                   ),
                   SizedBox(width: 4),
                 ],
                 Image.asset(
-                  screenWidth < 456
+                  screenWidth < 360
                       ? "assets/images/gigafaucet_logo.png"
                       : "assets/images/giga_faucet_text_logo.png",
                   height: 28,
+                  width: screenWidth < 360 ? null : 131,
+                  fit: BoxFit.contain,
                 ),
-                SizedBox(width: (screenWidth < 800) ? 8 : 20),
+                SizedBox(width: (screenWidth < 900) ? 8 : 20),
                 if (screenWidth > 900) ...[
                   HeaderMenuItem(
                     label: localizations?.translate("menu_earn_cryptos") ??
@@ -81,14 +84,19 @@ class GigaFaucetHeader extends ConsumerWidget {
                   ),
                 ],
                 const Spacer(),
-                if (screenWidth > 280 && isAuthenticated) ...[
-                  HeaderCoinBalanceBox(
-                    coinBalance: "14,212,568",
-                  ),
-                  SizedBox(width: screenWidth < 320 ? 8 : 16),
-                ],
                 isAuthenticated
-                    ? HeaderProfileAvatar()
+                    ? Row(
+                        children: [
+                          HeaderCoinBalanceBox(
+                            coinBalance: "14,212,568",
+                          ),
+                          SizedBox(
+                              width: screenWidth < 320 ||
+                                      (screenWidth >= 768 && screenWidth < 900)
+                                  ? 8
+                                  : 16),
+                        ],
+                      )
                     : ElevatedButton.icon(
                         onPressed: () => context.go('/auth/login'),
                         icon: const Icon(Icons.login),
@@ -97,7 +105,11 @@ class GigaFaucetHeader extends ConsumerWidget {
                           foregroundColor: context.onPrimary,
                           backgroundColor: context.primary,
                         ),
-                      )
+                      ),
+                if (isAuthenticated) ...[
+                  HeaderProfileAvatar(),
+                  SizedBox(width: screenWidth < 320 ? 8 : 16),
+                ],
               ],
             ),
           ),

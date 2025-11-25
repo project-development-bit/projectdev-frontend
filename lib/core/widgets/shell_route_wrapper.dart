@@ -23,7 +23,7 @@ class ShellRouteWrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenWidth = context.screenWidth;
     return Scaffold(
-      drawer: screenWidth < 850 ? const MobileDrawer() : null,
+      drawer: screenWidth < 900 ? const MobileDrawer() : null,
       body: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return [
