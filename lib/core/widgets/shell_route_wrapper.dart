@@ -62,9 +62,8 @@ class ShellRouteWrapper extends StatelessWidget {
       bottomNavigationBar: MobileBottomNav(),
       floatingActionButton: Consumer(builder: (context, ref, child) {
         final isChatOpen = ref.watch(rightChatOverlayProvider);
-        final screenWidth = context.screenWidth;
 
-        if (isChatOpen || screenWidth < 768) {
+        if (isChatOpen || context.isMobile) {
           return const SizedBox.shrink();
         }
         return GestureDetector(

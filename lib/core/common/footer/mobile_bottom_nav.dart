@@ -32,11 +32,10 @@ class _MobileBottomNavState extends ConsumerState<MobileBottomNav> {
     BuildContext context,
   ) {
     final localizations = AppLocalizations.of(context);
-    final screenWidth = context.screenWidth;
 
     const backgroundColor = Color(0xFF00131E);
 
-    return screenWidth < 768
+    return context.isMobile
         ? Container(
             height: 83,
             width: double.infinity,

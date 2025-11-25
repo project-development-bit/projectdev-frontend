@@ -15,7 +15,7 @@ class GigaFooter extends StatelessWidget {
     final isMobile = context.isMobile;
     final screenWidth = context.screenWidth;
 
-    return screenWidth > 768
+    return context.isTablet
         ? HomeSectionContainer(
             width: double.infinity,
             child: Center(
