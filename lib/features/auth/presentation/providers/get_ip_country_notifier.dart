@@ -1,5 +1,6 @@
 import 'package:cointiply_app/core/error/failures.dart';
 import 'package:cointiply_app/features/auth/domain/usecases/get_ip_country_usecase.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'ip_country_state.dart';
@@ -11,8 +12,15 @@ class GetIpCountryNotifier extends StateNotifier<IpCountryState> {
       : super(const IpCountryState());
 
   Future<void> detectCountry() async {
-    if (state.status == GetIpCountryStatus.loading) return;
+    if (state.status == GetIpCountryStatus.success && state.country != null) {
+      debugPrint(
+          "🌍  ${state.country?.code} Country already loaded → Skip detectCountry()");
+      return;
+    }
 
+    if (state.status == GetIpCountryStatus.loading) {
+      return;
+    }
     state = state.copyWith(
       status: GetIpCountryStatus.loading,
       error: null,

@@ -1,4 +1,5 @@
 import 'package:cointiply_app/core/theme/app_colors.dart';
+import 'package:cointiply_app/features/auth/presentation/providers/ip_country_provider.dart';
 import 'package:cointiply_app/features/auth/presentation/widgets/country_selector_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -37,6 +38,9 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(getIpCountryNotifierProvider.notifier).detectCountry();
+    });
 
     // Watch register state for navigation and error handling
     ref.listenManual<RegisterState>(registerNotifierProvider, (previous, next) {
