@@ -112,7 +112,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             children: [
               Expanded(
                 child: TextButton(
-                  onPressed: () => context.showPrivacy(ref),
+                  onPressed: () => context.showPrivacy(),
                   style: TextButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 8),
                   ),
@@ -129,7 +129,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               ),
               Expanded(
                 child: TextButton(
-                  onPressed: () => context.showTerms(ref),
+                  onPressed: () => context.showTerms(),
                   style: TextButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 8),
                   ),

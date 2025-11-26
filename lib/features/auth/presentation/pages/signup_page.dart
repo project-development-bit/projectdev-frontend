@@ -1,6 +1,7 @@
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/theme/app_colors.dart';
 import 'package:cointiply_app/features/auth/presentation/widgets/onboarding_background.dart';
+import 'package:cointiply_app/features/terms_privacy/presentation/services/terms_privacy_navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/common/common_textfield.dart';
@@ -32,6 +33,9 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
   final _confirmPasswordFocusNode = FocusNode();
 
   bool _agreeToTerms = false;
+
+  bool isTermsHover = false;
+  bool isPrivacyHover = false;
 
   @override
   void initState() {
@@ -252,38 +256,106 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                   },
                 ),
                 Expanded(
-                  child: RichText(
-                    text: TextSpan(
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: colorScheme.onSurfaceVariant,
-                      ),
-                      children: [
-                        TextSpan(
-                            text: localizations?.translate('agree_to_terms') ??
-                                'I agree to the '),
-                        TextSpan(
-                          text: localizations
-                                  ?.translate('terms_and_conditions') ??
-                              'Terms and Conditions',
-                          style: TextStyle(
-                            color: colorScheme.primary,
-                            fontWeight: FontWeight.w500,
+                  child: StatefulBuilder(
+                    builder: (context, setState) {
+                      return RichText(
+                        text: TextSpan(
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: colorScheme.onSurfaceVariant,
                           ),
+                          children: [
+                            TextSpan(
+                              text:
+                                  localizations?.translate('agree_to_terms') ??
+                                      'I agree to the ',
+                            ),
+
+                            WidgetSpan(
+                              alignment: PlaceholderAlignment.baseline,
+                              baseline: TextBaseline.alphabetic,
+                              child: MouseRegion(
+                                cursor: SystemMouseCursors.click,
+                                onEnter: (_) =>
+                                    setState(() => isTermsHover = true),
+                                onExit: (_) =>
+                                    setState(() => isTermsHover = false),
+                                child: GestureDetector(
+                                  onTap: () => context.showTerms(),
+                                  child: AnimatedContainer(
+                                    duration: const Duration(milliseconds: 150),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 2, vertical: 1),
+                                    decoration: BoxDecoration(
+                                      color: isTermsHover
+                                          ? colorScheme.primary
+                                              .withValues(alpha: 0.15)
+                                          : Colors.transparent,
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                    child: Text(
+                                      localizations?.translate(
+                                              'terms_and_conditions') ??
+                                          'Terms and Conditions',
+                                      style: TextStyle(
+                                        color: isTermsHover
+                                            ? colorScheme.primary
+                                                .withValues(alpha: 0.8)
+                                            : colorScheme.primary,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                            TextSpan(
+                              text: localizations?.translate('and') ?? ' and ',
+                            ),
+
+                            // ---------------- PRIVACY (with hover background) ----------------
+                            WidgetSpan(
+                              alignment: PlaceholderAlignment.baseline,
+                              baseline: TextBaseline.alphabetic,
+                              child: MouseRegion(
+                                cursor: SystemMouseCursors.click,
+                                onEnter: (_) =>
+                                    setState(() => isPrivacyHover = true),
+                                onExit: (_) =>
+                                    setState(() => isPrivacyHover = false),
+                                child: GestureDetector(
+                                  onTap: () => context.showPrivacy(),
+                                  child: AnimatedContainer(
+                                    duration: const Duration(milliseconds: 150),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 2, vertical: 1),
+                                    decoration: BoxDecoration(
+                                      color: isPrivacyHover
+                                          ? colorScheme.primary
+                                              .withValues(alpha: 0.15)
+                                          : Colors.transparent,
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                    child: Text(
+                                      localizations
+                                              ?.translate('privacy_policy') ??
+                                          'Privacy Policy',
+                                      style: TextStyle(
+                                        color: isPrivacyHover
+                                            ? colorScheme.primary
+                                                .withValues(alpha: 0.8)
+                                            : colorScheme.primary,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                        TextSpan(
-                            text: localizations?.translate('and') ?? ' and '),
-                        TextSpan(
-                          text: localizations?.translate('privacy_policy') ??
-                              'Privacy Policy',
-                          style: TextStyle(
-                            color: colorScheme.primary,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
+                      );
+                    },
                   ),
-                ),
+                )
               ],
             ),
 
