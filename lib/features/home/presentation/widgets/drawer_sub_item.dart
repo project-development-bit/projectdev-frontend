@@ -44,8 +44,8 @@ class _DrawerSubItemState extends State<DrawerSubItem> {
               AnimatedContainer(
                 duration: const Duration(milliseconds: 160),
                 width: 3,
-                height: 18,
-                margin: const EdgeInsets.only(left: 22, right: 12),
+                height: 28,
+                margin: const EdgeInsets.only(left: 19, right: 12),
                 decoration: BoxDecoration(
                   color: isActive ? colorScheme.primary : Colors.transparent,
                   borderRadius: BorderRadius.circular(2),

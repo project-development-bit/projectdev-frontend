@@ -24,9 +24,10 @@ class _MobileDrawerState extends ConsumerState<MobileDrawer> {
   };
 
   void toggle(String key) {
+    bool isexpanded = expanded[key] == true;
     setState(() {
       expanded.updateAll((k, v) => false);
-      expanded[key] = !(expanded[key] == true);
+      expanded[key] = !isexpanded;
     });
   }
 
