@@ -119,8 +119,7 @@ class CustomButtonWidget extends StatelessWidget {
           border: isActive
               ? null
               : Border.all(
-                  color: Color(0xFF333333), // subtle border same as screenshot
-                  width: 1.5,
+                  color: Color(0xFF333333),
                 ),
         ),
         child: Center(

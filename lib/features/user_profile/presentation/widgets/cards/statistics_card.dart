@@ -27,11 +27,8 @@ class StatCard extends StatelessWidget {
       margin: EdgeInsets.only(bottom: isMobile ? 16 : 12),
       decoration: BoxDecoration(
         color: AppColors.transparent,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(
-          color: const Color(0x83333333), //TODO: Replace with theme color
-          width: 1.2,
-        ),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Color(0xff333333)),
       ),
       child: LayoutBuilder(
         builder: (context, constraints) {
