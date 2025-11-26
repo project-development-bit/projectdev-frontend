@@ -210,9 +210,9 @@ class _CloudflareTurnstileWidgetState
     );
     // final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
-    return Container(
+    return SizedBox(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      // padding: const EdgeInsets.symmetric(vertical: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

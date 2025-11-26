@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/theme/app_colors.dart';
 import 'package:cointiply_app/features/auth/presentation/widgets/onboarding_background.dart';
 import 'package:flutter/material.dart';
@@ -157,31 +158,21 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const SizedBox(height: 20),
-
-            // Create Account Text
-            Text(
+            CommonText.headlineLarge(
               localizations?.translate('create_account') ?? 'Create Account',
-              style: theme.textTheme.headlineMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: colorScheme.onSurface,
-              ),
+              fontWeight: FontWeight.w700,
+              color: colorScheme.onSurface,
               textAlign: TextAlign.center,
             ),
-
-            const SizedBox(height: 8),
-
-            Text(
+            const SizedBox(height: 16),
+            CommonText.bodyMedium(
               localizations?.translate('create_account_subtitle') ??
                   'Fill in the details below to create your account',
-              style: theme.textTheme.bodyLarge?.copyWith(
-                color: colorScheme.onSurfaceVariant,
-              ),
+              color: colorScheme.onSurfaceVariant,
+              fontWeight: FontWeight.w500,
               textAlign: TextAlign.center,
             ),
-
-            const SizedBox(height: 40),
-
+            const SizedBox(height: 32),
             // Full Name Field
             CommonTextField(
               controller: _nameController,
@@ -197,7 +188,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
               onSubmitted: (_) => _emailFocusNode.requestFocus(),
             ),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: 16),
 
             // Email Field
             CommonTextField(
@@ -213,7 +204,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
               onSubmitted: (_) => _passwordFocusNode.requestFocus(),
             ),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: 16),
 
             // Password Field
             CommonTextField(
@@ -230,7 +221,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
               onSubmitted: (_) => _confirmPasswordFocusNode.requestFocus(),
             ),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: 16),
 
             // Confirm Password Field
             CommonTextField(
@@ -371,7 +362,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
               ],
             ),
 
-            const SizedBox(height: 24),
+            const SizedBox(height: 4.5),
           ],
         ),
       ),
