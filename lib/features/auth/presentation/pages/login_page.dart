@@ -2,6 +2,7 @@ import 'package:cointiply_app/core/core.dart';
 import 'package:cointiply_app/core/error/error_model.dart';
 import 'package:cointiply_app/features/auth/presentation/widgets/onboarding_background.dart';
 import 'package:cointiply_app/features/common/widgets/custom_pointer_interceptor.dart';
+import 'package:cointiply_app/features/terms_privacy/presentation/services/terms_privacy_navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -96,71 +97,73 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         'Testing direct translation for "welcome_back": ${translate('welcome_back')}');
 
     return OnboardingBackground(
-      child: LoginFormWidget(
-        onLoginSuccess: () {},
-        onForgotPassword: _handleForgotPassword,
-        onSignUp: _handleSignUp,
-        showSignUpLink: true,
-        showRememberMe: true,
+      child: Column(
+        children: [
+          LoginFormWidget(
+            onLoginSuccess: () {},
+            onForgotPassword: _handleForgotPassword,
+            onSignUp: _handleSignUp,
+            showSignUpLink: true,
+            showRememberMe: true,
+          ),
+          SizedBox(height: 46),
+          // Legal Links Section If Needed To ReUse Later
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Expanded(
+                child: TextButton(
+                  onPressed: () => context.showPrivacy(ref),
+                  style: TextButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                  ),
+                  child: CommonText.bodySmall(
+                    translate('privacy_policy'),
+                    color: context.primary,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+              CommonText.bodySmall(
+                '•',
+                color: context.onSurfaceVariant,
+              ),
+              Expanded(
+                child: TextButton(
+                  onPressed: () => context.showTerms(ref),
+                  style: TextButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                  ),
+                  child: CommonText.bodySmall(
+                    translate('terms_of_service'),
+                    color: context.primary,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+              CommonText.bodySmall(
+                '•',
+                color: context.onSurfaceVariant,
+              ),
+              Expanded(
+                child: TextButton(
+                  onPressed: () =>
+                      GoRouter.of(context).push(AppRoutes.contactUs),
+                  style: TextButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                  ),
+                  child: CommonText.bodySmall(
+                    translate('contact_us'),
+                    color: context.primary,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
-    // Legal Links Section If Needed To ReUse Later
-    // Row(
-    //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-    //   children: [
-    //     Expanded(
-    //       child: TextButton(
-    //         onPressed: () => context.showPrivacy(ref),
-    //         style: TextButton.styleFrom(
-    //           padding:
-    //               const EdgeInsets.symmetric(vertical: 8),
-    //         ),
-    //         child: CommonText.bodySmall(
-    //           translate('privacy_policy'),
-    //           color: context.primary,
-    //           textAlign: TextAlign.center,
-    //         ),
-    //       ),
-    //     ),
-    //     CommonText.bodySmall(
-    //       '•',
-    //       color: context.onSurfaceVariant,
-    //     ),
-    //     Expanded(
-    //       child: TextButton(
-    //         onPressed: () => context.showTerms(ref),
-    //         style: TextButton.styleFrom(
-    //           padding:
-    //               const EdgeInsets.symmetric(vertical: 8),
-    //         ),
-    //         child: CommonText.bodySmall(
-    //           translate('terms_of_service'),
-    //           color: context.primary,
-    //           textAlign: TextAlign.center,
-    //         ),
-    //       ),
-    //     ),
-    //     CommonText.bodySmall(
-    //       '•',
-    //       color: context.onSurfaceVariant,
-    //     ),
-    //     Expanded(
-    //       child: TextButton(
-    //         onPressed: () => GoRouter.of(context)
-    //             .push(AppRoutes.contactUs),
-    //         style: TextButton.styleFrom(
-    //           padding:
-    //               const EdgeInsets.symmetric(vertical: 8),
-    //         ),
-    //         child: CommonText.bodySmall(
-    //           translate('contact_us'),
-    //           color: context.primary,
-    //           textAlign: TextAlign.center,
-    //         ),
-    //       ),
-    //     ),
-    //   ],
-    // ),
   }
 
   void _checkVerifyCode(ErrorModel? errorModel, String email) {

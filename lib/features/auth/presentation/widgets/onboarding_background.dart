@@ -24,8 +24,8 @@ class OnboardingBackground extends StatelessWidget {
     final isMobile = context.isMobile;
 
     double girlHeight = isMobile ? 200 : 360;
-    double girlRightOffset = isMobile ? -40 : -120;
-    double girlBottomOffset = isMobile ? -10 : -30;
+    double girlRightOffset = isMobile ? -40 : -180;
+    double girlBottomOffset = isMobile ? -10 : -40;
 
     return Scaffold(
       backgroundColor: context.surface,
@@ -36,7 +36,6 @@ class OnboardingBackground extends StatelessWidget {
               backgroundImagePath ??
                   'assets/images/bg/onboarding_background.png',
               fit: context.isMobile ? BoxFit.cover : BoxFit.fill,
-              // alignment: Alignment.topCenter,
             ),
           ),
           SingleChildScrollView(
