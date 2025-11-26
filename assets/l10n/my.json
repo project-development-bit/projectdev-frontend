@@ -549,5 +549,14 @@
   "manage_profile_tab_security": "လုံခြုံရေး",
   "manage_profile_tab_settings": "အပြင်အဆင်များ",
   "status_rewards_daily_spin": "နေ့စဉ် [{count}]ခု အခမဲ့",
-  "status_rewards_treasure_chest": "ပတ်စဉ် [{count}] ခု အခမဲ့"
+  "status_rewards_treasure_chest": "ပတ်စဉ် [{count}] ခု အခမဲ့",
+  "earn_cryptos": "Crypto ရရှိမည်",
+  "daily_rewards": "နေ့စဉ် ဆုကြေး",
+  "watch_ads": "ကြော်င့်ကြား မကြည့်ရင် မရ",
+  "spin_earn": "ကံစမ်းလှည့်ကွက်",
+  "contests": "ပြိုင်ပွဲများ",
+  "events": "Event များ",
+  "shop": "စျေးဝယ်ရန်",
+  "help": "အကူအညီ",
+  "blog": "ဘလော့ဂ်"
 }

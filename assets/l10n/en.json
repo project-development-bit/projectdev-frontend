@@ -550,5 +550,14 @@
   "manage_profile_tab_security": "Security",
   "manage_profile_tab_settings": "Settings",
   "status_rewards_daily_spin": "[{count}] Free Daily",
-  "status_rewards_treasure_chest": "[{count}] Free Per\nWeek"
+  "status_rewards_treasure_chest": "[{count}] Free Per\nWeek",
+  "earn_cryptos": "Earn Cryptos",
+  "daily_rewards": "Daily Rewards",
+  "watch_ads": "Watch Ads",
+  "spin_earn": "Spin & Earn",
+  "contests": "Contests",
+  "events": "Events",
+  "shop": "Shop",
+  "help": "Help",
+  "blog": "Blog"
 }
