@@ -1,7 +1,6 @@
 import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
 import 'package:cointiply_app/core/common/doted_line_divider.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
-import 'package:cointiply_app/core/theme/theme.dart';
 import 'package:cointiply_app/features/auth/presentation/providers/logout_provider.dart';
 import 'package:cointiply_app/features/common/widgets/custom_pointer_interceptor.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/profile_dialog.dart';
