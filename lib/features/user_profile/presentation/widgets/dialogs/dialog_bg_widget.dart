@@ -45,15 +45,15 @@ class DialogBgWidget extends StatelessWidget {
         child: Stack(
           children: [
             DialogGradientBackground(width: width, height: height),
-            Container(
+            SizedBox(
               width: width,
               height: height,
-              padding: const EdgeInsets.symmetric(horizontal: 32),
               child: SizedBox(
                 height: height,
                 child: Column(
                   children: [
-                    SizedBox(
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 32),
                       height: 88,
                       child: Row(
                         children: [
@@ -76,10 +76,15 @@ class DialogBgWidget extends StatelessWidget {
                       ),
                     ),
                     Divider(
-                      color: dividerColor,
+                      color: dividerColor ??
+                          Color(0xFF003248), // TODO use from theme,
                       thickness: 1,
                     ),
-                    Expanded(child: body)
+                    Expanded(
+                        child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 32),
+                      child: body,
+                    ))
                   ],
                 ),
               ),
