@@ -256,104 +256,96 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                   },
                 ),
                 Expanded(
-                  child: StatefulBuilder(
-                    builder: (context, setState) {
-                      return RichText(
-                        text: TextSpan(
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            color: colorScheme.onSurfaceVariant,
-                          ),
-                          children: [
-                            TextSpan(
-                              text:
-                                  localizations?.translate('agree_to_terms') ??
-                                      'I agree to the ',
-                            ),
-
-                            WidgetSpan(
-                              alignment: PlaceholderAlignment.baseline,
-                              baseline: TextBaseline.alphabetic,
-                              child: MouseRegion(
-                                cursor: SystemMouseCursors.click,
-                                onEnter: (_) =>
-                                    setState(() => isTermsHover = true),
-                                onExit: (_) =>
-                                    setState(() => isTermsHover = false),
-                                child: GestureDetector(
-                                  onTap: () => context.showTerms(),
-                                  child: AnimatedContainer(
-                                    duration: const Duration(milliseconds: 150),
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 2, vertical: 1),
-                                    decoration: BoxDecoration(
-                                      color: isTermsHover
-                                          ? colorScheme.primary
-                                              .withValues(alpha: 0.15)
-                                          : Colors.transparent,
-                                      borderRadius: BorderRadius.circular(4),
-                                    ),
-                                    child: Text(
-                                      localizations?.translate(
-                                              'terms_and_conditions') ??
-                                          'Terms and Conditions',
-                                      style: TextStyle(
-                                        color: isTermsHover
-                                            ? colorScheme.primary
-                                                .withValues(alpha: 0.8)
-                                            : colorScheme.primary,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-
-                            TextSpan(
-                              text: localizations?.translate('and') ?? ' and ',
-                            ),
-
-                            // ---------------- PRIVACY (with hover background) ----------------
-                            WidgetSpan(
-                              alignment: PlaceholderAlignment.baseline,
-                              baseline: TextBaseline.alphabetic,
-                              child: MouseRegion(
-                                cursor: SystemMouseCursors.click,
-                                onEnter: (_) =>
-                                    setState(() => isPrivacyHover = true),
-                                onExit: (_) =>
-                                    setState(() => isPrivacyHover = false),
-                                child: GestureDetector(
-                                  onTap: () => context.showPrivacy(),
-                                  child: AnimatedContainer(
-                                    duration: const Duration(milliseconds: 150),
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 2, vertical: 1),
-                                    decoration: BoxDecoration(
-                                      color: isPrivacyHover
-                                          ? colorScheme.primary
-                                              .withValues(alpha: 0.15)
-                                          : Colors.transparent,
-                                      borderRadius: BorderRadius.circular(4),
-                                    ),
-                                    child: Text(
-                                      localizations
-                                              ?.translate('privacy_policy') ??
-                                          'Privacy Policy',
-                                      style: TextStyle(
-                                        color: isPrivacyHover
-                                            ? colorScheme.primary
-                                                .withValues(alpha: 0.8)
-                                            : colorScheme.primary,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
+                  child: RichText(
+                    text: TextSpan(
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: colorScheme.onSurfaceVariant,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: localizations?.translate('agree_to_terms') ??
+                              'I agree to the ',
                         ),
-                      );
-                    },
+
+                        WidgetSpan(
+                          alignment: PlaceholderAlignment.baseline,
+                          baseline: TextBaseline.alphabetic,
+                          child: MouseRegion(
+                            cursor: SystemMouseCursors.click,
+                            onEnter: (_) => setState(() => isTermsHover = true),
+                            onExit: (_) => setState(() => isTermsHover = false),
+                            child: GestureDetector(
+                              onTap: () => context.showTerms(),
+                              child: AnimatedContainer(
+                                duration: const Duration(milliseconds: 150),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 2, vertical: 1),
+                                decoration: BoxDecoration(
+                                  color: isTermsHover
+                                      ? colorScheme.primary
+                                          .withValues(alpha: 0.15)
+                                      : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: Text(
+                                  localizations
+                                          ?.translate('terms_and_conditions') ??
+                                      'Terms and Conditions',
+                                  style: TextStyle(
+                                    color: isTermsHover
+                                        ? colorScheme.primary
+                                            .withValues(alpha: 0.8)
+                                        : colorScheme.primary,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        TextSpan(
+                          text: localizations?.translate('and') ?? ' and ',
+                        ),
+
+                        // ---------------- PRIVACY (with hover background) ----------------
+                        WidgetSpan(
+                          alignment: PlaceholderAlignment.baseline,
+                          baseline: TextBaseline.alphabetic,
+                          child: MouseRegion(
+                            cursor: SystemMouseCursors.click,
+                            onEnter: (_) =>
+                                setState(() => isPrivacyHover = true),
+                            onExit: (_) =>
+                                setState(() => isPrivacyHover = false),
+                            child: GestureDetector(
+                              onTap: () => context.showPrivacy(),
+                              child: AnimatedContainer(
+                                duration: const Duration(milliseconds: 150),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 2, vertical: 1),
+                                decoration: BoxDecoration(
+                                  color: isPrivacyHover
+                                      ? colorScheme.primary
+                                          .withValues(alpha: 0.15)
+                                      : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: Text(
+                                  localizations?.translate('privacy_policy') ??
+                                      'Privacy Policy',
+                                  style: TextStyle(
+                                    color: isPrivacyHover
+                                        ? colorScheme.primary
+                                            .withValues(alpha: 0.8)
+                                        : colorScheme.primary,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 )
               ],
