@@ -84,8 +84,9 @@ class ProfileMenu extends StatelessWidget {
           ),
           // dotted divider (thin + low opacity)
           DotedLineDivider(
-              padding: const EdgeInsets.symmetric(
-            vertical: 10,
+              padding: const EdgeInsets.only(
+            top: 4,
+            bottom: 7,
           )),
           Consumer(
             builder: (context, ref, child) {
@@ -100,7 +101,7 @@ class ProfileMenu extends StatelessWidget {
                 fontWeight: FontWeight.w700,
                 width: 105,
                 padding: EdgeInsets.symmetric(vertical: 4, horizontal: 0),
-                margin: const EdgeInsets.symmetric(vertical: 8),
+                margin: const EdgeInsets.symmetric(vertical: 8.5),
                 title: isLoading
                     ? context.translate("logging_out")
                     : context.translate("sign_out"),
