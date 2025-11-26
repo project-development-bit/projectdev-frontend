@@ -7,9 +7,9 @@ import '../../../../core/usecases/usecase.dart';
 import '../repositories/profile_repository.dart';
 
 /// Use case for updating user profile
-class UpdateUserProfile
+class UpdateUserProfileUsecase
     implements UseCase<UserUpdateResponse, UpdateUserProfileParams> {
-  const UpdateUserProfile(this.repository);
+  const UpdateUserProfileUsecase(this.repository);
 
   final ProfileRepository repository;
 

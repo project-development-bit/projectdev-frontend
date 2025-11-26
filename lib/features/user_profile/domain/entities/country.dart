@@ -10,6 +10,7 @@ class Country extends Equatable {
     required this.code,
     required this.name,
     required this.flag,
+    required this.id,
   });
 
   /// Country code (e.g., "US", "AU", "MM")
@@ -21,9 +22,12 @@ class Country extends Equatable {
   /// URL to the country flag image
   final String flag;
 
-  @override
-  List<Object> get props => [code, name, flag];
+  final int id;
 
   @override
-  String toString() => 'Country(code: $code, name: $name , flag: $flag)';
+  List<Object> get props => [code, name, flag, id];
+
+  @override
+  String toString() =>
+      'Country(code: $code, name: $name , flag: $flag, id: $id)';
 }

@@ -1,6 +1,7 @@
 import 'package:cointiply_app/core/core.dart';
 import 'package:cointiply_app/core/utils/utils.dart';
 import 'package:cointiply_app/features/user_profile/data/models/country_model.dart';
+import 'package:cointiply_app/features/user_profile/data/models/language_model.dart';
 import 'package:cointiply_app/features/user_profile/data/models/profile_detail_model.dart';
 import 'package:cointiply_app/features/user_profile/data/models/response/upload_profile_avatar_response_model.dart';
 import 'package:cointiply_app/features/user_profile/data/models/response/user_update_respons.dart';
@@ -74,6 +75,38 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
     } catch (e) {
       debugPrint('❌ Unexpected error fetching countries: $e');
       throw Exception('Unexpected error fetching countries: $e');
+    }
+  }
+
+  @override
+  Future<List<LanguageModel>> getLanguages() async {
+    try {
+      debugPrint('🌐 Fetching languages list...');
+
+      final response = await _dio.get('/languages');
+
+      debugPrint('✅ Languages fetched successfully: ${response.statusCode}');
+
+      if ((response.statusCode ?? 0) >= 200 &&
+          (response.statusCode ?? 0) < 300) {
+        final data = response.data as Map<String, dynamic>;
+        final languagesList = data['languages'] as List<dynamic>;
+
+        return languagesList
+            .map((language) =>
+                LanguageModel.fromJson(language as Map<String, dynamic>))
+            .toList();
+      } else {
+        throw Exception('Failed to fetch languages: ${response.statusCode}');
+      }
+    } on DioException catch (e) {
+      debugPrint('❌ Languages fetch DioException: ${e.message}');
+      debugPrint('❌ Response status: ${e.response?.statusCode}');
+      debugPrint('❌ Response data: ${e.response?.data}');
+      throw _handleDioException(e);
+    } catch (e) {
+      debugPrint('❌ Unexpected error fetching languages: $e');
+      throw Exception('Unexpected error fetching languages: $e');
     }
   }
 

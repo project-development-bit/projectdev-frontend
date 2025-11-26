@@ -1,3 +1,4 @@
+import 'package:cointiply_app/features/user_profile/domain/entities/country.dart';
 import 'package:equatable/equatable.dart';
 
 /// Profile Detail Entity
@@ -44,7 +45,7 @@ class AccountInfo extends Equatable {
   final String avatarUrl;
 
   /// User's country (nullable)
-  final String? country;
+  final Country? country;
 
   /// Offer token (nullable)
   final String? offerToken;

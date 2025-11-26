@@ -1,3 +1,5 @@
+import 'package:cointiply_app/features/user_profile/data/models/country_model.dart';
+
 import '../../domain/entities/profile_detail.dart';
 
 /// Profile Detail Model for data layer
@@ -59,7 +61,7 @@ class AccountInfoModel extends AccountInfo {
       username: json['username'] as String? ?? '',
       email: json['email'] as String? ?? '',
       avatarUrl: json['avatar_url'] as String? ?? '',
-      country: json['country'] as String?,
+      country: CountryModel.fromJson(json['country']),
       offerToken: json['offer_token'] as String?,
       createdAt: json['created_at'] != null
           ? DateTime.tryParse(json['created_at'] as String) ?? DateTime.now()

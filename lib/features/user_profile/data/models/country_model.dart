@@ -8,6 +8,7 @@ class CountryModel extends Country {
     required super.code,
     required super.name,
     required super.flag,
+    required super.id,
   });
 
   /// Create CountryModel from JSON response
@@ -30,6 +31,7 @@ class CountryModel extends Country {
       code: json['code'] as String? ?? '',
       name: json['name'] as String? ?? '',
       flag: flagUrl,
+      id: json['id'] as int? ?? 0,
     );
   }
 
@@ -39,6 +41,7 @@ class CountryModel extends Country {
       code: code,
       name: name,
       flag: flag,
+      id: id,
     );
   }
 
@@ -48,9 +51,11 @@ class CountryModel extends Country {
       'code': code,
       'name': name,
       'flag': flag,
+      'id': id,
     };
   }
 
   @override
-  String toString() => 'CountryModel(code: $code, name: $name, flag: $flag)';
+  String toString() =>
+      'CountryModel(code: $code, name: $name, flag: $flag, id: $id)';
 }

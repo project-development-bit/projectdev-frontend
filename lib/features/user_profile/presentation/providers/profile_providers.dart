@@ -7,6 +7,7 @@ import '../../data/datasources/profile_remote_data_source_impl.dart';
 import '../../data/repositories/profile_repository_impl.dart';
 import '../../domain/repositories/profile_repository.dart';
 import '../../domain/usecases/get_countries_usecase.dart';
+import '../../domain/usecases/get_languages_usecase.dart';
 import '../../domain/usecases/get_profile_usecase.dart';
 import '../../domain/usecases/update_user_profile.dart';
 import '../../domain/usecases/upload_profile_picture.dart';
@@ -47,10 +48,17 @@ final getCountriesUseCaseProvider = Provider<GetCountriesUseCase>((ref) {
   return GetCountriesUseCase(repository);
 });
 
-/// Provider for update user profile use case
-final updateUserProfileUseCaseProvider = Provider<UpdateUserProfile>((ref) {
+/// Provider for get languages use case
+final getLanguagesUseCaseProvider = Provider<GetLanguagesUseCase>((ref) {
   final repository = ref.read(profileRepositoryProvider);
-  return UpdateUserProfile(repository);
+  return GetLanguagesUseCase(repository);
+});
+
+/// Provider for update user profile use case
+final updateUserProfileUseCaseProvider =
+    Provider<UpdateUserProfileUsecase>((ref) {
+  final repository = ref.read(profileRepositoryProvider);
+  return UpdateUserProfileUsecase(repository);
 });
 
 /// Provider for upload profile picture use case

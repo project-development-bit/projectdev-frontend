@@ -504,6 +504,18 @@
   "country_label": "Country",
   "please_select_country_error": "Please select a country",
   "failed_to_load_countries": "Failed to load countries",
+  "failed_to_load_languages": "Failed to load languages",
+  "please_select_language_error": "Please select a language",
+  "change_your_language": "Change language",
+  "change_your_language_title": "Change Your Language",
+  "change_your_language_description": "Choose your preferred site language.",
+  "change_your_language_btn_text": "Change Your Language",
+  "select_your_language_hint": "Select your language",
+  "language_label": "Language",
+  "your_language": "Your Language",
+  "change_your_language_note": "Changing your language will update the entire app interface.",
+  "language_changed_successfully": "Language changed successfully",
+  "failed_to_change_language": "Failed to change language",
   "retry_button": "Retry",
   "show_offer_token": "Show",
   "offer_token_description": "It is your offer User ID, which you may use to contact\nOfferwall to deal with your offer issues.",
@@ -562,5 +574,7 @@
   "setup_2fa_app_note": "If you’re having trouble scanning the QR code, select manual entry in your authenticator app and enter your username and the following code:",
   "setup_2fa_app_title": "Setup Two Factor Authentication",
   "authentication_code": "Authentication Code",
-  "enable_2fa_button": "Enable 2FA"
+  "enable_2fa_button": "Enable 2FA",
+  "failed_to_change_country": "Failed to change country",
+  "manage_profile_load_error": "Failed to load profile information"
 }

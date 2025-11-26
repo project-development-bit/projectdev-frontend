@@ -1,10 +1,12 @@
 import 'package:cointiply_app/core/common/common_button.dart' show CommonButton;
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
+import 'package:cointiply_app/core/providers/locale_provider.dart';
 import 'package:cointiply_app/features/auth/presentation/widgets/disable_2fa_confirmation_dialog.dart';
 import 'package:cointiply_app/features/auth/presentation/widgets/two_factor_auth_dialog.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/get_profile_notifier.dart';
+import 'package:cointiply_app/features/user_profile/presentation/providers/setting_profile_notifier.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/dialog_bg_widget.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/manage_profile/upload_avatar_dialog.dart';
 import 'package:cointiply_app/routing/routing.dart';
@@ -14,6 +16,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../user_profile_image_widget.dart';
 import 'change_email_dialog.dart';
 import 'change_your_country_dialog.dart';
+import 'change_your_language_dialog.dart';
 
 part 'tab/profile_tab_content_widget.dart';
 part 'tab/security_tab_content_widget.dart';

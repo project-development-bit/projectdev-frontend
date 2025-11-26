@@ -1,8 +1,8 @@
-
 import 'package:cointiply_app/features/user_profile/data/models/request/user_update_request.dart';
 import 'package:cointiply_app/features/user_profile/data/models/response/upload_profile_avatar_response_model.dart';
 import 'package:cointiply_app/features/user_profile/data/models/response/user_update_respons.dart';
 import 'package:cointiply_app/features/user_profile/domain/entities/country.dart';
+import 'package:cointiply_app/features/user_profile/domain/entities/language.dart';
 import 'package:cointiply_app/features/user_profile/domain/entities/profile_detail.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
@@ -81,6 +81,35 @@ class ProfileRepositoryImpl implements ProfileRepository {
       return Left(ServerFailure(message: e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, List<Language>>> getLanguages() async {
+    try {
+      debugPrint('🔄 Repository: Fetching languages...');
+      final languageModels = await remoteDataSource.getLanguages();
+
+      final languages =
+          languageModels.map((model) => model.toEntity()).toList();
+      debugPrint(
+          '✅ Repository: ${languages.length} languages fetched successfully');
+      return Right(languages);
+    } on DioException catch (e) {
+      debugPrint('❌ Repository: DioException - ${e.message}');
+      ErrorModel? errorModel;
+      if (e.response?.data != null) {
+        errorModel = ErrorModel.fromJson(e.response!.data);
+      }
+      return Left(ServerFailure(
+        message: e.message ?? 'Failed to fetch languages',
+        statusCode: e.response?.statusCode,
+        errorModel: errorModel,
+      ));
+    } catch (e) {
+      debugPrint('❌ Repository: Unexpected error - $e');
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
   @override
   Future<Either<Failure, UserUpdateResponse>> updateUserProfile(
     UserUpdateRequest profile,

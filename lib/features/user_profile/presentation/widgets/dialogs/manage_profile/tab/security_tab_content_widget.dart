@@ -69,7 +69,6 @@ you’ll have to enter a time-sensitive 6-digit code."""),
       {required String title,
       required Function() onPressed,
       required String btnTitle,
-      bool isDisable = false,
       String? description}) {
     return Column(
       mainAxisSize: MainAxisSize.min,

@@ -1,3 +1,5 @@
+import 'package:cointiply_app/features/user_profile/data/models/request/user_update_request.dart';
+import 'package:cointiply_app/features/user_profile/user_profile.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 
@@ -31,7 +33,45 @@ class ChangeCountryState{
   }
 }
 
-class ChangeCountryNotifier extends StateNotifier{
-/// TODO: Implement change country logic
-  ChangeCountryNotifier(super.state);
+final changeCountryProvider =
+    StateNotifierProvider<ChangeCountryNotifier, ChangeCountryState>(
+  (ref) {
+    final updateUserProfileUsecase =
+        ref.watch(updateUserProfileUseCaseProvider);
+    return ChangeCountryNotifier(
+      ChangeCountryState(),
+      updateUserProfileUsecase,
+    );
+  },
+);
+
+class ChangeCountryNotifier extends StateNotifier<ChangeCountryState> {
+  final UpdateUserProfileUsecase _updateUserProfile;
+  ChangeCountryNotifier(super.state, this._updateUserProfile);
+
+  Future<void> changeCountry(
+      {required int countryId,
+      required String countryName,
+      required String userid}) async {
+    state = state.copyWith(
+        status: ChangeCountryStatus.changing, errorMessage: null);
+
+    final updatedProfile = UserUpdateRequest(countryId: countryId, id: userid);
+
+    final result = await _updateUserProfile(
+      UpdateUserProfileParams(profile: updatedProfile),
+    );
+
+    result.fold(
+      (failure) {
+        state = state.copyWith(
+          status: ChangeCountryStatus.failure,
+          errorMessage: 'Failed to change country',
+        );
+      },
+      (response) {
+        state = state.copyWith(status: ChangeCountryStatus.success);
+      },
+    );
+  }
 }

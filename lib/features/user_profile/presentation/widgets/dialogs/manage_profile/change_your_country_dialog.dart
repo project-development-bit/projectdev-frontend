@@ -4,10 +4,14 @@ import 'package:cointiply_app/core/common/common_image_widget.dart';
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/extensions/extensions.dart';
 import 'package:cointiply_app/features/user_profile/domain/entities/country.dart';
+import 'package:cointiply_app/features/user_profile/presentation/providers/change_country_notifier.dart';
+import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/get_countries_state.dart';
+import 'package:cointiply_app/features/user_profile/presentation/providers/get_profile_notifier.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/dialog_bg_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 void showChangeCountryDialog(BuildContext context) {
   final colorScheme = Theme.of(context).colorScheme;
@@ -38,6 +42,45 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(getCountriesNotifierProvider.notifier).fetchCountries();
     });
+    ref.listenManual(
+      getCountriesNotifierProvider,
+      (previous, next) {
+        if (next.hasData &&
+            next.countries != null &&
+            next.countries!.isNotEmpty) {
+          final profile = ref.watch(getProfileNotifierProvider).profile;
+          final currentCountry = profile?.account.country?.id;
+          if (currentCountry != null) {
+            final countriesState = ref.read(getCountriesNotifierProvider);
+            final country = countriesState.countries
+                ?.firstWhere((country) => country.id == currentCountry);
+            setState(() {
+              _selectedCountry = country;
+            });
+          }
+        }
+      },
+    );
+
+    ref.listenManual(
+      changeCountryProvider,
+      (previous, next) {
+        if (next.isChanging) {
+          // Show loading indicator or disable inputs
+        } else if (next.status == ChangeCountryStatus.success) {
+          // Close dialog on success
+
+          ref.read(getProfileNotifierProvider.notifier).fetchProfile();
+          context.pop();
+        } else if (next.hasError) {
+          // Show error message
+          final errorMessage = next.errorMessage ??
+              context.translate("failed_to_change_country");
+          context.showSnackBar(
+              message: errorMessage, backgroundColor: context.error);
+        }
+      },
+    );
   }
 
   @override
@@ -51,6 +94,8 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
 
   Widget _manageDialogBody(BuildContext context) {
     final countriesState = ref.watch(getCountriesNotifierProvider);
+    final isChangingCountry = ref.watch(changeCountryProvider).isChanging;
+    final userId = (ref.read(currentUserProvider).user?.id ?? 0).toString();
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 32),
@@ -82,9 +127,16 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
           CommonButton(
             text: context.translate("change_your_country_btn_text"),
             backgroundColor: const Color(0xff333333),
-            onPressed: _selectedCountry != null ? () {
-              
-            } : null,
+            onPressed: _selectedCountry != null
+                ? () {
+                    ref.read(changeCountryProvider.notifier).changeCountry(
+                          countryId: _selectedCountry!.id,
+                          countryName: _selectedCountry!.name,
+                          userid: userId,
+                        );
+                  }
+                : null,
+            isLoading: isChangingCountry,
           ),
         ],
       ),
@@ -144,7 +196,6 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
         CommonText.bodySmall(
           context.translate("change_your_country_note"),
           color: Color(0xff98989A),
-          
         ),
       ],
     );

@@ -5,6 +5,7 @@ import 'package:dartz/dartz.dart';
 import 'package:file_picker/file_picker.dart';
 import '../../../../core/error/failures.dart';
 import '../entities/country.dart';
+import '../entities/language.dart';
 import '../entities/profile_detail.dart';
 
 /// Abstract repository interface for profile operations
@@ -22,6 +23,11 @@ abstract class ProfileRepository {
   ///
   /// Returns list of [Country] on success or [Failure] on error
   Future<Either<Failure, List<Country>>> getCountries();
+
+  /// Get list of available languages
+  ///
+  /// Returns list of [Language] on success or [Failure] on error
+  Future<Either<Failure, List<Language>>> getLanguages();
 
   /// Update the user's profile
   ///

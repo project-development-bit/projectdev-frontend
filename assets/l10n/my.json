@@ -505,6 +505,18 @@
   "country_label": "နိုင်ငံ",
   "please_select_country_error": "နိုင်ငံတစ်ခု ရွေးချယ်ပါ",
   "failed_to_load_countries": "နိုင်ငံများ ဖော်ပြ၍မရပါ",
+  "failed_to_load_languages": "ဘာသာစကားများ ဖော်ပြ၍မရပါ",
+  "please_select_language_error": "ဘာသာစကားတစ်ခု ရွေးချယ်ပါ",
+  "change_your_language": "ဘာသာစကား ပြောင်းလဲရန်",
+  "change_your_language_title": "သင့်ဘာသာစကားကို ပြောင်းလဲရန်",
+  "change_your_language_description": "သင်နှစ်သက်သော ဘာသာစကားကို ရွေးချယ်ပါ။ သင်ရွေးချယ်ထားသော ဘာသာစကားဖြင့် အက်ပ်ျ၏ မျက်နှာပြင်များကို ပြောင်းလဲပေးမည်ဖြစ်ပါသည်။",
+  "change_your_language_btn_text": "သင့်ဘာသာစကားကို ရွေးချယ်ပါ",
+  "select_your_language_hint": "သင့်ဘာသာစကားကို ရွေးချယ်ပါ",
+  "language_label": "ဘာသာစကား",
+  "your_language": "သင့်ဘာသာစကား",
+  "change_your_language_note": "ဘာသာစကားကို ပြောင်းလဲခြင်းသည် အက်ပ်အားလုံးကို အပ်ဒိတ်လုပ်ပါမည်။",
+  "language_changed_successfully": "ဘာသာစကား အောင်မြင်စွာ ပြောင်းလဲပြီးပါပြီ",
+  "failed_to_change_language": "ဘာသာစကား ပြောင်းလဲ၍မရပါ",
   "retry_button": "ထပ်စမ်းကြည့်ပါ",
   "show_offer_token": "Show",
   "offer_token_description": "It is your offer User ID, which you may use to contact\nOfferwall to deal with your offer issues.",
@@ -555,5 +567,7 @@
   "setup_2fa_app_note": "QR ကုဒ်ကို စကင်န်ဖတ်ရာတွင် အခက်အခဲရှိပါက၊ သင့် authenticator အက်ပ်တွင် manual entry ကို ရွေးချယ်ပြီး သင့် username နှင့် အောက်ပါကုဒ်ကို ထည့်သွင်းပါ-",
   "setup_2fa_app_title": "နှစ်ဆင့်အတည်ပြုချက် သတ်မှတ်ပါ",
   "authentication_code": "အတည်ပြုကုဒ်",
-  "enable_2fa_button": "2FA ဖွင့်ရန်"
+  "enable_2fa_button": "2FA ဖွင့်ရန်",
+  "failed_to_change_country": "နိုင်ငံကို ပြောင်းလဲရန် မအောင်မြင်ပါ",
+  "manage_profile_load_error": "ပရိုဖိုင် အချက်အလက်များကို တင်ရန် မအောင်မြင်ပါ"
 }
