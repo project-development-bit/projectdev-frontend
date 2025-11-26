@@ -53,17 +53,26 @@ class GigaFaucetHeader extends ConsumerWidget {
                   ),
                   SizedBox(width: 4),
                 ],
-                Image.asset(
-                  screenWidth < 360
-                      ? "assets/images/gigafaucet_logo.png"
-                      : "assets/images/giga_faucet_text_logo.png",
-                  height: 28,
-                  width: screenWidth < 360
-                      ? null
-                      : screenWidth < 430
-                          ? 111
-                          : 131,
-                  fit: BoxFit.contain,
+                GestureDetector(
+                  onTap: () {
+                    final currentRoute =
+                        GoRouterState.of(context).uri.toString();
+                    if (!currentRoute.contains('home')) {
+                      context.go('/home');
+                    }
+                  },
+                  child: Image.asset(
+                    screenWidth < 360
+                        ? "assets/images/gigafaucet_logo.png"
+                        : "assets/images/giga_faucet_text_logo.png",
+                    height: 28,
+                    width: screenWidth < 360
+                        ? null
+                        : screenWidth < 430
+                            ? 111
+                            : 131,
+                    fit: BoxFit.contain,
+                  ),
                 ),
                 SizedBox(width: (screenWidth < 900) ? 8 : 20),
                 if (screenWidth > 900) ...[
