@@ -120,9 +120,10 @@ class _CustomUnderLineButtonWidgetState
 
 class CustomButtonWidget extends StatefulWidget {
   final String title;
-  final VoidCallback? onTap; // nullable → supports disabled
+  final VoidCallback? onTap;
   final bool isActive;
   final bool isDisabled;
+  final bool isOutlined;
   final EdgeInsetsGeometry? padding;
   final EdgeInsetsGeometry? margin;
   final double? width;
@@ -135,6 +136,7 @@ class CustomButtonWidget extends StatefulWidget {
     required this.onTap,
     this.isActive = false,
     this.isDisabled = false,
+    this.isOutlined = false,
     this.padding,
     this.margin,
     this.width,
@@ -151,6 +153,7 @@ class _CustomButtonWidgetState extends State<CustomButtonWidget> {
 
   @override
   Widget build(BuildContext context) {
+    // Solid button colors
     const defaultBg = Color(0xFFFFCC02);
     const hoverBg = Color(0xFFFFD530);
     const activeBg = Color(0xFFE0B702);
@@ -159,23 +162,49 @@ class _CustomButtonWidgetState extends State<CustomButtonWidget> {
     const textColor = Color(0xFF333333);
     const disabledTextColor = Color(0xFF8C8C8C);
 
+    // Outlined button colors
+    // const outlineColor = Color(0xFFFFCC02);
+    const outlineHoverColor = Color(0xFFFFD530);
+    const outlineDisabledBorder = Color(0xFFD3D3D3);
+
     final bool isDisabled = widget.isDisabled || widget.onTap == null;
 
-    Color bgColor;
-    Color txtColor;
+    Color bgColor = Colors.transparent;
+    Color txtColor = textColor;
+    Color borderColor = Colors.transparent;
 
-    if (isDisabled) {
-      bgColor = disabledBg;
-      txtColor = disabledTextColor;
-    } else if (_isHovering) {
-      bgColor = hoverBg;
-      txtColor = textColor;
-    } else if (widget.isActive) {
-      bgColor = activeBg;
-      txtColor = textColor;
+    if (widget.isOutlined) {
+      if (isDisabled) {
+        borderColor = outlineDisabledBorder;
+        txtColor = disabledTextColor;
+      } else if (widget.isActive) {
+        if (_isHovering) {
+          bgColor = outlineHoverColor;
+        } else {
+          bgColor = activeBg;
+          txtColor = textColor;
+        }
+      } else if (_isHovering) {
+        borderColor = outlineHoverColor;
+        txtColor = outlineHoverColor;
+      } else {
+        borderColor = const Color(0xFF333333);
+        txtColor = const Color(0xFF98989A);
+      }
     } else {
-      bgColor = defaultBg;
-      txtColor = textColor;
+      if (isDisabled) {
+        bgColor = disabledBg;
+        txtColor = disabledTextColor;
+      } else if (_isHovering) {
+        bgColor = hoverBg;
+        txtColor = textColor;
+      } else if (widget.isActive) {
+        bgColor = activeBg;
+        txtColor = textColor;
+      } else {
+        bgColor = defaultBg;
+        txtColor = textColor;
+      }
     }
 
     return MouseRegion(
@@ -193,6 +222,9 @@ class _CustomButtonWidgetState extends State<CustomButtonWidget> {
           decoration: BoxDecoration(
             color: bgColor,
             borderRadius: BorderRadius.circular(12),
+            border: widget.isOutlined
+                ? Border.all(color: borderColor, width: 2)
+                : null,
           ),
           child: Center(
             child: CommonText.titleMedium(
