@@ -3,32 +3,31 @@ import 'package:flutter/material.dart';
 
 class CustomUnderLineButtonWidget extends StatefulWidget {
   final String title;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
-  final Color? backgroundColor;
-  final Color? textColor;
-  final double? height;
-  final double? borderRadius;
   final bool isActive;
+  final bool isDisabled;
+
   final EdgeInsetsGeometry? padding;
   final EdgeInsetsGeometry? margin;
   final double? width;
+  final double? height;
   final double? fontSize;
   final FontWeight? fontWeight;
+  final double? borderRadius;
 
   const CustomUnderLineButtonWidget({
     super.key,
     required this.title,
     required this.onTap,
     this.isActive = false,
+    this.isDisabled = false,
     this.padding,
     this.margin,
     this.width,
+    this.height,
     this.fontSize,
     this.fontWeight,
-    this.backgroundColor,
-    this.textColor,
-    this.height,
     this.borderRadius,
   });
 
@@ -43,80 +42,76 @@ class _CustomUnderLineButtonWidgetState
 
   @override
   Widget build(BuildContext context) {
-    final hoverColor =
-        const Color(0xFFFFD530); // TODO: to use Color from scheme
-    final bottomHoverColor =
-        const Color(0xFFC8AA28); // TODO: to use Color from scheme
-    final defaultBorderColor =
-        const Color(0xFF262626); // TODO: to use Color from scheme
+    // ---- 🎨 DESIGN SYSTEM COLORS ----
+    const defaultBg = Color(0xFFFFCC02); // Default
+    const defaultShadow = Color(0xFFB29F2C);
+
+    const hoverBg = Color(0xFFFFD530); // Hover
+    const hoverShadow = Color(0xFFC8AA28);
+
+    const activeBg = Color(0xFFE0B702); // Active
+    const activeShadow = Color(0xFFA18F24);
+
+    const disabledBg = Color(0xFFE8DCA6); // Disabled
+    const disabledShadow = Color(0xFFD3C893);
+
+    const textColor = Color(0xFF333333);
+    const disabledTextColor = Color(0xFF8C8C8C);
+
+    // ---- 🎛 STATE LOGIC ----
+    final bool isDisabled = widget.isDisabled || widget.onTap == null;
+
+    Color bgColor;
+    Color shadowColor;
+    Color finalTextColor;
+
+    if (isDisabled) {
+      bgColor = disabledBg;
+      shadowColor = disabledShadow;
+      finalTextColor = disabledTextColor;
+    } else if (_isHovering) {
+      bgColor = hoverBg;
+      shadowColor = hoverShadow;
+      finalTextColor = textColor;
+    } else if (widget.isActive) {
+      bgColor = activeBg;
+      shadowColor = activeShadow;
+      finalTextColor = textColor;
+    } else {
+      bgColor = defaultBg;
+      shadowColor = defaultShadow;
+      finalTextColor = textColor;
+    }
 
     return MouseRegion(
-      onHover: (_) {
-        setState(() => _isHovering = true);
-      },
-      onEnter: (_) => setState(() => _isHovering = true),
-      onExit: (_) => setState(() => _isHovering = false),
-      cursor: SystemMouseCursors.click,
-      child: Material(
-        // <-- IMPORTANT
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: widget.onTap,
-          hoverColor: Colors.transparent,
-          highlightColor: Colors.transparent,
-          splashColor: Colors.transparent,
-          child: AnimatedContainer(
-            duration: Duration(milliseconds: 120),
-            height: widget.height,
-            width: widget.width,
-            margin: widget.margin,
-            padding: widget.padding ??
-                const EdgeInsets.symmetric(vertical: 12, horizontal: 17),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  _isHovering
-                      ? hoverColor
-                      : widget.isActive
-                          ? const Color(
-                              0xFFFFCC02) // TODO: to use Color from scheme
-                          : const Color(
-                              0xFF333333), // TODO: to use Color from scheme
-                  _isHovering
-                      ? hoverColor
-                      : widget.isActive
-                          ? const Color(
-                              0xFFFFCC02) // TODO: to use Color from scheme
-                          : const Color(
-                              0xFF333333), // TODO: to use Color from scheme
-                ],
-              ),
-              borderRadius: BorderRadius.circular(widget.borderRadius ?? 12),
-              border: Border(
-                bottom: BorderSide(
-                  color: _isHovering
-                      ? bottomHoverColor
-                      : widget.isActive
-                          ? hoverColor
-                          : defaultBorderColor,
-                  width: 5,
-                ),
+      onEnter: (_) => !isDisabled ? setState(() => _isHovering = true) : null,
+      onExit: (_) => !isDisabled ? setState(() => _isHovering = false) : null,
+      cursor: isDisabled ? SystemMouseCursors.basic : SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: isDisabled ? null : widget.onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 120),
+          height: widget.height ?? 48,
+          width: widget.width,
+          margin: widget.margin,
+          padding: widget.padding ??
+              const EdgeInsets.symmetric(vertical: 12, horizontal: 17),
+          decoration: BoxDecoration(
+            color: bgColor,
+            borderRadius: BorderRadius.circular(widget.borderRadius ?? 12),
+            border: Border(
+              bottom: BorderSide(
+                color: shadowColor,
+                width: 5,
               ),
             ),
-            child: Center(
-              child: CommonText.titleMedium(
-                widget.title,
-                fontSize: widget.fontSize ?? 18,
-                fontWeight: widget.fontWeight ?? FontWeight.w700,
-                color: _isHovering
-                    ? const Color(0xFF333333) // TODO: to use Color from scheme
-                    : widget.textColor ??
-                        (widget.isActive
-                            ? const Color(
-                                0xFF333333) // TODO: to use Color from scheme
-                            : const Color(
-                                0xFF98989A)), // TODO: to use Color from scheme
-              ),
+          ),
+          child: Center(
+            child: CommonText.titleMedium(
+              widget.title,
+              fontSize: widget.fontSize ?? 18,
+              fontWeight: widget.fontWeight ?? FontWeight.w700,
+              color: finalTextColor,
             ),
           ),
         ),
