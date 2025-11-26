@@ -296,7 +296,7 @@ class _MenuItemState extends State<_MenuItem> {
             widget.title,
             fontWeight: FontWeight.w700,
             color: isHovered
-                ? Color(0xFF00A0DC) // TODO from colorScheme
+                ? Color(0xFFFFCC00) // TODO from colorScheme
                 : colorScheme.onPrimary,
           ),
         ),
