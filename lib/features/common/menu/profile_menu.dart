@@ -92,6 +92,7 @@ class ProfileMenu extends StatelessWidget {
             builder: (context, ref, child) {
               final isLoading = ref.watch(isLogoutLoadingProvider);
               return CustomUnderLineButtonWidget(
+                isDark: true,
                 onTap: isLoading
                     ? () {}
                     : () {

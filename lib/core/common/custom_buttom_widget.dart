@@ -7,6 +7,7 @@ class CustomUnderLineButtonWidget extends StatefulWidget {
 
   final bool isActive;
   final bool isDisabled;
+  final bool isDark;
 
   final EdgeInsetsGeometry? padding;
   final EdgeInsetsGeometry? margin;
@@ -22,6 +23,7 @@ class CustomUnderLineButtonWidget extends StatefulWidget {
     required this.onTap,
     this.isActive = false,
     this.isDisabled = false,
+    this.isDark = false,
     this.padding,
     this.margin,
     this.width,
@@ -62,12 +64,12 @@ class _CustomUnderLineButtonWidgetState
     Color bgColor;
     Color shadowColor;
     Color finalTextColor;
-
     if (isDisabled) {
       bgColor = disabledBg;
       shadowColor = disabledShadow;
       finalTextColor = disabledTextColor;
     } else if (_isHovering) {
+      print('hovering');
       bgColor = hoverBg;
       shadowColor = hoverShadow;
       finalTextColor = textColor;
@@ -75,6 +77,10 @@ class _CustomUnderLineButtonWidgetState
       bgColor = activeBg;
       shadowColor = activeShadow;
       finalTextColor = textColor;
+    } else if (widget.isDark) {
+      bgColor = Color(0xFF333333);
+      shadowColor = Color(0xFF262626);
+      finalTextColor = Color(0xFF98989A);
     } else {
       bgColor = defaultBg;
       shadowColor = defaultShadow;
