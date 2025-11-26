@@ -81,18 +81,19 @@ class OnboardingBackground extends StatelessWidget {
                           ),
                           child: child,
                         ),
-                        Positioned(
-                          right: girlRightOffset,
-                          bottom: girlBottomOffset,
-                          child: IgnorePointer(
-                            ignoring: true,
-                            child: Image.asset(
-                              "assets/images/girl.png",
-                              height: girlHeight,
-                              fit: BoxFit.contain,
+                        if (!isMobile)
+                          Positioned(
+                            right: girlRightOffset,
+                            bottom: girlBottomOffset,
+                            child: IgnorePointer(
+                              ignoring: true,
+                              child: Image.asset(
+                                "assets/images/girl.png",
+                                height: girlHeight,
+                                fit: BoxFit.contain,
+                              ),
                             ),
                           ),
-                        ),
                       ],
                     ),
                   ],
