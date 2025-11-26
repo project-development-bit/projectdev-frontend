@@ -285,19 +285,29 @@ class _MenuItemState extends State<_MenuItem> {
     return MouseRegion(
       onEnter: (_) => setState(() => isHovered = true),
       onExit: (_) => setState(() => isHovered = false),
+      cursor: SystemMouseCursors.click,
       child: InkWell(
         onTap: widget.onTap,
-        hoverColor: AppColors.transparent, // we control hover manually
-        child: Container(
-          alignment: Alignment.centerLeft,
-          padding: const EdgeInsets.symmetric(vertical: 9),
-          // Text
+        hoverColor: Colors.transparent, // disable default blue hover
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 140),
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(
+            vertical: 9,
+          ),
+          margin: EdgeInsets.only(
+            bottom: 7,
+          ),
+          decoration: BoxDecoration(
+            color: Colors.transparent,
+            borderRadius: BorderRadius.circular(6),
+          ),
           child: CommonText.bodyLarge(
             widget.title,
             fontWeight: FontWeight.w700,
-            color: isHovered
-                ? Color(0xFFFFCC00) // TODO from colorScheme
-                : colorScheme.onPrimary,
+            color: isHovered ? colorScheme.primary : colorScheme.onPrimary,
           ),
         ),
       ),
