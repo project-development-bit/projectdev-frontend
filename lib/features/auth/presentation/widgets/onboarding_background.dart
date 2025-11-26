@@ -36,62 +36,67 @@ class OnboardingBackground extends StatelessWidget {
               backgroundImagePath ??
                   'assets/images/bg/onboarding_background.png',
               fit: context.isMobile ? BoxFit.cover : BoxFit.fill,
-              alignment: Alignment.topCenter,
+              // alignment: Alignment.topCenter,
             ),
           ),
           SingleChildScrollView(
-            child: ResponsiveContainer(
-              maxWidth: maxContentWidth ?? (isMobile ? null : 500),
-              padding: horizontalPadding ??
-                  EdgeInsets.symmetric(
-                    horizontal: isMobile ? 24 : 32,
-                    vertical: isMobile ? 24 : 32,
-                  ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CommonImage(
-                    imageUrl: logoImagePath ??
-                        "assets/images/giga_faucet_text_logo.png",
-                    width: isMobile ? 240 : 360,
-                    height: isMobile ? 40 : 52,
-                    fit: BoxFit.contain,
-                  ),
-                  const SizedBox(height: 28),
-                  Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.symmetric(
-                          horizontal: isMobile ? 20 : 40,
-                          vertical: isMobile ? 24 : 34,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: MediaQuery.of(context).size.height,
+              ),
+              child: ResponsiveContainer(
+                maxWidth: maxContentWidth ?? (isMobile ? null : 500),
+                padding: horizontalPadding ??
+                    EdgeInsets.symmetric(
+                      horizontal: isMobile ? 24 : 32,
+                      vertical: isMobile ? 24 : 32,
+                    ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CommonImage(
+                      imageUrl: logoImagePath ??
+                          "assets/images/giga_faucet_text_logo.png",
+                      width: isMobile ? 240 : 360,
+                      height: isMobile ? 40 : 52,
+                      fit: BoxFit.contain,
+                    ),
+                    const SizedBox(height: 28),
+                    Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        Container(
+                          width: double.infinity,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: isMobile ? 20 : 40,
+                            vertical: isMobile ? 24 : 34,
+                          ),
+                          decoration: BoxDecoration(
+                            color:
+                                const Color(0xFF00131E).withValues(alpha: 0.3),
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(
+                              color: context.outline.withAlpha(20),
+                            ),
+                          ),
+                          child: child,
                         ),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF00131E).withValues(
-                              alpha: 0.3), //TODO: to use from Color Scheme
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                            color: context.outline.withAlpha(20),
+                        Positioned(
+                          right: girlRightOffset,
+                          bottom: girlBottomOffset,
+                          child: IgnorePointer(
+                            ignoring: true,
+                            child: Image.asset(
+                              "assets/images/girl.png",
+                              height: girlHeight,
+                              fit: BoxFit.contain,
+                            ),
                           ),
                         ),
-                        child: child,
-                      ),
-                      Positioned(
-                        right: girlRightOffset,
-                        bottom: girlBottomOffset,
-                        child: IgnorePointer(
-                          ignoring: true,
-                          child: Image.asset(
-                            "assets/images/girl.png",
-                            height: girlHeight,
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

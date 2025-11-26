@@ -317,7 +317,7 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
             // Cloudflare Turnstile Security Widget
             IgnorePointer(
               ignoring: true,
-              child: CloudflareTurnstileWidget(),
+              child: CloudflareTurnstileWidget(debugMode: false),
             ),
 
             const SizedBox(height: 24),
@@ -470,7 +470,7 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
 
     return context.screenWidth < 400
         ? Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               rememberMeWidget,
               const SizedBox(height: 8),
