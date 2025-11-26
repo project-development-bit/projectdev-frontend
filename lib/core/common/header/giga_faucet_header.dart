@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
 import 'package:cointiply_app/core/common/header/header_coin_balance_box.dart';
 import 'package:cointiply_app/core/common/header/header_menu_item.dart';
 import 'package:cointiply_app/core/common/header/header_profile_avatar.dart';
@@ -57,7 +58,11 @@ class GigaFaucetHeader extends ConsumerWidget {
                       ? "assets/images/gigafaucet_logo.png"
                       : "assets/images/giga_faucet_text_logo.png",
                   height: 28,
-                  width: screenWidth < 360 ? null : 131,
+                  width: screenWidth < 360
+                      ? null
+                      : screenWidth < 430
+                          ? 111
+                          : 131,
                   fit: BoxFit.contain,
                 ),
                 SizedBox(width: (screenWidth < 900) ? 8 : 20),
@@ -97,14 +102,13 @@ class GigaFaucetHeader extends ConsumerWidget {
                                   : 16),
                         ],
                       )
-                    : ElevatedButton.icon(
-                        onPressed: () => context.go('/auth/login'),
-                        icon: const Icon(Icons.login),
-                        label: const Text('Login'),
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: context.onPrimary,
-                          backgroundColor: context.primary,
-                        ),
+                    : CustomUnderLineButtonWidget(
+                        //TODO: Change to CustomButtonWidget after getting design confirmation
+                        padding: EdgeInsets.symmetric(horizontal: 12),
+                        height: 41,
+                        onTap: () => context.go('/auth/login'),
+                        fontSize: 16,
+                        title: 'Login',
                       ),
                 if (isAuthenticated) ...[
                   HeaderProfileAvatar(),

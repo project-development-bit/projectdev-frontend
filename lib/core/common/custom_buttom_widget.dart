@@ -9,6 +9,7 @@ class CustomUnderLineButtonWidget extends StatelessWidget {
   final EdgeInsetsGeometry? padding;
   final EdgeInsetsGeometry? margin;
   final double? width;
+  final double? height;
   final double? fontSize;
   final FontWeight? fontWeight;
   const CustomUnderLineButtonWidget({
@@ -19,6 +20,7 @@ class CustomUnderLineButtonWidget extends StatelessWidget {
     this.padding,
     this.margin,
     this.width,
+    this.height,
     this.fontSize,
     this.fontWeight,
   });
@@ -29,6 +31,7 @@ class CustomUnderLineButtonWidget extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: width,
+        height: height,
         margin: margin,
         padding: padding ??
             const EdgeInsets.symmetric(

@@ -37,7 +37,7 @@ class HeaderCoinBalanceBox extends StatelessWidget {
           CommonText.titleMedium(
             coinBalance,
             fontWeight: FontWeight.w700,
-            fontSize: context.isMobile ? 14 : 16,
+            fontSize: context.isMobile ? 12 : 16,
             color: colorScheme.onPrimary,
           ),
         ],
