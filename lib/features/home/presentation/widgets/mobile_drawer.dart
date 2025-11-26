@@ -1,6 +1,7 @@
 import 'package:cointiply_app/core/common/common_image_widget.dart';
-import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/extensions/extensions.dart';
+import 'package:cointiply_app/features/home/presentation/widgets/drawer_item.dart';
+import 'package:cointiply_app/features/home/presentation/widgets/drawer_sub_item.dart';
 import 'package:cointiply_app/routing/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -22,12 +23,19 @@ class _MobileDrawerState extends ConsumerState<MobileDrawer> {
     "blog": false,
   };
 
+  void toggle(String key) {
+    setState(() {
+      expanded.updateAll((k, v) => false);
+      expanded[key] = !(expanded[key] == true);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Drawer(
-      backgroundColor: const Color(0xFF00131E), //TODO use colorScheme
+      backgroundColor: colorScheme.surface,
       child: Column(
         children: [
           _buildHeader(context),
@@ -35,57 +43,71 @@ class _MobileDrawerState extends ConsumerState<MobileDrawer> {
             child: ListView(
               padding: EdgeInsets.zero,
               children: [
-                // ----------------- Earn Cryptos -----------------
-                _buildParent(
-                  key: "earn",
+                ParentItemWidget(
+                  isOpen: expanded["earn"] == true,
+                  onTap: () {
+                    toggle("earn");
+                  },
                   label: context.translate('earn_cryptos'),
                   colorScheme: colorScheme,
                 ),
                 if (expanded["earn"] == true) ...[
-                  _buildSubItem(context,
-                      route: '/daily-rewards',
-                      label: context.translate('daily_rewards'), onTap: () {
-                    context.pop();
-                  }, colorScheme: colorScheme),
-                  _buildSubItem(
-                      route: '/watch-ads',
-                      context,
-                      label: context.translate('watch_ads'), onTap: () {
-                    context.pop();
-                  }, colorScheme: colorScheme),
-                  _buildSubItem(context,
-                      route: '/offer-walls',
-                      label: context.translate('spin_earn'), onTap: () {
-                    context.pop();
-                  }, colorScheme: colorScheme),
+                  DrawerSubItem(
+                    route: '/daily-rewards',
+                    label: context.translate('daily_rewards'),
+                    onTap: () {},
+                  ),
+                  DrawerSubItem(
+                    route: '/watch-ads',
+                    label: context.translate('watch_ads'),
+                    onTap: () {},
+                  ),
+                  DrawerSubItem(
+                    route: '/offer-walls',
+                    label: context.translate('spin_earn'),
+                    onTap: () {},
+                  ),
                 ],
-
-                _buildParent(
-                  key: "contests",
+                ParentItemWidget(
+                  isOpen: expanded["contests"] == true,
+                  onTap: () {
+                    setState(() {
+                      expanded.updateAll((k, v) => false);
+                      expanded["contests"] = !(expanded["contests"] == true);
+                    });
+                  },
                   label: context.translate('contests'),
                   colorScheme: colorScheme,
                 ),
-
-                _buildParent(
-                  key: "events",
+                ParentItemWidget(
+                  isOpen: expanded["events"] == true,
+                  onTap: () {
+                    toggle("events");
+                  },
                   label: context.translate('events'),
                   colorScheme: colorScheme,
                 ),
-
-                _buildParent(
-                  key: "shop",
+                ParentItemWidget(
+                  isOpen: expanded["shop"] == true,
+                  onTap: () {
+                    toggle("shop");
+                  },
                   label: context.translate('shop'),
                   colorScheme: colorScheme,
                 ),
-
-                _buildParent(
-                  key: "help",
+                ParentItemWidget(
+                  isOpen: expanded["help"] == true,
+                  onTap: () {
+                    toggle("help");
+                  },
                   label: context.translate('help'),
                   colorScheme: colorScheme,
                 ),
-
-                _buildParent(
-                  key: "blog",
+                ParentItemWidget(
+                  isOpen: expanded["blog"] == true,
+                  onTap: () {
+                    toggle("blog");
+                  },
                   label: context.translate('blog'),
                   colorScheme: colorScheme,
                 ),
@@ -114,88 +136,6 @@ class _MobileDrawerState extends ConsumerState<MobileDrawer> {
           width: 180,
           height: 74,
           fit: BoxFit.contain,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildParent(
-      {required String key,
-      required String label,
-      required ColorScheme colorScheme}) {
-    final bool open = expanded[key] == true;
-
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          expanded.updateAll((k, v) => false);
-          expanded[key] = !open;
-        });
-      },
-      child: Container(
-        padding:
-            const EdgeInsets.only(left: 18, right: 9.5, top: 18, bottom: 18),
-        child: Row(
-          children: [
-            Expanded(
-              child: CommonText.bodyLarge(
-                label,
-                color: open ? colorScheme.primary : colorScheme.onPrimary,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            Transform.rotate(
-              angle: open ? 3.1416 : 0,
-              child: Icon(Icons.keyboard_arrow_down,
-                  size: 20,
-                  color: open ? colorScheme.primary : colorScheme.onPrimary),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSubItem(
-    BuildContext context, {
-    required String label,
-    required String route,
-    required VoidCallback onTap,
-    required ColorScheme colorScheme,
-  }) {
-    // final currentRoute = GoRouterState.of(context).uri.toString();
-    final bool isActive = "/daily-rewards".startsWith(route);
-    return GestureDetector(
-      onTap: () {
-        onTap();
-        context.pop(); // close drawer
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            // --- Left Active Bar ---
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 180),
-              width: 3,
-              height: 18,
-              margin: const EdgeInsets.only(left: 22, right: 12),
-              decoration: BoxDecoration(
-                color: isActive ? colorScheme.primary : Colors.transparent,
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-
-            // --- Label ---
-            CommonText.bodyLarge(
-              label,
-              color: isActive
-                  ? colorScheme.primary
-                  : Color(0xFF98989A), //TODO use colorScheme
-              fontWeight: FontWeight.w500,
-            ),
-          ],
         ),
       ),
     );
