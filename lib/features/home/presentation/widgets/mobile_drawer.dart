@@ -27,7 +27,7 @@ class _MobileDrawerState extends ConsumerState<MobileDrawer> {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Drawer(
-      backgroundColor: const Color(0xFF00131E),
+      backgroundColor: const Color(0xFF00131E), //TODO use colorScheme
       child: Column(
         children: [
           _buildHeader(context),
@@ -190,8 +190,10 @@ class _MobileDrawerState extends ConsumerState<MobileDrawer> {
             // --- Label ---
             CommonText.bodyLarge(
               label,
-              color: isActive ? colorScheme.primary : colorScheme.onPrimary,
-              fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
+              color: isActive
+                  ? colorScheme.primary
+                  : Color(0xFF98989A), //TODO use colorScheme
+              fontWeight: FontWeight.w500,
             ),
           ],
         ),
