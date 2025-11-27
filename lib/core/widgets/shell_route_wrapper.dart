@@ -29,9 +29,9 @@ class ShellRouteWrapper extends StatelessWidget {
           return [
             SliverAppBar(
               expandedHeight: 80.0,
-              floating: true,
-              pinned: false,
-              snap: true,
+              floating: false,
+              pinned: true,
+              snap: false,
               backgroundColor: context.surface.withAlpha(242),
               surfaceTintColor: AppColors.transparent,
               elevation: 0,
