@@ -147,7 +147,7 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
                 title: localizations?.translate('send_reset_email') ??
                     'Send Reset Email',
                 onTap: isLoading ? () {} : _handleSendResetEmail,
-                // isLoading: isLoading,
+                isLoading: isLoading,
                 height: 56,
                 isActive: true,
 

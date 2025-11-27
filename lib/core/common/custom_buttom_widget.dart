@@ -22,10 +22,12 @@ class CustomUnderLineButtonWidget extends StatefulWidget {
   final Color? fontColor;
   final Color? borderColor;
   final Gradient? gradient;
+  final bool isLoading;
   const CustomUnderLineButtonWidget({
     super.key,
     required this.title,
     required this.onTap,
+    this.isLoading = false,
     this.isActive = false,
     this.isDisabled = false,
     this.isDark = false,
@@ -120,12 +122,23 @@ class _CustomUnderLineButtonWidgetState
             ),
           ),
           child: Center(
-            child: CommonText.titleMedium(
-              widget.title,
-              fontSize: widget.fontSize ?? 18,
-              fontWeight: widget.fontWeight ?? FontWeight.w700,
-              color: finalTextColor,
-            ),
+            child: widget.isLoading
+                ? SizedBox(
+                    height: 20,
+                    width: 20,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      valueColor: AlwaysStoppedAnimation(
+                        finalTextColor,
+                      ),
+                    ),
+                  )
+                : CommonText.titleMedium(
+                    widget.title,
+                    fontSize: widget.fontSize ?? 18,
+                    fontWeight: widget.fontWeight ?? FontWeight.w700,
+                    color: finalTextColor,
+                  ),
           ),
         ),
       ),

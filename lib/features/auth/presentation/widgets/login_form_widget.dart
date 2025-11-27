@@ -332,6 +332,7 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
               onTap: isLoading ? () {} : _handleLogin,
               height: 56,
               borderRadius: 12,
+              isLoading: isLoading,
               isActive: !isLoading,
               fontSize: 14,
             ),
