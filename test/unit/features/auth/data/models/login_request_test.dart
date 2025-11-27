@@ -12,6 +12,10 @@ void main() {
       const loginRequest = LoginRequest(
         email: email,
         password: password,
+        recaptchaToken: null,
+        deviceFingerprint: '',
+        userAgent: '',
+        countryCode: '',
       );
 
       // Assert
@@ -32,6 +36,9 @@ void main() {
         email: email,
         password: password,
         recaptchaToken: recaptchaToken,
+        deviceFingerprint: '',
+        userAgent: '',
+        countryCode: '',
       );
 
       // Assert
@@ -47,6 +54,10 @@ void main() {
         const loginRequest = LoginRequest(
           email: 'test@example.com',
           password: 'password123',
+          recaptchaToken: null,
+          deviceFingerprint: '',
+          userAgent: '',
+          countryCode: '',
         );
 
         // Act
@@ -67,6 +78,9 @@ void main() {
           email: 'test@example.com',
           password: 'password123',
           recaptchaToken: 'test_recaptcha_token',
+          deviceFingerprint: '',
+          userAgent: '',
+          countryCode: '',
         );
 
         // Act
@@ -123,6 +137,9 @@ void main() {
           email: 'original@example.com',
           password: 'password123',
           recaptchaToken: 'original_token',
+          deviceFingerprint: '',
+          userAgent: '',
+          countryCode: '',
         );
 
         // Act
@@ -139,6 +156,10 @@ void main() {
         const original = LoginRequest(
           email: 'test@example.com',
           password: 'password123',
+          recaptchaToken: 'original_token',
+          deviceFingerprint: '',
+          userAgent: '',
+          countryCode: '',
         );
 
         // Act
@@ -156,6 +177,9 @@ void main() {
           email: 'test@example.com',
           password: 'password123',
           recaptchaToken: 'original_token',
+          deviceFingerprint: '',
+          userAgent: '',
+          countryCode: '',
         );
 
         // Act
@@ -175,18 +199,27 @@ void main() {
           email: 'test@example.com',
           password: 'password123',
           recaptchaToken: 'token123',
+          deviceFingerprint: '',
+          userAgent: '',
+          countryCode: '',
         );
 
         const loginRequest2 = LoginRequest(
           email: 'test@example.com',
           password: 'password123',
           recaptchaToken: 'token123',
+          deviceFingerprint: '',
+          userAgent: '',
+          countryCode: '',
         );
 
         const loginRequest3 = LoginRequest(
           email: 'test@example.com',
           password: 'password123',
           recaptchaToken: 'different_token',
+          deviceFingerprint: '',
+          userAgent: '',
+          countryCode: '',
         );
 
         // Assert
@@ -204,6 +237,9 @@ void main() {
           email: 'test@example.com',
           password: 'password123',
           recaptchaToken: 'token123',
+          deviceFingerprint: '',
+          userAgent: '',
+          countryCode: '',
         );
 
         // Act
@@ -223,6 +259,10 @@ void main() {
         const loginRequest = LoginRequest(
           email: 'test@example.com',
           password: 'password123',
+          recaptchaToken: null,
+          deviceFingerprint: '',
+          userAgent: '',
+          countryCode: '',
         );
 
         // Act

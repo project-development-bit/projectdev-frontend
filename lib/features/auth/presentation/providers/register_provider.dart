@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/services/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/enum/user_role.dart';
@@ -47,9 +48,11 @@ class RegisterError extends RegisterState {
 
 /// StateNotifier for managing registration operations
 class RegisterNotifier extends StateNotifier<RegisterState> {
-  RegisterNotifier(this._ref) : super(const RegisterInitial());
+  RegisterNotifier(this._ref, this._deviceInfo)
+      : super(const RegisterInitial());
 
   final Ref _ref;
+  final DeviceInfo _deviceInfo;
 
   /// Register a new user
   Future<void> register({
@@ -99,6 +102,8 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
         role: role,
         recaptchaToken:
             turnstileToken, // Using recaptchaToken field for Turnstile token
+        userAgent: await _deviceInfo.getUserAgent(),
+        deviceId: await _deviceInfo.getUniqueIdentifier() ?? '',
       );
 
       debugPrint('📤 Sending registration request with Turnstile token');
@@ -201,7 +206,7 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
 /// Provider for register state management
 final registerNotifierProvider =
     StateNotifierProvider<RegisterNotifier, RegisterState>((ref) {
-  return RegisterNotifier(ref);
+  return RegisterNotifier(ref, ref.read(deviceInfoProvider));
 });
 
 /// Provider for checking if registration is in progress

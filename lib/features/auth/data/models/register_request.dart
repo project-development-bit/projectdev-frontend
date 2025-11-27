@@ -1,5 +1,3 @@
-import 'package:cointiply_app/core/services/device_info.dart';
-
 import '../../../../core/enum/user_role.dart';
 
 class RegisterRequest {
@@ -10,20 +8,22 @@ class RegisterRequest {
   final UserRole role;
   final String? recaptchaToken;
   final String? countryCode;
+  late final String userAgent;
+  late final String deviceId;
 
   RegisterRequest({
     required this.name,
     required this.email,
     required this.password,
     required this.confirmPassword,
+    required this.userAgent,
+    required this.deviceId,
     this.countryCode,
     this.role = UserRole.normalUser,
     this.recaptchaToken,
   });
 
   Future<Map<String, dynamic>> toJson() async {
-    var userAgent = await DeviceInfo.getUserAgent();
-    String? deviceId = await DeviceInfo.getUniqueIdentifier();
     return {
       'country_code': countryCode,
       'userAgent': userAgent,
@@ -39,6 +39,8 @@ class RegisterRequest {
 
   factory RegisterRequest.fromJson(Map<String, dynamic> json) {
     return RegisterRequest(
+      userAgent: json['userAgent'] ?? '',
+      deviceId: json['device_fingerprint'] ?? '',
       countryCode: json['country_code'] ?? '',
       name: json['name'] ?? '',
       email: json['email'] ?? '',
@@ -56,8 +58,12 @@ class RegisterRequest {
     String? confirmPassword,
     UserRole? role,
     String? recaptchaToken,
+    String? userAgent,
+    String? deviceId,
   }) {
     return RegisterRequest(
+      userAgent: userAgent ?? this.userAgent,
+      deviceId: deviceId ?? this.deviceId,
       name: name ?? this.name,
       email: email ?? this.email,
       password: password ?? this.password,

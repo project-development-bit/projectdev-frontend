@@ -1,4 +1,5 @@
 import 'package:cointiply_app/core/error/error_model.dart';
+import 'package:cointiply_app/core/services/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/services/database_service.dart';
@@ -56,9 +57,10 @@ class LoginError extends LoginState {
 
 /// StateNotifier for managing login operations
 class LoginNotifier extends StateNotifier<LoginState> {
-  LoginNotifier(this._ref) : super(const LoginInitial());
+  LoginNotifier(this._ref, this._deviceInfo) : super(const LoginInitial());
 
   final Ref _ref;
+  final DeviceInfo _deviceInfo;
 
   /// Login with email and password
   Future<void> login({
@@ -99,8 +101,9 @@ class LoginNotifier extends StateNotifier<LoginState> {
         email: email,
         password: password,
         countryCode: countryCode,
-        recaptchaToken:
-            turnstileToken, // Using recaptchaToken field for Turnstile token
+        recaptchaToken: turnstileToken,
+        deviceFingerprint: await _deviceInfo.getUniqueIdentifier() ?? '',
+        userAgent: await _deviceInfo.getUserAgent(),
       );
 
       debugPrint('📤 Sending login request with Turnstile token');
@@ -252,7 +255,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
 /// Provider for login state management
 final loginNotifierProvider =
     StateNotifierProvider<LoginNotifier, LoginState>((ref) {
-  return LoginNotifier(ref);
+  return LoginNotifier(ref, ref.read(deviceInfoProvider));
 });
 
 /// Provider for checking if login is in progress

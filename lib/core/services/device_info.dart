@@ -2,11 +2,16 @@ import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:unique_device_identifier/unique_device_identifier.dart';
 
+final deviceInfoProvider = Provider<DeviceInfo>(
+  (ref) => DeviceInfo(),
+);
+
 class DeviceInfo {
-  static Future<String> getUserAgent() async {
+  Future<String> getUserAgent() async {
     final deviceInfo = DeviceInfoPlugin();
     final packageInfo = await PackageInfo.fromPlatform();
 
@@ -51,7 +56,7 @@ class DeviceInfo {
     return '$appName/$appVersion+$buildNumber (Unknown Platform)';
   }
 
-  static Future<String?> getUniqueIdentifier() async {
+  Future<String?> getUniqueIdentifier() async {
     final String? deviceId = await UniqueDeviceIdentifier.getUniqueIdentifier();
     debugPrint("UniqueDeviceIdentifier device_fingerprint: $deviceId");
     return deviceId;

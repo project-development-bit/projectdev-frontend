@@ -1,6 +1,4 @@
-import 'package:cointiply_app/core/services/device_info.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 
 /// Login request model for API calls
 class LoginRequest extends Equatable {
@@ -8,6 +6,8 @@ class LoginRequest extends Equatable {
     required this.email,
     required this.password,
     required this.countryCode,
+    required this.userAgent,
+    required this.deviceFingerprint,
     this.recaptchaToken,
   });
 
@@ -23,15 +23,18 @@ class LoginRequest extends Equatable {
   /// Country code for the user's location
   final String countryCode;
 
+  // User agent string for the device
+  final String userAgent;
+
+  // Device unique identifier
+  final String deviceFingerprint;
+
   /// Convert to JSON for API request
   Future<Map<String, dynamic>> toJson() async {
-    var userAgent = await DeviceInfo.getUserAgent();
-    debugPrint("device info User Agent: $userAgent");
-    String? deviceId = await DeviceInfo.getUniqueIdentifier();
     final json = {
       'country_code': countryCode,
       'userAgent': userAgent,
-      'device_fingerprint': deviceId,
+      'device_fingerprint': deviceFingerprint,
       'email': email,
       'password': password,
     };
@@ -51,6 +54,8 @@ class LoginRequest extends Equatable {
       password: json['password'] ?? '',
       countryCode: json['country_code'] ?? '',
       recaptchaToken: json['recaptchaToken'],
+      userAgent: json['userAgent'] ?? '',
+      deviceFingerprint: json['device_fingerprint'] ?? '',
     );
   }
 
@@ -61,8 +66,12 @@ class LoginRequest extends Equatable {
     String? recaptchaToken,
     String? countryCode,
     bool clearRecaptchaToken = false,
+    String? userAgent,
+    String? deviceFingerprint,
   }) {
     return LoginRequest(
+      userAgent: userAgent ?? this.userAgent,
+      deviceFingerprint: deviceFingerprint ?? this.deviceFingerprint,
       email: email ?? this.email,
       password: password ?? this.password,
       countryCode: countryCode ?? this.countryCode,
