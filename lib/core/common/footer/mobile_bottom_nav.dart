@@ -37,7 +37,7 @@ class _MobileBottomNavState extends ConsumerState<MobileBottomNav> {
 
     return context.isMobile
         ? Container(
-            height: 83,
+            height: 60,
             width: double.infinity,
             clipBehavior: Clip.none,
             decoration: const BoxDecoration(
@@ -92,7 +92,7 @@ class _MobileBottomNavState extends ConsumerState<MobileBottomNav> {
 
                 /// Center BIG STAR button
                 Positioned(
-                  top: -25,
+                  top: -13,
                   child: GestureDetector(
                     onTap: () => onTap(4),
                     child: Container(
