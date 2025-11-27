@@ -24,7 +24,6 @@ class OnboardingBackground extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isMobile = context.isMobile;
-    print("childPadding is Null: ${childPadding == null}");
     double girlHeight = isMobile ? 200 : 360;
     double girlRightOffset = isMobile ? -40 : -180;
     double girlBottomOffset = isMobile ? -10 : -40;
