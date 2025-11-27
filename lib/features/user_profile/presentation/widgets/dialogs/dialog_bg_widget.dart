@@ -10,12 +10,14 @@ class DialogBgWidget extends StatelessWidget {
   final String title;
   final Function()? onClose;
   final double? dialogHeight;
+  final Color? dividerColor;
   const DialogBgWidget(
       {super.key,
       required this.body,
       required this.title,
       this.onClose,
-      this.dialogHeight});
+      this.dialogHeight,
+      this.dividerColor});
 
   double _getDialogWidth(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -43,10 +45,9 @@ class DialogBgWidget extends StatelessWidget {
         child: Stack(
           children: [
             DialogGradientBackground(width: width, height: height),
-            Container(
+            SizedBox(
               width: width,
               height: height,
-              padding: const EdgeInsets.symmetric(horizontal: 32),
               child: SizedBox(
                 height: height,
                 child: Column(
@@ -72,8 +73,16 @@ class DialogBgWidget extends StatelessWidget {
                         ],
                       ),
                     ),
-                    Divider(),
-                    Expanded(child: body)
+                    Divider(
+                      color: dividerColor ??
+                          Color(0xFF003248), // TODO use from theme,
+                      thickness: 1,
+                    ),
+                    Expanded(
+                        child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 32),
+                      child: body,
+                    ))
                   ],
                 ),
               ),

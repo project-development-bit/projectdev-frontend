@@ -60,7 +60,7 @@ class TermsPrivacyNavigationExample extends ConsumerWidget {
 
             // Method 1: Using the extension methods
             ElevatedButton.icon(
-              onPressed: () => context.showTerms(ref),
+              onPressed: () => context.showTerms(),
               icon: const Icon(Icons.article),
               label: const Text('Show Terms of Service'),
             ),
@@ -68,7 +68,7 @@ class TermsPrivacyNavigationExample extends ConsumerWidget {
             const SizedBox(height: 12),
 
             ElevatedButton.icon(
-              onPressed: () => context.showPrivacy(ref),
+              onPressed: () => context.showPrivacy(),
               icon: const Icon(Icons.privacy_tip),
               label: const Text('Show Privacy Policy'),
             ),
@@ -84,8 +84,9 @@ class TermsPrivacyNavigationExample extends ConsumerWidget {
             const SizedBox(height: 12),
 
             OutlinedButton.icon(
-              onPressed: () =>
-                  TermsPrivacyNavigationService.showTerms(context, ref),
+              onPressed: () => TermsPrivacyNavigationService.showTerms(
+                context,
+              ),
               icon: const Icon(Icons.article_outlined),
               label: const Text('Terms (Direct Service)'),
             ),
@@ -93,8 +94,9 @@ class TermsPrivacyNavigationExample extends ConsumerWidget {
             const SizedBox(height: 8),
 
             OutlinedButton.icon(
-              onPressed: () =>
-                  TermsPrivacyNavigationService.showPrivacy(context, ref),
+              onPressed: () => TermsPrivacyNavigationService.showPrivacy(
+                context,
+              ),
               icon: const Icon(Icons.privacy_tip_outlined),
               label: const Text('Privacy (Direct Service)'),
             ),

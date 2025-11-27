@@ -1,7 +1,6 @@
 import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
 import 'package:cointiply_app/core/common/doted_line_divider.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
-import 'package:cointiply_app/core/theme/theme.dart';
 import 'package:cointiply_app/features/auth/presentation/providers/logout_provider.dart';
 import 'package:cointiply_app/core/common/widgets/custom_pointer_interceptor.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/profile_dialog.dart';
@@ -85,13 +84,15 @@ class ProfileMenu extends StatelessWidget {
           ),
           // dotted divider (thin + low opacity)
           DotedLineDivider(
-              padding: const EdgeInsets.symmetric(
-            vertical: 10,
+              padding: const EdgeInsets.only(
+            top: 4,
+            bottom: 7,
           )),
           Consumer(
             builder: (context, ref, child) {
               final isLoading = ref.watch(isLogoutLoadingProvider);
               return CustomUnderLineButtonWidget(
+                isDark: true,
                 onTap: isLoading
                     ? () {}
                     : () {
@@ -101,7 +102,7 @@ class ProfileMenu extends StatelessWidget {
                 fontWeight: FontWeight.w700,
                 width: 105,
                 padding: EdgeInsets.symmetric(vertical: 4, horizontal: 0),
-                margin: const EdgeInsets.symmetric(vertical: 8),
+                margin: const EdgeInsets.symmetric(vertical: 8.5),
                 title: isLoading
                     ? context.translate("logging_out")
                     : context.translate("sign_out"),
@@ -285,19 +286,29 @@ class _MenuItemState extends State<_MenuItem> {
     return MouseRegion(
       onEnter: (_) => setState(() => isHovered = true),
       onExit: (_) => setState(() => isHovered = false),
+      cursor: SystemMouseCursors.click,
       child: InkWell(
         onTap: widget.onTap,
-        hoverColor: AppColors.transparent, // we control hover manually
-        child: Container(
-          alignment: Alignment.centerLeft,
-          padding: const EdgeInsets.symmetric(vertical: 9),
-          // Text
+        hoverColor: Colors.transparent, // disable default blue hover
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 140),
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(
+            vertical: 9,
+          ),
+          margin: EdgeInsets.only(
+            bottom: 7,
+          ),
+          decoration: BoxDecoration(
+            color: Colors.transparent,
+            borderRadius: BorderRadius.circular(6),
+          ),
           child: CommonText.bodyLarge(
             widget.title,
             fontWeight: FontWeight.w700,
-            color: isHovered
-                ? Color(0xFF00A0DC) // TODO from colorScheme
-                : colorScheme.onPrimary,
+            color: isHovered ? colorScheme.primary : colorScheme.onPrimary,
           ),
         ),
       ),

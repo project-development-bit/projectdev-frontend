@@ -28,8 +28,13 @@ void main() {
     late MockSecureStorageService mockSecureStorage;
 
     setUpAll(() {
-      registerFallbackValue(
-          const LoginRequest(email: '', password: '', recaptchaToken: null));
+      registerFallbackValue(const LoginRequest(
+          email: '',
+          password: '',
+          recaptchaToken: null,
+          deviceFingerprint: '',
+          userAgent: '',
+          countryCode: ''));
       registerFallbackValue(const ResendCodeRequest(email: ''));
       registerFallbackValue(const VerifyCodeRequest(email: '', code: ''));
     });
@@ -50,6 +55,9 @@ void main() {
           email: 'user8@gmail.com',
           password: '12345678',
           recaptchaToken: 'test_recaptcha_token', // Add test token
+          countryCode: 'US',
+          userAgent: 'user-agent-string',
+          deviceFingerprint: 'device-123',
         );
 
         loginResponseModel = LoginResponseModel(

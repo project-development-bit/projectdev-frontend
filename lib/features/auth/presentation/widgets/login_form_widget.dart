@@ -1,6 +1,9 @@
+import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
 import 'package:cointiply_app/core/theme/app_colors.dart';
 import 'package:cointiply_app/core/widgets/cloudflare_turnstille_widgte.dart';
 import 'package:cointiply_app/core/providers/turnstile_provider.dart';
+import 'package:cointiply_app/features/auth/presentation/widgets/remember_me_widget.dart';
+import 'package:cointiply_app/features/auth/presentation/providers/ip_country_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/common/common_textfield.dart';
@@ -59,6 +62,7 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
     // Load saved credentials after the first frame
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadSavedCredentials();
+      ref.read(getIpCountryNotifierProvider.notifier).detectCountry();
       _emailController.addListener(_handleAutoFillBehavior);
       _passwordController.addListener(_handleAutoFillBehavior);
     });
@@ -179,10 +183,12 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
 
       // Reset previous states
       authActions.resetAllStates();
+      final ipState = ref.read(getIpCountryNotifierProvider);
 
       await authActions.login(
           email: _emailController.text.trim(),
           password: _passwordController.text.trim(),
+          countryCode: ipState.country?.code ?? "Unknown",
           onSuccess: () async {
             // Save credentials if remember me is checked
             await _saveCredentialsIfNeeded();
@@ -245,7 +251,6 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context);
     final isLoading = ref.watch(isAnyAuthLoadingProvider);
-
     return AutofillGroup(
       child: Form(
         key: _formKey,
@@ -253,8 +258,17 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisSize: MainAxisSize.min,
           children: [
+            CommonText.headlineLarge(
+              context.translate('sign_in'),
+              fontWeight: FontWeight.w700,
+              color: context.onSurface,
+              textAlign: TextAlign.center,
+            ),
+
+            const SizedBox(height: 32),
             // Email Field
             CommonTextField(
+              fillColor: Color(0xFF1A1A1A),
               key: const ValueKey('emailField'),
               controller: _emailController,
               focusNode: _emailFocusNode,
@@ -276,6 +290,7 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
 
             // Password Field
             CommonTextField(
+              fillColor: Color(0xFF1A1A1A),
               key: const ValueKey('passwordField'),
               controller: _passwordController,
               focusNode: _passwordFocusNode,
@@ -295,85 +310,31 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
               enableSuggestions: false,
               autofillHints: const [AutofillHints.password],
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 24),
 
             // Remember Me & Forgot Password Row
             if (widget.showRememberMe || widget.onForgotPassword != null)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  if (widget.showRememberMe)
-                    Row(
-                      children: [
-                        Checkbox(
-                          value: _rememberMe,
-                          onChanged: (value) async {
-                            setState(() {
-                              _rememberMe = value ?? false;
-                            });
-
-                            // If unchecked, clear saved credentials immediately
-                            if (!_rememberMe) {
-                              try {
-                                final secureStorage =
-                                    ref.read(secureStorageServiceProvider);
-                                await secureStorage
-                                    .clearRememberMeCredentials();
-                                debugPrint(
-                                    '✅ Remember me unchecked - credentials cleared');
-                              } catch (e) {
-                                debugPrint(
-                                    '⚠️ Failed to clear credentials on uncheck: $e');
-                              }
-                            }
-                          },
-                        ),
-                        CommonText.bodyMedium(
-                          localizations?.translate('remember_me') ??
-                              'Remember me',
-                          color: context.onSurfaceVariant,
-                        ),
-                      ],
-                    )
-                  else
-                    const SizedBox.shrink(),
-                  if (widget.onForgotPassword != null)
-                    TextButton(
-                      onPressed: _handleForgotPassword,
-                      child: CommonText.bodyMedium(
-                        localizations?.translate('forgot_password') ??
-                            'Forgot Password?',
-                        color: context.primary,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    )
-                  else
-                    const SizedBox.shrink(),
-                ],
-              ),
+              _buildRememberForgotRow(context),
 
             const SizedBox(height: 24),
 
             // Cloudflare Turnstile Security Widget
             IgnorePointer(
               ignoring: true,
-              child: CloudflareTurnstileWidget(),
+              child: CloudflareTurnstileWidget(debugMode: false),
             ),
 
             const SizedBox(height: 24),
 
             // Login Button
-            CommonButton(
-              text: localizations?.translate('sign_in') ?? 'Sign In',
-              onPressed: isLoading ? null : _handleLogin,
-              backgroundColor: isLoading
-                  ? context.primary.withValues(alpha: 0.5)
-                  : context.primary,
-              textColor: context.onPrimary,
+            CustomUnderLineButtonWidget(
+              title: localizations?.translate('sign_in') ?? 'Sign In',
+              onTap: isLoading ? () {} : _handleLogin,
               height: 56,
               borderRadius: 12,
               isLoading: isLoading,
-              fontSize: context.titleMedium?.fontSize,
+              isActive: !isLoading,
+              fontSize: 14,
             ),
 
             // Social Login Section
@@ -481,5 +442,52 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
         ),
       ),
     );
+  }
+
+  Widget _buildRememberForgotRow(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
+    final rememberMeWidget = widget.showRememberMe
+        ? RememberMeWidget(
+            value: _rememberMe,
+            label: localizations?.translate('remember_me') ?? "Remember me",
+            onChanged: (checked) async {
+              setState(() => _rememberMe = checked);
+
+              if (!checked) {
+                final secureStorage = ref.read(secureStorageServiceProvider);
+                await secureStorage.clearRememberMeCredentials();
+              }
+            },
+          )
+        : const SizedBox.shrink();
+
+    final forgotPasswordWidget = widget.onForgotPassword != null
+        ? TextButton(
+            onPressed: _handleForgotPassword,
+            child: CommonText.bodyMedium(
+              localizations?.translate('forgot_password') ?? 'Forgot Password?',
+              overflow: TextOverflow.ellipsis,
+              color: context.primary,
+              fontWeight: FontWeight.w500,
+            ),
+          )
+        : const SizedBox.shrink();
+
+    return context.screenWidth < 400
+        ? Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              rememberMeWidget,
+              const SizedBox(height: 8),
+              forgotPasswordWidget,
+            ],
+          )
+        : Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              rememberMeWidget,
+              forgotPasswordWidget,
+            ],
+          );
   }
 }

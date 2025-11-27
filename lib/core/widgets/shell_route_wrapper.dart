@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/common/footer/mobile_bottom_nav.dart';
 import 'package:cointiply_app/core/common/header/giga_faucet_header.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:cointiply_app/core/theme/app_colors.dart';
@@ -20,10 +21,9 @@ class ShellRouteWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = context.isMobile;
-    final isTablet = context.isTablet;
+    final screenWidth = context.screenWidth;
     return Scaffold(
-      drawer: isMobile || isTablet ? const MobileDrawer() : null,
+      drawer: screenWidth < 900 ? const MobileDrawer() : null,
       body: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return [
@@ -32,12 +32,11 @@ class ShellRouteWrapper extends StatelessWidget {
               floating: true,
               pinned: false,
               snap: true,
-              backgroundColor: context.surface.withAlpha(242), // 0.95 * 255
+              backgroundColor: context.surface.withAlpha(242),
               surfaceTintColor: AppColors.transparent,
               elevation: 0,
               scrolledUnderElevation: 1,
-              automaticallyImplyLeading:
-                  MediaQuery.of(context).size.width < 768,
+              automaticallyImplyLeading: false,
               flexibleSpace: FlexibleSpaceBar(
                 background: Container(
                   alignment: Alignment.center,
@@ -60,9 +59,11 @@ class ShellRouteWrapper extends StatelessWidget {
         },
         body: child,
       ),
+      bottomNavigationBar: MobileBottomNav(),
       floatingActionButton: Consumer(builder: (context, ref, child) {
         final isChatOpen = ref.watch(rightChatOverlayProvider);
-        if (isChatOpen) {
+
+        if (isChatOpen || context.isMobile) {
           return const SizedBox.shrink();
         }
         return GestureDetector(

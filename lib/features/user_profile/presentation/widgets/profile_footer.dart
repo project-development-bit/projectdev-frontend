@@ -42,11 +42,11 @@ class ProfileFooter extends ConsumerWidget {
                           title: localizations?.translate("footer_support") ??
                               "Support"),
                       _FooterLink(
-                          onPressed: () => context.showTerms(ref),
+                          onPressed: () => context.showTerms(),
                           title: localizations?.translate("terms_of_service") ??
                               "Terms of Service"),
                       _FooterLink(
-                          onPressed: () => context.showPrivacy(ref),
+                          onPressed: () => context.showPrivacy(),
                           title: localizations?.translate("privacy_policy") ??
                               "Privacy Policy"),
                     ],
@@ -73,12 +73,12 @@ class ProfileFooter extends ConsumerWidget {
                               "Support"),
                       const SizedBox(width: 16),
                       _FooterLink(
-                          onPressed: () => context.showTerms(ref),
+                          onPressed: () => context.showTerms(),
                           title: localizations?.translate("terms_of_service") ??
                               "Terms of Service"),
                       const SizedBox(width: 16),
                       _FooterLink(
-                          onPressed: () => context.showPrivacy(ref),
+                          onPressed: () => context.showPrivacy(),
                           title: localizations?.translate("privacy_policy") ??
                               "Privacy Policy"),
                     ],
