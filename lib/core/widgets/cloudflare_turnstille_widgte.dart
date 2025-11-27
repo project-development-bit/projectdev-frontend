@@ -376,9 +376,10 @@ class _CloudflareTurnstileWidgetState
               child: CircularProgressIndicator(strokeWidth: 2),
             ),
             const SizedBox(width: 8),
-            CommonText.bodySmall(
+            CommonText.bodyMedium(
               'Verifying security challenge...',
               color: context.onSurfaceVariant,
+              fontWeight: FontWeight.w500,
             ),
           ],
         );
@@ -388,7 +389,7 @@ class _CloudflareTurnstileWidgetState
           children: [
             const Icon(Icons.check_circle, size: 16, color: AppColors.success),
             const SizedBox(width: 8),
-            CommonText.bodySmall(
+            CommonText.bodyMedium(
               'Security verification successful',
               color: AppColors.success,
               fontWeight: FontWeight.w500,

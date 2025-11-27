@@ -1,4 +1,5 @@
 import 'package:cointiply_app/core/core.dart';
+import 'package:cointiply_app/features/auth/presentation/widgets/onboarding_background.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pinput/pinput.dart';
@@ -157,148 +158,152 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
       color: colorScheme.surface.withAlpha(128),
     );
 
-    // ==========================================================================
+    return OnboardingBackground(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const SizedBox(height: 23.5),
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back,
-              color: Theme.of(context).colorScheme.onSurface),
-          onPressed: () => GoRouterExtension(context).pop(),
-        ),
-        actions: const [
-          LocaleSwitchWidget(),
-          SizedBox(width: 16),
-        ],
-      ),
-      body: SafeArea(
-        child: ResponsiveContainer(
-          maxWidth: context.isMobile ? null : 400,
-          padding: EdgeInsets.symmetric(
-            horizontal: context.isMobile ? 24 : 32,
-            vertical: 24,
+          // Icon
+          Container(
+            width: context.isMobile ? 70 : 80,
+            height: context.isMobile ? 70 : 80,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primary.withAlpha(26),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              Icons.email_outlined,
+              size: context.isMobile ? 35 : 40,
+              color: Theme.of(context).colorScheme.primary,
+            ),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+
+          const SizedBox(height: 24),
+
+          // Title
+          CommonText.headlineMedium(
+            localizations?.translate('verify_email') ?? 'Verify Your Email',
+            fontWeight: FontWeight.bold,
+            color: Theme.of(context).colorScheme.onSurface,
+            textAlign: TextAlign.center,
+          ),
+
+          const SizedBox(height: 16),
+
+          // Description
+          CommonText.bodyLarge(
+            localizations?.translate('verification_description') ??
+                'We have sent a 4-digit verification code to',
+            color: Theme.of(context).colorScheme.onSurface.withAlpha(179),
+            textAlign: TextAlign.center,
+          ),
+
+          const SizedBox(height: 8),
+
+          // Email text
+          CommonText.bodyLarge(
+            widget.email,
+            fontWeight: FontWeight.w600,
+            color: context.primary,
+            textAlign: TextAlign.center,
+          ),
+
+          const SizedBox(height: 32),
+
+          // === PIN INPUT ====================================================
+          Pinput(
+            controller: _pinController,
+            enabled: !isLoading,
+            length: 4,
+            defaultPinTheme: defaultPinTheme,
+            focusedPinTheme: focusedPinTheme,
+            disabledPinTheme: disabledPinTheme,
+            onCompleted: (value) => _verifyCode(value),
+          ),
+          // ==================================================================
+
+          const SizedBox(height: 24),
+
+          if (verificationState is VerificationLoading)
+            const CircularProgressIndicator()
+          else if (verificationState is VerificationError)
+            Column(
+              children: [
+                Icon(
+                  Icons.error_outline,
+                  color: Theme.of(context).colorScheme.error,
+                  size: 24,
+                ),
+                const SizedBox(height: 8),
+                CommonText.bodyMedium(
+                  'Please try again',
+                  color: colorScheme.error,
+                ),
+              ],
+            ),
+
+          // const Spacer(),
+
+          // Resend text
+          Column(
             children: [
-              const SizedBox(height: 32),
-
-              // Icon
-              Container(
-                width: context.isMobile ? 70 : 80,
-                height: context.isMobile ? 70 : 80,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary.withAlpha(26),
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  Icons.email_outlined,
-                  size: context.isMobile ? 35 : 40,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
+              CommonText.bodyMedium(
+                localizations?.translate('didnt_receive_code') ??
+                    "Didn't receive the code?",
+                color: context.onSurface.withAlpha(179), // 0.7 * 255 = 179
               ),
-
-              const SizedBox(height: 24),
-
-              // Title
-              CommonText.headlineMedium(
-                localizations?.translate('verify_email') ?? 'Verify Your Email',
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).colorScheme.onSurface,
-                textAlign: TextAlign.center,
-              ),
-
-              const SizedBox(height: 16),
-
-              // Description
-              CommonText.bodyLarge(
-                localizations?.translate('verification_description') ??
-                    'We have sent a 4-digit verification code to',
-                color: Theme.of(context).colorScheme.onSurface.withAlpha(179),
-                textAlign: TextAlign.center,
-              ),
-
               const SizedBox(height: 8),
-
-              // Email text
-              CommonText.bodyLarge(
-                widget.email,
-                fontWeight: FontWeight.w600,
-                color: context.primary,
-                textAlign: TextAlign.center,
-              ),
-
-              const SizedBox(height: 32),
-
-              // === PIN INPUT ====================================================
-              Pinput(
-                controller: _pinController,
-                enabled: !isLoading,
-                length: 4,
-                defaultPinTheme: defaultPinTheme,
-                focusedPinTheme: focusedPinTheme,
-                disabledPinTheme: disabledPinTheme,
-                onCompleted: (value) => _verifyCode(value),
-              ),
-              // ==================================================================
-
-              const SizedBox(height: 24),
-
-              if (verificationState is VerificationLoading)
-                const CircularProgressIndicator()
-              else if (verificationState is VerificationError)
-                Column(
-                  children: [
-                    Icon(
-                      Icons.error_outline,
-                      color: Theme.of(context).colorScheme.error,
-                      size: 24,
-                    ),
-                    const SizedBox(height: 8),
-                    CommonText.bodyMedium(
-                      'Please try again',
-                      color: colorScheme.error,
-                    ),
-                  ],
+              TextButton(
+                onPressed:
+                    (verificationState is VerificationLoading || !canResend)
+                        ? null
+                        : _resendCode,
+                child: CommonText.bodyMedium(
+                  canResend
+                      ? (localizations?.translate('resend_code') ??
+                          'Resend Code')
+                      : '${localizations?.translate('resend_in') ?? 'Resend in'} ${countdown}s',
+                  color: canResend
+                      ? context.primary
+                      : context.onSurface.withAlpha(128), // 0.5 * 255 = 128
+                  fontWeight: FontWeight.w600,
                 ),
-
-              const Spacer(),
-
-              // Resend text
-              Column(
-                children: [
-                  CommonText.bodyMedium(
-                    localizations?.translate('didnt_receive_code') ??
-                        "Didn't receive the code?",
-                    color: context.onSurface.withAlpha(179), // 0.7 * 255 = 179
-                  ),
-                  const SizedBox(height: 8),
-                  TextButton(
-                    onPressed:
-                        (verificationState is VerificationLoading || !canResend)
-                            ? null
-                            : _resendCode,
-                    child: CommonText.bodyMedium(
-                      canResend
-                          ? (localizations?.translate('resend_code') ??
-                              'Resend Code')
-                          : '${localizations?.translate('resend_in') ?? 'Resend in'} ${countdown}s',
-                      color: canResend
-                          ? context.primary
-                          : context.onSurface.withAlpha(128), // 0.5 * 255 = 128
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
               ),
-
-              const SizedBox(height: 32),
             ],
           ),
-        ),
+
+          const SizedBox(height: 32),
+        ],
       ),
     );
+
+    // ==========================================================================
+
+    // return Scaffold(
+    //   appBar: AppBar(
+    //     backgroundColor: AppColors.transparent,
+    //     elevation: 0,
+    //     leading: IconButton(
+    //       icon: Icon(Icons.arrow_back,
+    //           color: Theme.of(context).colorScheme.onSurface),
+    //       onPressed: () => GoRouterExtension(context).pop(),
+    //     ),
+    //     actions: const [
+    //       LocaleSwitchWidget(),
+    //       SizedBox(width: 16),
+    //     ],
+    //   ),
+    //   body: SafeArea(
+    //     child: ResponsiveContainer(
+    //       maxWidth: context.isMobile ? null : 400,
+    //       padding: EdgeInsets.symmetric(
+    //         horizontal: context.isMobile ? 24 : 32,
+    //         vertical: 24,
+    //       ),
+    //       child:
+    //     ),
+    //   ),
+    // );
   }
 }
