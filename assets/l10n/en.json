@@ -542,6 +542,8 @@
   "reward_progress_percent_symbol": "%",
   "reward_next_level_label": "XP points to next level",
   "reward_level_label": "Lvl",
+  "select_country_title": "Select your country",
+  "country_label": "Country",
   "manage_profile_tab_profile": "My Profile",
   "manage_profile_tab_security": "Security",
   "manage_profile_tab_settings": "Settings",

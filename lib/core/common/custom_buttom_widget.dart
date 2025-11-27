@@ -11,6 +11,9 @@ class CustomUnderLineButtonWidget extends StatelessWidget {
   final double? width;
   final double? fontSize;
   final FontWeight? fontWeight;
+  final Color? fontColor;
+  final Color? borderColor;
+  final Gradient? gradient;
   const CustomUnderLineButtonWidget({
     super.key,
     required this.title,
@@ -21,6 +24,9 @@ class CustomUnderLineButtonWidget extends StatelessWidget {
     this.width,
     this.fontSize,
     this.fontWeight,
+    this.fontColor,
+    this.borderColor,
+    this.gradient,
   });
 
   @override
@@ -36,23 +42,25 @@ class CustomUnderLineButtonWidget extends StatelessWidget {
               horizontal: 17,
             ),
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              if (isActive)
-                Color(0xFFFFCC02)
-              else
-                Color(0xFF333333), //TODO use from theme
-              if (isActive)
-                Color(0xFFFFCC02)
-              else
-                Color(0xFF333333), //TODO use from theme
-            ],
-          ),
+          gradient: gradient ??
+              LinearGradient(
+                colors: [
+                  if (isActive)
+                    Color(0xFFFFCC02)
+                  else
+                    Color(0xFF333333), //TODO use from theme
+                  if (isActive)
+                    Color(0xFFFFCC02)
+                  else
+                    Color(0xFF333333), //TODO use from theme
+                ],
+              ),
           borderRadius: BorderRadius.circular(12),
           border: Border(
             bottom: BorderSide(
               // TODO use from theme
-              color: isActive ? Color(0xFFB28F0C) : Color(0xFF262626),
+              color: borderColor ??
+                  (isActive ? Color(0xFFB28F0C) : Color(0xFF262626)),
               width: 5,
             ),
           ),
@@ -62,9 +70,10 @@ class CustomUnderLineButtonWidget extends StatelessWidget {
             title,
             fontSize: fontSize ?? 18,
             fontWeight: fontWeight ?? FontWeight.w700,
-            color: isActive
-                ? Color(0xFF333333) //TODO use from theme
-                : Color(0xFF98989A), //TODO use from theme
+            color: fontColor ??
+                (isActive
+                    ? Color(0xFF333333) //TODO use from theme
+                    : Color(0xFF98989A)), //TODO use from theme
           ),
         ),
       ),

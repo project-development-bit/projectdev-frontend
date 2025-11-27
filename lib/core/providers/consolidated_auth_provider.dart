@@ -226,6 +226,7 @@ class AuthActions {
   Future<void> login({
     required String email,
     required String password,
+    required String countryCode,
     VoidCallback? onSuccess,
     Function(String)? onError,
   }) async {
@@ -233,6 +234,7 @@ class AuthActions {
     await loginNotifier.login(
         email: email,
         password: password,
+        countryCode: countryCode,
         onError: onError,
         onSuccess: onSuccess);
   }
@@ -249,12 +251,14 @@ class AuthActions {
     required String password,
     required String confirmPassword,
     required String name,
+    required String countryCode,
     dynamic role, // UserRole - made dynamic to avoid import issues
     VoidCallback? onSuccess,
     Function(String)? onError,
   }) async {
     final registerNotifier = _ref.read(registerNotifierProvider.notifier);
     await registerNotifier.register(
+      countryCode: countryCode,
       email: email,
       password: password,
       confirmPassword: confirmPassword,

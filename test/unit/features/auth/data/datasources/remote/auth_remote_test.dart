@@ -42,6 +42,8 @@ void main() {
           password: 'password123',
           confirmPassword: 'password123',
           role: UserRole.normalUser,
+          deviceId: 'device-123',
+          userAgent: 'user-agent-string',
         );
       });
 
@@ -340,6 +342,8 @@ void main() {
           password: 'adminpass',
           confirmPassword: 'adminpass',
           role: UserRole.admin,
+          deviceId: 'device-456',
+          userAgent: 'user-agent-string',
         );
 
         final expectedData = {
@@ -429,6 +433,9 @@ void main() {
           email: 'user8@gmail.com',
           password: '12345678',
           recaptchaToken: 'test_recaptcha_token', // Add test token
+          countryCode: 'US',
+          userAgent: 'user-agent-string',
+          deviceFingerprint: 'device-123',
         );
       });
 

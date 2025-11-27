@@ -7,18 +7,27 @@ class RegisterRequest {
   final String confirmPassword;
   final UserRole role;
   final String? recaptchaToken;
+  final String? countryCode;
+  late final String userAgent;
+  late final String deviceId;
 
   RegisterRequest({
     required this.name,
     required this.email,
     required this.password,
     required this.confirmPassword,
+    required this.userAgent,
+    required this.deviceId,
+    this.countryCode,
     this.role = UserRole.normalUser,
     this.recaptchaToken,
   });
 
-  Map<String, dynamic> toJson() {
+  Future<Map<String, dynamic>> toJson() async {
     return {
+      'country_code': countryCode,
+      'userAgent': userAgent,
+      'device_fingerprint': deviceId,
       "name": name,
       "email": email,
       "password": password,
@@ -30,6 +39,9 @@ class RegisterRequest {
 
   factory RegisterRequest.fromJson(Map<String, dynamic> json) {
     return RegisterRequest(
+      userAgent: json['userAgent'] ?? '',
+      deviceId: json['device_fingerprint'] ?? '',
+      countryCode: json['country_code'] ?? '',
       name: json['name'] ?? '',
       email: json['email'] ?? '',
       password: json['password'] ?? '',
@@ -46,8 +58,12 @@ class RegisterRequest {
     String? confirmPassword,
     UserRole? role,
     String? recaptchaToken,
+    String? userAgent,
+    String? deviceId,
   }) {
     return RegisterRequest(
+      userAgent: userAgent ?? this.userAgent,
+      deviceId: deviceId ?? this.deviceId,
       name: name ?? this.name,
       email: email ?? this.email,
       password: password ?? this.password,
