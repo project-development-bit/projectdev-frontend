@@ -14,8 +14,8 @@ class _CloseSquareButtonState extends State<CloseSquareButton> {
 
   @override
   Widget build(BuildContext context) {
-    const Color normalColor = Color(0xFFF4C236);
-    const Color hoverColor = Color(0xFFFFE27A);
+    const Color normalColor = Color(0xFFB28F0C);
+    const Color hoverColor = Color(0xFFFFD530);
 
     return MouseRegion(
       onEnter: (_) => setState(() => isHover = true),

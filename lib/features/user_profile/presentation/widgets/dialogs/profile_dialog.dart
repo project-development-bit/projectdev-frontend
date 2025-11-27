@@ -84,6 +84,7 @@ class _ProfileTabsState extends State<ProfileTabs> {
             ? Column(
                 children: [
                   CustomButtonWidget(
+                    isOutlined: true,
                     title: context.translate('profile_statistics'),
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
@@ -95,6 +96,7 @@ class _ProfileTabsState extends State<ProfileTabs> {
                   ),
                   const SizedBox(height: 8),
                   CustomButtonWidget(
+                    isOutlined: true,
                     title: context.translate('profile_coins_earned_history'),
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
@@ -110,6 +112,7 @@ class _ProfileTabsState extends State<ProfileTabs> {
                 children: [
                   Expanded(
                     child: CustomButtonWidget(
+                      isOutlined: true,
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
                       title: context.translate('profile_statistics'),
@@ -123,6 +126,7 @@ class _ProfileTabsState extends State<ProfileTabs> {
                   const SizedBox(width: 16),
                   Expanded(
                     child: CustomButtonWidget(
+                      isOutlined: true,
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
                       title: context.translate('profile_coins_earned_history'),

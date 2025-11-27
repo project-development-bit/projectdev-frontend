@@ -546,6 +546,8 @@
   "nav_wallet": "Wallet",
   "nav_account": "Account",
   "nav_chat": "Chat",
+  "select_country_title": "Select your country",
+  "country_label": "Country",
   "manage_profile_tab_profile": "My Profile",
   "manage_profile_tab_security": "Security",
   "manage_profile_tab_settings": "Settings",

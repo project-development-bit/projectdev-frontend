@@ -545,6 +545,8 @@
   "nav_wallet": "ပိုက်ဆံအိတ်",
   "nav_account": "အကောင့်",
   "nav_chat": "စာရင်း",
+  "select_country_title": "နိုင်ငံကို ရွေးချယ်ပါ",
+  "country_label": "နိုင်ငံ",
   "manage_profile_tab_profile": "ကိုယ်ရေးအချက်အလက်",
   "manage_profile_tab_security": "လုံခြုံရေး",
   "manage_profile_tab_settings": "အပြင်အဆင်များ",

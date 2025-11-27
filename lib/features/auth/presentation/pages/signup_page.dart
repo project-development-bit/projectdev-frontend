@@ -1,4 +1,6 @@
 import 'package:cointiply_app/core/theme/app_colors.dart';
+import 'package:cointiply_app/features/auth/presentation/providers/ip_country_provider.dart';
+import 'package:cointiply_app/features/auth/presentation/widgets/country_selector_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/common/common_textfield.dart';
@@ -36,6 +38,9 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(getIpCountryNotifierProvider.notifier).detectCountry();
+    });
 
     // Watch register state for navigation and error handling
     ref.listenManual<RegisterState>(registerNotifierProvider, (previous, next) {
@@ -134,6 +139,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
       name: _nameController.text.trim(),
       email: _emailController.text.trim(),
       password: _passwordController.text,
+      countryCode: ref.read(selectedCountryProvider).code,
       confirmPassword: _confirmPasswordController.text,
       role: UserRole.normalUser, // Default to normal user
       onSuccess: () {
@@ -242,6 +248,9 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                     onSubmitted: (_) => _passwordFocusNode.requestFocus(),
                   ),
 
+                  const SizedBox(height: 20),
+
+                  CountrySelectorField(),
                   const SizedBox(height: 20),
 
                   // Password Field
