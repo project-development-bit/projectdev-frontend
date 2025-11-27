@@ -163,7 +163,6 @@ class _VerificationFormWidgetState
       children: [
         // Icon
         Container(
-          margin: EdgeInsets.only(top: 21.5),
           width: 100,
           height: 100,
           decoration: BoxDecoration(
@@ -268,8 +267,6 @@ class _VerificationFormWidgetState
             ),
           ],
         ),
-
-        const SizedBox(height: 32),
       ],
     );
   }

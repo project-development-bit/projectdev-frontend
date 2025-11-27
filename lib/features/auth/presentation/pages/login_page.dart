@@ -97,6 +97,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         'Testing direct translation for "welcome_back": ${translate('welcome_back')}');
 
     return OnboardingBackground(
+      childPadding: EdgeInsets.symmetric(
+          vertical: context.isMobile ? 30 : 34,
+          horizontal: context.isMobile ? 16 : 43),
       child: Column(
         children: [
           LoginFormWidget(

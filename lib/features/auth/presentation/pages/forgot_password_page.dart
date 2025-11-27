@@ -84,12 +84,14 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
     final emailSent = forgotPasswordState is ForgotPasswordSuccess;
 
     return OnboardingBackground(
+      childPadding: EdgeInsets.symmetric(
+          vertical: context.isMobile ? 39 : 51,
+          horizontal: context.isMobile ? 16 : 41),
       child: Form(
         key: _formKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const SizedBox(height: 17),
             // Title
             CommonText.headlineLarge(
               localizations?.translate('forgot_password') ?? 'Forgot Password?',
@@ -229,8 +231,6 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
                 ),
               ],
             ),
-
-            const SizedBox(height: 50),
           ],
         ),
       ),

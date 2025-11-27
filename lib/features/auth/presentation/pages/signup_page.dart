@@ -157,13 +157,16 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
     final isLoading = ref.watch(isRegisterLoadingProvider);
 
     return OnboardingBackground(
+      childPadding: EdgeInsets.symmetric(
+          vertical: context.isMobile ? 35 : 38.5,
+          horizontal: context.isMobile ? 17 : 43),
       child: Form(
         key: _formKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             CommonText.headlineLarge(
-              localizations?.translate('create_account') ?? 'Create Account',
+              localizations?.translate('create_account') ?? 'Create Achhhcount',
               fontWeight: FontWeight.w700,
               color: colorScheme.onSurface,
               textAlign: TextAlign.center,
@@ -425,8 +428,6 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                 ),
               ],
             ),
-
-            const SizedBox(height: 4.5),
           ],
         ),
       ),
