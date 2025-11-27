@@ -6,8 +6,8 @@ import '../../data/models/forgot_password_response.dart';
 import '../../../../core/error/failures.dart';
 
 /// Provider for forgot password functionality
-final forgotPasswordProvider =
-    StateNotifierProvider<ForgotPasswordNotifier, ForgotPasswordState>(
+final forgotPasswordProvider = StateNotifierProvider.autoDispose<
+    ForgotPasswordNotifier, ForgotPasswordState>(
   (ref) => ForgotPasswordNotifier(ref.watch(authRepositoryProvider)),
 );
 
