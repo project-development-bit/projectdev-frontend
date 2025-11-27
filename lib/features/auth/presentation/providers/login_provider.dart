@@ -1,4 +1,5 @@
 import 'package:cointiply_app/core/error/error_model.dart';
+import 'package:cointiply_app/core/services/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/services/database_service.dart';
@@ -56,14 +57,16 @@ class LoginError extends LoginState {
 
 /// StateNotifier for managing login operations
 class LoginNotifier extends StateNotifier<LoginState> {
-  LoginNotifier(this._ref) : super(const LoginInitial());
+  LoginNotifier(this._ref, this._deviceInfo) : super(const LoginInitial());
 
   final Ref _ref;
+  final DeviceInfo _deviceInfo;
 
   /// Login with email and password
   Future<void> login({
     required String email,
     required String password,
+    required String countryCode,
     VoidCallback? onSuccess,
     Function(String)? onError,
   }) async {
@@ -80,7 +83,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
 
       debugPrint('🔐 Checking Turnstile verification...');
       final turnstileState = _ref.read(turnstileNotifierProvider);
-      
+
       if (turnstileState is TurnstileSuccess) {
         turnstileToken = turnstileState.token;
         debugPrint('✅ Turnstile token obtained successfully');
@@ -97,12 +100,13 @@ class LoginNotifier extends StateNotifier<LoginState> {
       final loginRequest = LoginRequest(
         email: email,
         password: password,
-        recaptchaToken:
-            turnstileToken, // Using recaptchaToken field for Turnstile token
+        countryCode: countryCode,
+        recaptchaToken: turnstileToken,
+        deviceFingerprint: await _deviceInfo.getUniqueIdentifier() ?? '',
+        userAgent: await _deviceInfo.getUserAgent(),
       );
 
-      debugPrint(
-          '📤 Sending login request with Turnstile token');
+      debugPrint('📤 Sending login request with Turnstile token');
 
       final loginUseCase = _ref.read(loginUseCaseProvider);
 
@@ -130,7 +134,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
         },
         (loginResponse) async {
           debugPrint('✅ Login successful for: $email');
-          
+
           // Check if this is a 2FA required response (user and tokens are null)
           if (loginResponse.user == null || loginResponse.tokens == null) {
             debugPrint('🔐 2FA required - userId: ${loginResponse.userId}');
@@ -143,7 +147,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
             onSuccess?.call();
             return;
           }
-          
+
           debugPrint(
               '✅ Access token length: ${loginResponse.tokens!.accessToken.length}');
           debugPrint(
@@ -251,7 +255,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
 /// Provider for login state management
 final loginNotifierProvider =
     StateNotifierProvider<LoginNotifier, LoginState>((ref) {
-  return LoginNotifier(ref);
+  return LoginNotifier(ref, ref.read(deviceInfoProvider));
 });
 
 /// Provider for checking if login is in progress

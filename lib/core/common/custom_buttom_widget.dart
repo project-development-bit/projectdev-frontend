@@ -17,6 +17,9 @@ class CustomUnderLineButtonWidget extends StatefulWidget {
   final FontWeight? fontWeight;
   final double? borderRadius;
 
+  final Color? fontColor;
+  final Color? borderColor;
+  final Gradient? gradient;
   const CustomUnderLineButtonWidget({
     super.key,
     required this.title,
@@ -31,6 +34,9 @@ class CustomUnderLineButtonWidget extends StatefulWidget {
     this.fontSize,
     this.fontWeight,
     this.borderRadius,
+    this.fontColor,
+    this.borderColor,
+    this.gradient,
   });
 
   @override
@@ -69,7 +75,6 @@ class _CustomUnderLineButtonWidgetState
       shadowColor = disabledShadow;
       finalTextColor = disabledTextColor;
     } else if (_isHovering) {
-      print('hovering');
       bgColor = hoverBg;
       shadowColor = hoverShadow;
       finalTextColor = textColor;

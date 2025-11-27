@@ -35,7 +35,7 @@ void main() {
       interestEnable: 1,
       notificationsEnabled: 1,
       showStatsEnabled: 1,
-      anonymousInContests: 0, 
+      anonymousInContests: 0,
       refreshToken: 'test_refresh_token',
       securityCode: 'test_security_code',
       isBanned: 0,
@@ -68,6 +68,9 @@ void main() {
         email: '',
         password: '',
         recaptchaToken: null,
+        deviceFingerprint: '',
+        userAgent: '',
+        countryCode: '',
       ));
     });
 
@@ -78,6 +81,9 @@ void main() {
           email: testEmail,
           password: testPassword,
           recaptchaToken: testRecaptchaToken,
+          countryCode: '',
+          deviceFingerprint: '',
+          userAgent: '',
         );
 
         // Assert
@@ -92,6 +98,9 @@ void main() {
           email: testEmail,
           password: testPassword,
           recaptchaToken: null,
+          countryCode: '',
+          deviceFingerprint: '',
+          userAgent: '',
         );
 
         // Assert
@@ -100,16 +109,19 @@ void main() {
         expect(request.recaptchaToken, null);
       });
 
-      test('should serialize to JSON with reCAPTCHA token', () {
+      test('should serialize to JSON with reCAPTCHA token', () async {
         // Arrange
         final request = LoginRequest(
           email: testEmail,
           password: testPassword,
           recaptchaToken: testRecaptchaToken,
+          countryCode: '',
+          deviceFingerprint: '',
+          userAgent: '',
         );
 
         // Act
-        final json = request.toJson();
+        final json = await request.toJson();
 
         // Assert
         expect(json['email'], testEmail);
@@ -117,16 +129,19 @@ void main() {
         expect(json['recaptchaToken'], testRecaptchaToken);
       });
 
-      test('should serialize to JSON without reCAPTCHA token', () {
+      test('should serialize to JSON without reCAPTCHA token', () async {
         // Arrange
         final request = LoginRequest(
           email: testEmail,
           password: testPassword,
           recaptchaToken: null,
+          countryCode: '',
+          deviceFingerprint: '',
+          userAgent: '',
         );
 
         // Act
-        final json = request.toJson();
+        final json = await request.toJson();
 
         // Assert
         expect(json['email'], testEmail);
@@ -142,6 +157,9 @@ void main() {
           email: testEmail,
           password: testPassword,
           recaptchaToken: testRecaptchaToken,
+          countryCode: '',
+          deviceFingerprint: '',
+          userAgent: '',
         );
 
         when(() => mockLoginUseCase(any()))
@@ -166,6 +184,9 @@ void main() {
           email: testEmail,
           password: testPassword,
           recaptchaToken: null,
+          countryCode: '',
+          deviceFingerprint: '',
+          userAgent: '',
         );
 
         when(() => mockLoginUseCase(any()))
@@ -185,6 +206,9 @@ void main() {
           email: testEmail,
           password: testPassword,
           recaptchaToken: testRecaptchaToken,
+          countryCode: '',
+          deviceFingerprint: '',
+          userAgent: '',
         );
 
         when(() => mockLoginUseCase(any())).thenAnswer(

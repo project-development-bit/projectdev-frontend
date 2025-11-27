@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/services/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/enum/user_role.dart';
@@ -47,9 +48,11 @@ class RegisterError extends RegisterState {
 
 /// StateNotifier for managing registration operations
 class RegisterNotifier extends StateNotifier<RegisterState> {
-  RegisterNotifier(this._ref) : super(const RegisterInitial());
+  RegisterNotifier(this._ref, this._deviceInfo)
+      : super(const RegisterInitial());
 
   final Ref _ref;
+  final DeviceInfo _deviceInfo;
 
   /// Register a new user
   Future<void> register({
@@ -57,6 +60,7 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
     required String email,
     required String password,
     required String confirmPassword,
+    required String countryCode,
     required UserRole role,
     VoidCallback? onSuccess,
     Function(String)? onError,
@@ -74,16 +78,18 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
 
       debugPrint('🔐 Checking Turnstile verification...');
       final turnstileState = _ref.read(turnstileNotifierProvider);
-      
+
       if (turnstileState is TurnstileSuccess) {
         turnstileToken = turnstileState.token;
         debugPrint('✅ Turnstile token obtained successfully');
       } else {
         debugPrint('❌ Turnstile verification incomplete');
         state = const RegisterError(
-          message: 'Security verification required. Please complete the verification and try again.',
+          message:
+              'Security verification required. Please complete the verification and try again.',
         );
-        onError?.call('Security verification required. Please complete the verification and try again.');
+        onError?.call(
+            'Security verification required. Please complete the verification and try again.');
         return;
       }
 
@@ -92,8 +98,12 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
         email: email,
         password: password,
         confirmPassword: confirmPassword,
+        countryCode: countryCode,
         role: role,
-        recaptchaToken: turnstileToken, // Using recaptchaToken field for Turnstile token
+        recaptchaToken:
+            turnstileToken, // Using recaptchaToken field for Turnstile token
+        userAgent: await _deviceInfo.getUserAgent(),
+        deviceId: await _deviceInfo.getUniqueIdentifier() ?? '',
       );
 
       debugPrint('📤 Sending registration request with Turnstile token');
@@ -142,7 +152,8 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
       debugPrint('🔄 State set to RegisterError (catch block)');
     }
 
-    debugPrint('🔄 Registration process completed. Final state: ${state.runtimeType}');
+    debugPrint(
+        '🔄 Registration process completed. Final state: ${state.runtimeType}');
   }
 
   /// Clear error state
@@ -195,7 +206,7 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
 /// Provider for register state management
 final registerNotifierProvider =
     StateNotifierProvider<RegisterNotifier, RegisterState>((ref) {
-  return RegisterNotifier(ref);
+  return RegisterNotifier(ref, ref.read(deviceInfoProvider));
 });
 
 /// Provider for checking if registration is in progress
