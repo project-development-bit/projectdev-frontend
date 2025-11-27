@@ -5,6 +5,7 @@ import 'package:cointiply_app/features/user_profile/data/models/response/upload_
 import 'package:cointiply_app/features/user_profile/data/models/response/user_update_respons.dart';
 import 'package:cointiply_app/features/user_profile/data/models/response/change_email_response_model.dart';
 import 'package:cointiply_app/features/user_profile/data/models/response/verify_email_change_response_model.dart';
+import 'package:cointiply_app/features/user_profile/data/models/response/change_password_response_model.dart';
 import 'package:file_picker/file_picker.dart';
 
 /// Abstract class for profile remote data source
@@ -33,6 +34,13 @@ abstract class ProfileRemoteDataSource {
   Future<VerifyEmailChangeResponseModel> verifyEmailChange({
     required String email,
     required String code,
+  });
+
+  /// Change user password
+  Future<ChangePasswordResponseModel> changePassword({
+    required String currentPassword,
+    required String newPassword,
+    required String repeatNewPassword,
   });
 
   /// Updates user profile

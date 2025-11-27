@@ -9,6 +9,7 @@ import '../entities/language.dart';
 import '../entities/profile_detail.dart';
 import '../entities/change_email_result.dart';
 import '../entities/verify_email_change_result.dart';
+import '../entities/change_password_result.dart';
 
 /// Abstract repository interface for profile operations
 ///
@@ -56,6 +57,13 @@ abstract class ProfileRepository {
   Future<Either<Failure, VerifyEmailChangeResult>> verifyEmailChange({
     required String email,
     required String code,
+  });
+
+  /// Change user password
+  Future<Either<Failure, ChangePasswordResult>> changePassword({
+    required String currentPassword,
+    required String newPassword,
+    required String repeatNewPassword,
   });
 
 }

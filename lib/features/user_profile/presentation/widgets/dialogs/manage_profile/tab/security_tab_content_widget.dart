@@ -31,7 +31,9 @@ class _SecurityTabContentWidgetState
         _securityMenuItem(
             title: "Change Password",
             btnTitle: "Change Password",
-            onPressed: () {}),
+            onPressed: () {
+              showChangePasswordDialog(context);
+            }),
         _securityMenuItem(
             title: "2FA Authenticator App",
             onPressed: () {

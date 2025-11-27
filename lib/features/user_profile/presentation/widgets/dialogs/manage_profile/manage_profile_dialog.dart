@@ -13,6 +13,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../user_profile_image_widget.dart';
 import 'change_email_dialog.dart';
+import 'change_name_dialog.dart';
+import 'change_password_dialog.dart';
 import 'change_your_country_dialog.dart';
 import 'change_your_language_dialog.dart';
 

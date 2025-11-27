@@ -7,6 +7,7 @@ class ProfileTabContent extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final email = ref.watch(profileCurrentUserProvider)?.email ?? '';
     final account = ref.watch(getProfileNotifierProvider).profile?.account;
+    final name = ref.watch(profileCurrentUserProvider)?.name ?? '';
     // final currentLocale = ref.watch(localeProvider);
     // final country = ref.watch(profileCurrentUserProvider)?.country ?? '';
     final isMobile = context.screenWidth < 600;
@@ -19,6 +20,18 @@ class ProfileTabContent extends ConsumerWidget {
           onPressed: () {
             context.pop();
             showUploadAvatarDialog(context);
+          },
+          isMobile: isMobile,
+        ),
+        _profileTabContentItem(
+          title: "Name",
+          child: CommonText.bodyMedium(
+            name.isNotEmpty ? name : "No name set",
+            fontWeight: FontWeight.w500,
+          ),
+          btnTitle: context.translate("change_your_name"),
+          onPressed: () {
+            showChangeNameDialog(context);
           },
           isMobile: isMobile,
         ),

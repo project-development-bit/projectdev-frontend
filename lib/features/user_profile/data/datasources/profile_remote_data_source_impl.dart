@@ -7,6 +7,7 @@ import 'package:cointiply_app/features/user_profile/data/models/response/upload_
 import 'package:cointiply_app/features/user_profile/data/models/response/user_update_respons.dart';
 import 'package:cointiply_app/features/user_profile/data/models/response/change_email_response_model.dart';
 import 'package:cointiply_app/features/user_profile/data/models/response/verify_email_change_response_model.dart';
+import 'package:cointiply_app/features/user_profile/data/models/response/change_password_response_model.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -208,6 +209,76 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
       debugPrint('❌ Unexpected error verifying email change: $e');
       throw ServerFailure(
           message: 'Unexpected error verifying email change: $e');
+    }
+  }
+
+  @override
+  Future<ChangePasswordResponseModel> changePassword({
+    required String currentPassword,
+    required String newPassword,
+    required String repeatNewPassword,
+  }) async {
+    try {
+      debugPrint('🔒 Changing user password...');
+
+      final body = {
+        'current_password': currentPassword,
+        'new_password': newPassword,
+        'repeat_new_password': repeatNewPassword,
+      };
+
+      final response = await _dio.patch('/users/password', data: body);
+
+      debugPrint('✅ Change password response: ${response.statusCode}');
+
+      if ((response.statusCode ?? 0) >= 200 &&
+          (response.statusCode ?? 0) < 300) {
+        return ChangePasswordResponseModel.fromJson(
+            response.data as Map<String, dynamic>);
+      } else {
+        // If server returned an error status code, try to extract message
+        final message = response.data is Map ? response.data['message'] : null;
+        throw ServerFailure(message: message ?? 'Failed to change password');
+      }
+    } on DioException catch (e) {
+      debugPrint('❌ Change password DioException: ${e.message}');
+      debugPrint('❌ Response status: ${e.response?.statusCode}');
+      debugPrint('❌ Response data: ${e.response?.data}');
+      
+      // Handle validation errors
+      if (e.response?.data != null && e.response?.data is Map) {
+        final responseData = e.response!.data as Map<String, dynamic>;
+        
+        // Check for validation errors in the code.errors array
+        if (responseData['code'] != null && 
+            responseData['code'] is Map &&
+            responseData['code']['errors'] != null) {
+          final errors = responseData['code']['errors'] as List<dynamic>;
+          
+          // Combine all error messages into one text
+          final errorMessages = errors
+              .map((error) => error['msg'] as String?)
+              .where((msg) => msg != null)
+              .join('. ');
+          
+          throw ServerFailure(
+            message: errorMessages.isNotEmpty 
+                ? errorMessages 
+                : responseData['message'] ?? 'Failed to change password',
+          );
+        }
+        
+        // Fallback to general message
+        final message = responseData['message'];
+        throw ServerFailure(message: message ?? 'Failed to change password');
+      }
+      
+      // Generic error
+      final message = e.response?.data?['message'] ?? e.message;
+      throw ServerFailure(message: message ?? 'Unexpected error');
+    } catch (e) {
+      debugPrint('❌ Unexpected error changing password: $e');
+      throw ServerFailure(message: 'Unexpected error changing password: $e');
     }
   }
 

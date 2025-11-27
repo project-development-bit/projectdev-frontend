@@ -15,6 +15,7 @@ import '../../domain/repositories/profile_repository.dart';
 import '../datasources/profile_remote_data_source.dart';
 import '../../domain/entities/change_email_result.dart';
 import '../../domain/entities/verify_email_change_result.dart';
+import '../../domain/entities/change_password_result.dart';
 
 /// Implementation of [ProfileRepository]
 ///
@@ -250,6 +251,48 @@ class ProfileRepositoryImpl implements ProfileRepository {
         message: e.response?.data?['message'] ??
             e.message ??
             'Failed to change email',
+        statusCode: e.response?.statusCode,
+        errorModel: errorModel,
+      ));
+    } catch (e) {
+      debugPrint('❌ Repository: Unexpected error - $e');
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, ChangePasswordResult>> changePassword({
+    required String currentPassword,
+    required String newPassword,
+    required String repeatNewPassword,
+  }) async {
+    try {
+      debugPrint('🔄 Repository: Changing password...');
+      final responseModel = await remoteDataSource.changePassword(
+        currentPassword: currentPassword,
+        newPassword: newPassword,
+        repeatNewPassword: repeatNewPassword,
+      );
+
+      final result = ChangePasswordResult(
+        success: responseModel.success,
+        message: responseModel.message,
+      );
+
+      return Right(result);
+    } on ServerFailure catch (e) {
+      debugPrint('❌ Repository: ServerFailure - ${e.message}');
+      return Left(e);
+    } on DioException catch (e) {
+      debugPrint('❌ Repository: DioException - ${e.message}');
+      ErrorModel? errorModel;
+      if (e.response?.data != null) {
+        errorModel = ErrorModel.fromJson(e.response!.data);
+      }
+      return Left(ServerFailure(
+        message: e.response?.data?['message'] ??
+            e.message ??
+            'Failed to change password',
         statusCode: e.response?.statusCode,
         errorModel: errorModel,
       ));
