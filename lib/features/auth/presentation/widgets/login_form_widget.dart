@@ -3,6 +3,7 @@ import 'package:cointiply_app/core/theme/app_colors.dart';
 import 'package:cointiply_app/core/widgets/cloudflare_turnstille_widgte.dart';
 import 'package:cointiply_app/core/providers/turnstile_provider.dart';
 import 'package:cointiply_app/features/auth/presentation/widgets/remember_me_widget.dart';
+import 'package:cointiply_app/features/auth/presentation/providers/ip_country_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/common/common_textfield.dart';
@@ -61,6 +62,7 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
     // Load saved credentials after the first frame
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadSavedCredentials();
+      ref.read(getIpCountryNotifierProvider.notifier).detectCountry();
       _emailController.addListener(_handleAutoFillBehavior);
       _passwordController.addListener(_handleAutoFillBehavior);
     });
@@ -181,10 +183,12 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
 
       // Reset previous states
       authActions.resetAllStates();
+      final ipState = ref.read(getIpCountryNotifierProvider);
 
       await authActions.login(
           email: _emailController.text.trim(),
           password: _passwordController.text.trim(),
+          countryCode: ipState.country?.code ?? "Unknown",
           onSuccess: () async {
             // Save credentials if remember me is checked
             await _saveCredentialsIfNeeded();

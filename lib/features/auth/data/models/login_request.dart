@@ -5,6 +5,9 @@ class LoginRequest extends Equatable {
   const LoginRequest({
     required this.email,
     required this.password,
+    required this.countryCode,
+    required this.userAgent,
+    required this.deviceFingerprint,
     this.recaptchaToken,
   });
 
@@ -17,9 +20,21 @@ class LoginRequest extends Equatable {
   /// reCAPTCHA token for verification (optional, will be null in debug mode)
   final String? recaptchaToken;
 
+  /// Country code for the user's location
+  final String countryCode;
+
+  // User agent string for the device
+  final String userAgent;
+
+  // Device unique identifier
+  final String deviceFingerprint;
+
   /// Convert to JSON for API request
-  Map<String, dynamic> toJson() {
+  Future<Map<String, dynamic>> toJson() async {
     final json = {
+      'country_code': countryCode,
+      'userAgent': userAgent,
+      'device_fingerprint': deviceFingerprint,
       'email': email,
       'password': password,
     };
@@ -37,7 +52,10 @@ class LoginRequest extends Equatable {
     return LoginRequest(
       email: json['email'] ?? '',
       password: json['password'] ?? '',
+      countryCode: json['country_code'] ?? '',
       recaptchaToken: json['recaptchaToken'],
+      userAgent: json['userAgent'] ?? '',
+      deviceFingerprint: json['device_fingerprint'] ?? '',
     );
   }
 
@@ -46,11 +64,17 @@ class LoginRequest extends Equatable {
     String? email,
     String? password,
     String? recaptchaToken,
+    String? countryCode,
     bool clearRecaptchaToken = false,
+    String? userAgent,
+    String? deviceFingerprint,
   }) {
     return LoginRequest(
+      userAgent: userAgent ?? this.userAgent,
+      deviceFingerprint: deviceFingerprint ?? this.deviceFingerprint,
       email: email ?? this.email,
       password: password ?? this.password,
+      countryCode: countryCode ?? this.countryCode,
       recaptchaToken:
           clearRecaptchaToken ? null : (recaptchaToken ?? this.recaptchaToken),
     );

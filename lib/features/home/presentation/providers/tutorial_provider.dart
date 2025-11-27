@@ -1,3 +1,5 @@
+import 'package:cointiply_app/features/user_profile/data/models/request/user_update_request.dart';
+import 'package:cointiply_app/features/user_profile/presentation/providers/update_profile_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -24,12 +26,13 @@ class TutorialNotifier extends StateNotifier<bool> {
   Future<void> markAsShown() async {
     final prefs = await SharedPreferences.getInstance();
     final userID = prefs.getString('user_id') ?? 'unknown_user';
-    // _ref.read(profileNotifierProvider.notifier).updateProfile(
-    //       UserUpdateRequest(
-    //         id: userID,
-    //         showOnboarding: 0,
-    //       ),
-    //     );
+    final profileNotifier = ref.read(updateProfileProvider.notifier);
+    profileNotifier.updateProfile(
+      UserUpdateRequest(
+        id: userID,
+        showOnboarding: 0,
+      ),
+    );
 
     await prefs.setBool(_tutorialShownKey + userID, true);
     debugPrint(

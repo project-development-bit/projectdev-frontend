@@ -3,33 +3,44 @@ import 'package:flutter/material.dart';
 
 class CustomUnderLineButtonWidget extends StatefulWidget {
   final String title;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   final Color? backgroundColor;
   final Color? textColor;
   final double? height;
   final double? borderRadius;
   final bool isActive;
+  final bool isDisabled;
+  final bool isDark;
+
   final EdgeInsetsGeometry? padding;
   final EdgeInsetsGeometry? margin;
   final double? width;
   final double? fontSize;
   final FontWeight? fontWeight;
 
+  final Color? fontColor;
+  final Color? borderColor;
+  final Gradient? gradient;
   const CustomUnderLineButtonWidget({
     super.key,
     required this.title,
     required this.onTap,
     this.isActive = false,
+    this.isDisabled = false,
+    this.isDark = false,
     this.padding,
     this.margin,
     this.width,
+    this.height,
     this.fontSize,
     this.fontWeight,
     this.backgroundColor,
     this.textColor,
-    this.height,
     this.borderRadius,
+    this.fontColor,
+    this.borderColor,
+    this.gradient,
   });
 
   @override
@@ -43,70 +54,77 @@ class _CustomUnderLineButtonWidgetState
 
   @override
   Widget build(BuildContext context) {
-    final hoverColor = const Color(0xFFB28F0C);
-    final bottomHoverColor =
-        Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.1);
-    final defaultBorderColor = const Color(0xFF262626);
+    const defaultBg = Color(0xFFFFCC02); // Default
+    const defaultShadow = Color(0xFFB29F2C);
+
+    const hoverBg = Color(0xFFFFD530); // Hover
+    const hoverShadow = Color(0xFFC8AA28);
+
+    const activeBg = Color(0xFFE0B702); // Active
+    const activeShadow = Color(0xFFA18F24);
+
+    const disabledBg = Color(0xFFE8DCA6); // Disabled
+    const disabledShadow = Color(0xFFD3C893);
+
+    const textColor = Color(0xFF333333);
+    const disabledTextColor = Color(0xFF8C8C8C);
+
+    final bool isDisabled = widget.isDisabled || widget.onTap == null;
+
+    Color bgColor;
+    Color shadowColor;
+    Color finalTextColor;
+    if (isDisabled) {
+      bgColor = disabledBg;
+      shadowColor = disabledShadow;
+      finalTextColor = disabledTextColor;
+    } else if (_isHovering) {
+      bgColor = hoverBg;
+      shadowColor = hoverShadow;
+      finalTextColor = textColor;
+    } else if (widget.isActive) {
+      bgColor = activeBg;
+      shadowColor = activeShadow;
+      finalTextColor = textColor;
+    } else if (widget.isDark) {
+      bgColor = Color(0xFF333333);
+      shadowColor = Color(0xFF262626);
+      finalTextColor = Color(0xFF98989A);
+    } else {
+      bgColor = defaultBg;
+      shadowColor = defaultShadow;
+      finalTextColor = textColor;
+    }
 
     return MouseRegion(
-      onHover: (_) {
-        setState(() => _isHovering = true);
-      },
-      onEnter: (_) => setState(() => _isHovering = true),
-      onExit: (_) => setState(() => _isHovering = false),
-      cursor: SystemMouseCursors.click,
-      child: Material(
-        // <-- IMPORTANT
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: widget.onTap,
-          hoverColor: Colors.transparent,
-          highlightColor: Colors.transparent,
-          splashColor: Colors.transparent,
-          child: AnimatedContainer(
-            duration: Duration(milliseconds: 120),
-            height: widget.height,
-            width: widget.width,
-            margin: widget.margin,
-            padding: widget.padding ??
-                const EdgeInsets.symmetric(vertical: 12, horizontal: 17),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  _isHovering
-                      ? hoverColor
-                      : widget.isActive
-                          ? const Color(0xFFFFCC02)
-                          : const Color(0xFF333333),
-                  _isHovering
-                      ? hoverColor
-                      : widget.isActive
-                          ? const Color(0xFFFFCC02)
-                          : const Color(0xFF333333),
-                ],
-              ),
-              borderRadius: BorderRadius.circular(widget.borderRadius ?? 12),
-              border: Border(
-                bottom: BorderSide(
-                  color: _isHovering
-                      ? bottomHoverColor
-                      : widget.isActive
-                          ? hoverColor
-                          : defaultBorderColor,
-                  width: 5,
-                ),
+      onEnter: (_) => !isDisabled ? setState(() => _isHovering = true) : null,
+      onExit: (_) => !isDisabled ? setState(() => _isHovering = false) : null,
+      cursor: isDisabled ? SystemMouseCursors.basic : SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: isDisabled ? null : widget.onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 120),
+          height: widget.height ?? 48,
+          width: widget.width,
+          margin: widget.margin,
+          padding: widget.padding ??
+              const EdgeInsets.symmetric(vertical: 12, horizontal: 17),
+          decoration: BoxDecoration(
+            color: bgColor,
+            borderRadius: BorderRadius.circular(widget.borderRadius ?? 12),
+            border: Border(
+              bottom: BorderSide(
+                color: shadowColor,
+                width: 5,
               ),
             ),
-            child: Center(
-              child: CommonText.titleMedium(
-                widget.title,
-                fontSize: widget.fontSize ?? 18,
-                fontWeight: widget.fontWeight ?? FontWeight.w700,
-                color: widget.textColor ??
-                    (widget.isActive
-                        ? const Color(0xFF333333)
-                        : const Color(0xFF98989A)),
-              ),
+          ),
+          child: Center(
+            child: CommonText.titleMedium(
+              widget.title,
+              fontSize: widget.fontSize ?? 18,
+              fontWeight: widget.fontWeight ?? FontWeight.w700,
+              color: finalTextColor,
             ),
           ),
         ),
@@ -115,10 +133,12 @@ class _CustomUnderLineButtonWidgetState
   }
 }
 
-class CustomButtonWidget extends StatelessWidget {
+class CustomButtonWidget extends StatefulWidget {
   final String title;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
   final bool isActive;
+  final bool isDisabled;
+  final bool isOutlined;
   final EdgeInsetsGeometry? padding;
   final EdgeInsetsGeometry? margin;
   final double? width;
@@ -130,6 +150,8 @@ class CustomButtonWidget extends StatelessWidget {
     required this.title,
     required this.onTap,
     this.isActive = false,
+    this.isDisabled = false,
+    this.isOutlined = false,
     this.padding,
     this.margin,
     this.width,
@@ -138,40 +160,94 @@ class CustomButtonWidget extends StatelessWidget {
   });
 
   @override
+  State<CustomButtonWidget> createState() => _CustomButtonWidgetState();
+}
+
+class _CustomButtonWidgetState extends State<CustomButtonWidget> {
+  bool _isHovering = false;
+
+  @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: width,
-        margin: margin,
-        padding: padding ??
-            const EdgeInsets.symmetric(
-              vertical: 12,
-              horizontal: 17,
+    // Solid button colors
+    const defaultBg = Color(0xFFFFCC02);
+    const hoverBg = Color(0xFFFFD530);
+    const activeBg = Color(0xFFE0B702);
+    const disabledBg = Color(0xFFE8DCA6);
+
+    const textColor = Color(0xFF333333);
+    const disabledTextColor = Color(0xFF8C8C8C);
+
+    // Outlined button colors
+    // const outlineColor = Color(0xFFFFCC02);
+    const outlineHoverColor = Color(0xFFFFD530);
+    const outlineDisabledBorder = Color(0xFFD3D3D3);
+
+    final bool isDisabled = widget.isDisabled || widget.onTap == null;
+
+    Color bgColor = Colors.transparent;
+    Color txtColor = textColor;
+    Color borderColor = Colors.transparent;
+
+    if (widget.isOutlined) {
+      if (isDisabled) {
+        borderColor = outlineDisabledBorder;
+        txtColor = disabledTextColor;
+      } else if (widget.isActive) {
+        if (_isHovering) {
+          bgColor = outlineHoverColor;
+        } else {
+          bgColor = activeBg;
+          txtColor = textColor;
+        }
+      } else if (_isHovering) {
+        borderColor = outlineHoverColor;
+        txtColor = outlineHoverColor;
+      } else {
+        borderColor = const Color(0xFF333333);
+        txtColor = const Color(0xFF98989A);
+      }
+    } else {
+      if (isDisabled) {
+        bgColor = disabledBg;
+        txtColor = disabledTextColor;
+      } else if (_isHovering) {
+        bgColor = hoverBg;
+        txtColor = textColor;
+      } else if (widget.isActive) {
+        bgColor = activeBg;
+        txtColor = textColor;
+      } else {
+        bgColor = defaultBg;
+        txtColor = textColor;
+      }
+    }
+
+    return MouseRegion(
+      onEnter: (_) => !isDisabled ? setState(() => _isHovering = true) : null,
+      onExit: (_) => !isDisabled ? setState(() => _isHovering = false) : null,
+      cursor: isDisabled ? SystemMouseCursors.basic : SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: isDisabled ? null : widget.onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 140),
+          width: widget.width,
+          margin: widget.margin,
+          padding: widget.padding ??
+              const EdgeInsets.symmetric(vertical: 12, horizontal: 17),
+          decoration: BoxDecoration(
+            color: bgColor,
+            borderRadius: BorderRadius.circular(12),
+            border: widget.isOutlined
+                ? Border.all(color: borderColor, width: 2)
+                : null,
+          ),
+          child: Center(
+            child: CommonText.titleMedium(
+              widget.title,
+              fontSize: widget.fontSize ?? 18,
+              fontWeight: widget.fontWeight ?? FontWeight.w700,
+              color: txtColor,
             ),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          gradient: isActive
-              ? const LinearGradient(
-                  colors: [
-                    Color(0xFFFFCC02),
-                    Color(0xFFFFCC02),
-                  ],
-                )
-              : null,
-          border: isActive
-              ? null
-              : Border.all(
-                  color: Color(0xFF333333), // subtle border same as screenshot
-                  width: 1.5,
-                ),
-        ),
-        child: Center(
-          child: CommonText.titleMedium(
-            title,
-            fontSize: fontSize ?? 18,
-            fontWeight: fontWeight ?? FontWeight.w700,
-            color: isActive ? const Color(0xFF333333) : const Color(0xFF98989A),
           ),
         ),
       ),
