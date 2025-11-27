@@ -97,7 +97,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     try {
       await dioClient.post(
         registerEndpoints,
-        data: request.toJson(),
+        data: await request.toJson(),
       );
 
       // Successful responses (200-299) don't need explicit handling
@@ -233,7 +233,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     try {
       final response = await dioClient.post(
         loginEndpoints,
-        data: request.toJson(),
+        data: await request.toJson(),
       );
 
       return LoginResponseModel.fromJson(response.data as Map<String, dynamic>);

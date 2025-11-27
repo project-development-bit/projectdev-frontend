@@ -75,7 +75,9 @@ class _BannerItem extends StatelessWidget {
       child: ClipRRect(
         borderRadius: borderRadius ?? BorderRadius.circular(12),
         child: Image.network(
-          banner.image,
+          MediaQuery.of(context).size.width < 768
+              ? banner.imageMobile
+              : banner.imageWeb,
           height: height,
           width: double.infinity,
           fit: BoxFit.cover,
@@ -260,7 +262,7 @@ class _DynamicBannersCarouselState
                         : Theme.of(context)
                             .colorScheme
                             .onSurfaceVariant
-                            .withOpacity(0.3),
+                            .withValues(alpha: 0.3),
                   ),
                 ),
               ),
