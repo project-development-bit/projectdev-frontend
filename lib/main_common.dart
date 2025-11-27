@@ -16,6 +16,10 @@ import 'core/widgets/flavor_banner.dart';
 import 'core/services/platform_recaptcha_service.dart';
 import 'routing/app_router.dart';
 
+// Global key for ScaffoldMessenger to show snackbars above dialogs
+final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey =
+    GlobalKey<ScaffoldMessengerState>();
+
 /// Common app initialization function for all flavors
 Future<void> runAppWithFlavor(AppFlavor flavor) async {
   // Set the flavor first so configuration is available
@@ -191,6 +195,7 @@ class _MyAppState extends ConsumerState<MyApp> {
 
     return FlavorBanner(
       child: MaterialApp.router(
+        scaffoldMessengerKey: rootScaffoldMessengerKey,
         debugShowCheckedModeBanner:
             !FlavorManager.isProd, // Hide debug banner in production
         routerConfig: ref.read(goRouterProvider), // Using persistent router

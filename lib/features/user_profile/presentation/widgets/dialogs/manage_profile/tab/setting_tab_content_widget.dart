@@ -51,41 +51,38 @@ class _SettingTabContentWidgetState
       spacing: 32.0,
       children: [
         _settingMenuItem(context,
-            title: "Language", btnTitle: "Change Language", onPressed: () {
+            title: context.translate("language"),
+            btnTitle: context.translate("change_language"), onPressed: () {
           showChangeLanguageDialog(context);
         }),
         _settingMenuItem(context,
-            title: "Notifications",
+            title: context.translate("notifications"),
             btnTitle: "",
             isSwitch: true,
             isSelected: settingsData.notificationsEnabled,
-            description:
-                "Enable notifications to receive alerts about important matters",
+            description: context.translate("notifications_description"),
             onPressed: () {}, onChanged: (v) {
           ref.read(settingProfileProvider.notifier).toggleNotifications(
                 userId: userId,
               );
         }),
         _settingMenuItem(context,
-            title: "Show Your Stats",
-            btnTitle: "Manage Privacy",
+            title: context.translate("show_your_stats"),
+            btnTitle: context.translate("manage_privacy"),
             isSwitch: true,
             isSelected: settingsData.showStatsEnabled,
-            description:
-                "When enabled, your account stats are shown on your profile.Enabled by default.",
+            description: context.translate("show_stats_description"),
             onPressed: () {}, onChanged: (v) {
           ref.read(settingProfileProvider.notifier).toggleShowStats(
                 userId: userId,
               );
         }),
         _settingMenuItem(context,
-            title: "Anonymous in contests",
-            btnTitle: "Manage Privacy",
+            title: context.translate("anonymous_in_contests"),
+            btnTitle: context.translate("manage_privacy"),
             isSwitch: true,
             isSelected: settingsData.anonymousInContests,
-            description:
-                """When enabled, your account appears anonymously in contest
-rankings. Off by default.""",
+            description: context.translate("anonymous_contests_description"),
             onPressed: () {}, onChanged: (v) {
           ref.read(settingProfileProvider.notifier).toggleAnonymousInContests(
                 userId: userId,

@@ -30,6 +30,7 @@ class ChangeEmailDialog extends ConsumerStatefulWidget {
 }
 
 class _ChangeEmailDialogState extends ConsumerState<ChangeEmailDialog> {
+  final _formKey = GlobalKey<FormState>();
   final TextEditingController _currentEmailController = TextEditingController();
   final TextEditingController _newEmailController = TextEditingController();
   final TextEditingController _confirmEmailController = TextEditingController();
@@ -71,6 +72,51 @@ class _ChangeEmailDialogState extends ConsumerState<ChangeEmailDialog> {
     });
   }
 
+  String? _validateCurrentEmail(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return context.translate('email_required');
+    }
+    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    if (!emailRegex.hasMatch(value.trim())) {
+      return context.translate('email_invalid');
+    }
+    return null;
+  }
+
+  String? _validateNewEmail(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return context.translate('email_required');
+    }
+    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    if (!emailRegex.hasMatch(value.trim())) {
+      return context.translate('email_invalid');
+    }
+    if (value.trim() == _currentEmailController.text.trim()) {
+      return context.translate('new_email_same_as_current');
+    }
+    return null;
+  }
+
+  String? _validateConfirmEmail(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return context.translate('email_required');
+    }
+    if (value.trim() != _newEmailController.text.trim()) {
+      return context.translate('new_email_mismatch');
+    }
+    return null;
+  }
+
+  void _handleChangeEmail() {
+    if (_formKey.currentState?.validate() ?? false) {
+      ref.read(changeEmailProvider.notifier).changeEmail(
+            currentEmail: _currentEmailController.text.trim(),
+            newEmail: _newEmailController.text.trim(),
+            repeatNewEmail: _confirmEmailController.text.trim(),
+          );
+    }
+  }
+
   @override
   void dispose() {
     _currentEmailController.dispose();
@@ -92,98 +138,138 @@ class _ChangeEmailDialogState extends ConsumerState<ChangeEmailDialog> {
   }
 
   Widget _manageDialogBody(BuildContext context, bool isChanging) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 32),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: CommonText.bodyMedium(
-                context.translate("change_your_email_description"),
-                fontWeight: FontWeight.w500,
+    return Form(
+      key: _formKey,
+      child: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: context.isMobile ? 0 : 32),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  child: CommonText.bodyMedium(
+                    context.translate("change_your_email_description"),
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
               ),
-            ),
-          ),
-          Row(
-            children: [
-              Expanded(
-                  child: CommonText.bodyMedium(
-                      context.translate("current_email"))),
-              Expanded(
-                flex: 2,
-                child: CommonTextField(
-                    controller: _currentEmailController,
-                    hintText: context.translate("current_email")),
-              )
+              context.isMobile
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CommonText.bodyLarge(
+                          context.translate("current_email"),
+                          color: Colors.white,
+                        ),
+                        CommonTextField(
+                          controller: _currentEmailController,
+                          hintText: context.translate("current_email"),
+                          validator: _validateCurrentEmail,
+                          enabled: false,
+                        ),
+                      ],
+                    )
+                  : Row(
+                      children: [
+                        Expanded(
+                            child: CommonText.bodyLarge(
+                          context.translate("current_email"),
+                          color: Colors.white,
+                        )),
+                        Expanded(
+                          flex: 2,
+                          child: CommonTextField(
+                            controller: _currentEmailController,
+                            hintText: context.translate("current_email"),
+                            validator: _validateCurrentEmail,
+                            enabled: false,
+                          ),
+                        )
+                      ],
+                    ),
+              SizedBox(
+                height: 24,
+              ),
+              context.isMobile
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CommonText.bodyLarge(context.translate("new_email"),
+                            color: Colors.white),
+                        CommonTextField(
+                          controller: _newEmailController,
+                          hintText: context.translate("new_email"),
+                          validator: _validateNewEmail,
+                        ),
+                      ],
+                    )
+                  : Row(
+                      children: [
+                        Expanded(
+                            child: CommonText.bodyLarge(
+                          context.translate("new_email"),
+                          color: Colors.white,
+                        )),
+                        Expanded(
+                          flex: 2,
+                          child: CommonTextField(
+                            controller: _newEmailController,
+                            hintText: context.translate("new_email"),
+                            validator: _validateNewEmail,
+                          ),
+                        )
+                      ],
+                    ),
+              SizedBox(
+                height: 24,
+              ),
+              context.isMobile
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CommonText.bodyLarge(
+                            context.translate("confirm_new_email"),
+                            color: Colors.white),
+                        CommonTextField(
+                          controller: _confirmEmailController,
+                          hintText: context.translate("confirm_new_email"),
+                          validator: _validateConfirmEmail,
+                        ),
+                      ],
+                    )
+                  : Row(
+                      children: [
+                        Expanded(
+                            child: CommonText.bodyLarge(
+                          context.translate("confirm_new_email"),
+                          color: Colors.white,
+                        )),
+                        Expanded(
+                          flex: 2,
+                          child: CommonTextField(
+                            controller: _confirmEmailController,
+                            hintText: context.translate("confirm_new_email"),
+                            validator: _validateConfirmEmail,
+                          ),
+                        )
+                      ],
+                    ),
+              SizedBox(
+                height: 24,
+              ),
+              CommonButton(
+                text: context.translate("change_your_email_btn_text"),
+                backgroundColor: Color(0xff333333),
+                isLoading: isChanging,
+                onPressed: isChanging ? null : _handleChangeEmail,
+              ),
             ],
           ),
-          SizedBox(
-            height: 24,
-          ),
-          Row(
-            children: [
-              Expanded(
-                  child: CommonText.bodyMedium(context.translate("new_email"))),
-              Expanded(
-                flex: 2,
-                child: CommonTextField(
-                    controller: _newEmailController,
-                    hintText: context.translate("new_email")),
-              )
-            ],
-          ),
-          SizedBox(
-            height: 24,
-          ),
-          Row(
-            children: [
-              Expanded(
-                  child: CommonText.bodyMedium(
-                      context.translate("confirm_new_email"))),
-              Expanded(
-                flex: 2,
-                child: CommonTextField(
-                    controller: _confirmEmailController,
-                    hintText: context.translate("confirm_new_email")),
-              )
-            ],
-          ),
-          SizedBox(
-            height: 24,
-          ),
-          CommonButton(
-            text: context.translate("change_your_email_btn_text"),
-            backgroundColor: Color(0xff333333),
-            isLoading: isChanging,
-            onPressed: () {
-              final current = _currentEmailController.text.trim();
-              final n = _newEmailController.text.trim();
-              final confirm = _confirmEmailController.text.trim();
-
-              if (current.isEmpty || n.isEmpty || confirm.isEmpty) {
-                context.showSnackBar(
-                    message: context.translate('please_fill_required_fields'));
-                return;
-              }
-
-              if (n != confirm) {
-                context.showSnackBar(
-                    message: context.translate('new_email_mismatch'));
-                return;
-              }
-
-              ref.read(changeEmailProvider.notifier).changeEmail(
-                    currentEmail: current,
-                    newEmail: n,
-                    repeatNewEmail: confirm,
-                  );
-            },
-          ),
-        ],
+        ),
       ),
     );
   }

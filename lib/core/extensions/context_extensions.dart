@@ -417,17 +417,23 @@ extension DialogExtension on BuildContext {
     Color? backgroundColor,
     Color? textColor,
   }) {
-    ScaffoldMessenger.of(this).showSnackBar(
-      SnackBar(
-        content: Text(
-          message,
-          style: TextStyle(color: textColor),
+    try {
+      final messenger = ScaffoldMessenger.of(this);
+      messenger.clearSnackBars();
+      messenger.showSnackBar(
+        SnackBar(
+          content: Text(
+            message,
+            style: TextStyle(color: textColor),
+          ),
+          duration: duration,
+          action: action,
+          backgroundColor: backgroundColor,
         ),
-        duration: duration,
-        action: action,
-        backgroundColor: backgroundColor,
-      ),
-    );
+      );
+    } catch (e) {
+      debugPrint('Error showing snackbar: $e');
+    }
   }
 
   /// Show an error snackbar

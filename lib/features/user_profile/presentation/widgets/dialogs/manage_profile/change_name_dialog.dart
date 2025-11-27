@@ -14,7 +14,10 @@ showChangeNameDialog(BuildContext context) {
   showDialog(
     context: context,
     barrierDismissible: true,
-    builder: (context) => const ChangeNameDialog(),
+    builder: (context) => DialogBgWidget(
+        dialogHeight: context.isMobile ? 320 : 280,
+        body: const ChangeNameDialog(),
+        title: context.translate("change_your_name")),
   );
 }
 
@@ -44,7 +47,6 @@ class _ChangeNameDialogState extends ConsumerState<ChangeNameDialog> {
         if (mounted && context.mounted) {
           context.showSnackBar(
             message: context.translate('name_changed_successfully'),
-            backgroundColor: Theme.of(context).colorScheme.primary,
             textColor: Colors.white,
           );
           context.pop(); // close dialog
@@ -80,8 +82,15 @@ class _ChangeNameDialogState extends ConsumerState<ChangeNameDialog> {
       if (newName == currentName) {
         context.showSnackBar(
           message: context.translate('name_unchanged'),
-          backgroundColor: Colors.orange,
+          backgroundColor: context.error,
           textColor: Colors.white,
+        );
+        ScaffoldMessenger.of(context).clearSnackBars();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(context.translate('name_unchanged')),
+            backgroundColor: context.error,
+          ),
         );
         return;
       }
@@ -108,9 +117,7 @@ class _ChangeNameDialogState extends ConsumerState<ChangeNameDialog> {
   @override
   Widget build(BuildContext context) {
     final isLoading = ref.watch(changeNameNotifierProvider).isChanging;
-    return DialogBgWidget(
-      dialogHeight: context.isMobile ? 320 : 280,
-        body: _dialogBgWidget(isLoading: isLoading), title: context.translate("change_your_name"));
+    return _dialogBgWidget(isLoading: isLoading);
   }
 
   Widget _dialogBgWidget({required bool isLoading}) {

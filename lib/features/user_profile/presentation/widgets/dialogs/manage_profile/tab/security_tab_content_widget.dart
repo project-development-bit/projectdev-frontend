@@ -29,13 +29,13 @@ class _SecurityTabContentWidgetState
       spacing: 32.0,
       children: [
         _securityMenuItem(
-            title: "Change Password",
-            btnTitle: "Change Password",
+            title: context.translate("change_password"),
+            btnTitle: context.translate("change_password"),
             onPressed: () {
               showChangePasswordDialog(context);
             }),
         _securityMenuItem(
-            title: "2FA Authenticator App",
+            title: context.translate("twofa_authenticator_app"),
             onPressed: () {
               if (is2FAEnabled) {
                 context.showDisable2FAConfirmationDialog(
@@ -53,15 +53,15 @@ class _SecurityTabContentWidgetState
                 });
               }
             },
-            btnTitle: is2FAEnabled ? "Disable 2FA" : "Enable 2FA",
-            description:
-                """Two-factor authentication apps add an extra layer of 
-security to your account. When you log in on a new device,
-you’ll have to enter a time-sensitive 6-digit code."""),
+            btnTitle: is2FAEnabled
+                ? context.translate("disable_2fa")
+                : context.translate("enable_2fa"),
+            description: context.translate("twofa_description")),
         _securityMenuItem(
-            title: "Enable 4 Digit Security Pin",
-            btnTitle:
-                isPinEnabled ? "Disable Security Pin" : "Enable Security Pin",
+            title: context.translate("enable_security_pin"),
+            btnTitle: isPinEnabled
+                ? context.translate("disable_security_pin")
+                : context.translate("enable_security_pin_btn"),
             onPressed: () {}),
       ],
     );

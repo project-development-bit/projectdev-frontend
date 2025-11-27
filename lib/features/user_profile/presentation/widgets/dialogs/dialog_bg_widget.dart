@@ -38,57 +38,64 @@ class DialogBgWidget extends StatelessWidget {
     final width = _getDialogWidth(context);
     final height = _getDialogHeight(context);
 
-    return Dialog(
-        backgroundColor: Colors.transparent,
-        insetPadding: const EdgeInsets.all(20),
-        clipBehavior: Clip.hardEdge,
-        child: Stack(
-          children: [
-            DialogGradientBackground(width: width, height: height),
-            SizedBox(
-              width: width,
-              height: height,
-              child: SizedBox(
-                height: height,
-                child: Column(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 22, vertical: 22),
-                      child: Row(
+    return ScaffoldMessenger(
+      child: Builder(builder: (context) {
+        return Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Dialog(
+              backgroundColor: Colors.transparent,
+              insetPadding: const EdgeInsets.all(20),
+              clipBehavior: Clip.hardEdge,
+              child: Stack(
+                children: [
+                  DialogGradientBackground(width: width, height: height),
+                  SizedBox(
+                    width: width,
+                    height: height,
+                    child: SizedBox(
+                      height: height,
+                      child: Column(
                         children: [
-                          Expanded(
-                            child: CommonText.headlineSmall(
-                              title,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
-                              overflow: TextOverflow.clip,
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 22, vertical: 22),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: CommonText.headlineSmall(
+                                    title,
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.white,
+                                    overflow: TextOverflow.clip,
+                                  ),
+                                ),
+                                CloseSquareButton(onTap: () {
+                                  context.pop();
+                                  if (onClose != null) {
+                                    onClose!();
+                                  }
+                                })
+                              ],
                             ),
                           ),
-                          CloseSquareButton(onTap: () {
-                            context.pop();
-                            if (onClose != null) {
-                              onClose!();
-                            }
-                          })
+                          Divider(
+                            color: dividerColor ??
+                                Color(0xFF003248), // TODO use from theme,
+                            thickness: 1,
+                          ),
+                          Expanded(
+                              child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 32),
+                            child: body,
+                          ))
                         ],
                       ),
                     ),
-                    Divider(
-                      color: dividerColor ??
-                          Color(0xFF003248), // TODO use from theme,
-                      thickness: 1,
-                    ),
-                    Expanded(
-                        child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 32),
-                      child: body,
-                    ))
-                  ],
-                ),
-              ),
-            )
-          ],
-        ));
+                  )
+                ],
+              )),
+        );
+      }),
+    );
   }
 }
