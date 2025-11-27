@@ -35,8 +35,8 @@ class HomeBannerSectionState extends ConsumerState<HomeBannerSection> {
     // Fallback static background image
     final fallbackImage = Image.asset(
       isMobile
-          ? 'assets/images/bg/banner mobile.png'
-          : 'assets/images/bg/banner web.png',
+          ? 'assets/images/bg/banner_mobile.png'
+          : 'assets/images/bg/banner_web.png',
       width: double.infinity,
       height: bannerHeight,
       fit: BoxFit.cover,
