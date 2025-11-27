@@ -141,7 +141,7 @@ rankings. Off by default.""",
                             color: Color(0xff98989A)),
                       ),
               ),
-            )
+            ),
           ],
         ),
         if (description != null)

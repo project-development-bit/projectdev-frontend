@@ -13,6 +13,8 @@ import '../../../../core/error/error_model.dart';
 import '../../../../core/error/failures.dart';
 import '../../domain/repositories/profile_repository.dart';
 import '../datasources/profile_remote_data_source.dart';
+import '../../domain/entities/change_email_result.dart';
+import '../../domain/entities/verify_email_change_result.dart';
 
 /// Implementation of [ProfileRepository]
 ///
@@ -46,6 +48,44 @@ class ProfileRepositoryImpl implements ProfileRepository {
       }
       return Left(ServerFailure(
         message: e.message ?? 'Failed to fetch profile',
+        statusCode: e.response?.statusCode,
+        errorModel: errorModel,
+      ));
+    } catch (e) {
+      debugPrint('❌ Repository: Unexpected error - $e');
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, VerifyEmailChangeResult>> verifyEmailChange({
+    required String email,
+    required String code,
+  }) async {
+    try {
+      debugPrint('🔄 Repository: Verifying email change...');
+      final responseModel =
+          await remoteDataSource.verifyEmailChange(email: email, code: code);
+
+      final data = responseModel.data;
+
+      final result = VerifyEmailChangeResult(
+        message: responseModel.message,
+        oldEmail: data?.oldEmail ?? '',
+        newEmail: data?.newEmail ?? '',
+      );
+
+      return Right(result);
+    } on DioException catch (e) {
+      debugPrint('❌ Repository: DioException - ${e.message}');
+      ErrorModel? errorModel;
+      if (e.response?.data != null) {
+        errorModel = ErrorModel.fromJson(e.response!.data);
+      }
+      return Left(ServerFailure(
+        message: e.response?.data?['message'] ??
+            e.message ??
+            'Failed to verify email change',
         statusCode: e.response?.statusCode,
         errorModel: errorModel,
       ));
@@ -173,6 +213,48 @@ class ProfileRepositoryImpl implements ProfileRepository {
         return Left(e);
       }
       
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, ChangeEmailResult>> changeEmail({
+    required String currentEmail,
+    required String newEmail,
+    required String repeatNewEmail,
+  }) async {
+    try {
+      debugPrint('🔄 Repository: Changing email...');
+      final responseModel = await remoteDataSource.changeEmail(
+        currentEmail: currentEmail,
+        newEmail: newEmail,
+        repeatNewEmail: repeatNewEmail,
+      );
+
+      final data = responseModel.data;
+      final result = ChangeEmailResult(
+        message: responseModel.message,
+        currentEmail: data?.currentEmail ?? '',
+        newEmail: data?.newEmail ?? '',
+        verificationCode: data?.verificationCode,
+      );
+
+      return Right(result);
+    } on DioException catch (e) {
+      debugPrint('❌ Repository: DioException - ${e.message}');
+      ErrorModel? errorModel;
+      if (e.response?.data != null) {
+        errorModel = ErrorModel.fromJson(e.response!.data);
+      }
+      return Left(ServerFailure(
+        message: e.response?.data?['message'] ??
+            e.message ??
+            'Failed to change email',
+        statusCode: e.response?.statusCode,
+        errorModel: errorModel,
+      ));
+    } catch (e) {
+      debugPrint('❌ Repository: Unexpected error - $e');
       return Left(ServerFailure(message: e.toString()));
     }
   }

@@ -14,12 +14,23 @@ class ProfileDetailModel extends ProfileDetail {
 
   /// Create ProfileDetailModel from JSON response
   factory ProfileDetailModel.fromJson(Map<String, dynamic> json) {
-    final data = json['data'] as Map<String, dynamic>;
+    // The API may return the profile wrapped in a `data` object or return
+    // the account/security/settings at the root. Handle both cases and
+    // protect against null values to avoid type cast errors.
+    final Map<String, dynamic> dataMap;
+    if (json['data'] != null && json['data'] is Map<String, dynamic>) {
+      dataMap = Map<String, dynamic>.from(json['data'] as Map);
+    } else {
+      dataMap = Map<String, dynamic>.from(json);
+    }
 
     return ProfileDetailModel(
-      account: AccountInfoModel.fromJson(data['account'] as Map<String, dynamic>),
-      security: SecuritySettingsModel.fromJson(data['security'] as Map<String, dynamic>),
-      settings: UserSettingsModel.fromJson(data['settings'] as Map<String, dynamic>),
+      account: AccountInfoModel.fromJson(
+          (dataMap['account'] ?? <String, dynamic>{}) as Map<String, dynamic>),
+      security: SecuritySettingsModel.fromJson(
+          (dataMap['security'] ?? <String, dynamic>{}) as Map<String, dynamic>),
+      settings: UserSettingsModel.fromJson(
+          (dataMap['settings'] ?? <String, dynamic>{}) as Map<String, dynamic>),
     );
   }
 
@@ -61,7 +72,10 @@ class AccountInfoModel extends AccountInfo {
       username: json['username'] as String? ?? '',
       email: json['email'] as String? ?? '',
       avatarUrl: json['avatar_url'] as String? ?? '',
-      country: CountryModel.fromJson(json['country']),
+      country: json['country'] != null && json['country'] is Map
+          ? CountryModel.fromJson(
+              Map<String, dynamic>.from(json['country'] as Map))
+          : null,
       offerToken: json['offer_token'] as String?,
       createdAt: json['created_at'] != null
           ? DateTime.tryParse(json['created_at'] as String) ?? DateTime.now()
@@ -75,7 +89,11 @@ class AccountInfoModel extends AccountInfo {
       'username': username,
       'email': email,
       'avatar_url': avatarUrl,
-      'country': country,
+      'country': country != null
+          ? (country is CountryModel
+              ? (country as CountryModel).toJson()
+              : null)
+          : null,
       'offer_token': offerToken,
       'created_at': createdAt.toIso8601String(),
     };

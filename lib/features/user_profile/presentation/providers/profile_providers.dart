@@ -11,6 +11,8 @@ import '../../domain/usecases/get_languages_usecase.dart';
 import '../../domain/usecases/get_profile_usecase.dart';
 import '../../domain/usecases/update_user_profile.dart';
 import '../../domain/usecases/upload_profile_picture.dart';
+import '../../domain/usecases/change_email_usecase.dart';
+import '../../domain/usecases/verify_email_change_usecase.dart';
 
 /// Provider for profile remote data source
 final profileRemoteDataSourceProvider =
@@ -66,5 +68,18 @@ final uploadProfilePictureUseCaseProvider =
     Provider<UploadProfilePictureUsecase>((ref) {
   final repository = ref.read(profileRepositoryProvider);
   return UploadProfilePictureUsecase(repository);
+});
+
+/// Provider for change email use case
+final changeEmailUseCaseProvider = Provider<ChangeEmailUsecase>((ref) {
+  final repository = ref.read(profileRepositoryProvider);
+  return ChangeEmailUsecase(repository);
+});
+
+/// Provider for verify email change use case
+final verifyEmailChangeUseCaseProvider =
+    Provider<VerifyEmailChangeUsecase>((ref) {
+  final repository = ref.read(profileRepositoryProvider);
+  return VerifyEmailChangeUsecase(repository);
 });
 

@@ -5,6 +5,8 @@ import 'package:cointiply_app/features/user_profile/data/models/language_model.d
 import 'package:cointiply_app/features/user_profile/data/models/profile_detail_model.dart';
 import 'package:cointiply_app/features/user_profile/data/models/response/upload_profile_avatar_response_model.dart';
 import 'package:cointiply_app/features/user_profile/data/models/response/user_update_respons.dart';
+import 'package:cointiply_app/features/user_profile/data/models/response/change_email_response_model.dart';
+import 'package:cointiply_app/features/user_profile/data/models/response/verify_email_change_response_model.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -130,6 +132,82 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
       throw _handleDioException(e);
     } catch (e) {
       throw Exception('Unexpected error updating user profile: $e');
+    }
+  }
+
+  @override
+  Future<ChangeEmailResponseModel> changeEmail({
+    required String currentEmail,
+    required String newEmail,
+    required String repeatNewEmail,
+  }) async {
+    try {
+      debugPrint('✉️ Changing user email...');
+
+      final body = {
+        'current_email': currentEmail,
+        'new_email': newEmail,
+        'repeat_new_email': repeatNewEmail,
+      };
+
+      final response = await _dio.patch('/users/email', data: body);
+
+      debugPrint('✅ Change email response: ${response.statusCode}');
+
+      if ((response.statusCode ?? 0) >= 200 &&
+          (response.statusCode ?? 0) < 300) {
+        return ChangeEmailResponseModel.fromJson(
+            response.data as Map<String, dynamic>);
+      } else {
+        // If server returned an error status code, try to extract message
+        final message = response.data is Map ? response.data['message'] : null;
+        throw ServerFailure(message: message ?? 'Failed to change email');
+      }
+    } on DioException catch (e) {
+      debugPrint('❌ Change email DioException: ${e.message}');
+      debugPrint('❌ Response status: ${e.response?.statusCode}');
+      debugPrint('❌ Response data: ${e.response?.data}');
+      // Map to ServerFailure so repository can pick it up
+      final message = e.response?.data?['message'] ?? e.message;
+      throw ServerFailure(message: message ?? 'Unexpected error');
+    } catch (e) {
+      debugPrint('❌ Unexpected error changing email: $e');
+      throw ServerFailure(message: 'Unexpected error changing email: $e');
+    }
+  }
+
+  @override
+  Future<VerifyEmailChangeResponseModel> verifyEmailChange({
+    required String email,
+    required String code,
+  }) async {
+    try {
+      debugPrint('🔎 Verifying email change for $email with code $code');
+
+      final response =
+          await _dio.get('/users/verify-email-change/$email/$code');
+
+      debugPrint('✅ Verify email change response: ${response.statusCode}');
+
+      if ((response.statusCode ?? 0) >= 200 &&
+          (response.statusCode ?? 0) < 300) {
+        return VerifyEmailChangeResponseModel.fromJson(
+            response.data as Map<String, dynamic>);
+      } else {
+        final message = response.data is Map ? response.data['message'] : null;
+        throw ServerFailure(
+            message: message ?? 'Failed to verify email change');
+      }
+    } on DioException catch (e) {
+      debugPrint('❌ Verify email change DioException: ${e.message}');
+      debugPrint('❌ Response status: ${e.response?.statusCode}');
+      debugPrint('❌ Response data: ${e.response?.data}');
+      final message = e.response?.data?['message'] ?? e.message;
+      throw ServerFailure(message: message ?? 'Unexpected error');
+    } catch (e) {
+      debugPrint('❌ Unexpected error verifying email change: $e');
+      throw ServerFailure(
+          message: 'Unexpected error verifying email change: $e');
     }
   }
 

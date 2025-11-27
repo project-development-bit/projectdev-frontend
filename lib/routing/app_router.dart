@@ -499,6 +499,7 @@ extension GoRouterExtension on BuildContext {
     required String email,
     bool isSendCode = false,
     bool isFromForgotPassword = false,
+    bool isFromChangeEmail = false,
   }) {
     go(
       AppRoutes.verification,
@@ -506,6 +507,7 @@ extension GoRouterExtension on BuildContext {
         email: email,
         isSendCode: isSendCode,
         isFromForgotPassword: isFromForgotPassword,
+        isFromChangeEmail: isFromChangeEmail
       ),
     );
   }
@@ -514,6 +516,7 @@ extension GoRouterExtension on BuildContext {
     required String email,
     bool isSendCode = false,
     bool isFromForgotPassword = false,
+    bool isFromChangeEmail = false,
   }) {
     push(
       AppRoutes.verification,
@@ -521,6 +524,7 @@ extension GoRouterExtension on BuildContext {
         email: email,
         isSendCode: isSendCode,
         isFromForgotPassword: isFromForgotPassword,
+        isFromChangeEmail: isFromChangeEmail
       ),
     );
   }

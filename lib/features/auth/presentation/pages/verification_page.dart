@@ -6,17 +6,20 @@ import 'package:pinput/pinput.dart';
 import '../../../../routing/routing.dart';
 import '../providers/verification_provider.dart';
 import '../providers/resend_timer_provider.dart';
+import 'package:cointiply_app/features/user_profile/presentation/providers/verify_email_change_notifier.dart';
 
 class VerificationPage extends ConsumerStatefulWidget {
   final String email;
   final bool isSendCode;
   final bool isFromForgotPassword;
+  final bool isFromChangeEmail;
 
   const VerificationPage({
     super.key,
     required this.email,
     this.isSendCode = false,
     this.isFromForgotPassword = false,
+    this.isFromChangeEmail = false,
   });
 
   @override
@@ -80,6 +83,39 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
         }
       },
     );
+
+    // If this verification page was opened for email-change confirmation,
+    // listen to the profile verify-email-change notifier as well.
+    if (widget.isFromChangeEmail) {
+      ref.listenManual<VerifyEmailChangeState>(
+        verifyEmailChangeProvider,
+        (previous, next) {
+          if (next.isVerifying) return;
+          if (next.status == VerifyEmailChangeStatus.success) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(next.message ?? 'Email updated successfully.'),
+                backgroundColor: AppColors.success,
+              ),
+            );
+
+            // Navigate back to profile page
+            GoRouterExtension(context).go(AppRoutes.profile);
+            return;
+          }
+
+          if (next.hasError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(next.message ?? 'Failed to verify email change'),
+                backgroundColor: Theme.of(context).colorScheme.error,
+              ),
+            );
+            _pinController.clear();
+          }
+        },
+      );
+    }
   }
 
   @override
@@ -89,6 +125,13 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
   }
 
   void _verifyCode(String code) {
+    if (widget.isFromChangeEmail) {
+      ref
+          .read(verifyEmailChangeProvider.notifier)
+          .verifyEmailChange(email: widget.email, code: code);
+      return;
+    }
+
     if (widget.isFromForgotPassword) {
       ref
           .read(verificationNotifierProvider.notifier)

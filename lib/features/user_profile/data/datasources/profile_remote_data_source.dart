@@ -3,6 +3,8 @@ import 'package:cointiply_app/features/user_profile/data/models/language_model.d
 import 'package:cointiply_app/features/user_profile/data/models/profile_detail_model.dart';
 import 'package:cointiply_app/features/user_profile/data/models/response/upload_profile_avatar_response_model.dart';
 import 'package:cointiply_app/features/user_profile/data/models/response/user_update_respons.dart';
+import 'package:cointiply_app/features/user_profile/data/models/response/change_email_response_model.dart';
+import 'package:cointiply_app/features/user_profile/data/models/response/verify_email_change_response_model.dart';
 import 'package:file_picker/file_picker.dart';
 
 /// Abstract class for profile remote data source
@@ -19,6 +21,19 @@ abstract class ProfileRemoteDataSource {
 
   /// Gets list of available languages
   Future<List<LanguageModel>> getLanguages();
+
+  /// Change user email (send verification code to new email)
+  Future<ChangeEmailResponseModel> changeEmail({
+    required String currentEmail,
+    required String newEmail,
+    required String repeatNewEmail,
+  });
+
+  /// Verify email change using code sent to new email
+  Future<VerifyEmailChangeResponseModel> verifyEmailChange({
+    required String email,
+    required String code,
+  });
 
   /// Updates user profile
   Future<UserUpdateResponse> updateUserProfile(
