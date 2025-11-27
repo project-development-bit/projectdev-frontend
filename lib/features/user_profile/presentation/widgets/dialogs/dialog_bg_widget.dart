@@ -53,7 +53,8 @@ class DialogBgWidget extends StatelessWidget {
                 child: Column(
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(vertical: 29),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 22, vertical: 22),
                       child: Row(
                         children: [
                           Expanded(

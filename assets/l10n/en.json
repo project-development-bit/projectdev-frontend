@@ -599,5 +599,6 @@
   "events": "Events",
   "shop": "Shop",
   "help": "Help",
-  "blog": "Blog"
+  "blog": "Blog",
+  "verify_new_email": "Verify New Email"
 }

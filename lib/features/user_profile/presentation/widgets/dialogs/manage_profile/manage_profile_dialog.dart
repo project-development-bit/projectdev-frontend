@@ -104,37 +104,37 @@ class _ManageProfileDialogState extends ConsumerState<ManageProfileDialog> {
   Widget _manageProfileTabBar() {
     final selectedIndex = ref.watch(tabBarIndexProvider);
 
-    if (context.screenWidth > 600) {
-      return Container(
-        padding: const EdgeInsets.symmetric(vertical: 21.5),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          spacing: 6.0,
-          children: [
-            _tabBarMenuItem(
-              context.translate("manage_profile_tab_profile"),
-              index: 0,
-              isSelected: selectedIndex == 0,
-              width: 150,
-            ),
-            _tabBarMenuItem(
-              context.translate("manage_profile_tab_security"),
-              index: 1,
-              isSelected: selectedIndex == 1,
-              width: 150,
-            ),
-            _tabBarMenuItem(
-              context.translate("manage_profile_tab_settings"),
-              index: 2,
-              isSelected: selectedIndex == 2,
-              width: 150,
-            ),
-          ],
-        ),
-      );
-    }
+    // if (context.screenWidth > 600) {
+    //   return Container(
+    //     padding: const EdgeInsets.symmetric(vertical: 21.5),
+    //     child: Row(
+    //       mainAxisAlignment: MainAxisAlignment.center,
+    //       crossAxisAlignment: CrossAxisAlignment.center,
+    //       mainAxisSize: MainAxisSize.min,
+    //       spacing: 6.0,
+    //       children: [
+    //         _tabBarMenuItem(
+    //           context.translate("manage_profile_tab_profile"),
+    //           index: 0,
+    //           isSelected: selectedIndex == 0,
+    //           width:  150,
+    //         ),
+    //         _tabBarMenuItem(
+    //           context.translate("manage_profile_tab_security"),
+    //           index: 1,
+    //           isSelected: selectedIndex == 1,
+    //           width: 150,
+    //         ),
+    //         _tabBarMenuItem(
+    //           context.translate("manage_profile_tab_settings"),
+    //           index: 2,
+    //           isSelected: selectedIndex == 2,
+    //           width: 150,
+    //         ),
+    //       ],
+    //     ),
+    //   );
+    // }
 
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 21.5),
@@ -142,7 +142,8 @@ class _ManageProfileDialogState extends ConsumerState<ManageProfileDialog> {
       child: LayoutBuilder(
         builder: (context, constraints) {
           const double spacing = 8.0;
-          final double buttonWidth = (constraints.maxWidth - spacing) / 2;
+          final double buttonWidth =
+              (constraints.maxWidth - spacing) / (context.isDesktop ? 3.1 : 2);
 
           return Wrap(
             alignment: WrapAlignment.start,

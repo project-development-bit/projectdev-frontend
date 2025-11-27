@@ -4,12 +4,12 @@ import 'package:cointiply_app/core/common/common_textfield.dart';
 import 'package:cointiply_app/core/extensions/extensions.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/change_email_notifier.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
-// removed unused import
-import 'package:cointiply_app/routing/verification_page_parameter.dart';
 import 'package:cointiply_app/routing/routing.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/dialog_bg_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'verification_change_email_dialog.dart';
 
 void showChangeEmailDialog(BuildContext context) {
   final colorScheme = Theme.of(context).colorScheme;
@@ -50,11 +50,18 @@ class _ChangeEmailDialogState extends ConsumerState<ChangeEmailDialog> {
         // close dialog then navigate to verification page to confirm new email
 
         final newEmail = next.newEmail ?? '';
-        
 
         // Navigate to verification page with the new email
-        context.pop();
-        context.pushToVerification(email: newEmail, isFromChangeEmail: true);
+        if (mounted && context.mounted) {
+          context.pop(); // Close change email dialog
+
+          // Show verification dialog after a short delay to ensure previous dialog is closed
+          Future.delayed(const Duration(milliseconds: 100), () {
+            if (mounted) {
+              showVerificationChangeEmailDialog(context, newEmail);
+            }
+          });
+        }
       } else if (next.hasError) {
         context.showSnackBar(
             message: next.errorMessage ??

@@ -1,4 +1,6 @@
 import 'package:cointiply_app/core/core.dart';
+import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
+import 'package:cointiply_app/features/user_profile/presentation/providers/get_profile_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pinput/pinput.dart';
@@ -13,10 +15,12 @@ class VerificationFormWidget extends ConsumerStatefulWidget {
     required this.email,
     this.isSendCode = false,
     this.isFromForgotPassword = false,
+    this.isFromEmailChanged = false,
   });
   final String email;
   final bool isSendCode;
   final bool isFromForgotPassword;
+  final bool isFromEmailChanged;
   @override
   ConsumerState<VerificationFormWidget> createState() =>
       _VerificationFormWidgetState();
@@ -57,6 +61,15 @@ class _VerificationFormWidgetState
             return;
           }
 
+          if (widget.isFromEmailChanged) {
+            context.pop(); // Close verification dialog
+            ref
+                .read(getProfileNotifierProvider.notifier)
+                .fetchProfile(isLoading: false);
+            ref.read(currentUserProvider.notifier).refreshUser();
+            return;
+          }
+
           GoRouterExtension(context).go('/auth/login');
         }
 
@@ -93,6 +106,11 @@ class _VerificationFormWidgetState
       ref
           .read(verificationNotifierProvider.notifier)
           .verifyCodeForForgotPassword(email: widget.email, code: code);
+    } else if (widget.isFromEmailChanged) {
+      ref.watch(verificationNotifierProvider.notifier).verifyEmailChange(
+            email: widget.email,
+            code: code,
+          );
     } else {
       ref
           .read(verificationNotifierProvider.notifier)
