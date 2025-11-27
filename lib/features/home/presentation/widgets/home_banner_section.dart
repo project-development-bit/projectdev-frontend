@@ -97,7 +97,7 @@ class BannerSlide extends StatelessWidget {
 
     final ctaText = banner.btnText.isNotEmpty
         ? banner.btnText
-        : (localizations?.translate('home_banner_cta') ?? 'Claim Now');
+        : (localizations?.translate('claim_now') ?? 'Claim Now');
 
     return Stack(
       fit: StackFit.expand,
