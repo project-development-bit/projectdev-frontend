@@ -118,7 +118,7 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
             if (!emailSent) ...[
               // Email Field
               CommonTextField(
-                fillColor: Color(0xFF1A1A1A),
+                fillColor: Color(0xFF1A1A1A), //TODO Use from theme
                 controller: _emailController,
                 focusNode: _emailFocusNode,
                 hintText: localizations?.translate('email_hint') ??

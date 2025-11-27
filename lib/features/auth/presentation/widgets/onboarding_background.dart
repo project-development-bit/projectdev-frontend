@@ -8,21 +8,23 @@ class OnboardingBackground extends StatelessWidget {
     super.key,
     required this.child,
     this.maxContentWidth,
-    this.horizontalPadding,
+    this.containerPadding,
     this.logoImagePath,
     this.backgroundImagePath,
+    this.childPadding,
   });
 
   final Widget child;
   final double? maxContentWidth;
-  final EdgeInsetsGeometry? horizontalPadding;
+  final EdgeInsetsGeometry? containerPadding;
+  final EdgeInsetsGeometry? childPadding;
   final String? logoImagePath;
   final String? backgroundImagePath;
 
   @override
   Widget build(BuildContext context) {
     final isMobile = context.isMobile;
-
+    print("childPadding is Null: ${childPadding == null}");
     double girlHeight = isMobile ? 200 : 360;
     double girlRightOffset = isMobile ? -40 : -180;
     double girlBottomOffset = isMobile ? -10 : -40;
@@ -45,7 +47,7 @@ class OnboardingBackground extends StatelessWidget {
               ),
               child: ResponsiveContainer(
                 maxWidth: maxContentWidth ?? (isMobile ? null : 500),
-                padding: horizontalPadding ??
+                padding: containerPadding ??
                     EdgeInsets.symmetric(
                       horizontal: isMobile ? 24 : 32,
                       vertical: isMobile ? 24 : 32,
@@ -66,10 +68,11 @@ class OnboardingBackground extends StatelessWidget {
                       children: [
                         Container(
                           width: double.infinity,
-                          padding: EdgeInsets.symmetric(
-                            horizontal: isMobile ? 20 : 40,
-                            vertical: isMobile ? 24 : 34,
-                          ),
+                          padding: childPadding ??
+                              EdgeInsets.symmetric(
+                                horizontal: isMobile ? 16 : 24,
+                                vertical: isMobile ? 16 : 24,
+                              ),
                           decoration: BoxDecoration(
                             color:
                                 const Color(0xFF00131E).withValues(alpha: 0.4),
