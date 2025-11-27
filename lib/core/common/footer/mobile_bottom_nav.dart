@@ -69,7 +69,7 @@ class _MobileBottomNavState extends ConsumerState<MobileBottomNav> {
                       ),
 
                       /// Gap for center big star
-                      const SizedBox(width: 60),
+                      const SizedBox(width: 72),
 
                       BottomNavItem(
                         index: 2,
