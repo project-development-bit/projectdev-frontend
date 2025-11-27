@@ -100,6 +100,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       childPadding: EdgeInsets.symmetric(
           vertical: context.isMobile ? 30 : 34,
           horizontal: context.isMobile ? 16 : 43),
+      girlHeight: 400,
+      girlRightOffset: -150,
+      girlBottomOffset: -110,
       child: Column(
         children: [
           LoginFormWidget(

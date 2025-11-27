@@ -66,6 +66,7 @@ class ForgotPasswordNotifier extends StateNotifier<ForgotPasswordState> {
       },
       (response) {
         state = ForgotPasswordSuccess(response);
+        reset();
       },
     );
   }

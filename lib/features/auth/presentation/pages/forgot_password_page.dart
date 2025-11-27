@@ -87,6 +87,9 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
       childPadding: EdgeInsets.symmetric(
           vertical: context.isMobile ? 39 : 51,
           horizontal: context.isMobile ? 16 : 41),
+      girlHeight: 400,
+      girlRightOffset: -150,
+      girlBottomOffset: -160,
       child: Form(
         key: _formKey,
         child: Column(

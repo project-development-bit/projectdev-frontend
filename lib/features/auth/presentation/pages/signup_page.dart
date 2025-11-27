@@ -166,6 +166,9 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
       childPadding: EdgeInsets.symmetric(
           vertical: context.isMobile ? 35 : 38.5,
           horizontal: context.isMobile ? 17 : 43),
+      girlHeight: 400,
+      girlRightOffset: -140,
+      girlBottomOffset: -180,
       child: Form(
         key: _formKey,
         child: Column(
