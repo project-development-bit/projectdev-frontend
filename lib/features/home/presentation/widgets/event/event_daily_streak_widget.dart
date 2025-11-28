@@ -16,16 +16,19 @@ class EventDailyStreakWidget extends StatelessWidget {
       direction: isColumn ? Axis.vertical : Axis.horizontal,
       children: [
         Flexible(
-            child: SizedBox(height: isColumn ? null: 600, child: _dailyStreakWidget(context,isColumn))),
+            child: SizedBox(
+                height: isColumn ? null : 600,
+                child: _dailyStreakWidget(context, isColumn))),
         Flexible(
           child: SizedBox(
-            height: isColumn ? null: 600,
+            height: isColumn ? null : 600,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               spacing: 41,
               children: [
-                Flexible(flex: 3, child: _eventRewardWidget(context,isColumn)),
-                Flexible(flex: 5, child: _invitationUserInfo(context,isColumn)),
+                Flexible(flex: 3, child: _eventRewardWidget(context, isColumn)),
+                Flexible(
+                    flex: 5, child: _invitationUserInfo(context, isColumn)),
               ],
             ),
           ),
@@ -34,7 +37,7 @@ class EventDailyStreakWidget extends StatelessWidget {
     );
   }
 
-  Container _dailyStreakWidget(BuildContext context,bool isColumn) {
+  Container _dailyStreakWidget(BuildContext context, bool isColumn) {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -46,7 +49,7 @@ class EventDailyStreakWidget extends StatelessWidget {
       child: Column(children: [
         _eventTitleWidget(isColumn),
         SizedBox(height: 17),
-        _eventNextFaucetWidget(context,isColumn),
+        _eventNextFaucetWidget(context, isColumn),
         SizedBox(height: 17),
         CommonText.titleLarge(
           "Daily Streak Faucet",
@@ -95,7 +98,7 @@ class EventDailyStreakWidget extends StatelessWidget {
               ),
               SizedBox(width: 4),
               Image.asset(
-                'assets/images/coin.png',
+                'assets/images/rewards/coin.png',
                 width: 24,
                 height: 24,
               ),
@@ -110,7 +113,7 @@ class EventDailyStreakWidget extends StatelessWidget {
     );
   }
 
-  Widget _eventNextFaucetWidget(BuildContext context,bool isColumn) {
+  Widget _eventNextFaucetWidget(BuildContext context, bool isColumn) {
     return Container(
       decoration: BoxDecoration(
         color: Color(0xff1A1A1A).withAlpha(51),
@@ -127,9 +130,11 @@ class EventDailyStreakWidget extends StatelessWidget {
           ),
           SizedBox(height: 16.0),
           Flex(
-            direction: isColumn? Axis.vertical :Axis.horizontal,
+              direction: isColumn ? Axis.vertical : Axis.horizontal,
               spacing: 16.0,
-              crossAxisAlignment: isColumn? CrossAxisAlignment.stretch: CrossAxisAlignment.center,
+              crossAxisAlignment: isColumn
+                  ? CrossAxisAlignment.stretch
+                  : CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
                 _eventTime(context, time: "03", unit: "hours"),
@@ -195,7 +200,7 @@ class EventDailyStreakWidget extends StatelessWidget {
           SizedBox(width: 14),
           CommonText.titleMedium("300"),
           Image.asset(
-            'assets/images/coin.png',
+            'assets/images/rewards/coin.png',
             width: 24,
             height: 24,
           ),
@@ -268,7 +273,7 @@ class EventDailyStreakWidget extends StatelessWidget {
                 ),
                 SizedBox(width: 6),
                 Image.asset(
-                  'assets/images/coin.png',
+                  'assets/images/rewards/coin.png',
                   width: 24,
                   height: 24,
                 ),
@@ -280,7 +285,7 @@ class EventDailyStreakWidget extends StatelessWidget {
     );
   }
 
-  Widget _eventRewardWidget(BuildContext context,bool isColumn) {
+  Widget _eventRewardWidget(BuildContext context, bool isColumn) {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -337,7 +342,7 @@ class EventDailyStreakWidget extends StatelessWidget {
     );
   }
 
-  Widget _invitationUserInfo(BuildContext context,bool isColumn) {
+  Widget _invitationUserInfo(BuildContext context, bool isColumn) {
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: Color(0xff333333)),
@@ -366,7 +371,7 @@ class EventDailyStreakWidget extends StatelessWidget {
                   direction: isColumn ? Axis.vertical : Axis.horizontal,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
-                  spacing: isColumn ? 20: 170,
+                  spacing: isColumn ? 20 : 170,
                   children: [
                     CommonText.titleLarge(
                       "Total\n[17]",
@@ -375,7 +380,7 @@ class EventDailyStreakWidget extends StatelessWidget {
                       fontSize: 20,
                       highlightColor: context.secondary,
                     ),
-                     CommonText.titleLarge(
+                    CommonText.titleLarge(
                       "Earning\n[12,678]",
                       color: Colors.white,
                       textAlign: TextAlign.center,
@@ -384,11 +389,12 @@ class EventDailyStreakWidget extends StatelessWidget {
                     ),
                   ],
                 ),
-                CommonButton(text: "More Details",
-                backgroundColor: Color(0xff333333),
-                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 13),
-                textColor: Color(0xff98989A),
-                 onPressed: (){})
+                CommonButton(
+                    text: "More Details",
+                    backgroundColor: Color(0xff333333),
+                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 13),
+                    textColor: Color(0xff98989A),
+                    onPressed: () {})
               ],
             ),
           )
