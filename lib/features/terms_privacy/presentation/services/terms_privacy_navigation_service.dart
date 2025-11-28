@@ -1,6 +1,5 @@
 import 'package:cointiply_app/routing/app_router.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 /// Service for handling Terms & Privacy navigation across platforms
@@ -8,7 +7,9 @@ class TermsPrivacyNavigationService {
   /// Navigate to Terms of Service
   /// On web: Opens URL in new tab
   /// On mobile: Shows WebView screen
-  static Future<void> showTerms(BuildContext context, WidgetRef ref) async {
+  static Future<void> showTerms(
+    BuildContext context,
+  ) async {
     // if (kIsWeb) {
     //   await _openTermsInNewTab(ref);
     // } else {
@@ -19,7 +20,7 @@ class TermsPrivacyNavigationService {
   /// Navigate to Privacy Policy
   /// On web: Opens URL in new tab
   /// On mobile: Shows WebView screen
-  static Future<void> showPrivacy(BuildContext context, WidgetRef ref) async {
+  static Future<void> showPrivacy(BuildContext context) async {
     // if (kIsWeb) {
     //   await _openPrivacyInNewTab(ref);
     // } else {
@@ -98,12 +99,12 @@ class TermsPrivacyNavigationService {
 /// Extension to simplify usage
 extension TermsPrivacyNavigationExtension on BuildContext {
   /// Show Terms of Service (platform-aware)
-  Future<void> showTerms(WidgetRef ref) async {
-    await TermsPrivacyNavigationService.showTerms(this, ref);
+  Future<void> showTerms() async {
+    await TermsPrivacyNavigationService.showTerms(this);
   }
 
   /// Show Privacy Policy (platform-aware)
-  Future<void> showPrivacy(WidgetRef ref) async {
-    await TermsPrivacyNavigationService.showPrivacy(this, ref);
+  Future<void> showPrivacy() async {
+    await TermsPrivacyNavigationService.showPrivacy(this);
   }
 }

@@ -1,12 +1,13 @@
+import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/theme/app_colors.dart';
+import 'package:cointiply_app/features/auth/presentation/widgets/onboarding_background.dart';
+import 'package:cointiply_app/features/terms_privacy/presentation/services/terms_privacy_navigation_service.dart';
 import 'package:cointiply_app/features/auth/presentation/providers/ip_country_provider.dart';
 import 'package:cointiply_app/features/auth/presentation/widgets/country_selector_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/common/common_textfield.dart';
 import '../../../../core/localization/app_localizations.dart';
-import '../../../../core/widgets/locale_switch_widget.dart';
-import '../../../../core/widgets/responsive_container.dart';
 import '../../../../core/widgets/cloudflare_turnstille_widgte.dart';
 import '../../../../core/providers/turnstile_provider.dart';
 import '../../../../core/extensions/context_extensions.dart';
@@ -34,6 +35,9 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
   final _confirmPasswordFocusNode = FocusNode();
 
   bool _agreeToTerms = false;
+
+  bool isTermsHover = false;
+  bool isPrivacyHover = false;
 
   @override
   void initState() {
@@ -158,267 +162,272 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
     final localizations = AppLocalizations.of(context);
     final isLoading = ref.watch(isRegisterLoadingProvider);
 
-    return Scaffold(
-      backgroundColor: colorScheme.surface,
-      appBar: AppBar(
-        backgroundColor: AppColors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: colorScheme.onSurface,
-          ),
-          onPressed: () => context.goToLogin(),
-        ),
-        actions: [
-          const CompactLocaleSwitcher(),
-          const SizedBox(width: 16),
-        ],
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: ResponsiveContainer(
-            maxWidth: context.isMobile ? null : 400,
-            padding: EdgeInsets.symmetric(
-              horizontal: context.isMobile ? 24 : 32,
-              vertical: 24,
+    return OnboardingBackground(
+      childPadding: EdgeInsets.symmetric(
+          vertical: context.isMobile ? 35 : 38.5,
+          horizontal: context.isMobile ? 17 : 43),
+      girlHeight: 400,
+      girlRightOffset: -140,
+      girlBottomOffset: -180,
+      child: Form(
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            CommonText.headlineLarge(
+              localizations?.translate('create_account') ?? 'Create Achhhcount',
+              fontWeight: FontWeight.w700,
+              color: colorScheme.onSurface,
+              textAlign: TextAlign.center,
             ),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const SizedBox(height: 20),
+            const SizedBox(height: 16),
+            CommonText.bodyMedium(
+              localizations?.translate('create_account_subtitle') ??
+                  'Fill in the details below to create your account',
+              color: colorScheme.onSurfaceVariant,
+              fontWeight: FontWeight.w500,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 32),
+            // Full Name Field
+            CommonTextField(
+              controller: _nameController,
+              focusNode: _nameFocusNode,
+              hintText: localizations?.translate('full_name_hint') ??
+                  'Enter your full name',
+              labelText: localizations?.translate('full_name') ?? 'Full Name',
+              textInputAction: TextInputAction.next,
+              prefixIcon: const Icon(Icons.person_outlined),
+              validator: (value) => TextFieldValidators.required(value, context,
+                  fieldName:
+                      localizations?.translate('full_name') ?? 'Full Name'),
+              onSubmitted: (_) => _emailFocusNode.requestFocus(),
+            ),
 
-                  // Create Account Text
-                  Text(
-                    localizations?.translate('create_account') ??
-                        'Create Account',
-                    style: theme.textTheme.headlineMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: colorScheme.onSurface,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
+            const SizedBox(height: 16),
 
-                  const SizedBox(height: 8),
+            // Email Field
+            CommonTextField(
+              controller: _emailController,
+              focusNode: _emailFocusNode,
+              hintText:
+                  localizations?.translate('email_hint') ?? 'Enter your email',
+              labelText: localizations?.translate('email') ?? 'Email',
+              keyboardType: TextInputType.emailAddress,
+              textInputAction: TextInputAction.next,
+              prefixIcon: const Icon(Icons.email_outlined),
+              validator: (value) => TextFieldValidators.email(value, context),
+              onSubmitted: (_) => _passwordFocusNode.requestFocus(),
+            ),
 
-                  Text(
-                    localizations?.translate('create_account_subtitle') ??
-                        'Fill in the details below to create your account',
-                    style: theme.textTheme.bodyLarge?.copyWith(
-                      color: colorScheme.onSurfaceVariant,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
+            const SizedBox(height: 16),
 
-                  const SizedBox(height: 40),
+            // Password Field
+            CommonTextField(
+              controller: _passwordController,
+              focusNode: _passwordFocusNode,
+              hintText: localizations?.translate('password_hint') ??
+                  'Enter your password',
+              labelText: localizations?.translate('password') ?? 'Password',
+              obscureText: true,
+              textInputAction: TextInputAction.next,
+              prefixIcon: const Icon(Icons.lock_outlined),
+              validator: (value) =>
+                  TextFieldValidators.password(value, context),
+              onSubmitted: (_) => _confirmPasswordFocusNode.requestFocus(),
+            ),
 
-                  // Full Name Field
-                  CommonTextField(
-                    controller: _nameController,
-                    focusNode: _nameFocusNode,
-                    hintText: localizations?.translate('full_name_hint') ??
-                        'Enter your full name',
-                    labelText:
-                        localizations?.translate('full_name') ?? 'Full Name',
-                    textInputAction: TextInputAction.next,
-                    prefixIcon: const Icon(Icons.person_outlined),
-                    validator: (value) => TextFieldValidators.required(
-                        value, context,
-                        fieldName: localizations?.translate('full_name') ??
-                            'Full Name'),
-                    onSubmitted: (_) => _emailFocusNode.requestFocus(),
-                  ),
+            const SizedBox(height: 16),
 
-                  const SizedBox(height: 20),
+            // Confirm Password Field
+            CommonTextField(
+              controller: _confirmPasswordController,
+              focusNode: _confirmPasswordFocusNode,
+              hintText: localizations?.translate('confirm_password_hint') ??
+                  'Confirm your password',
+              labelText: localizations?.translate('confirm_password') ??
+                  'Confirm Password',
+              obscureText: true,
+              textInputAction: TextInputAction.done,
+              prefixIcon: const Icon(Icons.lock_outlined),
+              validator: _validateConfirmPassword,
+              onSubmitted: (_) => _handleSignUp(),
+            ),
 
-                  // Email Field
-                  CommonTextField(
-                    controller: _emailController,
-                    focusNode: _emailFocusNode,
-                    hintText: localizations?.translate('email_hint') ??
-                        'Enter your email',
-                    labelText: localizations?.translate('email') ?? 'Email',
-                    keyboardType: TextInputType.emailAddress,
-                    textInputAction: TextInputAction.next,
-                    prefixIcon: const Icon(Icons.email_outlined),
-                    validator: (value) =>
-                        TextFieldValidators.email(value, context),
-                    onSubmitted: (_) => _passwordFocusNode.requestFocus(),
-                  ),
+            const SizedBox(height: 24),
 
-                  const SizedBox(height: 20),
-
-                  CountrySelectorField(),
-                  const SizedBox(height: 20),
-
-                  // Password Field
-                  CommonTextField(
-                    controller: _passwordController,
-                    focusNode: _passwordFocusNode,
-                    hintText: localizations?.translate('password_hint') ??
-                        'Enter your password',
-                    labelText:
-                        localizations?.translate('password') ?? 'Password',
-                    obscureText: true,
-                    textInputAction: TextInputAction.next,
-                    prefixIcon: const Icon(Icons.lock_outlined),
-                    validator: (value) =>
-                        TextFieldValidators.password(value, context),
-                    onSubmitted: (_) =>
-                        _confirmPasswordFocusNode.requestFocus(),
-                  ),
-
-                  const SizedBox(height: 20),
-
-                  // Confirm Password Field
-                  CommonTextField(
-                    controller: _confirmPasswordController,
-                    focusNode: _confirmPasswordFocusNode,
-                    hintText:
-                        localizations?.translate('confirm_password_hint') ??
-                            'Confirm your password',
-                    labelText: localizations?.translate('confirm_password') ??
-                        'Confirm Password',
-                    obscureText: true,
-                    textInputAction: TextInputAction.done,
-                    prefixIcon: const Icon(Icons.lock_outlined),
-                    validator: _validateConfirmPassword,
-                    onSubmitted: (_) => _handleSignUp(),
-                  ),
-
-                  const SizedBox(height: 24),
-
-                  // Terms and Conditions
-                  Row(
-                    children: [
-                      Checkbox(
-                        value: _agreeToTerms,
-                        onChanged: (value) {
-                          setState(() {
-                            _agreeToTerms = value ?? false;
-                          });
-                        },
+            // Terms and Conditions
+            Row(
+              children: [
+                Checkbox(
+                  value: _agreeToTerms,
+                  onChanged: (value) {
+                    setState(() {
+                      _agreeToTerms = value ?? false;
+                    });
+                  },
+                ),
+                Expanded(
+                  child: RichText(
+                    text: TextSpan(
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: colorScheme.onSurfaceVariant,
                       ),
-                      Expanded(
-                        child: RichText(
-                          text: TextSpan(
-                            style: theme.textTheme.bodyMedium?.copyWith(
-                              color: colorScheme.onSurfaceVariant,
-                            ),
-                            children: [
-                              TextSpan(
-                                  text: localizations
-                                          ?.translate('agree_to_terms') ??
-                                      'I agree to the '),
-                              TextSpan(
-                                text: localizations
-                                        ?.translate('terms_and_conditions') ??
-                                    'Terms and Conditions',
-                                style: TextStyle(
-                                  color: colorScheme.primary,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              TextSpan(
-                                  text: localizations?.translate('and') ??
-                                      ' and '),
-                              TextSpan(
-                                text: localizations
-                                        ?.translate('privacy_policy') ??
-                                    'Privacy Policy',
-                                style: TextStyle(
-                                  color: colorScheme.primary,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          ),
+                      children: [
+                        TextSpan(
+                          text: localizations?.translate('agree_to_terms') ??
+                              'I agree to the ',
                         ),
-                      ),
-                    ],
-                  ),
 
-                  const SizedBox(height: 24),
-
-                  // Cloudflare Turnstile Widget (replaces reCAPTCHA)
-                  const CloudflareTurnstileWidget(
-                    action: "create_user",
-                  ),
-
-                  const SizedBox(height: 32),
-
-                  // Sign Up Button
-                  SizedBox(
-                    height: 56,
-                    child: ElevatedButton(
-                      onPressed: isLoading ? null : _handleSignUp,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: colorScheme.primary,
-                        foregroundColor: colorScheme.onPrimary,
-                        elevation: 2,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      child: isLoading
-                          ? SizedBox(
-                              width: 24,
-                              height: 24,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                  colorScheme.onPrimary,
+                        WidgetSpan(
+                          alignment: PlaceholderAlignment.baseline,
+                          baseline: TextBaseline.alphabetic,
+                          child: MouseRegion(
+                            cursor: SystemMouseCursors.click,
+                            onEnter: (_) => setState(() => isTermsHover = true),
+                            onExit: (_) => setState(() => isTermsHover = false),
+                            child: GestureDetector(
+                              onTap: () => context.showTerms(),
+                              child: AnimatedContainer(
+                                duration: const Duration(milliseconds: 150),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 2, vertical: 1),
+                                decoration: BoxDecoration(
+                                  color: isTermsHover
+                                      ? colorScheme.primary
+                                          .withValues(alpha: 0.15)
+                                      : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(4),
                                 ),
-                              ),
-                            )
-                          : Text(
-                              localizations?.translate('sign_up') ?? 'Sign Up',
-                              style: theme.textTheme.titleMedium?.copyWith(
-                                fontWeight: FontWeight.w600,
-                                color: colorScheme.onPrimary,
+                                child: CommonText.bodyMedium(
+                                  localizations
+                                          ?.translate('terms_and_conditions') ??
+                                      'Terms and Conditions',
+                                  color: isTermsHover
+                                      ? colorScheme.primary
+                                          .withValues(alpha: 0.8)
+                                      : colorScheme.primary,
+                                ),
                               ),
                             ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 32),
-
-                  // Already have account link
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        localizations?.translate('already_have_account') ??
-                            'Already have an account? ',
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () => context.goToLogin(),
-                        style: TextButton.styleFrom(
-                          padding: EdgeInsets.zero,
-                          minimumSize: Size.zero,
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        ),
-                        child: Text(
-                          localizations?.translate('sign_in') ?? 'Sign In',
-                          style: TextStyle(
-                            color: colorScheme.primary,
-                            fontWeight: FontWeight.w600,
                           ),
                         ),
-                      ),
-                    ],
-                  ),
 
-                  const SizedBox(height: 24),
-                ],
+                        TextSpan(
+                          text: localizations?.translate('and') ?? ' and ',
+                        ),
+
+                        // ---------------- PRIVACY (with hover background) ----------------
+                        WidgetSpan(
+                          alignment: PlaceholderAlignment.baseline,
+                          baseline: TextBaseline.alphabetic,
+                          child: MouseRegion(
+                            cursor: SystemMouseCursors.click,
+                            onEnter: (_) =>
+                                setState(() => isPrivacyHover = true),
+                            onExit: (_) =>
+                                setState(() => isPrivacyHover = false),
+                            child: GestureDetector(
+                              onTap: () => context.showPrivacy(),
+                              child: AnimatedContainer(
+                                duration: const Duration(milliseconds: 150),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 2, vertical: 1),
+                                decoration: BoxDecoration(
+                                  color: isPrivacyHover
+                                      ? colorScheme.primary
+                                          .withValues(alpha: 0.15)
+                                      : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: CommonText.bodyMedium(
+                                  localizations?.translate('privacy_policy') ??
+                                      'Privacy Policy',
+                                  color: isPrivacyHover
+                                      ? colorScheme.primary
+                                          .withValues(alpha: 0.8)
+                                      : colorScheme.primary,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
+
+            const SizedBox(height: 24),
+
+            // Cloudflare Turnstile Widget (replaces reCAPTCHA)
+            CloudflareTurnstileWidget(
+              action: "create_user",
+              debugMode: false,
+            ),
+
+            const SizedBox(height: 32),
+
+            // Sign Up Button
+            SizedBox(
+              height: 56,
+              child: ElevatedButton(
+                onPressed: isLoading ? null : _handleSignUp,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: colorScheme.primary,
+                  foregroundColor: colorScheme.onPrimary,
+                  elevation: 2,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: isLoading
+                    ? SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            colorScheme.onPrimary,
+                          ),
+                        ),
+                      )
+                    : CommonText.titleMedium(
+                        localizations?.translate('sign_up') ?? 'Sign Up',
+                        fontWeight: FontWeight.w600,
+                        color: colorScheme.onPrimary,
+                      ),
               ),
             ),
-          ),
+
+            const SizedBox(height: 32),
+
+            // Already have account link
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CommonText.bodyMedium(
+                  localizations?.translate('already_have_account') ??
+                      'Already have an account? ',
+                  color: colorScheme.onSurfaceVariant,
+                ),
+                TextButton(
+                  onPressed: () => context.goToLogin(),
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    minimumSize: Size.zero,
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                  child: CommonText.bodyMedium(
+                    localizations?.translate('sign_in') ?? 'Sign In',
+                    color: colorScheme.primary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
