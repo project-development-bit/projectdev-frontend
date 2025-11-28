@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/common/footer/giga_footer.dart';
 import 'package:cointiply_app/core/common/footer/mobile_bottom_nav.dart';
 import 'package:cointiply_app/core/common/header/giga_faucet_header.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
@@ -24,31 +25,43 @@ class ShellRouteWrapper extends StatelessWidget {
     final screenWidth = context.screenWidth;
     return Scaffold(
       appBar: AppBar(
-              backgroundColor: context.surface.withAlpha(242),
-              surfaceTintColor: AppColors.transparent,
-              elevation: 0,
-              scrolledUnderElevation: 1,
-              automaticallyImplyLeading: false,
-              flexibleSpace: FlexibleSpaceBar(
-                background: Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        context.surface.withAlpha(250), // 0.98 * 255
-                        context.surface.withAlpha(235), // 0.92 * 255
-                      ],
-                    ),
-                  ),
-                  child: GigaFaucetHeader(),
-                ),
+        backgroundColor: context.surface.withAlpha(242),
+        surfaceTintColor: AppColors.transparent,
+        elevation: 0,
+        scrolledUnderElevation: 1,
+        automaticallyImplyLeading: false,
+        flexibleSpace: FlexibleSpaceBar(
+          background: Container(
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  context.surface.withAlpha(250), // 0.98 * 255
+                  context.surface.withAlpha(235), // 0.92 * 255
+                ],
               ),
-              titleSpacing: 16,
             ),
+            child: GigaFaucetHeader(),
+          ),
+        ),
+        titleSpacing: 16,
+      ),
       drawer: screenWidth < 900 ? const MobileDrawer() : null,
-      body: child,
+      body: NestedScrollView(
+        headerSliverBuilder: (context, innerBoxIsScrolled) => [],
+        body: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: child,
+            ),
+            SliverToBoxAdapter(
+              child: GigaFooter(),
+            ),
+          ],
+        ),
+      ),
       bottomNavigationBar: MobileBottomNav(),
       floatingActionButton: Consumer(builder: (context, ref, child) {
         final isChatOpen = ref.watch(rightChatOverlayProvider);
@@ -70,3 +83,4 @@ class ShellRouteWrapper extends StatelessWidget {
     );
   }
 }
+// GigaFooter()
