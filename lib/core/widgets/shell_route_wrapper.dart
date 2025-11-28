@@ -23,15 +23,7 @@ class ShellRouteWrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenWidth = context.screenWidth;
     return Scaffold(
-      drawer: screenWidth < 900 ? const MobileDrawer() : null,
-      body: NestedScrollView(
-        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          return [
-            SliverAppBar(
-              expandedHeight: 80.0,
-              floating: false,
-              pinned: true,
-              snap: false,
+      appBar: AppBar(
               backgroundColor: context.surface.withAlpha(242),
               surfaceTintColor: AppColors.transparent,
               elevation: 0,
@@ -55,10 +47,8 @@ class ShellRouteWrapper extends StatelessWidget {
               ),
               titleSpacing: 16,
             ),
-          ];
-        },
-        body: child,
-      ),
+      drawer: screenWidth < 900 ? const MobileDrawer() : null,
+      body: child,
       bottomNavigationBar: MobileBottomNav(),
       floatingActionButton: Consumer(builder: (context, ref, child) {
         final isChatOpen = ref.watch(rightChatOverlayProvider);
