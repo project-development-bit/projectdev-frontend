@@ -1,4 +1,5 @@
 import 'package:cointiply_app/core/common/common_rich_text_with_icon.dart';
+import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
 import 'package:cointiply_app/core/core.dart';
 import 'package:cointiply_app/features/reward/presentation/providers/reward_provider.dart';
 import 'package:cointiply_app/features/reward/presentation/providers/reward_state.dart';
@@ -17,6 +18,7 @@ class RewardDialog extends StatelessWidget {
     final height = _dialogHeight(context);
 
     return DialogBgWidget(
+        padding: EdgeInsets.zero,
         dialogHeight: height,
         body: _RewardDialogContent(),
         dividerColor: const Color(0xFF003248), //TODO: to use from schma color
@@ -38,7 +40,8 @@ class _RewardDialogContent extends ConsumerWidget {
     final isLoading = state.status == GetRewardStatus.loading;
     final error = state.error;
     final data = state.rewards?.data;
-
+    final visibleLevels = state.visibleLevels;
+    final isViewAll = state.isViewAll;
     return CustomScrollView(
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: [
@@ -65,30 +68,58 @@ class _RewardDialogContent extends ConsumerWidget {
         // ---------------------------
         if (!isLoading && error == null && data != null)
           SliverToBoxAdapter(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 27),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 32),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 27),
 
-                /// DESCRIPTION
-                CommonRichTextWithIcon(
-                  prefixText: LocalizationHelper(context)
-                      .translate("reward_description_prefix"),
-                  boldNumber: "5",
-                  suffixText: LocalizationHelper(context)
-                      .translate("reward_description_suffix"),
-                  iconPath: "assets/images/rewards/coin.png",
-                ),
-                RewardXpPrograssArea(data: data),
-                StatusRewardsWidget(
-                  selectedTier: data.currentTier,
-                  tiers: data.tiers,
-                )
-              ],
+                  /// DESCRIPTION
+                  CommonRichTextWithIcon(
+                    prefixText: LocalizationHelper(context)
+                        .translate("reward_description_prefix"),
+                    boldNumber: "5",
+                    suffixText: LocalizationHelper(context)
+                        .translate("reward_description_suffix"),
+                    iconPath: "assets/images/rewards/coin.png",
+                  ),
+                  RewardXpPrograssArea(data: data),
+                  StatusRewardsWidget(
+                    selectedTier: data.currentTier,
+                    tiers: data.tiers,
+                  )
+                ],
+              ),
             ),
           ),
         if (!isLoading && error == null && data != null)
-          StatusRewardsTableSliver(levels: data.levels),
+          StatusRewardsTableSliver(
+            levels: visibleLevels,
+            currentLevel: data.currentLevel,
+          ),
+
+        if (!isLoading && error == null && data != null)
+          SliverToBoxAdapter(
+            child: Center(
+              child: CustomUnderLineButtonWidget(
+                isDark: true,
+                onTap: () {
+                  final notifier = ref.read(getRewardNotifierProvider.notifier);
+                  isViewAll ? notifier.collapse() : notifier.viewAll();
+                },
+                fontSize: 16,
+                width: 115,
+                fontWeight: FontWeight.w700,
+                padding: EdgeInsets.symmetric(vertical: 4, horizontal: 0),
+                margin: const EdgeInsets.symmetric(vertical: 8.5),
+                title: isViewAll ? "Collapse" : "View All",
+              ),
+            ),
+          ),
+        SliverToBoxAdapter(
+          child: SizedBox(height: 24),
+        ),
       ],
     );
   }
@@ -96,7 +127,7 @@ class _RewardDialogContent extends ConsumerWidget {
 
 Widget _loadingWidget() {
   return const Padding(
-    padding: EdgeInsets.symmetric(vertical: 24),
+    padding: EdgeInsets.symmetric(vertical: 24, horizontal: 32),
     child: Center(
       child: CircularProgressIndicator(
         strokeWidth: 3,
@@ -110,7 +141,7 @@ Widget _errorWidget(String error) {
   return Padding(
     padding: const EdgeInsets.symmetric(
       vertical: 20,
-      horizontal: 24,
+      horizontal: 32,
     ),
     child: Center(
       child: CommonText.bodyLarge(
