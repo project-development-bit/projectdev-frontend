@@ -12,13 +12,31 @@ final getAppSettingsUseCaseProvider = Provider<GetAppSettingsUseCase>((ref) {
 });
 
 /// UseCase implementation
-class GetAppSettingsUseCase implements UseCase<AppConfigData, bool> {
+class GetAppSettingsUseCase implements UseCase<AppSettingsData, NoParams> {
   final AppSettingsRepository repository;
 
   GetAppSettingsUseCase(this.repository);
 
   @override
-  Future<Either<Failure, AppConfigData>> call(bool forceRefresh) async {
-    return repository.getAppSettings(forceRefresh: forceRefresh);
+  Future<Either<Failure, AppSettingsData>> call(NoParams params) async {
+    return repository.getAppSettings();
+  }
+}
+
+final getLocalAppSettingsUseCaseProvider =
+    Provider<GetLocalAppSettingsUseCase>((ref) {
+  final repository = ref.watch(appSettingsRepositoryProvider);
+  return GetLocalAppSettingsUseCase(repository);
+});
+
+class GetLocalAppSettingsUseCase
+    implements UseCase<AppSettingsData?, NoParams> {
+  final AppSettingsRepository repository;
+
+  GetLocalAppSettingsUseCase(this.repository);
+
+  @override
+  Future<Either<Failure, AppSettingsData?>> call(NoParams params) async {
+    return repository.cacheAppSettings();
   }
 }
