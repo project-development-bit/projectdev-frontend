@@ -57,34 +57,38 @@ class _ProfileDialogState extends ConsumerState<ProfileDialog> {
     return DialogBgWidget(
       dialogHeight: height,
       title: currentUserState.user?.name ?? "Unknown User",
+      padding: EdgeInsets.zero,
       body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const SizedBox(height: 24),
-            AvatarBadgeInfo(
-              levelImage: "assets/images/levels/bronze.png",
-              levelText: context.translate("profile_level_bronze_1"),
-              messageCount: "1542",
-              location: "Thailand",
-              createdText: context.translate("profile_created_days"),
-            ),
-            SizedBox(height: isMobile || isTablet ? 31 : 40),
-            ProfileTabs(
-              onTabChanged: (i) => setState(() => selectedTab = i),
-            ),
-            SizedBox(height: isMobile || isTablet ? 16 : 23),
-            selectedTab == 0
-                ? StatisticsSection(state: selectedStatisticsState)
-                : CoinsHistorySection(
-                    state: selectedEarningsHistoryState,
-                    loadMore: () {
-                      earningsHistoryNotifier.loadMore();
-                    },
-                  ),
-            const SizedBox(height: 20),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(height: 24),
+              AvatarBadgeInfo(
+                levelImage: "assets/images/levels/bronze.png",
+                levelText: context.translate("profile_level_bronze_1"),
+                messageCount: "1542",
+                location: "Thailand",
+                createdText: context.translate("profile_created_days"),
+              ),
+              SizedBox(height: isMobile || isTablet ? 31 : 40),
+              ProfileTabs(
+                onTabChanged: (i) => setState(() => selectedTab = i),
+              ),
+              SizedBox(height: isMobile || isTablet ? 16 : 23),
+              selectedTab == 0
+                  ? StatisticsSection(state: selectedStatisticsState)
+                  : CoinsHistorySection(
+                      state: selectedEarningsHistoryState,
+                      loadMore: () {
+                        earningsHistoryNotifier.loadMore();
+                      },
+                    ),
+              const SizedBox(height: 20),
+            ],
+          ),
         ),
       ),
     );
