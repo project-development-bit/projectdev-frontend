@@ -6,7 +6,6 @@ import 'package:cointiply_app/features/auth/presentation/widgets/two_factor_auth
 import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/get_profile_notifier.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/setting_profile_notifier.dart';
-import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/dialog_bg_widget.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/manage_profile/upload_avatar_dialog.dart';
 import 'package:cointiply_app/routing/routing.dart';
 import 'package:flutter/material.dart';
@@ -27,13 +26,12 @@ part 'tab/setting_tab_content_widget.dart';
 final tabBarIndexProvider = StateProvider.autoDispose<int>((ref) => 0);
 
 void showManageProfileDialog(BuildContext context) {
-  final colorScheme = Theme.of(context).colorScheme;
-
-  showDialog(
-    context: context,
+  final screenHeight = MediaQuery.of(context).size.height;
+  context.showManagePopup(
+    height: screenHeight > 700 ? 526 : screenHeight * 0.85,
     barrierDismissible: true,
-    barrierColor: colorScheme.scrim.withValues(alpha: 0.6),
-    builder: (context) => const ManageProfileDialog(),
+    child: const ManageProfileDialog(),
+    title: context.translate("manage_profile_title"),
   );
 }
 
@@ -46,8 +44,6 @@ class ManageProfileDialog extends ConsumerStatefulWidget {
 }
 
 class _ManageProfileDialogState extends ConsumerState<ManageProfileDialog> {
-
-
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -60,13 +56,8 @@ class _ManageProfileDialogState extends ConsumerState<ManageProfileDialog> {
   @override
   Widget build(BuildContext context) {
     final getProfileStatus = ref.watch(getProfileNotifierProvider).status;
-     final screenHeight = MediaQuery.of(context).size.height;
 
-    return DialogBgWidget(
-      dialogHeight: screenHeight > 700 ? 526 : screenHeight * 0.85,
-      body: _manageDialogBody(status:getProfileStatus),
-      title: context.translate("manage_profile_title"),
-    );
+    return _manageDialogBody(status: getProfileStatus);
   }
 
   _manageDialogBody({required GetProfileStatus status}) {
@@ -75,7 +66,6 @@ class _ManageProfileDialogState extends ConsumerState<ManageProfileDialog> {
       mainAxisSize: MainAxisSize.min,
       children: [
         _manageProfileTabBar(),
-        
         if (status == GetProfileStatus.loading) ...[
           const SizedBox(height: 50),
           Center(
@@ -93,13 +83,13 @@ class _ManageProfileDialogState extends ConsumerState<ManageProfileDialog> {
             ),
           ),
         ],
-        if (status == GetProfileStatus.success) 
-        Expanded(
-          child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            child: _manageProfileTabBody(),
+        if (status == GetProfileStatus.success)
+          Expanded(
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: _manageProfileTabBody(),
+            ),
           ),
-        ),
       ],
     );
   }

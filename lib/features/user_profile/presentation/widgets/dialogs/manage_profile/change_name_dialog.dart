@@ -5,19 +5,16 @@ import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/change_name_notifier.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/get_profile_notifier.dart';
-import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/dialog_bg_widget.dart';
 import 'package:cointiply_app/routing/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 showChangeNameDialog(BuildContext context) {
-  showDialog(
-    context: context,
-    barrierDismissible: true,
-    builder: (context) => DialogBgWidget(
-        dialogHeight: context.isMobile ? 320 : 280,
-        body: const ChangeNameDialog(),
-        title: context.translate("change_your_name")),
+  context.showManagePopup(
+    height: context.isMobile ? 320 : 280,
+    barrierDismissible: false,
+    child: ChangeNameDialog(),
+    title: context.translate("change_your_name"),
   );
 }
 
@@ -35,7 +32,7 @@ class _ChangeNameDialogState extends ConsumerState<ChangeNameDialog> {
   @override
   void initState() {
     super.initState();
-    
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final userName = ref.read(currentUserProvider).user?.name ?? '';
       _nameController.text = userName;
@@ -50,14 +47,19 @@ class _ChangeNameDialogState extends ConsumerState<ChangeNameDialog> {
             textColor: Colors.white,
           );
           context.pop(); // close dialog
-          ref.read(getProfileNotifierProvider.notifier).fetchProfile(isLoading: false); // refresh profile
-          ref.read(currentUserProvider.notifier).getCurrentUser(); // refresh current user
+          ref
+              .read(getProfileNotifierProvider.notifier)
+              .fetchProfile(isLoading: false); // refresh profile
+          ref
+              .read(currentUserProvider.notifier)
+              .getCurrentUser(); // refresh current user
         }
       } else if (next.status == ChangeNameStatus.failure) {
         // Show error message
         if (mounted && context.mounted) {
           context.showSnackBar(
-            message: next.errorMessage ?? context.translate('failed_to_change_name'),
+            message:
+                next.errorMessage ?? context.translate('failed_to_change_name'),
             backgroundColor: context.error,
             textColor: Colors.white,
           );
@@ -77,7 +79,7 @@ class _ChangeNameDialogState extends ConsumerState<ChangeNameDialog> {
     if (_formKey.currentState?.validate() ?? false) {
       final newName = _nameController.text.trim();
       final currentName = ref.read(currentUserProvider).user?.name ?? '';
-      
+
       // Check if name has changed
       if (newName == currentName) {
         context.showSnackBar(
@@ -108,9 +110,9 @@ class _ChangeNameDialogState extends ConsumerState<ChangeNameDialog> {
 
       // Call change name API
       ref.read(changeNameNotifierProvider.notifier).changeName(
-        userId,
-        newName,
-      );
+            userId,
+            newName,
+          );
     }
   }
 
@@ -156,7 +158,8 @@ class _ChangeNameDialogState extends ConsumerState<ChangeNameDialog> {
                   children: [
                     SizedBox(
                       width: 120,
-                      child: CommonText.bodyMedium(context.translate("new_name")),
+                      child:
+                          CommonText.bodyMedium(context.translate("new_name")),
                     ),
                     const SizedBox(width: 16),
                     Expanded(
@@ -183,7 +186,7 @@ class _ChangeNameDialogState extends ConsumerState<ChangeNameDialog> {
               const SizedBox(height: 24),
               Center(
                 child: CommonButton(
-                    backgroundColor: Color(0xff333333),
+                  backgroundColor: Color(0xff333333),
                   text: context.translate('change_name_btn_text'),
                   onPressed: isLoading ? null : _handleSubmit,
                   isLoading: isLoading,

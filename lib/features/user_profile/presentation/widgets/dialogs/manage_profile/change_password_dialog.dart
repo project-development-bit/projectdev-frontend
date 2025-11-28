@@ -3,17 +3,16 @@ import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/common/common_textfield.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/change_password_notifier.dart';
-import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/dialog_bg_widget.dart';
 import 'package:cointiply_app/routing/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 showChangePasswordDialog(BuildContext context) {
-  showDialog(
-    context: context,
-    barrierDismissible: true,
-    builder: (context) => const ChangePasswordDialog(),
-  );
+  context.showManagePopup(
+      height: context.isMobile ? 550 : 450,
+      child: const ChangePasswordDialog(),
+      barrierDismissible: false,
+      title: context.translate("change_your_password"));
 }
 
 class ChangePasswordDialog extends ConsumerStatefulWidget {
@@ -92,11 +91,7 @@ class _ChangePasswordDialogState extends ConsumerState<ChangePasswordDialog> {
   @override
   Widget build(BuildContext context) {
     final isLoading = ref.watch(changePasswordNotifierProvider).isChanging;
-    return DialogBgWidget(
-      dialogHeight: context.isMobile ? 550 : 450,
-      body: _dialogBgWidget(isLoading: isLoading),
-      title: context.translate("change_your_password"),
-    );
+    return _dialogBgWidget(isLoading: isLoading);
   }
 
   Widget _dialogBgWidget({required bool isLoading}) {
@@ -254,8 +249,8 @@ class _ChangePasswordDialogState extends ConsumerState<ChangePasswordDialog> {
                   children: [
                     SizedBox(
                       width: 150,
-                      child:
-                          CommonText.bodyMedium(context.translate("new_password")),
+                      child: CommonText.bodyMedium(
+                          context.translate("new_password")),
                     ),
                     const SizedBox(width: 16),
                     Expanded(
@@ -325,7 +320,8 @@ class _ChangePasswordDialogState extends ConsumerState<ChangePasswordDialog> {
                         ),
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
-                            return context.translate('repeat_password_required');
+                            return context
+                                .translate('repeat_password_required');
                           }
                           if (value != _newPasswordController.text) {
                             return context.translate('passwords_do_not_match');

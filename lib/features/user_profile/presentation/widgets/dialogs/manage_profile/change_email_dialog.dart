@@ -5,21 +5,16 @@ import 'package:cointiply_app/core/extensions/extensions.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/change_email_notifier.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
 import 'package:cointiply_app/routing/routing.dart';
-import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/dialog_bg_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'verification_change_email_dialog.dart';
 
 void showChangeEmailDialog(BuildContext context) {
-  final colorScheme = Theme.of(context).colorScheme;
-
-  showDialog(
-    context: context,
-    barrierDismissible: true,
-    barrierColor: colorScheme.scrim.withValues(alpha: 0.6),
-    builder: (context) => const ChangeEmailDialog(),
-  );
+  context.showManagePopup(
+      height: 526,
+      child: const ChangeEmailDialog(),
+      title: context.translate("change_your_email_title"));
 }
 
 class ChangeEmailDialog extends ConsumerStatefulWidget {
@@ -130,11 +125,7 @@ class _ChangeEmailDialogState extends ConsumerState<ChangeEmailDialog> {
   Widget build(BuildContext context) {
     final changeEmailState = ref.watch(changeEmailProvider);
     final isChanging = changeEmailState.isChanging;
-    return DialogBgWidget(
-      dialogHeight: 526,
-      body: _manageDialogBody(context, isChanging),
-      title: context.translate("change_your_email_title"),
-    );
+    return _manageDialogBody(context, isChanging);
   }
 
   Widget _manageDialogBody(BuildContext context, bool isChanging) {

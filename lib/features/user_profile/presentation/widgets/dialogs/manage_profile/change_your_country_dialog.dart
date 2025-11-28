@@ -8,20 +8,16 @@ import 'package:cointiply_app/features/user_profile/presentation/providers/chang
 import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/get_countries_state.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/get_profile_notifier.dart';
-import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/dialog_bg_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 void showChangeCountryDialog(BuildContext context) {
-  final colorScheme = Theme.of(context).colorScheme;
-
-  showDialog(
-    context: context,
-    barrierDismissible: true,
-    barrierColor: colorScheme.scrim.withValues(alpha: 0.6),
-    builder: (context) => const ChangeCountryDialog(),
-  );
+  context.showManagePopup(
+      barrierDismissible: true,
+      height: 400,
+      child: const ChangeCountryDialog(),
+      title: context.translate("change_your_country_title"));
 }
 
 class ChangeCountryDialog extends ConsumerStatefulWidget {
@@ -85,11 +81,7 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return DialogBgWidget(
-      dialogHeight: 400,
-      body: _manageDialogBody(context),
-      title: context.translate("change_your_country_title"),
-    );
+    return _manageDialogBody(context);
   }
 
   Widget _manageDialogBody(BuildContext context) {
