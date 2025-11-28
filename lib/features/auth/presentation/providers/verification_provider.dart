@@ -260,7 +260,7 @@ final verifyCodeForgotPasswordUsecaseProvider =
 
 /// Provider for verification state notifier
 final verificationNotifierProvider =
-    StateNotifierProvider<VerificationNotifier, VerificationState>(
+    StateNotifierProvider.autoDispose<VerificationNotifier, VerificationState>(
         (ref) => VerificationNotifier(
               ref.watch(resendCodeUseCaseProvider),
               ref.watch(verifyCodeUseCaseProvider),

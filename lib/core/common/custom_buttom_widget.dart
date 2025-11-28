@@ -5,6 +5,10 @@ class CustomUnderLineButtonWidget extends StatefulWidget {
   final String title;
   final VoidCallback? onTap;
 
+  final Color? backgroundColor;
+  final Color? textColor;
+  final double? height;
+  final double? borderRadius;
   final bool isActive;
   final bool isDisabled;
   final bool isDark;
@@ -12,18 +16,18 @@ class CustomUnderLineButtonWidget extends StatefulWidget {
   final EdgeInsetsGeometry? padding;
   final EdgeInsetsGeometry? margin;
   final double? width;
-  final double? height;
   final double? fontSize;
   final FontWeight? fontWeight;
-  final double? borderRadius;
 
   final Color? fontColor;
   final Color? borderColor;
   final Gradient? gradient;
+  final bool isLoading;
   const CustomUnderLineButtonWidget({
     super.key,
     required this.title,
     required this.onTap,
+    this.isLoading = false,
     this.isActive = false,
     this.isDisabled = false,
     this.isDark = false,
@@ -33,6 +37,8 @@ class CustomUnderLineButtonWidget extends StatefulWidget {
     this.height,
     this.fontSize,
     this.fontWeight,
+    this.backgroundColor,
+    this.textColor,
     this.borderRadius,
     this.fontColor,
     this.borderColor,
@@ -116,12 +122,23 @@ class _CustomUnderLineButtonWidgetState
             ),
           ),
           child: Center(
-            child: CommonText.titleMedium(
-              widget.title,
-              fontSize: widget.fontSize ?? 18,
-              fontWeight: widget.fontWeight ?? FontWeight.w700,
-              color: finalTextColor,
-            ),
+            child: widget.isLoading
+                ? SizedBox(
+                    height: 20,
+                    width: 20,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      valueColor: AlwaysStoppedAnimation(
+                        finalTextColor,
+                      ),
+                    ),
+                  )
+                : CommonText.titleMedium(
+                    widget.title,
+                    fontSize: widget.fontSize ?? 18,
+                    fontWeight: widget.fontWeight ?? FontWeight.w700,
+                    color: finalTextColor,
+                  ),
           ),
         ),
       ),

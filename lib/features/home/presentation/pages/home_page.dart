@@ -1,4 +1,3 @@
-import 'package:cointiply_app/core/common/footer/giga_footer.dart';
 import 'package:cointiply_app/features/home/presentation/widgets/event/home_event_section.dart';
 import 'package:cointiply_app/features/home/presentation/widgets/home_features_section.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
@@ -33,39 +32,32 @@ class _HomePageState extends ConsumerState<HomePage> {
   Widget build(BuildContext context) {
     // Load profile data when the page builds
 
-    return CustomScrollView(
-      slivers: [
+    return Column(
+      children: [
         /// home banner section
-        SliverToBoxAdapter(
-          child: HomeBannerSection(),
-        ),
-        SliverToBoxAdapter(
-          child: Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                    repeat: ImageRepeat.repeat,
-                    image: AssetImage(
-                      context.isDark
-                          ? 'assets/images/bg/home_background.png'
-                          : 'assets/images/bg/home_background.png',
-                    ),
-                    fit: BoxFit.fitWidth,
-                    alignment: Alignment.topCenter),
-              ),
-              child: Column(
-                children: [
-                  HomeFeaturesSection(),
-                  HomeLevelAndRewardSection(),
-                  SizedBox(height: 50),
-                  HomeEventSection(),
-                  SizedBox(height: 50),
-                ],
-              )),
-        ),
-        SliverToBoxAdapter(
-          child: GigaFooter(),
-        ),
+        HomeBannerSection(),
+        Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                  repeat: ImageRepeat.repeat,
+                  image: AssetImage(
+                    context.isDark
+                        ? 'assets/images/bg/home_background.png'
+                        : 'assets/images/bg/home_background.png',
+                  ),
+                  fit: BoxFit.fitWidth,
+                  alignment: Alignment.topCenter),
+            ),
+            child: Column(
+              children: [
+                HomeFeaturesSection(),
+                HomeLevelAndRewardSection(),
+                SizedBox(height: 50),
+                HomeEventSection(),
+                SizedBox(height: 50),
+              ],
+            )),
       ],
     );
   }

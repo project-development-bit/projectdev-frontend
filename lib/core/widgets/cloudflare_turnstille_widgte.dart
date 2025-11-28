@@ -208,84 +208,67 @@ class _CloudflareTurnstileWidgetState
       language: _getLanguage,
       retryAutomatically: widget.retryAutomatically,
     );
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    // final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
-    return Container(
+    return SizedBox(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      // padding: const EdgeInsets.symmetric(vertical: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Turnstile Widget
-          Container(
-            width: double.infinity,
-            constraints: const BoxConstraints(
-              minHeight: 65,
-              maxHeight: 100,
-            ),
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: isDarkMode
-                    ? AppColors.darkTextTertiary
-                    : AppColors.lightTextTertiary,
-                width: 1,
-              ),
-              borderRadius: BorderRadius.circular(8),
-              color: Theme.of(context).cardColor,
-            ),
-            child: _isInitialized && controller != null
-                ? Center(
-                    child: CloudflareTurnstile(
-                      siteKey: _getLiveSiteKey,
-                      options: options,
-                      controller: controller,
-                      action: widget.action,
-                      baseUrl: kDebugMode
-                          ? "http://localhost"
-                          : "https://staging.gigafaucet.com",
-                      onTokenReceived: (token) {
-                        if (kDebugMode) {
-                          print('✅ Turnstile: Token received successfully');
-                          print('🔑 Site Key: $_getLiveSiteKey');
-                          print(
-                              '🌐 Environment: ${kDebugMode ? "Debug" : "Production"}');
-                        }
-                        turnstileNotifier.onTokenReceived(token);
-                      },
-                      onTokenExpired: () {
-                        if (kDebugMode) {
-                          print('⏰ Turnstile: Token expired');
-                        }
-                        turnstileNotifier.onTokenExpired();
-                      },
-                      onError: (error) {
-                        if (kDebugMode) {
-                          print('❌ Turnstile Error: ${error.message}');
-                          print('🔑 Site Key Used: $_getLiveSiteKey');
-                          print(
-                              '🌐 Environment: ${kDebugMode ? "Debug" : "Production"}');
-                          print('🔧 Domain: ${Uri.base.host}');
-                          print('🔒 HTTPS: ${Uri.base.scheme == "https"}');
-                        }
-                        turnstileNotifier.onTurnstileError(error.message);
-                      },
-                    ),
-                  )
-                : const Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          width: 16,
-                          height: 16,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        ),
-                        SizedBox(width: 12),
-                        Text('Loading security verification...'),
-                      ],
-                    ),
+          _isInitialized && controller != null
+              ? Center(
+                  child: CloudflareTurnstile(
+                    siteKey: _getLiveSiteKey,
+                    options: options,
+                    controller: controller,
+                    action: widget.action,
+                    baseUrl: kDebugMode
+                        ? "http://localhost"
+                        : "https://staging.gigafaucet.com",
+                    onTokenReceived: (token) {
+                      if (kDebugMode) {
+                        print('✅ Turnstile: Token received successfully');
+                        print('🔑 Site Key: $_getLiveSiteKey');
+                        print(
+                            '🌐 Environment: ${kDebugMode ? "Debug" : "Production"}');
+                      }
+                      turnstileNotifier.onTokenReceived(token);
+                    },
+                    onTokenExpired: () {
+                      if (kDebugMode) {
+                        print('⏰ Turnstile: Token expired');
+                      }
+                      turnstileNotifier.onTokenExpired();
+                    },
+                    onError: (error) {
+                      if (kDebugMode) {
+                        print('❌ Turnstile Error: ${error.message}');
+                        print('🔑 Site Key Used: $_getLiveSiteKey');
+                        print(
+                            '🌐 Environment: ${kDebugMode ? "Debug" : "Production"}');
+                        print('🔧 Domain: ${Uri.base.host}');
+                        print('🔒 HTTPS: ${Uri.base.scheme == "https"}');
+                      }
+                      turnstileNotifier.onTurnstileError(error.message);
+                    },
                   ),
-          ),
+                )
+              : const Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: 16,
+                        height: 16,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      ),
+                      SizedBox(width: 12),
+                      Text('Loading security verification...'),
+                    ],
+                  ),
+                ),
 
           const SizedBox(height: 8),
 
@@ -388,14 +371,15 @@ class _CloudflareTurnstileWidgetState
         return Row(
           children: [
             const SizedBox(
-              width: 16,
-              height: 16,
+              width: 22,
+              height: 22,
               child: CircularProgressIndicator(strokeWidth: 2),
             ),
-            const SizedBox(width: 8),
-            CommonText.bodySmall(
+            const SizedBox(width: 6),
+            CommonText.bodyMedium(
               'Verifying security challenge...',
               color: context.onSurfaceVariant,
+              fontWeight: FontWeight.w500,
             ),
           ],
         );
@@ -403,9 +387,9 @@ class _CloudflareTurnstileWidgetState
       case TurnstileSuccess():
         return Row(
           children: [
-            const Icon(Icons.check_circle, size: 16, color: AppColors.success),
-            const SizedBox(width: 8),
-            CommonText.bodySmall(
+            const Icon(Icons.check_circle, size: 22, color: AppColors.success),
+            const SizedBox(width: 6),
+            CommonText.bodyMedium(
               'Security verification successful',
               color: AppColors.success,
               fontWeight: FontWeight.w500,
@@ -416,10 +400,10 @@ class _CloudflareTurnstileWidgetState
       case TurnstileError(message: final message):
         return Row(
           children: [
-            Icon(Icons.error, size: 16, color: colorScheme.error),
-            const SizedBox(width: 8),
+            Icon(Icons.error, size: 22, color: colorScheme.error),
+            const SizedBox(width: 6),
             Expanded(
-              child: CommonText.bodySmall(
+              child: CommonText.bodyMedium(
                 'Verification failed: $message',
                 color: colorScheme.error,
               ),
