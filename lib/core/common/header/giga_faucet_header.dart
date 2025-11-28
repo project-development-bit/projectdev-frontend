@@ -21,7 +21,7 @@ class GigaFaucetHeader extends ConsumerWidget {
     final screenWidth = context.screenWidth;
     final isAuthenticated = ref.watch(isAuthenticatedObservableProvider);
     return HomeSectionContainer(
-        // width: double.infinity,
+        width: double.infinity,
         decoration: BoxDecoration(
           color: colorScheme.surface,
           border: Border(
@@ -34,8 +34,8 @@ class GigaFaucetHeader extends ConsumerWidget {
         child: Center(
           child: Container(
             alignment: Alignment.center,
-            // constraints: const BoxConstraints(maxWidth: 1240),
-            // margin: EdgeInsets.symmetric(horizontal: 17),
+            constraints: const BoxConstraints(maxWidth: 1240),
+            margin: EdgeInsets.symmetric(horizontal: 17),
             padding: EdgeInsets.symmetric(
               horizontal: screenWidth > 1000 ? 30 : 0,
             ),
