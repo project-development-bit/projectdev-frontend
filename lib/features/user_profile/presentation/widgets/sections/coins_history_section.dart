@@ -1,18 +1,17 @@
 import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
 import 'package:cointiply_app/core/core.dart';
 import 'package:cointiply_app/features/earnings/presentation/provider/earnings_history_state.dart';
-import 'package:cointiply_app/features/earnings/presentation/provider/get_earnings_history_notifier.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/cards/coins_earned_history_card.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class CoinsHistorySection extends ConsumerWidget {
-  const CoinsHistorySection({super.key});
+class CoinsHistorySection extends StatelessWidget {
+  const CoinsHistorySection(
+      {super.key, required this.state, required this.loadMore});
+  final EarningsHistoryState state;
+  final Function loadMore;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(earningsHistoryNotifierProvider);
-    final notifier = ref.read(earningsHistoryNotifierProvider.notifier);
+  Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context);
 
     if (state.status == EarningsHistoryStatus.loading && state.data == null) {
@@ -54,7 +53,7 @@ class CoinsHistorySection extends ConsumerWidget {
         if (state.canLoadMore && !state.isLoadingMore)
           CustomButtonWidget(
             title: localizations?.translate("load_more") ?? "Load More",
-            onTap: notifier.loadMore,
+            onTap: () => loadMore(),
             fontWeight: FontWeight.w700,
           ),
       ],

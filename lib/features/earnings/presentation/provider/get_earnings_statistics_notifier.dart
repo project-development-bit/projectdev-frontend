@@ -36,7 +36,7 @@ class GetEarningsStatisticsNotifier
   }
 }
 
-final earningsStatisticsNotifierProvider = StateNotifierProvider<
+final earningsStatisticsNotifierProvider = StateNotifierProvider.autoDispose<
     GetEarningsStatisticsNotifier, EarningsStatisticsState>((ref) {
   final usecase = ref.watch(getEarningsStatisticsUseCaseProvider);
   return GetEarningsStatisticsNotifier(usecase);

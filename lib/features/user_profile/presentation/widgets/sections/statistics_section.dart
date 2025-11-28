@@ -1,16 +1,14 @@
 import 'package:cointiply_app/core/core.dart';
 import 'package:cointiply_app/features/earnings/presentation/provider/earnings_statistics_state.dart';
-import 'package:cointiply_app/features/earnings/presentation/provider/get_earnings_statistics_notifier.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/cards/statistics_card.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class StatisticsSection extends ConsumerWidget {
-  const StatisticsSection({super.key});
+class StatisticsSection extends StatelessWidget {
+  const StatisticsSection({super.key, required this.state});
+  final EarningsStatisticsState state;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(earningsStatisticsNotifierProvider);
+  Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context);
 
     switch (state.status) {

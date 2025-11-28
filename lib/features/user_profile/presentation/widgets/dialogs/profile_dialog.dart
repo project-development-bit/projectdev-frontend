@@ -47,6 +47,13 @@ class _ProfileDialogState extends ConsumerState<ProfileDialog> {
     final isMobile = context.isMobile;
     final currentUserState = ref.watch(currentUserProvider);
 
+    final selectedStatisticsState =
+        ref.watch(earningsStatisticsNotifierProvider);
+    final selectedEarningsHistoryState =
+        ref.watch(earningsHistoryNotifierProvider);
+    final earningsHistoryNotifier =
+        ref.read(earningsHistoryNotifierProvider.notifier);
+
     return DialogBgWidget(
       dialogHeight: height,
       title: currentUserState.user?.name ?? "Unknown User",
@@ -69,8 +76,13 @@ class _ProfileDialogState extends ConsumerState<ProfileDialog> {
             ),
             SizedBox(height: isMobile || isTablet ? 16 : 23),
             selectedTab == 0
-                ? const StatisticsSection()
-                : const CoinsHistorySection(),
+                ? StatisticsSection(state: selectedStatisticsState)
+                : CoinsHistorySection(
+                    state: selectedEarningsHistoryState,
+                    loadMore: () {
+                      earningsHistoryNotifier.loadMore();
+                    },
+                  ),
             const SizedBox(height: 20),
           ],
         ),
