@@ -139,7 +139,7 @@ class _VerificationFormWidgetState
             color: colorScheme.onPrimary,
           ),
       decoration: BoxDecoration(
-        color: colorScheme.surface,
+        color: Colors.transparent,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: context.onPrimary.withValues(alpha: 0.5),

@@ -23,7 +23,7 @@ class VerificationPage extends StatelessWidget {
           horizontal: context.isMobile ? 16 : 37),
       girlHeight: 500,
       girlRightOffset: -200,
-      girlBottomOffset: -350,
+      girlBottomOffset: -250,
       child: VerificationFormWidget(
         email: email,
         isFromForgotPassword: isFromForgotPassword,
