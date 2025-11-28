@@ -1,5 +1,6 @@
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class CoinsEarnedHistoryCard extends StatelessWidget {
   final String title;
@@ -139,7 +140,7 @@ class CoinsEarnedHistoryCard extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           CommonText.titleMedium(
-            amount.toString(),
+            NumberFormat('#,###').format(amount),
             fontSize: 20,
             fontWeight: FontWeight.w700,
             color: colorScheme.onPrimary,

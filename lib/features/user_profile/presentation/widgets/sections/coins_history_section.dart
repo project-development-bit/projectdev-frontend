@@ -42,13 +42,26 @@ class CoinsHistorySection extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 20),
-        for (final item in items)
-          CoinsEarnedHistoryCard(
-            title: item.title,
-            subtitle: item.category,
-            amount: item.amount,
-            timeAgo: item.timeAgo,
-          ),
+        // Empty state
+        if (items.isEmpty)
+          Container(
+            height: 200,
+            padding: const EdgeInsets.symmetric(vertical: 40),
+            child: CommonText.bodyMedium(
+              localizations?.translate('no_coin_earn_history') ??
+                  "No coin earning activity yet.",
+              color: Color(0xFF98989A),
+            ),
+          )
+        else
+          for (final item in items)
+            CoinsEarnedHistoryCard(
+              title: item.title,
+              subtitle: item.category,
+              amount: item.amount,
+              timeAgo: item.timeAgo,
+            ),
+
         const SizedBox(height: 20),
         if (state.isLoadingMore)
           const Center(child: CircularProgressIndicator()),

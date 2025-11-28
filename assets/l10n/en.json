@@ -645,5 +645,6 @@
   "anonymous_in_contests": "Anonymous in contests",
   "anonymous_contests_description": "When enabled, your account appears anonymously in contest rankings. Off by default.",
   "country": "Country",
-  "claim_now": "Claim Now"
+  "claim_now": "Claim Now",
+  "no_coin_earn_history": "No coin earning History yet."
 }

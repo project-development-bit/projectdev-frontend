@@ -2,6 +2,7 @@ import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:cointiply_app/core/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class StatCard extends StatelessWidget {
   final String title;
@@ -194,7 +195,7 @@ class StatCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           CommonText.titleLarge(
-            value,
+            NumberFormat('#,###').format(int.tryParse(value) ?? 0),
             fontSize: 20,
             fontWeight: FontWeight.w700,
             color: colorScheme.onPrimary,
