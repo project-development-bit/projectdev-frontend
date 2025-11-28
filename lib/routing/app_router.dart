@@ -193,8 +193,8 @@ class BurgerEatsAppRoutes {
             navigatorKey: _shellNavigatorKey,
             pageBuilder: (context, state, child) {
               return NoTransitionPage(
-                child: ShellRouteWrapper(
-                  child: InternalVerificationOverlay(
+                child: InternalVerificationOverlay(
+                  child: ShellRouteWrapper(
                     child: RightChatOverlay(
                       child: Consumer(
                         builder: (context, ref, _) {
