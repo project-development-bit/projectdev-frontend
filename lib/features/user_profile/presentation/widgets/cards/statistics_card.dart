@@ -177,8 +177,11 @@ class StatCard extends StatelessWidget {
   Widget _buildEarnBadge(ColorScheme colorScheme, String value, bool isMobile) {
     return Container(
       alignment: Alignment.center,
-      width: isMobile ? 150 : 120,
+      padding: EdgeInsets.symmetric(horizontal: 12),
       height: 40,
+      constraints: BoxConstraints(
+        minWidth: 150,
+      ),
       decoration: BoxDecoration(
         color: Color(0xff100E1C),
         borderRadius: BorderRadius.circular(30),
