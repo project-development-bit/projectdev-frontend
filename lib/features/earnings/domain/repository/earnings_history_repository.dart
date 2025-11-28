@@ -1,4 +1,4 @@
-import 'package:cointiply_app/features/earnings/data/datasources/remote/earnings_history_remote_data_source.dart';
+import 'package:cointiply_app/features/earnings/data/datasources/remote/earnings_remote_data_source.dart';
 import 'package:cointiply_app/features/earnings/data/repository/earnings_history_repository_impl.dart';
 import 'package:cointiply_app/features/earnings/domain/entity/earnings_history_response.dart';
 import 'package:dartz/dartz.dart';
@@ -11,7 +11,7 @@ final earningsHistoryRepositoryProvider = Provider<EarningsHistoryRepository>(
     ref,
   ) =>
       EarningsHistoryRepositoryImpl(
-    ref.watch(earningsHistoryRemoteDataSourceProvider),
+    ref.watch(earningsRemoteDataSourceProvider),
   ),
 );
 

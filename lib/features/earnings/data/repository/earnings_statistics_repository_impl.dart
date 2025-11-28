@@ -1,15 +1,15 @@
 import 'package:cointiply_app/core/error/error_model.dart';
 import 'package:cointiply_app/core/error/failures.dart';
+import 'package:cointiply_app/features/earnings/data/datasources/remote/earnings_remote_data_source.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 
 import '../../domain/repository/earnings_statistics_repository.dart';
 import '../../domain/entity/statistics_response.dart';
-import '../datasources/remote/earnings_statistics_remote_data_source.dart';
 import '../model/request/earnings_statistics_request.dart';
 
 class EarningsStatisticsRepositoryImpl implements EarningsStatisticsRepository {
-  final EarningsStatisticsRemoteDataSource remoteDataSource;
+  final EarningsRemoteDataSource remoteDataSource;
 
   const EarningsStatisticsRepositoryImpl(this.remoteDataSource);
 

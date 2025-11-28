@@ -5,11 +5,11 @@ import 'package:cointiply_app/features/earnings/domain/repository/earnings_histo
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 
-import '../datasources/remote/earnings_history_remote_data_source.dart';
+import '../datasources/remote/earnings_remote_data_source.dart';
 import '../model/request/earnings_history_request.dart';
 
 class EarningsHistoryRepositoryImpl implements EarningsHistoryRepository {
-  final EarningsHistoryRemoteDataSource remoteDataSource;
+  final EarningsRemoteDataSource remoteDataSource;
 
   const EarningsHistoryRepositoryImpl(this.remoteDataSource);
 
