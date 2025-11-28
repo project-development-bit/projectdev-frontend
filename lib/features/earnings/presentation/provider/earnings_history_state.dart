@@ -14,6 +14,7 @@ class EarningsHistoryState {
   final String? error;
   final int page;
   final int totalPages;
+  final int days;
   final bool isLoadingMore;
 
   const EarningsHistoryState({
@@ -22,6 +23,7 @@ class EarningsHistoryState {
     this.error,
     this.page = 1,
     this.totalPages = 1,
+    this.days = 7,
     this.isLoadingMore = false,
   });
 
@@ -32,6 +34,7 @@ class EarningsHistoryState {
     int? page,
     int? totalPages,
     bool? isLoadingMore,
+    int? days,
   }) {
     return EarningsHistoryState(
       data: data ?? this.data,
@@ -40,6 +43,7 @@ class EarningsHistoryState {
       page: page ?? this.page,
       totalPages: totalPages ?? this.totalPages,
       isLoadingMore: isLoadingMore ?? this.isLoadingMore,
+      days: days ?? this.days,
     );
   }
 

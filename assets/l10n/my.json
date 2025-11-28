@@ -473,7 +473,7 @@
   "profile_created_days": "၅ ရက် အကြာတွင် ဖန်တီးပါသည်",
   "profile_statistics": "သ الاح الاح",
   "profile_coins_earned_history": "အ Coins ရရှိမှု မှတ်တမ်း",
-  "coins_history_title": "မကြာသေးမီ Coin ဆုလာဘ် မှတ်တမ်း (၈ ရက်အတွင်း)",
+  "coins_history_title": "{days} ရက်အတွင်း မကြာသေးမီ Coin ဆုလာဘ် မှတ်တမ်း",
   "number": "နံပါတ်",
   "total_earn": "စုစုပေါင်း ရရှိမှု",
   "manage_your_account": "အကောင့် စီမံပါ",

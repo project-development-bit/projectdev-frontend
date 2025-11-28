@@ -50,10 +50,12 @@ class GetEarningsHistoryNotifier extends StateNotifier<EarningsHistoryState> {
     if (state.isLoadingMore) return;
     if (state.page >= state.totalPages) return;
 
-    state = state.copyWith(isLoadingMore: true);
+    state = state.copyWith(isLoadingMore: true, days: request.days);
 
     final nextPage = state.page + 1;
-    final updatedRequest = request.copyWith(page: nextPage);
+    final updatedRequest = request.copyWith(
+      page: nextPage,
+    );
 
     final result = await _useCase.call(updatedRequest);
 

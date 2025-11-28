@@ -28,13 +28,15 @@ class CoinsHistorySection extends StatelessWidget {
     }
 
     final items = state.data?.data?.earnings ?? [];
+    final days = state.days;
 
     return Column(
       children: [
         Center(
           child: CommonText.bodyLarge(
-            localizations?.translate('coins_history_title') ??
-                "Last Coins Earned (Past 7 Days)",
+            (localizations?.translate('coins_history_title') ??
+                    "Last Coins Earned (Past 7 Days)")
+                .replaceAll("{days}", days.toString()),
             fontWeight: FontWeight.w500,
             color: Color(0xFF98989A),
 
