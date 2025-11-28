@@ -560,5 +560,8 @@
   "events": "Event များ",
   "shop": "စျေးဝယ်ရန်",
   "help": "အကူအညီ",
-  "blog": "ဘလော့ဂ်"
+  "blog": "ဘလော့ဂ်",
+  "stat_surveys": "စစ်တမ်းများ",
+  "stat_game_apps": "ဂိမ်းအက်ပ်များ",
+  "stat_offerwalls": "Offerwalls"
 }

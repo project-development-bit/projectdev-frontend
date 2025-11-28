@@ -15,4 +15,18 @@ class EarningsPagination extends Equatable {
 
   @override
   List<Object?> get props => [total, page, limit, totalPages];
+
+  EarningsPagination copyWith({
+    int? total,
+    int? page,
+    int? limit,
+    int? totalPages,
+  }) {
+    return EarningsPagination(
+      total: total ?? this.total,
+      page: page ?? this.page,
+      limit: limit ?? this.limit,
+      totalPages: totalPages ?? this.totalPages,
+    );
+  }
 }

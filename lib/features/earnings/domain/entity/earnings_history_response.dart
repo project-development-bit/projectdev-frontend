@@ -14,4 +14,16 @@ class EarningsHistoryResponse extends Equatable {
 
   @override
   List<Object?> get props => [success, message, data];
+
+  EarningsHistoryResponse copyWith({
+    bool? success,
+    String? message,
+    EarningsHistoryData? data,
+  }) {
+    return EarningsHistoryResponse(
+      success: success ?? this.success,
+      message: message ?? this.message,
+      data: data ?? this.data,
+    );
+  }
 }

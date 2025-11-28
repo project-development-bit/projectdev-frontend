@@ -3,6 +3,17 @@ import 'package:cointiply_app/features/earnings/data/model/request/earnings_hist
 import 'package:cointiply_app/features/earnings/data/model/response/earnings_history_response_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+final earningsHistoryRemoteDataSourceProvider =
+    Provider<EarningsHistoryRemoteDataSource>(
+  (
+    ref,
+  ) =>
+      EarningsHistoryRemoteDataSourceImpl(
+    ref.watch(dioClientProvider),
+  ),
+);
 
 abstract class EarningsHistoryRemoteDataSource {
   Future<EarningsHistoryResponseModel> getEarningsHistory(

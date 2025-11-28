@@ -1,9 +1,16 @@
+import 'package:cointiply_app/core/network/base_dio_client.dart';
 import 'package:cointiply_app/features/earnings/data/model/request/earnings_statistics_request.dart';
 import 'package:cointiply_app/features/earnings/data/model/response/statistics_response_model.dart';
-import 'package:cointiply_app/core/network/base_dio_client.dart';
-
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+final earningsStatisticsRemoteDataSourceProvider =
+    Provider<EarningsStatisticsRemoteDataSource>(
+  (ref) => EarningsStatisticsRemoteDataSourceImpl(
+    ref.watch(dioClientProvider),
+  ),
+);
 
 abstract class EarningsStatisticsRemoteDataSource {
   Future<StatisticsResponseModel> getStatistics(

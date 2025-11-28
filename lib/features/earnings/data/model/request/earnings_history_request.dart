@@ -34,4 +34,18 @@ class EarningsHistoryRequestModel {
 
     return '?$queryString';
   }
+
+  EarningsHistoryRequestModel copyWith({
+    int? page,
+    int? limit,
+    int? days,
+    String? category,
+  }) {
+    return EarningsHistoryRequestModel(
+      page: page ?? this.page,
+      limit: limit ?? this.limit,
+      days: days ?? this.days,
+      category: category ?? this.category,
+    );
+  }
 }

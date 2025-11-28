@@ -561,5 +561,8 @@
   "events": "Events",
   "shop": "Shop",
   "help": "Help",
-  "blog": "Blog"
+  "blog": "Blog",
+  "stat_surveys": "Surveys",
+  "stat_game_apps": "Game Apps",
+  "stat_offerwalls": "Offerwalls"
 }

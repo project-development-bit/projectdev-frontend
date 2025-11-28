@@ -32,4 +32,26 @@ class EarningsHistoryItem extends Equatable {
         timeAgo,
         createdAt,
       ];
+
+  EarningsHistoryItem copyWith({
+    int? id,
+    String? type,
+    String? category,
+    String? title,
+    int? amount,
+    String? currency,
+    String? timeAgo,
+    DateTime? createdAt,
+  }) {
+    return EarningsHistoryItem(
+      id: id ?? this.id,
+      type: type ?? this.type,
+      category: category ?? this.category,
+      title: title ?? this.title,
+      amount: amount ?? this.amount,
+      currency: currency ?? this.currency,
+      timeAgo: timeAgo ?? this.timeAgo,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
 }
