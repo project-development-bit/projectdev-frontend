@@ -1,5 +1,11 @@
+import 'package:cointiply_app/features/user_profile/data/models/country_model.dart';
+import 'package:cointiply_app/features/user_profile/data/models/language_model.dart';
+import 'package:cointiply_app/features/user_profile/data/models/profile_detail_model.dart';
 import 'package:cointiply_app/features/user_profile/data/models/response/upload_profile_avatar_response_model.dart';
 import 'package:cointiply_app/features/user_profile/data/models/response/user_update_respons.dart';
+import 'package:cointiply_app/features/user_profile/data/models/response/change_email_response_model.dart';
+import 'package:cointiply_app/features/user_profile/data/models/response/verify_email_change_response_model.dart';
+import 'package:cointiply_app/features/user_profile/data/models/response/change_password_response_model.dart';
 import 'package:file_picker/file_picker.dart';
 
 /// Abstract class for profile remote data source
@@ -8,8 +14,34 @@ import 'package:file_picker/file_picker.dart';
 /// from remote APIs. Implementations will handle HTTP requests,
 /// authentication, and error responses.
 abstract class ProfileRemoteDataSource {
-  /// Gets user profile by ID
-  // Future<UserProfileModel> getUserProfile(String userId);
+  /// Gets the complete user profile
+  Future<ProfileDetailModel> getProfile();
+
+  /// Gets list of available countries
+  Future<List<CountryModel>> getCountries();
+
+  /// Gets list of available languages
+  Future<List<LanguageModel>> getLanguages();
+
+  /// Change user email (send verification code to new email)
+  Future<ChangeEmailResponseModel> changeEmail({
+    required String currentEmail,
+    required String newEmail,
+    required String repeatNewEmail,
+  });
+
+  /// Verify email change using code sent to new email
+  Future<VerifyEmailChangeResponseModel> verifyEmailChange({
+    required String email,
+    required String code,
+  });
+
+  /// Change user password
+  Future<ChangePasswordResponseModel> changePassword({
+    required String currentPassword,
+    required String newPassword,
+    required String repeatNewPassword,
+  });
 
   /// Updates user profile
   Future<UserUpdateResponse> updateUserProfile(

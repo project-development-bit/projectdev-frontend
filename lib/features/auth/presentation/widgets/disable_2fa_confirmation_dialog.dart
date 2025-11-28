@@ -1,4 +1,4 @@
-import 'package:cointiply_app/features/common/widgets/custom_pointer_interceptor.dart';
+import 'package:cointiply_app/core/common/widgets/custom_pointer_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -13,7 +13,8 @@ import 'package:go_router/go_router.dart';
 ///
 /// Shows a warning message and requires user confirmation before disabling 2FA
 class Disable2FAConfirmationDialog extends ConsumerWidget {
-  const Disable2FAConfirmationDialog({super.key});
+  final Function() onDisabled;
+  const Disable2FAConfirmationDialog({super.key, required this.onDisabled});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -29,6 +30,7 @@ class Disable2FAConfirmationDialog extends ConsumerWidget {
 
         // Refresh 2FA status
         ref.read(check2FAStatusProvider.notifier).check2FAStatus();
+        onDisabled();
 
         // Show success message
         ScaffoldMessenger.of(context).showSnackBar(
@@ -205,12 +207,15 @@ class Disable2FAConfirmationDialog extends ConsumerWidget {
 /// Extension to show disable 2FA confirmation dialog
 extension Disable2FADialogExtension on BuildContext {
   /// Show disable 2FA confirmation dialog
-  void showDisable2FAConfirmationDialog() {
+  void showDisable2FAConfirmationDialog({required Function() onDisabled}) {
     showDialog(
       context: this,
       barrierDismissible: false,
       builder: (context) =>
-          CustomPointerInterceptor(child: const Disable2FAConfirmationDialog()),
+          CustomPointerInterceptor(
+          child: Disable2FAConfirmationDialog(
+        onDisabled: onDisabled,
+      )),
     );
   }
 }

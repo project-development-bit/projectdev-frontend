@@ -4,6 +4,7 @@
 export 'common/common_button.dart';
 export 'common/common_card.dart';
 export 'common/common_container.dart';
+export 'common/common_dropdown_field.dart';
 export 'common/common_image_widget.dart';
 export 'common/common_text.dart';
 export 'common/common_textfield.dart';

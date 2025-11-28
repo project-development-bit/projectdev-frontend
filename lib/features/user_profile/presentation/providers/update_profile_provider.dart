@@ -45,7 +45,7 @@ final updateProfileProvider = StateNotifierProvider<
 );
 
 class UpdateProfileProvider extends StateNotifier<UpdateProfileState>{
-  final UpdateUserProfile _updateUserProfile;
+  final UpdateUserProfileUsecase _updateUserProfile;
   UpdateProfileProvider(super.state,this._updateUserProfile);
 
 

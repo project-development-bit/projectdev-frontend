@@ -36,6 +36,7 @@ class _CommonImageState extends State<CommonImage> {
     
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final colorScheme = Theme.of(context).colorScheme;
+    
     final defaultLoadingWidget = widget.loadingWidget ??
         Container(
           width: widget.width,

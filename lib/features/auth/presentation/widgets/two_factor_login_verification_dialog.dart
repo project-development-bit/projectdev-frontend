@@ -1,4 +1,4 @@
-import 'package:cointiply_app/features/common/widgets/custom_pointer_interceptor.dart';
+import 'package:cointiply_app/core/common/widgets/custom_pointer_interceptor.dart';
 import 'package:cointiply_app/routing/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

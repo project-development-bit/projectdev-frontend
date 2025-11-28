@@ -1,6 +1,8 @@
 import 'package:cointiply_app/core/error/failures.dart';
 import 'package:cointiply_app/features/auth/domain/usecases/forget_password_resend_code_usecase.dart';
 import 'package:cointiply_app/features/auth/domain/usecases/verify_code_forgot_password_usecase.dart';
+import 'package:cointiply_app/features/user_profile/domain/usecases/verify_email_change_usecase.dart';
+import 'package:cointiply_app/features/user_profile/user_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/models/resend_code_request.dart';
@@ -61,12 +63,14 @@ class VerificationNotifier extends StateNotifier<VerificationState> {
   final VerifyCodeUseCase _verifyCodeUseCase;
   final ForgetPasswordResendCodeUsecase _forgetPasswordResendCodeUsecase;
   final VerifyCodeForgotPasswordUsecase _verifyCodeForgotPasswordUsecase;
+  final VerifyEmailChangeUsecase _verifyEmailChangeUsecase;
 
   VerificationNotifier(
       this._resendCodeUseCase,
       this._verifyCodeUseCase,
       this._forgetPasswordResendCodeUsecase,
-      this._verifyCodeForgotPasswordUsecase)
+      this._verifyCodeForgotPasswordUsecase,
+      this._verifyEmailChangeUsecase)
       : super(const VerificationInitial());
 
   /// Verify email with the provided code
@@ -219,6 +223,40 @@ class VerificationNotifier extends StateNotifier<VerificationState> {
     }
   }
 
+  Future<void> verifyEmailChange({
+    required String email,
+    required String code,
+  }) async {
+    try {
+      state = const VerificationLoading();
+
+      final result = await _verifyEmailChangeUsecase(
+        VerifyEmailChangeParams(email: email, code: code),
+      );
+
+      result.fold(
+        (failure) {
+          debugPrint('❌ Email change verification error: ${failure.message}');
+          state = VerificationError(
+            message: failure.message ??
+                'Invalid verification code. Please try again.',
+          );
+        },
+        (response) {
+          debugPrint('✅ Email change verification successful for: $email');
+          state = VerificationSuccess(
+            message: response.message,
+          );
+        },
+      );
+    } catch (e) {
+      debugPrint('❌ Unexpected email change verification error: $e');
+      state = const VerificationError(
+        message: 'Invalid verification code. Please try again.',
+      );
+    }
+  }
+
   /// Clear error state
   void clearError() {
     if (state is VerificationError) {
@@ -266,6 +304,7 @@ final verificationNotifierProvider =
               ref.watch(verifyCodeUseCaseProvider),
               ref.watch(forgetPasswordResendCodeUsecaseProvider),
               ref.watch(verifyCodeForgotPasswordUsecaseProvider),
+              ref.watch(verifyEmailChangeUseCaseProvider),
             ));
 
 /// Provider for checking if verification is loading

@@ -427,10 +427,10 @@ class BannerConfig {
 
   factory BannerConfig.fromJson(Map<String, dynamic> json) {
     return BannerConfig(
+      link: json['link'] as String? ?? '',
       label: (json['label'] as String?) ?? '',
       title: (json['title'] as String?) ?? '',
       description: (json['description'] as String?) ?? '',
-      link: (json['link'] as String?) ?? '',
       imageWeb: (json['image_web'] as String?) ?? '',
       imageMobile: (json['image_mobile'] as String?) ?? '',
       btnText: (json['btnText'] as String?) ?? '',

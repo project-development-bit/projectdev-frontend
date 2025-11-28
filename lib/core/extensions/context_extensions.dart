@@ -1,5 +1,6 @@
 import 'package:cointiply_app/core/theme/app_colors.dart';
-import 'package:cointiply_app/features/common/widgets/custom_pointer_interceptor.dart';
+import 'package:cointiply_app/core/common/widgets/custom_pointer_interceptor.dart';
+import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/dialog_bg_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../localization/app_localizations.dart';
@@ -349,6 +350,31 @@ extension NavigationExtension on BuildContext {
 
 /// Extension on BuildContext for showing dialogs and snackbars
 extension DialogExtension on BuildContext {
+  /// showManagePopup
+
+  Future<T> showManagePopup<T>(
+      {required Widget child,
+      required String title,
+      bool barrierDismissible = true,
+      double? width,
+      double? height,
+      dynamic Function()? onClose,
+      Color? dividerColor}) {
+    final barrierColor = colorScheme.scrim.withValues(alpha: 0.6);
+    return showDialog<T>(
+      context: this,
+      barrierDismissible: barrierDismissible,
+      barrierColor: barrierColor,
+      builder: (context) => DialogBgWidget(
+        title: title,
+        dialogHeight: height,
+        dividerColor: dividerColor,
+        body: child,
+        onClose: onClose,
+      ),
+    ).then((value) => value as T);
+  }
+
   /// Show a material dialog
   Future<T?> showMaterialDialog<T>({
     required Widget child,
@@ -417,17 +443,23 @@ extension DialogExtension on BuildContext {
     Color? backgroundColor,
     Color? textColor,
   }) {
-    ScaffoldMessenger.of(this).showSnackBar(
-      SnackBar(
-        content: Text(
-          message,
-          style: TextStyle(color: textColor),
+    try {
+      final messenger = ScaffoldMessenger.of(this);
+      messenger.clearSnackBars();
+      messenger.showSnackBar(
+        SnackBar(
+          content: Text(
+            message,
+            style: TextStyle(color: textColor),
+          ),
+          duration: duration,
+          action: action,
+          backgroundColor: backgroundColor,
         ),
-        duration: duration,
-        action: action,
-        backgroundColor: backgroundColor,
-      ),
-    );
+      );
+    } catch (e) {
+      debugPrint('Error showing snackbar: $e');
+    }
   }
 
   /// Show an error snackbar

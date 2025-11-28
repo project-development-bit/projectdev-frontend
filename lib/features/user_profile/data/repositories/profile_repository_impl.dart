@@ -1,14 +1,21 @@
-
 import 'package:cointiply_app/features/user_profile/data/models/request/user_update_request.dart';
 import 'package:cointiply_app/features/user_profile/data/models/response/upload_profile_avatar_response_model.dart';
 import 'package:cointiply_app/features/user_profile/data/models/response/user_update_respons.dart';
+import 'package:cointiply_app/features/user_profile/domain/entities/country.dart';
+import 'package:cointiply_app/features/user_profile/domain/entities/language.dart';
+import 'package:cointiply_app/features/user_profile/domain/entities/profile_detail.dart';
 import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import '../../../../core/error/error_model.dart';
 import '../../../../core/error/failures.dart';
 import '../../domain/repositories/profile_repository.dart';
 import '../datasources/profile_remote_data_source.dart';
+import '../../domain/entities/change_email_result.dart';
+import '../../domain/entities/verify_email_change_result.dart';
+import '../../domain/entities/change_password_result.dart';
 
 /// Implementation of [ProfileRepository]
 ///
@@ -25,6 +32,124 @@ class ProfileRepositoryImpl implements ProfileRepository {
     // required this.localDataSource,
     // required this.databaseDataSource,
   });
+
+  @override
+  Future<Either<Failure, ProfileDetail>> getProfile() async {
+    try {
+      debugPrint('🔄 Repository: Fetching profile...');
+      final profileModel = await remoteDataSource.getProfile();
+      
+      debugPrint('✅ Repository: Profile fetched successfully');
+      return Right(profileModel.toEntity());
+    } on DioException catch (e) {
+      debugPrint('❌ Repository: DioException - ${e.message}');
+      ErrorModel? errorModel;
+      if (e.response?.data != null) {
+        errorModel = ErrorModel.fromJson(e.response!.data);
+      }
+      return Left(ServerFailure(
+        message: e.message ?? 'Failed to fetch profile',
+        statusCode: e.response?.statusCode,
+        errorModel: errorModel,
+      ));
+    } catch (e) {
+      debugPrint('❌ Repository: Unexpected error - $e');
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, VerifyEmailChangeResult>> verifyEmailChange({
+    required String email,
+    required String code,
+  }) async {
+    try {
+      debugPrint('🔄 Repository: Verifying email change...');
+      final responseModel =
+          await remoteDataSource.verifyEmailChange(email: email, code: code);
+
+      final data = responseModel.data;
+
+      final result = VerifyEmailChangeResult(
+        message: responseModel.message,
+        oldEmail: data?.oldEmail ?? '',
+        newEmail: data?.newEmail ?? '',
+      );
+
+      return Right(result);
+    } on DioException catch (e) {
+      debugPrint('❌ Repository: DioException - ${e.message}');
+      ErrorModel? errorModel;
+      if (e.response?.data != null) {
+        errorModel = ErrorModel.fromJson(e.response!.data);
+      }
+      return Left(ServerFailure(
+        message: e.response?.data?['message'] ??
+            e.message ??
+            'Failed to verify email change',
+        statusCode: e.response?.statusCode,
+        errorModel: errorModel,
+      ));
+    } catch (e) {
+      debugPrint('❌ Repository: Unexpected error - $e');
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<Country>>> getCountries() async {
+    try {
+      debugPrint('🔄 Repository: Fetching countries...');
+      final countryModels = await remoteDataSource.getCountries();
+
+      final countries = countryModels.map((model) => model.toEntity()).toList();
+      debugPrint(
+          '✅ Repository: ${countries.length} countries fetched successfully');
+      return Right(countries);
+    } on DioException catch (e) {
+      debugPrint('❌ Repository: DioException - ${e.message}');
+      ErrorModel? errorModel;
+      if (e.response?.data != null) {
+        errorModel = ErrorModel.fromJson(e.response!.data);
+      }
+      return Left(ServerFailure(
+        message: e.message ?? 'Failed to fetch countries',
+        statusCode: e.response?.statusCode,
+        errorModel: errorModel,
+      ));
+    } catch (e) {
+      debugPrint('❌ Repository: Unexpected error - $e');
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<Language>>> getLanguages() async {
+    try {
+      debugPrint('🔄 Repository: Fetching languages...');
+      final languageModels = await remoteDataSource.getLanguages();
+
+      final languages =
+          languageModels.map((model) => model.toEntity()).toList();
+      debugPrint(
+          '✅ Repository: ${languages.length} languages fetched successfully');
+      return Right(languages);
+    } on DioException catch (e) {
+      debugPrint('❌ Repository: DioException - ${e.message}');
+      ErrorModel? errorModel;
+      if (e.response?.data != null) {
+        errorModel = ErrorModel.fromJson(e.response!.data);
+      }
+      return Left(ServerFailure(
+        message: e.message ?? 'Failed to fetch languages',
+        statusCode: e.response?.statusCode,
+        errorModel: errorModel,
+      ));
+    } catch (e) {
+      debugPrint('❌ Repository: Unexpected error - $e');
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
 
   @override
   Future<Either<Failure, UserUpdateResponse>> updateUserProfile(
@@ -89,6 +214,90 @@ class ProfileRepositoryImpl implements ProfileRepository {
         return Left(e);
       }
       
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, ChangeEmailResult>> changeEmail({
+    required String currentEmail,
+    required String newEmail,
+    required String repeatNewEmail,
+  }) async {
+    try {
+      debugPrint('🔄 Repository: Changing email...');
+      final responseModel = await remoteDataSource.changeEmail(
+        currentEmail: currentEmail,
+        newEmail: newEmail,
+        repeatNewEmail: repeatNewEmail,
+      );
+
+      final data = responseModel.data;
+      final result = ChangeEmailResult(
+        message: responseModel.message,
+        currentEmail: data?.currentEmail ?? '',
+        newEmail: data?.newEmail ?? '',
+        verificationCode: data?.verificationCode,
+      );
+
+      return Right(result);
+    } on DioException catch (e) {
+      debugPrint('❌ Repository: DioException - ${e.message}');
+      ErrorModel? errorModel;
+      if (e.response?.data != null) {
+        errorModel = ErrorModel.fromJson(e.response!.data);
+      }
+      return Left(ServerFailure(
+        message: e.response?.data?['message'] ??
+            e.message ??
+            'Failed to change email',
+        statusCode: e.response?.statusCode,
+        errorModel: errorModel,
+      ));
+    } catch (e) {
+      debugPrint('❌ Repository: Unexpected error - $e');
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, ChangePasswordResult>> changePassword({
+    required String currentPassword,
+    required String newPassword,
+    required String repeatNewPassword,
+  }) async {
+    try {
+      debugPrint('🔄 Repository: Changing password...');
+      final responseModel = await remoteDataSource.changePassword(
+        currentPassword: currentPassword,
+        newPassword: newPassword,
+        repeatNewPassword: repeatNewPassword,
+      );
+
+      final result = ChangePasswordResult(
+        success: responseModel.success,
+        message: responseModel.message,
+      );
+
+      return Right(result);
+    } on ServerFailure catch (e) {
+      debugPrint('❌ Repository: ServerFailure - ${e.message}');
+      return Left(e);
+    } on DioException catch (e) {
+      debugPrint('❌ Repository: DioException - ${e.message}');
+      ErrorModel? errorModel;
+      if (e.response?.data != null) {
+        errorModel = ErrorModel.fromJson(e.response!.data);
+      }
+      return Left(ServerFailure(
+        message: e.response?.data?['message'] ??
+            e.message ??
+            'Failed to change password',
+        statusCode: e.response?.statusCode,
+        errorModel: errorModel,
+      ));
+    } catch (e) {
+      debugPrint('❌ Repository: Unexpected error - $e');
       return Left(ServerFailure(message: e.toString()));
     }
   }

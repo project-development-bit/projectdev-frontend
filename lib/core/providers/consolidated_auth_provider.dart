@@ -189,12 +189,6 @@ final canAttemptLoginProvider = Provider<bool>((ref) {
   return consolidatedState.canAttemptLogin;
 });
 
-/// Provider for getting current user
-final currentUserProvider = Provider<dynamic>((ref) {
-  final consolidatedState = ref.watch(consolidatedAuthStateProvider);
-  return consolidatedState.currentUser;
-});
-
 /// Provider for getting current auth token
 final currentAuthTokenProvider = Provider<String?>((ref) {
   final consolidatedState = ref.watch(consolidatedAuthStateProvider);
