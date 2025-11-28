@@ -1,7 +1,7 @@
 import 'package:cointiply_app/core/core.dart';
 import 'package:cointiply_app/core/error/error_model.dart';
+import 'package:cointiply_app/core/common/widgets/custom_pointer_interceptor.dart';
 import 'package:cointiply_app/features/auth/presentation/widgets/onboarding_background.dart';
-import 'package:cointiply_app/features/common/widgets/custom_pointer_interceptor.dart';
 import 'package:cointiply_app/features/terms_privacy/presentation/services/terms_privacy_navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

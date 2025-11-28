@@ -7,12 +7,14 @@ class VerificationPage extends StatelessWidget {
   final String email;
   final bool isSendCode;
   final bool isFromForgotPassword;
+  final bool isFromChangeEmail;
 
   const VerificationPage({
     super.key,
     required this.email,
     this.isSendCode = false,
     this.isFromForgotPassword = false,
+    this.isFromChangeEmail = false,
   });
 
   @override

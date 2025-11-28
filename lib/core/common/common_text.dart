@@ -16,6 +16,7 @@ class CommonText extends StatelessWidget {
     this.decoration,
     this.highlightColor,
     this.highlightFontSize,
+    this.highlightFontWeight,
   });
 
   /// Display text styles
@@ -31,6 +32,7 @@ class CommonText extends StatelessWidget {
     this.decoration,
     this.highlightColor,
     this.highlightFontSize,
+    this.highlightFontWeight,
   }) : style = TextStyleEnum.displayLarge; // Display large text style (57px)
 
   const CommonText.displayMedium(
@@ -45,6 +47,7 @@ class CommonText extends StatelessWidget {
     this.decoration,
     this.highlightColor,
     this.highlightFontSize,
+    this.highlightFontWeight,
   }) : style = TextStyleEnum.displayMedium; // Display medium text style (45px)
 
   const CommonText.displaySmall(
@@ -59,6 +62,7 @@ class CommonText extends StatelessWidget {
     this.decoration,
     this.highlightColor,
     this.highlightFontSize,
+    this.highlightFontWeight,
   }) : style = TextStyleEnum.displaySmall; // Display small text style (36px)
 
   /// Headline text styles
@@ -74,6 +78,7 @@ class CommonText extends StatelessWidget {
     this.decoration,
     this.highlightColor,
     this.highlightFontSize,
+    this.highlightFontWeight,
   }) : style = TextStyleEnum.headlineLarge; // Headline large text style (32px)
 
   const CommonText.headlineMedium(
@@ -88,6 +93,7 @@ class CommonText extends StatelessWidget {
     this.decoration,
     this.highlightColor,
     this.highlightFontSize,
+    this.highlightFontWeight,
   }) : style =
             TextStyleEnum.headlineMedium; // Headline medium text style (28px)
 
@@ -103,6 +109,7 @@ class CommonText extends StatelessWidget {
     this.decoration,
     this.highlightColor,
     this.highlightFontSize,
+    this.highlightFontWeight,
   }) : style = TextStyleEnum.headlineSmall; // Headline small text style (24px)
 
   /// Title text styles
@@ -118,6 +125,7 @@ class CommonText extends StatelessWidget {
     this.decoration,
     this.highlightColor,
     this.highlightFontSize,
+    this.highlightFontWeight,
   }) : style = TextStyleEnum.titleLarge; // Title large text style (22px)
 
   const CommonText.titleMedium(
@@ -132,6 +140,7 @@ class CommonText extends StatelessWidget {
     this.decoration,
     this.highlightColor,
     this.highlightFontSize,
+    this.highlightFontWeight,
   }) : style = TextStyleEnum.titleMedium; // Title medium text style (16px)
 
   const CommonText.titleSmall(
@@ -146,6 +155,7 @@ class CommonText extends StatelessWidget {
     this.decoration,
     this.highlightColor,
     this.highlightFontSize,
+    this.highlightFontWeight,
   }) : style = TextStyleEnum.titleSmall; // Title small text style (14px)
 
   /// Body text styles
@@ -161,6 +171,7 @@ class CommonText extends StatelessWidget {
     this.decoration,
     this.highlightColor,
     this.highlightFontSize,
+    this.highlightFontWeight,
   }) : style = TextStyleEnum.bodyLarge; // Body large text style (16px)
 
   const CommonText.bodyMedium(
@@ -175,6 +186,7 @@ class CommonText extends StatelessWidget {
     this.decoration,
     this.highlightColor,
     this.highlightFontSize,
+    this.highlightFontWeight,
   }) : style = TextStyleEnum.bodyMedium; // Body medium text style (14px)
 
   const CommonText.bodySmall(
@@ -189,6 +201,7 @@ class CommonText extends StatelessWidget {
     this.decoration,
     this.highlightColor,
     this.highlightFontSize,
+    this.highlightFontWeight,
   }) : style = TextStyleEnum.bodySmall; // Body small text style (12px)
 
   /// Label text styles
@@ -204,6 +217,7 @@ class CommonText extends StatelessWidget {
     this.decoration,
     this.highlightColor,
     this.highlightFontSize,
+    this.highlightFontWeight,
   }) : style = TextStyleEnum.labelLarge; // Label large text style (14px)
 
   const CommonText.labelMedium(
@@ -218,6 +232,7 @@ class CommonText extends StatelessWidget {
     this.decoration,
     this.highlightColor,
     this.highlightFontSize,
+    this.highlightFontWeight,
   }) : style = TextStyleEnum.labelMedium; // Label medium text style (12px)
 
   const CommonText.labelSmall(
@@ -232,6 +247,7 @@ class CommonText extends StatelessWidget {
     this.decoration,
     this.highlightColor,
     this.highlightFontSize,
+    this.highlightFontWeight,
   }) : style = TextStyleEnum.labelSmall; // Label small text style (10px)
 
   /// Special crypto display text style (Orbitron with effects)
@@ -247,6 +263,7 @@ class CommonText extends StatelessWidget {
     this.decoration,
     this.highlightColor,
     this.highlightFontSize,
+    this.highlightFontWeight,
   }) : style = TextStyleEnum.cryptoDisplay; // Crypto display text style
 
   /// Special crypto amount text style (Orbitron for numbers)
@@ -262,6 +279,7 @@ class CommonText extends StatelessWidget {
     this.decoration,
     this.highlightColor,
     this.highlightFontSize,
+    this.highlightFontWeight,
   }) : style = TextStyleEnum.cryptoAmount; // Crypto amount text style
 
   /// Button text style (Orbitron for buttons)
@@ -277,6 +295,7 @@ class CommonText extends StatelessWidget {
     this.decoration,
     this.highlightColor,
     this.highlightFontSize,
+    this.highlightFontWeight,
   }) : style = TextStyleEnum.button; // Button text style
 
   final String text;
@@ -290,6 +309,7 @@ class CommonText extends StatelessWidget {
   final TextDecoration? decoration;
   final Color? highlightColor;
   final double? highlightFontSize;
+  final FontWeight? highlightFontWeight;
 
   @override
   Widget build(BuildContext context) {
@@ -421,7 +441,9 @@ class CommonText extends StatelessWidget {
       spans.add(TextSpan(
         text: match.group(1), // Text without brackets
         style: effectiveStyle.copyWith(
-            color: highlightColor ?? primaryColor, fontSize: highlightFontSize),
+            color: highlightColor ?? primaryColor,
+            fontSize: highlightFontSize,
+            fontWeight: highlightFontWeight),
       ));
 
       lastIndex = match.end;

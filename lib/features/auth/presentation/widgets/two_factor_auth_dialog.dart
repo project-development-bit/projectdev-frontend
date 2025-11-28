@@ -3,10 +3,9 @@ import 'package:cointiply_app/core/common/common_text.dart' show CommonText;
 import 'package:cointiply_app/core/common/common_textfield.dart'
     show CommonTextField;
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
+import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/dialog_bg_widget.dart';
 import 'package:cointiply_app/routing/routing.dart';
-import 'package:dotted_decoration/dotted_decoration.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import '../providers/verify_2fa_provider.dart';
@@ -160,46 +159,14 @@ class _TwoFactorAuthDialogState extends ConsumerState<TwoFactorAuthDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
     final setup2FAState = ref.watch(setup2FAProvider);
     final isEnabling = ref.watch(isEnable2FALoadingProvider);
-    final isMobile = context.isMobile;
 
-    return Dialog(
-      backgroundColor: colorScheme.surface,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Container(
-        constraints: BoxConstraints(
-          maxWidth: isMobile ? double.infinity : 500,
-          maxHeight: MediaQuery.of(context).size.height * 0.95,
-        ),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.all(isMobile ? 20 : 28),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                // Header
-                _DialogHeader(
-                  isLoading: setup2FAState is Setup2FALoading || isEnabling,
-                ),
-                const SizedBox(height: 16),
-                Divider(
-                  color: colorScheme.outline.withAlpha(77),
-                  thickness: 1,
-                ),
-                const SizedBox(height: 16),
-
-                // Content based on state
-                _buildContent(setup2FAState, isEnabling),
-              ],
-            ),
-          ),
-        ),
+    return DialogBgWidget(
+      dialogHeight: 645,
+      title: context.translate("setup_2fa_app_title"),
+      body: SingleChildScrollView(
+        child: _buildContent(setup2FAState, isEnabling),
       ),
     );
   }
@@ -232,40 +199,6 @@ class _TwoFactorAuthDialogState extends ConsumerState<TwoFactorAuthDialog> {
         ),
       _ => const SizedBox.shrink(),
     };
-  }
-}
-
-// ============================================================================
-// SEPARATED WIDGETS BY STATE
-// ============================================================================
-
-/// Dialog Header Widget
-class _DialogHeader extends StatelessWidget {
-  const _DialogHeader({required this.isLoading});
-
-  final bool isLoading;
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return Row(
-      children: [
-        CommonText.titleSmall(
-          context.translate("two_factor_authentication_title"),
-        ),
-        const Spacer(),
-        IconButton(
-          icon: Icon(
-            Icons.close,
-            color: colorScheme.onSurfaceVariant,
-          ),
-          onPressed: isLoading ? null : () => context.pop(false),
-          padding: EdgeInsets.zero,
-          constraints: const BoxConstraints(),
-        ),
-      ],
-    );
   }
 }
 
@@ -360,7 +293,14 @@ class _SetupSuccessState extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           // Instructions
-          _InstructionsSection(),
+          CommonText.bodyMedium(
+            context.translate("setup_2fa_app_description"),
+            fontWeight: FontWeight.w500,
+            color: Colors.white,
+            highlightColor: Colors.white,
+            highlightFontWeight: FontWeight.w700,
+            highlightFontSize: 16,
+          ),
           const SizedBox(height: 24),
 
           // QR Code Section
@@ -385,45 +325,6 @@ class _SetupSuccessState extends StatelessWidget {
   }
 }
 
-/// Instructions Section
-class _InstructionsSection extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: context.primary.withAlpha(26), // 0.1 * 255
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(
-                Icons.info_outline,
-                color: context.primary,
-                size: 20,
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: CommonText.labelMedium(
-                  context.translate("2fa_dialog_subtitle"),
-                  color: context.primary,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          CommonText.bodyMedium(
-            context.translate("2fa_dialog_body_text"),
-            textAlign: TextAlign.start,
-          ),
-        ],
-      ),
-    );
-  }
-}
 
 /// QR Code Section
 class _QRCodeSection extends StatelessWidget {
@@ -434,32 +335,24 @@ class _QRCodeSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    return Column(
-      children: [
-        CommonText.labelLarge(
-          context.translate("scan_qr_code"),
-        ),
-        const SizedBox(height: 12),
-        Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: colorScheme.onError,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              BoxShadow(
-                color: colorScheme.scrim.withAlpha(26), // 0.1 * 255
-                blurRadius: 8,
-                offset: const Offset(0, 2),
-              ),
-            ],
+    return Container(
+      padding: const EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color: colorScheme.onError,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: colorScheme.scrim.withAlpha(26), // 0.1 * 255
+            blurRadius: 8,
+            offset: const Offset(0, 2),
           ),
-          child: QrImageView(
-            data: qrCodeData,
-            size: 200,
-            backgroundColor: colorScheme.onError,
-          ),
-        ),
-      ],
+        ],
+      ),
+      child: QrImageView(
+        data: qrCodeData,
+        size: 150,
+        backgroundColor: colorScheme.onError,
+      ),
     );
   }
 }
@@ -472,86 +365,36 @@ class _ManualEntrySection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: DottedDecoration(
-        color: context.primary,
-        shape: Shape.box,
-        dash: const [4, 4],
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: context.primary.withAlpha(40),
-          borderRadius: BorderRadius.circular(12),
+    final isMobile = context.isMobile;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        CommonText.bodySmall(
+          context.translate("2fa_dialog_note_text"),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(
-                  Icons.vpn_key_outlined,
-                  color: context.primary,
-                  size: 20,
-                ),
-                const SizedBox(width: 8),
-                CommonText.labelMedium(
-                  context.translate("manual_entry_code"),
-                  color: context.primary,
-                ),
-              ],
+        const SizedBox(height: 12),
+        Container(
+          width: isMobile ? double.infinity : 450,
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(
+              color: Color(0xff333333),
             ),
-            const SizedBox(height: 12),
-            CommonText.bodySmall(
-              context.translate("2fa_dialog_note_text"),
-            ),
-            const SizedBox(height: 12),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              decoration: BoxDecoration(
-                color: context.surface,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                  color: context.primary.withAlpha(128), // 0.5 * 255
+          ),
+          child: Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 60),
+              child: Center(
+                child: CommonText.bodyMedium(
+                  secret,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: SelectableText(
-                      secret,
-                      style: TextStyle(
-                        fontFamily: 'monospace',
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: context.onSurface,
-                        letterSpacing: 2,
-                      ),
-                    ),
-                  ),
-                  IconButton(
-                    icon: Icon(
-                      Icons.copy,
-                      size: 20,
-                      color: context.primary,
-                    ),
-                    onPressed: () {
-                      Clipboard.setData(ClipboardData(text: secret));
-                      context.showSuccessSnackBar(
-                        message: context.translate("code_copied"),
-                      );
-                    },
-                    tooltip: context.translate("copy_code"),
-                  ),
-                ],
-              ),
             ),
-          ],
+          ),
         ),
-      ),
+      ],
     );
   }
 }
@@ -574,73 +417,12 @@ class _VerificationFormSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        // Show verifying overlay when processing
-        if (isVerifying)
-          _VerifyingOverlay()
-        else
-          _VerificationForm(
-            codeController: codeController,
-            codeFocusNode: codeFocusNode,
-            validateCode: validateCode,
-            handleVerify: handleVerify,
-          ),
-      ],
-    );
-  }
-}
-
-/// Verifying Overlay - Shows when enable 2FA is in progress
-class _VerifyingOverlay extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 48, horizontal: 24),
-      decoration: BoxDecoration(
-        color: context.primary.withAlpha(13), // 0.05 * 255
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: context.primary.withAlpha(51), // 0.2 * 255
-          width: 2,
-        ),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // Animated circular progress indicator
-          Stack(
-            alignment: Alignment.center,
-            children: [
-              SizedBox(
-                width: 64,
-                height: 64,
-                child: CircularProgressIndicator(
-                  color: context.primary,
-                  strokeWidth: 3,
-                ),
-              ),
-              Icon(
-                Icons.security,
-                size: 28,
-                color: context.primary,
-              ),
-            ],
-          ),
-          const SizedBox(height: 24),
-          CommonText.titleMedium(
-            context.translate("verifying_code"),
-            textAlign: TextAlign.center,
-            color: context.primary,
-          ),
-          const SizedBox(height: 8),
-          CommonText.bodyMedium(
-            context.translate("please_wait"),
-            textAlign: TextAlign.center,
-            color: context.onSurface.withAlpha(179), // 0.7 * 255
-          ),
-        ],
-      ),
+    return _VerificationForm(
+      codeController: codeController,
+      codeFocusNode: codeFocusNode,
+      validateCode: validateCode,
+      handleVerify: handleVerify,
+      isVerifying: isVerifying,
     );
   }
 }
@@ -652,38 +434,49 @@ class _VerificationForm extends StatelessWidget {
     required this.codeFocusNode,
     required this.validateCode,
     required this.handleVerify,
+    required this.isVerifying,
   });
 
   final TextEditingController codeController;
   final FocusNode codeFocusNode;
   final String? Function(String?) validateCode;
   final Future<void> Function() handleVerify;
+  final bool isVerifying;
 
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        CommonTextField(
-          controller: codeController,
-          focusNode: codeFocusNode,
-          labelText: context.translate("enter_verification_code"),
-          hintText: 'Enter 6-digit code',
-          keyboardType: TextInputType.number,
-          maxLength: 6,
-          validator: validateCode,
-          onSubmitted: (_) => handleVerify(),
-          prefixIcon: Icon(
-            Icons.pin,
-            color: context.primary,
-          ),
+        Row(
+          spacing: 16,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            CommonText.bodyLarge(
+              context.translate("authentication_code"),
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+            ),
+            Expanded(
+              child: CommonTextField(
+                controller: codeController,
+                focusNode: codeFocusNode,
+                labelText: context.translate("enter_verification_code"),
+                hintText: 'Enter 6-digit code',
+                keyboardType: TextInputType.number,
+                validator: validateCode,
+                fillColor: const Color(0xff1A1A1A),
+                onSubmitted: (_) => handleVerify(),
+              ),
+            ),
+          ],
         ),
         const SizedBox(height: 16),
-        SizedBox(
-          width: double.infinity,
-          child: CommonButton(
-            text: context.translate("2fa_verify_button_text"),
-            onPressed: handleVerify,
-          ),
+        CommonButton(
+          text: context.translate("enable_2fa_button"),
+          onPressed: handleVerify,
+          isLoading: isVerifying,
+          backgroundColor: const Color(0xff262626),
         ),
       ],
     );

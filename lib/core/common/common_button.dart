@@ -1,6 +1,5 @@
 import 'package:cointiply_app/core/core.dart';
 import 'package:flutter/material.dart';
-import '../theme/app_typography.dart';
 
 /// A common button widget with consistent styling
 class CommonButton extends StatelessWidget {
@@ -41,14 +40,13 @@ class CommonButton extends StatelessWidget {
     final effectiveTextColor = textColor ?? theme.colorScheme.onPrimary;
     final effectiveBorderRadius = borderRadius ?? 12.0;
     final effectivePadding =
-        padding ?? const EdgeInsets.symmetric(horizontal: 24, vertical: 16);
+        padding ?? const EdgeInsets.symmetric(horizontal: 24, vertical: 10);
+    final effectiveHeight = height ?? 44.0;
 
-    Widget child = Text(
+    Widget child = CommonText.titleSmall(
       text,
-      style: AppTypography.buttonText.copyWith(
-        color: isOutlined ? effectiveBackgroundColor : effectiveTextColor,
-        fontSize: fontSize,
-      ),
+      color: isOutlined ? effectiveBackgroundColor : effectiveTextColor,
+      fontSize: fontSize,
     );
 
     if (icon != null) {
@@ -77,7 +75,7 @@ class CommonButton extends StatelessWidget {
 
     if (isOutlined) {
       return SizedBox(
-        height: height,
+        height: effectiveHeight,
         width: width,
         child: OutlinedButton(
           onPressed: isLoading ? null : onPressed,
@@ -94,9 +92,20 @@ class CommonButton extends StatelessWidget {
       );
     }
 
-    return SizedBox(
-      height: height,
+    // Wrap ElevatedButton with Container for bottom border
+    return Container(
+      height: effectiveHeight,
       width: width,
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: effectiveBackgroundColor.withValues(
+                alpha: 0.5), // Adjust color as needed
+            width: 3.0, // Adjust width as needed
+          ),
+        ),
+        borderRadius: BorderRadius.circular(effectiveBorderRadius),
+      ),
       child: ElevatedButton(
         onPressed: isLoading ? null : onPressed,
         style: ElevatedButton.styleFrom(

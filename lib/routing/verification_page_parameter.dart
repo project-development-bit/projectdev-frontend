@@ -3,11 +3,13 @@ class VerificationPageParameter {
   final String email;
   final bool isSendCode;
   final bool isFromForgotPassword;
+  final bool isFromChangeEmail;
 
   const VerificationPageParameter({
     required this.email,
     this.isSendCode = false,
     this.isFromForgotPassword = false,
+    this.isFromChangeEmail = false,
   });
 
   /// Create a copy with updated parameters
@@ -15,17 +17,19 @@ class VerificationPageParameter {
     String? email,
     bool? isSendCode,
     bool? isFromForgotPassword,
+    bool? isFromChangeEmail,
   }) {
     return VerificationPageParameter(
       email: email ?? this.email,
       isSendCode: isSendCode ?? this.isSendCode,
       isFromForgotPassword: isFromForgotPassword ?? this.isFromForgotPassword,
+      isFromChangeEmail: isFromChangeEmail ?? this.isFromChangeEmail,
     );
   }
 
   @override
   String toString() {
-    return 'VerificationPageParameter(email: $email, isSendCode: $isSendCode, isFromForgotPassword: $isFromForgotPassword)';
+    return 'VerificationPageParameter(email: $email, isSendCode: $isSendCode, isFromForgotPassword: $isFromForgotPassword, isFromChangeEmail: $isFromChangeEmail)';
   }
 
   @override
