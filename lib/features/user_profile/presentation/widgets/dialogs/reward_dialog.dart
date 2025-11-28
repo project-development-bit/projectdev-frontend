@@ -10,30 +10,13 @@ import 'package:cointiply_app/features/user_profile/presentation/widgets/rewards
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class RewardDialog extends StatelessWidget {
+class RewardDialog extends ConsumerWidget {
   const RewardDialog({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final height = _dialogHeight(context);
-
-    return DialogBgWidget(
-        padding: EdgeInsets.zero,
-        dialogHeight: height,
-        body: _RewardDialogContent(),
-        dividerColor: const Color(0xFF003248), //TODO: to use from schma color
-        title: LocalizationHelper(context).translate("rewards_title"));
-  }
 
   double _dialogHeight(BuildContext context) =>
       MediaQuery.of(context).size.height <= 700
           ? MediaQuery.of(context).size.height * 0.9
           : 800;
-}
-
-class _RewardDialogContent extends ConsumerWidget {
-  const _RewardDialogContent();
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(getRewardNotifierProvider);
@@ -42,85 +25,103 @@ class _RewardDialogContent extends ConsumerWidget {
     final data = state.rewards?.data;
     final visibleLevels = state.visibleLevels;
     final isViewAll = state.isViewAll;
-    return CustomScrollView(
-      physics: const AlwaysScrollableScrollPhysics(),
-      slivers: [
-        // ---------------------------
-        // LOADING
-        // ---------------------------
-        if (isLoading)
-          SliverFillRemaining(
-            hasScrollBody: false,
-            child: _loadingWidget(),
-          ),
 
-        // ---------------------------
-        // ERROR
-        // ---------------------------
-        if (!isLoading && error != null)
-          SliverFillRemaining(
-            hasScrollBody: false,
-            child: _errorWidget(error),
-          ),
+    final height = _dialogHeight(context);
 
-        // ---------------------------
-        // SUCCESS CONTENT
-        // ---------------------------
-        if (!isLoading && error == null && data != null)
+    return DialogBgWidget(
+      padding: EdgeInsets.zero,
+      dialogHeight: height,
+      onRouteBack: isViewAll
+          ? () {
+              final notifier = ref.read(getRewardNotifierProvider.notifier);
+              notifier.collapse();
+            }
+          : null,
+      dividerColor: const Color(0xFF003248), //TODO: to use from schma color
+      title: LocalizationHelper(context).translate("rewards_title"),
+      body: CustomScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        slivers: [
+          // ---------------------------
+          // LOADING
+          // ---------------------------
+          if (isLoading)
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: _loadingWidget(),
+            ),
+
+          // ---------------------------
+          // ERROR
+          // ---------------------------
+          if (!isLoading && error != null)
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: _errorWidget(error),
+            ),
+
           SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 32),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: 27),
-
-                  /// DESCRIPTION
-                  CommonRichTextWithIcon(
-                    prefixText: LocalizationHelper(context)
-                        .translate("reward_description_prefix"),
-                    boldNumber: "5",
-                    suffixText: LocalizationHelper(context)
-                        .translate("reward_description_suffix"),
-                    iconPath: "assets/images/rewards/coin.png",
-                  ),
-                  RewardXpPrograssArea(data: data),
-                  StatusRewardsWidget(
-                    selectedTier: data.currentTier,
-                    tiers: data.tiers,
-                  )
-                ],
+            child: SizedBox(height: 27),
+          ),
+          // ---------------------------
+          // SUCCESS CONTENT
+          // ---------------------------
+          if (!isLoading && error == null && data != null && !isViewAll)
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 32),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    /// DESCRIPTION
+                    CommonRichTextWithIcon(
+                      prefixText: LocalizationHelper(context)
+                          .translate("reward_description_prefix"),
+                      boldNumber: "5",
+                      suffixText: LocalizationHelper(context)
+                          .translate("reward_description_suffix"),
+                      iconPath: "assets/images/rewards/coin.png",
+                    ),
+                    RewardXpPrograssArea(data: data),
+                    StatusRewardsWidget(
+                      selectedTier: data.currentTier,
+                      tiers: data.tiers,
+                    )
+                  ],
+                ),
               ),
             ),
-          ),
-        if (!isLoading && error == null && data != null)
-          StatusRewardsTableSliver(
-            levels: visibleLevels,
-            currentLevel: data.currentLevel,
-          ),
 
-        if (!isLoading && error == null && data != null)
-          SliverToBoxAdapter(
-            child: Center(
-              child: CustomUnderLineButtonWidget(
-                isDark: true,
-                onTap: () {
-                  final notifier = ref.read(getRewardNotifierProvider.notifier);
-                  isViewAll ? notifier.collapse() : notifier.viewAll();
-                },
-                fontSize: 16,
-                width: 115,
-                fontWeight: FontWeight.w700,
-                padding: EdgeInsets.symmetric(vertical: 4, horizontal: 0),
-                margin: const EdgeInsets.symmetric(vertical: 8.5),
-                title: isViewAll ? "Collapse" : "View All",
+          if (!isLoading && error == null && data != null)
+            StatusRewardsTableSliver(
+              levels: visibleLevels,
+              currentLevel: data.currentLevel,
+            ),
+
+          if (!isLoading && error == null && data != null && !isViewAll)
+            SliverToBoxAdapter(
+              child: Center(
+                child: CustomUnderLineButtonWidget(
+                  isDark: true,
+                  onTap: () {
+                    final notifier =
+                        ref.read(getRewardNotifierProvider.notifier);
+                    notifier.viewAll();
+                  },
+                  fontSize: 16,
+                  width: 115,
+                  fontWeight: FontWeight.w700,
+                  padding: EdgeInsets.symmetric(vertical: 4, horizontal: 0),
+                  margin: const EdgeInsets.symmetric(vertical: 8.5),
+                  title: "View All",
+                ),
               ),
             ),
+          SliverToBoxAdapter(
+            child: SizedBox(height: 24),
           ),
-        SliverToBoxAdapter(
-          child: SizedBox(height: 24),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

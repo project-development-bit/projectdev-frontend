@@ -12,6 +12,7 @@ class DialogBgWidget extends StatelessWidget {
   final double? dialogHeight;
   final Color? dividerColor;
   final EdgeInsetsGeometry? padding;
+  final Function()? onRouteBack;
   const DialogBgWidget(
       {super.key,
       required this.body,
@@ -19,6 +20,7 @@ class DialogBgWidget extends StatelessWidget {
       this.onClose,
       this.dialogHeight,
       this.dividerColor,
+      this.onRouteBack,
       this.padding});
 
   double _getDialogWidth(BuildContext context) {
@@ -39,6 +41,7 @@ class DialogBgWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final width = _getDialogWidth(context);
     final height = _getDialogHeight(context);
+    final colorScheme = Theme.of(context).colorScheme;
 
     return ScaffoldMessenger(
       child: Builder(builder: (context) {
@@ -64,12 +67,34 @@ class DialogBgWidget extends StatelessWidget {
                             child: Row(
                               children: [
                                 Expanded(
-                                  child: CommonText.headlineSmall(
-                                    title,
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.white,
-                                    overflow: TextOverflow.clip,
-                                  ),
+                                  child: onRouteBack != null
+                                      ? Row(
+                                          children: [
+                                            GestureDetector(
+                                              onTap: () {
+                                                onRouteBack!();
+                                              },
+                                              child: Icon(
+                                                Icons.arrow_back,
+                                                color: Color(0xFF98989A),
+                                                weight: 16,
+                                              ),
+                                            ),
+                                            SizedBox(width: 16),
+                                            CommonText.headlineSmall(
+                                              title,
+                                              fontWeight: FontWeight.w700,
+                                              color: colorScheme.onPrimary,
+                                              overflow: TextOverflow.clip,
+                                            )
+                                          ],
+                                        )
+                                      : CommonText.headlineSmall(
+                                          title,
+                                          fontWeight: FontWeight.w700,
+                                          color: colorScheme.onPrimary,
+                                          overflow: TextOverflow.clip,
+                                        ),
                                 ),
                                 CloseSquareButton(onTap: () {
                                   context.pop();
