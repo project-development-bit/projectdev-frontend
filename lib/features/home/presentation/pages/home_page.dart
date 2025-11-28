@@ -53,9 +53,9 @@ class _HomePageState extends ConsumerState<HomePage> {
               children: [
                 HomeFeaturesSection(),
                 HomeLevelAndRewardSection(),
-                SizedBox(height: 50),
+                SizedBox(height: context.isMobile ? 20 : 50),
                 HomeEventSection(),
-                SizedBox(height: 50),
+                SizedBox(height: context.isMobile ? 20 : 50),
               ],
             )),
       ],
