@@ -1,5 +1,9 @@
 import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
+import 'package:cointiply_app/features/earnings/data/model/request/earnings_history_request.dart';
+import 'package:cointiply_app/features/earnings/data/model/request/earnings_statistics_request.dart';
+import 'package:cointiply_app/features/earnings/presentation/provider/get_earnings_history_notifier.dart';
+import 'package:cointiply_app/features/earnings/presentation/provider/get_earnings_statistics_notifier.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/dialog_bg_widget.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/overview/avatar_badge_info.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/sections/coins_history_section.dart';
@@ -22,6 +26,18 @@ class _ProfileDialogState extends ConsumerState<ProfileDialog> {
     final height = MediaQuery.of(context).size.height;
     if (context.isTablet) return height * 0.9;
     return 680;
+  }
+
+  @override
+  initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref
+          .read(earningsStatisticsNotifierProvider.notifier)
+          .fetchStatistics(const EarningsStatisticsRequest());
+      ref.read(earningsHistoryNotifierProvider.notifier).fetchEarningsHistory(
+          const EarningsHistoryRequestModel(page: 1, limit: 20, days: 7));
+    });
+    super.initState();
   }
 
   @override

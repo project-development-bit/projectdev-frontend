@@ -1,5 +1,4 @@
 import 'package:cointiply_app/core/core.dart';
-import 'package:cointiply_app/features/earnings/data/model/request/earnings_statistics_request.dart';
 import 'package:cointiply_app/features/earnings/presentation/provider/earnings_statistics_state.dart';
 import 'package:cointiply_app/features/earnings/presentation/provider/get_earnings_statistics_notifier.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/cards/statistics_card.dart';
@@ -12,14 +11,7 @@ class StatisticsSection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(earningsStatisticsNotifierProvider);
-    final notifier = ref.read(earningsStatisticsNotifierProvider.notifier);
     final localizations = AppLocalizations.of(context);
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (state.status == EarningsStatisticsStatus.initial) {
-        notifier.fetchStatistics(const EarningsStatisticsRequest());
-      }
-    });
 
     switch (state.status) {
       case EarningsStatisticsStatus.loading:

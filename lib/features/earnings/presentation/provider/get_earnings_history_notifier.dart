@@ -85,8 +85,9 @@ class GetEarningsHistoryNotifier extends StateNotifier<EarningsHistoryState> {
   }
 }
 
-final earningsHistoryNotifierProvider = StateNotifierProvider.autoDispose<
-    GetEarningsHistoryNotifier, EarningsHistoryState>((ref) {
+final earningsHistoryNotifierProvider =
+    StateNotifierProvider<GetEarningsHistoryNotifier, EarningsHistoryState>(
+        (ref) {
   final usecase = ref.watch(getEarningsHistoryUseCaseProvider);
   return GetEarningsHistoryNotifier(usecase);
 });

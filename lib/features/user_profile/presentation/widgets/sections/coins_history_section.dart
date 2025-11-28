@@ -1,6 +1,5 @@
 import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
 import 'package:cointiply_app/core/core.dart';
-import 'package:cointiply_app/features/earnings/data/model/request/earnings_history_request.dart';
 import 'package:cointiply_app/features/earnings/presentation/provider/earnings_history_state.dart';
 import 'package:cointiply_app/features/earnings/presentation/provider/get_earnings_history_notifier.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/cards/coins_earned_history_card.dart';
@@ -15,15 +14,6 @@ class CoinsHistorySection extends ConsumerWidget {
     final state = ref.watch(earningsHistoryNotifierProvider);
     final notifier = ref.read(earningsHistoryNotifierProvider.notifier);
     final localizations = AppLocalizations.of(context);
-
-    // Auto-fetch on enter
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (state.status == EarningsHistoryStatus.initial) {
-        notifier.fetchEarningsHistory(
-          const EarningsHistoryRequestModel(page: 1, limit: 20, days: 7),
-        );
-      }
-    });
 
     if (state.status == EarningsHistoryStatus.loading && state.data == null) {
       return const _HistoryLoading();
@@ -41,7 +31,6 @@ class CoinsHistorySection extends ConsumerWidget {
     final items = state.data?.data?.earnings ?? [];
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Center(
           child: CommonText.bodyLarge(
@@ -49,13 +38,9 @@ class CoinsHistorySection extends ConsumerWidget {
                 "Last Coins Earned (Past 7 Days)",
             fontWeight: FontWeight.w500,
             color: Theme.of(context).colorScheme.onPrimary,
-            textAlign: TextAlign.center,
-            maxLines: 2,
           ),
         ),
         const SizedBox(height: 20),
-
-        // Earned items
         for (final item in items)
           CoinsEarnedHistoryCard(
             title: item.title,
@@ -63,22 +48,14 @@ class CoinsHistorySection extends ConsumerWidget {
             amount: item.amount,
             timeAgo: item.timeAgo,
           ),
-
         const SizedBox(height: 20),
-
-        // Pagination
         if (state.isLoadingMore)
           const Center(child: CircularProgressIndicator()),
-
         if (state.canLoadMore && !state.isLoadingMore)
-          Center(
-            child: CustomButtonWidget(
-              title: localizations?.translate("load_more") ?? "Load More",
-              onTap: () {
-                notifier.loadMore();
-              },
-              fontWeight: FontWeight.w700,
-            ),
+          CustomButtonWidget(
+            title: localizations?.translate("load_more") ?? "Load More",
+            onTap: notifier.loadMore,
+            fontWeight: FontWeight.w700,
           ),
       ],
     );
