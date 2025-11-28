@@ -16,6 +16,7 @@ class StatusRewardsWidget extends StatelessWidget {
     final t = AppLocalizations.of(context);
     final isMobile = context.isMobile;
     final isTablet = context.isTablet;
+    final colorScheme = Theme.of(context).colorScheme;
 
     final items = tiers.map((e) {
       final tier = e.toLowerCase();
@@ -52,7 +53,7 @@ class StatusRewardsWidget extends StatelessWidget {
           CommonText.headlineSmall(
             t?.translate("status_rewards_title") ?? "Status Rewards",
             fontWeight: FontWeight.w700,
-            color: const Color(0xFF00A0DC),
+            color: colorScheme.primary,
           ),
 
           const SizedBox(height: 18),
@@ -72,7 +73,8 @@ class StatusRewardsWidget extends StatelessWidget {
                   children: items.map((tier) {
                     return StatusRewardItem(
                       tier: tier,
-                      isSelected: tier.keyName == selectedTier,
+                      isSelected: tier.keyName.toLowerCase() ==
+                          selectedTier.toLowerCase(),
                       spacing: 12,
                     );
                   }).toList(),
@@ -94,7 +96,8 @@ class StatusRewardsWidget extends StatelessWidget {
                       padding: const EdgeInsets.only(right: 16),
                       child: StatusRewardItem(
                         tier: tier,
-                        isSelected: tier.keyName == selectedTier,
+                        isSelected: tier.keyName.toLowerCase() ==
+                            selectedTier.toLowerCase(),
                         spacing: 16,
                       ),
                     );
@@ -164,10 +167,10 @@ class StatusRewardItem extends StatelessWidget {
       height: 90,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: isSelected ? const Color(0x80FFFFFF) : Colors.transparent,
+        color: isSelected ? const Color(0x8000131E) : Colors.transparent,
         borderRadius: BorderRadius.circular(15),
         border: Border.all(
-          color: const Color(0x80FFFFFF),
+          color: isSelected ? const Color(0x80333333) : Colors.transparent,
           width: 1.2,
         ),
       ),

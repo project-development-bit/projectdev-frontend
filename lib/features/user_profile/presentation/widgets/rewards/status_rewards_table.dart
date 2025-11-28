@@ -6,10 +6,12 @@ import 'package:flutter/material.dart';
 
 class StatusRewardsTableSliver extends StatelessWidget {
   final List<RewardLevel> levels;
+  final int currentLevel;
 
   const StatusRewardsTableSliver({
     super.key,
     required this.levels,
+    required this.currentLevel,
   });
 
   @override
@@ -19,8 +21,8 @@ class StatusRewardsTableSliver extends StatelessWidget {
 
     if (isNarrow) {
       return SliverToBoxAdapter(
-        child: Container(
-          padding: EdgeInsets.only(bottom: context.isMobile ? 0 : 27),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32),
           child: Scrollbar(
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
@@ -35,9 +37,7 @@ class StatusRewardsTableSliver extends StatelessWidget {
     }
 
     return SliverPadding(
-      padding: EdgeInsets.only(
-        bottom: context.isMobile ? 0 : 27,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 32),
       sliver: SliverList(
         delegate: SliverChildBuilderDelegate(
           (context, index) {
@@ -57,6 +57,7 @@ class StatusRewardsTableSliver extends StatelessWidget {
                 treasureChest: "${level.weeklyChest}",
                 offerBoost: "${level.offerBoostPct}%",
                 ptcDiscount: "${level.ptcDiscountPct}%",
+                isCurrentLevel: level.level == currentLevel,
               ),
             );
           },
