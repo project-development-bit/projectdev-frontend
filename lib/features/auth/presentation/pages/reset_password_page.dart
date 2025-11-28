@@ -20,6 +20,9 @@ class ResetPasswordPage extends StatelessWidget {
           horizontal: isMobile ? 20 : 31,
           vertical: isMobile ? 24 : 47.5,
         ),
+        girlHeight: 400,
+        girlRightOffset: -150,
+        girlBottomOffset: -170,
         child: ResetPasswordForm(email: email));
   }
 }

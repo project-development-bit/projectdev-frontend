@@ -371,11 +371,11 @@ class _CloudflareTurnstileWidgetState
         return Row(
           children: [
             const SizedBox(
-              width: 16,
-              height: 16,
+              width: 22,
+              height: 22,
               child: CircularProgressIndicator(strokeWidth: 2),
             ),
-            const SizedBox(width: 8),
+            const SizedBox(width: 6),
             CommonText.bodyMedium(
               'Verifying security challenge...',
               color: context.onSurfaceVariant,
@@ -387,8 +387,8 @@ class _CloudflareTurnstileWidgetState
       case TurnstileSuccess():
         return Row(
           children: [
-            const Icon(Icons.check_circle, size: 16, color: AppColors.success),
-            const SizedBox(width: 8),
+            const Icon(Icons.check_circle, size: 22, color: AppColors.success),
+            const SizedBox(width: 6),
             CommonText.bodyMedium(
               'Security verification successful',
               color: AppColors.success,
@@ -400,10 +400,10 @@ class _CloudflareTurnstileWidgetState
       case TurnstileError(message: final message):
         return Row(
           children: [
-            Icon(Icons.error, size: 16, color: colorScheme.error),
-            const SizedBox(width: 8),
+            Icon(Icons.error, size: 22, color: colorScheme.error),
+            const SizedBox(width: 6),
             Expanded(
-              child: CommonText.bodySmall(
+              child: CommonText.bodyMedium(
                 'Verification failed: $message',
                 color: colorScheme.error,
               ),

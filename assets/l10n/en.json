@@ -641,5 +641,6 @@
   "show_stats_description": "When enabled, your account stats are shown on your profile. Enabled by default.",
   "anonymous_in_contests": "Anonymous in contests",
   "anonymous_contests_description": "When enabled, your account appears anonymously in contest rankings. Off by default.",
-  "country": "Country"
+  "country": "Country",
+  "claim_now": "Claim Now"
 }

@@ -12,6 +12,9 @@ class OnboardingBackground extends StatelessWidget {
     this.logoImagePath,
     this.backgroundImagePath,
     this.childPadding,
+    this.girlHeight,
+    this.girlRightOffset,
+    this.girlBottomOffset,
   });
 
   final Widget child;
@@ -20,13 +23,15 @@ class OnboardingBackground extends StatelessWidget {
   final EdgeInsetsGeometry? childPadding;
   final String? logoImagePath;
   final String? backgroundImagePath;
-
+  final double? girlHeight;
+  final double? girlRightOffset;
+  final double? girlBottomOffset;
   @override
   Widget build(BuildContext context) {
     final isMobile = context.isMobile;
-    double girlHeight = isMobile ? 200 : 360;
-    double girlRightOffset = isMobile ? -40 : -180;
-    double girlBottomOffset = isMobile ? -10 : -40;
+    double localGirlHeight = girlHeight ?? (isMobile ? 200 : 400);
+    double localGirlRightOffset = girlRightOffset ?? (isMobile ? -40 : -150);
+    double localGirlBottomOffset = girlBottomOffset ?? (isMobile ? -10 : -110);
 
     return Scaffold(
       backgroundColor: context.surface,
@@ -36,7 +41,7 @@ class OnboardingBackground extends StatelessWidget {
             child: Image.asset(
               backgroundImagePath ??
                   'assets/images/bg/onboarding_background.png',
-              fit: context.isMobile ? BoxFit.cover : BoxFit.fill,
+              fit: BoxFit.cover,
             ),
           ),
           SingleChildScrollView(
@@ -84,13 +89,14 @@ class OnboardingBackground extends StatelessWidget {
                         ),
                         if (!isMobile)
                           Positioned(
-                            right: girlRightOffset,
-                            bottom: girlBottomOffset,
+                            right: localGirlRightOffset,
+                            bottom: localGirlBottomOffset,
                             child: IgnorePointer(
                               ignoring: true,
                               child: Image.asset(
-                                "assets/images/girl.png",
-                                height: girlHeight,
+                                // "assets/images/girl.png",
+                                "assets/images/girl_whole_body.png",
+                                height: localGirlHeight,
                                 fit: BoxFit.contain,
                               ),
                             ),

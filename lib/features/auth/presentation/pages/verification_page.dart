@@ -23,6 +23,9 @@ class VerificationPage extends StatelessWidget {
       childPadding: EdgeInsets.symmetric(
           vertical: context.isMobile ? 30.5 : 55.5,
           horizontal: context.isMobile ? 16 : 37),
+      girlHeight: 500,
+      girlRightOffset: -200,
+      girlBottomOffset: -250,
       child: VerificationFormWidget(
         email: email,
         isFromForgotPassword: isFromForgotPassword,

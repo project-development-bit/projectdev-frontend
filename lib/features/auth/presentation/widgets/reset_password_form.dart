@@ -255,7 +255,7 @@ class _ResetPasswordFormState extends ConsumerState<ResetPasswordForm> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 13.0),
       child: CustomUnderLineButtonWidget(
-        title: context.translate('update_password'),
+        title: context.translate('reset_password'),
         isLoading: isLoading,
         onTap: isLoading ? () {} : _onResetPasswordPressed,
         height: context.isMobile ? 50 : 56,
@@ -277,8 +277,8 @@ class _ResetPasswordFormState extends ConsumerState<ResetPasswordForm> {
           children: [
             Icon(
               Icons.arrow_back,
-              size: 16,
-              color: Theme.of(context).colorScheme.primary,
+              size: 24,
+              color: Theme.of(context).colorScheme.onPrimary,
             ),
             const SizedBox(width: 8),
             Flexible(

@@ -166,6 +166,9 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
       childPadding: EdgeInsets.symmetric(
           vertical: context.isMobile ? 35 : 38.5,
           horizontal: context.isMobile ? 17 : 43),
+      girlHeight: 400,
+      girlRightOffset: -140,
+      girlBottomOffset: -180,
       child: Form(
         key: _formKey,
         child: Column(
@@ -296,16 +299,14 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                                       : Colors.transparent,
                                   borderRadius: BorderRadius.circular(4),
                                 ),
-                                child: Text(
+                                child: CommonText.bodyMedium(
                                   localizations
                                           ?.translate('terms_and_conditions') ??
                                       'Terms and Conditions',
-                                  style: TextStyle(
-                                    color: isTermsHover
-                                        ? colorScheme.primary
-                                            .withValues(alpha: 0.8)
-                                        : colorScheme.primary,
-                                  ),
+                                  color: isTermsHover
+                                      ? colorScheme.primary
+                                          .withValues(alpha: 0.8)
+                                      : colorScheme.primary,
                                 ),
                               ),
                             ),
@@ -339,15 +340,13 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                                       : Colors.transparent,
                                   borderRadius: BorderRadius.circular(4),
                                 ),
-                                child: Text(
+                                child: CommonText.bodyMedium(
                                   localizations?.translate('privacy_policy') ??
                                       'Privacy Policy',
-                                  style: TextStyle(
-                                    color: isPrivacyHover
-                                        ? colorScheme.primary
-                                            .withValues(alpha: 0.8)
-                                        : colorScheme.primary,
-                                  ),
+                                  color: isPrivacyHover
+                                      ? colorScheme.primary
+                                          .withValues(alpha: 0.8)
+                                      : colorScheme.primary,
                                 ),
                               ),
                             ),
@@ -394,12 +393,10 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                           ),
                         ),
                       )
-                    : Text(
+                    : CommonText.titleMedium(
                         localizations?.translate('sign_up') ?? 'Sign Up',
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.w600,
-                          color: colorScheme.onPrimary,
-                        ),
+                        fontWeight: FontWeight.w600,
+                        color: colorScheme.onPrimary,
                       ),
               ),
             ),
@@ -410,12 +407,10 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
+                CommonText.bodyMedium(
                   localizations?.translate('already_have_account') ??
                       'Already have an account? ',
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: colorScheme.onSurfaceVariant,
-                  ),
+                  color: colorScheme.onSurfaceVariant,
                 ),
                 TextButton(
                   onPressed: () => context.goToLogin(),
@@ -424,12 +419,10 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                     minimumSize: Size.zero,
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
-                  child: Text(
+                  child: CommonText.bodyMedium(
                     localizations?.translate('sign_in') ?? 'Sign In',
-                    style: TextStyle(
-                      color: colorScheme.primary,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    color: colorScheme.primary,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ],
