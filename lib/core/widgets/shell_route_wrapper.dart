@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/common/footer/giga_footer.dart';
 import 'package:cointiply_app/core/common/footer/mobile_bottom_nav.dart';
 import 'package:cointiply_app/core/common/header/giga_faucet_header.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
@@ -23,41 +24,43 @@ class ShellRouteWrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenWidth = context.screenWidth;
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: context.surface.withAlpha(242),
+        surfaceTintColor: AppColors.transparent,
+        elevation: 0,
+        scrolledUnderElevation: 1,
+        automaticallyImplyLeading: false,
+        flexibleSpace: FlexibleSpaceBar(
+          background: Container(
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  context.surface.withAlpha(250), // 0.98 * 255
+                  context.surface.withAlpha(235), // 0.92 * 255
+                ],
+              ),
+            ),
+            child: GigaFaucetHeader(),
+          ),
+        ),
+        titleSpacing: 16,
+      ),
       drawer: screenWidth < 900 ? const MobileDrawer() : null,
       body: NestedScrollView(
-        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          return [
-            SliverAppBar(
-              expandedHeight: 80.0,
-              floating: true,
-              pinned: false,
-              snap: true,
-              backgroundColor: context.surface.withAlpha(242),
-              surfaceTintColor: AppColors.transparent,
-              elevation: 0,
-              scrolledUnderElevation: 1,
-              automaticallyImplyLeading: false,
-              flexibleSpace: FlexibleSpaceBar(
-                background: Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        context.surface.withAlpha(250), // 0.98 * 255
-                        context.surface.withAlpha(235), // 0.92 * 255
-                      ],
-                    ),
-                  ),
-                  child: GigaFaucetHeader(),
-                ),
-              ),
-              titleSpacing: 16,
+        headerSliverBuilder: (context, innerBoxIsScrolled) => [],
+        body: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: child,
             ),
-          ];
-        },
-        body: child,
+            SliverToBoxAdapter(
+              child: GigaFooter(),
+            ),
+          ],
+        ),
       ),
       bottomNavigationBar: MobileBottomNav(),
       floatingActionButton: Consumer(builder: (context, ref, child) {
@@ -80,3 +83,4 @@ class ShellRouteWrapper extends StatelessWidget {
     );
   }
 }
+// GigaFooter()
