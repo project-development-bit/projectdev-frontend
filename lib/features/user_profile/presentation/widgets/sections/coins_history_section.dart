@@ -36,7 +36,9 @@ class CoinsHistorySection extends StatelessWidget {
             localizations?.translate('coins_history_title') ??
                 "Last Coins Earned (Past 7 Days)",
             fontWeight: FontWeight.w500,
-            color: Theme.of(context).colorScheme.onPrimary,
+            color: Color(0xFF98989A),
+
+            /// TODO: Use from scheme
           ),
         ),
         const SizedBox(height: 20),
