@@ -48,10 +48,10 @@ class AppSettingsState {
 
 /// Notifier for managing app settings  from server
 class AppSettingsNotifier extends StateNotifier<AppSettingsState> {
-  final GetAppSettingsUseCase getAppSettingsUseCase;
+  final GetRemoteAppSettingsUseCase getRemoteAppSettingsUseCase;
   final GetLocalAppSettingsUseCase getLocalAppSettingsUseCase;
   AppSettingsNotifier({
-    required this.getAppSettingsUseCase,
+    required this.getRemoteAppSettingsUseCase,
     required this.getLocalAppSettingsUseCase,
   }) : super(const AppSettingsState());
 
@@ -96,7 +96,7 @@ class AppSettingsNotifier extends StateNotifier<AppSettingsState> {
     if (state.config == null || forceRefresh) {
       state = state.copyWith(isLoading: true, error: null);
 
-      final remoteResult = await getAppSettingsUseCase.call(NoParams());
+      final remoteResult = await getRemoteAppSettingsUseCase.call(NoParams());
 
       remoteResult.fold(
         (failure) {
@@ -128,7 +128,7 @@ class AppSettingsNotifier extends StateNotifier<AppSettingsState> {
 
   Future<void> _refreshInBackground(String oldVersion) async {
     debugPrint('🌈 Refreshing app settings theme in background...');
-    final result = await getAppSettingsUseCase.call(NoParams());
+    final result = await getRemoteAppSettingsUseCase.call(NoParams());
 
     result.fold(
       (_) {}, // ignore background errors

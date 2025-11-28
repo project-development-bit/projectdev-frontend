@@ -25,7 +25,7 @@ abstract class AppSettingsRepository {
   /// Get app settings from server or cache
   /// Returns [Right] with [AppSettingsData] on success
   /// Returns [Left] with [Failure] on error
-  Future<Either<Failure, AppSettingsData>> getAppSettings();
+  Future<Either<Failure, AppSettingsData>> getRemoteAppSettings();
 
   Future<Either<Failure, AppSettingsData?>> cacheAppSettings();
 }
@@ -40,16 +40,8 @@ class AppSettingsRepositoryImpl implements AppSettingsRepository {
   });
 
   @override
-  Future<Either<Failure, AppSettingsData>> getAppSettings() async {
+  Future<Either<Failure, AppSettingsData>> getRemoteAppSettings() async {
     try {
-      // final cached = await localDataSource.getCachedAppSettings();
-
-      // // Return cached immediately (if not forcing refresh)
-      // if (!forceRefresh && cached != null && cached.data.isNotEmpty) {
-      //   return Right(cached.data.first);
-      // }
-
-      // If no cache, call server
       final response = await remoteDataSource.getAppSettings();
       if (!response.success || response.data.isEmpty) {
         return const Left(
