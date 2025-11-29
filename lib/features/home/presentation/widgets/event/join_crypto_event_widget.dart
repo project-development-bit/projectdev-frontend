@@ -8,23 +8,20 @@ class JoinCryptoEventWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isSmallSize = context.isMobile || context.isTablet;
-    return Flex(
-      direction: isSmallSize ? Axis.vertical : Axis.horizontal,
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.center,
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 10.0,
       children: [
         Image.asset(
           'assets/images/gigafaucet_logo.png',
-          width: isSmallSize ? 60 : 120,
-          height: isSmallSize ? 60 : 120,
+          width: isSmallSize ? 68 : 120,
+          height: isSmallSize ? 68 : 120,
         ),
         Flexible(
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: isSmallSize
-                ? CrossAxisAlignment.center
-                : CrossAxisAlignment.stretch,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
@@ -37,15 +34,14 @@ class JoinCryptoEventWidget extends StatelessWidget {
                 child: CommonText.bodyLarge(
                   context.translate('earn_play_and_collect_crypto_text'),
                   fontWeight: FontWeight.w600,
-                  
                 ),
               ),
               CommonText.titleLarge(
                 context.translate('join_crypto_event_widget_text'),
                 fontSize: 40.0,
-                textAlign: TextAlign.center,
               ),
-              CommonText.bodyLarge(context.translate("join_crypto_event_description_widget_text"))
+              CommonText.bodyLarge(context
+                  .translate("join_crypto_event_description_widget_text"))
             ],
           ),
         ),

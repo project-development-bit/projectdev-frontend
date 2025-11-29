@@ -238,71 +238,21 @@
       return !!(window.grecaptcha && window.currentRecaptchaKey);
     };
 
-    // Function to ensure reCAPTCHA badge stays visible and properly customized
-    window.ensureRecaptchaBadgeVisible = function () {
-      // const badge = document.querySelector('.grecaptcha-badge');
-      // if (badge) {
-      //   // Position and visibility
-      //   badge.style.zIndex = '9999';
-      //   badge.style.position = 'fixed';
-      //   badge.style.bottom = '14px';
-      //   badge.style.left = '14px';
-      //   badge.style.right = 'auto';
-      //   badge.style.opacity = '1';
-      //   badge.style.visibility = 'visible';
-      //   badge.style.display = 'block';
-
-      //   // Make it smaller and customize size
-      //   badge.style.transform = 'scale(0.75)';
-      //   badge.style.transformOrigin = 'bottom left';
-      //   badge.style.width = '70px';
-      //   badge.style.height = '60px';
-
-      //   // Hide text elements within the badge
-      //   const textElements = badge.querySelectorAll('div[style*="text"], .grecaptcha-text');
-      //   textElements.forEach(el => {
-      //     el.style.display = 'none';
-      //   });
-
-      //   // Hide the last div which usually contains text
-      //   const lastDiv = badge.querySelector('div:last-child');
-      //   if (lastDiv && lastDiv.textContent && lastDiv.textContent.trim()) {
-      //     lastDiv.style.fontSize = '0';
-      //     lastDiv.style.height = '0';
-      //     lastDiv.style.overflow = 'hidden';
-      //   }
-
-      //   // Target iframe if present
-      //   const iframe = badge.querySelector('iframe');
-      //   if (iframe) {
-      //     iframe.style.width = '70px';
-      //     iframe.style.height = '60px';
-      //   }
-
-      //   return true;
-      // }
-      // return false;
+      // Function to hide reCAPTCHA badge
+      window.ensureRecaptchaBadgeVisible = function () {
       const badge = document.querySelector('.grecaptcha-badge');
       const iframe = document.querySelector('iframe[src*="recaptcha"]');
 
       if (badge) {
-        badge.style.position = 'fixed';
-        badge.style.left = '14px';
-        badge.style.right = 'auto';
-        badge.style.bottom = '14px';
-        badge.style.transformOrigin = 'bottom left';
-        badge.style.zIndex = '9999';
-        badge.style.opacity = '0.6';
-        badge.onmouseenter = () => (badge.style.opacity = '1');
-        badge.onmouseleave = () => (badge.style.opacity = '0.6');
+        badge.style.visibility = 'hidden';
+        badge.style.opacity = '0';
+        badge.style.display = 'none';
       }
 
       if (iframe) {
-        iframe.style.position = 'fixed';
-        iframe.style.left = '14px';
-        iframe.style.right = 'auto';
-        iframe.style.bottom = '14px';
-        iframe.style.zIndex = '9999';
+        iframe.style.visibility = 'hidden';
+        iframe.style.opacity = '0';
+        iframe.style.display = 'none';
       }
     };
 
@@ -347,58 +297,18 @@
       font-display: swap;
     }
 
-    /* reCAPTCHA badge styling - ensure it stays visible and smaller */
+    /* Hide reCAPTCHA badge completely */
     .grecaptcha-badge {
-      position: fixed !important;
-      bottom: 14px !important;
-      left: 14px !important;
-      right: auto !important;
-      z-index: 9999 !important;
-      transform: scale(0.75) !important;
-      transform-origin: bottom left !important;
-      width: 70px !important;
-      height: 60px !important;
-      opacity: 0.6 !important;
-      transition: opacity 0.3s ease-in-out;
-    }
-
-    /* Hide the reCAPTCHA text, keep only the logo */
-    .grecaptcha-badge .grecaptcha-logo {
-      display: block !important;
-    }
-
-    .grecaptcha-badge .grecaptcha-text {
+      visibility: hidden !important;
+      opacity: 0 !important;
       display: none !important;
     }
 
-    /* Hide text elements within the badge */
-    .grecaptcha-badge div[style*="text"] {
-      display: none !important;
-    }
-
-    /* Target the badge content more specifically - hide text divs */
-    .grecaptcha-badge>div:last-child {
-      font-size: 0 !important;
-      height: 0 !important;
-      overflow: hidden !important;
-    }
-
-    /* Ensure reCAPTCHA badge is not hidden by Flutter overlays */
-    flt-glass-pane .grecaptcha-badge,
-    flutter-view .grecaptcha-badge {
-      z-index: 10000 !important;
-      transform: scale(0.75) !important;
-      transform-origin: bottom right !important;
-    }
-
-    /* Prevent any potential conflicts with Flutter's rendering */
+    /* Hide reCAPTCHA iframe */
     iframe[src*="recaptcha"] {
-      z-index: 9999 !important;
-      position: fixed !important;
-      width: 70px !important;
-      height: 60px !important;
-      bottom: 14px !important;
-      left: 14px !important;
+      visibility: hidden !important;
+      opacity: 0 !important;
+      display: none !important;
     }
   </style>
 

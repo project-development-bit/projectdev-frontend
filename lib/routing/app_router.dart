@@ -194,18 +194,11 @@ class BurgerEatsAppRoutes {
             pageBuilder: (context, state, child) {
               return NoTransitionPage(
                 child: InternalVerificationOverlay(
-                  child: ShellRouteWrapper(
-                    child: RightChatOverlay(
-                      child: Consumer(
-                        builder: (context, ref, _) {
-                          final isVerified =
-                              ref.watch(internalVerificationProvider);
-
-                          return isVerified
-                              ? TutorialOverlay(child: child)
-                              : child;
-                        },
-                      ),
+                  child: TutorialOverlay(
+                    child: ShellRouteWrapper(
+                      child: RightChatOverlay(
+                        child: child
+                        ),
                     ),
                   ),
                 ),

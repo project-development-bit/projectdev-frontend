@@ -1,5 +1,5 @@
-import 'package:cointiply_app/core/common/common_button.dart';
 import 'package:cointiply_app/core/common/common_text.dart';
+import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
 import 'package:cointiply_app/core/extensions/extensions.dart';
 import 'package:flutter/material.dart';
 
@@ -13,20 +13,37 @@ class HomeLevelAndRewardSection extends StatelessWidget {
     final isSmallSize = context.isMobile || context.isTablet;
     return HomeSectionContainer(
       width: double.infinity,
+      decoration: BoxDecoration(
+        image: context.isMobile
+            ? DecorationImage(
+                fit: BoxFit.fitWidth,
+                alignment: Alignment(0, -1.5),
+                image: AssetImage(
+                    'assets/images/bg/coin_background_section_2_mobile.png'),
+              )
+            : null,
+      ),
       child: Center(
         child: Container(
             constraints: BoxConstraints(maxWidth: 1240),
             padding: const EdgeInsets.symmetric(vertical: 25.0),
             margin: EdgeInsets.symmetric(horizontal: 25),
             child: Column(
+              crossAxisAlignment: isSmallSize
+                  ? CrossAxisAlignment.start
+                  : CrossAxisAlignment.center,
               children: [
                 CommonText.titleLarge(
-                  context.translate('home_level_and_reward_section_title'),
+                  context.isMobile
+                      ? context.translate(
+                          'home_level_and_reward_section_title_mobile')
+                      : context
+                          .translate('home_level_and_reward_section_title'),
                   fontWeight: FontWeight.w700,
-                  textAlign: TextAlign.center,
+                  textAlign: isSmallSize ? TextAlign.start : TextAlign.center,
                   fontSize: 40,
                 ),
-                SizedBox(height: 42),
+                SizedBox(height: isSmallSize ? 16 : 42),
                 SizedBox(
                   height: isSmallSize ? null : 300,
                   child: Flex(
@@ -52,7 +69,9 @@ class HomeLevelAndRewardSection extends StatelessWidget {
         border: Border.all(color: Colors.white, width: 1),
         borderRadius: BorderRadius.circular(20),
       ),
-      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 34),
+      padding: isSmallSize
+          ? EdgeInsets.all(16)
+          : EdgeInsets.symmetric(horizontal: 10, vertical: 34),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Flex(
@@ -94,13 +113,16 @@ class HomeLevelAndRewardSection extends StatelessWidget {
         border: Border.all(color: Colors.white, width: 1),
         borderRadius: BorderRadius.circular(20),
       ),
-      padding: EdgeInsets.symmetric(horizontal: 31, vertical: 33.5),
+      padding: isSmallSize
+          ? EdgeInsets.all(16)
+          : EdgeInsets.symmetric(horizontal: 31, vertical: 33.5),
       child: Column(
         children: [
           CommonText.titleLarge(
             context.translate('home_reward_widget_title'),
             fontWeight: FontWeight.w700,
             fontSize: 20,
+            maxLines: 2,
           ),
           SizedBox(height: 34),
           Flex(
@@ -117,15 +139,17 @@ class HomeLevelAndRewardSection extends StatelessWidget {
                     SizedBox(width: 14),
                     CommonText.titleLarge(
                       '[78] %',
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w500,
                       fontSize: 20,
-                      highlightColor: context.secondary,
+                      highlightColor: context.primary,
                     ),
                     SizedBox(width: 10),
                     Expanded(
                       child: CommonText.bodyLarge(
                         context.translate('home_reward_boost_and_serveys_text'),
                         fontWeight: FontWeight.w700,
+                        color: Color(0xff98989A),
+                        maxLines: 2,
                       ),
                     ),
                   ],
@@ -149,16 +173,16 @@ class HomeLevelAndRewardSection extends StatelessWidget {
                     SizedBox(width: 14),
                     CommonText.titleLarge(
                       '[+24%]',
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w500,
                       fontSize: 20,
-                      highlightColor: context.secondary,
+                      highlightColor: context.primary,
                     ),
                     SizedBox(width: 10),
                     Expanded(
                       child: CommonText.bodyLarge(
-                        context.translate('home_reward_discount_text'),
-                        fontWeight: FontWeight.w700,
-                      ),
+                          context.translate('home_reward_discount_text'),
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white),
                     ),
                   ],
                 ),
@@ -167,9 +191,16 @@ class HomeLevelAndRewardSection extends StatelessWidget {
           ),
           SizedBox(height: 34),
           Center(
-            child: CommonButton(
-                text: context.translate("level_stat_widget_button_text"),
-                onPressed: () {}),
+            child: CustomUnderLineButtonWidget(
+              width: 180,
+              fontSize: 16,
+              isDark: true,
+              fontWeight: FontWeight.w700,
+              padding: EdgeInsets.symmetric(vertical: 4, horizontal: 0),
+              margin: const EdgeInsets.symmetric(vertical: 8.5),
+              title: context.translate("level_stat_widget_button_text"),
+              onTap: () {},
+            ),
           )
         ],
       ),
@@ -196,12 +227,12 @@ class HomeLevelAndRewardSection extends StatelessWidget {
               ),
               Flexible(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     CommonText.titleMedium(
                       "[78] %",
                       fontWeight: FontWeight.w700,
-                      highlightColor: context.secondary,
+                      highlightColor: context.primary,
                     ),
                     SizedBox(height: 8),
                     LinearProgressIndicator(
@@ -214,9 +245,11 @@ class HomeLevelAndRewardSection extends StatelessWidget {
                     ),
                     SizedBox(height: 16),
                     CommonText.titleMedium(
-                      "[2,452] XP points to next level",
+                      context.translate('xp_points_to_next_level',
+                          args: ['2,452']),
                       fontWeight: FontWeight.w700,
-                      highlightColor: context.secondary,
+                      highlightColor: context.primary,
+                      textAlign: TextAlign.center,
                     ),
                   ],
                 ),
@@ -229,9 +262,16 @@ class HomeLevelAndRewardSection extends StatelessWidget {
           ),
           SizedBox(height: 34),
           Center(
-            child: CommonButton(
-                text: context.translate("level_stat_widget_button_text"),
-                onPressed: () {}),
+            child: CustomUnderLineButtonWidget(
+              width: 180,
+              fontSize: 16,
+              isDark: true,
+              fontWeight: FontWeight.w700,
+              padding: EdgeInsets.symmetric(vertical: 4, horizontal: 0),
+              margin: const EdgeInsets.symmetric(vertical: 8.5),
+              title: context.translate("level_stat_widget_button_text"),
+              onTap: () {},
+            ),
           )
         ]);
   }

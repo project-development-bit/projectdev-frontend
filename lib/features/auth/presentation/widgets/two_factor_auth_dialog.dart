@@ -382,14 +382,12 @@ class _ManualEntrySection extends StatelessWidget {
               color: Color(0xff333333),
             ),
           ),
-          child: Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 60),
-              child: Center(
-                child: CommonText.bodyMedium(
-                  secret,
-                  overflow: TextOverflow.ellipsis,
-                ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 60),
+            child: Center(
+              child: CommonText.bodyMedium(
+                secret,
+                overflow: TextOverflow.ellipsis,
               ),
             ),
           ),
@@ -445,20 +443,21 @@ class _VerificationForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = context.isMobile;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Row(
-          spacing: 16,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            CommonText.bodyLarge(
-              context.translate("authentication_code"),
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-            ),
-            Expanded(
-              child: CommonTextField(
+        if (isMobile)
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CommonText.bodyLarge(
+                context.translate("authentication_code"),
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+              ),
+              const SizedBox(height: 8),
+              CommonTextField(
                 controller: codeController,
                 focusNode: codeFocusNode,
                 labelText: context.translate("enter_verification_code"),
@@ -468,9 +467,32 @@ class _VerificationForm extends StatelessWidget {
                 fillColor: const Color(0xff1A1A1A),
                 onSubmitted: (_) => handleVerify(),
               ),
-            ),
-          ],
-        ),
+            ],
+          )
+        else
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              CommonText.bodyLarge(
+                context.translate("authentication_code"),
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: CommonTextField(
+                  controller: codeController,
+                  focusNode: codeFocusNode,
+                  labelText: context.translate("enter_verification_code"),
+                  hintText: 'Enter 6-digit code',
+                  keyboardType: TextInputType.number,
+                  validator: validateCode,
+                  fillColor: const Color(0xff1A1A1A),
+                  onSubmitted: (_) => handleVerify(),
+                ),
+              ),
+            ],
+          ),
         const SizedBox(height: 16),
         CommonButton(
           text: context.translate("enable_2fa_button"),

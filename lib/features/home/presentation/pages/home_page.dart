@@ -42,8 +42,8 @@ class _HomePageState extends ConsumerState<HomePage> {
               image: DecorationImage(
                   repeat: ImageRepeat.repeat,
                   image: AssetImage(
-                    context.isDark
-                        ? 'assets/images/bg/home_background.png'
+                    context.isMobile
+                        ? 'assets/images/bg/home_background_mobile.png'
                         : 'assets/images/bg/home_background.png',
                   ),
                   fit: BoxFit.fitWidth,
@@ -53,9 +53,9 @@ class _HomePageState extends ConsumerState<HomePage> {
               children: [
                 HomeFeaturesSection(),
                 HomeLevelAndRewardSection(),
-                SizedBox(height: 50),
+                SizedBox(height: context.isMobile ? 20 : 50),
                 HomeEventSection(),
-                SizedBox(height: 50),
+                SizedBox(height: context.isMobile ? 20 : 50),
               ],
             )),
       ],
