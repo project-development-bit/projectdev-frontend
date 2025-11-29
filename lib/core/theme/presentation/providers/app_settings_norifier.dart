@@ -1,4 +1,5 @@
 import 'package:cointiply_app/core/theme/domain/usecases/app_settings_usecase.dart';
+import 'package:cointiply_app/core/usecases/usecase.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/models/app_settings_model.dart';
@@ -47,53 +48,108 @@ class AppSettingsState {
 
 /// Notifier for managing app settings  from server
 class AppSettingsNotifier extends StateNotifier<AppSettingsState> {
-  final GetAppSettingsUseCase getAppSettingsUseCase;
-
+  final GetRemoteAppSettingsUseCase getRemoteAppSettingsUseCase;
+  final GetLocalAppSettingsUseCase getLocalAppSettingsUseCase;
   AppSettingsNotifier({
-    required this.getAppSettingsUseCase,
+    required this.getRemoteAppSettingsUseCase,
+    required this.getLocalAppSettingsUseCase,
   }) : super(const AppSettingsState());
 
-  /// Load theme configuration from server
   Future<void> loadConfig({bool forceRefresh = false}) async {
-    state = state.copyWith(isLoading: true, error: null);
+    debugPrint(
+      '🌈 Loading app settings theme configuration (forceRefresh: $forceRefresh)...',
+    );
+    // --------------------------------------------------------
+    // 1. Try local cache first (instant UI, no loading screen)
+    // --------------------------------------------------------
+    if (!forceRefresh) {
+      final localResult = await getLocalAppSettingsUseCase.call(NoParams());
 
-    final result = await getAppSettingsUseCase.call(forceRefresh);
+      localResult.fold(
+        (_) {}, // ignore local error
+        (cached) {
+          debugPrint(
+            '🌈 Loaded app settings theme from cache, version: ${cached?.version}',
+          );
+          if (cached != null) {
+            // Apply cached theme immediately
+            state = state.copyWith(
+              config: cached.configData,
+              lightTheme: DynamicAppTheme.buildLightTheme(cached.configData),
+              darkTheme: DynamicAppTheme.buildDarkTheme(cached.configData),
+              configVersion: cached.version,
+              banners: cached.configData.banners,
+              isLoading: false,
+              error: null,
+            );
 
-    result.fold(
-      (failure) {
-        state = state.copyWith(
-          isLoading: false,
-          error: failure.message ?? 'Failed to load theme configuration',
-        );
-        debugPrint('❌ Failed to load theme config: ${failure.message}');
-      },
-      (config) {
-        try {
-          // Build theme data from config
-          final lightTheme = DynamicAppTheme.buildLightTheme(config);
-          final darkTheme = DynamicAppTheme.buildDarkTheme(config);
+            // Fetch fresh config in background
+            _refreshInBackground(cached.version);
+          }
+        },
+      );
+    }
 
+    // --------------------------------------------------------
+    // 2. If no cache was applied, show loading + fetch from BE
+    // --------------------------------------------------------
+    if (state.config == null || forceRefresh) {
+      state = state.copyWith(isLoading: true, error: null);
+
+      final remoteResult = await getRemoteAppSettingsUseCase.call(NoParams());
+
+      remoteResult.fold(
+        (failure) {
+          debugPrint(
+            '🌈 Failed to load app settings theme from server: ${failure.message}',
+          );
           state = state.copyWith(
-            config: config,
-            lightTheme: lightTheme,
-            darkTheme: darkTheme,
-            configVersion: config.configVersion,
-            banners: config.banners,
+            isLoading: false,
+            error: failure.message ?? 'Failed to load theme configuration',
+          );
+        },
+        (config) {
+          debugPrint(
+            '🌈 Loaded app settings theme from server, version: ${config.version}',
+          );
+          state = state.copyWith(
+            config: config.configData,
+            lightTheme: DynamicAppTheme.buildLightTheme(config.configData),
+            darkTheme: DynamicAppTheme.buildDarkTheme(config.configData),
+            configVersion: config.version,
+            banners: config.configData.banners,
             isLoading: false,
             error: null,
           );
+        },
+      );
+    }
+  }
 
-          debugPrint('✅ Theme config loaded successfully');
-          debugPrint('  - Version: ${config.configVersion}');
-          debugPrint('  - Color Scheme: ${config.colorScheme}');
-          debugPrint('  - Heading Font: ${config.fonts.heading}');
-          debugPrint('  - Body Font: ${config.fonts.body}');
-        } catch (e) {
-          state = state.copyWith(
-            isLoading: false,
-            error: 'Failed to build theme: $e',
+  Future<void> _refreshInBackground(String oldVersion) async {
+    debugPrint('🌈 Refreshing app settings theme in background...');
+    final result = await getRemoteAppSettingsUseCase.call(NoParams());
+
+    result.fold(
+      (_) {}, // ignore background errors
+      (config) {
+        debugPrint(
+          '🌈 Background refresh got app settings theme version: ${config.version}',
+        );
+        if (config.version != oldVersion) {
+          debugPrint(
+            '🌈 App settings theme version changed from $oldVersion to ${config.version}. Updating theme...',
           );
-          debugPrint('❌ Failed to build theme: $e');
+          // Theme changed → update UI
+          state = state.copyWith(
+            config: config.configData,
+            lightTheme: DynamicAppTheme.buildLightTheme(config.configData),
+            darkTheme: DynamicAppTheme.buildDarkTheme(config.configData),
+            configVersion: config.version,
+            banners: config.configData.banners,
+          );
+        } else {
+          debugPrint('🌈 App settings theme version unchanged.');
         }
       },
     );

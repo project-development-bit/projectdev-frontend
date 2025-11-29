@@ -10,7 +10,7 @@ abstract class AppSettingsRemoteDataSource {
 
 class AppSettingsRemoteDataSourceImpl implements AppSettingsRemoteDataSource {
   static const String _appSettingsEndpoint = 'app_settings';
-  
+
   final DioClient dioClient;
 
   AppSettingsRemoteDataSourceImpl({
@@ -23,7 +23,8 @@ class AppSettingsRemoteDataSourceImpl implements AppSettingsRemoteDataSource {
       final response = await dioClient.get(_appSettingsEndpoint);
 
       if (response.statusCode == 200 && response.data != null) {
-        return AppSettingsResponse.fromJson(response.data as Map<String, dynamic>);
+        return AppSettingsResponse.fromJson(
+            response.data as Map<String, dynamic>);
       } else {
         throw DioException(
           requestOptions: response.requestOptions,
