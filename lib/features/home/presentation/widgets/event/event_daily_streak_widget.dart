@@ -206,7 +206,7 @@ class EventDailyStreakWidget extends StatelessWidget {
               children: [
                 CommonText.titleMedium("300"),
                 Image.asset(
-                  'assets/images/coin.png',
+                  'assets/images/rewards/coin.png',
                   width: 24,
                   height: 24,
                 ),
@@ -424,7 +424,7 @@ class EventDailyStreakWidget extends StatelessWidget {
                               highlightColor: context.primary,
                             ),
                             Image.asset(
-                              'assets/images/coin.png',
+                              'assets/images/rewards/coin.png',
                               width: 24,
                               height: 24,
                             ),
