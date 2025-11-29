@@ -46,7 +46,7 @@ final appSettingsThemeProvider =
     StateNotifierProvider<AppSettingsNotifier, AppSettingsState>((ref) {
   return AppSettingsNotifier(
     getLocalAppSettingsUseCase: ref.watch(getLocalAppSettingsUseCaseProvider),
-    getAppSettingsUseCase: ref.watch(getAppSettingsUseCaseProvider),
+    getRemoteAppSettingsUseCase: ref.watch(getAppSettingsUseCaseProvider),
   );
 });
 
