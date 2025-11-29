@@ -58,10 +58,22 @@ class HomeFeaturesSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return HomeSectionContainer(
       width: double.infinity,
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          fit: BoxFit.fitWidth,
+          alignment: Alignment(0, -0.5),
+          image: AssetImage(
+            context.isMobile
+                ? 'assets/images/bg/coin_background_section_1_mobile.png'
+                : 'assets/images/bg/coin_background_section_1_desktop.png',
+          ),
+        ),
+      ),
       child: Center(
         child: Container(
           constraints: BoxConstraints(maxWidth: 1240),
           padding: const EdgeInsets.symmetric(vertical: 25.0),
+          
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 10.0),
             child: Column(

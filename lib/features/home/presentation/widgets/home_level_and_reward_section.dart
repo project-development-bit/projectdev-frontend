@@ -13,20 +13,37 @@ class HomeLevelAndRewardSection extends StatelessWidget {
     final isSmallSize = context.isMobile || context.isTablet;
     return HomeSectionContainer(
       width: double.infinity,
+      decoration: BoxDecoration(
+        image: context.isMobile
+            ? DecorationImage(
+                fit: BoxFit.fitWidth,
+                alignment: Alignment(0, -1.5),
+                image: AssetImage(
+                    'assets/images/bg/coin_background_section_2_mobile.png'),
+              )
+            : null,
+      ),
       child: Center(
         child: Container(
             constraints: BoxConstraints(maxWidth: 1240),
             padding: const EdgeInsets.symmetric(vertical: 25.0),
             margin: EdgeInsets.symmetric(horizontal: 25),
             child: Column(
+              crossAxisAlignment: isSmallSize
+                  ? CrossAxisAlignment.start
+                  : CrossAxisAlignment.center,
               children: [
                 CommonText.titleLarge(
-                  context.translate('home_level_and_reward_section_title'),
+                  context.isMobile
+                      ? context.translate(
+                          'home_level_and_reward_section_title_mobile')
+                      : context
+                          .translate('home_level_and_reward_section_title'),
                   fontWeight: FontWeight.w700,
-                  textAlign: TextAlign.center,
+                  textAlign: isSmallSize ? TextAlign.start : TextAlign.center,
                   fontSize: 40,
                 ),
-                SizedBox(height: 42),
+                SizedBox(height: isSmallSize ? 16 : 42),
                 SizedBox(
                   height: isSmallSize ? null : 300,
                   child: Flex(
@@ -163,10 +180,9 @@ class HomeLevelAndRewardSection extends StatelessWidget {
                     SizedBox(width: 10),
                     Expanded(
                       child: CommonText.bodyLarge(
-                        context.translate('home_reward_discount_text'),
-                        fontWeight: FontWeight.w700,
-                          color: Colors.white
-                      ),
+                          context.translate('home_reward_discount_text'),
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white),
                     ),
                   ],
                 ),
@@ -255,7 +271,7 @@ class HomeLevelAndRewardSection extends StatelessWidget {
               margin: const EdgeInsets.symmetric(vertical: 8.5),
               title: context.translate("level_stat_widget_button_text"),
               onTap: () {},
-            ), 
+            ),
           )
         ]);
   }

@@ -199,7 +199,7 @@ class EventDailyStreakWidget extends StatelessWidget {
           ),
           SizedBox(width: 14),
           SizedBox(
-            height: isColumn ? 80 : null,
+            height: context.isMobile ? 80 : null,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
@@ -306,7 +306,6 @@ class EventDailyStreakWidget extends StatelessWidget {
           alignment: Alignment(0, 0),
           fit: BoxFit.cover,
         ),
-        color: Color(0xff00131E).withAlpha(127),
         borderRadius: BorderRadius.circular(20),
       ),
       padding: isColumn
