@@ -1,43 +1,92 @@
+import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
 import 'package:cointiply_app/core/core.dart';
+import 'package:cointiply_app/features/earnings/presentation/provider/earnings_history_state.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/cards/coins_earned_history_card.dart';
 import 'package:flutter/material.dart';
 
 class CoinsHistorySection extends StatelessWidget {
-  const CoinsHistorySection({super.key});
+  const CoinsHistorySection(
+      {super.key, required this.state, required this.loadMore});
+  final EarningsHistoryState state;
+  final Function loadMore;
 
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
-    final isMobile = context.isMobile;
+
+    if (state.status == EarningsHistoryStatus.loading && state.data == null) {
+      return const _HistoryLoading();
+    }
+
+    if (state.status == EarningsHistoryStatus.error) {
+      return Center(
+        child: CommonText.bodyMedium(
+          state.error ?? "Something went wrong",
+          color: Theme.of(context).colorScheme.error,
+        ),
+      );
+    }
+
+    final items = state.data?.data?.earnings ?? [];
+    final days = state.days;
+
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: 10),
         Center(
           child: CommonText.bodyLarge(
-            localizations?.translate('coins_history_title') ??
-                "Last Coins Earned History. Past 7 Days",
+            (localizations?.translate('coins_history_title') ??
+                    "Last Coins Earned (Past 7 Days)")
+                .replaceAll("{days}", days.toString()),
             fontWeight: FontWeight.w500,
-            color: colorScheme.onPrimary,
-            textAlign: TextAlign.center,
-            maxLines: 2,
+            color: Color(0xFF98989A),
+
+            /// TODO: Use from scheme
           ),
         ),
-        SizedBox(height: isMobile ? 10 : 28),
-        CoinsEarnedHistoryCard(
-          title: "Treasure Chest",
-          subtitle: "Treasure Chest Reward",
-          amount: 14,
-          timeAgo: "5 hours ago",
-        ),
-        CoinsEarnedHistoryCard(
-          title: "Game App",
-          subtitle: "Game App Reward",
-          amount: 200,
-          timeAgo: "5 hours ago",
-        ),
+        const SizedBox(height: 20),
+        // Empty state
+        if (items.isEmpty)
+          Container(
+            height: 200,
+            padding: const EdgeInsets.symmetric(vertical: 40),
+            child: CommonText.bodyMedium(
+              localizations?.translate('no_coin_earn_history') ??
+                  "No coin earning activity yet.",
+              color: Color(0xFF98989A),
+            ),
+          )
+        else
+          for (final item in items)
+            CoinsEarnedHistoryCard(
+              title: item.title,
+              subtitle: item.category,
+              amount: item.amount,
+              timeAgo: item.timeAgo,
+            ),
+
+        const SizedBox(height: 20),
+        if (state.isLoadingMore)
+          const Center(child: CircularProgressIndicator()),
+        if (state.canLoadMore && !state.isLoadingMore)
+          CustomButtonWidget(
+            title: localizations?.translate("load_more") ?? "Load More",
+            onTap: () => loadMore(),
+            fontWeight: FontWeight.w700,
+          ),
       ],
+    );
+  }
+}
+
+class _HistoryLoading extends StatelessWidget {
+  const _HistoryLoading();
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: CircularProgressIndicator(
+        color: Theme.of(context).colorScheme.primary,
+      ),
     );
   }
 }

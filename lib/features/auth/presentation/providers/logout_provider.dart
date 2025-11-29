@@ -2,7 +2,6 @@ import 'package:cointiply_app/features/home/presentation/providers/tutorial_prov
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/services/database_service.dart';
-import '../../../../core/services/secure_storage_service.dart';
 import '../../../user_profile/presentation/providers/current_user_provider.dart';
 import 'auth_providers.dart';
 import 'login_provider.dart';

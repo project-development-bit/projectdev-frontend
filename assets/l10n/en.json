@@ -472,7 +472,7 @@
   "profile_created_days": "Created 5 Days Ago",
   "profile_statistics": "Statistics",
   "profile_coins_earned_history": "Coins Earned History",
-  "coins_history_title": "Last Coins Earned History. Past 7 Days",
+  "coins_history_title": "Last Coins Earned History. Past {days} Days",
   "number": "Number",
   "total_earn": "Total Earn",
   "manage_your_account": "Manage Your Account",
@@ -601,6 +601,9 @@
   "shop": "Shop",
   "help": "Help",
   "blog": "Blog",
+  "stat_surveys": "Surveys",
+  "stat_game_apps": "Game Apps",
+  "stat_offerwalls": "Offerwalls",
   "verify_new_email": "Verify New Email",
   "change_your_name": "Change your name",
   "new_name": "New Name",
@@ -642,5 +645,6 @@
   "anonymous_in_contests": "Anonymous in contests",
   "anonymous_contests_description": "When enabled, your account appears anonymously in contest rankings. Off by default.",
   "country": "Country",
-  "claim_now": "Claim Now"
+  "claim_now": "Claim Now",
+  "no_coin_earn_history": "No coin earning History yet."
 }

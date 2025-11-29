@@ -1,5 +1,6 @@
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
+import 'package:cointiply_app/core/extensions/int_extensions.dart';
 import 'package:cointiply_app/core/theme/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -177,8 +178,11 @@ class StatCard extends StatelessWidget {
   Widget _buildEarnBadge(ColorScheme colorScheme, String value, bool isMobile) {
     return Container(
       alignment: Alignment.center,
-      width: isMobile ? 150 : 120,
+      padding: EdgeInsets.symmetric(horizontal: 12),
       height: 40,
+      constraints: BoxConstraints(
+        minWidth: 150,
+      ),
       decoration: BoxDecoration(
         color: Color(0xff100E1C),
         borderRadius: BorderRadius.circular(30),
@@ -191,7 +195,7 @@ class StatCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           CommonText.titleLarge(
-            value,
+            (int.tryParse(value) ?? 0).currencyFormat(),
             fontSize: 20,
             fontWeight: FontWeight.w700,
             color: colorScheme.onPrimary,

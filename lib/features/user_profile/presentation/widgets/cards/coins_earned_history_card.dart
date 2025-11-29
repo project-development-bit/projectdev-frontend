@@ -1,4 +1,5 @@
 import 'package:cointiply_app/core/common/common_text.dart';
+import 'package:cointiply_app/core/extensions/int_extensions.dart';
 import 'package:flutter/material.dart';
 
 class CoinsEarnedHistoryCard extends StatelessWidget {
@@ -24,7 +25,7 @@ class CoinsEarnedHistoryCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 6.5),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Color(0xff333333)),
+        border: Border.all(color: Color(0xff333333)), // TODO: Use from scheme
       ),
       child: LayoutBuilder(
         builder: (context, constraints) {
@@ -58,7 +59,9 @@ class CoinsEarnedHistoryCard extends StatelessWidget {
               CommonText.bodyMedium(
                 subtitle,
                 fontWeight: FontWeight.w500,
-                color: colorScheme.onPrimary,
+                color: Color(0xFF98989A),
+
+                /// TODO: Use from scheme,
                 overflow: TextOverflow.ellipsis,
               ),
             ],
@@ -99,10 +102,12 @@ class CoinsEarnedHistoryCard extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
               const SizedBox(height: 4),
-              CommonText.bodyLarge(
+              CommonText.bodyMedium(
                 subtitle,
                 fontWeight: FontWeight.w500,
-                color: colorScheme.onPrimary,
+                color: Color(0xFF98989A),
+
+                /// TODO: Use from scheme
                 overflow: TextOverflow.ellipsis,
               ),
             ],
@@ -135,7 +140,7 @@ class CoinsEarnedHistoryCard extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           CommonText.titleMedium(
-            amount.toString(),
+            amount.currencyFormat().toString(),
             fontSize: 20,
             fontWeight: FontWeight.w700,
             color: colorScheme.onPrimary,
