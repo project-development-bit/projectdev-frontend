@@ -1,6 +1,6 @@
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
-import 'package:cointiply_app/core/extensions/string_extensions.dart';
+import 'package:cointiply_app/core/extensions/int_extensions.dart';
 import 'package:cointiply_app/core/theme/theme.dart';
 import 'package:flutter/material.dart';
 
