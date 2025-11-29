@@ -5,17 +5,17 @@ import '../models/app_settings_model.dart';
 abstract class AppSettingsLocalDataSource {
   /// Get cached app settings
   Future<AppSettingsResponse?> getCachedAppSettings();
-  
+
   /// Cache app settings
   Future<void> cacheAppSettings(AppSettingsResponse settings);
-  
+
   /// Clear cached app settings
   Future<void> clearCachedAppSettings();
 }
 
 class AppSettingsLocalDataSourceImpl implements AppSettingsLocalDataSource {
   static const String _cacheKey = 'cached_app_settings';
-  
+
   final SharedPreferences sharedPreferences;
 
   AppSettingsLocalDataSourceImpl({
@@ -26,11 +26,11 @@ class AppSettingsLocalDataSourceImpl implements AppSettingsLocalDataSource {
   Future<AppSettingsResponse?> getCachedAppSettings() async {
     try {
       final cachedJson = sharedPreferences.getString(_cacheKey);
-      
+
       if (cachedJson == null) {
         return null;
       }
-      
+
       final jsonMap = json.decode(cachedJson) as Map<String, dynamic>;
       return AppSettingsResponse.fromJson(jsonMap);
     } catch (e) {

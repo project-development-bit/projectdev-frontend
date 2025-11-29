@@ -99,7 +99,7 @@ class EventDailyStreakWidget extends StatelessWidget {
               ),
               SizedBox(width: 4),
               Image.asset(
-                'assets/images/coin.png',
+                'assets/images/rewards/coin.png',
                 width: 24,
                 height: 24,
               ),
@@ -284,7 +284,7 @@ class EventDailyStreakWidget extends StatelessWidget {
                 ),
                 SizedBox(width: 6),
                 Image.asset(
-                  'assets/images/coin.png',
+                  'assets/images/rewards/coin.png',
                   width: 24,
                   height: 24,
                 ),

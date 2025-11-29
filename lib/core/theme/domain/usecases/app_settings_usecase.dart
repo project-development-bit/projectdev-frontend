@@ -6,19 +6,39 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/models/app_settings_model.dart';
 
-final getAppSettingsUseCaseProvider = Provider<GetAppSettingsUseCase>((ref) {
+final getAppSettingsUseCaseProvider =
+    Provider<GetRemoteAppSettingsUseCase>((ref) {
   final repository = ref.watch(appSettingsRepositoryProvider);
-  return GetAppSettingsUseCase(repository);
+  return GetRemoteAppSettingsUseCase(repository);
 });
 
 /// UseCase implementation
-class GetAppSettingsUseCase implements UseCase<AppConfigData, bool> {
+class GetRemoteAppSettingsUseCase
+    implements UseCase<AppSettingsData, NoParams> {
   final AppSettingsRepository repository;
 
-  GetAppSettingsUseCase(this.repository);
+  GetRemoteAppSettingsUseCase(this.repository);
 
   @override
-  Future<Either<Failure, AppConfigData>> call(bool forceRefresh) async {
-    return repository.getAppSettings(forceRefresh: forceRefresh);
+  Future<Either<Failure, AppSettingsData>> call(NoParams params) async {
+    return repository.getRemoteAppSettings();
+  }
+}
+
+final getLocalAppSettingsUseCaseProvider =
+    Provider<GetLocalAppSettingsUseCase>((ref) {
+  final repository = ref.watch(appSettingsRepositoryProvider);
+  return GetLocalAppSettingsUseCase(repository);
+});
+
+class GetLocalAppSettingsUseCase
+    implements UseCase<AppSettingsData?, NoParams> {
+  final AppSettingsRepository repository;
+
+  GetLocalAppSettingsUseCase(this.repository);
+
+  @override
+  Future<Either<Failure, AppSettingsData?>> call(NoParams params) async {
+    return repository.cacheAppSettings();
   }
 }

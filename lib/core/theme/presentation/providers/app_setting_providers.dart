@@ -45,7 +45,8 @@ final bannersConfigProvider = Provider<List<BannerConfig>>((ref) {
 final appSettingsThemeProvider =
     StateNotifierProvider<AppSettingsNotifier, AppSettingsState>((ref) {
   return AppSettingsNotifier(
-    getAppSettingsUseCase: ref.watch(getAppSettingsUseCaseProvider),
+    getLocalAppSettingsUseCase: ref.watch(getLocalAppSettingsUseCaseProvider),
+    getRemoteAppSettingsUseCase: ref.watch(getAppSettingsUseCaseProvider),
   );
 });
 

@@ -11,13 +11,15 @@ class DialogBgWidget extends StatelessWidget {
   final Function()? onClose;
   final double? dialogHeight;
   final Color? dividerColor;
+  final EdgeInsetsGeometry? padding;
   const DialogBgWidget(
       {super.key,
       required this.body,
       required this.title,
       this.onClose,
       this.dialogHeight,
-      this.dividerColor});
+      this.dividerColor,
+      this.padding});
 
   double _getDialogWidth(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -85,7 +87,8 @@ class DialogBgWidget extends StatelessWidget {
                           ),
                           Expanded(
                               child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 32),
+                            padding: padding ??
+                                const EdgeInsets.symmetric(horizontal: 32),
                             child: body,
                           ))
                         ],
