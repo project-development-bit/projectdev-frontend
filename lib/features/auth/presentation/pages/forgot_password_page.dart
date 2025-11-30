@@ -244,13 +244,6 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
       BuildContext context, String message, localizations, Color textColor) {
     context.showErrorSnackBar(
       message: message,
-      action: SnackBarAction(
-        label: localizations?.translate('dismiss') ?? 'Dismiss',
-        textColor: textColor,
-        onPressed: () {
-          ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        },
-      ),
     );
   }
 }

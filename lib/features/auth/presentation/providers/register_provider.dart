@@ -205,7 +205,7 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
 
 /// Provider for register state management
 final registerNotifierProvider =
-    StateNotifierProvider<RegisterNotifier, RegisterState>((ref) {
+    StateNotifierProvider.autoDispose<RegisterNotifier, RegisterState>((ref) {
   return RegisterNotifier(ref, ref.read(deviceInfoProvider));
 });
 

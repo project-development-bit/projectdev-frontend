@@ -49,37 +49,45 @@ class ShellRouteWrapper extends StatelessWidget {
         titleSpacing: 16,
       ),
       drawer: screenWidth < 900 ? const MobileDrawer() : null,
-      body: NestedScrollView(
-        headerSliverBuilder: (context, innerBoxIsScrolled) => [],
-        body: CustomScrollView(
-          slivers: [
-            SliverToBoxAdapter(
-              child: child,
+      body: Stack(
+        children: [
+          NestedScrollView(
+            headerSliverBuilder: (context, innerBoxIsScrolled) => [],
+            body: CustomScrollView(
+              slivers: [
+                SliverToBoxAdapter(
+                  child: child,
+                ),
+                SliverToBoxAdapter(
+                  child: GigaFooter(),
+                ),
+              ],
             ),
-            SliverToBoxAdapter(
-              child: GigaFooter(),
-            ),
-          ],
-        ),
+          ),
+          Positioned(
+            bottom: 12,
+            right: 12,
+            child: Consumer(builder: (context, ref, child) {
+              final isChatOpen = ref.watch(rightChatOverlayProvider);
+
+              if (isChatOpen || context.isMobile) {
+                return const SizedBox.shrink();
+              }
+              return GestureDetector(
+                onTap: () {
+                  ref.read(rightChatOverlayProvider.notifier).toggle();
+                },
+                child: SvgPicture.asset(
+                  'assets/images/icons/chat_message.svg',
+                  width: 60,
+                  height: 60,
+                ),
+              );
+            }),
+          )
+        ],
       ),
       bottomNavigationBar: MobileBottomNav(),
-      floatingActionButton: Consumer(builder: (context, ref, child) {
-        final isChatOpen = ref.watch(rightChatOverlayProvider);
-
-        if (isChatOpen || context.isMobile) {
-          return const SizedBox.shrink();
-        }
-        return GestureDetector(
-          onTap: () {
-            ref.read(rightChatOverlayProvider.notifier).toggle();
-          },
-          child: SvgPicture.asset(
-            'assets/images/icons/chat_message.svg',
-            width: 72,
-            height: 72,
-          ),
-        );
-      }),
     );
   }
 }

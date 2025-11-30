@@ -223,6 +223,33 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   /// Extract error message from server response data
   String? _extractServerErrorMessage(dynamic responseData) {
     if (responseData is Map<String, dynamic>) {
+      // Check for validation errors in the code.errors array
+      if (responseData['code'] != null &&
+          responseData['code'] is Map &&
+          responseData['code']['errors'] != null) {
+        final errors = responseData['code']['errors'] as List<dynamic>;
+
+        // Combine all error messages with field names into one text
+        final errorMessages = errors
+            .map((error) {
+              final msg = error['msg'] as String?;
+              final path = error['path'] as String?;
+              if (msg != null && path != null) {
+                // Capitalize first letter of path for display
+                final fieldName = path[0].toUpperCase() + path.substring(1);
+                return '$fieldName: $msg';
+              }
+              return msg;
+            })
+            .where((msg) => msg != null)
+            .join('. ');
+
+        if (errorMessages.isNotEmpty) {
+          return errorMessages;
+        }
+      }
+
+      // Fallback to general message
       return responseData['message'] as String?;
     }
     return null;

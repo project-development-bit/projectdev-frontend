@@ -3,6 +3,8 @@ import 'package:cointiply_app/core/error/error_model.dart';
 import 'package:cointiply_app/core/common/widgets/custom_pointer_interceptor.dart';
 import 'package:cointiply_app/features/auth/presentation/widgets/onboarding_background.dart';
 import 'package:cointiply_app/features/terms_privacy/presentation/services/terms_privacy_navigation_service.dart';
+import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
+import 'package:cointiply_app/features/user_profile/presentation/providers/get_profile_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -44,7 +46,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 onSuccess: () {
                   // Navigate to home after successful 2FA verification
                   if (mounted) {
-                    GoRouter.of(context).go(AppRoutes.home);
+                    _afterLoginSuccess();
                   }
                 },
               );
@@ -61,7 +63,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             Future.delayed(const Duration(milliseconds: 100), () async {
               if (mounted) {
                 // Use GoRouter.of(context).go() to replace the current route
-                GoRouter.of(context).go(AppRoutes.home);
+                _afterLoginSuccess();
               }
             });
           }
@@ -74,6 +76,12 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           break;
       }
     });
+  }
+
+  void _afterLoginSuccess() {
+    GoRouter.of(context).go(AppRoutes.home);
+    ref.read(getProfileNotifierProvider.notifier).fetchProfile();
+    ref.read(currentUserProvider.notifier).getCurrentUser();
   }
 
   void _handleForgotPassword() {

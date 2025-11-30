@@ -26,9 +26,10 @@ class _PrivacyScreenState extends ConsumerState<PrivacyScreen> {
   Widget build(BuildContext context) {
     final state = ref.watch(termsPrivacyNotifierProvider);
 
-    return Scaffold(
-      body: _buildBody(state),
-    );
+    return SizedBox(
+        width: double.infinity,
+        height: MediaQuery.of(context).size.height,
+        child: _buildBody(state));
   }
 
   Widget _buildBody(TermsPrivacyState state) {
@@ -68,21 +69,10 @@ class _PrivacyScreenState extends ConsumerState<PrivacyScreen> {
   }
 
   Widget _buildWebView(String url) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return CustomScrollView(
-          slivers: [
-            SliverFillRemaining(
-              hasScrollBody: true,
-              child: WebViewWrapper(
-                useScaffold: false,
-                url: url,
-                onClose: () => context.pop(),
-              ),
-            ),
-          ],
-        );
-      },
+    return WebViewWrapper(
+      useScaffold: false,
+      url: url,
+      onClose: () => context.pop(),
     );
   }
 

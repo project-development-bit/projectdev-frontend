@@ -110,6 +110,20 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
 
   Future<void> _handleSignUp() async {
     if (!_formKey.currentState!.validate()) {
+      // Focus on the first field with an error
+      if (_nameController.text.isEmpty) {
+        _nameFocusNode.requestFocus();
+      } else if (_emailController.text.isEmpty ||
+          !RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+              .hasMatch(_emailController.text)) {
+        _emailFocusNode.requestFocus();
+      } else if (_passwordController.text.isEmpty ||
+          _passwordController.text.length < 8) {
+        _passwordFocusNode.requestFocus();
+      } else if (_confirmPasswordController.text.isEmpty ||
+          _confirmPasswordController.text != _passwordController.text) {
+        _confirmPasswordFocusNode.requestFocus();
+      }
       return;
     }
 
