@@ -57,7 +57,9 @@ class StatusRewardRow extends StatelessWidget {
                   color: const Color(0xFF333333),
                   width: 1.3,
                 ),
-                color: const Color(0xFF131E4D).withValues(alpha: 0.3),
+                color: row.isCurrentLevel
+                    ? const Color(0xFF00131E)
+                    : const Color(0xFF00131E).withValues(alpha: 0.3),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -65,9 +67,9 @@ class StatusRewardRow extends StatelessWidget {
                   SizedBox(
                     width: 64,
                     child: Center(
-                      child: CommonText.bodyLarge(
+                      child: CommonText.titleMedium(
                         row.levelRequired,
-                        color: const Color(0xFF00A0DC),
+                        color: colorScheme.primary,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
@@ -80,9 +82,9 @@ class StatusRewardRow extends StatelessWidget {
                       child: CommonText.bodyMedium(
                         dailySpinText,
                         fontWeight: FontWeight.w700,
-                        color: colorScheme.onPrimary,
-                        highlightColor: const Color(
-                            0xFF00A0DC), // TODO: use from color scheme
+                        color: const Color(
+                            0xFF98989A), //TODO: use from color scheme
+                        highlightColor: colorScheme.onPrimary,
                       ),
                     ),
                   ),
@@ -94,9 +96,9 @@ class StatusRewardRow extends StatelessWidget {
                       child: CommonText.bodyMedium(
                         treasureChestText,
                         fontWeight: FontWeight.w700,
-                        color: colorScheme.onPrimary,
-                        highlightColor: const Color(
-                            0xFF00A0DC), // TODO: use from color scheme
+                        color: const Color(
+                            0xFF98989A), //TODO: use from color scheme
+                        highlightColor: colorScheme.onPrimary,
                       ),
                     ),
                   ),
@@ -105,10 +107,11 @@ class StatusRewardRow extends StatelessWidget {
                   SizedBox(
                     width: columnWidth,
                     child: Center(
-                      child: CommonText.bodyMedium(
+                      child: CommonText.titleMedium(
                         row.offerBoost,
-                        color: colorScheme.onPrimary,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.w700,
+                        color: const Color(
+                            0xFF98989A), //TODO: use from color scheme                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
@@ -117,10 +120,11 @@ class StatusRewardRow extends StatelessWidget {
                   SizedBox(
                     width: columnWidth,
                     child: Center(
-                      child: CommonText.bodyMedium(
+                      child: CommonText.titleMedium(
                         row.ptcDiscount,
-                        color: colorScheme.onPrimary,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.w700,
+                        color: const Color(
+                            0xFF98989A), //TODO: use from color scheme                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
@@ -159,6 +163,7 @@ class StatusRewardRowModel {
   final String treasureChest;
   final String offerBoost;
   final String ptcDiscount;
+  final bool isCurrentLevel;
 
   StatusRewardRowModel({
     required this.tier,
@@ -168,5 +173,6 @@ class StatusRewardRowModel {
     required this.treasureChest,
     required this.offerBoost,
     required this.ptcDiscount,
+    this.isCurrentLevel = false,
   });
 }
