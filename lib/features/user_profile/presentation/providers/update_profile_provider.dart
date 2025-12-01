@@ -1,7 +1,7 @@
 import 'package:cointiply_app/features/user_profile/data/models/request/user_update_request.dart';
 import 'package:cointiply_app/features/user_profile/domain/usecases/update_user_profile.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/profile_providers.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 
 enum UpdateProfileStatus {
   initial,
@@ -32,8 +32,8 @@ class UpdateProfileState {
   }
 }
 
-final updateProfileProvider = StateNotifierProvider<
-    UpdateProfileProvider, UpdateProfileState>(
+final updateProfileProvider =
+    StateNotifierProvider<UpdateProfileProvider, UpdateProfileState>(
   (ref) {
     final updateUserProfileUsecase =
         ref.watch(updateUserProfileUseCaseProvider);
@@ -44,13 +44,13 @@ final updateProfileProvider = StateNotifierProvider<
   },
 );
 
-class UpdateProfileProvider extends StateNotifier<UpdateProfileState>{
+class UpdateProfileProvider extends StateNotifier<UpdateProfileState> {
   final UpdateUserProfileUsecase _updateUserProfile;
-  UpdateProfileProvider(super.state,this._updateUserProfile);
-
+  UpdateProfileProvider(super.state, this._updateUserProfile);
 
   Future<void> updateProfile(UserUpdateRequest updatedProfile) async {
-    state = state.copyWith(status: UpdateProfileStatus.loading, errorMessage: null);
+    state =
+        state.copyWith(status: UpdateProfileStatus.loading, errorMessage: null);
 
     final result = await _updateUserProfile(
       UpdateUserProfileParams(profile: updatedProfile),
@@ -68,5 +68,4 @@ class UpdateProfileProvider extends StateNotifier<UpdateProfileState>{
       },
     );
   }
-  
 }

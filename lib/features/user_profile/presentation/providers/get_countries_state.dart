@@ -1,4 +1,4 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import '../../domain/entities/country.dart';
 import '../../domain/usecases/get_countries_usecase.dart';
 import 'profile_providers.dart';
@@ -44,8 +44,7 @@ class GetCountriesState {
 class GetCountriesNotifier extends StateNotifier<GetCountriesState> {
   final GetCountriesUseCase _getCountriesUseCase;
 
-  GetCountriesNotifier(this._getCountriesUseCase)
-      : super(GetCountriesState());
+  GetCountriesNotifier(this._getCountriesUseCase) : super(GetCountriesState());
 
   /// Fetch countries list
   Future<void> fetchCountries() async {

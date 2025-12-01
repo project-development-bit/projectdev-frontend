@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 
 import '../../../../core/usecases/usecase.dart';
 import '../../data/models/check_2fa_status_response.dart';
@@ -63,11 +63,13 @@ class Check2FAStatusNotifier extends StateNotifier<Check2FAStatusState> {
     result.fold(
       (failure) {
         debugPrint('❌ Check 2FA status failed: ${failure.message}');
-        state = Check2FAStatusError(failure.message ?? 'Failed to check 2FA status');
+        state = Check2FAStatusError(
+            failure.message ?? 'Failed to check 2FA status');
       },
       (response) {
         final is2FAEnabled = response.data?.twofaEnabled ?? false;
-        debugPrint('✅ 2FA status checked successfully: ${is2FAEnabled ? "Enabled" : "Disabled"}');
+        debugPrint(
+            '✅ 2FA status checked successfully: ${is2FAEnabled ? "Enabled" : "Disabled"}');
         state = Check2FAStatusSuccess(
           response: response,
           is2FAEnabled: is2FAEnabled,

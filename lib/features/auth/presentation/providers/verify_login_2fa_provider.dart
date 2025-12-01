@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 
 import '../../data/models/verify_login_2fa_request.dart';
 import '../../data/models/verify_login_2fa_response.dart';
@@ -64,8 +64,8 @@ class VerifyLogin2FANotifier extends StateNotifier<VerifyLogin2FAState> {
     result.fold(
       (failure) {
         debugPrint('❌ Verify Login 2FA failed: ${failure.message}');
-        state = VerifyLogin2FAError(
-            failure.message ?? 'Failed to verify 2FA code');
+        state =
+            VerifyLogin2FAError(failure.message ?? 'Failed to verify 2FA code');
       },
       (response) {
         debugPrint('✅ Verify Login 2FA successful: ${response.message}');

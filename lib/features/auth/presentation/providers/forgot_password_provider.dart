@@ -1,4 +1,4 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../../data/repositories/auth_repo_impl.dart';
 import '../../data/models/forgot_password_request.dart';

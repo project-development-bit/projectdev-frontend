@@ -9,6 +9,7 @@ import '../../domain/entities/user.dart';
 import '../../domain/entities/login_response.dart';
 import '../../data/models/login_request.dart';
 import 'auth_providers.dart';
+import 'package:flutter_riverpod/legacy.dart';
 
 // =============================================================================
 // LOGIN STATE CLASSES

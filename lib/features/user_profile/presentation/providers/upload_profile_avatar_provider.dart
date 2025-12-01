@@ -1,6 +1,6 @@
 import 'package:cointiply_app/features/user_profile/domain/usecases/upload_profile_picture.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 
 import 'profile_providers.dart';
 
@@ -49,13 +49,14 @@ final uploadProfileAvatarProvider = StateNotifierProvider<
   },
 );
 
-class UploadProfileAvatarProvider extends StateNotifier<UploadProfileAvatarState>{
+class UploadProfileAvatarProvider
+    extends StateNotifier<UploadProfileAvatarState> {
   final UploadProfilePictureUsecase _uploadProfilePictureUsecase;
   UploadProfileAvatarProvider(super.state, this._uploadProfilePictureUsecase);
 
-
   Future<void> uploadAvatar() async {
-    state = state.copyWith(status: UploadProfileAvatarStatus.loading, errorMessage: null);
+    state = state.copyWith(
+        status: UploadProfileAvatarStatus.loading, errorMessage: null);
     final image = await _pickImage();
     final params = UploadProfilePictureParams(image: image);
     final result = await _uploadProfilePictureUsecase.call(params);
@@ -64,7 +65,7 @@ class UploadProfileAvatarProvider extends StateNotifier<UploadProfileAvatarState
       (failure) {
         state = state.copyWith(
           status: UploadProfileAvatarStatus.failure,
-          errorMessage: failure.message?? "Unknown error",
+          errorMessage: failure.message ?? "Unknown error",
         );
       },
       (response) {
@@ -75,7 +76,6 @@ class UploadProfileAvatarProvider extends StateNotifier<UploadProfileAvatarState
       },
     );
   }
-
 
   Future<PlatformFile> _pickImage() async {
     final file = await FilePicker.platform.pickFiles(

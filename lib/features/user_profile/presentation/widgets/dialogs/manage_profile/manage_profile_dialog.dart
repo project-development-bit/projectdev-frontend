@@ -10,6 +10,7 @@ import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs
 import 'package:cointiply_app/routing/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 
 import '../../user_profile_image_widget.dart';
 import 'change_email_dialog.dart';

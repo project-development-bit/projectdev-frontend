@@ -1,6 +1,6 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/models/offer_model.dart';
 import '../../data/models/home_models.dart';
+import 'package:flutter_riverpod/legacy.dart';
 
 /// Provider for featured offers
 final featuredOffersProvider = StateProvider<List<OfferModel>>((ref) {

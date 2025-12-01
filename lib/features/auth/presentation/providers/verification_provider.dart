@@ -10,6 +10,7 @@ import '../../data/models/verify_code_request.dart';
 import '../../domain/usecases/resend_code_usecase.dart';
 import '../../domain/usecases/verify_code_usecase.dart';
 import '../../data/repositories/auth_repo_impl.dart';
+import 'package:flutter_riverpod/legacy.dart';
 
 // =============================================================================
 // VERIFICATION STATE CLASSES

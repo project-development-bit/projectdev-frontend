@@ -5,6 +5,7 @@ import '../../../../core/enum/user_role.dart';
 import '../../../../core/providers/turnstile_provider.dart';
 import '../../data/models/register_request.dart';
 import 'auth_providers.dart';
+import 'package:flutter_riverpod/legacy.dart';
 
 // =============================================================================
 // REGISTER STATE CLASSES

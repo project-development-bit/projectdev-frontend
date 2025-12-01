@@ -3,7 +3,7 @@ import 'package:cointiply_app/features/earnings/data/model/request/earnings_hist
 import 'package:cointiply_app/features/earnings/domain/entity/earnings_history_item.dart';
 import 'package:cointiply_app/features/earnings/domain/usecases/get_earnings_history_use_case.dart';
 import 'package:cointiply_app/features/earnings/presentation/provider/earnings_history_state.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 
 class GetEarningsHistoryNotifier extends StateNotifier<EarningsHistoryState> {
   final GetEarningsHistoryUseCase _useCase;

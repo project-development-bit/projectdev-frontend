@@ -3,6 +3,7 @@ import 'package:cointiply_app/core/common/widgets/custom_pointer_interceptor.dar
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/common/common_text.dart';
 

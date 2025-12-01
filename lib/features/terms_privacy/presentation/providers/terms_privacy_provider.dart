@@ -6,6 +6,7 @@ import '../../data/datasources/terms_privacy_remote.dart';
 import '../../data/repositories/terms_privacy_repository_impl.dart';
 import '../../domain/entities/terms_privacy_entity.dart';
 import '../../domain/repositories/terms_privacy_repository.dart';
+import 'package:flutter_riverpod/legacy.dart';
 
 // Repository provider
 final termsPrivacyRepositoryProvider = Provider<TermsPrivacyRepository>((ref) {
@@ -30,14 +31,14 @@ class TermsPrivacyLoading extends TermsPrivacyState {
 
 class TermsPrivacySuccess extends TermsPrivacyState {
   final TermsPrivacyEntity data;
-  
+
   const TermsPrivacySuccess(this.data);
 }
 
 class TermsPrivacyError extends TermsPrivacyState {
   final String message;
   final int? statusCode;
-  
+
   const TermsPrivacyError({
     required this.message,
     this.statusCode,
@@ -53,22 +54,22 @@ class TermsPrivacyNotifier extends StateNotifier<TermsPrivacyState> {
   /// Fetch terms and privacy data
   Future<void> fetchTermsAndPrivacy() async {
     if (state is TermsPrivacyLoading) return; // Prevent multiple calls
-    
+
     state = const TermsPrivacyLoading();
-    
+
     debugPrint('🔄 TermsPrivacyNotifier: Fetching terms and privacy...');
-    
+
     final result = await _repository.getTermsAndPrivacy();
-    
+
     result.fold(
       (failure) {
         debugPrint('❌ TermsPrivacyNotifier: Failed - ${failure.message}');
-        
+
         int? statusCode;
         if (failure is ServerFailure) {
           statusCode = failure.statusCode;
         }
-        
+
         state = TermsPrivacyError(
           message: failure.message ?? 'Failed to load terms and privacy',
           statusCode: statusCode,
@@ -78,7 +79,7 @@ class TermsPrivacyNotifier extends StateNotifier<TermsPrivacyState> {
         debugPrint('✅ TermsPrivacyNotifier: Success');
         debugPrint('🔗 Terms URL: ${entity.termsUrl}');
         debugPrint('🔗 Privacy URL: ${entity.privacyUrl}');
-        
+
         if (entity.hasValidUrls) {
           state = TermsPrivacySuccess(entity);
         } else {
@@ -108,7 +109,7 @@ class TermsPrivacyNotifier extends StateNotifier<TermsPrivacyState> {
 }
 
 // Provider for terms and privacy notifier
-final termsPrivacyNotifierProvider = 
+final termsPrivacyNotifierProvider =
     StateNotifierProvider<TermsPrivacyNotifier, TermsPrivacyState>((ref) {
   final repository = ref.read(termsPrivacyRepositoryProvider);
   return TermsPrivacyNotifier(repository);

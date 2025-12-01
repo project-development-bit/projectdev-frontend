@@ -4,6 +4,7 @@ import '../../../../core/services/database_service.dart';
 import '../../domain/entities/user.dart';
 import '../../data/models/verify_2fa_request.dart';
 import '../../domain/usecases/verify_2fa_usecase.dart';
+import 'package:flutter_riverpod/legacy.dart';
 
 // =============================================================================
 // 2FA STATE CLASSES
@@ -127,7 +128,8 @@ class Verify2FANotifier extends StateNotifier<Verify2FAState> {
             onSuccess?.call();
             debugPrint('🔄 State set to Verify2FASuccess');
           } else {
-            debugPrint('❌ 2FA verification failed: ${verify2FAResponse.message}');
+            debugPrint(
+                '❌ 2FA verification failed: ${verify2FAResponse.message}');
             state = Verify2FAError(
               message: verify2FAResponse.message,
             );

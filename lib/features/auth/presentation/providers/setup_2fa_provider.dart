@@ -3,6 +3,7 @@ import '../../data/models/setup_2fa_request.dart';
 import '../../data/models/setup_2fa_response.dart';
 import '../../data/repositories/auth_repo_impl.dart';
 import '../../domain/usecases/setup_2fa_usecase.dart';
+import 'package:flutter_riverpod/legacy.dart';
 
 /// Provider for the Setup2FA use case
 final setup2FAUseCaseProvider = Provider<Setup2FAUseCase>((ref) {
@@ -51,7 +52,7 @@ class Setup2FANotifier extends StateNotifier<Setup2FAState> {
   Setup2FANotifier(this._setup2FAUseCase) : super(const Setup2FAInitial());
 
   /// Setup 2FA for the authenticated user
-  /// 
+  ///
   /// This method calls the API to generate:
   /// - secret: The secret key for manual entry
   /// - qrCode: Base64 encoded PNG image for scanning
@@ -63,7 +64,8 @@ class Setup2FANotifier extends StateNotifier<Setup2FAState> {
     final result = await _setup2FAUseCase(Setup2FAParams(request: request));
 
     result.fold(
-      (failure) => state = Setup2FAError(failure.message ?? 'Failed to setup 2FA'),
+      (failure) =>
+          state = Setup2FAError(failure.message ?? 'Failed to setup 2FA'),
       (response) {
         if (response.success && response.data != null) {
           state = Setup2FASuccess(response.data!);

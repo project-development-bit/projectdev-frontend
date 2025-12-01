@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import '../../domain/entities/theme_config.dart';
 import '../../domain/usecases/get_theme_config.dart';
 import '../../../usecases/usecase.dart';
@@ -122,9 +122,8 @@ class DynamicThemeNotifier extends StateNotifier<DynamicThemeState> {
         foregroundColor: colorScheme.onSurface,
         elevation: components.appBar.elevation,
         scrolledUnderElevation: components.appBar.scrolledUnderElevation,
-        systemOverlayStyle: isDark
-            ? SystemUiOverlayStyle.light
-            : SystemUiOverlayStyle.dark,
+        systemOverlayStyle:
+            isDark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
         titleTextStyle: textTheme.titleLarge?.copyWith(
           color: colorScheme.onSurface,
           fontWeight: FontWeight.w600,
@@ -264,8 +263,7 @@ class DynamicThemeNotifier extends StateNotifier<DynamicThemeState> {
         indicatorColor: colorScheme.secondaryContainer,
         labelTextStyle: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
-            return textTheme.labelSmall
-                ?.copyWith(color: colorScheme.onSurface);
+            return textTheme.labelSmall?.copyWith(color: colorScheme.onSurface);
           }
           return textTheme.labelSmall
               ?.copyWith(color: colorScheme.onSurfaceVariant);

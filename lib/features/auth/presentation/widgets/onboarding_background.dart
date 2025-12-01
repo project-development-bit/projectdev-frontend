@@ -57,7 +57,7 @@ class OnboardingBackground extends StatelessWidget {
                   'assets/images/bg/on_boarding_coin.png',
                 ),
                 fit: BoxFit.fitWidth,
-                filterQuality: FilterQuality.medium,
+                filterQuality: FilterQuality.high,
               ),
             )),
           ),

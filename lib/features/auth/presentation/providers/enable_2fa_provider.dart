@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import '../../data/models/enable_2fa_request.dart';
 import '../../data/models/enable_2fa_response.dart';
 import '../../data/repositories/auth_repo_impl.dart';
@@ -61,7 +62,7 @@ class Enable2FANotifier extends StateNotifier<Enable2FAState> {
   Enable2FANotifier(this._enable2FAUseCase) : super(const Enable2FAInitial());
 
   /// Enable 2FA by verifying the token from authenticator app
-  /// 
+  ///
   /// This method calls the API to verify:
   /// - token: The 6-digit code from the authenticator app
   /// - secret: The secret key that was provided during setup
@@ -75,7 +76,8 @@ class Enable2FANotifier extends StateNotifier<Enable2FAState> {
     final result = await _enable2FAUseCase(Enable2FAParams(request: request));
 
     result.fold(
-      (failure) => state = Enable2FAError(failure.message ?? 'Failed to enable 2FA'),
+      (failure) =>
+          state = Enable2FAError(failure.message ?? 'Failed to enable 2FA'),
       (response) {
         if (response.success && response.data != null) {
           state = Enable2FASuccess(

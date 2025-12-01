@@ -1,4 +1,4 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import '../../domain/entities/language.dart';
 import '../../domain/usecases/get_languages_usecase.dart';
 import 'profile_providers.dart';
@@ -44,8 +44,7 @@ class GetLanguagesState {
 class GetLanguagesNotifier extends StateNotifier<GetLanguagesState> {
   final GetLanguagesUseCase _getLanguagesUseCase;
 
-  GetLanguagesNotifier(this._getLanguagesUseCase)
-      : super(GetLanguagesState());
+  GetLanguagesNotifier(this._getLanguagesUseCase) : super(GetLanguagesState());
 
   /// Fetch languages list
   Future<void> fetchLanguages() async {

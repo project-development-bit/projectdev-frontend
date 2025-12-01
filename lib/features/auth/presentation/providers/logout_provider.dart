@@ -5,6 +5,7 @@ import '../../../../core/services/database_service.dart';
 import '../../../user_profile/presentation/providers/current_user_provider.dart';
 import 'auth_providers.dart';
 import 'login_provider.dart';
+import 'package:flutter_riverpod/legacy.dart';
 
 // =============================================================================
 // LOGOUT STATE CLASSES

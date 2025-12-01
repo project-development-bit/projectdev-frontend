@@ -1,16 +1,15 @@
 import 'package:cointiply_app/features/user_profile/data/models/request/user_update_request.dart';
 import 'package:cointiply_app/features/user_profile/user_profile.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 
-
-enum ChangeCountryStatus{
+enum ChangeCountryStatus {
   initial,
   changing,
   success,
   failure,
 }
 
-class ChangeCountryState{
+class ChangeCountryState {
   final ChangeCountryStatus status;
   final String? errorMessage;
 
