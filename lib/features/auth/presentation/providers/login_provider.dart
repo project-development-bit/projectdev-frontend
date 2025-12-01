@@ -254,7 +254,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
 
 /// Provider for login state management
 final loginNotifierProvider =
-    StateNotifierProvider<LoginNotifier, LoginState>((ref) {
+    StateNotifierProvider.autoDispose<LoginNotifier, LoginState>((ref) {
   return LoginNotifier(ref, ref.read(deviceInfoProvider));
 });
 

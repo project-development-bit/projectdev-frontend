@@ -154,6 +154,7 @@ class _CommonTextFieldState extends State<CommonTextField> {
         errorText: widget.errorText,
         helperText: widget.helperText,
         prefixIcon: widget.prefixIcon,
+        errorMaxLines: 2,
         suffixIcon: widget.obscureText
             ? IconButton(
                 icon: Icon(
@@ -288,6 +289,21 @@ class TextFieldValidators {
     if (value.length < 8) {
       return localizations?.translate('password_min_length', args: ['8']) ??
           'Password must be at least 8 characters long';
+    }
+    // Check for at least one uppercase letter
+    if (!RegExp(r'[A-Z]').hasMatch(value)) {
+      return localizations?.translate('password_must_contain_uppercase') ??
+          'Password must contain at least one uppercase letter';
+    }
+    // Check for at least one lowercase letter
+    if (!RegExp(r'[a-z]').hasMatch(value)) {
+      return localizations?.translate('password_must_contain_lowercase') ??
+          'Password must contain at least one lowercase letter';
+    }
+    // Check for at least one number
+    if (!RegExp(r'[0-9]').hasMatch(value)) {
+      return localizations?.translate('password_must_contain_number') ??
+          'Password must contain at least one number';
     }
     return null;
   }
