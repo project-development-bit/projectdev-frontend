@@ -39,10 +39,27 @@ class OnboardingBackground extends StatelessWidget {
         children: [
           Positioned.fill(
             child: Image.asset(
-              backgroundImagePath ??
-                  'assets/images/bg/onboarding_background.png',
+              backgroundImagePath ?? 'assets/images/bg/on_boarding_bg.jpg',
               fit: BoxFit.cover,
+              filterQuality: FilterQuality.high,
             ),
+          ),
+          Positioned.fill(
+            // child: Image.asset(
+            //   'assets/images/bg/on_boarding_coin.png',
+            //   fit: BoxFit.fitWidth,
+            //   filterQuality: FilterQuality.high,
+            // ),
+            child: Container(
+                decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(
+                  'assets/images/bg/on_boarding_coin.png',
+                ),
+                fit: BoxFit.fitWidth,
+                filterQuality: FilterQuality.medium,
+              ),
+            )),
           ),
           SingleChildScrollView(
             child: ConstrainedBox(

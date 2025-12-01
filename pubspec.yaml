@@ -52,7 +52,7 @@ dependencies:
   url_strategy: ^0.3.0
   equatable: ^2.0.5
   dartz: ^0.10.1
-  flutter_secure_storage: ^9.2.2
+  # flutter_secure_storage: ^9.2.2
   universal_io: ^2.2.2
   melos: ^7.2.0
   google_fonts: ^6.2.1

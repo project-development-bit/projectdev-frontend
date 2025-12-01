@@ -1,29 +1,30 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SecureStorageService {
   // Instance-level storage
-  final _storage = const FlutterSecureStorage(
-    aOptions: AndroidOptions(
-      encryptedSharedPreferences: true,
-    ),
-    iOptions: IOSOptions(
-      accessibility: KeychainAccessibility.first_unlock_this_device,
-    ),
-    webOptions: WebOptions(
-      dbName: 'FlutterSecureStorage',
-      publicKey: 'FlutterSecureStorage',
-    ),
-  );
+
+  // late SharedPreferences =
+  // const FlutterSecureStorage(
+  //   aOptions: AndroidOptions(
+  //     encryptedSharedPreferences: true,
+  //   ),
+  //   iOptions: IOSOptions(
+  //     accessibility: KeychainAccessibility.first_unlock_this_device,
+  //   ),
+  //   webOptions: WebOptions(
+  //     dbName: 'FlutterSecureStorage',
+  //     publicKey: 'FlutterSecureStorage',
+  //   ),
+  // );
 
   // Token management
   static const String _authTokenKey = 'auth_token';
   static const String _refreshTokenKey = 'refresh_token';
   static const String _userIdKey = 'user_id';
   static const String _tutorialShownKey = 'tutorial_shown';
-  
+
   // Remember me credentials
   static const String _rememberMeEmailKey = 'remember_me_email';
   static const String _rememberMePasswordKey = 'remember_me_password';
@@ -51,11 +52,12 @@ class SecureStorageService {
   Future<String?> getAuthToken() async {
     _logStorageTypeOnce();
     try {
+      final prefs = await _prefs;
+
       if (_isWeb) {
-        final prefs = await _prefs;
         return prefs.getString(_authTokenKey);
       } else {
-        return await _storage.read(key: _authTokenKey);
+        return prefs.getString(_authTokenKey);
       }
     } catch (e) {
       debugPrint('Error getting auth token: $e');
@@ -65,11 +67,11 @@ class SecureStorageService {
 
   Future<void> saveAuthToken(String token) async {
     try {
+      final prefs = await _prefs;
       if (_isWeb) {
-        final prefs = await _prefs;
         await prefs.setString(_authTokenKey, token);
       } else {
-        await _storage.write(key: _authTokenKey, value: token);
+        await prefs.setString(_authTokenKey, token);
       }
     } catch (e) {
       debugPrint('Error saving auth token: $e');
@@ -78,11 +80,12 @@ class SecureStorageService {
 
   Future<void> deleteAuthToken() async {
     try {
+      final prefs = await _prefs;
+
       if (_isWeb) {
-        final prefs = await _prefs;
         await prefs.remove(_authTokenKey);
       } else {
-        await _storage.delete(key: _authTokenKey);
+        await prefs.remove(_authTokenKey);
       }
     } catch (e) {
       debugPrint('Error deleting auth token: $e');
@@ -92,12 +95,8 @@ class SecureStorageService {
   // Refresh token methods
   Future<String?> getRefreshToken() async {
     try {
-      if (_isWeb) {
-        final prefs = await _prefs;
-        return prefs.getString(_refreshTokenKey);
-      } else {
-        return await _storage.read(key: _refreshTokenKey);
-      }
+      final prefs = await _prefs;
+      return prefs.getString(_refreshTokenKey);
     } catch (e) {
       debugPrint('Error getting refresh token: $e');
       return null;
@@ -106,12 +105,8 @@ class SecureStorageService {
 
   Future<void> saveRefreshToken(String token) async {
     try {
-      if (_isWeb) {
-        final prefs = await _prefs;
-        await prefs.setString(_refreshTokenKey, token);
-      } else {
-        await _storage.write(key: _refreshTokenKey, value: token);
-      }
+      final prefs = await _prefs;
+      await prefs.setString(_refreshTokenKey, token);
     } catch (e) {
       debugPrint('Error saving refresh token: $e');
     }
@@ -119,12 +114,8 @@ class SecureStorageService {
 
   Future<void> deleteRefreshToken() async {
     try {
-      if (_isWeb) {
-        final prefs = await _prefs;
-        await prefs.remove(_refreshTokenKey);
-      } else {
-        await _storage.delete(key: _refreshTokenKey);
-      }
+      final prefs = await _prefs;
+      await prefs.remove(_refreshTokenKey);
     } catch (e) {
       debugPrint('Error deleting refresh token: $e');
     }
@@ -133,12 +124,8 @@ class SecureStorageService {
   // User ID methods
   Future<String?> getUserId() async {
     try {
-      if (_isWeb) {
-        final prefs = await _prefs;
-        return prefs.getString(_userIdKey);
-      } else {
-        return await _storage.read(key: _userIdKey);
-      }
+      final prefs = await _prefs;
+      return prefs.getString(_userIdKey);
     } catch (e) {
       debugPrint('Error getting user ID: $e');
       return null;
@@ -147,12 +134,8 @@ class SecureStorageService {
 
   Future<void> saveUserId(String userId) async {
     try {
-      if (_isWeb) {
-        final prefs = await _prefs;
-        await prefs.setString(_userIdKey, userId);
-      } else {
-        await _storage.write(key: _userIdKey, value: userId);
-      }
+      final prefs = await _prefs;
+      await prefs.setString(_userIdKey, userId);
     } catch (e) {
       debugPrint('Error saving user ID: $e');
     }
@@ -160,12 +143,8 @@ class SecureStorageService {
 
   Future<void> deleteUserId() async {
     try {
-      if (_isWeb) {
-        final prefs = await _prefs;
-        await prefs.remove(_userIdKey);
-      } else {
-        await _storage.delete(key: _userIdKey);
-      }
+      final prefs = await _prefs;
+      await prefs.remove(_userIdKey);
     } catch (e) {
       debugPrint('Error deleting user ID: $e');
     }
@@ -212,17 +191,10 @@ class SecureStorageService {
   /// Check if remember me is enabled
   Future<bool> isRememberMeEnabled() async {
     try {
-      if (_isWeb) {
-        final prefs = await _prefs;
-        final enabled = prefs.getBool(_rememberMeEnabledKey) ?? false;
-        debugPrint('🔍 Remember me enabled check (web): $enabled');
-        return enabled;
-      } else {
-        final value = await _storage.read(key: _rememberMeEnabledKey);
-        final enabled = value == 'true';
-        debugPrint('🔍 Remember me enabled check (mobile): $enabled');
-        return enabled;
-      }
+      final prefs = await _prefs;
+      final enabled = prefs.getBool(_rememberMeEnabledKey) ?? false;
+      debugPrint('🔍 Remember me enabled check (web): $enabled');
+      return enabled;
     } catch (e) {
       debugPrint('⚠️ Error checking remember me status: $e');
       debugPrint('⚠️ Stack trace: ${StackTrace.current}');
@@ -237,30 +209,16 @@ class SecureStorageService {
     required bool rememberMe,
   }) async {
     try {
-      if (_isWeb) {
-        final prefs = await _prefs;
-        await prefs.setBool(_rememberMeEnabledKey, rememberMe);
-        if (rememberMe) {
-          await prefs.setString(_rememberMeEmailKey, email);
-          await prefs.setString(_rememberMePasswordKey, password);
-          debugPrint('✅ Remember me credentials saved (Web)');
-        } else {
-          await prefs.remove(_rememberMeEmailKey);
-          await prefs.remove(_rememberMePasswordKey);
-          debugPrint('✅ Remember me credentials cleared (Web)');
-        }
+      final prefs = await _prefs;
+      await prefs.setBool(_rememberMeEnabledKey, rememberMe);
+      if (rememberMe) {
+        await prefs.setString(_rememberMeEmailKey, email);
+        await prefs.setString(_rememberMePasswordKey, password);
+        debugPrint('✅ Remember me credentials saved (Web)');
       } else {
-        await _storage.write(
-            key: _rememberMeEnabledKey, value: rememberMe.toString());
-        if (rememberMe) {
-          await _storage.write(key: _rememberMeEmailKey, value: email);
-          await _storage.write(key: _rememberMePasswordKey, value: password);
-          debugPrint('✅ Remember me credentials saved (Mobile)');
-        } else {
-          await _storage.delete(key: _rememberMeEmailKey);
-          await _storage.delete(key: _rememberMePasswordKey);
-          debugPrint('✅ Remember me credentials cleared (Mobile)');
-        }
+        await prefs.remove(_rememberMeEmailKey);
+        await prefs.remove(_rememberMePasswordKey);
+        debugPrint('✅ Remember me credentials cleared (Web)');
       }
     } catch (e) {
       debugPrint('Error saving remember me credentials: $e');
@@ -270,16 +228,11 @@ class SecureStorageService {
   /// Get saved email for remember me
   Future<String?> getSavedEmail() async {
     try {
-      if (_isWeb) {
-        final prefs = await _prefs;
-        final email = prefs.getString(_rememberMeEmailKey);
-        debugPrint('🔍 Retrieved saved email from web storage: ${email != null ? "found" : "not found"}');
-        return email;
-      } else {
-        final email = await _storage.read(key: _rememberMeEmailKey);
-        debugPrint('🔍 Retrieved saved email from mobile storage: ${email != null ? "found" : "not found"}');
-        return email;
-      }
+      final prefs = await _prefs;
+      final email = prefs.getString(_rememberMeEmailKey);
+      debugPrint(
+          '🔍 Retrieved saved email from web storage: ${email != null ? "found" : "not found"}');
+      return email;
     } catch (e) {
       debugPrint('⚠️ Error getting saved email: $e');
       return null;
@@ -289,16 +242,11 @@ class SecureStorageService {
   /// Get saved password for remember me
   Future<String?> getSavedPassword() async {
     try {
-      if (_isWeb) {
-        final prefs = await _prefs;
-        final password = prefs.getString(_rememberMePasswordKey);
-        debugPrint('🔍 Retrieved saved password from web storage: ${password != null ? "found" : "not found"}');
-        return password;
-      } else {
-        final password = await _storage.read(key: _rememberMePasswordKey);
-        debugPrint('🔍 Retrieved saved password from mobile storage: ${password != null ? "found" : "not found"}');
-        return password;
-      }
+      final prefs = await _prefs;
+      final password = prefs.getString(_rememberMePasswordKey);
+      debugPrint(
+          '🔍 Retrieved saved password from web storage: ${password != null ? "found" : "not found"}');
+      return password;
     } catch (e) {
       debugPrint('⚠️ Error getting saved password: $e');
       return null;
@@ -308,20 +256,13 @@ class SecureStorageService {
   /// Clear remember me credentials
   Future<void> clearRememberMeCredentials() async {
     try {
-      if (_isWeb) {
-        final prefs = await _prefs;
-        await Future.wait([
-          prefs.remove(_rememberMeEnabledKey),
-          prefs.remove(_rememberMeEmailKey),
-          prefs.remove(_rememberMePasswordKey),
-        ]);
-      } else {
-        await Future.wait([
-          _storage.delete(key: _rememberMeEnabledKey),
-          _storage.delete(key: _rememberMeEmailKey),
-          _storage.delete(key: _rememberMePasswordKey),
-        ]);
-      }
+      final prefs = await _prefs;
+      await Future.wait([
+        prefs.remove(_rememberMeEnabledKey),
+        prefs.remove(_rememberMeEmailKey),
+        prefs.remove(_rememberMePasswordKey),
+      ]);
+
       debugPrint('✅ Remember me credentials cleared');
     } catch (e) {
       debugPrint('Error clearing remember me credentials: $e');
