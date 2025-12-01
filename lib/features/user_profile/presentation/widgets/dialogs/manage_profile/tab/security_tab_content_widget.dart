@@ -38,12 +38,13 @@ class _SecurityTabContentWidgetState
             title: context.translate("twofa_authenticator_app"),
             onPressed: () {
               if (is2FAEnabled) {
-                context.showDisable2FAConfirmationDialog(
+                showDisable2FAConfirmationDialog(
+                  context,
                   onDisabled: () {
                     // Refresh profile data after disabling 2FA
                     ref
                         .read(getProfileNotifierProvider.notifier)
-                        .fetchProfile();
+                        .fetchProfile(isLoading: false);
                   },
                 );
               } else {
@@ -53,11 +54,13 @@ class _SecurityTabContentWidgetState
                 });
               }
             },
+            isDanger: is2FAEnabled,
             btnTitle: is2FAEnabled
                 ? context.translate("disable_2fa")
                 : context.translate("enable_2fa"),
             description: context.translate("twofa_description")),
         _securityMenuItem(
+            isDanger: isPinEnabled,
             title: context.translate("enable_security_pin"),
             btnTitle: isPinEnabled
                 ? context.translate("disable_security_pin")
@@ -83,7 +86,7 @@ class _SecurityTabContentWidgetState
             Expanded(
               child: CommonText.titleMedium(title,
                   fontWeight: FontWeight.w700,
-                  color: isDanger ? context.error : Colors.white),
+                  color: Colors.white),
             ),
             Expanded(
               flex: 2,
@@ -94,7 +97,7 @@ class _SecurityTabContentWidgetState
                   style: ElevatedButton.styleFrom(
                     minimumSize: Size(233, 44),
                     backgroundColor: isDanger
-                        ? context.error.withValues(alpha: 0.1)
+                        ? context.error.withValues(alpha: 0.3)
                         : Color(0xFF262626),
                     foregroundColor: Colors.black,
                     padding: const EdgeInsets.symmetric(

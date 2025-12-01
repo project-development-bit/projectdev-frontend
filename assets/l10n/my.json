@@ -687,5 +687,6 @@
   "country": "နိုင်ငံ",
   "claim_now": "အခု ယူလိုက်ပါ",
   "no_coin_earn_history": "မကြာသေးမီ Coin ရရှိမှု မှတ်တမ်း မရှိပါ",
-  "notifications": "အသိပေးချက်များ"
+  "notifications": "အသိပေးချက်များ",
+  "disable_2fa_title": "2FA ပိတ်ရန်"
 }

@@ -8,7 +8,7 @@ import 'package:flutter/services.dart';
 void showSecurityPinDialog(BuildContext context) {
   context.showManagePopup(
       barrierDismissible: true,
-      height: 400,
+      height: context.isDesktop ? 400 : context.screenHeight * 0.9,
       child: const SecurityPinDialog(),
       title: context.translate("enable_security_pin_title"));
 }
@@ -85,108 +85,109 @@ class _SecurityPinDialogState extends State<SecurityPinDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 22),
-      child: Form(
-        key: _formKey,
-        child: Column(
-          spacing: 24,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            CommonText.bodySmall(
-              context.translate("enable_security_pin_note"),
-              fontWeight: FontWeight.w500,
-              color: Color(0xff98989A),
-            ),
-            context.isDesktop
-                ? Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    spacing: 16,
-                    children: [
-                      Expanded(
-                        child: CommonText.bodyLarge(
+    return SingleChildScrollView(
+      child: Container(
+        margin: const EdgeInsets.only(right: 5),
+        padding: const EdgeInsets.symmetric(vertical: 22),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            spacing: 24,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CommonText.bodySmall(
+                context.translate("enable_security_pin_note"),
+                fontWeight: FontWeight.w500,
+                color: Color(0xff98989A),
+              ),
+              context.isDesktop
+                  ? Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      spacing: 16,
+                      children: [
+                        Expanded(
+                          child: CommonText.bodyLarge(
+                            context
+                                .translate("enable_security_pin_description"),
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: pinCodeField(
+                            pinCodeController,
+                            errorText: _pinError,
+                          ),
+                        ),
+                      ],
+                    )
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      spacing: 12,
+                      children: [
+                        CommonText.bodyMedium(
                           context.translate("enable_security_pin_description"),
                           color: Colors.white,
                           fontWeight: FontWeight.w700,
                         ),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: pinCodeField(
+                        pinCodeField(
                           pinCodeController,
                           errorText: _pinError,
                         ),
-                      ),
-                    ],
-                  )
-                : Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    spacing: 12,
-                    children: [
-                      CommonText.bodyMedium(
-                        context.translate("enable_security_pin_description"),
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700,
-                      ),
-                      const SizedBox(
-                        height: 16,
-                      ),
-                      pinCodeField(
-                        pinCodeController,
-                        errorText: _pinError,
-                      ),
-                    ],
-                  ),
-            context.isDesktop
-                ? Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    spacing: 16,
-                    children: [
-                      Expanded(
-                        child: CommonText.bodyLarge(
+                      ],
+                    ),
+              context.isDesktop
+                  ? Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      spacing: 16,
+                      children: [
+                        Expanded(
+                          child: CommonText.bodyLarge(
+                            context.translate("repeat_4_digit_pin"),
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: pinCodeField(
+                            confirmPinCodeController,
+                            errorText: _confirmPinError,
+                            isConfirmField: true,
+                          ),
+                        ),
+                      ],
+                    )
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      spacing: 12,
+                      children: [
+                        CommonText.bodyMedium(
                           context.translate("repeat_4_digit_pin"),
                           color: Colors.white,
                           fontWeight: FontWeight.w700,
                         ),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: pinCodeField(
+                        pinCodeField(
                           confirmPinCodeController,
                           errorText: _confirmPinError,
                           isConfirmField: true,
                         ),
-                      ),
-                    ],
-                  )
-                : Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    spacing: 12,
-                    children: [
-                      CommonText.bodyMedium(
-                        context.translate("repeat_4_digit_pin"),
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700,
-                      ),
-                      pinCodeField(
-                        confirmPinCodeController,
-                        errorText: _confirmPinError,
-                        isConfirmField: true,
-                      ),
-                    ],
-                  ),
-            Center(
-              child: CustomUnderLineButtonWidget(
-                onTap: _validateAndSubmit,
-                isLoading: _isLoading,
-                height: 56,
-                isActive: true,
-                width: 200,
-                fontSize: 14,
-              title: context.translate("enter_security_pin"),
-              ),
-            )
-          ],
+                      ],
+                    ),
+              Center(
+                child: CustomUnderLineButtonWidget(
+                  onTap: _validateAndSubmit,
+                  isLoading: _isLoading,
+                  height: 56,
+                  isActive: true,
+                  width: 200,
+                  fontSize: 14,
+                  title: context.translate("enter_security_pin"),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

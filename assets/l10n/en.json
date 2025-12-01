@@ -672,7 +672,7 @@
   "enable_security_pin": "Enable 4 Digit Security Pin",
   "disable_security_pin": "Disable Security Pin",
   "enable_security_pin_btn": "Enable Security Pin",
-  "enable_security_pin_title": "Set Security Pin",
+  "enable_security_pin_title": "Enable Security Pin",
   "enable_security_pin_description": "4-digit PIN Code",
   "repeat_4_digit_pin": "Repeat 4-digit PIN Code",
   "enter_security_pin": "Enter security pin",
@@ -694,5 +694,6 @@
   "country": "Country",
   "claim_now": "Claim Now",
   "no_coin_earn_history": "No coin earning History yet.",
-  "notifications": "Notifications"
+  "notifications": "Notifications",
+  "disable_2fa_title": "Disable Two-Factor Authentication"
 }
