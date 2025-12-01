@@ -27,9 +27,10 @@ class RewardXpPrograssArea extends StatelessWidget {
             child: Column(
               children: [
                 CommonText.titleMedium(
-                  "${data.levelProgressPct.toStringAsFixed(0)}%",
+                  "[${data.levelProgressPct.toStringAsFixed(0)}]%",
                   fontSize: isMobile ? 16 : 18,
                   fontWeight: FontWeight.w700,
+                  highlightColor: colorScheme.primary,
                   color: colorScheme.onPrimary,
                 ),
                 const SizedBox(height: 6),
@@ -41,9 +42,10 @@ class RewardXpPrograssArea extends StatelessWidget {
                 ),
                 const SizedBox(height: 6),
                 CommonText.titleMedium(
-                  "${data.xpToNextLevel} XP to next level",
+                  "[${data.xpToNextLevel}] XP to next level",
                   fontSize: isMobile ? 16 : 18,
                   color: colorScheme.onPrimary,
+                  highlightColor: colorScheme.primary,
                   fontWeight: FontWeight.w700,
                 )
               ],
