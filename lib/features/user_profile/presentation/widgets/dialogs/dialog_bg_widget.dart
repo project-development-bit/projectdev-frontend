@@ -69,6 +69,7 @@ class DialogBgWidget extends StatelessWidget {
                                 Expanded(
                                   child: onRouteBack != null
                                       ? Row(
+                                          mainAxisSize: MainAxisSize.min,
                                           children: [
                                             GestureDetector(
                                               onTap: () {

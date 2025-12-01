@@ -23,10 +23,11 @@ final appSettingsRepositoryProvider = Provider<AppSettingsRepository>((ref) {
 
 abstract class AppSettingsRepository {
   /// Get app settings from server or cache
-  /// Returns [Right] with [AppConfigData] on success
+  /// Returns [Right] with [AppSettingsData] on success
   /// Returns [Left] with [Failure] on error
-  Future<Either<Failure, AppConfigData>> getAppSettings(
-      {bool forceRefresh = false});
+  Future<Either<Failure, AppSettingsData>> getRemoteAppSettings();
+
+  Future<Either<Failure, AppSettingsData?>> cacheAppSettings();
 }
 
 class AppSettingsRepositoryImpl implements AppSettingsRepository {
@@ -39,43 +40,38 @@ class AppSettingsRepositoryImpl implements AppSettingsRepository {
   });
 
   @override
-  Future<Either<Failure, AppConfigData>> getAppSettings({
-    bool forceRefresh = false,
-  }) async {
+  Future<Either<Failure, AppSettingsData>> getRemoteAppSettings() async {
     try {
-      // Try to get from cache first if not forcing refresh
-      if (!forceRefresh) {
-        final cachedSettings = await localDataSource.getCachedAppSettings();
-        if (cachedSettings != null && cachedSettings.data.isNotEmpty) {
-          return Right(cachedSettings.data.first.configData);
-        }
-      }
-
-      // Fetch from server
       final response = await remoteDataSource.getAppSettings();
-
       if (!response.success || response.data.isEmpty) {
         return const Left(
             ServerFailure(message: 'Failed to fetch app settings'));
       }
 
-      // Cache the response
       await localDataSource.cacheAppSettings(response);
-
-      // Return the first config data
-      return Right(response.data.first.configData);
+      return Right(response.data.first);
     } catch (e) {
       // If network fails, try to get from cache as fallback
       try {
         final cachedSettings = await localDataSource.getCachedAppSettings();
         if (cachedSettings != null && cachedSettings.data.isNotEmpty) {
-          return Right(cachedSettings.data.first.configData);
+          return Right(cachedSettings.data.first);
         }
       } catch (_) {
         // Ignore cache errors
       }
 
       return Left(ServerFailure(message: 'Failed to fetch app settings: $e'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, AppSettingsData?>> cacheAppSettings() async {
+    try {
+      final cached = await localDataSource.getCachedAppSettings();
+      return Right(cached?.data.first);
+    } catch (e) {
+      return Left(CacheFailure(message: 'Failed to cache app settings: $e'));
     }
   }
 }

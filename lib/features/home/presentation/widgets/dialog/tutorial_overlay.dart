@@ -1,3 +1,4 @@
+import 'package:cointiply_app/features/auth/presentation/widgets/internal_verification_overlay.dart';
 import 'package:cointiply_app/features/home/presentation/providers/tutorial_provider.dart';
 import 'package:cointiply_app/features/home/presentation/widgets/dialog/tutorial_dialog_widget.dart';
 import 'package:cointiply_app/core/providers/auth_provider.dart';
@@ -19,12 +20,14 @@ class _TutorialOverlayState extends ConsumerState<TutorialOverlay> {
     final tutorialShown = ref.watch(tutorialProvider);
     final authState = ref.watch(authProvider);
 
+    final isVerified = ref.watch(internalVerificationProvider);
     final currentUserState = ref.watch(loggedInUserProvider);
     debugPrint(
         'Tutorial Overlay - shown: $tutorialShown | !auth: ${!authState.isAuthenticated} showOnboarding : ${currentUserState != null ? !currentUserState.shouldShowOnboarding : 'N/A'}');
     if (tutorialShown ||
         !authState.isAuthenticated ||
-        (currentUserState != null && !currentUserState.shouldShowOnboarding)) {
+        (currentUserState != null && !currentUserState.shouldShowOnboarding) ||
+        !isVerified) {
       return widget.child;
     }
 

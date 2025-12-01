@@ -1,5 +1,5 @@
-import 'package:cointiply_app/core/common/common_button.dart';
 import 'package:cointiply_app/core/common/common_text.dart';
+import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:dotted_decoration/dotted_decoration.dart';
 import 'package:flutter/material.dart';
@@ -16,16 +16,19 @@ class EventDailyStreakWidget extends StatelessWidget {
       direction: isColumn ? Axis.vertical : Axis.horizontal,
       children: [
         Flexible(
-            child: SizedBox(height: isColumn ? null: 600, child: _dailyStreakWidget(context,isColumn))),
+            child: SizedBox(
+                height: isColumn ? null : 600,
+                child: _dailyStreakWidget(context, isColumn))),
         Flexible(
           child: SizedBox(
-            height: isColumn ? null: 600,
+            height: isColumn ? null : 600,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               spacing: 41,
               children: [
-                Flexible(flex: 3, child: _eventRewardWidget(context,isColumn)),
-                Flexible(flex: 5, child: _invitationUserInfo(context,isColumn)),
+                Flexible(flex: 3, child: _eventRewardWidget(context, isColumn)),
+                Flexible(
+                    flex: 5, child: _invitationUserInfo(context, isColumn)),
               ],
             ),
           ),
@@ -34,7 +37,7 @@ class EventDailyStreakWidget extends StatelessWidget {
     );
   }
 
-  Container _dailyStreakWidget(BuildContext context,bool isColumn) {
+  Container _dailyStreakWidget(BuildContext context, bool isColumn) {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -44,25 +47,25 @@ class EventDailyStreakWidget extends StatelessWidget {
       ),
       padding: const EdgeInsets.all(22.0),
       child: Column(children: [
-        _eventTitleWidget(isColumn),
+        _eventTitleWidget(context, isColumn),
         SizedBox(height: 17),
-        _eventNextFaucetWidget(context,isColumn),
+        _eventNextFaucetWidget(context, isColumn),
         SizedBox(height: 17),
         CommonText.titleLarge(
-          "Daily Streak Faucet",
+          context.translate("event_daily_streak_faucet"),
           fontSize: 20.0,
         ),
         CommonText.bodyLarge(
-          "Earn Coins to Continue Your Streak",
+          context.translate("event_earn_coins_continue_streak"),
           color: Colors.white,
         ),
         SizedBox(height: 24),
-        _eventProgressBar(context),
+        _eventProgressBar(context, isColumn),
         SizedBox(height: 24),
         _eventDayListWidget(context),
         SizedBox(height: 16),
         CommonText.bodyLarge(
-          "Daily streak resets in 21 hours",
+          context.translate("event_daily_streak_resets", args: ["21"]),
           color: Colors.white,
           fontWeight: FontWeight.w700,
         ),
@@ -70,14 +73,15 @@ class EventDailyStreakWidget extends StatelessWidget {
     );
   }
 
-  Widget _eventTitleWidget(bool isColumn) {
+  Widget _eventTitleWidget(BuildContext context, bool isColumn) {
     return Flex(
       direction: isColumn ? Axis.vertical : Axis.horizontal,
       spacing: 8,
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        CommonText.titleMedium('Actual Faucet', fontWeight: FontWeight.w700),
+        CommonText.titleMedium(context.translate('event_actual_faucet'),
+            fontWeight: FontWeight.w700),
         Container(
           padding: EdgeInsets.symmetric(horizontal: 18, vertical: 10),
           decoration: BoxDecoration(
@@ -95,7 +99,7 @@ class EventDailyStreakWidget extends StatelessWidget {
               ),
               SizedBox(width: 4),
               Image.asset(
-                'assets/images/coin.png',
+                'assets/images/rewards/coin.png',
                 width: 24,
                 height: 24,
               ),
@@ -103,17 +107,17 @@ class EventDailyStreakWidget extends StatelessWidget {
           ),
         ),
         CommonText.titleMedium(
-          "Every 4 hours",
+          context.translate("event_every_hours", args: ["4"]),
           fontWeight: FontWeight.w700,
         ),
       ],
     );
   }
 
-  Widget _eventNextFaucetWidget(BuildContext context,bool isColumn) {
+  Widget _eventNextFaucetWidget(BuildContext context, bool isColumn) {
     return Container(
       decoration: BoxDecoration(
-        color: Color(0xff1A1A1A).withAlpha(51),
+        color: Color(0xff1A1A1A),
         border: Border.all(color: Color(0xff262626)),
         borderRadius: BorderRadius.circular(12),
       ),
@@ -122,20 +126,21 @@ class EventDailyStreakWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           CommonText.titleMedium(
-            'Next Faucet',
+            context.translate('event_next_faucet'),
             fontWeight: FontWeight.w600,
           ),
           SizedBox(height: 16.0),
-          Flex(
-            direction: isColumn? Axis.vertical :Axis.horizontal,
+          Row(
               spacing: 16.0,
-              crossAxisAlignment: isColumn? CrossAxisAlignment.stretch: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
-                _eventTime(context, time: "03", unit: "hours"),
-                _eventTime(context, time: "24", unit: "minutes"),
-                _eventTime(context, time: "42", unit: "seconds"),
-                _eventTime(context, time: "42", unit: "seconds"),
+                _eventTime(context,
+                    time: "03", unit: context.translate("event_hours")),
+                _eventTime(context,
+                    time: "24", unit: context.translate("event_minutes")),
+                _eventTime(context,
+                    time: "42", unit: context.translate("event_seconds")),
               ]),
         ],
       ),
@@ -150,7 +155,7 @@ class EventDailyStreakWidget extends StatelessWidget {
         CommonText.titleLarge(
           time,
           fontSize: 20,
-          color: context.secondary,
+          color: context.primary,
           fontWeight: FontWeight.w500,
         ),
         SizedBox(height: 4),
@@ -162,7 +167,7 @@ class EventDailyStreakWidget extends StatelessWidget {
     );
   }
 
-  Widget _eventProgressBar(BuildContext context) {
+  Widget _eventProgressBar(BuildContext context, bool isColumn) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 53.0),
       child: Row(
@@ -174,7 +179,7 @@ class EventDailyStreakWidget extends StatelessWidget {
               children: [
                 CommonText.titleMedium(
                   "[78]%",
-                  highlightColor: context.secondary,
+                  highlightColor: context.primary,
                   fontWeight: FontWeight.w700,
                 ),
                 LinearProgressIndicator(
@@ -186,18 +191,27 @@ class EventDailyStreakWidget extends StatelessWidget {
                 ),
                 CommonText.titleMedium(
                   "[2,452] XP points to next level",
-                  highlightColor: context.secondary,
+                  highlightColor: context.primary,
                   fontWeight: FontWeight.w700,
                 ),
               ],
             ),
           ),
           SizedBox(width: 14),
-          CommonText.titleMedium("300"),
-          Image.asset(
-            'assets/images/coin.png',
-            width: 24,
-            height: 24,
+          SizedBox(
+            height: context.isMobile ? 80 : null,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CommonText.titleMedium("300"),
+                Image.asset(
+                  'assets/images/rewards/coin.png',
+                  width: 24,
+                  height: 24,
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -207,12 +221,13 @@ class EventDailyStreakWidget extends StatelessWidget {
   Widget _eventDayListWidget(BuildContext context) {
     final scrollController = ScrollController();
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 30.5),
+      padding: EdgeInsets.symmetric(horizontal: 30.5).copyWith(),
       child: Scrollbar(
         controller: scrollController,
         thickness: 2,
         thumbVisibility: true,
         child: SingleChildScrollView(
+          padding: EdgeInsets.only(bottom: 10),
           controller: scrollController,
           scrollDirection: Axis.horizontal,
           child: Row(
@@ -239,7 +254,7 @@ class EventDailyStreakWidget extends StatelessWidget {
     return Container(
       decoration: isActive
           ? DottedDecoration(
-              color: context.secondary,
+              color: context.primary,
               borderRadius: BorderRadius.circular(12),
               strokeWidth: 2,
               shape: Shape.box,
@@ -254,7 +269,8 @@ class EventDailyStreakWidget extends StatelessWidget {
         child: Column(
           children: [
             CommonText.titleMedium(
-              day,
+              context
+                  .translate("event_day", args: [day.replaceAll("Day ", "")]),
               fontWeight: FontWeight.w700,
             ),
             SizedBox(height: 8),
@@ -268,7 +284,7 @@ class EventDailyStreakWidget extends StatelessWidget {
                 ),
                 SizedBox(width: 6),
                 Image.asset(
-                  'assets/images/coin.png',
+                  'assets/images/rewards/coin.png',
                   width: 24,
                   height: 24,
                 ),
@@ -280,7 +296,7 @@ class EventDailyStreakWidget extends StatelessWidget {
     );
   }
 
-  Widget _eventRewardWidget(BuildContext context,bool isColumn) {
+  Widget _eventRewardWidget(BuildContext context, bool isColumn) {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -290,10 +306,12 @@ class EventDailyStreakWidget extends StatelessWidget {
           alignment: Alignment(0, 0),
           fit: BoxFit.cover,
         ),
-        color: Color(0xff00131E).withAlpha(127),
         borderRadius: BorderRadius.circular(20),
       ),
-      padding: const EdgeInsets.all(24.0),
+      padding: isColumn
+          ? const EdgeInsets.symmetric(horizontal: 20, vertical: 10)
+              .copyWith(bottom: 25)
+          : const EdgeInsets.all(24.0),
       child: Column(
         children: [
           Flex(
@@ -307,9 +325,13 @@ class EventDailyStreakWidget extends StatelessWidget {
                 "\$250",
                 highlightColor: Colors.white,
                 fontSize: 40.0,
+                fontWeight: FontWeight.w700,
               ),
-              CommonText.titleMedium("daily contest reward",
-                  color: context.secondary),
+              CommonText.titleMedium(
+                context.translate("event_daily_contest_reward"),
+                fontWeight: FontWeight.w700,
+                color: context.primary,
+              ),
             ],
           ),
           SizedBox(height: 10),
@@ -321,14 +343,17 @@ class EventDailyStreakWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
             ),
             child: Row(
-              mainAxisSize: MainAxisSize.min,
+              mainAxisSize: isColumn ? MainAxisSize.max : MainAxisSize.min,
               spacing: 11,
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _eventTime(context, time: "03", unit: "days"),
-                _eventTime(context, time: "24", unit: "hours"),
-                _eventTime(context, time: "42", unit: "minutes"),
+                _eventTime(context,
+                    time: "03", unit: context.translate("event_days")),
+                _eventTime(context,
+                    time: "24", unit: context.translate("event_hours")),
+                _eventTime(context,
+                    time: "42", unit: context.translate("event_minutes")),
               ],
             ),
           ),
@@ -337,7 +362,7 @@ class EventDailyStreakWidget extends StatelessWidget {
     );
   }
 
-  Widget _invitationUserInfo(BuildContext context,bool isColumn) {
+  Widget _invitationUserInfo(BuildContext context, bool isColumn) {
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: Color(0xff333333)),
@@ -345,7 +370,9 @@ class EventDailyStreakWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
       ),
       width: double.infinity,
-      padding: EdgeInsets.symmetric(horizontal: 14.0, vertical: 34.5),
+      padding: isColumn
+          ? const EdgeInsets.symmetric(horizontal: 17.5, vertical: 19.5)
+          : const EdgeInsets.symmetric(horizontal: 14.0, vertical: 24.5),
       child: Column(
         children: [
           Image.asset(
@@ -356,39 +383,66 @@ class EventDailyStreakWidget extends StatelessWidget {
           Container(
             padding: EdgeInsets.all(16.0),
             child: Column(
-              spacing: 16,
+              spacing: isColumn ? 14 : 10,
               children: [
                 CommonText.titleMedium(
-                  "Invite your friends and win coins for lifetime!",
+                  context.translate("event_invite_friends_win_coins"),
                   color: Color(0xff98989A),
+                  textAlign: TextAlign.center,
                 ),
-                Flex(
-                  direction: isColumn ? Axis.vertical : Axis.horizontal,
+                Row(
+                  mainAxisSize: isColumn ? MainAxisSize.max : MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  spacing: isColumn ? 20: 170,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  spacing: isColumn ? 20 : 170,
                   children: [
                     CommonText.titleLarge(
-                      "Total\n[17]",
+                      context.translate("event_total", args: ["17"]),
                       color: Colors.white,
                       textAlign: TextAlign.center,
                       fontSize: 20,
-                      highlightColor: context.secondary,
+                      highlightColor: context.primary,
                     ),
-                     CommonText.titleLarge(
-                      "Earning\n[12,678]",
-                      color: Colors.white,
-                      textAlign: TextAlign.center,
-                      fontSize: 20,
-                      highlightColor: context.secondary,
+                    Column(
+                      children: [
+                        CommonText.titleLarge(
+                          context.translate("event_earned"),
+                          textAlign: TextAlign.center,
+                          color: Colors.white,
+                        ),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          spacing: 10,
+                          children: [
+                            CommonText.titleLarge(
+                              "[12,678]",
+                              color: Colors.white,
+                              textAlign: TextAlign.center,
+                              fontSize: 20,
+                              highlightColor: context.primary,
+                            ),
+                            Image.asset(
+                              'assets/images/rewards/coin.png',
+                              width: 24,
+                              height: 24,
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ],
                 ),
-                CommonButton(text: "More Details",
-                backgroundColor: Color(0xff333333),
-                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 13),
-                textColor: Color(0xff98989A),
-                 onPressed: (){})
+                CustomUnderLineButtonWidget(
+                  width: 180,
+                  fontSize: 16,
+                  isDark: true,
+                  fontWeight: FontWeight.w700,
+                  padding: EdgeInsets.symmetric(vertical: 4, horizontal: 0),
+                  margin: const EdgeInsets.symmetric(vertical: 8.5),
+                  title: context.translate("event_more_details"),
+                  onTap: () {},
+                ),
               ],
             ),
           )

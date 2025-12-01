@@ -1,5 +1,9 @@
 import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
+import 'package:cointiply_app/features/earnings/data/model/request/earnings_history_request.dart';
+import 'package:cointiply_app/features/earnings/data/model/request/earnings_statistics_request.dart';
+import 'package:cointiply_app/features/earnings/presentation/provider/get_earnings_history_notifier.dart';
+import 'package:cointiply_app/features/earnings/presentation/provider/get_earnings_statistics_notifier.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/dialog_bg_widget.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/overview/avatar_badge_info.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/sections/coins_history_section.dart';
@@ -25,38 +29,66 @@ class _ProfileDialogState extends ConsumerState<ProfileDialog> {
   }
 
   @override
+  initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref
+          .read(earningsStatisticsNotifierProvider.notifier)
+          .fetchStatistics(const EarningsStatisticsRequest());
+      ref.read(earningsHistoryNotifierProvider.notifier).fetchEarningsHistory(
+          const EarningsHistoryRequestModel(page: 1, limit: 20, days: 7));
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final height = _getDialogHeight(context);
     final isTablet = context.isTablet;
     final isMobile = context.isMobile;
     final currentUserState = ref.watch(currentUserProvider);
 
+    final selectedStatisticsState =
+        ref.watch(earningsStatisticsNotifierProvider);
+    final selectedEarningsHistoryState =
+        ref.watch(earningsHistoryNotifierProvider);
+    final earningsHistoryNotifier =
+        ref.read(earningsHistoryNotifierProvider.notifier);
+
     return DialogBgWidget(
       dialogHeight: height,
       title: currentUserState.user?.name ?? "Unknown User",
+      padding: EdgeInsets.zero,
       body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const SizedBox(height: 24),
-            AvatarBadgeInfo(
-              levelImage: "assets/images/levels/bronze.png",
-              levelText: context.translate("profile_level_bronze_1"),
-              messageCount: "1542",
-              location: "Thailand",
-              createdText: context.translate("profile_created_days"),
-            ),
-            SizedBox(height: isMobile || isTablet ? 31 : 40),
-            ProfileTabs(
-              onTabChanged: (i) => setState(() => selectedTab = i),
-            ),
-            SizedBox(height: isMobile || isTablet ? 16 : 23),
-            selectedTab == 0
-                ? const StatisticsSection()
-                : const CoinsHistorySection(),
-            const SizedBox(height: 20),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(height: 24),
+              AvatarBadgeInfo(
+                levelImage: "assets/images/levels/bronze.png",
+                levelText: context.translate("profile_level_bronze_1"),
+                messageCount: "1542",
+                location: "Thailand",
+                createdText: context.translate("profile_created_days"),
+              ),
+              SizedBox(height: isMobile || isTablet ? 31 : 40),
+              ProfileTabs(
+                onTabChanged: (i) => setState(() => selectedTab = i),
+              ),
+              SizedBox(height: isMobile || isTablet ? 16 : 23),
+              selectedTab == 0
+                  ? StatisticsSection(state: selectedStatisticsState)
+                  : CoinsHistorySection(
+                      state: selectedEarningsHistoryState,
+                      loadMore: () {
+                        earningsHistoryNotifier.loadMore();
+                      },
+                    ),
+              const SizedBox(height: 20),
+            ],
+          ),
         ),
       ),
     );

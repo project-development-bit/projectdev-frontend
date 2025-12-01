@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 class HomeFeaturesSection extends StatelessWidget {
   const HomeFeaturesSection({super.key});
 
-  List<dynamic>  get _featureItemsData {
+  List<dynamic> get _featureItemsData {
     return [
       {
         'image': 'assets/images/features/features_1.png',
@@ -58,10 +58,22 @@ class HomeFeaturesSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return HomeSectionContainer(
       width: double.infinity,
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          fit: BoxFit.fitWidth,
+          alignment: Alignment(0, -0.5),
+          image: AssetImage(
+            context.isMobile
+                ? 'assets/images/bg/coin_background_section_1_mobile.png'
+                : 'assets/images/bg/coin_background_section_1_desktop.png',
+          ),
+        ),
+      ),
       child: Center(
         child: Container(
           constraints: BoxConstraints(maxWidth: 1240),
           padding: const EdgeInsets.symmetric(vertical: 25.0),
+          
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 10.0),
             child: Column(
@@ -92,61 +104,61 @@ class HomeFeaturesSection extends StatelessWidget {
 
   SizedBox featuresItemWidget(feature, BuildContext context) {
     return SizedBox(
+      width: 190,
+      child: Column(
+        children: [
+          SizedBox(
+            width: 190,
+            height: 190,
+            child: Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Image.asset(
+                    feature['image'],
                     width: 190,
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          width: 190,
-                          height: 190,
-                          child: Stack(
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(20),
-                                child: Image.asset(
-                                  feature['image'],
-                                  width: 190,
-                                  height: 190,
-                                  fit: BoxFit.contain,
-                                ),
-                              ),
-                              if (feature['description'] != null)
-                                Positioned(
-                                  top: 0,
-                                  left: 0,
-                                  right: 0,
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8, vertical: 4),
-                                    decoration: BoxDecoration(
-                                      color: Colors.black.withAlpha(150),
-                                      borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(20),
-                                        topRight: Radius.circular(20),
-                                      ),
-                                    ),
-                                    child: CommonText.titleMedium(
-                                      feature['description'],
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w600,
-                                      textAlign: TextAlign.center,
-                                      highlightFontSize: 24,
-                                      highlightColor: context.secondary,
-                                    ),
-                                  ),
-                                ),
-                            ],
-                          ),
+                    height: 190,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+                if (feature['description'] != null)
+                  Positioned(
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withAlpha(150),
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20),
                         ),
-                        SizedBox(height: 16.0),
-                        CommonText.labelMedium(
-                          feature['title'],
-                          fontWeight: FontWeight.w700,
-                          fontSize: 16,
-                          textAlign: TextAlign.center,
-                          color: Theme.of(context).colorScheme.onSurface,
-                        ),
-                      ],
+                      ),
+                      child: CommonText.titleMedium(
+                        feature['description'],
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        textAlign: TextAlign.center,
+                        highlightFontSize: 24,
+                        highlightColor: context.primary,
+                      ),
                     ),
-                  );
+                  ),
+              ],
+            ),
+          ),
+          SizedBox(height: 16.0),
+          CommonText.labelMedium(
+            feature['title'],
+            fontWeight: FontWeight.w700,
+            fontSize: 16,
+            textAlign: TextAlign.center,
+            color: Theme.of(context).colorScheme.onSurface,
+          ),
+        ],
+      ),
+    );
   }
 }

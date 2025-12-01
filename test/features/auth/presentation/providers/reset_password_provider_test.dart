@@ -7,7 +7,6 @@ import 'package:cointiply_app/features/auth/presentation/providers/reset_passwor
 import 'package:cointiply_app/features/auth/domain/repositories/auth_repository.dart';
 
 import 'package:cointiply_app/features/auth/domain/entities/login_response.dart';
-import 'package:cointiply_app/features/auth/domain/entities/user.dart';
 import 'package:cointiply_app/features/auth/domain/entities/auth_tokens.dart';
 import 'package:cointiply_app/core/error/failures.dart';
 import 'package:cointiply_app/core/enum/user_role.dart';
@@ -238,7 +237,7 @@ void main() {
       state = container.read(
           resetPasswordProvider as ProviderListenable<ResetPasswordError>);
       expect(state, isA<ResetPasswordError>());
-      errorState = state as ResetPasswordError;
+      errorState = state;
       expect(errorState.message, 'Please enter a password');
 
       // Reset state
@@ -254,7 +253,7 @@ void main() {
       state = container.read(
           resetPasswordProvider as ProviderListenable<ResetPasswordError>);
       expect(state, isA<ResetPasswordError>());
-      errorState = state as ResetPasswordError;
+      errorState = state;
       expect(errorState.message, 'Please confirm your password');
     });
 

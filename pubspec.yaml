@@ -76,6 +76,7 @@ dependencies:
   package_info_plus: ^9.0.0
   unique_device_identifier: ^2.0.4
   carousel_slider: ^5.1.1
+  intl: ^0.20.2
   
   
 dev_dependencies:
