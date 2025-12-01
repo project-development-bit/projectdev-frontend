@@ -157,6 +157,14 @@
   "save_changes": "Save Changes",
   "cancel": "Cancel",
   "delete_account": "Delete Account",
+  "delete_account_confirmation_title": "Delete Your Account?",
+  "delete_account_confirmation_message": "Are you sure you want to permanently delete your account? This action cannot be undone and all your data will be permanently removed.",
+  "delete_account_warning": "Warning: This will permanently delete all your data including profile, earnings, and transaction history.",
+  "permanently_delete": "Yes, Delete Permanently",
+  "cancel_delete": "Cancel",
+  "deleting_account": "Deleting Account...",
+  "account_deleted_successfully": "Your account has been successfully deleted.",
+  "failed_to_delete_account": "Failed to delete account. Please try again.",
   "logout": "Logout",
   "update_profile": "Update Profile",
   "upload_photo": "Upload Photo",
@@ -673,5 +681,6 @@
   "anonymous_contests_description": "When enabled, your account appears anonymously in contest rankings. Off by default.",
   "country": "Country",
   "claim_now": "Claim Now",
-  "no_coin_earn_history": "No coin earning History yet."
+  "no_coin_earn_history": "No coin earning History yet.",
+  "notifications": "Notifications"
 }

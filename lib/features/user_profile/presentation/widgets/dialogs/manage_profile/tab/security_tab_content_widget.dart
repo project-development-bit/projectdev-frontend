@@ -71,7 +71,8 @@ class _SecurityTabContentWidgetState
       {required String title,
       required Function() onPressed,
       required String btnTitle,
-      String? description}) {
+      String? description,
+      bool isDanger = false}) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -79,7 +80,8 @@ class _SecurityTabContentWidgetState
           children: [
             Expanded(
               child: CommonText.titleMedium(title,
-                  fontWeight: FontWeight.w700, color: Colors.white),
+                  fontWeight: FontWeight.w700,
+                  color: isDanger ? context.error : Colors.white),
             ),
             Expanded(
               flex: 2,
@@ -89,13 +91,20 @@ class _SecurityTabContentWidgetState
                   onPressed: onPressed,
                   style: ElevatedButton.styleFrom(
                     minimumSize: Size(233, 44),
-                    backgroundColor: Color(0xFF262626),
+                    backgroundColor: isDanger
+                        ? context.error.withValues(alpha: 0.1)
+                        : Color(0xFF262626),
                     foregroundColor: Colors.black,
                     padding: const EdgeInsets.symmetric(
                         horizontal: 16, vertical: 12),
+                    side: isDanger
+                        ? BorderSide(
+                            color: context.error.withValues(alpha: 0.3))
+                        : null,
                   ),
                   child: CommonText.titleMedium(btnTitle,
-                      fontWeight: FontWeight.w600, color: Color(0xff98989A)),
+                      fontWeight: FontWeight.w600,
+                      color: isDanger ? context.error : Color(0xff98989A)),
                 ),
               ),
             )

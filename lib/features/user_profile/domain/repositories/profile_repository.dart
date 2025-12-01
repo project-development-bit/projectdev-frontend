@@ -10,6 +10,7 @@ import '../entities/profile_detail.dart';
 import '../entities/change_email_result.dart';
 import '../entities/verify_email_change_result.dart';
 import '../entities/change_password_result.dart';
+import '../entities/delete_account_result.dart';
 
 /// Abstract repository interface for profile operations
 ///
@@ -66,4 +67,9 @@ abstract class ProfileRepository {
     required String repeatNewPassword,
   });
 
+  /// Delete user account permanently
+  ///
+  /// [userId] - The ID of the user to delete
+  /// Returns [DeleteAccountResult] on success or [Failure] on error
+  Future<Either<Failure, DeleteAccountResult>> deleteAccount(String userId);
 }

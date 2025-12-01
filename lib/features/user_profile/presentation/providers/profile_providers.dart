@@ -14,6 +14,7 @@ import '../../domain/usecases/upload_profile_picture.dart';
 import '../../domain/usecases/change_email_usecase.dart';
 import '../../domain/usecases/verify_email_change_usecase.dart';
 import '../../domain/usecases/change_password_usecase.dart';
+import '../../domain/usecases/delete_account_usecase.dart';
 
 /// Provider for profile remote data source
 final profileRemoteDataSourceProvider =
@@ -90,3 +91,8 @@ final changePasswordUseCaseProvider = Provider<ChangePasswordUsecase>((ref) {
   return ChangePasswordUsecase(repository);
 });
 
+/// Provider for delete account use case
+final deleteAccountUseCaseProvider = Provider<DeleteAccountUsecase>((ref) {
+  final repository = ref.read(profileRepositoryProvider);
+  return DeleteAccountUsecase(repository);
+});

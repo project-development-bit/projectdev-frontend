@@ -16,6 +16,7 @@ import '../datasources/profile_remote_data_source.dart';
 import '../../domain/entities/change_email_result.dart';
 import '../../domain/entities/verify_email_change_result.dart';
 import '../../domain/entities/change_password_result.dart';
+import '../../domain/entities/delete_account_result.dart';
 
 /// Implementation of [ProfileRepository]
 ///
@@ -302,4 +303,38 @@ class ProfileRepositoryImpl implements ProfileRepository {
     }
   }
 
+  @override
+  Future<Either<Failure, DeleteAccountResult>> deleteAccount(
+      String userId) async {
+    try {
+      debugPrint('🔄 Repository: Deleting account...');
+      final responseModel = await remoteDataSource.deleteAccount(userId);
+
+      final result = DeleteAccountResult(
+        success: responseModel.success,
+        message: responseModel.message,
+      );
+
+      return Right(result);
+    } on ServerFailure catch (e) {
+      debugPrint('❌ Repository: ServerFailure - ${e.message}');
+      return Left(e);
+    } on DioException catch (e) {
+      debugPrint('❌ Repository: DioException - ${e.message}');
+      ErrorModel? errorModel;
+      if (e.response?.data != null) {
+        errorModel = ErrorModel.fromJson(e.response!.data);
+      }
+      return Left(ServerFailure(
+        message: e.response?.data?['message'] ??
+            e.message ??
+            'Failed to delete account',
+        statusCode: e.response?.statusCode,
+        errorModel: errorModel,
+      ));
+    } catch (e) {
+      debugPrint('❌ Repository: Unexpected error - $e');
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
 }

@@ -88,6 +88,13 @@ class _SettingTabContentWidgetState
                 userId: userId,
               );
         }),
+        _settingMenuItem(context,
+            title: context.translate("delete_account"),
+            btnTitle: context.translate("delete_account"),
+            onPressed: () {
+              showDeleteAccountConfirmationDialog(context);
+            },
+            isDanger: true),
       ],
     );
   }
@@ -99,7 +106,8 @@ class _SettingTabContentWidgetState
       bool isSwitch = false,
       bool isSelected = false,
       Function(bool)? onChanged,
-      String? description}) {
+      String? description,
+      bool isDanger = false}) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -107,7 +115,8 @@ class _SettingTabContentWidgetState
           children: [
             Expanded(
               child: CommonText.titleMedium(title,
-                  fontWeight: FontWeight.w700, color: Colors.white),
+                  fontWeight: FontWeight.w700,
+                  color: isDanger ? context.error : Colors.white),
             ),
             Expanded(
               flex: 2,
@@ -128,14 +137,20 @@ class _SettingTabContentWidgetState
                         onPressed: onPressed,
                         style: ElevatedButton.styleFrom(
                           minimumSize: Size(233, 44),
-                          backgroundColor: Color(0xFF262626),
+                          backgroundColor: isDanger
+                              ? context.error.withValues(alpha: 0.1)
+                              : Color(0xFF262626),
                           foregroundColor: Colors.black,
                           padding: const EdgeInsets.symmetric(
                               horizontal: 16, vertical: 12),
+                          side: isDanger
+                              ? BorderSide(
+                                  color: context.error.withValues(alpha: 0.3))
+                              : null,
                         ),
                         child: CommonText.titleMedium(btnTitle,
                             fontWeight: FontWeight.w600,
-                            color: Color(0xff98989A)),
+                            color: isDanger ? context.error : Color(0xff98989A)),
                       ),
               ),
             ),

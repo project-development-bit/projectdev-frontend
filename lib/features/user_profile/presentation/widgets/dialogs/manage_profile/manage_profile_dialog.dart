@@ -17,6 +17,7 @@ import 'change_name_dialog.dart';
 import 'change_password_dialog.dart';
 import 'change_your_country_dialog.dart';
 import 'change_your_language_dialog.dart';
+import 'delete_account_dialog.dart';
 
 part 'tab/profile_tab_content_widget.dart';
 part 'tab/security_tab_content_widget.dart';
