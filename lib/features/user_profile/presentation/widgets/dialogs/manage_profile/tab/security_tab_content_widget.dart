@@ -92,24 +92,17 @@ class _SecurityTabContentWidgetState
               flex: 2,
               child: Align(
                 alignment: Alignment.centerLeft,
-                child: ElevatedButton(
-                  onPressed: onPressed,
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: Size(233, 44),
-                    backgroundColor: isDanger
-                        ? context.error.withValues(alpha: 0.3)
-                        : Color(0xFF262626),
-                    foregroundColor: Colors.black,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 12),
-                    side: isDanger
-                        ? BorderSide(
-                            color: context.error.withValues(alpha: 0.3))
-                        : null,
-                  ),
-                  child: CommonText.titleMedium(btnTitle,
-                      fontWeight: FontWeight.w600,
-                      color: isDanger ? context.error : Color(0xff98989A)),
+                child: CustomUnderLineButtonWidget(
+                  title: btnTitle,
+                  onTap: onPressed,
+                  fontColor: isDanger ? context.error : Color(0xff98989A),
+                  isRed: isDanger,
+                  isDark: true,
+                  borderColor:
+                      isDanger ? context.error.withValues(alpha: 0.3) : null,
+                  fontSize: 14,
+                  width: 233,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
             )

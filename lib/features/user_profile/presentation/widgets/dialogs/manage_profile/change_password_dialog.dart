@@ -1,6 +1,6 @@
-import 'package:cointiply_app/core/common/common_button.dart';
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/common/common_textfield.dart';
+import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/change_password_notifier.dart';
 import 'package:cointiply_app/routing/routing.dart';
@@ -335,13 +335,14 @@ class _ChangePasswordDialogState extends ConsumerState<ChangePasswordDialog> {
               ],
               const SizedBox(height: 24),
               Center(
-                child: CommonButton(
-                  backgroundColor: const Color(0xff333333),
-                  text: context.translate('change_password_btn_text'),
-                  onPressed: isLoading ? null : _handleSubmit,
-                  isLoading: isLoading,
-                ),
-              ),
+                  child: CustomUnderLineButtonWidget(
+                title: context.translate('change_password_btn_text'),
+                fontSize: 14,
+                isDark: true,
+                fontWeight: FontWeight.w700,
+                onTap: isLoading ? null : _handleSubmit,
+                isLoading: isLoading,
+              )),
             ],
           ),
         ),

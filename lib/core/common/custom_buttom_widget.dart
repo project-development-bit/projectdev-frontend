@@ -12,6 +12,7 @@ class CustomUnderLineButtonWidget extends StatefulWidget {
   final bool isActive;
   final bool isDisabled;
   final bool isDark;
+  final bool isRed;
 
   final EdgeInsetsGeometry? padding;
   final EdgeInsetsGeometry? margin;
@@ -31,6 +32,7 @@ class CustomUnderLineButtonWidget extends StatefulWidget {
     this.isActive = false,
     this.isDisabled = false,
     this.isDark = false,
+    this.isRed = false,
     this.padding,
     this.margin,
     this.width,
@@ -92,6 +94,10 @@ class _CustomUnderLineButtonWidgetState
       bgColor = Color(0xFF333333);
       shadowColor = Color(0xFF262626);
       finalTextColor = Color(0xFF98989A);
+    } else if (widget.isRed) {
+      bgColor = Color(0xffB02419);
+      shadowColor = Color(0xFF7A1B12);
+      finalTextColor = Color(0xFFFFFFFF);
     } else {
       bgColor = defaultBg;
       shadowColor = defaultShadow;
@@ -121,15 +127,16 @@ class _CustomUnderLineButtonWidgetState
               ),
             ),
           ),
-          child: Center(
-            child: widget.isLoading
+          child: widget.isLoading
                 ? SizedBox(
                     height: 20,
                     width: 20,
+                  child: Center(
                     child: CircularProgressIndicator(
                       strokeWidth: 2,
                       valueColor: AlwaysStoppedAnimation(
                         finalTextColor,
+                      ),
                       ),
                     ),
                   )
@@ -138,8 +145,9 @@ class _CustomUnderLineButtonWidgetState
                     fontSize: widget.fontSize ?? 18,
                     fontWeight: widget.fontWeight ?? FontWeight.w700,
                     color: finalTextColor,
+                  textAlign: TextAlign.center,
                   ),
-          ),
+          
         ),
       ),
     );

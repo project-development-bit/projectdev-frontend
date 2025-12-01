@@ -19,6 +19,7 @@ class _SettingTabContentWidgetState
             notificationsEnabled: settingsData?.notificationsEnabled ?? false,
             showStatsEnabled: settingsData?.showStatsEnabled ?? false,
             anonymousInContests: settingsData?.anonymousInContests ?? false,
+            language: settingsData?.language ?? "En",
           );
     });
 
@@ -45,6 +46,7 @@ class _SettingTabContentWidgetState
   Widget build(BuildContext context) {
     final userId = (ref.watch(profileCurrentUserProvider)?.id ?? 0).toString();
     final settingsData = ref.watch(settingProfileProvider);
+    final language = settingsData.language;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -90,11 +92,12 @@ class _SettingTabContentWidgetState
         }),
         _settingMenuItem(context,
             title: context.translate("delete_account"),
-            btnTitle: context.translate("delete_account"),
-            onPressed: () {
-              showDeleteAccountConfirmationDialog(context);
-            },
+            btnTitle: context.translate("delete_account"), onPressed: () {
+          showDeleteAccountConfirmationDialog(context);
+        },
+            description: context.translate("delete_account_description"),
             isDanger: true),
+        SizedBox(height: 20),
       ],
     );
   }
@@ -133,24 +136,20 @@ class _SettingTabContentWidgetState
                         inactiveTrackColor: Color(0xff4D4D4D),
                         activeTrackColor: context.colorScheme.primary,
                       )
-                    : ElevatedButton(
-                        onPressed: onPressed,
-                        style: ElevatedButton.styleFrom(
-                          minimumSize: Size(233, 44),
-                          backgroundColor: isDanger
-                              ? context.error.withValues(alpha: 0.1)
-                              : Color(0xFF262626),
-                          foregroundColor: Colors.black,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 12),
-                          side: isDanger
-                              ? BorderSide(
-                                  color: context.error.withValues(alpha: 0.3))
-                              : null,
-                        ),
-                        child: CommonText.titleMedium(btnTitle,
-                            fontWeight: FontWeight.w600,
-                            color: isDanger ? context.error : Color(0xff98989A)),
+                    : CustomUnderLineButtonWidget(
+                        title: btnTitle,
+                        onTap: onPressed,
+                        fontColor: isDanger ? context.error : Color(0xff98989A),
+                        isRed: isDanger,
+                        isDark: true,
+                        backgroundColor: isDanger
+                            ? context.error.withValues(alpha: 0.1)
+                            : Color(0xFF262626),
+                        borderColor: isDanger
+                            ? context.error.withValues(alpha: 0.3)
+                            : null,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
                       ),
               ),
             ),

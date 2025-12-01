@@ -1,6 +1,6 @@
-import 'package:cointiply_app/core/common/common_button.dart';
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/common/common_textfield.dart';
+import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/change_name_notifier.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
@@ -185,12 +185,16 @@ class _ChangeNameDialogState extends ConsumerState<ChangeNameDialog> {
                 ),
               const SizedBox(height: 24),
               Center(
-                child: CommonButton(
-                  backgroundColor: Color(0xff333333),
-                  text: context.translate('change_name_btn_text'),
-                  onPressed: isLoading ? null : _handleSubmit,
-                  isLoading: isLoading,
-                ),
+                  child: CustomUnderLineButtonWidget(
+                title: context.translate('change_name_btn_text'),
+                onTap: isLoading ? null : _handleSubmit,
+                fontSize: 14,
+                isDark: true,
+                fontWeight: FontWeight.w700,
+                width: 200,
+                isLoading: isLoading,
+              )
+                 
               ),
             ],
           ),

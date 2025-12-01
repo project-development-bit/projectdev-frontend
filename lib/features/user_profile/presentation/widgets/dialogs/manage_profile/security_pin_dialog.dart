@@ -179,9 +179,7 @@ class _SecurityPinDialogState extends State<SecurityPinDialog> {
                 child: CustomUnderLineButtonWidget(
                   onTap: _validateAndSubmit,
                   isLoading: _isLoading,
-                  height: 56,
-                  isActive: true,
-                  width: 200,
+                  isDark: true,
                   fontSize: 14,
                   title: context.translate("enter_security_pin"),
                 ),

@@ -1,7 +1,7 @@
-import 'package:cointiply_app/core/common/common_button.dart';
 import 'package:cointiply_app/core/common/common_dropdown_field.dart';
 import 'package:cointiply_app/core/common/common_image_widget.dart';
 import 'package:cointiply_app/core/common/common_text.dart';
+import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
 import 'package:cointiply_app/core/extensions/extensions.dart';
 import 'package:cointiply_app/features/user_profile/domain/entities/country.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/change_country_notifier.dart';
@@ -117,10 +117,12 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
 
           const SizedBox(height: 24),
 
-          CommonButton(
-            text: context.translate("change_your_country_btn_text"),
-            backgroundColor: const Color(0xff333333),
-            onPressed: _selectedCountry != null
+          CustomUnderLineButtonWidget(
+            title: context.translate("change_your_country_btn_text"),
+            fontSize: 14,
+            isDark: true,
+            fontWeight: FontWeight.w700,
+            onTap: _selectedCountry != null
                 ? () {
                     ref.read(changeCountryProvider.notifier).changeCountry(
                           countryId: _selectedCountry!.id,
@@ -130,7 +132,7 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
                   }
                 : null,
             isLoading: isChangingCountry,
-          ),
+          )
         ],
       ),
     );

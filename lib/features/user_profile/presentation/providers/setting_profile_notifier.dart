@@ -1,4 +1,5 @@
 import 'package:cointiply_app/features/user_profile/data/models/request/user_update_request.dart';
+import 'package:cointiply_app/features/user_profile/domain/entities/language.dart';
 import 'package:cointiply_app/features/user_profile/domain/usecases/update_user_profile.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/profile_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,6 +15,7 @@ class SettingProfileState {
   final bool notificationsEnabled;
   final bool showStatsEnabled;
   final bool anonymousInContests;
+  final String language;
   final SettingProfileStatus status;
   final String? errorMessage;
 
@@ -24,6 +26,7 @@ class SettingProfileState {
     required this.notificationsEnabled,
     required this.showStatsEnabled,
     required this.anonymousInContests,
+    required this.language,
     this.status = SettingProfileStatus.initial,
     this.errorMessage,
   });
@@ -32,6 +35,7 @@ class SettingProfileState {
     bool? notificationsEnabled,
     bool? showStatsEnabled,
     bool? anonymousInContests,
+    String? language,
     SettingProfileStatus? status,
     String? errorMessage,
   }) {
@@ -39,6 +43,7 @@ class SettingProfileState {
       notificationsEnabled: notificationsEnabled ?? this.notificationsEnabled,
       showStatsEnabled: showStatsEnabled ?? this.showStatsEnabled,
       anonymousInContests: anonymousInContests ?? this.anonymousInContests,
+      language: language ?? this.language,
       status: status ?? this.status,
       errorMessage: errorMessage ?? this.errorMessage,
     );
@@ -55,6 +60,7 @@ final settingProfileProvider =
         notificationsEnabled: true,
         showStatsEnabled: true,
         anonymousInContests: false,
+        language: "",
       ),
       updateUserProfileUsecase,
     );
@@ -71,11 +77,13 @@ class SettingProfileNotifier extends StateNotifier<SettingProfileState> {
     required bool notificationsEnabled,
     required bool showStatsEnabled,
     required bool anonymousInContests,
+    required String language,
   }) {
     state = SettingProfileState(
       notificationsEnabled: notificationsEnabled,
       showStatsEnabled: showStatsEnabled,
       anonymousInContests: anonymousInContests,
+      language: language,
     );
   }
 

@@ -37,7 +37,7 @@ class UploadProfileAvatarState {
   }
 }
 
-final uploadProfileAvatarProvider = StateNotifierProvider<
+final uploadProfileAvatarProvider = StateNotifierProvider.autoDispose<
     UploadProfileAvatarProvider, UploadProfileAvatarState>(
   (ref) {
     final uploadProfilePictureUsecase =
@@ -49,14 +49,22 @@ final uploadProfileAvatarProvider = StateNotifierProvider<
   },
 );
 
-class UploadProfileAvatarProvider extends StateNotifier<UploadProfileAvatarState>{
+class UploadProfileAvatarProvider
+    extends StateNotifier<UploadProfileAvatarState> {
   final UploadProfilePictureUsecase _uploadProfilePictureUsecase;
   UploadProfileAvatarProvider(super.state, this._uploadProfilePictureUsecase);
 
-
   Future<void> uploadAvatar() async {
-    state = state.copyWith(status: UploadProfileAvatarStatus.loading, errorMessage: null);
+    state = state.copyWith(
+        status: UploadProfileAvatarStatus.loading, errorMessage: null);
     final image = await _pickImage();
+    if (image == null) {
+      state = state.copyWith(
+        status: UploadProfileAvatarStatus.initial,
+        errorMessage: null,
+      );
+      return;
+    }
     final params = UploadProfilePictureParams(image: image);
     final result = await _uploadProfilePictureUsecase.call(params);
 
@@ -64,7 +72,7 @@ class UploadProfileAvatarProvider extends StateNotifier<UploadProfileAvatarState
       (failure) {
         state = state.copyWith(
           status: UploadProfileAvatarStatus.failure,
-          errorMessage: failure.message?? "Unknown error",
+          errorMessage: failure.message ?? "Unknown error",
         );
       },
       (response) {
@@ -76,8 +84,7 @@ class UploadProfileAvatarProvider extends StateNotifier<UploadProfileAvatarState
     );
   }
 
-
-  Future<PlatformFile> _pickImage() async {
+  Future<PlatformFile?> _pickImage() async {
     final file = await FilePicker.platform.pickFiles(
       type: FileType.image,
       allowMultiple: false,
@@ -87,7 +94,7 @@ class UploadProfileAvatarProvider extends StateNotifier<UploadProfileAvatarState
     if (file != null && file.files.isNotEmpty) {
       return file.files.first;
     } else {
-      throw Exception('No file selected');
+      return null;
     }
   }
 }

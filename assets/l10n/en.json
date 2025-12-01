@@ -695,5 +695,6 @@
   "claim_now": "Claim Now",
   "no_coin_earn_history": "No coin earning History yet.",
   "notifications": "Notifications",
-  "disable_2fa_title": "Disable Two-Factor Authentication"
+  "disable_2fa_title": "Disable Two-Factor Authentication",
+  "delete_account_description": "Deleting your account is permanent. Your rewards, coins and referrals will be lost forever."
 }
