@@ -62,7 +62,9 @@ class _SecurityTabContentWidgetState
             btnTitle: isPinEnabled
                 ? context.translate("disable_security_pin")
                 : context.translate("enable_security_pin_btn"),
-            onPressed: () {}),
+            onPressed: () {
+              showSecurityPinDialog(context);
+            }),
       ],
     );
   }

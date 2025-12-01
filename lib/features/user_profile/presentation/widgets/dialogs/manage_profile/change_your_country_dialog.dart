@@ -67,6 +67,7 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
           // Close dialog on success
 
           ref.read(getProfileNotifierProvider.notifier).fetchProfile();
+          ref.read(currentUserProvider.notifier).getCurrentUser();
           context.pop();
         } else if (next.hasError) {
           // Show error message

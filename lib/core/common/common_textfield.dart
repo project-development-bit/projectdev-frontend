@@ -149,6 +149,7 @@ class _CommonTextFieldState extends State<CommonTextField> {
               : AppTypography.bodyMedium),
       autofillHints: widget.autofillHints,
       decoration: InputDecoration(
+        counterText: '',
         hintText: widget.hintText,
         labelText: widget.labelText,
         errorText: widget.errorText,
