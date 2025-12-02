@@ -38,12 +38,13 @@ class _SecurityTabContentWidgetState
             title: context.translate("twofa_authenticator_app"),
             onPressed: () {
               if (is2FAEnabled) {
-                context.showDisable2FAConfirmationDialog(
+                showDisable2FAConfirmationDialog(
+                  context,
                   onDisabled: () {
                     // Refresh profile data after disabling 2FA
                     ref
                         .read(getProfileNotifierProvider.notifier)
-                        .fetchProfile();
+                        .fetchProfile(isLoading: false);
                   },
                 );
               } else {
@@ -53,16 +54,20 @@ class _SecurityTabContentWidgetState
                 });
               }
             },
+            isDanger: is2FAEnabled,
             btnTitle: is2FAEnabled
                 ? context.translate("disable_2fa")
                 : context.translate("enable_2fa"),
             description: context.translate("twofa_description")),
         _securityMenuItem(
+            isDanger: isPinEnabled,
             title: context.translate("enable_security_pin"),
             btnTitle: isPinEnabled
                 ? context.translate("disable_security_pin")
                 : context.translate("enable_security_pin_btn"),
-            onPressed: () {}),
+            onPressed: () {
+              showSecurityPinDialog(context, isPinEnabled: isPinEnabled);
+            }),
       ],
     );
   }
@@ -71,46 +76,52 @@ class _SecurityTabContentWidgetState
       {required String title,
       required Function() onPressed,
       required String btnTitle,
-      String? description}) {
+      String? description,
+      bool isDanger = false}) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Row(
           children: [
-            Expanded(
-              child: CommonText.titleMedium(title,
-                  fontWeight: FontWeight.w700, color: Colors.white),
+            SizedBox(
+              width: 163,
+              child: CommonText.bodyLarge(title,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white),
             ),
             Expanded(
               flex: 2,
               child: Align(
                 alignment: Alignment.centerLeft,
-                child: ElevatedButton(
-                  onPressed: onPressed,
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: Size(233, 44),
-                    backgroundColor: Color(0xFF262626),
-                    foregroundColor: Colors.black,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 12),
-                  ),
-                  child: CommonText.titleMedium(btnTitle,
-                      fontWeight: FontWeight.w600, color: Color(0xff98989A)),
+                child: CustomUnderLineButtonWidget(
+                  title: btnTitle,
+                  onTap: onPressed,
+                  fontColor: isDanger ? context.error : Color(0xff98989A),
+                  isRed: isDanger,
+                  isDark: true,
+                  borderColor:
+                      isDanger ? context.error.withValues(alpha: 0.3) : null,
+                  fontSize: 14,
+                  width: 233,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
             )
           ],
         ),
         if (description != null)
-          Row(
-            children: [
-              Expanded(child: SizedBox()),
-              Expanded(
-                flex: 2,
-                child: CommonText.bodyMedium(description,
-                    color: Color(0xff98989A)),
-              )
-            ],
+          Padding(
+            padding: const EdgeInsets.only(top: 12.0),
+            child: Row(
+              children: [
+                SizedBox(width: 163),
+                Expanded(
+                  flex: 2,
+                  child: CommonText.bodyMedium(description,
+                      color: Color(0xff98989A)),
+                )
+              ],
+            ),
           ),
       ],
     );

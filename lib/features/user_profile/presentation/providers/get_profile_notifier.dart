@@ -48,9 +48,6 @@ class GetProfileNotifier extends StateNotifier<GetProfileState> {
 
   /// Fetch user profile
   Future<void> fetchProfile({bool isLoading = true}) async {
-    if (state.status == GetProfileStatus.success) {
-      return;
-    }
     if (isLoading) {
       state = state.copyWith(
         status: GetProfileStatus.loading,

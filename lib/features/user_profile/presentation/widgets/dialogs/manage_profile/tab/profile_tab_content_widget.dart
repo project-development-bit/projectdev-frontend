@@ -96,8 +96,7 @@ class ProfileTabContent extends ConsumerWidget {
                   children: [
                     CommonImage(
                       imageUrl: account!.country!.flag,
-                      width: 21,
-                      height: 10,
+                      width: 32,
                       fit: BoxFit.cover,
                     ),
                     const SizedBox(width: 10),
@@ -192,24 +191,11 @@ class ProfileTabContent extends ConsumerWidget {
                 ),
                 SizedBox(
                   width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: onPressed,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF262626),
-                      foregroundColor: Colors.black,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 10),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(13.0),
-                      child: CommonText.titleSmall(
-                        btnTitle,
-                        color: const Color(0xff98989A),
-                      ),
-                    ),
+                  child: CustomUnderLineButtonWidget(
+                    title: btnTitle,
+                    onTap: onPressed,
+                    fontColor: const Color.fromARGB(255, 99, 99, 130),
+                    backgroundColor: const Color(0xFF262626),
                   ),
                 )
               ],
@@ -232,24 +218,14 @@ class ProfileTabContent extends ConsumerWidget {
                 ),
                 Expanded(
                   flex: 2,
-                  child: ElevatedButton(
-                      onPressed: onPressed,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFF262626),
-                        foregroundColor: Colors.black,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 10),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(13.0),
-                        child: CommonText.titleSmall(
-                          btnTitle,
-                          color: Color(0xff98989A),
-                        ),
-                      )),
+                  child: CustomUnderLineButtonWidget(
+                    title: btnTitle,
+                    onTap: onPressed,
+                    isDark: true,
+                    backgroundColor: const Color(0xFF262626),
+                    fontWeight: FontWeight.w700,
+                    fontSize: 14,
+                  ),
                 ),
               ],
             ),

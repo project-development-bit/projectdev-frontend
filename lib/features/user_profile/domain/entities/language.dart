@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 
 /// Language Entity
 ///
@@ -24,6 +25,39 @@ class Language extends Equatable {
 
   /// Whether this is the default language
   final bool isDefault;
+
+  String get displayFlag {
+    return getDisplayFlag(code);
+  }
+
+  factory Language.empty() {
+    return Language(
+      code: '',
+      name: '',
+      flag: '',
+      isDefault: false,
+    );
+  }
+
+  String getDisplayFlag(String langCode) {
+    final formattedCode =
+        langCode.toLowerCase() == 'en' ? 'us' : langCode.toLowerCase();
+    // return "https://flagsapi.com/$formattedCode/flat/64.png";
+    return 'https://flagcdn.com/w80/$formattedCode.png';
+  }
+
+  String getDisplayName(String langCode) {
+    switch (langCode.toLowerCase()) {
+      case 'en':
+        return 'English';
+      case 'fr':
+        return 'French';
+      case 'mm':
+        return 'Myanmar';
+      default:
+        return 'Unknown';
+    }
+  }
 
   @override
   List<Object> get props => [code, name, flag, isDefault];

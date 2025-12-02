@@ -98,11 +98,8 @@ class ProfileMenu extends StatelessWidget {
                     : () {
                         _handleLogout(context, ref);
                       },
-                fontSize: 16,
+                fontSize: 14,
                 fontWeight: FontWeight.w700,
-                width: 105,
-                padding: EdgeInsets.symmetric(vertical: 4, horizontal: 0),
-                margin: const EdgeInsets.symmetric(vertical: 8.5),
                 title: isLoading
                     ? context.translate("logging_out")
                     : context.translate("sign_out"),

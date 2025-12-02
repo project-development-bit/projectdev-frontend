@@ -1,6 +1,6 @@
-import 'package:cointiply_app/core/common/common_button.dart';
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/common/common_textfield.dart';
+import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
 import 'package:cointiply_app/core/extensions/extensions.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/change_email_notifier.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
@@ -252,12 +252,15 @@ class _ChangeEmailDialogState extends ConsumerState<ChangeEmailDialog> {
               SizedBox(
                 height: 24,
               ),
-              CommonButton(
-                text: context.translate("change_your_email_btn_text"),
-                backgroundColor: Color(0xff333333),
+              CustomUnderLineButtonWidget(
+                title: context.translate("change_your_email_btn_text"),
+                fontSize: 14,
+                isDark: true,
+                fontWeight: FontWeight.w700,
+                width: 200,
                 isLoading: isChanging,
-                onPressed: isChanging ? null : _handleChangeEmail,
-              ),
+                onTap: isChanging ? null : _handleChangeEmail,
+              )
             ],
           ),
         ),

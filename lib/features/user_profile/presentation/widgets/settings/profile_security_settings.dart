@@ -370,7 +370,7 @@ class _ProfileSecuritySettingsState
             onPressed: () {
               if (is2FAEnabled) {
                 // Show confirmation dialog to disable 2FA
-                context.showDisable2FAConfirmationDialog(onDisabled: () {
+                showDisable2FAConfirmationDialog(context, onDisabled: () {
                   // Refresh 2FA status after successful disable
                   ref.read(check2FAStatusProvider.notifier).check2FAStatus();
                 });
