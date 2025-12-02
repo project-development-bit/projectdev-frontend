@@ -1,221 +1,173 @@
-import 'package:cointiply_app/core/common/widgets/custom_pointer_interceptor.dart';
+import 'package:cointiply_app/core/common/common_button.dart';
+import 'package:cointiply_app/core/common/common_text.dart';
+import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
+import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
-import '../../../../core/common/common_text.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/localization/app_localizations.dart';
 import '../providers/disable_2fa_provider.dart';
 import '../providers/check_2fa_status_provider.dart';
-import 'package:go_router/go_router.dart';
+
+void showDisable2FAConfirmationDialog(BuildContext context,
+    {required Function() onDisabled}) {
+  context.showManagePopup(
+    height: context.isMobile ? 400 : 350,
+    child: Disable2FAConfirmationDialog(onDisabled: onDisabled),
+    barrierDismissible: true,
+    title: context.translate("disable_2fa_title"),
+  );
+}
 
 /// Confirmation dialog for disabling 2FA
 ///
 /// Shows a warning message and requires user confirmation before disabling 2FA
-class Disable2FAConfirmationDialog extends ConsumerWidget {
+class Disable2FAConfirmationDialog extends ConsumerStatefulWidget {
   final Function() onDisabled;
   const Disable2FAConfirmationDialog({super.key, required this.onDisabled});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final disable2FAState = ref.watch(disable2FAProvider);
-    final localizations = AppLocalizations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+  ConsumerState<Disable2FAConfirmationDialog> createState() =>
+      _Disable2FAConfirmationDialogState();
+}
 
-    // Listen to state changes and handle success/error
-    ref.listen<Disable2FAState>(disable2FAProvider, (previous, next) {
+class _Disable2FAConfirmationDialogState
+    extends ConsumerState<Disable2FAConfirmationDialog> {
+  @override
+  void initState() {
+    super.initState();
+
+    ref.listenManual<Disable2FAState>(disable2FAProvider, (previous, next) {
+      if (next is Disable2FALoading) return;
+
       if (next is Disable2FASuccess) {
-        // Close dialog on success
-        context.pop();
+        if (mounted && context.mounted) {
+          context.showSnackBar(
+            message: next.response.message,
+            backgroundColor: context.primary,
+            textColor: Colors.white,
+          );
 
-        // Refresh 2FA status
-        ref.read(check2FAStatusProvider.notifier).check2FAStatus();
-        onDisabled();
+          // Close dialog
+          context.pop();
 
-        // Show success message
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: CommonText(
-              next.response.message,
-              color: colorScheme.onError,
-            ),
-            backgroundColor: AppColors.success,
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
+          // Refresh 2FA status
+          ref.read(check2FAStatusProvider.notifier).check2FAStatus();
+          widget.onDisabled();
+        }
       } else if (next is Disable2FAError) {
-        // Show error message
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: CommonText(
-              next.message,
-              color: colorScheme.onError,
-            ),
-            backgroundColor: AppColors.error,
-            behavior: SnackBarBehavior.floating,
-            action: SnackBarAction(
-              label: localizations?.translate('retry') ?? 'Retry',
-              textColor: colorScheme.onError,
-              onPressed: () {
-                ref.read(disable2FAProvider.notifier).disable2FA();
-              },
-            ),
-          ),
-        );
+        if (mounted && context.mounted) {
+          context.showSnackBar(
+            message: next.message,
+            backgroundColor: context.error,
+            textColor: Colors.white,
+          );
+        }
       }
     });
+  }
 
-    return AlertDialog(
-      backgroundColor: AppColors.websiteCard,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
-      title: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: AppColors.warning.withValues(alpha: 0.2),
-              borderRadius: BorderRadius.circular(8),
+  void _handleDisable2FA() {
+    ref.read(disable2FAProvider.notifier).disable2FA();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final disable2FAState = ref.watch(disable2FAProvider);
+    final isDisabling = disable2FAState is Disable2FALoading;
+
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Warning message
+            CommonText.bodyLarge(
+              context.translate('disable_2fa_warning_message'),
+              color: context.onSurface,
+              textAlign: TextAlign.start,
             ),
-            child: const Icon(
-              Icons.warning_amber_rounded,
-              color: AppColors.warning,
-              size: 24,
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: CommonText(
-              localizations?.translate('disable_2fa_confirmation_title') ??
-                  'Disable 2FA?',
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: colorScheme.onError,
-            ),
-          ),
-        ],
-      ),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CommonText(
-            localizations?.translate('disable_2fa_warning_message') ??
-                'Disabling two-factor authentication will make your account less secure. Are you sure you want to continue?',
-            fontSize: 14,
-            color: AppColors.websiteText,
-          ),
-          const SizedBox(height: 16),
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: colorScheme.error.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(
-                color: colorScheme.error.withValues(alpha: 0.3),
-                width: 1,
+            const SizedBox(height: 24),
+
+            // Security note
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: context.error.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                  color: context.error.withValues(alpha: 0.3),
+                ),
               ),
-            ),
-            child: Row(
-              children: [
-                Icon(
-                  Icons.info_outline,
-                  color: colorScheme.error,
-                  size: 20,
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: CommonText(
-                    localizations?.translate('disable_2fa_security_note') ??
-                        'Your account will be protected only by your password.',
-                    fontSize: 12,
-                    color: colorScheme.error,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          if (disable2FAState is Disable2FALoading) ...[
-            const SizedBox(height: 16),
-            Center(
-              child: Column(
+              child: Row(
                 children: [
-                  const CircularProgressIndicator(
-                    strokeWidth: 2,
+                  Icon(
+                    Icons.warning_amber_rounded,
+                    color: context.error,
+                    size: 24,
                   ),
-                  const SizedBox(height: 8),
-                  CommonText(
-                    localizations?.translate('disabling_2fa') ??
-                        'Disabling 2FA...',
-                    fontSize: 12,
-                    color: AppColors.websiteText,
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: CommonText.bodyMedium(
+                      context.translate('disable_2fa_security_note'),
+                      color: context.error,
+                    ),
                   ),
                 ],
               ),
             ),
-          ],
-        ],
-      ),
-      actions: [
-        // Cancel button
-        TextButton(
-          onPressed: disable2FAState is Disable2FALoading
-              ? null
-              : () {
-                  context.pop();
-                  ref.read(disable2FAProvider.notifier).reset();
-                },
-          style: TextButton.styleFrom(
-            foregroundColor: AppColors.websiteText,
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-          ),
-          child: CommonText(
-            localizations?.translate('cancel') ?? 'Cancel',
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-            color: AppColors.websiteText,
-          ),
-        ),
-        // Disable button
-        ElevatedButton(
-          onPressed: disable2FAState is Disable2FALoading
-              ? null
-              : () {
-                  ref.read(disable2FAProvider.notifier).disable2FA();
-                },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: colorScheme.error,
-            foregroundColor: colorScheme.onError,
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-          ),
-          child: CommonText(
-            localizations?.translate('disable_2fa') ?? 'Disable 2FA',
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-            color: colorScheme.onError,
-          ),
-        ),
-      ],
-    );
-  }
-}
 
-/// Extension to show disable 2FA confirmation dialog
-extension Disable2FADialogExtension on BuildContext {
-  /// Show disable 2FA confirmation dialog
-  void showDisable2FAConfirmationDialog({required Function() onDisabled}) {
-    showDialog(
-      context: this,
-      barrierDismissible: false,
-      builder: (context) =>
-          CustomPointerInterceptor(
-          child: Disable2FAConfirmationDialog(
-        onDisabled: onDisabled,
-      )),
+            const SizedBox(height: 32),
+
+            // Action buttons
+            Flex(
+              direction: context.isMobile ? Axis.vertical : Axis.horizontal,
+              mainAxisAlignment: MainAxisAlignment.center,
+              spacing: 10.0,
+              textDirection:
+                  context.isMobile ? TextDirection.rtl : TextDirection.ltr,
+              children: [
+                CustomButtonWidget(
+                  title: context.translate("cancel"),
+                  onTap: isDisabling
+                      ? null
+                      : () {
+                          context.pop();
+                          ref.read(disable2FAProvider.notifier).reset();
+                        },
+                  isOutlined: true,
+                  width: context.isMobile ? double.infinity : 233,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 40,
+                    vertical: 10,
+                  ),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                ),
+                const SizedBox(width: 16),
+                
+                CustomUnderLineButtonWidget(
+                  title: context.translate("disable_2fa"),
+                  onTap: isDisabling ? null : _handleDisable2FA,
+                  fontColor: Color(0xff98989A),
+                  isRed: true,
+                  width: context.isMobile ? double.infinity : 233,
+                    isLoading: isDisabling,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 40,
+                    vertical: 10,
+                  ),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                ),
+                
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

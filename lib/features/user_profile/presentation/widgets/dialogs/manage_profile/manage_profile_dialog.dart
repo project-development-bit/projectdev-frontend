@@ -1,11 +1,14 @@
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/common/common_image_widget.dart';
+import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:cointiply_app/features/auth/presentation/widgets/disable_2fa_confirmation_dialog.dart';
 import 'package:cointiply_app/features/auth/presentation/widgets/two_factor_auth_dialog.dart';
+import 'package:cointiply_app/features/user_profile/domain/entities/language.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/get_profile_notifier.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/setting_profile_notifier.dart';
+import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/manage_profile/security_pin_dialog.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/manage_profile/upload_avatar_dialog.dart';
 import 'package:cointiply_app/routing/routing.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +21,7 @@ import 'change_name_dialog.dart';
 import 'change_password_dialog.dart';
 import 'change_your_country_dialog.dart';
 import 'change_your_language_dialog.dart';
+import 'delete_account_dialog.dart';
 
 part 'tab/profile_tab_content_widget.dart';
 part 'tab/security_tab_content_widget.dart';

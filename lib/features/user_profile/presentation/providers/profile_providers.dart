@@ -1,6 +1,7 @@
 import 'package:cointiply_app/core/network/base_dio_client.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import '../../config/profile_config.dart';
 import '../../data/datasources/profile_remote_data_source.dart';
 import '../../data/datasources/profile_remote_data_source_impl.dart';
@@ -14,19 +15,20 @@ import '../../domain/usecases/upload_profile_picture.dart';
 import '../../domain/usecases/change_email_usecase.dart';
 import '../../domain/usecases/verify_email_change_usecase.dart';
 import '../../domain/usecases/change_password_usecase.dart';
+import '../../domain/usecases/delete_account_usecase.dart';
+import '../../domain/usecases/set_security_pin_usecase.dart';
+import 'set_security_pin_notifier.dart';
 
 /// Provider for profile remote data source
 final profileRemoteDataSourceProvider =
     Provider<ProfileRemoteDataSource>((ref) {
-  
-    // 🌐 API mode: Using real backend calls
-    if (ProfileConfig.enableDebugLogging) {
-      debugPrint('🌐 Profile Module: Using REAL API data source');
-    }
-    final dio = ref.read(dioClientProvider);
+  // 🌐 API mode: Using real backend calls
+  if (ProfileConfig.enableDebugLogging) {
+    debugPrint('🌐 Profile Module: Using REAL API data source');
+  }
+  final dio = ref.read(dioClientProvider);
   return ProfileRemoteDataSourceImpl(dioClient: dio);
 });
-
 
 // /// Provider for profile repository
 final profileRepositoryProvider = Provider<ProfileRepository>((ref) {
@@ -90,3 +92,21 @@ final changePasswordUseCaseProvider = Provider<ChangePasswordUsecase>((ref) {
   return ChangePasswordUsecase(repository);
 });
 
+/// Provider for delete account use case
+final deleteAccountUseCaseProvider = Provider<DeleteAccountUsecase>((ref) {
+  final repository = ref.read(profileRepositoryProvider);
+  return DeleteAccountUsecase(repository);
+});
+
+/// Provider for set security PIN use case
+final setSecurityPinUseCaseProvider = Provider<SetSecurityPinUsecase>((ref) {
+  final repository = ref.read(profileRepositoryProvider);
+  return SetSecurityPinUsecase(repository);
+});
+
+/// Provider for set security PIN notifier
+final setSecurityPinNotifierProvider = StateNotifierProvider.autoDispose<
+    SetSecurityPinNotifier, SetSecurityPinState>((ref) {
+  final setSecurityPinUsecase = ref.read(setSecurityPinUseCaseProvider);
+  return SetSecurityPinNotifier(setSecurityPinUsecase);
+});

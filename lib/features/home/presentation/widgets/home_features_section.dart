@@ -61,8 +61,9 @@ class HomeFeaturesSection extends StatelessWidget {
       width: double.infinity,
       decoration: BoxDecoration(
         image: DecorationImage(
-          fit: BoxFit.fitWidth,
+          fit: context.isDesktop ? BoxFit.contain : BoxFit.fitWidth,
           alignment: Alignment(0, -0.5),
+          filterQuality: FilterQuality.high,
           image: AssetImage(
             context.isMobile
                 ? AppLocalImages.homeCoinBackgroundSection1Mobile

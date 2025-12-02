@@ -7,7 +7,7 @@ import '../../domain/usecases/disable_2fa_usecase.dart';
 
 /// Provider for the Disable 2FA state notifier
 final disable2FAProvider =
-    StateNotifierProvider<Disable2FANotifier, Disable2FAState>(
+    StateNotifierProvider.autoDispose<Disable2FANotifier, Disable2FAState>(
   (ref) => Disable2FANotifier(ref.watch(disable2FAUseCaseProvider)),
 );
 

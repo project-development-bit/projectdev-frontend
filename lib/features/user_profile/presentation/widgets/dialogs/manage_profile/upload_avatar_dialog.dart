@@ -1,4 +1,5 @@
 import 'package:cointiply_app/core/common/common_text.dart';
+import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/upload_profile_avatar_provider.dart';
@@ -42,34 +43,22 @@ class UploadAvatarDialog extends ConsumerWidget {
             size: 80,
           ),
           SizedBox(height: 32),
-          ElevatedButton(
-              onPressed: () {
-                isLoading
-                    ? null
-                    : ref
-                        .read(uploadProfileAvatarProvider.notifier)
-                        .uploadAvatar();
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFF262626),
-                foregroundColor: Colors.black,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(13.0),
-                child: isLoading
-                    ? Center(
-                        child: CircularProgressIndicator(),
-                      )
-                    : CommonText.titleSmall(
-                        context.translate("upload_your_new_avatar"),
-                        color: Color(0xff98989A),
-                      ),
-              )),
+          CustomUnderLineButtonWidget(
+            title: context.translate("upload_your_new_avatar"),
+            onTap: () {
+              isLoading
+                  ? null
+                  : ref
+                      .read(uploadProfileAvatarProvider.notifier)
+                      .uploadAvatar();
+            },
+            width: 250,
+            isLoading: isLoading,
+            isDark: true,
+            backgroundColor: const Color(0xFF262626),
+            fontWeight: FontWeight.w700,
+            fontSize: 14,
+          ),
           SizedBox(
               height: 42,
               child: isErrorState

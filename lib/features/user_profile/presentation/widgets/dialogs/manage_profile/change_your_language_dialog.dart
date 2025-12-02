@@ -1,7 +1,7 @@
-import 'package:cointiply_app/core/common/common_button.dart';
 import 'package:cointiply_app/core/common/common_dropdown_field.dart';
 import 'package:cointiply_app/core/common/common_image_widget.dart';
 import 'package:cointiply_app/core/common/common_text.dart';
+import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
 import 'package:cointiply_app/core/extensions/extensions.dart';
 import 'package:cointiply_app/features/user_profile/domain/entities/language.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/change_language_notifier.dart';
@@ -96,15 +96,16 @@ class _ChangeLanguageDialogState extends ConsumerState<ChangeLanguageDialog> {
     final languagesState = ref.watch(getLanguagesNotifierProvider);
     final isChangingLanguage = ref.watch(changeLanguageProvider).isChanging;
     final userId = (ref.read(currentUserProvider).user?.id ?? 0).toString();
+    final isMobile = context.isMobile;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 32),
+      padding: !isMobile ? const EdgeInsets.symmetric(horizontal: 32) : null,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
           Align(
-            alignment: Alignment.centerLeft,
+          alignment: Alignment.centerLeft,
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 20),
               child: CommonText.bodyMedium(
@@ -123,11 +124,12 @@ class _ChangeLanguageDialogState extends ConsumerState<ChangeLanguageDialog> {
             _dataState(languagesState, context),
 
           const SizedBox(height: 24),
-
-          CommonButton(
-            text: context.translate("change_your_language_btn_text"),
-            backgroundColor: const Color(0xff333333),
-            onPressed: _selectedLanguage != null
+          CustomUnderLineButtonWidget(
+            title: context.translate('change_your_language_btn_text'),
+            fontSize: 14,
+            isDark: true,
+            fontWeight: FontWeight.w700,
+            onTap: _selectedLanguage != null
                 ? () {
                     ref.read(changeLanguageProvider.notifier).changeLanguage(
                           languageCode: _selectedLanguage!.code,
@@ -144,7 +146,48 @@ class _ChangeLanguageDialogState extends ConsumerState<ChangeLanguageDialog> {
   }
 
   Widget _dataState(GetLanguagesState languagesState, BuildContext context) {
-    return Row(
+    final isMobile = context.isMobile;
+
+    return isMobile
+        ? Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CommonText.bodyMedium(
+                context.translate("your_language"),
+                fontWeight: FontWeight.w500,
+              ),
+              CommonDropdownFieldWithIcon<Language>(
+                items: languagesState.languages!,
+                value: _selectedLanguage,
+                onChanged: (language) {
+                  setState(() {
+                    _selectedLanguage = language;
+                  });
+                },
+                hint: context.translate("select_your_language_hint"),
+                getItemCode: (language) => language.code,
+                getItemName: (language) => language.name,
+                getItemIcon: (language) {
+                  final flag = language.displayFlag;
+                  return CommonImage(
+                    imageUrl: flag,
+                    width: 32,
+                    height: 32,
+                    fit: BoxFit.cover,
+                  );
+                },
+                validator: (value) {
+                  if (value == null) {
+                    return context.translate("please_select_language_error");
+                  }
+                  return null;
+                },
+              ),
+            ],
+          )
+        : Row(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
@@ -170,7 +213,7 @@ class _ChangeLanguageDialogState extends ConsumerState<ChangeLanguageDialog> {
             getItemCode: (language) => language.code,
             getItemName: (language) => language.name,
             getItemIcon: (language) {
-              final flag = language.flag;
+              final flag = language.displayFlag;
               return CommonImage(
                 imageUrl: flag,
                 width: 32,

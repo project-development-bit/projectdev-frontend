@@ -37,7 +37,7 @@ class UploadProfileAvatarState {
   }
 }
 
-final uploadProfileAvatarProvider = StateNotifierProvider<
+final uploadProfileAvatarProvider = StateNotifierProvider.autoDispose<
     UploadProfileAvatarProvider, UploadProfileAvatarState>(
   (ref) {
     final uploadProfilePictureUsecase =
@@ -58,6 +58,13 @@ class UploadProfileAvatarProvider
     state = state.copyWith(
         status: UploadProfileAvatarStatus.loading, errorMessage: null);
     final image = await _pickImage();
+    if (image == null) {
+      state = state.copyWith(
+        status: UploadProfileAvatarStatus.initial,
+        errorMessage: null,
+      );
+      return;
+    }
     final params = UploadProfilePictureParams(image: image);
     final result = await _uploadProfilePictureUsecase.call(params);
 
@@ -77,7 +84,7 @@ class UploadProfileAvatarProvider
     );
   }
 
-  Future<PlatformFile> _pickImage() async {
+  Future<PlatformFile?> _pickImage() async {
     final file = await FilePicker.platform.pickFiles(
       type: FileType.image,
       allowMultiple: false,
@@ -87,7 +94,7 @@ class UploadProfileAvatarProvider
     if (file != null && file.files.isNotEmpty) {
       return file.files.first;
     } else {
-      throw Exception('No file selected');
+      return null;
     }
   }
 }
