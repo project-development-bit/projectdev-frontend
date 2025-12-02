@@ -194,8 +194,10 @@ class ProfileTabContent extends ConsumerWidget {
                   child: CustomUnderLineButtonWidget(
                     title: btnTitle,
                     onTap: onPressed,
-                    fontColor: const Color.fromARGB(255, 99, 99, 130),
+                    isDark: true,
                     backgroundColor: const Color(0xFF262626),
+                    fontWeight: FontWeight.w700,
+                    fontSize: 14,
                   ),
                 )
               ],

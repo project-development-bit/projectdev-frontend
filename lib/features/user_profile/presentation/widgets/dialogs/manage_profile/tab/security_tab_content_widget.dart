@@ -78,7 +78,49 @@ class _SecurityTabContentWidgetState
       required String btnTitle,
       String? description,
       bool isDanger = false}) {
-    return Column(
+    final isMobile = context.isMobile;
+    return isMobile
+        ? Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                // mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                spacing: 21.0,
+                children: [
+                  CommonText.bodyLarge(
+                    title,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white,
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              SizedBox(
+                width: double.infinity,
+                child: CustomUnderLineButtonWidget(
+                  title: btnTitle,
+                  onTap: onPressed,
+                  fontColor: isDanger ? context.error : Color(0xff98989A),
+                  isRed: isDanger,
+                  isDark: true,
+                  borderColor:
+                      isDanger ? context.error.withValues(alpha: 0.3) : null,
+                  fontSize: 14,
+                  width: 233,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              if (description != null)
+                Padding(
+                    padding: const EdgeInsets.only(top: 12.0),
+                    child: CommonText.bodyMedium(description,
+                        color: Color(0xff98989A))),
+            ],
+          )
+        : Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Row(
