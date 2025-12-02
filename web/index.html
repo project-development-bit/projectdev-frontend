@@ -42,6 +42,7 @@
         https://www.google.com
         https://www.gstatic.com/recaptcha/
         https://challenges.cloudflare.com;
+      worker-src 'self' blob:;
       style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
       font-src 'self' https://fonts.gstatic.com;
       img-src 'self' data: https:;
@@ -238,8 +239,8 @@
       return !!(window.grecaptcha && window.currentRecaptchaKey);
     };
 
-      // Function to hide reCAPTCHA badge
-      window.ensureRecaptchaBadgeVisible = function () {
+    // Function to hide reCAPTCHA badge
+    window.ensureRecaptchaBadgeVisible = function () {
       const badge = document.querySelector('.grecaptcha-badge');
       const iframe = document.querySelector('iframe[src*="recaptcha"]');
 

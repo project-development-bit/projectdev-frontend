@@ -30,6 +30,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    print('Building HomePage...');
     // Load profile data when the page builds
 
     return Column(

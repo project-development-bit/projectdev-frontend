@@ -128,6 +128,12 @@ flutter:
     - assets/images/user/
     - assets/theme/
     - assets/images/icons/
+    - assets/images/bg/on_boarding_bg.jpg
+    - assets/images/bg/on_boarding_coin.png
+    - assets/images/bg/2.0x/
+    - assets/images/bg/3.0x/
+    - assets/images/bg/4.0x/
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
