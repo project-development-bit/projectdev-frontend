@@ -1,5 +1,6 @@
 import 'package:cointiply_app/core/common/common_button.dart';
 import 'package:cointiply_app/core/common/common_text.dart';
+import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -121,34 +122,47 @@ class _Disable2FAConfirmationDialogState
             const SizedBox(height: 32),
 
             // Action buttons
-            Row(
+            Flex(
+              direction: context.isMobile ? Axis.vertical : Axis.horizontal,
+              mainAxisAlignment: MainAxisAlignment.center,
+              spacing: 10.0,
+              textDirection:
+                  context.isMobile ? TextDirection.rtl : TextDirection.ltr,
               children: [
-                Expanded(
-                  child: CommonButton(
-                    text: context.translate("cancel"),
-                    onPressed: isDisabling
-                        ? null
-                        : () {
-                            context.pop();
-                            ref.read(disable2FAProvider.notifier).reset();
-                          },
-                    backgroundColor: context.surfaceContainer,
-                    textColor: context.onSurface,
-                    isOutlined: true,
-                    height: 48,
+                CustomButtonWidget(
+                  title: context.translate("cancel"),
+                  onTap: isDisabling
+                      ? null
+                      : () {
+                          context.pop();
+                          ref.read(disable2FAProvider.notifier).reset();
+                        },
+                  isOutlined: true,
+                  width: context.isMobile ? double.infinity : 233,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 40,
+                    vertical: 10,
                   ),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
                 ),
                 const SizedBox(width: 16),
-                Expanded(
-                  child: CommonButton(
-                    text: context.translate("disable_2fa"),
-                    onPressed: isDisabling ? null : _handleDisable2FA,
-                    backgroundColor: context.error,
-                    textColor: Colors.white,
-                    height: 48,
+                
+                CustomUnderLineButtonWidget(
+                  title: context.translate("disable_2fa"),
+                  onTap: isDisabling ? null : _handleDisable2FA,
+                  fontColor: Color(0xff98989A),
+                  isRed: true,
+                  width: context.isMobile ? double.infinity : 233,
                     isLoading: isDisabling,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 40,
+                    vertical: 10,
                   ),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
                 ),
+                
               ],
             ),
           ],

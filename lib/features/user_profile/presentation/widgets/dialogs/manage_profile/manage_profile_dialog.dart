@@ -4,6 +4,7 @@ import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:cointiply_app/features/auth/presentation/widgets/disable_2fa_confirmation_dialog.dart';
 import 'package:cointiply_app/features/auth/presentation/widgets/two_factor_auth_dialog.dart';
+import 'package:cointiply_app/features/user_profile/domain/entities/language.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/get_profile_notifier.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/setting_profile_notifier.dart';

@@ -171,7 +171,7 @@ class _ChangeLanguageDialogState extends ConsumerState<ChangeLanguageDialog> {
             getItemCode: (language) => language.code,
             getItemName: (language) => language.name,
             getItemIcon: (language) {
-              final flag = language.flag;
+              final flag = language.displayFlag;
               return CommonImage(
                 imageUrl: flag,
                 width: 32,

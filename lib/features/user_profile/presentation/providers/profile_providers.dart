@@ -15,6 +15,8 @@ import '../../domain/usecases/change_email_usecase.dart';
 import '../../domain/usecases/verify_email_change_usecase.dart';
 import '../../domain/usecases/change_password_usecase.dart';
 import '../../domain/usecases/delete_account_usecase.dart';
+import '../../domain/usecases/set_security_pin_usecase.dart';
+import 'set_security_pin_notifier.dart';
 
 /// Provider for profile remote data source
 final profileRemoteDataSourceProvider =
@@ -95,4 +97,18 @@ final changePasswordUseCaseProvider = Provider<ChangePasswordUsecase>((ref) {
 final deleteAccountUseCaseProvider = Provider<DeleteAccountUsecase>((ref) {
   final repository = ref.read(profileRepositoryProvider);
   return DeleteAccountUsecase(repository);
+});
+
+/// Provider for set security PIN use case
+final setSecurityPinUseCaseProvider = Provider<SetSecurityPinUsecase>((ref) {
+  final repository = ref.read(profileRepositoryProvider);
+  return SetSecurityPinUsecase(repository);
+});
+
+/// Provider for set security PIN notifier
+final setSecurityPinNotifierProvider =
+    StateNotifierProvider.autoDispose<SetSecurityPinNotifier, SetSecurityPinState>(
+        (ref) {
+  final setSecurityPinUsecase = ref.read(setSecurityPinUseCaseProvider);
+  return SetSecurityPinNotifier(setSecurityPinUsecase);
 });

@@ -2,6 +2,7 @@ import 'package:cointiply_app/core/common/common_button.dart';
 import 'package:cointiply_app/core/common/common_text.dart' show CommonText;
 import 'package:cointiply_app/core/common/common_textfield.dart'
     show CommonTextField;
+import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/dialog_bg_widget.dart';
 import 'package:cointiply_app/routing/routing.dart';
@@ -494,11 +495,19 @@ class _VerificationForm extends StatelessWidget {
             ],
           ),
         const SizedBox(height: 16),
-        CommonButton(
-          text: context.translate("enable_2fa_button"),
-          onPressed: handleVerify,
+        CustomUnderLineButtonWidget(
+          title: context.translate("enable_2fa_button"),
+          onTap: handleVerify,
+          fontColor: Color(0xff98989A),
+          isDark: true,
+          width: isMobile ? double.infinity : 233,
           isLoading: isVerifying,
-          backgroundColor: const Color(0xff262626),
+          padding: EdgeInsets.symmetric(
+            horizontal: 40,
+            vertical: 10,
+          ),
+          fontSize: 14,
+          fontWeight: FontWeight.w700,
         ),
       ],
     );

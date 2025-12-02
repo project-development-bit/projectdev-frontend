@@ -96,8 +96,7 @@ class ProfileTabContent extends ConsumerWidget {
                   children: [
                     CommonImage(
                       imageUrl: account!.country!.flag,
-                      width: 21,
-                      height: 10,
+                      width: 32,
                       fit: BoxFit.cover,
                     ),
                     const SizedBox(width: 10),

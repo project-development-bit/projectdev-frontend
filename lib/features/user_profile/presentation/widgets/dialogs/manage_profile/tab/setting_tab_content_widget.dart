@@ -47,16 +47,63 @@ class _SettingTabContentWidgetState
     final userId = (ref.watch(profileCurrentUserProvider)?.id ?? 0).toString();
     final settingsData = ref.watch(settingProfileProvider);
     final language = settingsData.language;
+    final languageFlag = Language.empty().getDisplayFlag(language);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       spacing: 32.0,
       children: [
-        _settingMenuItem(context,
-            title: context.translate("language"),
-            btnTitle: context.translate("change_language"), onPressed: () {
-          showChangeLanguageDialog(context);
-        }),
+        Row(
+          children: [
+            SizedBox(
+              width: 130,
+              child: CommonText.bodyLarge(context.translate("language"),
+                  fontWeight: FontWeight.w700, color: Colors.white),
+            ),
+            Expanded(
+              flex: 2,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      CommonImage(
+                        imageUrl: languageFlag,
+                        width: 32,
+                        height: 21,
+                        fit: BoxFit.cover,
+                      ),
+                      SizedBox(width: 5),
+                      CommonText.bodyMedium(
+                        language,
+                        color: Color(0xff98989A),
+                      ),
+                    ],
+                  ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: CustomUnderLineButtonWidget(
+                      title: context.translate("change_language"),
+                      onTap: () {
+                        showChangeLanguageDialog(context);
+                      },
+                      fontColor: Color(0xff98989A),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 40,
+                        vertical: 10,
+                      ),
+                      isDark: true,
+                      backgroundColor: Color(0xFF262626),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
         _settingMenuItem(context,
             title: context.translate("notifications"),
             btnTitle: "",
@@ -113,11 +160,13 @@ class _SettingTabContentWidgetState
       bool isDanger = false}) {
     return Column(
       mainAxisSize: MainAxisSize.min,
+      spacing: 8.0,
       children: [
         Row(
           children: [
-            Expanded(
-              child: CommonText.titleMedium(title,
+            SizedBox(
+              width: 130,
+              child: CommonText.bodyLarge(title,
                   fontWeight: FontWeight.w700,
                   color: isDanger ? context.error : Colors.white),
             ),
@@ -142,6 +191,10 @@ class _SettingTabContentWidgetState
                         fontColor: isDanger ? context.error : Color(0xff98989A),
                         isRed: isDanger,
                         isDark: true,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 40,
+                          vertical: 10,
+                        ),
                         backgroundColor: isDanger
                             ? context.error.withValues(alpha: 0.1)
                             : Color(0xFF262626),
@@ -158,7 +211,7 @@ class _SettingTabContentWidgetState
         if (description != null)
           Row(
             children: [
-              Expanded(child: SizedBox()),
+              SizedBox(width: 130),
               Expanded(
                 flex: 2,
                 child: CommonText.bodyMedium(description,

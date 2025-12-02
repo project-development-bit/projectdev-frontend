@@ -66,7 +66,7 @@ class _SecurityTabContentWidgetState
                 ? context.translate("disable_security_pin")
                 : context.translate("enable_security_pin_btn"),
             onPressed: () {
-              showSecurityPinDialog(context);
+              showSecurityPinDialog(context, isPinEnabled: isPinEnabled);
             }),
       ],
     );
@@ -83,8 +83,9 @@ class _SecurityTabContentWidgetState
       children: [
         Row(
           children: [
-            Expanded(
-              child: CommonText.titleMedium(title,
+            SizedBox(
+              width: 163,
+              child: CommonText.bodyLarge(title,
                   fontWeight: FontWeight.w700,
                   color: Colors.white),
             ),
@@ -109,15 +110,18 @@ class _SecurityTabContentWidgetState
           ],
         ),
         if (description != null)
-          Row(
-            children: [
-              Expanded(child: SizedBox()),
-              Expanded(
-                flex: 2,
-                child: CommonText.bodyMedium(description,
-                    color: Color(0xff98989A)),
-              )
-            ],
+          Padding(
+            padding: const EdgeInsets.only(top: 12.0),
+            child: Row(
+              children: [
+                SizedBox(width: 163),
+                Expanded(
+                  flex: 2,
+                  child: CommonText.bodyMedium(description,
+                      color: Color(0xff98989A)),
+                )
+              ],
+            ),
           ),
       ],
     );

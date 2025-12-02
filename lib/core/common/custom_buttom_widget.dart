@@ -90,14 +90,14 @@ class _CustomUnderLineButtonWidgetState
       bgColor = activeBg;
       shadowColor = activeShadow;
       finalTextColor = textColor;
-    } else if (widget.isDark) {
-      bgColor = Color(0xFF333333);
-      shadowColor = Color(0xFF262626);
-      finalTextColor = Color(0xFF98989A);
     } else if (widget.isRed) {
       bgColor = Color(0xffB02419);
       shadowColor = Color(0xFF7A1B12);
       finalTextColor = Color(0xFFFFFFFF);
+    } else if (widget.isDark) {
+      bgColor = Color(0xFF333333);
+      shadowColor = Color(0xFF262626);
+      finalTextColor = Color(0xFF98989A);
     } else {
       bgColor = defaultBg;
       shadowColor = defaultShadow;
@@ -115,7 +115,9 @@ class _CustomUnderLineButtonWidgetState
           height: widget.height ?? 48,
           width: widget.width,
           margin: widget.margin,
-          padding: widget.padding ??
+          padding: widget.isLoading
+              ? EdgeInsets.zero
+              : widget.padding ??
               const EdgeInsets.symmetric(vertical: 12, horizontal: 17),
           decoration: BoxDecoration(
             color: bgColor,
