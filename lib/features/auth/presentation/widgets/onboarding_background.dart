@@ -1,11 +1,8 @@
-import 'package:cointiply_app/core/common/Custom_memory_image.dart';
 import 'package:cointiply_app/core/common/common_image_widget.dart';
 import 'package:cointiply_app/core/config/app_local_images.dart';
-import 'package:cointiply_app/core/config/app_network_images.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:cointiply_app/core/widgets/responsive_container.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class OnboardingBackground extends StatelessWidget {
   const OnboardingBackground({
@@ -45,40 +42,19 @@ class OnboardingBackground extends StatelessWidget {
             child: CommonImage(
               imageUrl: backgroundImagePath ??
                   (isMobile
-                      ? AppNetworkImages.onboardingBgMobile
-                      : AppNetworkImages.onboardingBgDesktop),
-
-              loaingImageUrl: (isMobile
-                  ? AppLocalImages.onboardingBgMobile
-                  : AppLocalImages.onboardingBgDesktop),
+                      ? AppLocalImages.onboardingBgMobile
+                      : AppLocalImages.onboardingBgDesktop),
               fit: BoxFit.cover,
-              // filterQuality: FilterQuality.high,
             ),
           ),
           Positioned.fill(
-            // child: CustomMemoryImage(
-            //   assetPath: backgroundImagePath ??
-            //       (isMobile
-            //           ? AppLocalImages.onboardingCoinSection1Mobile
-            //           : AppLocalImages.onboardingCoinDesktop),
-            //   fit: BoxFit.cover,
-            //   filterQuality: FilterQuality.high,
-            // ),
             child: CommonImage(
               imageUrl: backgroundImagePath ??
                   (isMobile
-                      ? AppNetworkImages.onboardingCoinSection1Mobile
-                      : AppNetworkImages.onboardingCoinDesktop),
-              loaingImageUrl: backgroundImagePath ??
-                  (isMobile
-                      ? AppNetworkImages.onboardingCoinSection1Mobile
-                      : AppNetworkImages.onboardingCoinDesktop),
+                      ? AppLocalImages.onboardingCoinSection1Mobile
+                      : AppLocalImages.onboardingCoinDesktop),
               fit: BoxFit.cover,
             ),
-            // child: SvgPicture.asset("assets/images/bg/test_coin.svg",
-            //     width: double.infinity,
-            //     height: double.infinity,
-            //     fit: BoxFit.cover),
           ),
           SingleChildScrollView(
             child: ConstrainedBox(

@@ -1,4 +1,5 @@
 import 'package:cointiply_app/core/common/common_text.dart';
+import 'package:cointiply_app/core/config/app_local_images.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:cointiply_app/features/home/presentation/widgets/home_section_container.dart';
 import 'package:flutter/material.dart';
@@ -64,8 +65,8 @@ class HomeFeaturesSection extends StatelessWidget {
           alignment: Alignment(0, -0.5),
           image: AssetImage(
             context.isMobile
-                ? 'assets/images/bg/coin_background_section_1_mobile.png'
-                : 'assets/images/bg/coin_background_section_1_desktop.png',
+                ? AppLocalImages.homeCoinBackgroundSection1Mobile
+                : AppLocalImages.homeCoinBackgroundSection1Desktop,
           ),
         ),
       ),
@@ -73,7 +74,6 @@ class HomeFeaturesSection extends StatelessWidget {
         child: Container(
           constraints: BoxConstraints(maxWidth: 1240),
           padding: const EdgeInsets.symmetric(vertical: 25.0),
-          
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 10.0),
             child: Column(

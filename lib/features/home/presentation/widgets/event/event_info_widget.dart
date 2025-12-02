@@ -173,16 +173,16 @@ class EventInfoWidget extends StatelessWidget {
       required String title,
       required bool isSmallSize}) {
     final widget = SizedBox(
-      height: isSmallSize ? null : 175,
+      height: isSmallSize ? null : 350,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: Stack(
           children: [
             Image.asset(
               image,
-              width: double.infinity,
-              height: 175,
-              fit: BoxFit.cover,
+              width: 642,
+              height: 350,
+              fit: BoxFit.contain,
             ),
             Positioned(
               top: 0,

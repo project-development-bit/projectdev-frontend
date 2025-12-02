@@ -22,6 +22,8 @@ final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey =
 
 /// Common app initialization function for all flavors
 Future<void> runAppWithFlavor(AppFlavor flavor) async {
+  // debugInvertOversizedImages = true;
+
   // Set the flavor first so configuration is available
   FlavorManager.setFlavor(flavor);
 
