@@ -17,6 +17,7 @@ import '../../domain/entities/change_email_result.dart';
 import '../../domain/entities/verify_email_change_result.dart';
 import '../../domain/entities/change_password_result.dart';
 import '../../domain/entities/delete_account_result.dart';
+import '../../domain/entities/verify_delete_account_result.dart';
 import '../../domain/entities/set_security_pin_result.dart';
 
 /// Implementation of [ProfileRepository]
@@ -314,6 +315,8 @@ class ProfileRepositoryImpl implements ProfileRepository {
       final result = DeleteAccountResult(
         success: responseModel.success,
         message: responseModel.message,
+        email: responseModel.email,
+        verificationCode: responseModel.verificationCode,
       );
 
       return Right(result);
@@ -330,6 +333,43 @@ class ProfileRepositoryImpl implements ProfileRepository {
         message: e.response?.data?['message'] ??
             e.message ??
             'Failed to delete account',
+        statusCode: e.response?.statusCode,
+        errorModel: errorModel,
+      ));
+    } catch (e) {
+      debugPrint('❌ Repository: Unexpected error - $e');
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, VerifyDeleteAccountResult>> verifyDeleteAccount(
+      String code) async {
+    try {
+      debugPrint('🔄 Repository: Verifying account deletion...');
+      final responseModel = await remoteDataSource.verifyDeleteAccount(code);
+
+      final result = VerifyDeleteAccountResult(
+        success: responseModel.success,
+        message: responseModel.message,
+        deletedUserId: responseModel.deletedUserId,
+        deletedEmail: responseModel.deletedEmail,
+      );
+
+      return Right(result);
+    } on ServerFailure catch (e) {
+      debugPrint('❌ Repository: ServerFailure - ${e.message}');
+      return Left(e);
+    } on DioException catch (e) {
+      debugPrint('❌ Repository: DioException - ${e.message}');
+      ErrorModel? errorModel;
+      if (e.response?.data != null) {
+        errorModel = ErrorModel.fromJson(e.response!.data);
+      }
+      return Left(ServerFailure(
+        message: e.response?.data?['message'] ??
+            e.message ??
+            'Failed to verify account deletion',
         statusCode: e.response?.statusCode,
         errorModel: errorModel,
       ));

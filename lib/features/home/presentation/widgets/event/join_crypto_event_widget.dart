@@ -14,7 +14,7 @@ class JoinCryptoEventWidget extends StatelessWidget {
       spacing: 10.0,
       children: [
         Image.asset(
-          'assets/images/gigafaucet_logo.png',
+          'assets/images/gigafaucet_logo.webp',
           width: isSmallSize ? 68 : 120,
           height: isSmallSize ? 68 : 120,
         ),

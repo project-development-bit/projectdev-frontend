@@ -152,8 +152,7 @@ class _SettingTabContentWidgetState
               ),
             ],
           )
-        :
-     Row(
+        : Row(
             children: [
               SizedBox(
                 width: 130,
@@ -203,7 +202,7 @@ class _SettingTabContentWidgetState
                 ),
               ),
             ],
-    );
+          );
   }
 
   Widget _settingMenuItem(BuildContext context,

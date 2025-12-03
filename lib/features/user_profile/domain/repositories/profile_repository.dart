@@ -11,6 +11,7 @@ import '../entities/change_email_result.dart';
 import '../entities/verify_email_change_result.dart';
 import '../entities/change_password_result.dart';
 import '../entities/delete_account_result.dart';
+import '../entities/verify_delete_account_result.dart';
 import '../entities/set_security_pin_result.dart';
 
 /// Abstract repository interface for profile operations
@@ -73,6 +74,13 @@ abstract class ProfileRepository {
   /// [userId] - The ID of the user to delete
   /// Returns [DeleteAccountResult] on success or [Failure] on error
   Future<Either<Failure, DeleteAccountResult>> deleteAccount(String userId);
+
+  /// Verify account deletion with verification code
+  ///
+  /// [code] - The verification code sent to user's email
+  /// Returns [VerifyDeleteAccountResult] on success or [Failure] on error
+  Future<Either<Failure, VerifyDeleteAccountResult>> verifyDeleteAccount(
+      String code);
 
   /// Set or update security PIN
   ///

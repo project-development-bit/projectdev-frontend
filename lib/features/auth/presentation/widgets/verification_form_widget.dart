@@ -16,11 +16,14 @@ class VerificationFormWidget extends ConsumerStatefulWidget {
     this.isSendCode = false,
     this.isFromForgotPassword = false,
     this.isFromEmailChanged = false,
+    this.isFromDeleteAccount = false,
   });
   final String email;
   final bool isSendCode;
   final bool isFromForgotPassword;
   final bool isFromEmailChanged;
+  final bool isFromDeleteAccount;
+
   @override
   ConsumerState<VerificationFormWidget> createState() =>
       _VerificationFormWidgetState();
@@ -70,6 +73,11 @@ class _VerificationFormWidgetState
             return;
           }
 
+          if (widget.isFromDeleteAccount) {
+            _handleLogoutAfterDeletion();
+            return;
+          }
+
           GoRouterExtension(context).go('/auth/login');
         }
 
@@ -95,6 +103,24 @@ class _VerificationFormWidgetState
     );
   }
 
+  Future<void> _handleLogoutAfterDeletion() async {
+    try {
+      // Clear secure storage
+      final secureStorage = ref.read(secureStorageServiceProvider);
+      await secureStorage.clearRememberMeCredentials();
+      await secureStorage.deleteAuthToken();
+      await secureStorage.deleteRefreshToken();
+
+      // Navigate to login page
+      if (mounted && context.mounted) {
+        context.pop(); // Close verification dialog
+        context.go('/');
+      }
+    } catch (e) {
+      debugPrint('Error during logout after account deletion: $e');
+    }
+  }
+
   @override
   void dispose() {
     _pinController.dispose();
@@ -111,6 +137,10 @@ class _VerificationFormWidgetState
             email: widget.email,
             code: code,
           );
+    } else if (widget.isFromDeleteAccount) {
+      ref
+          .read(verificationNotifierProvider.notifier)
+          .verifyDeleteAccount(email: widget.email, code: code);
     } else {
       ref
           .read(verificationNotifierProvider.notifier)
