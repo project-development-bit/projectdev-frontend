@@ -1,6 +1,6 @@
 import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
-import 'package:cointiply_app/features/wallet/presentation/widgets/sub_widgets/wallet_dialog.dart';
+import 'package:cointiply_app/features/wallet/presentation/widgets/dialogs/wallet_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
