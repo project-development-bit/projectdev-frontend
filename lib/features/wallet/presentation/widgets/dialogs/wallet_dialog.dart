@@ -1,8 +1,9 @@
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:cointiply_app/core/common/dialog_bg_widget.dart';
-import 'package:cointiply_app/features/wallet/presentation/widgets/balances_section.dart';
-import 'package:cointiply_app/features/wallet/presentation/widgets/wallet_tab_bar_widget.dart';
-import 'package:cointiply_app/features/wallet/presentation/widgets/withdrawl_earning_section.dart';
+import 'package:cointiply_app/features/wallet/presentation/widgets/sections/balances_section.dart';
+import 'package:cointiply_app/features/wallet/presentation/widgets/sections/payament_history_section.dart';
+import 'package:cointiply_app/features/wallet/presentation/widgets/sub_widgets/wallet_tab_bar_widget.dart';
+import 'package:cointiply_app/features/wallet/presentation/widgets/sections/withdrawl_earning_section.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -64,7 +65,7 @@ class _ProfileDialogState extends ConsumerState<WalletDialog> {
     } else if (selectedIndex == 1) {
       return const BalancesSection();
     } else if (selectedIndex == 2) {
-      return const SizedBox();
+      return const PayamentHistorySection();
     }
     return const SizedBox();
   }

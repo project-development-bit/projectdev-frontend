@@ -1,5 +1,5 @@
-import 'package:cointiply_app/features/wallet/presentation/widgets/interest_notification_widget.dart';
-import 'package:cointiply_app/features/wallet/presentation/widgets/withdrawal_earning_methods_widget.dart';
+import 'package:cointiply_app/features/wallet/presentation/widgets/sub_widgets/interest_notification_widget.dart';
+import 'package:cointiply_app/features/wallet/presentation/widgets/sub_widgets/withdrawal_earning_methods_widget.dart';
 import 'package:flutter/material.dart';
 
 class WithdrawlEarningSection extends StatelessWidget {
