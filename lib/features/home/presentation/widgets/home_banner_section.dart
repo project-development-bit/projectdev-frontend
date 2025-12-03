@@ -186,10 +186,10 @@ class BannerSlide extends StatelessWidget {
       fit: StackFit.expand,
       children: [
         CommonImage(
-          // imageUrl: isMobile ? banner.imageMobile : banner.imageWeb,
-          imageUrl: isMobile
-              ? 'assets/images/bg/banner_mobile@2x.png'
-              : 'assets/images/bg/banner_web@2x.png',
+          imageUrl: isMobile ? banner.imageMobile : banner.imageWeb,
+          // imageUrl: isMobile
+          //     ? 'assets/images/bg/banner_mobile@2x.png'
+          //     : 'assets/images/bg/banner_web@2x.png',
           width: double.infinity,
           height: height,
           fit: BoxFit.cover,
