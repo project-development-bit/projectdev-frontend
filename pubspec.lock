@@ -865,10 +865,10 @@ packages:
     dependency: transitive
     description:
       name: meta
-      sha256: e3641ec5d63ebf0d9b41bd43201a66e3fc79a65db5f61fc181f04cd27aab950c
+      sha256: "23f08335362185a5ea2ad3a4e597f1375e78bce8a040df5c600c8d3552ef2394"
       url: "https://pub.dev"
     source: hosted
-    version: "1.16.0"
+    version: "1.17.0"
   mime:
     dependency: transitive
     description:
@@ -1005,6 +1005,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.0.1"
+  pixel_snap:
+    dependency: transitive
+    description:
+      name: pixel_snap
+      sha256: "677410ea37b07cd37ecb6d5e6c0d8d7615a7cf3bd92ba406fd1ac57e937d1fb0"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.5"
   platform:
     dependency: transitive
     description:
@@ -1374,10 +1382,10 @@ packages:
     dependency: transitive
     description:
       name: test_api
-      sha256: "522f00f556e73044315fa4585ec3270f1808a4b186c936e612cab0b565ff1e00"
+      sha256: ab2726c1a94d3176a45960b6234466ec367179b87dd74f1611adb1f3b5fb9d55
       url: "https://pub.dev"
     source: hosted
-    version: "0.7.6"
+    version: "0.7.7"
   timing:
     dependency: transitive
     description:
@@ -1466,6 +1474,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "14.3.1"
+  vph_common_widgets:
+    dependency: transitive
+    description:
+      name: vph_common_widgets
+      sha256: "596f6655cd67d3aba8f81e77d2c5148d86378c4f19469acf06afc84009606c09"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.3"
+  vph_web_date_picker:
+    dependency: "direct main"
+    description:
+      name: vph_web_date_picker
+      sha256: "27a135d91dc368506bbfa6950e2110323d9e841401b3deabc4b0868c0233c0fb"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.7"
   watcher:
     dependency: transitive
     description:

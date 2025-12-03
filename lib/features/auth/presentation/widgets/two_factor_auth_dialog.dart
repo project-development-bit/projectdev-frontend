@@ -5,6 +5,7 @@ import 'package:cointiply_app/core/common/common_textfield.dart'
 import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/dialog_bg_widget.dart';
+import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/dialog_scaffold_widget.dart';
 import 'package:cointiply_app/routing/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -162,12 +163,21 @@ class _TwoFactorAuthDialogState extends ConsumerState<TwoFactorAuthDialog> {
   Widget build(BuildContext context) {
     final setup2FAState = ref.watch(setup2FAProvider);
     final isEnabling = ref.watch(isEnable2FALoadingProvider);
+    double dialogHeight = context.isDesktop
+        ? 645
+        : context.isTablet
+            ? 700
+            : 750;
 
     return DialogBgWidget(
-      dialogHeight: 645,
+      dialogHeight: dialogHeight,
       title: context.translate("setup_2fa_app_title"),
       body: SingleChildScrollView(
-        child: _buildContent(setup2FAState, isEnabling),
+        child: Padding(
+            padding: context.isDesktop
+                ? const EdgeInsets.symmetric(horizontal: 31, vertical: 16)
+                : const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            child: _buildContent(setup2FAState, isEnabling)),
       ),
     );
   }
@@ -297,7 +307,6 @@ class _SetupSuccessState extends StatelessWidget {
           CommonText.bodyMedium(
             context.translate("setup_2fa_app_description"),
             fontWeight: FontWeight.w500,
-            color: Colors.white,
             highlightColor: Colors.white,
             highlightFontWeight: FontWeight.w700,
             highlightFontSize: 16,
@@ -325,7 +334,6 @@ class _SetupSuccessState extends StatelessWidget {
     );
   }
 }
-
 
 /// QR Code Section
 class _QRCodeSection extends StatelessWidget {
@@ -370,8 +378,9 @@ class _ManualEntrySection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        CommonText.bodySmall(
+        CommonText.bodyMedium(
           context.translate("2fa_dialog_note_text"),
+          fontWeight: FontWeight.w500,
         ),
         const SizedBox(height: 12),
         Container(
@@ -384,7 +393,7 @@ class _ManualEntrySection extends StatelessWidget {
             ),
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 60),
+            padding: EdgeInsets.zero,
             child: Center(
               child: CommonText.bodyMedium(
                 secret,
@@ -452,19 +461,19 @@ class _VerificationForm extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CommonText.bodyLarge(
-                context.translate("authentication_code"),
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-              ),
+              CommonText.bodyLarge(context.translate("authentication_code"),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white),
               const SizedBox(height: 8),
               CommonTextField(
                 controller: codeController,
                 focusNode: codeFocusNode,
-                labelText: context.translate("enter_verification_code"),
-                hintText: 'Enter 6-digit code',
+                hintText: context.translate("enter_verification_code"),
                 keyboardType: TextInputType.number,
                 validator: validateCode,
+                style:
+                    context.textTheme.bodyMedium?.copyWith(color: Colors.white),
                 fillColor: const Color(0xff1A1A1A),
                 onSubmitted: (_) => handleVerify(),
               ),
@@ -474,18 +483,18 @@ class _VerificationForm extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              CommonText.bodyLarge(
-                context.translate("authentication_code"),
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-              ),
+              CommonText.bodyLarge(context.translate("authentication_code"),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white),
               const SizedBox(width: 16),
               Expanded(
                 child: CommonTextField(
                   controller: codeController,
                   focusNode: codeFocusNode,
-                  labelText: context.translate("enter_verification_code"),
-                  hintText: 'Enter 6-digit code',
+                  hintText: context.translate("enter_verification_code"),
+                  style: context.textTheme.bodyMedium
+                      ?.copyWith(color: Colors.white),
                   keyboardType: TextInputType.number,
                   validator: validateCode,
                   fillColor: const Color(0xff1A1A1A),
@@ -524,10 +533,12 @@ Future<bool?> show2FADialog(
   return showDialog<bool>(
     context: context,
     barrierDismissible: false,
-    builder: (context) => TwoFactorAuthDialog(
-      email: email,
-      sessionToken: sessionToken,
-      onSuccess: onSuccess,
+    builder: (context) => DialogScaffoldWidget(
+      child: TwoFactorAuthDialog(
+        email: email,
+        sessionToken: sessionToken,
+        onSuccess: onSuccess,
+      ),
     ),
   );
 }

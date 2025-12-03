@@ -5,16 +5,15 @@ import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/change_name_notifier.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/get_profile_notifier.dart';
+import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/dialog_bg_widget.dart';
 import 'package:cointiply_app/routing/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 showChangeNameDialog(BuildContext context) {
   context.showManagePopup(
-    height: context.isMobile ? 320 : 280,
     barrierDismissible: false,
     child: ChangeNameDialog(),
-    title: context.translate("change_your_name"),
   );
 }
 
@@ -119,7 +118,10 @@ class _ChangeNameDialogState extends ConsumerState<ChangeNameDialog> {
   @override
   Widget build(BuildContext context) {
     final isLoading = ref.watch(changeNameNotifierProvider).isChanging;
-    return _dialogBgWidget(isLoading: isLoading);
+    return DialogBgWidget(
+        title: context.translate("change_your_name"),
+        dialogHeight: context.isMobile ? 320 : 280,
+        body: _dialogBgWidget(isLoading: isLoading));
   }
 
   Widget _dialogBgWidget({required bool isLoading}) {
@@ -127,13 +129,19 @@ class _ChangeNameDialogState extends ConsumerState<ChangeNameDialog> {
       key: _formKey,
       child: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          padding: context.isDesktop
+              ? const EdgeInsets.symmetric(horizontal: 24, vertical: 16)
+              : const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (context.isMobile) ...[
-                CommonText.bodyMedium(context.translate("new_name")),
+              if (context.isMobile || context.isTablet) ...[
+                CommonText.bodyLarge(
+                  context.translate("new_name"),
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white,
+                ),
                 const SizedBox(height: 8),
                 CommonTextField(
                   controller: _nameController,
@@ -159,12 +167,17 @@ class _ChangeNameDialogState extends ConsumerState<ChangeNameDialog> {
                     SizedBox(
                       width: 120,
                       child:
-                          CommonText.bodyMedium(context.translate("new_name")),
+                          CommonText.bodyLarge(
+                        context.translate("new_name"),
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                      ),
                     ),
                     const SizedBox(width: 16),
                     Expanded(
                       child: CommonTextField(
                         controller: _nameController,
+                        autofocus: true,
                         hintText: context.translate("enter_your_name"),
                         enabled: !isLoading,
                         validator: (value) {
@@ -191,11 +204,9 @@ class _ChangeNameDialogState extends ConsumerState<ChangeNameDialog> {
                 fontSize: 14,
                 isDark: true,
                 fontWeight: FontWeight.w700,
-                width: 200,
+                width: context.isDesktop ? 200 : double.infinity,
                 isLoading: isLoading,
-              )
-                 
-              ),
+              )),
             ],
           ),
         ),

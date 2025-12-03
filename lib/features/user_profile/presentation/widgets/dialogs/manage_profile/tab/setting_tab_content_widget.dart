@@ -51,7 +51,7 @@ class _SettingTabContentWidgetState
 
     return Column(
       mainAxisSize: MainAxisSize.min,
-      spacing: 32.0,
+      spacing: 25.0,
       children: [
         _languageWidget(context, languageFlag, language),
         _settingMenuItem(context,
@@ -94,7 +94,6 @@ class _SettingTabContentWidgetState
         },
             description: context.translate("delete_account_description"),
             isDanger: true),
-        SizedBox(height: 20),
       ],
     );
   }

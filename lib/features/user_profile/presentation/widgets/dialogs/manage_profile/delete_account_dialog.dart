@@ -3,6 +3,7 @@ import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/delete_account_notifier.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
+import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/dialog_bg_widget.dart';
 import 'package:cointiply_app/routing/routing.dart';
 import 'package:cointiply_app/core/services/secure_storage_service.dart';
 import 'package:flutter/material.dart';
@@ -10,10 +11,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void showDeleteAccountConfirmationDialog(BuildContext context) {
   context.showManagePopup(
-    height: context.isMobile ? 500 : 450,
+    // height: context.isMobile ? 500 : 450,
     child: const DeleteAccountConfirmationDialog(),
     barrierDismissible: true,
-    title: context.translate("delete_account_confirmation_title"),
+    // title: context.translate("delete_account_confirmation_title"),
   );
 }
 
@@ -100,78 +101,88 @@ class _DeleteAccountConfirmationDialogState
   Widget build(BuildContext context) {
     final isDeleting = ref.watch(deleteAccountNotifierProvider).isDeleting;
     
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Warning message
-            CommonText.bodyLarge(
-              context.translate("delete_account_confirmation_message"),
-              color: context.onSurface,
-              textAlign: TextAlign.start,
-            ),
-            const SizedBox(height: 24),
-            
-            // Additional warning
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: context.error.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                  color: context.error.withValues(alpha: 0.3),
+    return DialogBgWidget(
+      dialogHeight: context.isDesktop
+          ? 400
+          : context.isTablet
+              ? 380
+              : 420,
+      title: context.translate("delete_account_confirmation_title"),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: context.isMobile || context.isTablet
+              ? const EdgeInsets.symmetric(horizontal: 17, vertical: 22)
+              : const EdgeInsets.symmetric(horizontal: 31, vertical: 22),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Warning message
+              CommonText.bodyLarge(
+                context.translate("delete_account_confirmation_message"),
+                color: context.onSurface,
+                textAlign: TextAlign.start,
+              ),
+              const SizedBox(height: 24),
+
+              // Additional warning
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: context.error.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color: context.error.withValues(alpha: 0.3),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.warning_amber_rounded,
+                      color: context.error,
+                      size: 24,
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: CommonText.bodyMedium(
+                        context.translate("delete_account_warning"),
+                        color: context.error,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              child: Row(
+
+              const SizedBox(height: 32),
+
+              // Action buttons
+              Row(
                 children: [
-                  Icon(
-                    Icons.warning_amber_rounded,
-                    color: context.error,
-                    size: 24,
-                  ),
-                  const SizedBox(width: 12),
                   Expanded(
-                    child: CommonText.bodyMedium(
-                      context.translate("delete_account_warning"),
-                      color: context.error,
+                    child: CommonButton(
+                      text: context.translate("cancel_delete"),
+                      onPressed: isDeleting ? null : () => context.pop(),
+                      backgroundColor: context.surfaceContainer,
+                      textColor: context.onSurface,
+                      isOutlined: true,
+                      height: 48,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: CommonButton(
+                      text: context.translate("permanently_delete"),
+                      onPressed: isDeleting ? null : _handleDeleteAccount,
+                      backgroundColor: context.error,
+                      textColor: Colors.white,
+                      height: 48,
+                      isLoading: isDeleting,
                     ),
                   ),
                 ],
               ),
-            ),
-            
-            const SizedBox(height: 32),
-            
-            // Action buttons
-            Row(
-              children: [
-                Expanded(
-                  child: CommonButton(
-                    text: context.translate("cancel_delete"),
-                    onPressed: isDeleting ? null : () => context.pop(),
-                    backgroundColor: context.surfaceContainer,
-                    textColor: context.onSurface,
-                    isOutlined: true,
-                    height: 48,
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: CommonButton(
-                    text: context.translate("permanently_delete"),
-                    onPressed: isDeleting ? null : _handleDeleteAccount,
-                    backgroundColor: context.error,
-                    textColor: Colors.white,
-                    height: 48,
-                    isLoading: isDeleting,
-                  ),
-                ),
-              ],
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

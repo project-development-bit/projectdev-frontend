@@ -5,6 +5,7 @@ import 'package:cointiply_app/core/extensions/extensions.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/profile_providers.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/set_security_pin_notifier.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/get_profile_notifier.dart';
+import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/dialog_bg_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,11 +13,12 @@ import 'package:go_router/go_router.dart';
 
 void showSecurityPinDialog(BuildContext context, {bool isPinEnabled = false}) {
   context.showManagePopup(
-      barrierDismissible: true,
-      height: context.isDesktop ? 400 : context.screenHeight * 0.9,
-      child: SecurityPinDialog(isPinEnabled: isPinEnabled),
-      title: context.translate(
-          isPinEnabled ? "disable_security_pin" : "enable_security_pin_title"));
+    barrierDismissible: true,
+    // height: context.isDesktop ? 400 : context.screenHeight * 0.9,
+    child: SecurityPinDialog(isPinEnabled: isPinEnabled),
+    // title: context.translate(
+    //     isPinEnabled ? "disable_security_pin" : "enable_security_pin_title")
+  );
 }
 
 class SecurityPinDialog extends ConsumerStatefulWidget {
@@ -122,20 +124,23 @@ class _SecurityPinDialogState extends ConsumerState<SecurityPinDialog> {
   @override
   Widget build(BuildContext context) {
     final isLoading = ref.watch(setSecurityPinNotifierProvider).isSetting;
-    return SingleChildScrollView(
-      child: Container(
-        margin: const EdgeInsets.only(right: 5),
-        padding: const EdgeInsets.symmetric(vertical: 22),
+    return DialogBgWidget(
+      dialogHeight: _getDialogHeight(),
+      title: context.translate(
+          widget.isPinEnabled ? "disable_security_pin" : "enable_security_pin"),
+      body: SingleChildScrollView(
+        padding: context.isMobile || context.isTablet
+            ? const EdgeInsets.symmetric(horizontal: 17, vertical: 22)
+            : const EdgeInsets.symmetric(horizontal: 31, vertical: 22),
         child: Form(
           key: _formKey,
           child: Column(
             spacing: 24,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CommonText.bodySmall(
+              CommonText.bodyMedium(
                 context.translate("enable_security_pin_note"),
                 fontWeight: FontWeight.w500,
-                color: Color(0xff98989A),
               ),
               context.isDesktop
                   ? Row(
@@ -219,7 +224,7 @@ class _SecurityPinDialogState extends ConsumerState<SecurityPinDialog> {
                 child: CustomUnderLineButtonWidget(
                   onTap: isLoading ? null : _validateAndSubmit,
                   isLoading: isLoading,
-                  isDark: true,
+                  width: context.isDesktop ? 233 : double.infinity,
                   fontSize: 14,
                   title: context.translate(widget.isPinEnabled
                       ? "disable_security_pin"
@@ -245,6 +250,7 @@ class _SecurityPinDialogState extends ConsumerState<SecurityPinDialog> {
       inputFormatters: [
         FilteringTextInputFormatter.digitsOnly,
       ],
+      fillColor: Color(0xff1A1A1A),
       obscureText: false,
       validator: (value) {
         if (value == null || value.isEmpty) {
@@ -260,5 +266,20 @@ class _SecurityPinDialogState extends ConsumerState<SecurityPinDialog> {
       },
       hintText: context.translate("enter_security_pin_hint"),
     );
+  }
+
+  double? _getDialogHeight() {
+    if (widget.isPinEnabled) {
+      return context.isDesktop
+          ? 300
+          : context.isTablet
+              ? 350
+              : 360;
+    }
+    return context.isDesktop
+        ? 400
+        : context.isTablet
+            ? 450
+            : 500;
   }
 }

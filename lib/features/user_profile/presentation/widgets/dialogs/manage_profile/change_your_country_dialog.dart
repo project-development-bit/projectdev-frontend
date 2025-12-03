@@ -8,6 +8,7 @@ import 'package:cointiply_app/features/user_profile/presentation/providers/chang
 import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/get_countries_state.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/get_profile_notifier.dart';
+import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/dialog_bg_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -15,9 +16,10 @@ import 'package:go_router/go_router.dart';
 void showChangeCountryDialog(BuildContext context) {
   context.showManagePopup(
       barrierDismissible: true,
-      height: context.isMobile ? context.screenHeight * 0.7 : 400,
+    // height: context.isMobile ? context.screenHeight * 0.7 : 400,
       child: const ChangeCountryDialog(),
-      title: context.translate("change_your_country_title"));
+    // title: context.translate("change_your_country_title")
+  );
 }
 
 class ChangeCountryDialog extends ConsumerStatefulWidget {
@@ -66,7 +68,9 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
         } else if (next.status == ChangeCountryStatus.success) {
           // Close dialog on success
 
-          ref.read(getProfileNotifierProvider.notifier).fetchProfile();
+          ref
+              .read(getProfileNotifierProvider.notifier)
+              .fetchProfile(isLoading: false);
           ref.read(currentUserProvider.notifier).getCurrentUser();
           context.pop();
         } else if (next.hasError) {
@@ -82,18 +86,23 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return _manageDialogBody(context);
+    return DialogBgWidget(
+        dialogHeight: context.isDesktop ? 370 : 420,
+        title: context.translate("change_your_country_title"),
+        body: _manageDialogBody(context));
   }
 
   Widget _manageDialogBody(BuildContext context) {
     final countriesState = ref.watch(getCountriesNotifierProvider);
     final isChangingCountry = ref.watch(changeCountryProvider).isChanging;
     final userId = (ref.read(currentUserProvider).user?.id ?? 0).toString();
-    final isMobile = context.isMobile;
+    // final isMobile = context.isMobile;
 
     return SingleChildScrollView(
       child: Container(
-        padding: !isMobile ? const EdgeInsets.symmetric(horizontal: 32) : null,
+        padding: context.isDesktop
+            ? const EdgeInsets.symmetric(horizontal: 32)
+            : EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
@@ -120,6 +129,7 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
             const SizedBox(height: 24),
 
             CustomUnderLineButtonWidget(
+              width: context.isDesktop ? 250 : double.infinity,
               title: context.translate("change_your_country_btn_text"),
               fontSize: 14,
               isDark: true,
@@ -142,9 +152,9 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
   }
 
   Widget _dataState(GetCountriesState countriesState, BuildContext context) {
-    final isMobile = context.isMobile;
+    final isDesktop = context.isDesktop;
 
-    return !isMobile
+    return isDesktop
         ? Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -157,9 +167,10 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
                 children: [
                   Expanded(
                     flex: 1,
-                    child: CommonText.bodyMedium(
+                    child: CommonText.bodyLarge(
                       context.translate("your_country"),
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
                     ),
                   ),
                   Expanded(
@@ -172,6 +183,7 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
                           _selectedCountry = country;
                         });
                       },
+
                       hint: context.translate("select_your_country_hint"),
                       getItemCode: (country) => country.code,
                       getItemName: (country) => country.name,
@@ -206,9 +218,10 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
             mainAxisSize: MainAxisSize.min,
             spacing: 12.0,
             children: [
-              CommonText.bodyMedium(
+              CommonText.bodyLarge(
                 context.translate("your_country"),
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w700,
+                color: Colors.white,
               ),
               CommonDropdownFieldWithIcon<Country>(
                 items: countriesState.countries!,

@@ -8,6 +8,7 @@ import 'package:cointiply_app/features/user_profile/domain/entities/language.dar
 import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/get_profile_notifier.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/setting_profile_notifier.dart';
+import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/dialog_bg_widget.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/manage_profile/security_pin_dialog.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/manage_profile/upload_avatar_dialog.dart';
 import 'package:cointiply_app/routing/routing.dart';
@@ -30,12 +31,12 @@ part 'tab/setting_tab_content_widget.dart';
 final tabBarIndexProvider = StateProvider.autoDispose<int>((ref) => 0);
 
 void showManageProfileDialog(BuildContext context) {
-  final screenHeight = MediaQuery.of(context).size.height;
+  // final screenHeight = MediaQuery.of(context).size.height;
   context.showManagePopup(
-    height: screenHeight > 700 ? 526 : screenHeight * 0.85,
+    // height: screenHeight > 700 ? 526 : screenHeight * 0.85,
     barrierDismissible: true,
     child: const ManageProfileDialog(),
-    title: context.translate("manage_profile_title"),
+    // title: context.translate("manage_profile_title"),
   );
 }
 
@@ -61,86 +62,72 @@ class _ManageProfileDialogState extends ConsumerState<ManageProfileDialog> {
   Widget build(BuildContext context) {
     final getProfileStatus = ref.watch(getProfileNotifierProvider).status;
 
-    return _manageDialogBody(status: getProfileStatus);
+    return DialogBgWidget(
+      dialogHeight: _getDialogHeight(context),
+      body: _manageDialogBody(status: getProfileStatus),
+      title: context.translate("manage_profile_title"),
+    );
+  }
+
+  double _getDialogHeight(BuildContext context) {
+    final tabIndex = ref.watch(tabBarIndexProvider);
+    if (tabIndex == 0) {
+      return context.isMobile ? context.screenHeight * 0.95 : 600;
+    } else if (tabIndex == 1) {
+      return context.isMobile ? context.screenHeight * 0.9 : 550;
+    } else {
+      return context.isMobile ? context.screenHeight * 0.85 : 720;
+    }
   }
 
   _manageDialogBody({required GetProfileStatus status}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        _manageProfileTabBar(),
-        if (status == GetProfileStatus.loading) ...[
-          const SizedBox(height: 50),
-          Center(
-            child: CircularProgressIndicator(
-              color: Theme.of(context).colorScheme.primary,
-            ),
-          ),
-        ],
-        if (status == GetProfileStatus.failure) ...[
-          const SizedBox(height: 50),
-          Center(
-            child: CommonText.bodyMedium(
-              context.translate("manage_profile_load_error"),
-              color: Theme.of(context).colorScheme.error,
-            ),
-          ),
-        ],
-        if (status == GetProfileStatus.success)
-          Expanded(
-            child: SingleChildScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              child: _manageProfileTabBody(),
-            ),
-          ),
-      ],
+    return SingleChildScrollView(
+      padding: context.isMobile || context.isTablet
+          ? EdgeInsets.symmetric(horizontal: 16)
+          : const EdgeInsets.symmetric(horizontal: 31).copyWith(bottom: 24),
+      child: Padding(
+        padding: const EdgeInsets.only(top: 16, bottom: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _manageProfileTabBar(),
+            SizedBox(height: 16),
+            if (status == GetProfileStatus.loading) ...[
+              const SizedBox(height: 50),
+              Center(
+                child: CircularProgressIndicator(
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+            ],
+            if (status == GetProfileStatus.failure) ...[
+              const SizedBox(height: 50),
+              Center(
+                child: CommonText.bodyMedium(
+                  context.translate("manage_profile_load_error"),
+                  color: Theme.of(context).colorScheme.error,
+                ),
+              ),
+            ],
+            SizedBox(height: 16),
+            if (status == GetProfileStatus.success) _manageProfileTabBody(),
+          ],
+        ),
+      ),
     );
   }
 
   Widget _manageProfileTabBar() {
     final selectedIndex = ref.watch(tabBarIndexProvider);
-
-    // if (context.screenWidth > 600) {
-    //   return Container(
-    //     padding: const EdgeInsets.symmetric(vertical: 21.5),
-    //     child: Row(
-    //       mainAxisAlignment: MainAxisAlignment.center,
-    //       crossAxisAlignment: CrossAxisAlignment.center,
-    //       mainAxisSize: MainAxisSize.min,
-    //       spacing: 6.0,
-    //       children: [
-    //         _tabBarMenuItem(
-    //           context.translate("manage_profile_tab_profile"),
-    //           index: 0,
-    //           isSelected: selectedIndex == 0,
-    //           width:  150,
-    //         ),
-    //         _tabBarMenuItem(
-    //           context.translate("manage_profile_tab_security"),
-    //           index: 1,
-    //           isSelected: selectedIndex == 1,
-    //           width: 150,
-    //         ),
-    //         _tabBarMenuItem(
-    //           context.translate("manage_profile_tab_settings"),
-    //           index: 2,
-    //           isSelected: selectedIndex == 2,
-    //           width: 150,
-    //         ),
-    //       ],
-    //     ),
-    //   );
-    // }
-
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 21.5),
+    return SizedBox(
       width: double.infinity,
       child: LayoutBuilder(
         builder: (context, constraints) {
           const double spacing = 8.0;
           final double buttonWidth =
-              (constraints.maxWidth - spacing) / (context.isDesktop ? 3.1 : 2);
+              (constraints.maxWidth - spacing) /
+              (context.isDesktop || context.isTablet ? 3.1 : 2);
 
           return Wrap(
             alignment: WrapAlignment.start,
