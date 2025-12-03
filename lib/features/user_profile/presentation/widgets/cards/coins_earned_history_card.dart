@@ -41,7 +41,7 @@ class CoinsEarnedHistoryCard extends StatelessWidget {
 
   Widget _buildMobileLayout(ColorScheme colorScheme) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CommonText.bodyLarge(
           title,
