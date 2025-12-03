@@ -1,4 +1,5 @@
-import 'package:cointiply_app/features/wallet/data/models/response/transaction_model.dart';
+import 'package:cointiply_app/features/wallet/data/models/response/payment_history_model.dart';
+import 'package:cointiply_app/features/wallet/domain/entity/payment_history.dart';
 import 'package:cointiply_app/features/wallet/presentation/widgets/sub_widgets/transaction_desktop_header.dart';
 import 'package:cointiply_app/features/wallet/presentation/widgets/sub_widgets/transaction_desktop_row.dart';
 import 'package:cointiply_app/features/wallet/presentation/widgets/sub_widgets/transaction_filter_bar.dart';
@@ -7,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:cointiply_app/core/core.dart';
 
 class TransactionsTable extends StatelessWidget {
-  final List<TransactionModel> items;
+  final List<PaymentHistory> items;
 
   const TransactionsTable({
     super.key,

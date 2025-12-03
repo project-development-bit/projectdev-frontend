@@ -3,7 +3,7 @@ import 'package:cointiply_app/core/common/dialog_bg_widget.dart';
 import 'package:cointiply_app/features/wallet/presentation/providers/get_balance_notifier_provider.dart';
 import 'package:cointiply_app/features/wallet/presentation/providers/get_withdrawal_options_notifier_provider.dart';
 import 'package:cointiply_app/features/wallet/presentation/widgets/sections/balances_section.dart';
-import 'package:cointiply_app/features/wallet/presentation/widgets/sections/payament_history_section.dart';
+import 'package:cointiply_app/features/wallet/presentation/widgets/sections/payment_history_section.dart';
 import 'package:cointiply_app/features/wallet/presentation/widgets/sub_widgets/wallet_tab_bar_widget.dart';
 import 'package:cointiply_app/features/wallet/presentation/widgets/sections/withdrawl_earning_section.dart';
 import 'package:flutter/material.dart';

@@ -1,16 +1,14 @@
 import 'package:cointiply_app/core/common/common_text.dart';
-import 'package:cointiply_app/features/wallet/data/models/response/transaction_model.dart';
+import 'package:cointiply_app/features/wallet/domain/entity/payment_history.dart';
 import 'package:flutter/material.dart';
 
 class TransactionDesktopRow extends StatelessWidget {
-  final TransactionModel item;
+  final PaymentHistory item;
 
   const TransactionDesktopRow({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {
-    // final colorScheme = Theme.of(context).colorScheme;
-
     final values = [
       item.description,
       item.status,
