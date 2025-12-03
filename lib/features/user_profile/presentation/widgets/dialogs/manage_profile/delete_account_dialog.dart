@@ -1,5 +1,5 @@
-import 'package:cointiply_app/core/common/common_button.dart';
 import 'package:cointiply_app/core/common/common_text.dart';
+import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/delete_account_notifier.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
@@ -34,19 +34,19 @@ class _DeleteAccountConfirmationDialogState
 
     ref.listenManual(deleteAccountNotifierProvider, (previous, next) {
       if (next.isDeleting) return;
-      
+
       if (next.status == DeleteAccountStatus.success) {
         if (mounted && context.mounted) {
           context.showSnackBar(
-            message: next.successMessage ?? 
+            message: next.successMessage ??
                 context.translate('account_deleted_successfully'),
             backgroundColor: context.primary,
             textColor: Colors.white,
           );
-          
+
           // Close dialog
           context.pop();
-          
+
           // Clear all data and logout
           _handleLogoutAfterDeletion();
         }
@@ -70,7 +70,7 @@ class _DeleteAccountConfirmationDialogState
       await secureStorage.clearRememberMeCredentials();
       await secureStorage.deleteAuthToken();
       await secureStorage.deleteRefreshToken();
-      
+
       // Navigate to login page
       if (mounted && context.mounted) {
         context.go('/');
@@ -82,7 +82,7 @@ class _DeleteAccountConfirmationDialogState
 
   void _handleDeleteAccount() {
     final userId = ref.read(profileCurrentUserProvider)?.id;
-    
+
     if (userId == null) {
       context.showSnackBar(
         message: 'User ID not found',
@@ -93,20 +93,20 @@ class _DeleteAccountConfirmationDialogState
     }
 
     ref.read(deleteAccountNotifierProvider.notifier).deleteAccount(
-      userId:userId.toString(),
-    );
+          userId: userId.toString(),
+        );
   }
 
   @override
   Widget build(BuildContext context) {
     final isDeleting = ref.watch(deleteAccountNotifierProvider).isDeleting;
-    
+
     return DialogBgWidget(
       dialogHeight: context.isDesktop
           ? 400
           : context.isTablet
-              ? 380
-              : 420,
+              ? 450
+              : context.screenHeight * 0.75,
       title: context.translate("delete_account_confirmation_title"),
       body: SingleChildScrollView(
         child: Padding(
@@ -129,24 +129,22 @@ class _DeleteAccountConfirmationDialogState
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: context.error.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(
-                    color: context.error.withValues(alpha: 0.3),
-                  ),
+                  color: Color(0xff0C0B38),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Color(0xffD0302F)),
                 ),
                 child: Row(
                   children: [
-                    Icon(
-                      Icons.warning_amber_rounded,
-                      color: context.error,
-                      size: 24,
+                    Image.asset(
+                      "assets/images/warning.png",
+                      width: 24,
+                      height: 24,
                     ),
                     const SizedBox(width: 12),
                     Expanded(
                       child: CommonText.bodyMedium(
                         context.translate("delete_account_warning"),
-                        color: context.error,
+                        highlightColor: Color(0xffD0302F),
                       ),
                     ),
                   ],
@@ -156,31 +154,53 @@ class _DeleteAccountConfirmationDialogState
               const SizedBox(height: 32),
 
               // Action buttons
-              Row(
-                children: [
-                  Expanded(
-                    child: CommonButton(
-                      text: context.translate("cancel_delete"),
-                      onPressed: isDeleting ? null : () => context.pop(),
-                      backgroundColor: context.surfaceContainer,
-                      textColor: context.onSurface,
-                      isOutlined: true,
-                      height: 48,
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: CommonButton(
-                      text: context.translate("permanently_delete"),
-                      onPressed: isDeleting ? null : _handleDeleteAccount,
-                      backgroundColor: context.error,
-                      textColor: Colors.white,
-                      height: 48,
-                      isLoading: isDeleting,
-                    ),
-                  ),
-                ],
-              ),
+              context.isDesktop
+                  ? Row(
+                      children: [
+                        Expanded(
+                          child: CustomUnderLineButtonWidget(
+                            title: context.translate("cancel_delete"),
+                            onTap: () => context.pop(),
+                            fontSize: 14,
+                            isDark: true,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: CustomUnderLineButtonWidget(
+                            title: context.translate("permanently_delete"),
+                            onTap: _handleDeleteAccount,
+                            fontSize: 14,
+                            isRed: true,
+                            fontWeight: FontWeight.w700,
+                            isLoading: isDeleting,
+                          ),
+                        ),
+                      ],
+                    )
+                  : Column(
+                      children: [
+                        CustomUnderLineButtonWidget(
+                          title: context.translate("cancel_delete"),
+                          onTap: () => context.pop(),
+                          fontSize: 14,
+                          isDark: true,
+                          width: double.infinity,
+                          fontWeight: FontWeight.w700,
+                        ),
+                        const SizedBox(height: 16),
+                        CustomUnderLineButtonWidget(
+                          title: context.translate("permanently_delete"),
+                          onTap: _handleDeleteAccount,
+                          fontSize: 14,
+                          isRed: true,
+                          width: double.infinity,
+                          fontWeight: FontWeight.w700,
+                          isLoading: isDeleting,
+                        ),
+                      ],
+                    )
             ],
           ),
         ),

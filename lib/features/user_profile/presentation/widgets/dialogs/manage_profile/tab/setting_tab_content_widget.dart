@@ -66,7 +66,8 @@ class _SettingTabContentWidgetState
               );
         }),
         _settingMenuItem(context,
-            title: context.translate("show_your_stats"),
+            title: context.translate("show_your_stats",
+                args: [context.isDesktop ? "\n" : " "]),
             btnTitle: context.translate("manage_privacy"),
             isSwitch: true,
             isSelected: settingsData.showStatsEnabled,
@@ -77,7 +78,8 @@ class _SettingTabContentWidgetState
               );
         }),
         _settingMenuItem(context,
-            title: context.translate("anonymous_in_contests"),
+            title: context.translate("anonymous_in_contests",
+                args: [context.isDesktop ? "\n" : " "]),
             btnTitle: context.translate("manage_privacy"),
             isSwitch: true,
             isSelected: settingsData.anonymousInContests,
@@ -88,8 +90,9 @@ class _SettingTabContentWidgetState
               );
         }),
         _settingMenuItem(context,
-            title: context.translate("delete_account"),
-            btnTitle: context.translate("delete_account"), onPressed: () {
+            title: context.translate("delete_account",
+                args: [context.isDesktop ? "\n" : " "]),
+            btnTitle: context.translate("delete_your_account"), onPressed: () {
           showDeleteAccountConfirmationDialog(context);
         },
             description: context.translate("delete_account_description"),
