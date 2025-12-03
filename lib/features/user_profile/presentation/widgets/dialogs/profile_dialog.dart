@@ -35,7 +35,7 @@ class _ProfileDialogState extends ConsumerState<ProfileDialog> {
           .read(earningsStatisticsNotifierProvider.notifier)
           .fetchStatistics(const EarningsStatisticsRequest());
       ref.read(earningsHistoryNotifierProvider.notifier).fetchEarningsHistory(
-          const EarningsHistoryRequestModel(page: 1, limit: 20, days: 7));
+          const EarningsHistoryRequestModel(page: 1, limit: 20, days: 30));
     });
     super.initState();
   }

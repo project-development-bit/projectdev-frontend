@@ -39,50 +39,35 @@ class CoinsEarnedHistoryCard extends StatelessWidget {
     );
   }
 
-  // MOBILE LAYOUT
   Widget _buildMobileLayout(ColorScheme colorScheme) {
-    return Row(
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CommonText.bodyLarge(
-                title,
-                fontWeight: FontWeight.w700,
-                color: colorScheme.onPrimary,
-                overflow: TextOverflow.ellipsis,
-              ),
-              const SizedBox(height: 4),
-              CommonText.bodyMedium(
-                subtitle,
-                fontWeight: FontWeight.w500,
-                color: Color(0xFF98989A),
+        CommonText.bodyLarge(
+          title,
+          maxLines: 3,
+          fontWeight: FontWeight.w700,
+          color: colorScheme.onPrimary,
+          overflow: TextOverflow.ellipsis,
+        ),
+        const SizedBox(height: 4),
+        CommonText.bodyMedium(
+          subtitle,
+          fontWeight: FontWeight.w500,
+          color: Color(0xFF98989A),
 
-                /// TODO: Use from scheme,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ],
-          ),
+          /// TODO: Use from scheme,
+          overflow: TextOverflow.ellipsis,
         ),
         const SizedBox(width: 10),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // PASS isMobile: true
-            _buildAmountPill(colorScheme, isMobile: true),
-            const SizedBox(height: 4),
-            CommonText.bodyMedium(
-              timeAgo,
-              fontWeight: FontWeight.w700,
-              color: colorScheme.onPrimary,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
-        )
+        _buildAmountPill(colorScheme, isMobile: true),
+        const SizedBox(height: 4),
+        CommonText.bodyMedium(
+          timeAgo,
+          fontWeight: FontWeight.w700,
+          color: colorScheme.onPrimary,
+          overflow: TextOverflow.ellipsis,
+        ),
       ],
     );
   }
@@ -128,7 +113,7 @@ class CoinsEarnedHistoryCard extends StatelessWidget {
 
   Widget _buildAmountPill(ColorScheme colorScheme, {required bool isMobile}) {
     return Container(
-      width: isMobile ? 116 : 200,
+      width: 200,
       height: 40,
       alignment: Alignment.center,
       padding: isMobile ? const EdgeInsets.symmetric(horizontal: 12) : null,
