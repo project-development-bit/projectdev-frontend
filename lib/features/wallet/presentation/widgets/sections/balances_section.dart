@@ -1,14 +1,17 @@
+import 'package:cointiply_app/features/wallet/presentation/providers/get_balance_notifier_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:cointiply_app/core/core.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class BalancesSection extends StatelessWidget {
+class BalancesSection extends ConsumerWidget {
   const BalancesSection({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final localizations = AppLocalizations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
     final isMobile = context.isMobile;
+    final balanceState = ref.watch(getBalanceNotifierProvider);
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
@@ -28,7 +31,7 @@ class BalancesSection extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       _balanceItem(
-                          "30",
+                          "${balanceState.balance?.coinBalance ?? 0}",
                           localizations?.translate('coins_balance') ??
                               "Coins Balance",
                           colorScheme),
@@ -40,7 +43,7 @@ class BalancesSection extends StatelessWidget {
                       ),
                       const SizedBox(height: 8),
                       _balanceItem(
-                          "\$0.003",
+                          "\$${balanceState.balance?.usdBalance ?? 0}",
                           localizations?.translate('usd_balance') ??
                               "USD Balance",
                           colorScheme),
@@ -52,7 +55,7 @@ class BalancesSection extends StatelessWidget {
                       ),
                       const SizedBox(height: 8),
                       _balanceItem(
-                          "0.00000003",
+                          "${balanceState.balance?.btcBalance ?? 0}",
                           localizations?.translate('btc_balance') ??
                               "BTC Balance",
                           colorScheme),
@@ -62,7 +65,7 @@ class BalancesSection extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       _balanceItem(
-                          "30",
+                          "${balanceState.balance?.coinBalance ?? 0}",
                           localizations?.translate('coins_balance') ??
                               "Coins Balance",
                           colorScheme),
@@ -72,7 +75,7 @@ class BalancesSection extends StatelessWidget {
                         fontWeight: FontWeight.w400,
                       ),
                       _balanceItem(
-                          "\$0.003",
+                          "\$${balanceState.balance?.usdBalance ?? 0}",
                           localizations?.translate('usd_balance') ??
                               "USD Balance",
                           colorScheme),
@@ -82,7 +85,7 @@ class BalancesSection extends StatelessWidget {
                         fontWeight: FontWeight.w400,
                       ),
                       _balanceItem(
-                          "0.00000003",
+                          "${balanceState.balance?.btcBalance ?? 0}",
                           localizations?.translate('btc_balance') ??
                               "BTC Balance",
                           colorScheme),
@@ -96,21 +99,21 @@ class BalancesSection extends StatelessWidget {
               ? Column(
                   children: [
                     _statItem(
-                        "N/A",
+                        "${balanceState.balance?.interestEarned ?? 'N/A'}",
                         "Interest Earned",
                         "assets/images/rewards/coin.png",
                         colorScheme,
                         isMobile),
                     const SizedBox(height: 12),
                     _statItem(
-                        "15 coins",
+                        "${balanceState.balance?.coinsToday ?? 'N/A'} coins",
                         "Coins Today",
                         "assets/images/rewards/coin.png",
                         colorScheme,
                         isMobile),
                     const SizedBox(height: 12),
                     _statItem(
-                        "30 coins",
+                        "${balanceState.balance?.coinsLast7Days ?? 'N/A'} coins",
                         "Coins (7 Days)",
                         "assets/images/rewards/coin.png",
                         colorScheme,
@@ -121,19 +124,25 @@ class BalancesSection extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     _statItem(
-                        "N/A",
+                        balanceState.balance?.interestEarned != null
+                            ? "${balanceState.balance?.interestEarned}"
+                            : 'N/A',
                         "Interest Earned",
                         "assets/images/rewards/coin.png",
                         colorScheme,
                         isMobile),
                     _statItem(
-                        "15 coins",
+                        balanceState.balance?.coinsToday != null
+                            ? "${balanceState.balance?.coinsToday} coins"
+                            : 'N/A',
                         "Coins Today",
                         "assets/images/rewards/coin.png",
                         colorScheme,
                         isMobile),
                     _statItem(
-                        "30 coins",
+                        balanceState.balance?.coinsLast7Days != null
+                            ? "${balanceState.balance?.coinsLast7Days} coins"
+                            : 'N/A',
                         "Coins (7 Days)",
                         "assets/images/rewards/coin.png",
                         colorScheme,
@@ -145,8 +154,11 @@ class BalancesSection extends StatelessWidget {
 
           // Info Text
           CommonText.bodySmall(
-            localizations?.translate('balances_update_info') ??
-                "Balances update every 10 minutes. History limited to 90 days.",
+            localizations?.translate('balances_update_info', args: [
+                  '${balanceState.balance?.metaInfo.cacheTtlSec != null ? balanceState.balance!.metaInfo.cacheTtlSec / 60 : 0}',
+                  '${balanceState.balance?.metaInfo.windowDays ?? 0}',
+                ]) ??
+                "Balances update every ${balanceState.balance?.metaInfo.cacheTtlSec != null ? balanceState.balance!.metaInfo.cacheTtlSec / 60 : 0} minutes. History limited to ${balanceState.balance?.metaInfo.windowDays ?? 0} days.",
             color: colorScheme.onSurfaceVariant,
             fontWeight: FontWeight.w500,
           ),

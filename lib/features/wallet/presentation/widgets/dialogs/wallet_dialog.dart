@@ -1,5 +1,6 @@
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:cointiply_app/core/common/dialog_bg_widget.dart';
+import 'package:cointiply_app/features/wallet/presentation/providers/get_balance_notifier_provider.dart';
 import 'package:cointiply_app/features/wallet/presentation/widgets/sections/balances_section.dart';
 import 'package:cointiply_app/features/wallet/presentation/widgets/sections/payament_history_section.dart';
 import 'package:cointiply_app/features/wallet/presentation/widgets/sub_widgets/wallet_tab_bar_widget.dart';
@@ -27,7 +28,9 @@ class _ProfileDialogState extends ConsumerState<WalletDialog> {
 
   @override
   initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {});
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(getBalanceNotifierProvider.notifier).fetchUserBalance();
+    });
     super.initState();
   }
 
