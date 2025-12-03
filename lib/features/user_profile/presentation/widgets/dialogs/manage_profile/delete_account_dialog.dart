@@ -4,8 +4,8 @@ import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/delete_account_notifier.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/dialog_bg_widget.dart';
+import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/manage_profile/verify_delete_account_dialog.dart';
 import 'package:cointiply_app/routing/routing.dart';
-import 'package:cointiply_app/core/services/secure_storage_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -37,18 +37,21 @@ class _DeleteAccountConfirmationDialogState
 
       if (next.status == DeleteAccountStatus.success) {
         if (mounted && context.mounted) {
+          // Show success message for verification code sent
           context.showSnackBar(
             message: next.successMessage ??
-                context.translate('account_deleted_successfully'),
+                context.translate('verification_code_sent'),
             backgroundColor: context.primary,
             textColor: Colors.white,
           );
 
-          // Close dialog
+          // Close current dialog
           context.pop();
 
-          // Clear all data and logout
-          _handleLogoutAfterDeletion();
+          // Show verification dialog with email
+          if (next.email != null) {
+            showVerifyDeleteAccountDialog(context, next.email!);
+          }
         }
       } else if (next.status == DeleteAccountStatus.failure) {
         if (mounted && context.mounted) {
@@ -63,29 +66,12 @@ class _DeleteAccountConfirmationDialogState
     });
   }
 
-  Future<void> _handleLogoutAfterDeletion() async {
-    try {
-      // Clear secure storage
-      final secureStorage = ref.read(secureStorageServiceProvider);
-      await secureStorage.clearRememberMeCredentials();
-      await secureStorage.deleteAuthToken();
-      await secureStorage.deleteRefreshToken();
-
-      // Navigate to login page
-      if (mounted && context.mounted) {
-        context.go('/');
-      }
-    } catch (e) {
-      debugPrint('Error during logout after account deletion: $e');
-    }
-  }
-
   void _handleDeleteAccount() {
     final userId = ref.read(profileCurrentUserProvider)?.id;
 
     if (userId == null) {
       context.showSnackBar(
-        message: 'User ID not found',
+        message: context.translate('user_id_not_found'),
         backgroundColor: context.error,
         textColor: Colors.white,
       );

@@ -9,6 +9,7 @@ import 'package:cointiply_app/features/user_profile/data/models/response/change_
 import 'package:cointiply_app/features/user_profile/data/models/response/verify_email_change_response_model.dart';
 import 'package:cointiply_app/features/user_profile/data/models/response/change_password_response_model.dart';
 import 'package:cointiply_app/features/user_profile/data/models/response/delete_account_response_model.dart';
+import 'package:cointiply_app/features/user_profile/data/models/response/verify_delete_account_response_model.dart';
 import 'package:cointiply_app/features/user_profile/data/models/response/set_security_pin_response_model.dart';
 import 'package:cointiply_app/features/user_profile/data/models/request/set_security_pin_request_model.dart';
 import 'package:file_picker/file_picker.dart';
@@ -332,11 +333,11 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   @override
   Future<DeleteAccountResponseModel> deleteAccount(String userId) async {
     try {
-      debugPrint('🗑️ Deleting user account: $userId');
+      debugPrint('🗑️ Requesting account deletion for user: $userId');
 
       final response = await _dio.delete('/users/id/$userId');
 
-      debugPrint('✅ Account deleted successfully: ${response.statusCode}');
+      debugPrint('✅ Delete account request sent: ${response.statusCode}');
 
       if ((response.statusCode ?? 0) >= 200 &&
           (response.statusCode ?? 0) < 300) {
@@ -344,7 +345,8 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
             response.data as Map<String, dynamic>);
       } else {
         final message = response.data is Map ? response.data['message'] : null;
-        throw ServerFailure(message: message ?? 'Failed to delete account');
+        throw ServerFailure(
+            message: message ?? 'Failed to request account deletion');
       }
     } on DioException catch (e) {
       debugPrint('❌ Delete account DioException: ${e.message}');
@@ -352,10 +354,46 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
       debugPrint('❌ Response data: ${e.response?.data}');
 
       final message = e.response?.data?['message'] ?? e.message;
-      throw ServerFailure(message: message ?? 'Failed to delete account');
+      throw ServerFailure(
+          message: message ?? 'Failed to request account deletion');
     } catch (e) {
-      debugPrint('❌ Unexpected error deleting account: $e');
-      throw ServerFailure(message: 'Unexpected error deleting account: $e');
+      debugPrint('❌ Unexpected error requesting account deletion: $e');
+      throw ServerFailure(
+          message: 'Unexpected error requesting account deletion: $e');
+    }
+  }
+
+  @override
+  Future<VerifyDeleteAccountResponseModel> verifyDeleteAccount(
+      String code) async {
+    try {
+      debugPrint('🔎 Verifying account deletion with code: $code');
+
+      final response = await _dio.get('/users/verify-delete-account/$code');
+
+      debugPrint('✅ Account deletion verified: ${response.statusCode}');
+
+      if ((response.statusCode ?? 0) >= 200 &&
+          (response.statusCode ?? 0) < 300) {
+        return VerifyDeleteAccountResponseModel.fromJson(
+            response.data as Map<String, dynamic>);
+      } else {
+        final message = response.data is Map ? response.data['message'] : null;
+        throw ServerFailure(
+            message: message ?? 'Failed to verify account deletion');
+      }
+    } on DioException catch (e) {
+      debugPrint('❌ Verify delete account DioException: ${e.message}');
+      debugPrint('❌ Response status: ${e.response?.statusCode}');
+      debugPrint('❌ Response data: ${e.response?.data}');
+
+      final message = e.response?.data?['message'] ?? e.message;
+      throw ServerFailure(
+          message: message ?? 'Failed to verify account deletion');
+    } catch (e) {
+      debugPrint('❌ Unexpected error verifying account deletion: $e');
+      throw ServerFailure(
+          message: 'Unexpected error verifying account deletion: $e');
     }
   }
 
