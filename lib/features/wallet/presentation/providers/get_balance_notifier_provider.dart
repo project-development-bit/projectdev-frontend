@@ -4,7 +4,7 @@ import 'package:cointiply_app/features/wallet/presentation/providers/get_balance
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final getBalanceNotifierProvider =
-    StateNotifierProvider.autoDispose<GetBalanceNotifier, BalanceState>((ref) {
+    StateNotifierProvider<GetBalanceNotifier, BalanceState>((ref) {
   final usecase = ref.read(getUserBalanceUseCaseProvider);
   return GetBalanceNotifier(usecase);
 });

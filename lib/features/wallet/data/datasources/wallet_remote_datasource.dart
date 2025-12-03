@@ -1,5 +1,6 @@
 import 'package:cointiply_app/core/network/base_dio_client.dart';
 import 'package:cointiply_app/features/wallet/data/models/response/balance_response_model.dart';
+import 'package:cointiply_app/features/wallet/data/models/response/withdrawal_option_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -11,6 +12,7 @@ final walletRemoteDataSourceProvider = Provider<WalletRemoteDataSource>(
 
 abstract class WalletRemoteDataSource {
   Future<BalanceResponseModel> getUserBalance();
+  Future<List<WithdrawalOptionModel>> getWithdrawalOptions();
 }
 
 class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
@@ -23,6 +25,36 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
     try {
       final response = await dioClient.get('/wallet/balances');
       return BalanceResponseModel.fromJson(response.data);
+    } on DioException catch (e) {
+      // Extract server error message from response data
+      final serverMessage = _extractServerErrorMessage(e.response?.data);
+
+      // Create new DioException with server message or appropriate fallback
+      throw DioException(
+        requestOptions: e.requestOptions,
+        response: e.response,
+        message: serverMessage ?? _getFallbackMessage(e),
+      );
+    } catch (e) {
+      // Handle any other unexpected exceptions
+      throw Exception('Unexpected error while fetching rewards: $e');
+    }
+  }
+
+  @override
+  Future<List<WithdrawalOptionModel>> getWithdrawalOptions() async {
+    try {
+      final response = await dioClient.get('/withdrawals/options');
+      if (response.data != null) {
+        if (response.data['data'] == null) {
+          throw Exception("No withdrawal options found");
+        }
+        final data = (response.data['data'] as List)
+            .map((json) => WithdrawalOptionModel.fromJson(json))
+            .toList();
+        return data;
+      }
+      throw Exception("No withdrawal options found");
     } on DioException catch (e) {
       // Extract server error message from response data
       final serverMessage = _extractServerErrorMessage(e.response?.data);
