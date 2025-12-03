@@ -708,5 +708,8 @@
   "filter_currency": "ငွေကြေးအမျိုးအစားဖြင့် စိစစ်ရန်",
   "filter_type": "အမျိုးအစားဖြင့် စိစစ်ရန်",
   "showing": "ပြသနေသည်",
-  "records": "မှတ်တမ်းများ"
+  "records": "မှတ်တမ်းများ",
+  "coins_balance": "ကွိုင်းများ စာရင်း",
+  "usd_balance": "USD Balance",
+  "btc_balance": "BTC Balance"
 }

@@ -715,5 +715,8 @@
   "filter_currency": "Filter By Currency",
   "filter_type": "Filter By Type",
   "showing": "Showing",
-  "records": "records"
+  "records": "records",
+  "coins_balance": "Coins Balance",
+  "usd_balance": "USD Balance",
+  "btc_balance": "BTC Balance"
 }
