@@ -1,5 +1,3 @@
-import 'package:flutter_riverpod/legacy.dart';
-
 import '../../../providers/theme_provider.dart' as theme_provider;
 
 import 'package:cointiply_app/core/theme/data/models/app_settings_model.dart';

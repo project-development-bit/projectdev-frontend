@@ -2,7 +2,7 @@ import 'package:cointiply_app/core/usecases/usecase.dart';
 import 'package:cointiply_app/features/reward/domain/entities/reward_level.dart';
 import 'package:cointiply_app/features/reward/domain/entities/reward_response.dart';
 import 'package:cointiply_app/features/reward/domain/usecases/get_user_rewards_usecase.dart';
-import 'package:flutter_riverpod/legacy.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'reward_state.dart';
 

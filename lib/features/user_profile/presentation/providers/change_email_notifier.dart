@@ -1,6 +1,6 @@
 import 'package:cointiply_app/features/user_profile/domain/usecases/change_email_usecase.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/profile_providers.dart';
-import 'package:flutter_riverpod/legacy.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 enum ChangeEmailStatus { initial, changing, success, failure }
 

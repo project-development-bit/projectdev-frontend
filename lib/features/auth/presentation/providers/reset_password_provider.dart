@@ -4,7 +4,6 @@ import '../../data/repositories/auth_repo_impl.dart';
 import '../../data/models/reset_password_request.dart';
 import '../../data/models/reset_password_response.dart';
 import '../../../../core/error/failures.dart';
-import 'package:flutter_riverpod/legacy.dart';
 
 /// Provider for reset password functionality
 final resetPasswordProvider =

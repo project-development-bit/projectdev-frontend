@@ -6,7 +6,6 @@ import '../../data/datasources/terms_privacy_remote.dart';
 import '../../data/repositories/terms_privacy_repository_impl.dart';
 import '../../domain/entities/terms_privacy_entity.dart';
 import '../../domain/repositories/terms_privacy_repository.dart';
-import 'package:flutter_riverpod/legacy.dart';
 
 // Repository provider
 final termsPrivacyRepositoryProvider = Provider<TermsPrivacyRepository>((ref) {

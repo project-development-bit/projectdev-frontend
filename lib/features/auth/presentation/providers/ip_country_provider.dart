@@ -1,4 +1,4 @@
-import 'package:flutter_riverpod/legacy.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/usecases/get_ip_country_usecase.dart';
 import 'get_ip_country_notifier.dart';

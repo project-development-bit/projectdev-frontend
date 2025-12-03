@@ -3,7 +3,6 @@ import '../../data/models/setup_2fa_request.dart';
 import '../../data/models/setup_2fa_response.dart';
 import '../../data/repositories/auth_repo_impl.dart';
 import '../../domain/usecases/setup_2fa_usecase.dart';
-import 'package:flutter_riverpod/legacy.dart';
 
 /// Provider for the Setup2FA use case
 final setup2FAUseCaseProvider = Provider<Setup2FAUseCase>((ref) {

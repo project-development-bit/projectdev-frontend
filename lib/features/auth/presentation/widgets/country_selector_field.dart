@@ -6,7 +6,6 @@ import 'package:cointiply_app/features/auth/presentation/providers/ip_country_pr
 import 'package:cointiply_app/features/auth/presentation/providers/ip_country_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/legacy.dart';
 
 class Country {
   final int id;

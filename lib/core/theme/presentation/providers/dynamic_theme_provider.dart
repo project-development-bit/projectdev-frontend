@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/legacy.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../domain/entities/theme_config.dart';
 import '../../domain/usecases/get_theme_config.dart';
 import '../../../usecases/usecase.dart';

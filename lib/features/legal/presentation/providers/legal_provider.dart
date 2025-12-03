@@ -2,7 +2,6 @@ import 'package:cointiply_app/features/legal/data/datasource/legal_remote_data_s
 import 'package:cointiply_app/features/legal/data/models/request/contact_us_request.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/legacy.dart';
 
 import '../../domain/entities/legal_document.dart';
 import '../../domain/usecases/get_privacy_policy_usecase.dart';

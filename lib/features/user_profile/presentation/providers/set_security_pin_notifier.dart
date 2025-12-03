@@ -1,5 +1,5 @@
 import 'package:cointiply_app/features/user_profile/domain/usecases/set_security_pin_usecase.dart';
-import 'package:flutter_riverpod/legacy.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 enum SetSecurityPinStatus { initial, loading, success, failure }
 

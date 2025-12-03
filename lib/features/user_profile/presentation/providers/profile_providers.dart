@@ -1,7 +1,7 @@
 import 'package:cointiply_app/core/network/base_dio_client.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/legacy.dart';
+
 import '../../config/profile_config.dart';
 import '../../data/datasources/profile_remote_data_source.dart';
 import '../../data/datasources/profile_remote_data_source_impl.dart';

@@ -3,7 +3,6 @@ import 'package:cointiply_app/features/referrals/domain/usecases/get_referral_ba
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/error/failures.dart';
-import 'package:flutter_riverpod/legacy.dart';
 
 /// ─────────────────────────────────────────────────────────────
 /// STATE CLASSES

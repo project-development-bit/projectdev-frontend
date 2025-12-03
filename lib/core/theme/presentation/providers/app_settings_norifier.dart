@@ -1,7 +1,8 @@
 import 'package:cointiply_app/core/theme/domain/usecases/app_settings_usecase.dart';
 import 'package:cointiply_app/core/usecases/usecase.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/legacy.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../data/models/app_settings_model.dart';
 import '../../dynamic_app_theme.dart';
 

@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/legacy.dart';
+
 import '../../data/models/enable_2fa_request.dart';
 import '../../data/models/enable_2fa_response.dart';
 import '../../data/repositories/auth_repo_impl.dart';

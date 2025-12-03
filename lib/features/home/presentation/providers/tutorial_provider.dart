@@ -3,7 +3,6 @@ import 'package:cointiply_app/features/user_profile/presentation/providers/updat
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_riverpod/legacy.dart';
 
 final tutorialProvider = StateNotifierProvider<TutorialNotifier, bool>(
     (ref) => TutorialNotifier(ref));

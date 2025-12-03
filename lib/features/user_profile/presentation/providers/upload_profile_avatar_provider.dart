@@ -1,6 +1,6 @@
 import 'package:cointiply_app/features/user_profile/domain/usecases/upload_profile_picture.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter_riverpod/legacy.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'profile_providers.dart';
 
