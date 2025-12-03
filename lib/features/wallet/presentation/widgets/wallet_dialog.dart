@@ -1,5 +1,6 @@
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:cointiply_app/core/common/dialog_bg_widget.dart';
+import 'package:cointiply_app/features/wallet/presentation/widgets/balances_section.dart';
 import 'package:cointiply_app/features/wallet/presentation/widgets/wallet_tab_bar_widget.dart';
 import 'package:cointiply_app/features/wallet/presentation/widgets/withdrawl_earning_section.dart';
 import 'package:flutter/material.dart';
@@ -61,7 +62,7 @@ class _ProfileDialogState extends ConsumerState<WalletDialog> {
     if (selectedIndex == 0) {
       return const WithdrawlEarningSection();
     } else if (selectedIndex == 1) {
-      return const SizedBox();
+      return const BalancesSection();
     } else if (selectedIndex == 2) {
       return const SizedBox();
     }
