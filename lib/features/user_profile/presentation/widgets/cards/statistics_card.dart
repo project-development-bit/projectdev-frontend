@@ -82,6 +82,7 @@ class StatCard extends StatelessWidget {
               child: CommonText.bodyMedium(
                 context.translate('number'),
                 fontWeight: FontWeight.w700,
+                overflow: TextOverflow.ellipsis,
                 color: colorScheme.onSecondary,
               ),
             ),
@@ -151,26 +152,25 @@ class StatCard extends StatelessWidget {
   Widget _buildNumberBadge(
       ColorScheme colorScheme, String value, bool isMobile) {
     return Container(
-      alignment: Alignment.centerLeft,
-      width: isMobile ? 150 : 120,
-      child: Container(
-        alignment: Alignment.center,
-        width: isMobile ? 100 : 120,
-        height: 40,
-        decoration: BoxDecoration(
-          color: Color(0xff100E1C),
-          borderRadius: BorderRadius.circular(30),
-          border: Border.all(
-            color: const Color(0x83333333), //TODO: Replace with theme color
-            width: 1.2,
-          ),
+      alignment: Alignment.center,
+      width: isMobile ? null : 120,
+      height: 40,
+      constraints: BoxConstraints(
+        minWidth: isMobile ? 150 : 0,
+      ),
+      decoration: BoxDecoration(
+        color: Color(0xff100E1C),
+        borderRadius: BorderRadius.circular(30),
+        border: Border.all(
+          color: const Color(0x83333333), //TODO: Replace with theme color
+          width: 1.2,
         ),
-        child: CommonText.titleLarge(
-          value,
-          fontSize: 20,
-          fontWeight: FontWeight.w700,
-          color: colorScheme.onPrimary,
-        ),
+      ),
+      child: CommonText.titleLarge(
+        value,
+        fontSize: 20,
+        fontWeight: FontWeight.w700,
+        color: colorScheme.onPrimary,
       ),
     );
   }
