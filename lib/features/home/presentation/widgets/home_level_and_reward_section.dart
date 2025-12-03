@@ -1,5 +1,6 @@
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
+import 'package:cointiply_app/core/config/app_local_images.dart';
 import 'package:cointiply_app/core/extensions/extensions.dart';
 import 'package:flutter/material.dart';
 
@@ -18,8 +19,8 @@ class HomeLevelAndRewardSection extends StatelessWidget {
             ? DecorationImage(
                 fit: BoxFit.fitWidth,
                 alignment: Alignment(0, -1.5),
-                image: AssetImage(
-                    'assets/images/bg/coin_background_section_2_mobile.png'),
+                image:
+                    AssetImage(AppLocalImages.homeCoinBackgroundSection2Mobile),
               )
             : null,
       ),

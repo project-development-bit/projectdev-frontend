@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/config/app_local_images.dart';
 import 'package:cointiply_app/features/home/presentation/widgets/event/home_event_section.dart';
 import 'package:cointiply_app/features/home/presentation/widgets/home_features_section.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
@@ -43,8 +44,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                   repeat: ImageRepeat.repeat,
                   image: AssetImage(
                     context.isMobile
-                        ? 'assets/images/bg/home_background_mobile.png'
-                        : 'assets/images/bg/home_background.png',
+                        ? AppLocalImages.homeBackgroundMobile
+                        : AppLocalImages.homeBackgroundDesktop,
                   ),
                   fit: BoxFit.fitWidth,
                   alignment: Alignment.topCenter),

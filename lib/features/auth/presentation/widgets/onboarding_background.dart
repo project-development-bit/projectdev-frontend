@@ -1,4 +1,5 @@
 import 'package:cointiply_app/core/common/common_image_widget.dart';
+import 'package:cointiply_app/core/config/app_local_images.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:cointiply_app/core/widgets/responsive_container.dart';
 import 'package:flutter/material.dart';
@@ -38,9 +39,20 @@ class OnboardingBackground extends StatelessWidget {
       body: Stack(
         children: [
           Positioned.fill(
-            child: Image.asset(
-              backgroundImagePath ??
-                  'assets/images/bg/onboarding_background.png',
+            child: CommonImage(
+              imageUrl: backgroundImagePath ??
+                  (isMobile
+                      ? AppLocalImages.onboardingBgMobile
+                      : AppLocalImages.onboardingBgDesktop),
+              fit: BoxFit.cover,
+            ),
+          ),
+          Positioned.fill(
+            child: CommonImage(
+              imageUrl: backgroundImagePath ??
+                  (isMobile
+                      ? AppLocalImages.onboardingCoinSection1Mobile
+                      : AppLocalImages.onboardingCoinDesktop),
               fit: BoxFit.cover,
             ),
           ),
