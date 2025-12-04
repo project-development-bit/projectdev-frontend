@@ -16,9 +16,10 @@ class PaymentHistoryRespoitoryImpl implements PaymentHistoryRespoitory {
     try {
       final List<PaymentHistory> responseModel =
           await remoteDataSource.getPaymentHistory();
-      print('Repository fetched ${responseModel.length} payment history items');
       return Right(responseModel);
     } on DioException catch (e) {
+      print(
+          'DioException caught in PaymentHistoryRespoitoryImpl: ${e.message}');
       ErrorModel? errorModel;
       if (e.response?.data != null) {
         errorModel = ErrorModel.fromJson(e.response!.data);
@@ -28,6 +29,7 @@ class PaymentHistoryRespoitoryImpl implements PaymentHistoryRespoitory {
           statusCode: e.response?.statusCode,
           errorModel: errorModel));
     } catch (e) {
+      print('Unexpected exception caught in PaymentHistoryRespoitoryImpl: $e');
       return Left(
         ServerFailure(
           message: e.toString(),

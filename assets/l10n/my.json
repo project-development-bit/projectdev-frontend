@@ -711,5 +711,6 @@
   "records": "မှတ်တမ်းများ",
   "coins_balance": "ကွိုင်းများ စာရင်း",
   "usd_balance": "USD Balance",
-  "btc_balance": "BTC Balance"
+  "btc_balance": "BTC Balance",
+  "tx_fee": "Fee"
 }

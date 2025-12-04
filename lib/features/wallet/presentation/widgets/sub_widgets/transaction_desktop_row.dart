@@ -10,13 +10,12 @@ class TransactionDesktopRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final values = [
-      item.description,
-      item.status,
-      item.amount,
-      item.coins,
+      item.status.toString(),
+      item.amount.toString(),
       item.currency,
+      item.fee.toString(),
       item.address,
-      item.date
+      item.updatedAt.toString(),
     ];
 
     return Padding(

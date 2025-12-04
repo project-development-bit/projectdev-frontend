@@ -718,5 +718,6 @@
   "records": "records",
   "coins_balance": "Coins Balance",
   "usd_balance": "USD Balance",
-  "btc_balance": "BTC Balance"
+  "btc_balance": "BTC Balance",
+  "tx_fee": "Fee"
 }

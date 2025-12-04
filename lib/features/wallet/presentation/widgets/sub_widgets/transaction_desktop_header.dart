@@ -8,14 +8,12 @@ class TransactionDesktopHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context);
-    // final colorScheme = Theme.of(context).colorScheme;
 
     final headers = [
-      localizations?.translate("tx_description") ?? "Description",
       localizations?.translate("tx_status") ?? "Status",
       localizations?.translate("tx_amount") ?? "Amount",
-      localizations?.translate("tx_coins") ?? "Coins",
       localizations?.translate("tx_currency") ?? "Currency",
+      localizations?.translate("tx_fee") ?? "Fee",
       localizations?.translate("tx_address") ?? "Address",
       localizations?.translate("tx_date") ?? "Date",
     ];
