@@ -9,6 +9,8 @@ import 'package:cointiply_app/core/theme/presentation/providers/app_setting_prov
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+final currentBannerIndexProvider = StateProvider.autoDispose<int>((ref) => 0);
+
 class HomeBannerSection extends ConsumerStatefulWidget {
   const HomeBannerSection({super.key});
 
@@ -19,7 +21,6 @@ class HomeBannerSection extends ConsumerStatefulWidget {
 class HomeBannerSectionState extends ConsumerState<HomeBannerSection> {
   final CarouselSliderController bannerCarouselController =
       CarouselSliderController();
-  int currentPageIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +42,7 @@ class HomeBannerSectionState extends ConsumerState<HomeBannerSection> {
       height: bannerHeight,
       fit: BoxFit.cover,
     );
+    final currentPageIndex = ref.watch(currentBannerIndexProvider);
     // final colorScheme = Theme.of(context).colorScheme;
     return SizedBox(
       width: double.infinity,
@@ -67,9 +69,7 @@ class HomeBannerSectionState extends ConsumerState<HomeBannerSection> {
               autoPlayCurve: Curves.easeInOut,
               enableInfiniteScroll: banners.length > 1,
               onPageChanged: (index, reason) {
-                setState(() {
-                  currentPageIndex = index;
-                });
+                ref.read(currentBannerIndexProvider.notifier).state = index;
               },
             ),
           ),
