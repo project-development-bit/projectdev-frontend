@@ -14,6 +14,8 @@ class CommonImage extends StatefulWidget {
     this.placeholder,
     this.errorWidget,
     this.loadingWidget,
+    this.loaingImageUrl,
+    this.filterQuality,
   });
 
   final String imageUrl;
@@ -24,7 +26,8 @@ class CommonImage extends StatefulWidget {
   final Widget? placeholder;
   final Widget? errorWidget;
   final Widget? loadingWidget;
-
+  final String? loaingImageUrl;
+  final FilterQuality? filterQuality;
   @override
   State<CommonImage> createState() => _CommonImageState();
 }
@@ -33,27 +36,9 @@ class _CommonImageState extends State<CommonImage> {
   @override
   Widget build(BuildContext context) {
     if (!mounted) return const SizedBox.shrink();
-    
+
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final colorScheme = Theme.of(context).colorScheme;
-    
-    final defaultLoadingWidget = widget.loadingWidget ??
-        Container(
-          width: widget.width,
-          height: widget.height,
-          decoration: BoxDecoration(
-            color: isDark
-                ? colorScheme.secondaryContainer
-                : context.surfaceContainer,
-            borderRadius: widget.borderRadius,
-          ),
-          child: Center(
-            child: CircularProgressIndicator(
-              strokeWidth: 2,
-              valueColor: AlwaysStoppedAnimation(colorScheme.primary),
-            ),
-          ),
-        );
 
     final defaultErrorWidget = widget.errorWidget ??
         Container(
@@ -78,6 +63,35 @@ class _CommonImageState extends State<CommonImage> {
           ),
         );
 
+    final defaultLoadingWidget = widget.loadingWidget ??
+        (widget.loaingImageUrl != null
+            ? Image.asset(
+                widget.loaingImageUrl!,
+                width: widget.width,
+                height: widget.height,
+                filterQuality: widget.filterQuality ?? FilterQuality.high,
+                fit: widget.fit,
+                errorBuilder: (context, error, stackTrace) {
+                  if (!mounted) return const SizedBox.shrink();
+                  return defaultErrorWidget;
+                },
+              )
+            : Container(
+                width: widget.width,
+                height: widget.height,
+                decoration: BoxDecoration(
+                  color: isDark
+                      ? colorScheme.secondaryContainer
+                      : context.surfaceContainer,
+                  borderRadius: widget.borderRadius,
+                ),
+                child: Center(
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    valueColor: AlwaysStoppedAnimation(colorScheme.primary),
+                  ),
+                ),
+              ));
     Widget imageWidget;
 
     if (widget.imageUrl.isEmpty) {
@@ -88,6 +102,8 @@ class _CommonImageState extends State<CommonImage> {
         width: widget.width,
         height: widget.height,
         fit: widget.fit,
+        filterQuality: widget.filterQuality ?? FilterQuality.high,
+        // imageRenderMethodForWeb: ImageRenderMethodForWeb.HtmlImage,
         placeholder: widget.placeholder != null
             ? (context, url) {
                 if (!mounted) return const SizedBox.shrink();
@@ -117,6 +133,7 @@ class _CommonImageState extends State<CommonImage> {
         width: widget.width,
         height: widget.height,
         fit: widget.fit,
+        filterQuality: widget.filterQuality ?? FilterQuality.high,
         errorBuilder: (context, error, stackTrace) {
           if (!mounted) return const SizedBox.shrink();
           return defaultErrorWidget;

@@ -490,7 +490,7 @@
   "total_earn": "Total Earn",
   "manage_your_account": "Manage Your Account",
   "rewards": "Rewards",
-  "transactions": "Transactions",
+  "wallet": "Wallet",
   "referrals": "Referrals",
   "logout_successful": "Logout successful!",
   "logging_out": "Logging out...",
@@ -676,7 +676,7 @@
   "enable_security_pin_description": "4-digit PIN Code",
   "repeat_4_digit_pin": "Repeat 4-digit PIN Code",
   "enter_security_pin": "Enter security pin",
-  "enter_security_pin_hint":"Enter Your PIN Code",
+  "enter_security_pin_hint": "Enter Your PIN Code",
   "security_pin_empty_error": "Security PIN is required",
   "security_pin_length_error": "PIN must be exactly 4 digits",
   "security_pin_mismatch_error": "PINs do not match",
@@ -696,5 +696,12 @@
   "no_coin_earn_history": "No coin earning History yet.",
   "notifications": "Notifications",
   "disable_2fa_title": "Disable Two-Factor Authentication",
-  "delete_account_description": "Deleting your account is permanent. Your rewards, coins and referrals will be lost forever."
+  "delete_account_description": "Deleting your account is permanent. Your rewards, coins and referrals will be lost forever.",
+  "withdrawal_earning": "Withdrawal Earning",
+  "balances": "Balances",
+  "payment_history": "Payment History",
+  "withdraw_button_text": "Withdraw {coinName}",
+  "interest_notification_title": "Don’t miss out on 5% interest!",
+  "interest_notification_description": "Keep at least 35,000 Coins to earn 5% interest. Interest is paid every week. Turn it on in your settings.",
+  "withdrawal": "Withdrawal"
 }
