@@ -1,5 +1,4 @@
-import 'package:cointiply_app/core/common/common_dropdown_field.dart';
-import 'package:cointiply_app/core/common/common_image_widget.dart';
+import 'package:cointiply_app/core/common/common_dropdown_field_with_icon.dart';
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
 import 'package:cointiply_app/core/extensions/extensions.dart';
@@ -105,7 +104,7 @@ class _ChangeLanguageDialogState extends ConsumerState<ChangeLanguageDialog> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Align(
-          alignment: Alignment.centerLeft,
+            alignment: Alignment.centerLeft,
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 20),
               child: CommonText.bodyMedium(
@@ -158,26 +157,20 @@ class _ChangeLanguageDialogState extends ConsumerState<ChangeLanguageDialog> {
                 context.translate("your_language"),
                 fontWeight: FontWeight.w500,
               ),
-              CommonDropdownFieldWithIcon<Language>(
-                items: languagesState.languages!,
-                value: _selectedLanguage,
+              SearchableDropdownWithIcon<Language>(
+                items: (filter, infiniteScrollProps) =>
+                    languagesState.languages!,
+                selectedItem: _selectedLanguage,
                 onChanged: (language) {
                   setState(() {
                     _selectedLanguage = language;
                   });
                 },
-                hint: context.translate("select_your_language_hint"),
+                labelText: context.translate("language"),
+                // hint: context.translate("select_your_language_hint"),
                 getItemCode: (language) => language.code,
                 getItemName: (language) => language.name,
-                getItemIcon: (language) {
-                  final flag = language.displayFlag;
-                  return CommonImage(
-                    imageUrl: flag,
-                    width: 32,
-                    height: 32,
-                    fit: BoxFit.cover,
-                  );
-                },
+                getItemIconUrl: (language) => language.flag,
                 validator: (value) {
                   if (value == null) {
                     return context.translate("please_select_language_error");
@@ -188,49 +181,43 @@ class _ChangeLanguageDialogState extends ConsumerState<ChangeLanguageDialog> {
             ],
           )
         : Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Expanded(
-          flex: 1,
-          child: CommonText.bodyMedium(
-            context.translate("your_language"),
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        Expanded(
-          flex: 2,
-          child: CommonDropdownFieldWithIcon<Language>(
-            items: languagesState.languages!,
-            value: _selectedLanguage,
-            onChanged: (language) {
-              setState(() {
-                _selectedLanguage = language;
-              });
-            },
-            hint: context.translate("select_your_language_hint"),
-            getItemCode: (language) => language.code,
-            getItemName: (language) => language.name,
-            getItemIcon: (language) {
-              final flag = language.displayFlag;
-              return CommonImage(
-                imageUrl: flag,
-                width: 32,
-                height: 32,
-                fit: BoxFit.cover,
-              );
-            },
-            validator: (value) {
-              if (value == null) {
-                return context.translate("please_select_language_error");
-              }
-              return null;
-            },
-          ),
-        ),
-      ],
-    );
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Expanded(
+                flex: 1,
+                child: CommonText.bodyMedium(
+                  context.translate("your_language"),
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              Expanded(
+                flex: 2,
+                child: SearchableDropdownWithIcon<Language>(
+                  items: (filter, infiniteScrollProps) =>
+                      languagesState.languages!,
+                  selectedItem: _selectedLanguage,
+                  onChanged: (language) {
+                    setState(() {
+                      _selectedLanguage = language;
+                    });
+                  },
+                  labelText: context.translate("language"),
+                  // hint: context.translate("select_your_language_hint"),
+                  getItemCode: (language) => language.code,
+                  getItemName: (language) => language.name,
+                  getItemIconUrl: (language) => language.flag,
+                  validator: (value) {
+                    if (value == null) {
+                      return context.translate("please_select_language_error");
+                    }
+                    return null;
+                  },
+                ),
+              ),
+            ],
+          );
   }
 
   Center _errorState(GetLanguagesState languagesState, BuildContext context) {

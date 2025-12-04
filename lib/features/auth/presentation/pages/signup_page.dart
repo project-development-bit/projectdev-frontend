@@ -1,9 +1,11 @@
+import 'package:cointiply_app/core/common/common_dropdown_field_with_icon.dart';
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/theme/app_colors.dart';
 import 'package:cointiply_app/features/auth/presentation/widgets/onboarding_background.dart';
 import 'package:cointiply_app/features/terms_privacy/presentation/services/terms_privacy_navigation_service.dart';
 import 'package:cointiply_app/features/auth/presentation/providers/ip_country_provider.dart';
-import 'package:cointiply_app/features/auth/presentation/widgets/country_selector_field.dart';
+import 'package:cointiply_app/features/user_profile/domain/entities/country.dart';
+import 'package:cointiply_app/features/user_profile/presentation/providers/get_countries_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/common/common_textfield.dart';
@@ -23,6 +25,8 @@ class SignUpPage extends ConsumerStatefulWidget {
 }
 
 class _SignUpPageState extends ConsumerState<SignUpPage> {
+  Country? _selectedCountry;
+
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
@@ -42,7 +46,9 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
   @override
   void initState() {
     super.initState();
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(getCountriesNotifierProvider.notifier).fetchCountries();
       ref.read(getIpCountryNotifierProvider.notifier).detectCountry();
     });
 
@@ -157,7 +163,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
       name: _nameController.text.trim(),
       email: _emailController.text.trim(),
       password: _passwordController.text,
-      countryCode: ref.read(selectedCountryProvider).code,
+      countryCode: _selectedCountry?.code ?? '',
       confirmPassword: _confirmPasswordController.text,
       role: UserRole.normalUser, // Default to normal user
       onSuccess: () {
@@ -175,6 +181,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
     final colorScheme = theme.colorScheme;
     final localizations = AppLocalizations.of(context);
     final isLoading = ref.watch(isRegisterLoadingProvider);
+    final countriesState = ref.watch(getCountriesNotifierProvider);
 
     return OnboardingBackground(
       childPadding: EdgeInsets.symmetric(
@@ -234,6 +241,30 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
               onSubmitted: (_) => _passwordFocusNode.requestFocus(),
             ),
 
+            const SizedBox(height: 16),
+
+            SearchableDropdownWithIcon<Country>(
+              items: (filter, infiniteScrollProps) => countriesState.countries!,
+              selectedItem: _selectedCountry,
+              onChanged: (country) {
+                setState(() {
+                  _selectedCountry = country;
+                });
+              },
+              labelText:
+                  localizations?.translate('country_required') ?? 'Country *',
+              hintText: localizations?.translate('country_hint') ??
+                  'Select Your Country',
+              getItemCode: (country) => country.code,
+              getItemName: (country) => country.name,
+              getItemIconUrl: (country) => country.flag,
+              validator: (value) {
+                if (value == null) {
+                  return context.translate("please_select_country_error");
+                }
+                return null;
+              },
+            ),
             const SizedBox(height: 16),
 
             // Password Field
