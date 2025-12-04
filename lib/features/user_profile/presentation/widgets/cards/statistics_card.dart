@@ -156,7 +156,7 @@ class StatCard extends StatelessWidget {
       width: isMobile ? null : 120,
       height: 40,
       constraints: BoxConstraints(
-        minWidth: isMobile ? 150 : 0,
+        minWidth: isMobile ? 110 : 0,
       ),
       decoration: BoxDecoration(
         color: Color(0xff100E1C),
@@ -181,7 +181,7 @@ class StatCard extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 12),
       height: 40,
       constraints: BoxConstraints(
-        minWidth: 150,
+        minWidth: isMobile ? 110 : 150,
       ),
       decoration: BoxDecoration(
         color: Color(0xff100E1C),
