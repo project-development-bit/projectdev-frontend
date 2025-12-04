@@ -9,6 +9,8 @@ import 'package:cointiply_app/core/theme/presentation/providers/app_setting_prov
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+final currentBannerIndexProvider = StateProvider.autoDispose<int>((ref) => 0);
+
 class HomeBannerSection extends ConsumerStatefulWidget {
   const HomeBannerSection({super.key});
 
@@ -19,7 +21,6 @@ class HomeBannerSection extends ConsumerStatefulWidget {
 class HomeBannerSectionState extends ConsumerState<HomeBannerSection> {
   final CarouselSliderController bannerCarouselController =
       CarouselSliderController();
-  int currentPageIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -35,41 +36,107 @@ class HomeBannerSectionState extends ConsumerState<HomeBannerSection> {
     // Fallback static background image
     final fallbackImage = Image.asset(
       isMobile
-          ? 'assets/images/bg/banner_mobile.png'
-          : 'assets/images/bg/banner_web.png',
+          ? 'assets/images/bg/banner_mobile@2x.png'
+          : 'assets/images/bg/banner_web@2x.png',
       width: double.infinity,
       height: bannerHeight,
       fit: BoxFit.cover,
     );
-
+    final currentPageIndex = ref.watch(currentBannerIndexProvider);
+    // final colorScheme = Theme.of(context).colorScheme;
     return SizedBox(
       width: double.infinity,
       height: bannerHeight,
-      child: CarouselSlider.builder(
-        carouselController: bannerCarouselController,
-        itemCount: banners.length,
-        itemBuilder: (context, index, realIndex) {
-          final banner = banners[index];
-          return BannerSlide(
-            banner: banner,
-            height: bannerHeight,
-            fallbackImage: fallbackImage,
-          );
-        },
-        options: CarouselOptions(
-          height: bannerHeight,
-          viewportFraction: 1.0,
-          autoPlay: banners.length > 1,
-          autoPlayInterval: const Duration(seconds: 5),
-          autoPlayAnimationDuration: const Duration(milliseconds: 500),
-          autoPlayCurve: Curves.easeInOut,
-          enableInfiniteScroll: banners.length > 1,
-          onPageChanged: (index, reason) {
-            setState(() {
-              currentPageIndex = index;
-            });
-          },
-        ),
+      child: Stack(
+        children: [
+          CarouselSlider.builder(
+            carouselController: bannerCarouselController,
+            itemCount: banners.length,
+            itemBuilder: (context, index, realIndex) {
+              final banner = banners[index];
+              return BannerSlide(
+                banner: banner,
+                height: bannerHeight,
+                fallbackImage: fallbackImage,
+              );
+            },
+            // items: [
+            //   for (final banner in banners)
+            //     BannerSlide(
+            //       banner: banner,
+            //       height: bannerHeight,
+            //       fallbackImage: fallbackImage,
+            //     ),
+            // ],
+            options: CarouselOptions(
+              height: bannerHeight,
+              viewportFraction: 1.0,
+              autoPlay: banners.length > 1,
+              autoPlayInterval: const Duration(seconds: 5),
+              autoPlayAnimationDuration: const Duration(milliseconds: 500),
+              autoPlayCurve: Curves.easeInOut,
+              enableInfiniteScroll: banners.length > 1,
+              onPageChanged: (index, reason) {
+                ref.read(currentBannerIndexProvider.notifier).state = index;
+              },
+            ),
+          ),
+          Positioned(
+            bottom: 10,
+            left: isMobile ? 0 : null,
+            right: isMobile ? 0 : 10,
+            child: Row(
+                mainAxisAlignment:
+                    isMobile ? MainAxisAlignment.center : MainAxisAlignment.end,
+                children: [
+                  _ArrowIconWidget(
+                    onTap: () {
+                      if (currentPageIndex < banners.length - 1) {
+                        bannerCarouselController.previousPage();
+                      } else {
+                        bannerCarouselController.animateToPage(0);
+                      }
+                    },
+                    iconData: Icons.arrow_back_ios,
+                  ),
+                  ...List.generate(
+                    banners.length,
+                    (index) => GestureDetector(
+                        onTap: () {
+                          bannerCarouselController.animateToPage(index);
+                        },
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 300),
+                          margin: const EdgeInsets.symmetric(horizontal: 4),
+                          width: currentPageIndex == index ? 12 : 8,
+                          height: 8,
+                          decoration: BoxDecoration(
+                            color: currentPageIndex == index
+                                ? const Color(0xFF00A0DC)
+                                : const Color(0xFFB8B8B8),
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color: currentPageIndex == index
+                                  ? Colors.white.withValues(alpha: 0.8)
+                                  : const Color(0xFFB8B8B8),
+                              width: 2,
+                            ),
+                          ),
+                        )),
+                  ),
+                  _ArrowIconWidget(
+                    onTap: () {
+                      if (currentPageIndex < banners.length - 1) {
+                        bannerCarouselController.nextPage();
+                      } else {
+                        bannerCarouselController.animateToPage(0);
+                      }
+                    },
+                    iconData: Icons.arrow_forward_ios,
+                  ),
+                ]),
+          )
+        ],
       ),
     );
   }
@@ -104,6 +171,9 @@ class BannerSlide extends StatelessWidget {
       children: [
         CommonImage(
           imageUrl: isMobile ? banner.imageMobile : banner.imageWeb,
+          // imageUrl: isMobile
+          //     ? 'assets/images/bg/banner_mobile@2x.png'
+          //     : 'assets/images/bg/banner_web@2x.png',
           width: double.infinity,
           height: height,
           fit: BoxFit.cover,
@@ -180,6 +250,49 @@ class BannerSlide extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _ArrowIconWidget extends StatefulWidget {
+  const _ArrowIconWidget({required this.onTap, required this.iconData});
+  final VoidCallback onTap;
+  final IconData iconData;
+
+  @override
+  State<_ArrowIconWidget> createState() => _ArrowIconWidgetState();
+}
+
+class _ArrowIconWidgetState extends State<_ArrowIconWidget> {
+  bool isHover = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: widget.onTap,
+      child: MouseRegion(
+        onEnter: (_) => setState(() => isHover = true),
+        onExit: (_) => setState(() => isHover = false),
+        cursor: SystemMouseCursors.click,
+        child: Container(
+          width: 30,
+          height: 30,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+              border: Border.all(
+                color: isHover ? Colors.white : const Color(0xFF7E7E81),
+                width: 1,
+              ),
+              shape: BoxShape.circle),
+          child: Icon(
+            widget.iconData,
+            color: isHover
+                ? Colors.white
+                : const Color(0xFF7E7E81), // TODO: use from theme
+            size: 14,
+          ),
+        ),
+      ),
     );
   }
 }
