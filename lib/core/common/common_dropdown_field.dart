@@ -1,5 +1,6 @@
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 /// A common dropdown form field widget with consistent styling
@@ -98,10 +99,10 @@ class CommonDropdownField<T> extends StatelessWidget {
                 )
               : null,
           icon: Icon(
-            Icons.arrow_drop_down,
+            Icons.expand_more_sharp,
             color: enabled
-                ? context.onSurface
-                : context.onSurface.withValues(alpha: 0.5),
+                ? Color(0xff545454)
+                : Color(0xff545454).withValues(alpha: 0.5),
           ),
           isDense: false,
           padding: EdgeInsets.zero,
@@ -109,8 +110,8 @@ class CommonDropdownField<T> extends StatelessWidget {
             prefixIcon: prefixIcon,
             filled: true,
             fillColor: enabled
-                ? context.surfaceContainer
-                : context.surfaceContainer.withValues(alpha: 0.5),
+                ? Color(0xff1A1A1A)
+                : Color(0xff1A1A1A).withValues(alpha: 0.5),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(effectiveBorderRadius),
               borderSide: BorderSide(
@@ -151,10 +152,10 @@ class CommonDropdownField<T> extends StatelessWidget {
             ),
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 16,
-              vertical: 14,
+              vertical: 10,
             ),
           ),
-          dropdownColor: context.surfaceContainer,
+          dropdownColor: Color(0xff1A1A1A),
           menuMaxHeight: 300,
         ),
       ],

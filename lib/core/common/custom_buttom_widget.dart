@@ -167,6 +167,7 @@ class CustomButtonWidget extends StatefulWidget {
   final double? width;
   final double? fontSize;
   final FontWeight? fontWeight;
+  final int? maxLines;
 
   const CustomButtonWidget({
     super.key,
@@ -180,6 +181,7 @@ class CustomButtonWidget extends StatefulWidget {
     this.width,
     this.fontSize,
     this.fontWeight,
+    this.maxLines,
   });
 
   @override
@@ -270,6 +272,7 @@ class _CustomButtonWidgetState extends State<CustomButtonWidget> {
               fontSize: widget.fontSize ?? 18,
               fontWeight: widget.fontWeight ?? FontWeight.w700,
               color: txtColor,
+              maxLines: widget.maxLines,
             ),
           ),
         ),

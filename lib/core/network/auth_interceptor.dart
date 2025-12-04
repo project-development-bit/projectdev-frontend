@@ -104,6 +104,7 @@ class TokenInterceptor extends Interceptor {
             log("REFRESH TOKEN FAILED: $e", name: name);
             isRefreshing = false;
             failedRequests = [];
+            await tokenService.clearAllAuthData();
             return handler.reject(err);
           }
         }

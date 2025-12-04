@@ -5,9 +5,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 showVerificationChangeEmailDialog(BuildContext context, String email) {
   context.showManagePopup(
-      height: context.isDesktop ? 600 : context.mediaQuery.size.height * 0.9,
+    // height: context.isDesktop ? 600 : context.mediaQuery.size.height * 0.9,
       child: VerificationChangeEmailDialog(email: email),
-      title: context.translate("verify_new_email"));
+    // title: context.translate("verify_new_email")
+  );
 }
 
 class VerificationChangeEmailDialog extends ConsumerWidget {

@@ -1,6 +1,6 @@
 import 'package:cointiply_app/core/theme/app_colors.dart';
 import 'package:cointiply_app/core/common/widgets/custom_pointer_interceptor.dart';
-import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/dialog_bg_widget.dart';
+import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/dialog_scaffold_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../localization/app_localizations.dart';
@@ -354,23 +354,15 @@ extension DialogExtension on BuildContext {
 
   Future<T> showManagePopup<T>(
       {required Widget child,
-      required String title,
-      bool barrierDismissible = true,
-      double? width,
-      double? height,
-      dynamic Function()? onClose,
-      Color? dividerColor}) {
+    bool barrierDismissible = true,
+  }) {
     final barrierColor = colorScheme.scrim.withValues(alpha: 0.6);
     return showDialog<T>(
       context: this,
       barrierDismissible: barrierDismissible,
       barrierColor: barrierColor,
-      builder: (context) => DialogBgWidget(
-        title: title,
-        dialogHeight: height,
-        dividerColor: dividerColor,
-        body: child,
-        onClose: onClose,
+      builder: (context) => DialogScaffoldWidget(
+        child: child,
       ),
     ).then((value) => value as T);
   }

@@ -210,7 +210,7 @@ class _CommonTextFieldState extends State<CommonTextField> {
             (isDark
                 ? AppColors.websiteBorder
                 : Theme.of(context).colorScheme.outline),
-        width: widget.borderWidth ?? 1.0,
+        width: widget.borderWidth ?? 0.0,
       ),
     );
   }

@@ -7,6 +7,7 @@ import 'package:cointiply_app/features/user_profile/data/models/response/change_
 import 'package:cointiply_app/features/user_profile/data/models/response/verify_email_change_response_model.dart';
 import 'package:cointiply_app/features/user_profile/data/models/response/change_password_response_model.dart';
 import 'package:cointiply_app/features/user_profile/data/models/response/delete_account_response_model.dart';
+import 'package:cointiply_app/features/user_profile/data/models/response/verify_delete_account_response_model.dart';
 import 'package:cointiply_app/features/user_profile/data/models/response/set_security_pin_response_model.dart';
 import 'package:file_picker/file_picker.dart';
 
@@ -55,8 +56,11 @@ abstract class ProfileRemoteDataSource {
   Future<UploadProfileAvatarResponseModel> uploadProfilePicture(
       PlatformFile imageFile);
 
-  /// Delete user account permanently
+  /// Delete user account permanently (sends verification code)
   Future<DeleteAccountResponseModel> deleteAccount(String userId);
+
+  /// Verify account deletion with code
+  Future<VerifyDeleteAccountResponseModel> verifyDeleteAccount(String code);
 
   /// Set or update security PIN
   Future<SetSecurityPinResponseModel> setSecurityPin({

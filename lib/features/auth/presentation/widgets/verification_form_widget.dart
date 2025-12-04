@@ -47,7 +47,7 @@ class _VerificationFormWidgetState
 
     ref.listenManual<VerificationState>(
       verificationNotifierProvider,
-      (previous, next) {
+      (previous, next) async {
         if (next is VerificationSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -62,11 +62,15 @@ class _VerificationFormWidgetState
           }
 
           if (widget.isFromEmailChanged) {
-            context.pop(); // Close verification dialog
+            context.showSuccessSnackBar(message: "Email changed successfully.");
             ref
                 .read(getProfileNotifierProvider.notifier)
                 .fetchProfile(isLoading: false);
             ref.read(currentUserProvider.notifier).refreshUser();
+            await Future.delayed(const Duration(milliseconds: 1000));
+            if (mounted) {
+              context.pop(); // close dialog
+            }
             return;
           }
 

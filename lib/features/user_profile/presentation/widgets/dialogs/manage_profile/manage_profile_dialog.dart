@@ -8,9 +8,9 @@ import 'package:cointiply_app/features/user_profile/domain/entities/language.dar
 import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/get_profile_notifier.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/setting_profile_notifier.dart';
+import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/dialog_bg_widget.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/manage_profile/security_pin_dialog.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/manage_profile/upload_avatar_dialog.dart';
-import 'package:cointiply_app/routing/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -21,6 +21,7 @@ import 'change_password_dialog.dart';
 import 'change_your_country_dialog.dart';
 import 'change_your_language_dialog.dart';
 import 'delete_account_dialog.dart';
+import 'show_offer_token_dialog.dart';
 
 part 'tab/profile_tab_content_widget.dart';
 part 'tab/security_tab_content_widget.dart';
@@ -30,12 +31,12 @@ part 'tab/setting_tab_content_widget.dart';
 final tabBarIndexProvider = StateProvider.autoDispose<int>((ref) => 0);
 
 void showManageProfileDialog(BuildContext context) {
-  final screenHeight = MediaQuery.of(context).size.height;
+  // final screenHeight = MediaQuery.of(context).size.height;
   context.showManagePopup(
-    height: screenHeight > 700 ? 526 : screenHeight * 0.85,
+    // height: screenHeight > 700 ? 526 : screenHeight * 0.85,
     barrierDismissible: true,
     child: const ManageProfileDialog(),
-    title: context.translate("manage_profile_title"),
+    // title: context.translate("manage_profile_title"),
   );
 }
 
@@ -61,86 +62,71 @@ class _ManageProfileDialogState extends ConsumerState<ManageProfileDialog> {
   Widget build(BuildContext context) {
     final getProfileStatus = ref.watch(getProfileNotifierProvider).status;
 
-    return _manageDialogBody(status: getProfileStatus);
+    return DialogBgWidget(
+      dialogHeight: _getDialogHeight(context),
+      body: _manageDialogBody(status: getProfileStatus),
+      title: context.translate("manage_profile_title"),
+    );
+  }
+
+  double _getDialogHeight(BuildContext context) {
+    final tabIndex = ref.watch(tabBarIndexProvider);
+    if (tabIndex == 0) {
+      return context.isMobile ? context.screenHeight * 0.9 : 600;
+    } else if (tabIndex == 1) {
+      return context.isMobile ? context.screenHeight * 0.9 : 550;
+    } else {
+      return context.isMobile ? context.screenHeight * 0.9 : 720;
+    }
   }
 
   _manageDialogBody({required GetProfileStatus status}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        _manageProfileTabBar(),
-        if (status == GetProfileStatus.loading) ...[
-          const SizedBox(height: 50),
-          Center(
-            child: CircularProgressIndicator(
-              color: Theme.of(context).colorScheme.primary,
-            ),
-          ),
-        ],
-        if (status == GetProfileStatus.failure) ...[
-          const SizedBox(height: 50),
-          Center(
-            child: CommonText.bodyMedium(
-              context.translate("manage_profile_load_error"),
-              color: Theme.of(context).colorScheme.error,
-            ),
-          ),
-        ],
-        if (status == GetProfileStatus.success)
-          Expanded(
-            child: SingleChildScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              child: _manageProfileTabBody(),
-            ),
-          ),
-      ],
+    return SingleChildScrollView(
+      padding: context.isMobile || context.isTablet
+          ? EdgeInsets.symmetric(horizontal: 16)
+          : const EdgeInsets.symmetric(horizontal: 31).copyWith(bottom: 24),
+      child: Padding(
+        padding: const EdgeInsets.only(top: 16, bottom: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _manageProfileTabBar(),
+            SizedBox(height: 16),
+            if (status == GetProfileStatus.loading) ...[
+              const SizedBox(height: 50),
+              Center(
+                child: CircularProgressIndicator(
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+            ],
+            if (status == GetProfileStatus.failure) ...[
+              const SizedBox(height: 50),
+              Center(
+                child: CommonText.bodyMedium(
+                  context.translate("manage_profile_load_error"),
+                  color: Theme.of(context).colorScheme.error,
+                ),
+              ),
+            ],
+            SizedBox(height: 16),
+            if (status == GetProfileStatus.success) _manageProfileTabBody(),
+          ],
+        ),
+      ),
     );
   }
 
   Widget _manageProfileTabBar() {
     final selectedIndex = ref.watch(tabBarIndexProvider);
-
-    // if (context.screenWidth > 600) {
-    //   return Container(
-    //     padding: const EdgeInsets.symmetric(vertical: 21.5),
-    //     child: Row(
-    //       mainAxisAlignment: MainAxisAlignment.center,
-    //       crossAxisAlignment: CrossAxisAlignment.center,
-    //       mainAxisSize: MainAxisSize.min,
-    //       spacing: 6.0,
-    //       children: [
-    //         _tabBarMenuItem(
-    //           context.translate("manage_profile_tab_profile"),
-    //           index: 0,
-    //           isSelected: selectedIndex == 0,
-    //           width:  150,
-    //         ),
-    //         _tabBarMenuItem(
-    //           context.translate("manage_profile_tab_security"),
-    //           index: 1,
-    //           isSelected: selectedIndex == 1,
-    //           width: 150,
-    //         ),
-    //         _tabBarMenuItem(
-    //           context.translate("manage_profile_tab_settings"),
-    //           index: 2,
-    //           isSelected: selectedIndex == 2,
-    //           width: 150,
-    //         ),
-    //       ],
-    //     ),
-    //   );
-    // }
-
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 21.5),
+    return SizedBox(
       width: double.infinity,
       child: LayoutBuilder(
         builder: (context, constraints) {
           const double spacing = 8.0;
-          final double buttonWidth =
-              (constraints.maxWidth - spacing) / (context.isDesktop ? 3.1 : 2);
+          final double buttonWidth = (constraints.maxWidth - spacing) /
+              (context.isDesktop || context.isTablet ? 3.1 : 2);
 
           return Wrap(
             alignment: WrapAlignment.start,
@@ -179,33 +165,16 @@ class _ManageProfileDialogState extends ConsumerState<ManageProfileDialog> {
     required bool isSelected,
     required double width,
   }) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return GestureDetector(
-      onTap: () => ref.read(tabBarIndexProvider.notifier).state = index,
-      child: Container(
-        width: width,
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-        decoration: BoxDecoration(
-          color: isSelected ? colorScheme.primary : Colors.transparent,
-          borderRadius: BorderRadius.circular(12),
-          border: isSelected
-              ? null
-              : Border.all(
-                  width: 1,
-                  color: colorScheme.onSurfaceVariant.withValues(alpha: 0.2),
-                ),
-        ),
-        child: Center(
-          child: CommonText.titleMedium(
-            s,
-            fontWeight: FontWeight.w700,
-            fontSize: isSelected ? 16 : 14,
-            color:
-                isSelected ? const Color(0xff333333) : const Color(0xff98989A),
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-      ),
+    return CustomButtonWidget(
+      isOutlined: true,
+      title: s,
+      width: width,
+      fontSize: 16,
+      fontWeight: FontWeight.w700,
+      isActive: isSelected,
+      onTap: () {
+        ref.read(tabBarIndexProvider.notifier).state = index;
+      },
     );
   }
 

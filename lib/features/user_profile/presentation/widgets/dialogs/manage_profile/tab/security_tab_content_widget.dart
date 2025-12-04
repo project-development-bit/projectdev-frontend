@@ -29,8 +29,9 @@ class _SecurityTabContentWidgetState
       spacing: 32.0,
       children: [
         _securityMenuItem(
-            title: context.translate("change_password"),
-            btnTitle: context.translate("change_password"),
+            title: context.translate("password"),
+            btnTitle: context.translate("change_your_password"),
+            isPrimaryColor: false,
             onPressed: () {
               showChangePasswordDialog(context);
             }),
@@ -50,7 +51,9 @@ class _SecurityTabContentWidgetState
               } else {
                 show2FADialog(context, email: email, onSuccess: () {
                   // Refresh profile data after enabling 2FA
-                  ref.read(getProfileNotifierProvider.notifier).fetchProfile();
+                  ref
+                      .read(getProfileNotifierProvider.notifier)
+                      .fetchProfile(isLoading: false);
                 });
               }
             },
@@ -67,7 +70,8 @@ class _SecurityTabContentWidgetState
                 : context.translate("enable_security_pin_btn"),
             onPressed: () {
               showSecurityPinDialog(context, isPinEnabled: isPinEnabled);
-            }),
+            },
+            description: context.translate("security_pin_description")),
       ],
     );
   }
@@ -77,6 +81,7 @@ class _SecurityTabContentWidgetState
       required Function() onPressed,
       required String btnTitle,
       String? description,
+      bool? isPrimaryColor,
       bool isDanger = false}) {
     final isMobile = context.isMobile;
     return isMobile
@@ -121,51 +126,51 @@ class _SecurityTabContentWidgetState
             ],
           )
         : Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Row(
-          children: [
-            SizedBox(
-              width: 163,
-              child: CommonText.bodyLarge(title,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white),
-            ),
-            Expanded(
-              flex: 2,
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: CustomUnderLineButtonWidget(
-                  title: btnTitle,
-                  onTap: onPressed,
-                  fontColor: isDanger ? context.error : Color(0xff98989A),
-                  isRed: isDanger,
-                  isDark: true,
-                  borderColor:
-                      isDanger ? context.error.withValues(alpha: 0.3) : null,
-                  fontSize: 14,
-                  width: 233,
-                  fontWeight: FontWeight.w700,
-                ),
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                children: [
+                  SizedBox(
+                    width: 163,
+                    child: CommonText.bodyLarge(title,
+                        fontWeight: FontWeight.w700, color: Colors.white),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: CustomUnderLineButtonWidget(
+                        title: btnTitle,
+                        onTap: onPressed,
+                        fontColor: isDanger ? context.error : Color(0xff98989A),
+                        isRed: (isPrimaryColor ?? false) ? false : isDanger,
+                        isDark: (isPrimaryColor ?? false) ? false : true,
+                        borderColor: isDanger
+                            ? context.error.withValues(alpha: 0.3)
+                            : null,
+                        fontSize: 14,
+                        width: 233,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  )
+                ],
               ),
-            )
-          ],
-        ),
-        if (description != null)
-          Padding(
-            padding: const EdgeInsets.only(top: 12.0),
-            child: Row(
-              children: [
-                SizedBox(width: 163),
-                Expanded(
-                  flex: 2,
-                  child: CommonText.bodyMedium(description,
-                      color: Color(0xff98989A)),
-                )
-              ],
-            ),
-          ),
-      ],
-    );
+              if (description != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 12.0),
+                  child: Row(
+                    children: [
+                      SizedBox(width: 163),
+                      Expanded(
+                        flex: 2,
+                        child: CommonText.bodyMedium(description,
+                            color: Color(0xff98989A)),
+                      )
+                    ],
+                  ),
+                ),
+            ],
+          );
   }
 }
