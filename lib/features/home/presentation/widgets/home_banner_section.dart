@@ -49,40 +49,38 @@ class HomeBannerSectionState extends ConsumerState<HomeBannerSection> {
       height: bannerHeight,
       child: Stack(
         children: [
-          Builder(builder: (context) {
-            return CarouselSlider(
-              carouselController: bannerCarouselController,
-              // itemCount: banners.length,
-              // items: (context, index, realIndex) {
-              //   final banner = banners[index];
-              //   return BannerSlide(
-              //     banner: banner,
-              //     height: bannerHeight,
-              //     fallbackImage: fallbackImage,
-              //   );
-              // },
-              items: [
-                for (final banner in banners)
-                  BannerSlide(
-                    banner: banner,
-                    height: bannerHeight,
-                    fallbackImage: fallbackImage,
-                  ),
-              ],
-              options: CarouselOptions(
+          CarouselSlider.builder(
+            carouselController: bannerCarouselController,
+            itemCount: banners.length,
+            itemBuilder: (context, index, realIndex) {
+              final banner = banners[index];
+              return BannerSlide(
+                banner: banner,
                 height: bannerHeight,
-                viewportFraction: 1.0,
-                autoPlay: banners.length > 1,
-                autoPlayInterval: const Duration(seconds: 5),
-                autoPlayAnimationDuration: const Duration(milliseconds: 500),
-                autoPlayCurve: Curves.easeInOut,
-                enableInfiniteScroll: banners.length > 1,
-                onPageChanged: (index, reason) {
-                  ref.read(currentBannerIndexProvider.notifier).state = index;
-                },
-              ),
-            );
-          }),
+                fallbackImage: fallbackImage,
+              );
+            },
+            // items: [
+            //   for (final banner in banners)
+            //     BannerSlide(
+            //       banner: banner,
+            //       height: bannerHeight,
+            //       fallbackImage: fallbackImage,
+            //     ),
+            // ],
+            options: CarouselOptions(
+              height: bannerHeight,
+              viewportFraction: 1.0,
+              autoPlay: banners.length > 1,
+              autoPlayInterval: const Duration(seconds: 5),
+              autoPlayAnimationDuration: const Duration(milliseconds: 500),
+              autoPlayCurve: Curves.easeInOut,
+              enableInfiniteScroll: banners.length > 1,
+              onPageChanged: (index, reason) {
+                ref.read(currentBannerIndexProvider.notifier).state = index;
+              },
+            ),
+          ),
           Positioned(
             bottom: 10,
             left: isMobile ? 0 : null,
