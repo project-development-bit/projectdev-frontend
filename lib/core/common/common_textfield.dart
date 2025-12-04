@@ -158,6 +158,7 @@ class _CommonTextFieldState extends State<CommonTextField> {
         errorMaxLines: 2,
         suffixIcon: widget.obscureText
             ? IconButton(
+                focusNode: FocusNode(skipTraversal: true),
                 icon: Icon(
                   _obscureText ? Icons.visibility : Icons.visibility_off,
                   color: theme.colorScheme.onSurfaceVariant,

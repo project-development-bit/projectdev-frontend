@@ -75,7 +75,7 @@ class _ChangeLanguageDialogState extends ConsumerState<ChangeLanguageDialog> {
 
           // Refresh profile if needed
           
-          await Future.delayed(const Duration(milliseconds: 1000));
+      
           // Close dialog on success
           if (mounted) {
             ref

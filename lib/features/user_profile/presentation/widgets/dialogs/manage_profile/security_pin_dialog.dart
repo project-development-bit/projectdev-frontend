@@ -60,7 +60,7 @@ class _SecurityPinDialogState extends ConsumerState<SecurityPinDialog> {
                 .fetchProfile(isLoading: false);
 
             // Close dialog
-            await Future.delayed(const Duration(milliseconds: 1000));
+        
             if (mounted) {
               context.pop();
             }
@@ -265,6 +265,7 @@ class _SecurityPinDialogState extends ConsumerState<SecurityPinDialog> {
         }
         return errorText;
       },
+      onSubmitted: (_) => _validateAndSubmit(),
       hintText: context.translate("enter_security_pin_hint"),
     );
   }

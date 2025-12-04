@@ -50,7 +50,7 @@ class _ChangeNameDialogState extends ConsumerState<ChangeNameDialog> {
           ref
               .read(currentUserProvider.notifier)
               .getCurrentUser(); // refresh current user
-          await Future.delayed(const Duration(milliseconds: 1000));
+      
           if (mounted) {
             context.pop(); // close dialog
           }
@@ -87,13 +87,6 @@ class _ChangeNameDialogState extends ConsumerState<ChangeNameDialog> {
           message: context.translate('name_unchanged'),
           backgroundColor: context.error,
           textColor: Colors.white,
-        );
-        ScaffoldMessenger.of(context).clearSnackBars();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(context.translate('name_unchanged')),
-            backgroundColor: context.error,
-          ),
         );
         return;
       }
@@ -145,24 +138,7 @@ class _ChangeNameDialogState extends ConsumerState<ChangeNameDialog> {
                   color: Colors.white,
                 ),
                 const SizedBox(height: 8),
-                CommonTextField(
-                  autofocus: true,
-                  controller: _nameController,
-                  hintText: context.translate("enter_your_name"),
-                  enabled: !isLoading,
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return context.translate('name_required');
-                    }
-                    if (value.trim().length < 5) {
-                      return context.translate('name_too_short');
-                    }
-                    if (value.trim().length > 50) {
-                      return context.translate('name_too_long');
-                    }
-                    return null;
-                  },
-                ),
+                _textfield(isLoading),
               ] else
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -177,24 +153,7 @@ class _ChangeNameDialogState extends ConsumerState<ChangeNameDialog> {
                     ),
                     const SizedBox(width: 16),
                     Expanded(
-                      child: CommonTextField(
-                        controller: _nameController,
-                        autofocus: true,
-                        hintText: context.translate("enter_your_name"),
-                        enabled: !isLoading,
-                        validator: (value) {
-                          if (value == null || value.trim().isEmpty) {
-                            return context.translate('name_required');
-                          }
-                          if (value.trim().length < 5) {
-                            return context.translate('name_too_short');
-                          }
-                          if (value.trim().length > 50) {
-                            return context.translate('name_too_long');
-                          }
-                          return null;
-                        },
-                      ),
+                      child: _textfield(isLoading),
                     ),
                   ],
                 ),
@@ -213,6 +172,28 @@ class _ChangeNameDialogState extends ConsumerState<ChangeNameDialog> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _textfield(bool isLoading) {
+    return CommonTextField(
+      controller: _nameController,
+      autofocus: true,
+      hintText: context.translate("enter_your_name"),
+      enabled: !isLoading,
+      onSubmitted: (_) => _handleSubmit(),
+      validator: (value) {
+        if (value == null || value.trim().isEmpty) {
+          return context.translate('name_required');
+        }
+        if (value.trim().length < 5) {
+          return context.translate('name_too_short');
+        }
+        if (value.trim().length > 50) {
+          return context.translate('name_too_long');
+        }
+        return null;
+      },
     );
   }
 }

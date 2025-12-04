@@ -47,7 +47,7 @@ class _ChangePasswordDialogState extends ConsumerState<ChangePasswordDialog> {
         if (mounted && context.mounted) {
           context.showSuccessSnackBar(
               message: context.translate('password_changed_successfully'));
-          await Future.delayed(const Duration(milliseconds: 1000));
+      
           if (mounted) {
             context.pop(); // close dialog
           }
@@ -208,6 +208,7 @@ class _ChangePasswordDialogState extends ConsumerState<ChangePasswordDialog> {
                   hintText: context.translate("enter_repeat_new_password"),
                   obscureText: !_isRepeatPasswordVisible,
                   enabled: !isLoading,
+                  onSubmitted: (_) => _handleSubmit(),
                   suffixIcon: IconButton(
                     icon: Icon(
                       _isRepeatPasswordVisible
@@ -349,6 +350,7 @@ class _ChangePasswordDialogState extends ConsumerState<ChangePasswordDialog> {
                             context.translate("enter_repeat_new_password"),
                         obscureText: !_isRepeatPasswordVisible,
                         enabled: !isLoading,
+                        onSubmitted: (_) => _handleSubmit(),
                         suffixIcon: IconButton(
                           icon: Icon(
                             _isRepeatPasswordVisible

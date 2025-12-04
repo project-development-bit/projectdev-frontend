@@ -58,7 +58,7 @@ class _ChangeEmailDialogState extends ConsumerState<ChangeEmailDialog> {
             }
           });
         }
-      } else if (next.hasError) {
+    } else if (next.hasError) {
         context.showSnackBar(
             message: next.errorMessage ??
                 context.translate('failed_to_change_email'),

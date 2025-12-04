@@ -43,7 +43,7 @@ class UploadAvatarDialog extends ConsumerWidget {
           ref
               .read(getProfileNotifierProvider.notifier)
               .fetchProfile(isLoading: false);
-          await Future.delayed(const Duration(milliseconds: 1000));
+      
           if (context.mounted) {
             context.pop();
           }

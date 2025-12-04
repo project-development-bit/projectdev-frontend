@@ -168,6 +168,7 @@ class _VerifyDeleteAccountDialogState
                 controller: _pinController,
                 enabled: !isLoading,
                 maxLength: 4,
+                onSubmitted: (_) => _verifyCode(),
                 style: context.textTheme.bodyLarge?.copyWith(
                     fontWeight: FontWeight.w700,
                     letterSpacing: 8,

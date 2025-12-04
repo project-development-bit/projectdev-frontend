@@ -60,7 +60,7 @@ class _TwoFactorAuthDialogState extends ConsumerState<TwoFactorAuthDialog> {
             context.showSuccessSnackBar(
               message: next.message,
             );
-            await Future.delayed(const Duration(milliseconds: 1000));
+        
             if (mounted) {
               // Close dialog
               context.pop();

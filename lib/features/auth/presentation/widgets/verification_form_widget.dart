@@ -67,7 +67,7 @@ class _VerificationFormWidgetState
                 .read(getProfileNotifierProvider.notifier)
                 .fetchProfile(isLoading: false);
             ref.read(currentUserProvider.notifier).refreshUser();
-            await Future.delayed(const Duration(milliseconds: 1000));
+        
             if (mounted) {
               context.pop(); // close dialog
             }

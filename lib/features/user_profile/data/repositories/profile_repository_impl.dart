@@ -4,6 +4,7 @@ import 'package:cointiply_app/features/user_profile/data/models/response/user_up
 import 'package:cointiply_app/features/user_profile/domain/entities/country.dart';
 import 'package:cointiply_app/features/user_profile/domain/entities/language.dart';
 import 'package:cointiply_app/features/user_profile/domain/entities/profile_detail.dart';
+import 'package:cointiply_app/features/user_profile/domain/entities/verify_delete_account_result.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
@@ -17,7 +18,6 @@ import '../../domain/entities/change_email_result.dart';
 import '../../domain/entities/verify_email_change_result.dart';
 import '../../domain/entities/change_password_result.dart';
 import '../../domain/entities/delete_account_result.dart';
-import '../../domain/entities/verify_delete_account_result.dart';
 import '../../domain/entities/set_security_pin_result.dart';
 
 /// Implementation of [ProfileRepository]
@@ -57,7 +57,13 @@ class ProfileRepositoryImpl implements ProfileRepository {
       ));
     } catch (e) {
       debugPrint('❌ Repository: Unexpected error - $e');
-      return Left(ServerFailure(message: e.toString()));
+      String errorMessage = 'Failed to fetch profile';
+      if (e is FormatException) {
+        errorMessage = 'Invalid response format from server';
+      } else if (e is TypeError) {
+        errorMessage = 'Data type error in server response';
+      }
+      return Left(ServerFailure(message: errorMessage));
     }
   }
 
@@ -80,22 +86,56 @@ class ProfileRepositoryImpl implements ProfileRepository {
       );
 
       return Right(result);
+    } on ServerFailure catch (e) {
+      debugPrint('❌ Repository: ServerFailure from data source - ${e.message}');
+      return Left(e);
     } on DioException catch (e) {
       debugPrint('❌ Repository: DioException - ${e.message}');
+      debugPrint('❌ Repository: Response data - ${e.response?.data}');
+      
       ErrorModel? errorModel;
+      String errorMessage = 'Failed to verify email change';
+      
       if (e.response?.data != null) {
-        errorModel = ErrorModel.fromJson(e.response!.data);
+        try {
+          // Try to parse as ErrorModel
+          errorModel = ErrorModel.fromJson(e.response!.data);
+          errorMessage = errorModel.message;
+          debugPrint('✅ Parsed ErrorModel: ${errorModel.message}');
+        } catch (parseError) {
+          debugPrint('⚠️ Failed to parse ErrorModel: $parseError');
+          // If parsing fails, try to get message directly
+          if (e.response?.data is Map) {
+            errorMessage = e.response?.data?['message'] ??
+                e.message ??
+                'Failed to verify email change';
+          } else if (e.response?.data is String) {
+            errorMessage = e.response?.data as String;
+          } else {
+            errorMessage = e.message ?? 'Failed to verify email change';
+          }
+        }
+      } else {
+        errorMessage = e.message ?? 'Failed to verify email change';
       }
+
+      debugPrint('❌ Final error message: $errorMessage');
+      
       return Left(ServerFailure(
-        message: e.response?.data?['message'] ??
-            e.message ??
-            'Failed to verify email change',
+        message: errorMessage,
         statusCode: e.response?.statusCode,
         errorModel: errorModel,
       ));
     } catch (e) {
       debugPrint('❌ Repository: Unexpected error - $e');
-      return Left(ServerFailure(message: e.toString()));
+      // Extract meaningful error message instead of toString()
+      String errorMessage = 'Failed to verify email change';
+      if (e is FormatException) {
+        errorMessage = 'Invalid response format from server';
+      } else if (e is TypeError) {
+        errorMessage = 'Data type error in server response';
+      }
+      return Left(ServerFailure(message: errorMessage));
     }
   }
 
@@ -122,7 +162,13 @@ class ProfileRepositoryImpl implements ProfileRepository {
       ));
     } catch (e) {
       debugPrint('❌ Repository: Unexpected error - $e');
-      return Left(ServerFailure(message: e.toString()));
+      String errorMessage = 'Failed to fetch countries';
+      if (e is FormatException) {
+        errorMessage = 'Invalid response format from server';
+      } else if (e is TypeError) {
+        errorMessage = 'Data type error in server response';
+      }
+      return Left(ServerFailure(message: errorMessage));
     }
   }
 
@@ -244,6 +290,9 @@ class ProfileRepositoryImpl implements ProfileRepository {
       );
 
       return Right(result);
+    } on ServerFailure catch (e) {
+      debugPrint('❌ Repository: ServerFailure - ${e.message}');
+      return Left(e);
     } on DioException catch (e) {
       debugPrint('❌ Repository: DioException - ${e.message}');
       ErrorModel? errorModel;
@@ -301,7 +350,13 @@ class ProfileRepositoryImpl implements ProfileRepository {
       ));
     } catch (e) {
       debugPrint('❌ Repository: Unexpected error - $e');
-      return Left(ServerFailure(message: e.toString()));
+      String errorMessage = 'Failed to change password';
+      if (e is FormatException) {
+        errorMessage = 'Invalid response format from server';
+      } else if (e is TypeError) {
+        errorMessage = 'Data type error in server response';
+      }
+      return Left(ServerFailure(message: errorMessage));
     }
   }
 
@@ -338,7 +393,13 @@ class ProfileRepositoryImpl implements ProfileRepository {
       ));
     } catch (e) {
       debugPrint('❌ Repository: Unexpected error - $e');
-      return Left(ServerFailure(message: e.toString()));
+      String errorMessage = 'Failed to request account deletion';
+      if (e is FormatException) {
+        errorMessage = 'Invalid response format from server';
+      } else if (e is TypeError) {
+        errorMessage = 'Data type error in server response';
+      }
+      return Left(ServerFailure(message: errorMessage));
     }
   }
 
@@ -375,7 +436,13 @@ class ProfileRepositoryImpl implements ProfileRepository {
       ));
     } catch (e) {
       debugPrint('❌ Repository: Unexpected error - $e');
-      return Left(ServerFailure(message: e.toString()));
+      String errorMessage = 'Failed to verify account deletion';
+      if (e is FormatException) {
+        errorMessage = 'Invalid response format from server';
+      } else if (e is TypeError) {
+        errorMessage = 'Data type error in server response';
+      }
+      return Left(ServerFailure(message: errorMessage));
     }
   }
 
@@ -416,7 +483,13 @@ class ProfileRepositoryImpl implements ProfileRepository {
       ));
     } catch (e) {
       debugPrint('❌ Repository: Unexpected error - $e');
-      return Left(ServerFailure(message: e.toString()));
+      String errorMessage = 'Failed to set security PIN';
+      if (e is FormatException) {
+        errorMessage = 'Invalid response format from server';
+      } else if (e is TypeError) {
+        errorMessage = 'Data type error in server response';
+      }
+      return Left(ServerFailure(message: errorMessage));
     }
   }
 }
