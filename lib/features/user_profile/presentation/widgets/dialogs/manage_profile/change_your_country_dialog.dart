@@ -1,5 +1,4 @@
-import 'package:cointiply_app/core/common/common_dropdown_field.dart';
-import 'package:cointiply_app/core/common/common_image_widget.dart';
+import 'package:cointiply_app/core/common/common_dropdown_field_with_icon.dart';
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
 import 'package:cointiply_app/core/extensions/extensions.dart';
@@ -10,7 +9,6 @@ import 'package:cointiply_app/features/user_profile/presentation/providers/get_c
 import 'package:cointiply_app/features/user_profile/presentation/providers/get_profile_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 void showChangeCountryDialog(BuildContext context) {
   context.showManagePopup(
@@ -30,6 +28,7 @@ class ChangeCountryDialog extends ConsumerStatefulWidget {
 
 class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
   Country? _selectedCountry;
+  Country? _previousCountry; // To store the previously selected country
 
   @override
   void initState() {
@@ -52,32 +51,31 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
                 ?.firstWhere((country) => country.id == currentCountry);
             setState(() {
               _selectedCountry = country;
+              _previousCountry = country; // Store the initial country
             });
           }
         }
       },
     );
+  }
 
-    ref.listenManual(
-      changeCountryProvider,
-      (previous, next) {
-        if (next.isChanging) {
-          // Show loading indicator or disable inputs
-        } else if (next.status == ChangeCountryStatus.success) {
-          // Close dialog on success
+  void _onChangeCountry() {
+    // If the selected country is the same as the previous one, show an error message
+    if (_selectedCountry == _previousCountry) {
+      context.showSnackBar(
+        message: context.translate('country_not_changed_error'),
+        backgroundColor: context.error,
+      );
+      return;
+    }
 
-          ref.read(getProfileNotifierProvider.notifier).fetchProfile();
-          ref.read(currentUserProvider.notifier).getCurrentUser();
-          context.pop();
-        } else if (next.hasError) {
-          // Show error message
-          final errorMessage = next.errorMessage ??
-              context.translate("failed_to_change_country");
-          context.showSnackBar(
-              message: errorMessage, backgroundColor: context.error);
-        }
-      },
-    );
+    // Proceed with changing the country if it's different
+    final userId = (ref.read(currentUserProvider).user?.id ?? 0).toString();
+    ref.read(changeCountryProvider.notifier).changeCountry(
+          countryId: _selectedCountry!.id,
+          countryName: _selectedCountry!.name,
+          userid: userId,
+        );
   }
 
   @override
@@ -88,7 +86,6 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
   Widget _manageDialogBody(BuildContext context) {
     final countriesState = ref.watch(getCountriesNotifierProvider);
     final isChangingCountry = ref.watch(changeCountryProvider).isChanging;
-    final userId = (ref.read(currentUserProvider).user?.id ?? 0).toString();
     final isMobile = context.isMobile;
 
     return SingleChildScrollView(
@@ -124,15 +121,7 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
               fontSize: 14,
               isDark: true,
               fontWeight: FontWeight.w700,
-              onTap: _selectedCountry != null
-                  ? () {
-                      ref.read(changeCountryProvider.notifier).changeCountry(
-                            countryId: _selectedCountry!.id,
-                            countryName: _selectedCountry!.name,
-                            userid: userId,
-                          );
-                    }
-                  : null,
+              onTap: _selectedCountry != null ? _onChangeCountry : null,
               isLoading: isChangingCountry,
             )
           ],
@@ -163,36 +152,28 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
                     ),
                   ),
                   Expanded(
-                    flex: 2,
-                    child: CommonDropdownFieldWithIcon<Country>(
-                      items: countriesState.countries!,
-                      value: _selectedCountry,
-                      onChanged: (country) {
-                        setState(() {
-                          _selectedCountry = country;
-                        });
-                      },
-                      hint: context.translate("select_your_country_hint"),
-                      getItemCode: (country) => country.code,
-                      getItemName: (country) => country.name,
-                      getItemIcon: (country) {
-                        final flag = country.flag;
-                        return CommonImage(
-                          imageUrl: flag,
-                          width: 32,
-                          height: 32,
-                          fit: BoxFit.cover,
-                        );
-                      },
-                      validator: (value) {
-                        if (value == null) {
-                          return context
-                              .translate("please_select_country_error");
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
+                      flex: 2,
+                      child: SearchableDropdownWithIcon<Country>(
+                        items: (filter, infiniteScrollProps) =>
+                            countriesState.countries!,
+                        selectedItem: _selectedCountry,
+                        onChanged: (country) {
+                          setState(() {
+                            _selectedCountry = country;
+                          });
+                        },
+                        labelText: 'Country *',
+                        getItemCode: (country) => country.code,
+                        getItemName: (country) => country.name,
+                        getItemIconUrl: (country) => country.flag,
+                        validator: (value) {
+                          if (value == null) {
+                            return context
+                                .translate("please_select_country_error");
+                          }
+                          return null;
+                        },
+                      )),
                 ],
               ),
               CommonText.bodySmall(
@@ -210,26 +191,19 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
                 context.translate("your_country"),
                 fontWeight: FontWeight.w500,
               ),
-              CommonDropdownFieldWithIcon<Country>(
-                items: countriesState.countries!,
-                value: _selectedCountry,
+              SearchableDropdownWithIcon<Country>(
+                items: (filter, infiniteScrollProps) =>
+                    countriesState.countries!,
+                selectedItem: _selectedCountry,
                 onChanged: (country) {
                   setState(() {
                     _selectedCountry = country;
                   });
                 },
-                hint: context.translate("select_your_country_hint"),
+                labelText: 'Country *',
                 getItemCode: (country) => country.code,
                 getItemName: (country) => country.name,
-                getItemIcon: (country) {
-                  final flag = country.flag;
-                  return CommonImage(
-                    imageUrl: flag,
-                    width: 32,
-                    height: 32,
-                    fit: BoxFit.cover,
-                  );
-                },
+                getItemIconUrl: (country) => country.flag,
                 validator: (value) {
                   if (value == null) {
                     return context.translate("please_select_country_error");
