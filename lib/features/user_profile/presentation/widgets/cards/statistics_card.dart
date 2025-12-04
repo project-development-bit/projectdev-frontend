@@ -167,7 +167,7 @@ class StatCard extends StatelessWidget {
         ),
       ),
       child: CommonText.titleLarge(
-        value,
+        (int.tryParse(value) ?? 0).currencyFormat(),
         fontSize: 20,
         fontWeight: FontWeight.w700,
         color: colorScheme.onPrimary,
