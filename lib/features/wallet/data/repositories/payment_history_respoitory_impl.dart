@@ -16,6 +16,7 @@ class PaymentHistoryRespoitoryImpl implements PaymentHistoryRespoitory {
     try {
       final List<PaymentHistory> responseModel =
           await remoteDataSource.getPaymentHistory();
+      print('Repository fetched ${responseModel.length} payment history items');
       return Right(responseModel);
     } on DioException catch (e) {
       ErrorModel? errorModel;

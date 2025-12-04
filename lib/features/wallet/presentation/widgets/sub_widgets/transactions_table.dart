@@ -1,4 +1,3 @@
-import 'package:cointiply_app/features/wallet/data/models/response/payment_history_model.dart';
 import 'package:cointiply_app/features/wallet/domain/entity/payment_history.dart';
 import 'package:cointiply_app/features/wallet/presentation/widgets/sub_widgets/transaction_desktop_header.dart';
 import 'package:cointiply_app/features/wallet/presentation/widgets/sub_widgets/transaction_desktop_row.dart';

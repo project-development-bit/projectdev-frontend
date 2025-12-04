@@ -24,6 +24,7 @@ class PaymentHistoryNotifier extends StateNotifier<PaymentHistoryState> {
         );
       },
       (paymentHistory) {
+        print('Fetched ${paymentHistory.length} payment history items');
         state = state.copyWith(
           status: GetPaymentHistoryStatus.data,
           paymentHistory: paymentHistory,

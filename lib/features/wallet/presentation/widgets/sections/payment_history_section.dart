@@ -3,13 +3,29 @@ import 'package:cointiply_app/features/wallet/presentation/widgets/sub_widgets/t
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class PayamentHistorySection extends ConsumerWidget {
+class PayamentHistorySection extends ConsumerStatefulWidget {
   const PayamentHistorySection({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final items = ref.watch(paymentHistoryNotifierProvider).paymentHistory;
+  ConsumerState<PayamentHistorySection> createState() =>
+      _PayamentHistorySectionState();
+}
 
+class _PayamentHistorySectionState
+    extends ConsumerState<PayamentHistorySection> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(paymentHistoryNotifierProvider.notifier).fetchPaymentHistory();
+    });
+  }
+
+  @override
+  Widget build(
+    BuildContext context,
+  ) {
+    final items = ref.watch(paymentHistoryNotifierProvider).paymentHistory;
     return TransactionsTable(
       items: items,
     );
