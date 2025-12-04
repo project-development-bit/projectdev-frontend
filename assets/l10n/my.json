@@ -491,7 +491,7 @@
   "total_earn": "စုစုပေါင်း ရရှိမှု",
   "manage_your_account": "အကောင့် စီမံပါ",
   "rewards": "ဆုများ",
-  "transactions": "ငွေလွဲ ပြုလုပ်မှုများ",
+  "wallet": "ပိုက်ဆံအိတ်",
   "referrals": "အကြံပြုမှုများ",
   "logout_successful": "လော့ဂ်အောက် အောင်မြင်ပါသည်",
   "logging_out": "လော့ဂ်အောက် ထွက်နေသည်...",
@@ -692,5 +692,12 @@
   "delete_account_description": "သင့်အကောင့်ကို ဖျက်ခြင်းသည် အပြီးသတ်ဖြစ်သည်။ သင့်ဆုလာဘ်များ၊ ကွိုင်များနှင့် လှည့်ညွှန်းမှုများ အမြဲတမ်းဆုံးရှုံးသွားပါမည်။",
   "country_not_changed_error": "လက်ရှိ နိုင်ငံနှင့် ရွေးချယ်ထားသော နိုင်ငံ တူနေပါသည်",
   "country_required": "နိုင်ငံ *",
-  "country_hint": "သင့်နိုင်ငံကိုရွေးပါ"
+  "country_hint": "သင့်နိုင်ငံကိုရွေးပါ",
+  "withdrawal_earning": "Withdrawal Earning",
+  "balances": "Balances",
+  "payment_history": "Payment History",
+  "withdraw_button_text": "Withdraw {coinName}",
+  "interest_notification_title": "5% အတိုးအကျော် မဖြစ်မီ ကူညီပါ!",
+  "interest_notification_description": "35000 ကုဒ်ရှိလျှင် 5% အတိုးအကျော် ရရှိပါမည်။ အတိုးအကျော် မျိုးစုံကို နေ့စဉ်ပေးပါ။ စက်ဆောင်လျှက်လက်ခံပါ။",
+  "withdrawal": "Withdrawal"
 }
