@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cointiply_app/core/common/common_image_widget.dart';
 import 'package:cointiply_app/core/common/common_text.dart';
+import 'package:cointiply_app/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:cointiply_app/core/extensions/extensions.dart';
@@ -19,6 +20,7 @@ class SearchableDropdownWithIcon<T> extends StatelessWidget {
     this.selectedItem,
     this.validator,
     this.labelText,
+    this.hintText,
   });
 
   /// Function to provide the list of items based on filter (for search/remote loading)
@@ -45,13 +47,16 @@ class SearchableDropdownWithIcon<T> extends StatelessWidget {
   /// Label text for the field
   final String? labelText;
 
+  /// Hint text for the search field inside the popup
+  final String? hintText;
+
   // --- Implementation Details for Reusability ---
 
   // Builder for the selected item in the closed state (Flag | Name/Code)
   Widget _dropdownBuilder(BuildContext context, T? item) {
     if (item == null) {
       return CommonText.bodyMedium(
-        labelText ?? 'Select Item',
+        hintText ?? 'Select Item',
         color: Theme.of(context).hintColor,
       );
     }
@@ -132,6 +137,7 @@ class SearchableDropdownWithIcon<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return DropdownSearch<T>(
       // 1. Data Source and Callbacks
       items: items,
@@ -149,8 +155,10 @@ class SearchableDropdownWithIcon<T> extends StatelessWidget {
           floatingLabelBehavior: FloatingLabelBehavior.always,
           labelText: labelText ?? 'Select Item *',
           filled: true,
-          fillColor: Theme.of(context).inputDecorationTheme.fillColor,
-          // Crucial: Adjusted padding to fit the two lines of text
+          fillColor: (Theme.of(context).brightness == Brightness.dark
+              ? AppColors.websiteCard
+              : theme.colorScheme.surfaceContainerHighest
+                  .withValues(alpha: 0.1)),
           contentPadding:
               const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         ),
@@ -161,13 +169,32 @@ class SearchableDropdownWithIcon<T> extends StatelessWidget {
         showSearchBox: true,
         searchFieldProps: TextFieldProps(
           decoration: InputDecoration(
+            disabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.2),
+              ),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(
+                color: context.onSurface.withValues(alpha: 0.6),
+              ),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(
+                color: context.onSurface.withValues(alpha: 0.6),
+              ),
+            ),
             hintText: "Search...",
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
           ),
         ),
         itemBuilder: _itemBuilder,
       ),
-
       // 5. Validation
       validator: validator,
     );
