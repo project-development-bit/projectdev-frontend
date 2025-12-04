@@ -15,9 +15,9 @@ import 'package:go_router/go_router.dart';
 
 void showChangeCountryDialog(BuildContext context) {
   context.showManagePopup(
-      barrierDismissible: true,
+    barrierDismissible: true,
     // height: context.isMobile ? context.screenHeight * 0.7 : 400,
-      child: const ChangeCountryDialog(),
+    child: const ChangeCountryDialog(),
     // title: context.translate("change_your_country_title")
   );
 }
@@ -62,17 +62,21 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
 
     ref.listenManual(
       changeCountryProvider,
-      (previous, next) {
+      (previous, next) async {
         if (next.isChanging) {
           // Show loading indicator or disable inputs
         } else if (next.status == ChangeCountryStatus.success) {
           // Close dialog on success
-
+          context.showSuccessSnackBar(message: "Country changed successfully");
           ref
               .read(getProfileNotifierProvider.notifier)
               .fetchProfile(isLoading: false);
           ref.read(currentUserProvider.notifier).getCurrentUser();
+          await Future.delayed(const Duration(milliseconds: 1000));
+          if (mounted) {
+
           context.pop();
+          }
         } else if (next.hasError) {
           // Show error message
           final errorMessage = next.errorMessage ??
@@ -87,7 +91,7 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
   @override
   Widget build(BuildContext context) {
     return DialogBgWidget(
-        dialogHeight: context.isDesktop ? 370 : 420,
+        dialogHeight: context.isDesktop ? 370 : 440,
         title: context.translate("change_your_country_title"),
         body: _manageDialogBody(context));
   }
@@ -134,15 +138,19 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
               fontSize: 14,
               isDark: true,
               fontWeight: FontWeight.w700,
-              onTap: _selectedCountry != null
-                  ? () {
-                      ref.read(changeCountryProvider.notifier).changeCountry(
-                            countryId: _selectedCountry!.id,
-                            countryName: _selectedCountry!.name,
-                            userid: userId,
-                          );
-                    }
-                  : null,
+              onTap: () {
+                if (_selectedCountry == null) {
+                  context.showSnackBar(
+                      message:
+                          context.translate("please_select_country_error"));
+                  return;
+                }
+                ref.read(changeCountryProvider.notifier).changeCountry(
+                      countryId: _selectedCountry!.id,
+                      countryName: _selectedCountry!.name,
+                      userid: userId,
+                    );
+              },
               isLoading: isChangingCountry,
             )
           ],
@@ -183,7 +191,6 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
                           _selectedCountry = country;
                         });
                       },
-
                       hint: context.translate("select_your_country_hint"),
                       getItemCode: (country) => country.code,
                       getItemName: (country) => country.name,

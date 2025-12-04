@@ -38,11 +38,9 @@ class _DeleteAccountConfirmationDialogState
       if (next.status == DeleteAccountStatus.success) {
         if (mounted && context.mounted) {
           // Show success message for verification code sent
-          context.showSnackBar(
+          context.showSuccessSnackBar(
             message: next.successMessage ??
                 context.translate('verification_code_sent'),
-            backgroundColor: context.primary,
-            textColor: Colors.white,
           );
 
           // Close current dialog
@@ -92,7 +90,7 @@ class _DeleteAccountConfirmationDialogState
           ? 400
           : context.isTablet
               ? 450
-              : context.screenHeight * 0.75,
+              : context.screenHeight * 0.7,
       title: context.translate("delete_account_confirmation_title"),
       body: SingleChildScrollView(
         child: Padding(

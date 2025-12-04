@@ -8,11 +8,14 @@ class DialogScaffoldWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScaffoldMessenger(
       child: Builder(builder: (context) {
-        return Dialog(
-            backgroundColor: Colors.transparent,
-            insetPadding: const EdgeInsets.all(20),
-            clipBehavior: Clip.hardEdge,
-            child: child);
+        return Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Dialog(
+              backgroundColor: Colors.transparent,
+              insetPadding: const EdgeInsets.all(20),
+              clipBehavior: Clip.hardEdge,
+              child: child),
+        );
       }),
     );
   }

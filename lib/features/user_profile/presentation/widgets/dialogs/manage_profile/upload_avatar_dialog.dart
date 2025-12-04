@@ -2,16 +2,17 @@ import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
+import 'package:cointiply_app/features/user_profile/presentation/providers/get_profile_notifier.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/upload_profile_avatar_provider.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/dialog_bg_widget.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/user_profile_image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 void showUploadAvatarDialog(BuildContext context) {
-
   context.showManagePopup(
-      child: const UploadAvatarDialog(),
+    child: const UploadAvatarDialog(),
   );
 }
 
@@ -24,8 +25,8 @@ class UploadAvatarDialog extends ConsumerWidget {
         ? 470
         : context.isTablet
             ? 400
-            : 450;    
-            
+            : 450;
+
     final isLoading = ref.watch(uploadProfileAvatarProvider).isLoading;
 
     final isErrorState = ref.watch(uploadProfileAvatarProvider).status ==
@@ -34,9 +35,18 @@ class UploadAvatarDialog extends ConsumerWidget {
 
     ref.listen<UploadProfileAvatarState>(
       uploadProfileAvatarProvider,
-      (previous, next) {
+      (previous, next) async {
         if (next.status == UploadProfileAvatarStatus.success) {
+          context.showSuccessSnackBar(message: "Avatar uploaded successfully");
+         
           ref.read(currentUserProvider.notifier).getCurrentUser();
+          ref
+              .read(getProfileNotifierProvider.notifier)
+              .fetchProfile(isLoading: false);
+          await Future.delayed(const Duration(milliseconds: 1000));
+          if (context.mounted) {
+            context.pop();
+          }
         }
       },
     );

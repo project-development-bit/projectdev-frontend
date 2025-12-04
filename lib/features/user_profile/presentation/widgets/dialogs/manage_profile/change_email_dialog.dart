@@ -172,6 +172,8 @@ class _ChangeEmailDialogState extends ConsumerState<ChangeEmailDialog> {
                         CommonTextField(
                           fillColor: Color(0xff1A1A1A),
                           controller: _currentEmailController,
+                          style: context.textTheme.bodyMedium?.copyWith(
+                              color: Colors.white, fontWeight: FontWeight.w500),
                           hintText:
                               context.translate("current_email", args: [' ']),
                           validator: _validateCurrentEmail,
@@ -181,15 +183,16 @@ class _ChangeEmailDialogState extends ConsumerState<ChangeEmailDialog> {
                     )
                   : Row(
                       children: [
-                        Expanded(
+                        SizedBox(
+                            width: 170,
                             child: CommonText.bodyLarge(
-                          context.translate("current_email",
-                              args: [context.isDesktop ? '\n' : ' ']),
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
-                        )),
+                              context.translate("current_email",
+                                  args: [context.isDesktop ? '\n' : ' ']),
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                            )),
                         Expanded(
-                          flex: 2,
+                          flex: 3,
                           child: CommonTextField(
                             fillColor: Color(0xff1A1A1A),
                             controller: _currentEmailController,
@@ -223,6 +226,8 @@ class _ChangeEmailDialogState extends ConsumerState<ChangeEmailDialog> {
                         CommonTextField(
                           fillColor: Color(0xff1A1A1A),
                           controller: _newEmailController,
+                          style: context.textTheme.bodyMedium?.copyWith(
+                              color: Colors.white, fontWeight: FontWeight.w500),
                           hintText: context.translate("new_email", args: [' ']),
                           validator: _validateNewEmail,
                           hintStyle: context.textTheme.bodyMedium?.copyWith(
@@ -233,15 +238,16 @@ class _ChangeEmailDialogState extends ConsumerState<ChangeEmailDialog> {
                     )
                   : Row(
                       children: [
-                        Expanded(
+                        SizedBox(
+                            width: 170,
                             child: CommonText.bodyLarge(
-                          context.translate("new_email",
-                              args: [context.isDesktop ? '\n' : ' ']),
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
-                        )),
+                              context.translate("new_email",
+                                  args: [context.isDesktop ? '\n' : ' ']),
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                            )),
                         Expanded(
-                          flex: 2,
+                          flex: 3,
                           child: CommonTextField(
                             fillColor: Color(0xff1A1A1A),
                             controller: _newEmailController,
@@ -277,6 +283,8 @@ class _ChangeEmailDialogState extends ConsumerState<ChangeEmailDialog> {
                           hintText: context
                               .translate("confirm_new_email", args: [' ']),
                           validator: _validateConfirmEmail,
+                          style: context.textTheme.bodyMedium?.copyWith(
+                              color: Colors.white, fontWeight: FontWeight.w500),
                           hintStyle: context.textTheme.bodyMedium?.copyWith(
                               color: Color(0xffB3B3B3),
                               fontWeight: FontWeight.w500),
@@ -285,21 +293,25 @@ class _ChangeEmailDialogState extends ConsumerState<ChangeEmailDialog> {
                     )
                   : Row(
                       children: [
-                        Expanded(
+                        SizedBox(
+                            width: 170,
                             child: CommonText.bodyLarge(
-                          context.translate("confirm_new_email",
-                              args: [context.isDesktop ? '\n' : ' ']),
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
-                        )),
+                              context.translate("confirm_new_email",
+                                  args: [context.isDesktop ? '\n' : ' ']),
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                            )),
                         Expanded(
-                          flex: 2,
+                          flex: 1,
                           child: CommonTextField(
                             fillColor: Color(0xff1A1A1A),
                             controller: _confirmEmailController,
                             hintText: context
                                 .translate("confirm_new_email", args: [' ']),
                             validator: _validateConfirmEmail,
+                            style: context.textTheme.bodyMedium?.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500),
                             hintStyle: context.textTheme.bodyMedium?.copyWith(
                                 color: Color(0xffB3B3B3),
                                 fontWeight: FontWeight.w500),

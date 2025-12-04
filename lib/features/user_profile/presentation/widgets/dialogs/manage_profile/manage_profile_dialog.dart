@@ -11,7 +11,6 @@ import 'package:cointiply_app/features/user_profile/presentation/providers/setti
 import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/dialog_bg_widget.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/manage_profile/security_pin_dialog.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/manage_profile/upload_avatar_dialog.dart';
-import 'package:cointiply_app/routing/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -22,6 +21,7 @@ import 'change_password_dialog.dart';
 import 'change_your_country_dialog.dart';
 import 'change_your_language_dialog.dart';
 import 'delete_account_dialog.dart';
+import 'show_offer_token_dialog.dart';
 
 part 'tab/profile_tab_content_widget.dart';
 part 'tab/security_tab_content_widget.dart';
@@ -72,11 +72,11 @@ class _ManageProfileDialogState extends ConsumerState<ManageProfileDialog> {
   double _getDialogHeight(BuildContext context) {
     final tabIndex = ref.watch(tabBarIndexProvider);
     if (tabIndex == 0) {
-      return context.isMobile ? context.screenHeight * 0.95 : 600;
+      return context.isMobile ? context.screenHeight * 0.9 : 600;
     } else if (tabIndex == 1) {
       return context.isMobile ? context.screenHeight * 0.9 : 550;
     } else {
-      return context.isMobile ? context.screenHeight * 0.85 : 720;
+      return context.isMobile ? context.screenHeight * 0.9 : 720;
     }
   }
 
@@ -125,8 +125,7 @@ class _ManageProfileDialogState extends ConsumerState<ManageProfileDialog> {
       child: LayoutBuilder(
         builder: (context, constraints) {
           const double spacing = 8.0;
-          final double buttonWidth =
-              (constraints.maxWidth - spacing) /
+          final double buttonWidth = (constraints.maxWidth - spacing) /
               (context.isDesktop || context.isTablet ? 3.1 : 2);
 
           return Wrap(
@@ -166,33 +165,16 @@ class _ManageProfileDialogState extends ConsumerState<ManageProfileDialog> {
     required bool isSelected,
     required double width,
   }) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return GestureDetector(
-      onTap: () => ref.read(tabBarIndexProvider.notifier).state = index,
-      child: Container(
-        width: width,
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-        decoration: BoxDecoration(
-          color: isSelected ? colorScheme.primary : Colors.transparent,
-          borderRadius: BorderRadius.circular(12),
-          border: isSelected
-              ? null
-              : Border.all(
-                  width: 1,
-                  color: colorScheme.onSurfaceVariant.withValues(alpha: 0.2),
-                ),
-        ),
-        child: Center(
-          child: CommonText.titleMedium(
-            s,
-            fontWeight: FontWeight.w700,
-            fontSize: isSelected ? 16 : 14,
-            color:
-                isSelected ? const Color(0xff333333) : const Color(0xff98989A),
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-      ),
+    return CustomButtonWidget(
+      isOutlined: true,
+      title: s,
+      width: width,
+      fontSize: 16,
+      fontWeight: FontWeight.w700,
+      isActive: isSelected,
+      onTap: () {
+        ref.read(tabBarIndexProvider.notifier).state = index;
+      },
     );
   }
 

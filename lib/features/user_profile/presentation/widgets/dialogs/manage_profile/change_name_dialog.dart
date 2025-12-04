@@ -37,21 +37,23 @@ class _ChangeNameDialogState extends ConsumerState<ChangeNameDialog> {
       _nameController.text = userName;
     });
 
-    ref.listenManual(changeNameNotifierProvider, (previous, next) {
+    ref.listenManual(changeNameNotifierProvider, (previous, next) async {
       if (next.isChanging) return;
       if (next.status == ChangeNameStatus.success) {
         if (mounted && context.mounted) {
-          context.showSnackBar(
+          context.showSuccessSnackBar(
             message: context.translate('name_changed_successfully'),
-            textColor: Colors.white,
           );
-          context.pop(); // close dialog
           ref
               .read(getProfileNotifierProvider.notifier)
               .fetchProfile(isLoading: false); // refresh profile
           ref
               .read(currentUserProvider.notifier)
               .getCurrentUser(); // refresh current user
+          await Future.delayed(const Duration(milliseconds: 1000));
+          if (mounted) {
+            context.pop(); // close dialog
+          }
         }
       } else if (next.status == ChangeNameStatus.failure) {
         // Show error message
@@ -144,6 +146,7 @@ class _ChangeNameDialogState extends ConsumerState<ChangeNameDialog> {
                 ),
                 const SizedBox(height: 8),
                 CommonTextField(
+                  autofocus: true,
                   controller: _nameController,
                   hintText: context.translate("enter_your_name"),
                   enabled: !isLoading,
@@ -166,8 +169,7 @@ class _ChangeNameDialogState extends ConsumerState<ChangeNameDialog> {
                   children: [
                     SizedBox(
                       width: 120,
-                      child:
-                          CommonText.bodyLarge(
+                      child: CommonText.bodyLarge(
                         context.translate("new_name"),
                         fontWeight: FontWeight.w700,
                         color: Colors.white,

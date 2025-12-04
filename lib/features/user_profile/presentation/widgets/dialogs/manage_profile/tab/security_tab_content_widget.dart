@@ -31,7 +31,7 @@ class _SecurityTabContentWidgetState
         _securityMenuItem(
             title: context.translate("password"),
             btnTitle: context.translate("change_your_password"),
-            isPrimaryColor: true,
+            isPrimaryColor: false,
             onPressed: () {
               showChangePasswordDialog(context);
             }),
@@ -51,7 +51,9 @@ class _SecurityTabContentWidgetState
               } else {
                 show2FADialog(context, email: email, onSuccess: () {
                   // Refresh profile data after enabling 2FA
-                  ref.read(getProfileNotifierProvider.notifier).fetchProfile();
+                  ref
+                      .read(getProfileNotifierProvider.notifier)
+                      .fetchProfile(isLoading: false);
                 });
               }
             },

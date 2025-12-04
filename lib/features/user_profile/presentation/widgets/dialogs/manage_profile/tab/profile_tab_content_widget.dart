@@ -51,7 +51,6 @@ class ProfileTabContent extends ConsumerWidget {
           child: UserProfileImageWidget(size: 25),
           btnTitle: context.translate("change_your_avatar"),
           onPressed: () {
-            context.pop();
             showUploadAvatarDialog(context);
           },
           isMobile: isMobile,
@@ -137,7 +136,12 @@ class ProfileTabContent extends ConsumerWidget {
           btnTitle: context.translate(
               showOfferToken ? "hide_offer_token" : "show_offer_token"),
           onPressed: () {
-            ref.read(_showOfferTokenProvider.notifier).state = !showOfferToken;
+            if (offerToken.isEmpty) {
+              context.showSnackBar(
+                  message: context.translate("no_offer_token"));
+              return;
+            }
+            showOfferTokenDialog(context, offerToken: offerToken);
           },
           isMobile: isMobile,
         ),
@@ -150,12 +154,13 @@ class ProfileTabContent extends ConsumerWidget {
           children: [
             if (!context.isMobile)
               Expanded(
+                  flex: 2,
                   child: CommonText.titleMedium(
                 "",
                 fontWeight: FontWeight.w700,
               )),
             Expanded(
-              flex: 4,
+              flex: 5,
               child: CommonText.bodyMedium(
                   context.translate("offer_token_description"),
                   color: Color(0xff98989A)),
@@ -212,6 +217,7 @@ class ProfileTabContent extends ConsumerWidget {
             spacing: 21.0,
             children: [
               Expanded(
+                  flex: 2,
                   child: CommonText.bodyLarge(
                 title,
                 fontWeight: FontWeight.w700,
@@ -222,7 +228,7 @@ class ProfileTabContent extends ConsumerWidget {
                 child: Align(alignment: Alignment.centerLeft, child: child),
               ),
               Expanded(
-                flex: 2,
+                flex: 3,
                 child: CustomUnderLineButtonWidget(
                   title: btnTitle,
                   onTap: onPressed,

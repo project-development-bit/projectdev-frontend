@@ -44,16 +44,14 @@ class _SecurityPinDialogState extends ConsumerState<SecurityPinDialog> {
     // Listen to state changes
     ref.listenManual<SetSecurityPinState>(
       setSecurityPinNotifierProvider,
-      (previous, next) {
+      (previous, next) async {
         if (next.isSetting) return;
 
         if (next.isSuccess) {
           if (mounted && context.mounted) {
-            context.showSnackBar(
+            context.showSuccessSnackBar(
               message: next.successMessage ??
-                  context.translate("security_pin_enabled_successfully"),
-              backgroundColor: context.primary,
-              textColor: Colors.white,
+                    context.translate("security_pin_enabled_successfully")
             );
 
             // Refresh profile to get updated security pin status
@@ -62,7 +60,10 @@ class _SecurityPinDialogState extends ConsumerState<SecurityPinDialog> {
                 .fetchProfile(isLoading: false);
 
             // Close dialog
-            context.pop();
+            await Future.delayed(const Duration(milliseconds: 1000));
+            if (mounted) {
+              context.pop();
+            }
           }
         } else if (next.hasError) {
           if (mounted && context.mounted) {

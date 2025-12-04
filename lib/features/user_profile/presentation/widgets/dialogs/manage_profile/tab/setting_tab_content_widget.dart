@@ -48,12 +48,13 @@ class _SettingTabContentWidgetState
     final settingsData = ref.watch(settingProfileProvider);
     final language = settingsData.language;
     final languageFlag = Language.empty().getDisplayFlag(language);
+    final languageName = Language.empty().getDisplayName(language);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       spacing: 25.0,
       children: [
-        _languageWidget(context, languageFlag, language),
+        _languageWidget(context, languageFlag, languageName),
         _settingMenuItem(context,
             title: context.translate("notifications"),
             btnTitle: "",
@@ -127,7 +128,8 @@ class _SettingTabContentWidgetState
                       SizedBox(width: 5),
                       CommonText.bodyMedium(
                         language,
-                        color: Color(0xff98989A),
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500,
                       ),
                     ],
                   ),
@@ -176,10 +178,11 @@ class _SettingTabContentWidgetState
                           height: 21,
                           fit: BoxFit.cover,
                         ),
-                        SizedBox(width: 5),
+                        SizedBox(width: 10),
                         CommonText.bodyMedium(
                           language,
-                          color: Color(0xff98989A),
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
                         ),
                       ],
                     ),
@@ -241,6 +244,7 @@ class _SettingTabContentWidgetState
                           : WidgetStatePropertyAll(
                               context.primary.withAlpha(150)),
                       inactiveTrackColor: Color(0xff4D4D4D),
+                      trackOutlineWidth: WidgetStatePropertyAll(0.0),
                       activeTrackColor: context.colorScheme.primary,
                     )
                 ],

@@ -41,16 +41,16 @@ class _ChangePasswordDialogState extends ConsumerState<ChangePasswordDialog> {
   void initState() {
     super.initState();
 
-    ref.listenManual(changePasswordNotifierProvider, (previous, next) {
+    ref.listenManual(changePasswordNotifierProvider, (previous, next) async {
       if (next.isChanging) return;
       if (next.status == ChangePasswordStatus.success) {
         if (mounted && context.mounted) {
-          context.showSnackBar(
-            message: context.translate('password_changed_successfully'),
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            textColor: Colors.white,
-          );
-          context.pop(); // close dialog
+          context.showSuccessSnackBar(
+              message: context.translate('password_changed_successfully'));
+          await Future.delayed(const Duration(milliseconds: 1000));
+          if (mounted) {
+            context.pop(); // close dialog
+          }
         }
       } else if (next.status == ChangePasswordStatus.failure) {
         // Show error message
@@ -94,7 +94,7 @@ class _ChangePasswordDialogState extends ConsumerState<ChangePasswordDialog> {
   Widget build(BuildContext context) {
     final isLoading = ref.watch(changePasswordNotifierProvider).isChanging;
     double dialogHeight = context.isDesktop
-        ? 400
+        ? 450
         : context.isTablet
             ? 450
             : 500;
@@ -384,7 +384,7 @@ class _ChangePasswordDialogState extends ConsumerState<ChangePasswordDialog> {
                 title: context.translate('change_password_btn_text'),
                 fontSize: 14,
                 isDark: true,
-                width: context.isDesktop ? 200 : double.infinity,
+                width: context.isDesktop ? 250 : double.infinity,
                 fontWeight: FontWeight.w700,
                 onTap: isLoading ? null : _handleSubmit,
                 isLoading: isLoading,

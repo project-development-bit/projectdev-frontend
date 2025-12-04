@@ -64,7 +64,7 @@ class _ChangeLanguageDialogState extends ConsumerState<ChangeLanguageDialog> {
 
     ref.listenManual(
       changeLanguageProvider,
-      (previous, next) {
+      (previous, next) async {
         if (next.isChanging) {
           // Show loading indicator or disable inputs
         } else if (next.status == ChangeLanguageStatus.success) {
@@ -74,10 +74,15 @@ class _ChangeLanguageDialogState extends ConsumerState<ChangeLanguageDialog> {
           );
 
           // Refresh profile if needed
-          ref.read(getProfileNotifierProvider.notifier).fetchProfile();
-
+          
+          await Future.delayed(const Duration(milliseconds: 1000));
           // Close dialog on success
-          context.pop();
+          if (mounted) {
+            ref
+                .read(getProfileNotifierProvider.notifier)
+                .fetchProfile(isLoading: false);
+            context.pop();
+          }
         } else if (next.hasError) {
           // Show error message
           final errorMessage = next.errorMessage ??
@@ -135,6 +140,7 @@ class _ChangeLanguageDialogState extends ConsumerState<ChangeLanguageDialog> {
               title: context.translate('change_your_language_btn_text'),
               fontSize: 14,
               isDark: true,
+              width: 250,
               fontWeight: FontWeight.w700,
               onTap: _selectedLanguage != null
                   ? () {
