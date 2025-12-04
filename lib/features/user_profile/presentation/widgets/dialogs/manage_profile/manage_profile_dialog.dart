@@ -1,6 +1,7 @@
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/common/common_image_widget.dart';
 import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
+import 'package:cointiply_app/core/common/tab_bar_menu_item.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:cointiply_app/features/auth/presentation/widgets/disable_2fa_confirmation_dialog.dart';
 import 'package:cointiply_app/features/auth/presentation/widgets/two_factor_auth_dialog.dart';
@@ -27,7 +28,7 @@ part 'tab/security_tab_content_widget.dart';
 part 'tab/setting_tab_content_widget.dart';
 
 /// Provider to manage the selected tab index in the Manage Profile dialog
-final tabBarIndexProvider = StateProvider.autoDispose<int>((ref) => 0);
+final profileTabBarIndexProvider = StateProvider.autoDispose<int>((ref) => 0);
 
 void showManageProfileDialog(BuildContext context) {
   final screenHeight = MediaQuery.of(context).size.height;
@@ -52,7 +53,7 @@ class _ManageProfileDialogState extends ConsumerState<ManageProfileDialog> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(getProfileNotifierProvider.notifier).fetchProfile();
-      ref.read(tabBarIndexProvider.notifier).state = 0;
+      ref.read(profileTabBarIndexProvider.notifier).state = 0;
     });
     super.initState();
   }
@@ -99,7 +100,7 @@ class _ManageProfileDialogState extends ConsumerState<ManageProfileDialog> {
   }
 
   Widget _manageProfileTabBar() {
-    final selectedIndex = ref.watch(tabBarIndexProvider);
+    final selectedIndex = ref.watch(profileTabBarIndexProvider);
 
     // if (context.screenWidth > 600) {
     //   return Container(
@@ -148,23 +149,29 @@ class _ManageProfileDialogState extends ConsumerState<ManageProfileDialog> {
             spacing: spacing,
             runSpacing: 12.0,
             children: [
-              _tabBarMenuItem(
-                context.translate("manage_profile_tab_profile"),
+              TabBarMenuItem(
+                text: context.translate("manage_profile_tab_profile"),
                 index: 0,
                 isSelected: selectedIndex == 0,
                 width: buttonWidth,
+                onTap: () =>
+                    ref.read(profileTabBarIndexProvider.notifier).state = 0,
               ),
-              _tabBarMenuItem(
-                context.translate("manage_profile_tab_security"),
+              TabBarMenuItem(
+                text: context.translate("manage_profile_tab_security"),
                 index: 1,
                 isSelected: selectedIndex == 1,
                 width: buttonWidth,
+                onTap: () =>
+                    ref.read(profileTabBarIndexProvider.notifier).state = 1,
               ),
-              _tabBarMenuItem(
-                context.translate("manage_profile_tab_settings"),
+              TabBarMenuItem(
+                text: context.translate("manage_profile_tab_settings"),
                 index: 2,
                 isSelected: selectedIndex == 2,
                 width: buttonWidth,
+                onTap: () =>
+                    ref.read(profileTabBarIndexProvider.notifier).state = 2,
               ),
             ],
           );
@@ -173,44 +180,8 @@ class _ManageProfileDialogState extends ConsumerState<ManageProfileDialog> {
     );
   }
 
-  Widget _tabBarMenuItem(
-    String s, {
-    required int index,
-    required bool isSelected,
-    required double width,
-  }) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return GestureDetector(
-      onTap: () => ref.read(tabBarIndexProvider.notifier).state = index,
-      child: Container(
-        width: width,
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-        decoration: BoxDecoration(
-          color: isSelected ? colorScheme.primary : Colors.transparent,
-          borderRadius: BorderRadius.circular(12),
-          border: isSelected
-              ? null
-              : Border.all(
-                  width: 1,
-                  color: colorScheme.onSurfaceVariant.withValues(alpha: 0.2),
-                ),
-        ),
-        child: Center(
-          child: CommonText.titleMedium(
-            s,
-            fontWeight: FontWeight.w700,
-            fontSize: isSelected ? 16 : 14,
-            color:
-                isSelected ? const Color(0xff333333) : const Color(0xff98989A),
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget _manageProfileTabBody() {
-    final selectedIndex = ref.watch(tabBarIndexProvider);
+    final selectedIndex = ref.watch(profileTabBarIndexProvider);
     if (selectedIndex == 0) {
       return const ProfileTabContent();
     } else if (selectedIndex == 1) {
