@@ -49,30 +49,40 @@ class HomeBannerSectionState extends ConsumerState<HomeBannerSection> {
       height: bannerHeight,
       child: Stack(
         children: [
-          CarouselSlider.builder(
-            carouselController: bannerCarouselController,
-            itemCount: banners.length,
-            itemBuilder: (context, index, realIndex) {
-              final banner = banners[index];
-              return BannerSlide(
-                banner: banner,
+          Builder(builder: (context) {
+            return CarouselSlider(
+              carouselController: bannerCarouselController,
+              // itemCount: banners.length,
+              // items: (context, index, realIndex) {
+              //   final banner = banners[index];
+              //   return BannerSlide(
+              //     banner: banner,
+              //     height: bannerHeight,
+              //     fallbackImage: fallbackImage,
+              //   );
+              // },
+              items: [
+                for (final banner in banners)
+                  BannerSlide(
+                    banner: banner,
+                    height: bannerHeight,
+                    fallbackImage: fallbackImage,
+                  ),
+              ],
+              options: CarouselOptions(
                 height: bannerHeight,
-                fallbackImage: fallbackImage,
-              );
-            },
-            options: CarouselOptions(
-              height: bannerHeight,
-              viewportFraction: 1.0,
-              autoPlay: banners.length > 1,
-              autoPlayInterval: const Duration(seconds: 5),
-              autoPlayAnimationDuration: const Duration(milliseconds: 500),
-              autoPlayCurve: Curves.easeInOut,
-              enableInfiniteScroll: banners.length > 1,
-              onPageChanged: (index, reason) {
-                ref.read(currentBannerIndexProvider.notifier).state = index;
-              },
-            ),
-          ),
+                viewportFraction: 1.0,
+                autoPlay: banners.length > 1,
+                autoPlayInterval: const Duration(seconds: 5),
+                autoPlayAnimationDuration: const Duration(milliseconds: 500),
+                autoPlayCurve: Curves.easeInOut,
+                enableInfiniteScroll: banners.length > 1,
+                onPageChanged: (index, reason) {
+                  ref.read(currentBannerIndexProvider.notifier).state = index;
+                },
+              ),
+            );
+          }),
           Positioned(
             bottom: 10,
             left: isMobile ? 0 : null,
@@ -81,7 +91,7 @@ class HomeBannerSectionState extends ConsumerState<HomeBannerSection> {
                 mainAxisAlignment:
                     isMobile ? MainAxisAlignment.center : MainAxisAlignment.end,
                 children: [
-                  GestureDetector(
+                  _ArrowIconWidget(
                     onTap: () {
                       if (currentPageIndex < banners.length - 1) {
                         bannerCarouselController.previousPage();
@@ -89,19 +99,7 @@ class HomeBannerSectionState extends ConsumerState<HomeBannerSection> {
                         bannerCarouselController.animateToPage(0);
                       }
                     },
-                    child: Container(
-                      width: 24,
-                      height: 24,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.8),
-                          shape: BoxShape.circle),
-                      child: Icon(
-                        Icons.arrow_back,
-                        color: const Color(0xFF00A0DC), // TODO: use from theme
-                        size: 16,
-                      ),
-                    ),
+                    iconData: Icons.arrow_back_ios,
                   ),
                   ...List.generate(
                     banners.length,
@@ -128,7 +126,7 @@ class HomeBannerSectionState extends ConsumerState<HomeBannerSection> {
                           ),
                         )),
                   ),
-                  GestureDetector(
+                  _ArrowIconWidget(
                     onTap: () {
                       if (currentPageIndex < banners.length - 1) {
                         bannerCarouselController.nextPage();
@@ -136,19 +134,7 @@ class HomeBannerSectionState extends ConsumerState<HomeBannerSection> {
                         bannerCarouselController.animateToPage(0);
                       }
                     },
-                    child: Container(
-                      width: 24,
-                      height: 24,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.8),
-                          shape: BoxShape.circle),
-                      child: Icon(
-                        Icons.arrow_forward,
-                        color: const Color(0xFF00A0DC), // TODO: use from theme
-                        size: 16,
-                      ),
-                    ),
+                    iconData: Icons.arrow_forward_ios,
                   ),
                 ]),
           )
@@ -266,6 +252,49 @@ class BannerSlide extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _ArrowIconWidget extends StatefulWidget {
+  const _ArrowIconWidget({required this.onTap, required this.iconData});
+  final VoidCallback onTap;
+  final IconData iconData;
+
+  @override
+  State<_ArrowIconWidget> createState() => _ArrowIconWidgetState();
+}
+
+class _ArrowIconWidgetState extends State<_ArrowIconWidget> {
+  bool isHover = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: widget.onTap,
+      child: MouseRegion(
+        onEnter: (_) => setState(() => isHover = true),
+        onExit: (_) => setState(() => isHover = false),
+        cursor: SystemMouseCursors.click,
+        child: Container(
+          width: 30,
+          height: 30,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+              border: Border.all(
+                color: isHover ? Colors.white : const Color(0xFF7E7E81),
+                width: 1,
+              ),
+              shape: BoxShape.circle),
+          child: Icon(
+            widget.iconData,
+            color: isHover
+                ? Colors.white
+                : const Color(0xFF7E7E81), // TODO: use from theme
+            size: 14,
+          ),
+        ),
+      ),
     );
   }
 }
