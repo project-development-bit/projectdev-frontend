@@ -65,7 +65,7 @@ class HomeEventSection extends StatelessWidget {
                   fit: BoxFit.fitWidth,
                   alignment: Alignment(0, -1.5),
                   image: AssetImage(
-                      'assets/images/bg/coin_background_section_3_mobile.png'),
+                      AppLocalImages.homeCoinBackgroundSection3Mobile),
                 )),
               ),
             ),
