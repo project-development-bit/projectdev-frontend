@@ -77,6 +77,7 @@ dependencies:
   unique_device_identifier: ^2.0.4
   carousel_slider: ^5.1.1
   intl: ^0.20.2
+  vph_web_date_picker: ^0.1.7
   
   
 dev_dependencies:

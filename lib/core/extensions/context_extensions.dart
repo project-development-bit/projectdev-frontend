@@ -1,6 +1,8 @@
+import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/theme/app_colors.dart';
 import 'package:cointiply_app/core/common/widgets/custom_pointer_interceptor.dart';
-import 'package:cointiply_app/core/common/dialog_bg_widget.dart';
+import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/dialog_scaffold_widget.dart';
+import 'package:cointiply_app/main_common.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../localization/app_localizations.dart';
@@ -354,23 +356,15 @@ extension DialogExtension on BuildContext {
 
   Future<T> showManagePopup<T>(
       {required Widget child,
-      required String title,
-      bool barrierDismissible = true,
-      double? width,
-      double? height,
-      dynamic Function()? onClose,
-      Color? dividerColor}) {
+    bool barrierDismissible = true,
+  }) {
     final barrierColor = colorScheme.scrim.withValues(alpha: 0.6);
     return showDialog<T>(
       context: this,
       barrierDismissible: barrierDismissible,
       barrierColor: barrierColor,
-      builder: (context) => DialogBgWidget(
-        title: title,
-        dialogHeight: height,
-        dividerColor: dividerColor,
-        body: child,
-        onClose: onClose,
+      builder: (context) => DialogScaffoldWidget(
+        child: child,
       ),
     ).then((value) => value as T);
   }
@@ -438,34 +432,106 @@ extension DialogExtension on BuildContext {
   /// Show a snackbar
   void showSnackBar({
     required String message,
-    Duration duration = const Duration(seconds: 4),
+    Duration duration = const Duration(seconds: 2),
     SnackBarAction? action,
     Color? backgroundColor,
     Color? textColor,
   }) {
     try {
-      final messenger = ScaffoldMessenger.of(this);
-      messenger.clearSnackBars();
-      messenger.showSnackBar(
-        SnackBar(
-          content: Text(
-            message,
-            style: TextStyle(color: textColor),
+      // Use Overlay to show snackbar above dialogs
+      final overlay = Overlay.of(this, rootOverlay: true);
+
+      late OverlayEntry overlayEntry;
+      overlayEntry = OverlayEntry(
+        builder: (context) => Positioned(
+          bottom: 20,
+          left: 20,
+          right: 20,
+          child: Material(
+            color: Colors.transparent,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              decoration: BoxDecoration(
+                color: backgroundColor ??
+                    Theme.of(context).colorScheme.inverseSurface,
+                borderRadius: BorderRadius.circular(8),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.2),
+                    blurRadius: 8,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: CommonText(
+                      message,
+                      color: textColor ??
+                          Theme.of(context).colorScheme.onInverseSurface,
+                    ),
+                  ),
+                  if (action != null) ...[
+                    const SizedBox(width: 8),
+                    TextButton(
+                      onPressed: () {
+                        action.onPressed();
+                        overlayEntry.remove();
+                      },
+                      child: Text(action.label),
+                    ),
+                  ],
+                ],
+              ),
+            ),
           ),
-          duration: duration,
-          action: action,
-          backgroundColor: backgroundColor,
         ),
       );
+
+      overlay.insert(overlayEntry);
+
+      // Auto remove after duration
+      Future.delayed(duration, () {
+        if (overlayEntry.mounted) {
+          overlayEntry.remove();
+        }
+      });
     } catch (e) {
       debugPrint('Error showing snackbar: $e');
+      // Fallback to scaffold messenger
+      try {
+        final messenger = rootScaffoldMessengerKey.currentState;
+        if (messenger != null) {
+          messenger.clearSnackBars();
+          messenger.showSnackBar(
+            SnackBar(
+              content: CommonText(
+                message,
+                color: textColor,
+              ),
+              duration: duration,
+              action: action,
+              backgroundColor: backgroundColor,
+              behavior: SnackBarBehavior.floating,
+              margin: const EdgeInsets.only(
+                bottom: 20,
+                left: 20,
+                right: 20,
+              ),
+            ),
+          );
+        }
+      } catch (fallbackError) {
+        debugPrint('Fallback snackbar also failed: $fallbackError');
+      }
     }
   }
 
   /// Show an error snackbar
   void showErrorSnackBar({
     required String message,
-    Duration duration = const Duration(seconds: 4),
+    Duration duration = const Duration(seconds: 2),
     SnackBarAction? action,
   }) {
     showSnackBar(
@@ -480,7 +546,7 @@ extension DialogExtension on BuildContext {
   /// Show a success snackbar
   void showSuccessSnackBar({
     required String message,
-    Duration duration = const Duration(seconds: 4),
+    Duration duration = const Duration(seconds: 2),
     SnackBarAction? action,
   }) {
     showSnackBar(
@@ -495,7 +561,7 @@ extension DialogExtension on BuildContext {
   /// Show a warning snackbar
   void showWarningSnackBar({
     required String message,
-    Duration duration = const Duration(seconds: 4),
+    Duration duration = const Duration(seconds: 2),
     SnackBarAction? action,
   }) {
     showSnackBar(

@@ -1,6 +1,7 @@
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/common/common_textfield.dart';
 import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
+import 'package:cointiply_app/core/common/dialog_bg_widget.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/change_name_notifier.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
@@ -11,10 +12,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 showChangeNameDialog(BuildContext context) {
   context.showManagePopup(
-    height: context.isMobile ? 320 : 280,
     barrierDismissible: false,
     child: ChangeNameDialog(),
-    title: context.translate("change_your_name"),
   );
 }
 
@@ -38,21 +37,23 @@ class _ChangeNameDialogState extends ConsumerState<ChangeNameDialog> {
       _nameController.text = userName;
     });
 
-    ref.listenManual(changeNameNotifierProvider, (previous, next) {
+    ref.listenManual(changeNameNotifierProvider, (previous, next) async {
       if (next.isChanging) return;
       if (next.status == ChangeNameStatus.success) {
         if (mounted && context.mounted) {
-          context.showSnackBar(
+          context.showSuccessSnackBar(
             message: context.translate('name_changed_successfully'),
-            textColor: Colors.white,
           );
-          context.pop(); // close dialog
           ref
               .read(getProfileNotifierProvider.notifier)
               .fetchProfile(isLoading: false); // refresh profile
           ref
               .read(currentUserProvider.notifier)
               .getCurrentUser(); // refresh current user
+      
+          if (mounted) {
+            context.pop(); // close dialog
+          }
         }
       } else if (next.status == ChangeNameStatus.failure) {
         // Show error message
@@ -87,13 +88,6 @@ class _ChangeNameDialogState extends ConsumerState<ChangeNameDialog> {
           backgroundColor: context.error,
           textColor: Colors.white,
         );
-        ScaffoldMessenger.of(context).clearSnackBars();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(context.translate('name_unchanged')),
-            backgroundColor: context.error,
-          ),
-        );
         return;
       }
 
@@ -119,7 +113,10 @@ class _ChangeNameDialogState extends ConsumerState<ChangeNameDialog> {
   @override
   Widget build(BuildContext context) {
     final isLoading = ref.watch(changeNameNotifierProvider).isChanging;
-    return _dialogBgWidget(isLoading: isLoading);
+    return DialogBgWidget(
+        title: context.translate("change_your_name"),
+        dialogHeight: context.isMobile ? 320 : 280,
+        body: _dialogBgWidget(isLoading: isLoading));
   }
 
   Widget _dialogBgWidget({required bool isLoading}) {
@@ -127,59 +124,36 @@ class _ChangeNameDialogState extends ConsumerState<ChangeNameDialog> {
       key: _formKey,
       child: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          padding: context.isDesktop
+              ? const EdgeInsets.symmetric(horizontal: 24, vertical: 16)
+              : const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (context.isMobile) ...[
-                CommonText.bodyMedium(context.translate("new_name")),
-                const SizedBox(height: 8),
-                CommonTextField(
-                  controller: _nameController,
-                  hintText: context.translate("enter_your_name"),
-                  enabled: !isLoading,
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return context.translate('name_required');
-                    }
-                    if (value.trim().length < 5) {
-                      return context.translate('name_too_short');
-                    }
-                    if (value.trim().length > 50) {
-                      return context.translate('name_too_long');
-                    }
-                    return null;
-                  },
+              if (context.isMobile || context.isTablet) ...[
+                CommonText.bodyLarge(
+                  context.translate("new_name"),
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white,
                 ),
+                const SizedBox(height: 8),
+                _textfield(isLoading),
               ] else
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(
                       width: 120,
-                      child:
-                          CommonText.bodyMedium(context.translate("new_name")),
+                      child: CommonText.bodyLarge(
+                        context.translate("new_name"),
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                      ),
                     ),
                     const SizedBox(width: 16),
                     Expanded(
-                      child: CommonTextField(
-                        controller: _nameController,
-                        hintText: context.translate("enter_your_name"),
-                        enabled: !isLoading,
-                        validator: (value) {
-                          if (value == null || value.trim().isEmpty) {
-                            return context.translate('name_required');
-                          }
-                          if (value.trim().length < 5) {
-                            return context.translate('name_too_short');
-                          }
-                          if (value.trim().length > 50) {
-                            return context.translate('name_too_long');
-                          }
-                          return null;
-                        },
-                      ),
+                      child: _textfield(isLoading),
                     ),
                   ],
                 ),
@@ -191,15 +165,35 @@ class _ChangeNameDialogState extends ConsumerState<ChangeNameDialog> {
                 fontSize: 14,
                 isDark: true,
                 fontWeight: FontWeight.w700,
-                width: 200,
+                width: context.isDesktop ? 200 : double.infinity,
                 isLoading: isLoading,
-              )
-                 
-              ),
+              )),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _textfield(bool isLoading) {
+    return CommonTextField(
+      controller: _nameController,
+      autofocus: true,
+      hintText: context.translate("enter_your_name"),
+      enabled: !isLoading,
+      onSubmitted: (_) => _handleSubmit(),
+      validator: (value) {
+        if (value == null || value.trim().isEmpty) {
+          return context.translate('name_required');
+        }
+        if (value.trim().length < 5) {
+          return context.translate('name_too_short');
+        }
+        if (value.trim().length > 50) {
+          return context.translate('name_too_long');
+        }
+        return null;
+      },
     );
   }
 }

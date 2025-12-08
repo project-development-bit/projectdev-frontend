@@ -120,7 +120,7 @@ class GigaFaucetHeader extends ConsumerWidget {
                         ),
                         height: 41,
                         onTap: () => context.go('/auth/login'),
-                        fontSize: 16,
+                        fontSize: 14,
                         title: 'Login',
                       ),
                 if (isAuthenticated) ...[

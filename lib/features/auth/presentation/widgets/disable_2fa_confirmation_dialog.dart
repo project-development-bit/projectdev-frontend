@@ -1,6 +1,7 @@
-import 'package:cointiply_app/core/common/common_button.dart';
+// import 'package:cointiply_app/core/common/common_button.dart';
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
+import 'package:cointiply_app/core/common/dialog_bg_widget.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,10 +13,8 @@ import '../providers/check_2fa_status_provider.dart';
 void showDisable2FAConfirmationDialog(BuildContext context,
     {required Function() onDisabled}) {
   context.showManagePopup(
-    height: context.isMobile ? 400 : 350,
     child: Disable2FAConfirmationDialog(onDisabled: onDisabled),
     barrierDismissible: true,
-    title: context.translate("disable_2fa_title"),
   );
 }
 
@@ -76,96 +75,110 @@ class _Disable2FAConfirmationDialogState
     final disable2FAState = ref.watch(disable2FAProvider);
     final isDisabling = disable2FAState is Disable2FALoading;
 
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Warning message
-            CommonText.bodyLarge(
-              context.translate('disable_2fa_warning_message'),
-              color: context.onSurface,
-              textAlign: TextAlign.start,
-            ),
-            const SizedBox(height: 24),
+    return DialogBgWidget(
+      dialogHeight: context.isDesktop
+          ? 350
+          : context.isTablet
+              ? 400
+              : 510,
+      title: context.translate("disable_2fa_title"),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: context.isMobile || context.isTablet
+              ? const EdgeInsets.symmetric(horizontal: 17, vertical: 22)
+              : const EdgeInsets.symmetric(horizontal: 31, vertical: 22),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Warning message
+              CommonText.bodyLarge(
+                context.translate('disable_2fa_warning_message'),
+                color: context.onSurface,
+                textAlign: TextAlign.start,
+              ),
+              const SizedBox(height: 24),
 
-            // Security note
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: context.error.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                  color: context.error.withValues(alpha: 0.3),
+              // Security note
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: context.error.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color: context.error.withValues(alpha: 0.3),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.warning_amber_rounded,
+                      color: context.error,
+                      size: 24,
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: CommonText.bodyMedium(
+                        context.translate('disable_2fa_security_note'),
+                        color: context.error,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              child: Row(
+
+              const SizedBox(height: 32),
+
+              // Action buttons
+              Flex(
+                direction: context.isMobile || context.isTablet
+                    ? Axis.vertical
+                    : Axis.horizontal,
+                mainAxisAlignment: MainAxisAlignment.center,
+                spacing: 10.0,
+                textDirection:
+                    context.isMobile ? TextDirection.rtl : TextDirection.ltr,
                 children: [
-                  Icon(
-                    Icons.warning_amber_rounded,
-                    color: context.error,
-                    size: 24,
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: CommonText.bodyMedium(
-                      context.translate('disable_2fa_security_note'),
-                      color: context.error,
+                  CustomButtonWidget(
+                    title: context.translate("cancel"),
+                    onTap: isDisabling
+                        ? null
+                        : () {
+                            context.pop();
+                            ref.read(disable2FAProvider.notifier).reset();
+                          },
+                    isOutlined: true,
+                    width: context.isMobile || context.isTablet
+                        ? double.infinity
+                        : 233,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 40,
+                      vertical: 10,
                     ),
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                  ),
+                  const SizedBox(width: 16),
+                  CustomUnderLineButtonWidget(
+                    title: context.translate("disable_2fa"),
+                    onTap: isDisabling ? null : _handleDisable2FA,
+                    fontColor: Color(0xff98989A),
+                    isRed: true,
+                    width: context.isMobile || context.isTablet
+                        ? double.infinity
+                        : 233,
+                    isLoading: isDisabling,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 40,
+                      vertical: 10,
+                    ),
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
                   ),
                 ],
               ),
-            ),
-
-            const SizedBox(height: 32),
-
-            // Action buttons
-            Flex(
-              direction: context.isMobile ? Axis.vertical : Axis.horizontal,
-              mainAxisAlignment: MainAxisAlignment.center,
-              spacing: 10.0,
-              textDirection:
-                  context.isMobile ? TextDirection.rtl : TextDirection.ltr,
-              children: [
-                CustomButtonWidget(
-                  title: context.translate("cancel"),
-                  onTap: isDisabling
-                      ? null
-                      : () {
-                          context.pop();
-                          ref.read(disable2FAProvider.notifier).reset();
-                        },
-                  isOutlined: true,
-                  width: context.isMobile ? double.infinity : 233,
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 40,
-                    vertical: 10,
-                  ),
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                ),
-                const SizedBox(width: 16),
-                
-                CustomUnderLineButtonWidget(
-                  title: context.translate("disable_2fa"),
-                  onTap: isDisabling ? null : _handleDisable2FA,
-                  fontColor: Color(0xff98989A),
-                  isRed: true,
-                  width: context.isMobile ? double.infinity : 233,
-                    isLoading: isDisabling,
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 40,
-                    vertical: 10,
-                  ),
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                ),
-                
-              ],
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
