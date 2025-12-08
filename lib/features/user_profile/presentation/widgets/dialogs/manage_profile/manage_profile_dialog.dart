@@ -1,6 +1,8 @@
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/common/common_image_widget.dart';
 import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
+import 'package:cointiply_app/core/common/dialog_bg_widget.dart';
+import 'package:cointiply_app/core/common/tab_bar_menu_item.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:cointiply_app/features/auth/presentation/widgets/disable_2fa_confirmation_dialog.dart';
 import 'package:cointiply_app/features/auth/presentation/widgets/two_factor_auth_dialog.dart';
@@ -8,7 +10,6 @@ import 'package:cointiply_app/features/user_profile/domain/entities/language.dar
 import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/get_profile_notifier.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/setting_profile_notifier.dart';
-import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/dialog_bg_widget.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/manage_profile/security_pin_dialog.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/manage_profile/upload_avatar_dialog.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +29,7 @@ part 'tab/security_tab_content_widget.dart';
 part 'tab/setting_tab_content_widget.dart';
 
 /// Provider to manage the selected tab index in the Manage Profile dialog
-final tabBarIndexProvider = StateProvider.autoDispose<int>((ref) => 0);
+final profileTabBarIndexProvider = StateProvider.autoDispose<int>((ref) => 0);
 
 void showManageProfileDialog(BuildContext context) {
   // final screenHeight = MediaQuery.of(context).size.height;
@@ -53,7 +54,7 @@ class _ManageProfileDialogState extends ConsumerState<ManageProfileDialog> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(getProfileNotifierProvider.notifier).fetchProfile();
-      ref.read(tabBarIndexProvider.notifier).state = 0;
+      ref.read(profileTabBarIndexProvider.notifier).state = 0;
     });
     super.initState();
   }
@@ -70,7 +71,7 @@ class _ManageProfileDialogState extends ConsumerState<ManageProfileDialog> {
   }
 
   double _getDialogHeight(BuildContext context) {
-    final tabIndex = ref.watch(tabBarIndexProvider);
+    final tabIndex = ref.watch(profileTabBarIndexProvider);
     if (tabIndex == 0) {
       return context.isMobile ? context.screenHeight * 0.9 : 600;
     } else if (tabIndex == 1) {
@@ -119,8 +120,42 @@ class _ManageProfileDialogState extends ConsumerState<ManageProfileDialog> {
   }
 
   Widget _manageProfileTabBar() {
-    final selectedIndex = ref.watch(tabBarIndexProvider);
-    return SizedBox(
+    final selectedIndex = ref.watch(profileTabBarIndexProvider);
+
+    // if (context.screenWidth > 600) {
+    //   return Container(
+    //     padding: const EdgeInsets.symmetric(vertical: 21.5),
+    //     child: Row(
+    //       mainAxisAlignment: MainAxisAlignment.center,
+    //       crossAxisAlignment: CrossAxisAlignment.center,
+    //       mainAxisSize: MainAxisSize.min,
+    //       spacing: 6.0,
+    //       children: [
+    //         _tabBarMenuItem(
+    //           context.translate("manage_profile_tab_profile"),
+    //           index: 0,
+    //           isSelected: selectedIndex == 0,
+    //           width:  150,
+    //         ),
+    //         _tabBarMenuItem(
+    //           context.translate("manage_profile_tab_security"),
+    //           index: 1,
+    //           isSelected: selectedIndex == 1,
+    //           width: 150,
+    //         ),
+    //         _tabBarMenuItem(
+    //           context.translate("manage_profile_tab_settings"),
+    //           index: 2,
+    //           isSelected: selectedIndex == 2,
+    //           width: 150,
+    //         ),
+    //       ],
+    //     ),
+    //   );
+    // }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 21.5),
       width: double.infinity,
       child: LayoutBuilder(
         builder: (context, constraints) {
@@ -134,23 +169,29 @@ class _ManageProfileDialogState extends ConsumerState<ManageProfileDialog> {
             spacing: spacing,
             runSpacing: 12.0,
             children: [
-              _tabBarMenuItem(
-                context.translate("manage_profile_tab_profile"),
+              TabBarMenuItem(
+                text: context.translate("manage_profile_tab_profile"),
                 index: 0,
                 isSelected: selectedIndex == 0,
                 width: buttonWidth,
+                onTap: () =>
+                    ref.read(profileTabBarIndexProvider.notifier).state = 0,
               ),
-              _tabBarMenuItem(
-                context.translate("manage_profile_tab_security"),
+              TabBarMenuItem(
+                text: context.translate("manage_profile_tab_security"),
                 index: 1,
                 isSelected: selectedIndex == 1,
                 width: buttonWidth,
+                onTap: () =>
+                    ref.read(profileTabBarIndexProvider.notifier).state = 1,
               ),
-              _tabBarMenuItem(
-                context.translate("manage_profile_tab_settings"),
+              TabBarMenuItem(
+                text: context.translate("manage_profile_tab_settings"),
                 index: 2,
                 isSelected: selectedIndex == 2,
                 width: buttonWidth,
+                onTap: () =>
+                    ref.read(profileTabBarIndexProvider.notifier).state = 2,
               ),
             ],
           );
@@ -159,27 +200,8 @@ class _ManageProfileDialogState extends ConsumerState<ManageProfileDialog> {
     );
   }
 
-  Widget _tabBarMenuItem(
-    String s, {
-    required int index,
-    required bool isSelected,
-    required double width,
-  }) {
-    return CustomButtonWidget(
-      isOutlined: true,
-      title: s,
-      width: width,
-      fontSize: 16,
-      fontWeight: FontWeight.w700,
-      isActive: isSelected,
-      onTap: () {
-        ref.read(tabBarIndexProvider.notifier).state = index;
-      },
-    );
-  }
-
   Widget _manageProfileTabBody() {
-    final selectedIndex = ref.watch(tabBarIndexProvider);
+    final selectedIndex = ref.watch(profileTabBarIndexProvider);
     if (selectedIndex == 0) {
       return const ProfileTabContent();
     } else if (selectedIndex == 1) {

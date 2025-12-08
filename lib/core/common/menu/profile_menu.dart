@@ -6,6 +6,7 @@ import 'package:cointiply_app/core/common/widgets/custom_pointer_interceptor.dar
 import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/dialog_scaffold_widget.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/profile_dialog.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/reward_dialog.dart';
+import 'package:cointiply_app/features/wallet/presentation/widgets/wallet_dialog.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cointiply_app/core/common/common_text.dart';
@@ -75,13 +76,18 @@ class ProfileMenu extends StatelessWidget {
           ),
 
           _MenuItem(
-            title: context.translate("transactions"),
-            onTap: () {},
+            title: context.translate("wallet"),
+            onTap: () {
+              closeMenu();
+              _showWalletDialog(context);
+            },
           ),
 
           _MenuItem(
             title: context.translate("referrals"),
-            onTap: () {},
+            onTap: () {
+              closeMenu();
+            },
           ),
           // dotted divider (thin + low opacity)
           DotedLineDivider(
@@ -131,6 +137,17 @@ class ProfileMenu extends StatelessWidget {
       barrierDismissible: true,
       barrierColor: colorScheme.scrim.withValues(alpha: 0.6),
       builder: (context) => DialogScaffoldWidget(child: const RewardDialog()),
+    );
+  }
+
+  void _showWalletDialog(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      barrierColor: colorScheme.scrim.withValues(alpha: 0.6),
+      builder: (context) => const WalletDialog(),
     );
   }
 

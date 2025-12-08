@@ -4,7 +4,7 @@ import 'package:cointiply_app/features/earnings/data/model/request/earnings_hist
 import 'package:cointiply_app/features/earnings/data/model/request/earnings_statistics_request.dart';
 import 'package:cointiply_app/features/earnings/presentation/provider/get_earnings_history_notifier.dart';
 import 'package:cointiply_app/features/earnings/presentation/provider/get_earnings_statistics_notifier.dart';
-import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/dialog_bg_widget.dart';
+import 'package:cointiply_app/core/common/dialog_bg_widget.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/overview/avatar_badge_info.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/sections/coins_history_section.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/sections/statistics_section.dart';
@@ -35,7 +35,7 @@ class _ProfileDialogState extends ConsumerState<ProfileDialog> {
           .read(earningsStatisticsNotifierProvider.notifier)
           .fetchStatistics(const EarningsStatisticsRequest());
       ref.read(earningsHistoryNotifierProvider.notifier).fetchEarningsHistory(
-          const EarningsHistoryRequestModel(page: 1, limit: 20, days: 7));
+          const EarningsHistoryRequestModel(page: 1, limit: 20, days: 30));
     });
     super.initState();
   }
@@ -60,7 +60,8 @@ class _ProfileDialogState extends ConsumerState<ProfileDialog> {
       padding: EdgeInsets.zero,
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 32),
+          padding:
+              EdgeInsets.symmetric(horizontal: context.isMobile ? 10.5 : 32),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,

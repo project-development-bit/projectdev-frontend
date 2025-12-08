@@ -118,7 +118,7 @@ class _CustomUnderLineButtonWidgetState
           padding: widget.isLoading
               ? EdgeInsets.zero
               : widget.padding ??
-              const EdgeInsets.symmetric(vertical: 12, horizontal: 17),
+                  const EdgeInsets.symmetric(vertical: 12, horizontal: 17),
           decoration: BoxDecoration(
             color: bgColor,
             borderRadius: BorderRadius.circular(widget.borderRadius ?? 12),
@@ -130,26 +130,25 @@ class _CustomUnderLineButtonWidgetState
             ),
           ),
           child: widget.isLoading
-                ? SizedBox(
-                    height: 20,
-                    width: 20,
+              ? SizedBox(
+                  height: 20,
+                  width: 20,
                   child: Center(
                     child: CircularProgressIndicator(
                       strokeWidth: 2,
                       valueColor: AlwaysStoppedAnimation(
                         finalTextColor,
                       ),
-                      ),
                     ),
-                  )
-                : CommonText.titleMedium(
-                    widget.title,
-                    fontSize: widget.fontSize ?? 18,
-                    fontWeight: widget.fontWeight ?? FontWeight.w700,
-                    color: finalTextColor,
-                  textAlign: TextAlign.center,
                   ),
-          
+                )
+              : CommonText.titleMedium(
+                  widget.title,
+                  fontSize: widget.fontSize ?? 18,
+                  fontWeight: widget.fontWeight ?? FontWeight.w700,
+                  color: finalTextColor,
+                  textAlign: TextAlign.center,
+                ),
         ),
       ),
     );
