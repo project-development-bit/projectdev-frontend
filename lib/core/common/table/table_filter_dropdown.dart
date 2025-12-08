@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:flutter/material.dart';
 
 class TableFilterDropdown extends StatefulWidget {
@@ -37,6 +38,7 @@ class _TableFilterDropdownState extends State<TableFilterDropdown> {
   OverlayEntry _createOverlayEntry() {
     RenderBox renderBox = context.findRenderObject() as RenderBox;
     final offset = renderBox.localToGlobal(Offset.zero);
+    final colorScheme = Theme.of(context).colorScheme;
 
     return OverlayEntry(
       builder: (_) => Positioned(
@@ -69,16 +71,14 @@ class _TableFilterDropdownState extends State<TableFilterDropdown> {
                             : Icons.circle_outlined,
                         size: 18,
                         color: isSelected
-                            ? Colors.blueAccent
+                            ? colorScheme.primary
                             : const Color(0xFF98989A),
                       ),
                       const SizedBox(width: 8),
-                      Text(
+                      CommonText.bodyMedium(
                         option.toUpperCase(),
-                        style: const TextStyle(
-                          color: Color(0xFFEEEEEE),
-                          fontSize: 14,
-                        ),
+                        color:
+                            isSelected ? Colors.white : const Color(0xFF98989A),
                       ),
                     ],
                   ),
