@@ -79,6 +79,7 @@ dependencies:
   intl: ^0.20.2
   dropdown_search: ^6.0.2
   vph_web_date_picker: ^0.1.7
+  skeletonizer: ^2.1.1
   
   
 dev_dependencies:

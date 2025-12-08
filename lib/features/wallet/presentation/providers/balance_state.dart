@@ -1,0 +1,32 @@
+import 'package:cointiply_app/features/wallet/domain/entity/balance.dart';
+
+enum GetBalanceStatus {
+  initial,
+  loading,
+  data,
+  error,
+}
+
+class BalanceState {
+  final BalanceResponse? balance;
+  final GetBalanceStatus status;
+  final String? error;
+
+  const BalanceState({
+    this.balance,
+    this.status = GetBalanceStatus.initial,
+    this.error,
+  });
+
+  BalanceState copyWith({
+    BalanceResponse? balance,
+    GetBalanceStatus? status,
+    String? error,
+  }) {
+    return BalanceState(
+      balance: balance ?? this.balance,
+      status: status ?? this.status,
+      error: error ?? this.error,
+    );
+  }
+}

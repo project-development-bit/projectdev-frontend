@@ -1,13 +1,16 @@
+import 'package:cointiply_app/features/wallet/presentation/providers/get_balance_notifier_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:cointiply_app/core/core.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class InterestNotificationWidget extends StatelessWidget {
+class InterestNotificationWidget extends ConsumerWidget {
   const InterestNotificationWidget({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final localizations = AppLocalizations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final balanceState = ref.watch(getBalanceNotifierProvider);
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -41,9 +44,14 @@ class InterestNotificationWidget extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 CommonText.bodySmall(
-                  localizations
-                          ?.translate('interest_notification_description') ??
-                      "Keep at least 35,000 Coins to earn 5% interest. Interest is paid every week. Turn it on in your settings.",
+                  localizations?.translate(
+                        'interest_notification_description',
+                        args: [
+                          '${balanceState.balance?.interestInfo.minimumBalanceRequired ?? 0}',
+                          '${balanceState.balance?.interestInfo.interestRate ?? 0}',
+                        ],
+                      ) ??
+                      "Keep at least ${balanceState.balance?.interestInfo.minimumBalanceRequired ?? 0} Coins to earn ${balanceState.balance?.interestInfo.interestRate ?? 0}% interest. Interest is paid every week. Turn it on in your settings.",
                   color: Color(0xFF98989A),
                   fontWeight: FontWeight.w400,
                 ),
