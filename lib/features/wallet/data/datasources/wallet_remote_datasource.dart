@@ -81,7 +81,7 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
       PaymentHistoryRequest request) async {
     try {
       final response = await dioClient.get(
-        '/withdrawals?${request.toRequestUrl()}',
+        '/transactions?${request.toRequestUrl()}',
       );
       return PaymentHistoryResponseModel.fromJson(response.data);
     } on DioException catch (e) {
