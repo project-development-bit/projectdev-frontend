@@ -1,6 +1,7 @@
 import 'package:cointiply_app/core/common/common_dropdown_field_with_icon.dart';
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/theme/app_colors.dart';
+import 'package:cointiply_app/features/auth/presentation/providers/ip_country_state.dart';
 import 'package:cointiply_app/features/auth/presentation/widgets/onboarding_background.dart';
 import 'package:cointiply_app/features/terms_privacy/presentation/services/terms_privacy_navigation_service.dart';
 import 'package:cointiply_app/features/auth/presentation/providers/ip_country_provider.dart';
@@ -50,6 +51,23 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(getCountriesNotifierProvider.notifier).fetchCountries();
       ref.read(getIpCountryNotifierProvider.notifier).detectCountry();
+    });
+
+    ref.listenManual<IpCountryState>(getIpCountryNotifierProvider,
+        (prev, next) {
+      final countriesState = ref.read(getCountriesNotifierProvider);
+      if (next.country != null && countriesState.countries != null) {
+        final detected = countriesState.countries!.firstWhere(
+          (c) => c.code.toLowerCase() == next.country!.code?.toLowerCase(),
+          orElse: () => Country(code: "", name: "", flag: "", id: 0),
+        );
+        // Set detected country if not already selected by user or already detected
+        if (detected.code.isNotEmpty && mounted && _selectedCountry == null) {
+          setState(() {
+            _selectedCountry = detected;
+          });
+        }
+      }
     });
 
     // Watch register state for navigation and error handling
