@@ -1,7 +1,7 @@
 // reward_state.dart
 
 import 'package:cointiply_app/features/reward/domain/entities/reward_level.dart';
-import 'package:cointiply_app/features/reward/domain/entities/reward_response.dart';
+import 'package:cointiply_app/features/reward/domain/entities/user_level_state.dart';
 
 enum GetRewardStatus {
   initial,
@@ -11,8 +11,10 @@ enum GetRewardStatus {
 }
 
 class RewardState {
-  final RewardResponse? rewards;
+  final UserLevelState? userLevelState;
+  final List<RewardLevel> levels;
   final GetRewardStatus status;
+  final String selectedLevel;
   final String? error;
 
   final List<RewardLevel> visibleLevels;
@@ -20,7 +22,10 @@ class RewardState {
   final bool isViewAll;
 
   const RewardState({
-    this.rewards,
+    // this.rewards,
+    this.selectedLevel = '',
+    this.userLevelState,
+    this.levels = const [],
     this.status = GetRewardStatus.initial,
     this.error,
     this.visibleLevels = const [],
@@ -28,18 +33,22 @@ class RewardState {
   });
 
   RewardState copyWith({
-    RewardResponse? rewards,
+    UserLevelState? userLevelState,
+    List<RewardLevel>? levels,
     GetRewardStatus? status,
     String? error,
     List<RewardLevel>? visibleLevels,
     bool? isViewAll,
+    String? selectedLevel,
   }) {
     return RewardState(
-      rewards: rewards ?? this.rewards,
+      userLevelState: userLevelState ?? this.userLevelState,
+      levels: levels ?? this.levels,
       status: status ?? this.status,
       error: error ?? this.error,
       visibleLevels: visibleLevels ?? this.visibleLevels,
       isViewAll: isViewAll ?? this.isViewAll,
+      selectedLevel: selectedLevel ?? this.selectedLevel,
     );
   }
 }
