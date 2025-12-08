@@ -8,6 +8,7 @@ import 'package:cointiply_app/features/user_profile/presentation/providers/chang
 import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/get_countries_state.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/get_profile_notifier.dart';
+import 'package:cointiply_app/routing/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -59,7 +60,34 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
         }
       },
     );
+
+    ref.listenManual(
+      changeCountryProvider,
+      (previous, next) async {
+        if (next.isChanging) {
+          // Show loading indicator or disable inputs
+        } else if (next.status == ChangeCountryStatus.success) {
+          // Close dialog on success
+          context.showSuccessSnackBar(message: "Country changed successfully");
+          ref
+              .read(getProfileNotifierProvider.notifier)
+              .fetchProfile(isLoading: false);
+          ref.read(currentUserProvider.notifier).getCurrentUser();
+
+          if (mounted) {
+            context.pop();
+          }
+        } else if (next.hasError) {
+          // Show error message
+          final errorMessage = next.errorMessage ??
+              context.translate("failed_to_change_country");
+          context.showSnackBar(
+              message: errorMessage, backgroundColor: context.error);
+        }
+      },
+    );
   }
+  
 
   void _onChangeCountry() {
     // If the selected country is the same as the previous one, show an error message
