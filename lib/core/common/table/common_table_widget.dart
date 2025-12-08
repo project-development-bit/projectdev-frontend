@@ -3,6 +3,7 @@ import 'package:cointiply_app/core/common/table/table_header_widget.dart';
 import 'package:cointiply_app/core/common/table/table_row_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:cointiply_app/core/core.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class CommonTableWidget extends StatelessWidget {
   final List<String> headers;
@@ -14,6 +15,8 @@ class CommonTableWidget extends StatelessWidget {
   final Function(int) changePage;
   final Function(int) changeLimit;
   final Widget? filterBar;
+  final bool isLoading;
+  final String noDataText;
   const CommonTableWidget({
     super.key,
     required this.headers,
@@ -25,6 +28,8 @@ class CommonTableWidget extends StatelessWidget {
     required this.changePage,
     required this.changeLimit,
     this.filterBar,
+    this.isLoading = false,
+    this.noDataText = "No data available",
   });
 
   @override
@@ -36,6 +41,7 @@ class CommonTableWidget extends StatelessWidget {
       children: [
         const SizedBox(height: 12),
         if (filterBar != null) filterBar!,
+        SizedBox(height: filterBar != null ? 8 : 0),
         Container(
           width: double.infinity,
           decoration: BoxDecoration(
@@ -54,7 +60,17 @@ class CommonTableWidget extends StatelessWidget {
                             color: const Color(
                                 0xFF333333), // TODO: to use from scheme
                             height: 1),
-                        ...values.map((e) => TableRowWidget(values: e)),
+                        Skeletonizer(
+                          enabled: isLoading,
+                          child: values.isEmpty && !isLoading
+                              ? _buildNoData(context, noDataText: noDataText)
+                              : Column(
+                                  children: [
+                                    ...values
+                                        .map((e) => TableRowWidget(values: e)),
+                                  ],
+                                ),
+                        )
                       ],
                     ),
                   ),
@@ -63,7 +79,16 @@ class CommonTableWidget extends StatelessWidget {
                   children: [
                     TableHeaderWidget(headers: headers),
                     Divider(color: const Color(0xFF333333), height: 1),
-                    ...values.map((e) => TableRowWidget(values: e)),
+                    Skeletonizer(
+                      enabled: isLoading,
+                      child: values.isEmpty && !isLoading
+                          ? _buildNoData(context, noDataText: noDataText)
+                          : Column(
+                              children: [
+                                ...values.map((e) => TableRowWidget(values: e)),
+                              ],
+                            ),
+                    )
                   ],
                 ),
         ),
@@ -79,4 +104,17 @@ class CommonTableWidget extends StatelessWidget {
       ],
     );
   }
+}
+
+Widget _buildNoData(BuildContext context,
+    {String noDataText = "No data available"}) {
+  return Container(
+    height: 80,
+    alignment: Alignment.center,
+    child: CommonText.bodyMedium(
+      noDataText,
+      color: const Color(0xFF98989A), // TODO: use from scheme
+      fontWeight: FontWeight.w600,
+    ),
+  );
 }

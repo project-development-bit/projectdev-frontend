@@ -78,6 +78,7 @@ dependencies:
   carousel_slider: ^5.1.1
   intl: ^0.20.2
   vph_web_date_picker: ^0.1.7
+  skeletonizer: ^2.1.1
   
   
 dev_dependencies:
