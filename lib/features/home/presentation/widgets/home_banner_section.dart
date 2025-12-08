@@ -43,7 +43,7 @@ class HomeBannerSectionState extends ConsumerState<HomeBannerSection> {
       fit: BoxFit.cover,
     );
     final currentPageIndex = ref.watch(currentBannerIndexProvider);
-    // final colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = Theme.of(context).colorScheme;
     return SizedBox(
       width: double.infinity,
       height: bannerHeight,
@@ -84,21 +84,21 @@ class HomeBannerSectionState extends ConsumerState<HomeBannerSection> {
           Positioned(
             bottom: 10,
             left: isMobile ? 0 : null,
-            right: isMobile ? 0 : 10,
+            right: isMobile ? 0 : 76,
             child: Row(
                 mainAxisAlignment:
                     isMobile ? MainAxisAlignment.center : MainAxisAlignment.end,
                 children: [
-                  _ArrowIconWidget(
-                    onTap: () {
-                      if (currentPageIndex < banners.length - 1) {
-                        bannerCarouselController.previousPage();
-                      } else {
-                        bannerCarouselController.animateToPage(0);
-                      }
-                    },
-                    iconData: Icons.arrow_back_ios,
-                  ),
+                  // _ArrowIconWidget(
+                  //   onTap: () {
+                  //     if (currentPageIndex < banners.length - 1) {
+                  //       bannerCarouselController.previousPage();
+                  //     } else {
+                  //       bannerCarouselController.animateToPage(0);
+                  //     }
+                  //   },
+                  //   iconData: Icons.arrow_back_ios,
+                  // ),
                   ...List.generate(
                     banners.length,
                     (index) => GestureDetector(
@@ -107,33 +107,33 @@ class HomeBannerSectionState extends ConsumerState<HomeBannerSection> {
                         },
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 300),
-                          margin: const EdgeInsets.symmetric(horizontal: 4),
-                          width: currentPageIndex == index ? 12 : 8,
-                          height: 8,
+                          margin: const EdgeInsets.symmetric(horizontal: 5),
+                          width: 10,
+                          height: 10,
                           decoration: BoxDecoration(
                             color: currentPageIndex == index
-                                ? const Color(0xFF00A0DC)
+                                ? colorScheme.primary
                                 : const Color(0xFFB8B8B8),
                             borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                              color: currentPageIndex == index
-                                  ? Colors.white.withValues(alpha: 0.8)
-                                  : const Color(0xFFB8B8B8),
-                              width: 2,
-                            ),
+                            // border: Border.all(
+                            //   color: currentPageIndex == index
+                            //       ? Colors.white.withValues(alpha: 0.8)
+                            //       : const Color(0xFFB8B8B8),
+                            //   width: 2,
+                            // ),
                           ),
                         )),
                   ),
-                  _ArrowIconWidget(
-                    onTap: () {
-                      if (currentPageIndex < banners.length - 1) {
-                        bannerCarouselController.nextPage();
-                      } else {
-                        bannerCarouselController.animateToPage(0);
-                      }
-                    },
-                    iconData: Icons.arrow_forward_ios,
-                  ),
+                  // _ArrowIconWidget(
+                  //   onTap: () {
+                  //     if (currentPageIndex < banners.length - 1) {
+                  //       bannerCarouselController.nextPage();
+                  //     } else {
+                  //       bannerCarouselController.animateToPage(0);
+                  //     }
+                  //   },
+                  //   iconData: Icons.arrow_forward_ios,
+                  // ),
                 ]),
           )
         ],
@@ -254,45 +254,45 @@ class BannerSlide extends StatelessWidget {
   }
 }
 
-class _ArrowIconWidget extends StatefulWidget {
-  const _ArrowIconWidget({required this.onTap, required this.iconData});
-  final VoidCallback onTap;
-  final IconData iconData;
+// class _ArrowIconWidget extends StatefulWidget {
+//   const _ArrowIconWidget({required this.onTap, required this.iconData});
+//   final VoidCallback onTap;
+//   final IconData iconData;
 
-  @override
-  State<_ArrowIconWidget> createState() => _ArrowIconWidgetState();
-}
+//   @override
+//   State<_ArrowIconWidget> createState() => _ArrowIconWidgetState();
+// }
 
-class _ArrowIconWidgetState extends State<_ArrowIconWidget> {
-  bool isHover = false;
+// class _ArrowIconWidgetState extends State<_ArrowIconWidget> {
+//   bool isHover = false;
 
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: widget.onTap,
-      child: MouseRegion(
-        onEnter: (_) => setState(() => isHover = true),
-        onExit: (_) => setState(() => isHover = false),
-        cursor: SystemMouseCursors.click,
-        child: Container(
-          width: 30,
-          height: 30,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-              border: Border.all(
-                color: isHover ? Colors.white : const Color(0xFF7E7E81),
-                width: 1,
-              ),
-              shape: BoxShape.circle),
-          child: Icon(
-            widget.iconData,
-            color: isHover
-                ? Colors.white
-                : const Color(0xFF7E7E81), // TODO: use from theme
-            size: 14,
-          ),
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return GestureDetector(
+//       onTap: widget.onTap,
+//       child: MouseRegion(
+//         onEnter: (_) => setState(() => isHover = true),
+//         onExit: (_) => setState(() => isHover = false),
+//         cursor: SystemMouseCursors.click,
+//         child: Container(
+//           width: 30,
+//           height: 30,
+//           alignment: Alignment.center,
+//           decoration: BoxDecoration(
+//               border: Border.all(
+//                 color: isHover ? Colors.white : const Color(0xFF7E7E81),
+//                 width: 1,
+//               ),
+//               shape: BoxShape.circle),
+//           child: Icon(
+//             widget.iconData,
+//             color: isHover
+//                 ? Colors.white
+//                 : const Color(0xFF7E7E81), // TODO: use from theme
+//             size: 14,
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
