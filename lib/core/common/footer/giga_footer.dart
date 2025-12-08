@@ -1,6 +1,7 @@
 import 'package:cointiply_app/core/common/footer/footer_section.dart';
 import 'package:cointiply_app/core/common/store_button.dart';
 import 'package:cointiply_app/features/home/presentation/widgets/home_section_container.dart';
+import 'package:cointiply_app/features/terms_privacy/presentation/services/terms_privacy_navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
@@ -163,6 +164,18 @@ class GigaFooter extends StatelessWidget {
 
   Widget _buildAboutSection(BuildContext context) => FooterSection(
         title: context.translate("footer_about"),
+        actions: {
+          context.translate("footer_faq"): () {},
+          context.translate("footer_privacy"): () {
+            // Navigate to Privacy Policy page
+            context.showPrivacy();
+          },
+          context.translate("footer_cookie"): () {},
+          context.translate("footer_terms"): () {
+            // Navigate to Terms of Service page
+            context.showTerms();
+          },
+        },
         items: [
           context.translate("footer_faq"),
           context.translate("footer_privacy"),
