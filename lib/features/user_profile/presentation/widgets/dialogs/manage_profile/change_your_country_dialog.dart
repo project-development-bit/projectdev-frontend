@@ -119,6 +119,7 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
   Widget _manageDialogBody(BuildContext context) {
     final countriesState = ref.watch(getCountriesNotifierProvider);
     final isChangingCountry = ref.watch(changeCountryProvider).isChanging;
+    final _selectedCountry = ref.watch(selectedCountryProvider);
 
     return SingleChildScrollView(
       child: Container(
@@ -156,7 +157,7 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
               fontSize: 14,
               isDark: true,
               fontWeight: FontWeight.w700,
-              onTap: ref.read(selectedCountryProvider) != null
+              onTap: _selectedCountry != null
                   ? _onChangeCountry
                   : null,
               isLoading: isChangingCountry,
