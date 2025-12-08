@@ -18,7 +18,8 @@ class PaymentHistoryNotifier extends StateNotifier<PaymentHistoryState> {
     final result = await _getPaymentHistoryUseCase.call(PaymentHistoryRequest(
       page: state.page,
       limit: state.limit,
-      // status: state.filterStatus,
+      status:
+          state.filterType == "all" ? null : state.filterType?.toLowerCase(),
       // type: state.filterType,
     ));
 
@@ -46,9 +47,28 @@ class PaymentHistoryNotifier extends StateNotifier<PaymentHistoryState> {
     fetchPaymentHistory();
   }
 
-  // Update limit (page-size)
   void changeLimit(int newLimit) {
     state = state.copyWith(limit: newLimit, page: 1);
+    fetchPaymentHistory();
+  }
+
+  void changeFilterType(String type) {
+    state = state.copyWith(
+      filterType: type,
+      page: 1,
+    );
+    fetchPaymentHistory();
+  }
+
+  void changeFilterCurrency(String currency) {
+    state = state.copyWith(
+      filterCurrency: currency,
+      page: 1,
+    );
+    fetchPaymentHistory();
+  }
+
+  void refresh() {
     fetchPaymentHistory();
   }
 }
