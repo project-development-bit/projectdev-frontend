@@ -3,6 +3,7 @@ import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
 import 'package:cointiply_app/core/common/dialog_bg_widget.dart';
 import 'package:cointiply_app/core/extensions/extensions.dart';
+import 'package:cointiply_app/features/auth/presentation/providers/selected_country_provider.dart';
 import 'package:cointiply_app/features/user_profile/domain/entities/country.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/change_country_notifier.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
@@ -30,7 +31,7 @@ class ChangeCountryDialog extends ConsumerStatefulWidget {
 }
 
 class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
-  Country? _selectedCountry;
+  // Country? _selectedCountry;
   Country? _previousCountry; // To store the previously selected country
 
   @override
@@ -52,8 +53,8 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
             final countriesState = ref.read(getCountriesNotifierProvider);
             final country = countriesState.countries
                 ?.firstWhere((country) => country.id == currentCountry);
+            ref.read(selectedCountryProvider.notifier).state = country;
             setState(() {
-              _selectedCountry = country;
               _previousCountry = country; // Store the initial country
             });
           }
@@ -87,11 +88,10 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
       },
     );
   }
-  
 
   void _onChangeCountry() {
     // If the selected country is the same as the previous one, show an error message
-    if (_selectedCountry == _previousCountry) {
+    if (ref.read(selectedCountryProvider) == _previousCountry) {
       context.showSnackBar(
         message: context.translate('country_not_changed_error'),
         backgroundColor: context.error,
@@ -102,8 +102,8 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
     // Proceed with changing the country if it's different
     final userId = (ref.read(currentUserProvider).user?.id ?? 0).toString();
     ref.read(changeCountryProvider.notifier).changeCountry(
-          countryId: _selectedCountry!.id,
-          countryName: _selectedCountry!.name,
+          countryId: ref.read(selectedCountryProvider)!.id,
+          countryName: ref.read(selectedCountryProvider)!.name,
           userid: userId,
         );
   }
@@ -156,7 +156,9 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
               fontSize: 14,
               isDark: true,
               fontWeight: FontWeight.w700,
-              onTap: _selectedCountry != null ? _onChangeCountry : null,
+              onTap: ref.read(selectedCountryProvider) != null
+                  ? _onChangeCountry
+                  : null,
               isLoading: isChangingCountry,
             )
           ],
@@ -192,11 +194,10 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
                       child: SearchableDropdownWithIcon<Country>(
                         items: (filter, infiniteScrollProps) =>
                             countriesState.countries!,
-                        selectedItem: _selectedCountry,
+                        selectedItem: ref.read(selectedCountryProvider),
                         onChanged: (country) {
-                          setState(() {
-                            _selectedCountry = country;
-                          });
+                          ref.read(selectedCountryProvider.notifier).state =
+                              country;
                         },
                         getItemCode: (country) => country.code,
                         getItemName: (country) => country.name,
@@ -230,11 +231,9 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
               SearchableDropdownWithIcon<Country>(
                 items: (filter, infiniteScrollProps) =>
                     countriesState.countries!,
-                selectedItem: _selectedCountry,
+                selectedItem: ref.read(selectedCountryProvider),
                 onChanged: (country) {
-                  setState(() {
-                    _selectedCountry = country;
-                  });
+                  ref.read(selectedCountryProvider.notifier).state = country;
                 },
                 getItemCode: (country) => country.code,
                 getItemName: (country) => country.name,

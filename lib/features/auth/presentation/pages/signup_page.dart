@@ -2,6 +2,7 @@ import 'package:cointiply_app/core/common/common_dropdown_field_with_icon.dart';
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/theme/app_colors.dart';
 import 'package:cointiply_app/features/auth/presentation/providers/ip_country_state.dart';
+import 'package:cointiply_app/features/auth/presentation/providers/selected_country_provider.dart';
 import 'package:cointiply_app/features/auth/presentation/widgets/onboarding_background.dart';
 import 'package:cointiply_app/features/terms_privacy/presentation/services/terms_privacy_navigation_service.dart';
 import 'package:cointiply_app/features/auth/presentation/providers/ip_country_provider.dart';
@@ -17,9 +18,6 @@ import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/enum/user_role.dart';
 import '../providers/register_provider.dart';
 import '../../../../routing/app_router.dart';
-
-final selectedCountryProvider =
-    StateProvider.autoDispose<Country?>((ref) => null);
 
 class SignUpPage extends ConsumerStatefulWidget {
   const SignUpPage({super.key});
