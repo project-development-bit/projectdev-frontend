@@ -6,7 +6,7 @@ import 'package:cointiply_app/core/common/widgets/custom_pointer_interceptor.dar
 import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/dialog_scaffold_widget.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/profile_dialog.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/reward_dialog.dart';
-import 'package:cointiply_app/features/wallet/presentation/widgets/wallet_dialog.dart';
+import 'package:cointiply_app/features/wallet/presentation/widgets/dialogs/wallet_dialog.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cointiply_app/core/common/common_text.dart';
@@ -147,7 +147,7 @@ class ProfileMenu extends StatelessWidget {
       context: context,
       barrierDismissible: true,
       barrierColor: colorScheme.scrim.withValues(alpha: 0.6),
-      builder: (context) => const WalletDialog(),
+      builder: (context) => DialogScaffoldWidget(child: const WalletDialog()),
     );
   }
 

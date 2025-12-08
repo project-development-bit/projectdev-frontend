@@ -4,11 +4,13 @@ import 'package:cointiply_app/core/common/common_text.dart';
 class FooterSection extends StatelessWidget {
   final String title;
   final List<String> items;
+  final Map<String, VoidCallback>? actions;
 
   const FooterSection({
     super.key,
     required this.title,
     required this.items,
+    this.actions,
   });
 
   @override
@@ -29,10 +31,16 @@ class FooterSection extends StatelessWidget {
           for (final item in items)
             Padding(
               padding: const EdgeInsets.only(bottom: 11),
-              child: CommonText.bodyMedium(
-                item,
-                fontWeight: FontWeight.w500,
-                color: colorScheme.onSurface,
+              child: MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: GestureDetector(
+                  onTap: actions?[item],
+                  child: CommonText.bodyMedium(
+                    item,
+                    fontWeight: FontWeight.w500,
+                    color: colorScheme.onSurface,
+                  ),
+                ),
               ),
             ),
         ],

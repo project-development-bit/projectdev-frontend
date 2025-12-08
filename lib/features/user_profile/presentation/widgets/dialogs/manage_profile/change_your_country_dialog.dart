@@ -1,17 +1,17 @@
-import 'package:cointiply_app/core/common/common_dropdown_field.dart';
-import 'package:cointiply_app/core/common/common_image_widget.dart';
+import 'package:cointiply_app/core/common/common_dropdown_field_with_icon.dart';
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
 import 'package:cointiply_app/core/common/dialog_bg_widget.dart';
 import 'package:cointiply_app/core/extensions/extensions.dart';
+import 'package:cointiply_app/features/auth/presentation/providers/selected_country_provider.dart';
 import 'package:cointiply_app/features/user_profile/domain/entities/country.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/change_country_notifier.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/get_countries_state.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/get_profile_notifier.dart';
+import 'package:cointiply_app/routing/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 void showChangeCountryDialog(BuildContext context) {
   context.showManagePopup(
@@ -31,7 +31,8 @@ class ChangeCountryDialog extends ConsumerStatefulWidget {
 }
 
 class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
-  Country? _selectedCountry;
+  // Country? _selectedCountry;
+  Country? _previousCountry; // To store the previously selected country
 
   @override
   void initState() {
@@ -52,8 +53,9 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
             final countriesState = ref.read(getCountriesNotifierProvider);
             final country = countriesState.countries
                 ?.firstWhere((country) => country.id == currentCountry);
+            ref.read(selectedCountryProvider.notifier).state = country;
             setState(() {
-              _selectedCountry = country;
+              _previousCountry = country; // Store the initial country
             });
           }
         }
@@ -72,10 +74,9 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
               .read(getProfileNotifierProvider.notifier)
               .fetchProfile(isLoading: false);
           ref.read(currentUserProvider.notifier).getCurrentUser();
-      
-          if (mounted) {
 
-          context.pop();
+          if (mounted) {
+            context.pop();
           }
         } else if (next.hasError) {
           // Show error message
@@ -86,6 +87,25 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
         }
       },
     );
+  }
+
+  void _onChangeCountry() {
+    // If the selected country is the same as the previous one, show an error message
+    if (ref.read(selectedCountryProvider) == _previousCountry) {
+      context.showSnackBar(
+        message: context.translate('country_not_changed_error'),
+        backgroundColor: context.error,
+      );
+      return;
+    }
+
+    // Proceed with changing the country if it's different
+    final userId = (ref.read(currentUserProvider).user?.id ?? 0).toString();
+    ref.read(changeCountryProvider.notifier).changeCountry(
+          countryId: ref.read(selectedCountryProvider)!.id,
+          countryName: ref.read(selectedCountryProvider)!.name,
+          userid: userId,
+        );
   }
 
   @override
@@ -99,8 +119,7 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
   Widget _manageDialogBody(BuildContext context) {
     final countriesState = ref.watch(getCountriesNotifierProvider);
     final isChangingCountry = ref.watch(changeCountryProvider).isChanging;
-    final userId = (ref.read(currentUserProvider).user?.id ?? 0).toString();
-    // final isMobile = context.isMobile;
+    final _selectedCountry = ref.watch(selectedCountryProvider);
 
     return SingleChildScrollView(
       child: Container(
@@ -138,19 +157,9 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
               fontSize: 14,
               isDark: true,
               fontWeight: FontWeight.w700,
-              onTap: () {
-                if (_selectedCountry == null) {
-                  context.showSnackBar(
-                      message:
-                          context.translate("please_select_country_error"));
-                  return;
-                }
-                ref.read(changeCountryProvider.notifier).changeCountry(
-                      countryId: _selectedCountry!.id,
-                      countryName: _selectedCountry!.name,
-                      userid: userId,
-                    );
-              },
+              onTap: _selectedCountry != null
+                  ? _onChangeCountry
+                  : null,
               isLoading: isChangingCountry,
             )
           ],
@@ -182,36 +191,26 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
                     ),
                   ),
                   Expanded(
-                    flex: 2,
-                    child: CommonDropdownFieldWithIcon<Country>(
-                      items: countriesState.countries!,
-                      value: _selectedCountry,
-                      onChanged: (country) {
-                        setState(() {
-                          _selectedCountry = country;
-                        });
-                      },
-                      hint: context.translate("select_your_country_hint"),
-                      getItemCode: (country) => country.code,
-                      getItemName: (country) => country.name,
-                      getItemIcon: (country) {
-                        final flag = country.flag;
-                        return CommonImage(
-                          imageUrl: flag,
-                          width: 32,
-                          height: 32,
-                          fit: BoxFit.cover,
-                        );
-                      },
-                      validator: (value) {
-                        if (value == null) {
-                          return context
-                              .translate("please_select_country_error");
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
+                      flex: 2,
+                      child: SearchableDropdownWithIcon<Country>(
+                        items: (filter, infiniteScrollProps) =>
+                            countriesState.countries!,
+                        selectedItem: ref.read(selectedCountryProvider),
+                        onChanged: (country) {
+                          ref.read(selectedCountryProvider.notifier).state =
+                              country;
+                        },
+                        getItemCode: (country) => country.code,
+                        getItemName: (country) => country.name,
+                        getItemIconUrl: (country) => country.flag,
+                        validator: (value) {
+                          if (value == null) {
+                            return context
+                                .translate("please_select_country_error");
+                          }
+                          return null;
+                        },
+                      )),
                 ],
               ),
               CommonText.bodySmall(
@@ -230,26 +229,16 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
                 fontWeight: FontWeight.w700,
                 color: Colors.white,
               ),
-              CommonDropdownFieldWithIcon<Country>(
-                items: countriesState.countries!,
-                value: _selectedCountry,
+              SearchableDropdownWithIcon<Country>(
+                items: (filter, infiniteScrollProps) =>
+                    countriesState.countries!,
+                selectedItem: ref.read(selectedCountryProvider),
                 onChanged: (country) {
-                  setState(() {
-                    _selectedCountry = country;
-                  });
+                  ref.read(selectedCountryProvider.notifier).state = country;
                 },
-                hint: context.translate("select_your_country_hint"),
                 getItemCode: (country) => country.code,
                 getItemName: (country) => country.name,
-                getItemIcon: (country) {
-                  final flag = country.flag;
-                  return CommonImage(
-                    imageUrl: flag,
-                    width: 32,
-                    height: 32,
-                    fit: BoxFit.cover,
-                  );
-                },
+                getItemIconUrl: (country) => country.flag,
                 validator: (value) {
                   if (value == null) {
                     return context.translate("please_select_country_error");
