@@ -19,6 +19,8 @@ class PayamentHistoryTable extends ConsumerWidget {
     final page = state.pagination?.currentPage ?? 1;
     final limit = state.pagination?.limit ?? 10;
     final totalPages = (total / limit).ceil() == 0 ? 1 : (total / limit).ceil();
+
+    final bool isloading = state.status == GetPaymentHistoryStatus.loading;
     return CommonTableWidget(
       headers: [
         localizations?.translate("tx_status") ?? "Status",
@@ -29,17 +31,22 @@ class PayamentHistoryTable extends ConsumerWidget {
         localizations?.translate("tx_date") ?? "Date",
       ],
       filterBar: const TransactionFilterBar(),
-      isLoading: state.status == GetPaymentHistoryStatus.loading,
-      values: items
-          .map((e) => [
-                e.status.toUpperCase().toString(),
-                e.amount.toString(),
-                e.currency,
-                e.fee.toString(),
-                e.address,
-                e.updatedAt.toString(),
-              ])
-          .toList(),
+      isLoading: isloading,
+      values: isloading
+          ? [
+              ["", "", "", "", "", ""],
+              ["", "", "", "", "", ""]
+            ]
+          : items
+              .map((e) => [
+                    e.status.toUpperCase().toString(),
+                    e.amount.toString(),
+                    e.currency,
+                    e.fee.toString(),
+                    e.address,
+                    e.updatedAt.toString(),
+                  ])
+              .toList(),
       total: total,
       page: page,
       limit: limit,
