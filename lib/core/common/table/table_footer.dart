@@ -1,9 +1,8 @@
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class TableFooter extends ConsumerWidget {
+class TableFooter extends StatelessWidget {
   const TableFooter({
     super.key,
     required this.total,
@@ -22,17 +21,11 @@ class TableFooter extends ConsumerWidget {
   final Function(int) changeLimit;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    // final state = ref.watch(paymentHistoryNotifierProvider);
-    // final notifier = ref.read(paymentHistoryNotifierProvider.notifier);
-
+  Widget build(
+    BuildContext context,
+  ) {
     final colorScheme = Theme.of(context).colorScheme;
     final isMobile = context.isMobile;
-
-    // final total = state.pagination?.total ?? 0;
-    // final page = state.pagination?.currentPage ?? 1;
-    // final limit = state.pagination?.limit ?? 10;
-    // final totalPages = (total / limit).ceil() == 0 ? 1 : (total / limit).ceil();
 
     final start = ((page - 1) * limit) + 1;
     final end = (start + total - 1).clamp(0, total);
@@ -76,7 +69,7 @@ class TableFooter extends ConsumerWidget {
                   value: limit,
                   underline: SizedBox(),
                   dropdownColor: const Color(0xFF00131E),
-                  items: [10, 20, 50, 100].map((v) {
+                  items: [1, 10, 20, 50, 100].map((v) {
                     return DropdownMenuItem(
                       value: v,
                       child: CommonText.bodyMedium(
