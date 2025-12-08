@@ -722,5 +722,9 @@
   "withdraw_button_text": "Withdraw {coinName}",
   "interest_notification_title": "5% အတိုးအကျော် မဖြစ်မီ ကူညီပါ!",
   "interest_notification_description": "35000 ကုဒ်ရှိလျှင် 5% အတိုးအကျော် ရရှိပါမည်။ အတိုးအကျော် မျိုးစုံကို နေ့စဉ်ပေးပါ။ စက်ဆောင်လျှက်လက်ခံပါ။",
-  "withdrawal": "Withdrawal"
+  "withdrawal": "Withdrawal",
+  "affiliate_program_title": "Affiliate Program",
+  "affiliate_program_description": "ကျွန်ုပ်တို့၏ အဖွဲ့ဝင်များ အဖွဲ့အစည်းကို ဝင်ရောက်ပါ။ သင့်အကြံပြုလင့်ခ်မှတစ်ဆင့် စာရင်းသွင်းသူတိုင်းအပေါ် 15% အထိ အမြတ်အစွန်း ရယူနိုင်ပါသည်။",
+  "referral_link": "Referral Link",
+  "referral_link_copied_message": "Referral link copied to clipboard."
 }

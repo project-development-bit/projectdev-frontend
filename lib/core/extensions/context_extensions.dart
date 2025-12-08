@@ -369,6 +369,21 @@ extension DialogExtension on BuildContext {
     ).then((value) => value as T);
   }
 
+  Future<T> showAffiliateProgramPopup<T>({
+    required Widget child,
+    bool barrierDismissible = true,
+  }) {
+    final barrierColor = colorScheme.scrim.withValues(alpha: 0.6);
+    return showDialog<T>(
+      context: this,
+      barrierDismissible: barrierDismissible,
+      barrierColor: barrierColor,
+      builder: (context) => DialogScaffoldWidget(
+        child: child,
+      ),
+    ).then((value) => value as T);
+  }
+
   /// Show a material dialog
   Future<T?> showMaterialDialog<T>({
     required Widget child,

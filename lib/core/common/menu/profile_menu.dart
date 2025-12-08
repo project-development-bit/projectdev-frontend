@@ -1,6 +1,7 @@
 import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
 import 'package:cointiply_app/core/common/doted_line_divider.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
+import 'package:cointiply_app/features/affiliate_program/presentation/widgets/affiliate_program_dialog.dart';
 import 'package:cointiply_app/features/auth/presentation/providers/logout_provider.dart';
 import 'package:cointiply_app/core/common/widgets/custom_pointer_interceptor.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/dialog_scaffold_widget.dart';
@@ -87,6 +88,7 @@ class ProfileMenu extends StatelessWidget {
             title: context.translate("referrals"),
             onTap: () {
               closeMenu();
+              showAffiliateProgramDialog(context);
             },
           ),
           // dotted divider (thin + low opacity)
