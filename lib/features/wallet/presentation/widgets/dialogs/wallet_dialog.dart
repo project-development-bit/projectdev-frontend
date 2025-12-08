@@ -36,14 +36,23 @@ class _ProfileDialogState extends ConsumerState<WalletDialog> {
     super.initState();
   }
 
+  double _getDialogWidth(BuildContext context) {
+    if (context.isMobile) {
+      return MediaQuery.of(context).size.width;
+    }
+    if (context.isTablet) {
+      return MediaQuery.of(context).size.width * 0.8;
+    }
+    return 820;
+  }
+
   @override
   Widget build(BuildContext context) {
     final height = _getDialogHeight(context);
-    // final isTablet = context.isTablet;
-    // final isMobile = context.isMobile;
 
     return DialogBgWidget(
       dialogHeight: height,
+      dialogWidth: _getDialogWidth(context),
       title: context.translate("wallet"),
       padding: EdgeInsets.zero,
       body: SingleChildScrollView(
