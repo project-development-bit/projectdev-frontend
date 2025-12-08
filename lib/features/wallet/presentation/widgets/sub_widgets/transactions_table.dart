@@ -58,7 +58,7 @@ class TransactionsTable extends StatelessWidget {
         ),
         const SizedBox(height: 12),
         // Table Footer (pagination)
-        TransactionTableFooter(itemsCount: items.length),
+        TransactionTableFooter(),
       ],
     );
   }

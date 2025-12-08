@@ -1,10 +1,12 @@
 import 'package:cointiply_app/core/error/error_model.dart';
 import 'package:cointiply_app/core/error/failures.dart';
 import 'package:cointiply_app/features/wallet/data/datasources/wallet_remote_datasource.dart';
-import 'package:cointiply_app/features/wallet/domain/entity/payment_history.dart';
+import 'package:cointiply_app/features/wallet/data/models/request/payment_history_request.dart';
+import 'package:cointiply_app/features/wallet/data/repositories/payment_history_response_model.dart';
 import 'package:cointiply_app/features/wallet/domain/repositories/payment_history_respoitory.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/widgets.dart';
 
 class PaymentHistoryRespoitoryImpl implements PaymentHistoryRespoitory {
   final WalletRemoteDataSource remoteDataSource;
@@ -12,13 +14,12 @@ class PaymentHistoryRespoitoryImpl implements PaymentHistoryRespoitory {
   PaymentHistoryRespoitoryImpl(this.remoteDataSource);
 
   @override
-  Future<Either<Failure, List<PaymentHistory>>> getPaymentHistory() async {
+  Future<Either<Failure, PaymentHistoryResponseModel>> getPaymentHistory(
+      PaymentHistoryRequest request) async {
     try {
-      final List<PaymentHistory> responseModel =
-          await remoteDataSource.getPaymentHistory();
-      return Right(responseModel);
+      return Right(await remoteDataSource.getPaymentHistory(request));
     } on DioException catch (e) {
-      print(
+      debugPrint(
           'DioException caught in PaymentHistoryRespoitoryImpl: ${e.message}');
       ErrorModel? errorModel;
       if (e.response?.data != null) {
@@ -29,7 +30,8 @@ class PaymentHistoryRespoitoryImpl implements PaymentHistoryRespoitory {
           statusCode: e.response?.statusCode,
           errorModel: errorModel));
     } catch (e) {
-      print('Unexpected exception caught in PaymentHistoryRespoitoryImpl: $e');
+      debugPrint(
+          'Unexpected exception caught in PaymentHistoryRespoitoryImpl: $e');
       return Left(
         ServerFailure(
           message: e.toString(),

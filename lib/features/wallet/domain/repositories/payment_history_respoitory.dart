@@ -1,7 +1,9 @@
 import 'package:cointiply_app/core/error/failures.dart';
-import 'package:cointiply_app/features/wallet/domain/entity/payment_history.dart';
+import 'package:cointiply_app/features/wallet/data/models/request/payment_history_request.dart';
+import 'package:cointiply_app/features/wallet/data/repositories/payment_history_response_model.dart';
 import 'package:dartz/dartz.dart';
 
 abstract class PaymentHistoryRespoitory {
-  Future<Either<Failure, List<PaymentHistory>>> getPaymentHistory();
+  Future<Either<Failure, PaymentHistoryResponseModel>> getPaymentHistory(
+      PaymentHistoryRequest request);
 }

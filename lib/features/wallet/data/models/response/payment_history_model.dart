@@ -1,21 +1,6 @@
 import 'package:cointiply_app/features/wallet/domain/entity/payment_history.dart';
 
 class PaymentHistoryModel extends PaymentHistory {
-  //  "id": 2,
-  //           "userId": 35,
-  //           "currency": "BTC",
-  //           "amount": 60000,
-  //           "fee": 0,
-  //           "netAmount": 60000,
-  //           "address": "1LMcKyPmwebfygoeZP8E9jAMS2BcgH3Yip",
-  //           "payoutProvider": "manual",
-  //           "status": "requested",
-  //           "txid": null,
-  //           "errorCode": null,
-  //           "errorMessage": null,
-  //           "requestedAt": "2025-12-04T09:54:56.000Z",
-  //           "processedAt": null,
-  //           "updatedAt": "2025-12-04T09:54:56.000Z"
   const PaymentHistoryModel({
     required super.id,
     required super.userId,

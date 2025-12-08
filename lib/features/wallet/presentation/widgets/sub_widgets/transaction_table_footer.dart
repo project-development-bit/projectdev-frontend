@@ -1,26 +1,35 @@
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
-import 'package:cointiply_app/core/localization/app_localizations.dart';
+import 'package:cointiply_app/features/wallet/presentation/providers/payment_history_notifier_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class TransactionTableFooter extends StatelessWidget {
-  final int itemsCount;
-
-  const TransactionTableFooter({super.key, required this.itemsCount});
+class TransactionTableFooter extends ConsumerWidget {
+  const TransactionTableFooter({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(paymentHistoryNotifierProvider);
+    final notifier = ref.read(paymentHistoryNotifierProvider.notifier);
+
     final colorScheme = Theme.of(context).colorScheme;
     final isMobile = context.isMobile;
 
-    final pegination = Row(
-      mainAxisAlignment:
-          isMobile ? MainAxisAlignment.center : MainAxisAlignment.end,
+    final total = state.pagination?.total ?? 0;
+    final page = state.pagination?.currentPage ?? 1;
+    final limit = state.pagination?.limit ?? 10;
+    final totalPages = (total / limit).ceil() == 0 ? 1 : (total / limit).ceil();
+
+    final start = ((page - 1) * limit) + 1;
+    final end = (start + state.paymentHistory.length - 1).clamp(0, total);
+
+    // Pagination buttons
+    final paginationWidget = Row(
       children: [
-        Icon(Icons.chevron_left,
-            color: const Color(0xFF98989A)), // TODO: use Color From Scheme
-        const SizedBox(width: 6),
+        IconButton(
+          icon: Icon(Icons.chevron_left, color: const Color(0xFF98989A)),
+          onPressed: page > 1 ? () => notifier.changePage(page - 1) : null,
+        ),
         Container(
           width: 32,
           height: 32,
@@ -30,14 +39,15 @@ class TransactionTableFooter extends StatelessWidget {
             borderRadius: BorderRadius.circular(4),
           ),
           child: CommonText.bodyMedium(
-            "1",
+            "$page",
             color: colorScheme.surface,
-            fontWeight: FontWeight.w400,
           ),
         ),
-        const SizedBox(width: 6),
-        Icon(Icons.chevron_right,
-            color: const Color(0xFF98989A)), // TODO: use Color From Scheme
+        IconButton(
+          icon: Icon(Icons.chevron_right, color: const Color(0xFF98989A)),
+          onPressed:
+              page < totalPages ? () => notifier.changePage(page + 1) : null,
+        ),
       ],
     );
 
@@ -46,49 +56,39 @@ class TransactionTableFooter extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // PAGE SIZE DROPDOWN
+            // LIMIT DROPDOWN + SHOWING TEXT
             Row(
               children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 12, vertical: 10.5),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                        color: const Color(
-                            0xFF333333)), // TODO: use Color From Scheme
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Row(
-                    children: [
-                      CommonText.bodyMedium("20",
-                          fontWeight: FontWeight.w400,
-                          color: const Color(
-                              0xFF98989A)), // TODO: use Color From Scheme
-                      const SizedBox(width: 6),
-                      Icon(Icons.keyboard_arrow_down_rounded,
-                          color: const Color(
-                              0xFF98989A)), // TODO: use Color From Scheme
-                    ],
-                  ),
+                DropdownButton<int>(
+                  value: limit,
+                  underline: SizedBox(),
+                  dropdownColor: const Color(0xFF00131E),
+                  items: [10, 20, 50, 100].map((v) {
+                    return DropdownMenuItem(
+                      value: v,
+                      child: CommonText.bodyMedium(
+                        "$v",
+                        color: const Color(0xFF98989A),
+                      ),
+                    );
+                  }).toList(),
+                  onChanged: (v) => notifier.changeLimit(v!),
                 ),
                 SizedBox(width: 8),
-                // SHOWING TEXT
                 CommonText.bodyMedium(
-                  fontWeight: FontWeight.w400,
-                  "${localizations?.translate('showing') ?? 'Showing'} 1 to 0 of $itemsCount ${localizations?.translate('records') ?? 'records'}",
-                  color: const Color(0xFF98989A), // TODO: use Color From Scheme
+                  "Showing $start to $end of $total records",
+                  color: const Color(0xFF98989A),
                 ),
               ],
             ),
 
-            // PAGINATION
-            if (!isMobile) pegination
+            if (!isMobile) paginationWidget,
           ],
         ),
         if (isMobile)
           Padding(
             padding: const EdgeInsets.only(top: 16),
-            child: pegination,
+            child: paginationWidget,
           ),
       ],
     );

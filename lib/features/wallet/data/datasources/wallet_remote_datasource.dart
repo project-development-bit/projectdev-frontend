@@ -1,8 +1,10 @@
 import 'package:cointiply_app/core/network/base_dio_client.dart';
+import 'package:cointiply_app/features/wallet/data/models/request/payment_history_request.dart';
 import 'package:cointiply_app/features/wallet/data/models/response/balance_response_model.dart';
-import 'package:cointiply_app/features/wallet/data/models/response/payment_history_model.dart';
 import 'package:cointiply_app/features/wallet/data/models/response/withdrawal_option_model.dart';
+import 'package:cointiply_app/features/wallet/data/repositories/payment_history_response_model.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final walletRemoteDataSourceProvider = Provider<WalletRemoteDataSource>(
@@ -14,7 +16,8 @@ final walletRemoteDataSourceProvider = Provider<WalletRemoteDataSource>(
 abstract class WalletRemoteDataSource {
   Future<BalanceResponseModel> getUserBalance();
   Future<List<WithdrawalOptionModel>> getWithdrawalOptions();
-  Future<List<PaymentHistoryModel>> getPaymentHistory();
+  Future<PaymentHistoryResponseModel> getPaymentHistory(
+      PaymentHistoryRequest request);
 }
 
 class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
@@ -74,17 +77,15 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
   }
 
   @override
-  Future<List<PaymentHistoryModel>> getPaymentHistory() async {
+  Future<PaymentHistoryResponseModel> getPaymentHistory(
+      PaymentHistoryRequest request) async {
     try {
-      final response = await dioClient.get('/withdrawals');
-      print(response.data['data']);
-      final data = (response.data['data'] as List<dynamic>)
-          .map((json) => PaymentHistoryModel.fromJson(json))
-          .toList();
-      print('Fetched ${data.length} payment history items');
-      return data;
+      final response = await dioClient.get(
+        '/withdrawals?${request.toRequestUrl()}',
+      );
+      return PaymentHistoryResponseModel.fromJson(response.data);
     } on DioException catch (e) {
-      print('DioException caught: ${e.message}');
+      debugPrint('DioException caught: ${e.message}');
       // Extract server error message from response data
       final serverMessage = _extractServerErrorMessage(e.response?.data);
 
@@ -95,7 +96,7 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
         message: serverMessage ?? _getFallbackMessage(e),
       );
     } catch (e) {
-      print('Unexpected exception caught: $e');
+      debugPrint('Unexpected exception caught: $e');
       // Handle any other unexpected exceptions
       throw Exception('Unexpected error while fetching payment history: $e');
     }
