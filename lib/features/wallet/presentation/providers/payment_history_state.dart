@@ -16,7 +16,7 @@ class PaymentHistoryState {
   final int limit;
   final PaginationModel? pagination;
 
-  final String? filterType;
+  final String? filterStatus;
   final String? filterCurrency;
   const PaymentHistoryState({
     this.status = GetPaymentHistoryStatus.initial,
@@ -24,7 +24,7 @@ class PaymentHistoryState {
     this.error,
     this.page = 1,
     this.limit = 10,
-    this.filterType,
+    this.filterStatus,
     this.filterCurrency,
     this.pagination,
   });
@@ -45,7 +45,7 @@ class PaymentHistoryState {
         error: error ?? this.error,
         page: page ?? this.page,
         limit: limit ?? this.limit,
-        filterType: filterType ?? this.filterType,
+        filterStatus: filterType ?? this.filterStatus,
         filterCurrency: filterCurrency ?? this.filterCurrency,
         pagination: pagination ?? this.pagination);
   }

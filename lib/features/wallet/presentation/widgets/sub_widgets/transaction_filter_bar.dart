@@ -20,7 +20,7 @@ class TransactionFilterBar extends ConsumerWidget {
       children: [
         TransactionFilterDropdown(
           selected: state.filterCurrency ?? "all",
-          options: const ["all", "usd", "btc", "eth"],
+          options: const ["all", "usdt", "coin", "btc"],
           onSelect: notifier.changeFilterCurrency,
           child: TransactionFilterButton(
             title: "Currency: ${(state.filterCurrency ?? "all").toUpperCase()}",
@@ -28,11 +28,11 @@ class TransactionFilterBar extends ConsumerWidget {
         ),
         SizedBox(width: isMobile ? 6 : 10),
         TransactionFilterDropdown(
-          selected: state.filterType ?? "all",
-          options: const ["all", "completed", "pending", "failed"],
-          onSelect: notifier.changeFilterType,
+          selected: state.filterStatus ?? "all",
+          options: const ["all", "confirmed", "pending", "failed"],
+          onSelect: notifier.changeStatus,
           child: TransactionFilterButton(
-            title: "Type: ${(state.filterType ?? "all").toUpperCase()}",
+            title: "Type: ${(state.filterStatus ?? "all").toUpperCase()}",
           ),
         ),
         SizedBox(width: isMobile ? 6 : 10),

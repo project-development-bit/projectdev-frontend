@@ -1,12 +1,14 @@
 class PaymentHistoryRequest {
   final String? status;
-  final String? type;
+  final String? transactionType;
+  final String? filterCurrency;
   final int page;
   final int limit;
 
   PaymentHistoryRequest({
     this.status,
-    this.type,
+    this.transactionType,
+    this.filterCurrency,
     required this.page,
     required this.limit,
   });
@@ -16,7 +18,8 @@ class PaymentHistoryRequest {
       'status': status,
       'page': page,
       'limit': limit,
-      'type': type,
+      'transactionType': transactionType,
+      'currency': filterCurrency,
     };
   }
 
@@ -24,13 +27,13 @@ class PaymentHistoryRequest {
     String? status,
     int? page,
     int? limit,
-    String? type,
+    String? transactionType,
   }) {
     return PaymentHistoryRequest(
       status: status ?? this.status,
       page: page ?? this.page,
       limit: limit ?? this.limit,
-      type: type ?? this.type,
+      transactionType: transactionType ?? this.transactionType,
     );
   }
 
@@ -41,8 +44,11 @@ class PaymentHistoryRequest {
     }
     params.add('page=$page');
     params.add('limit=$limit');
-    if (type != null) {
-      params.add('type=$type');
+    if (transactionType != null) {
+      params.add('transactionType=$transactionType');
+    }
+    if (filterCurrency != null) {
+      params.add('currency=$filterCurrency');
     }
     return params.join('&');
   }

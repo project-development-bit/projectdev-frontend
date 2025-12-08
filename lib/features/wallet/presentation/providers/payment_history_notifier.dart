@@ -14,12 +14,15 @@ class PaymentHistoryNotifier extends StateNotifier<PaymentHistoryState> {
       status: GetPaymentHistoryStatus.loading,
       error: null,
     );
-
     final result = await _getPaymentHistoryUseCase.call(PaymentHistoryRequest(
       page: state.page,
       limit: state.limit,
-      status:
-          state.filterType == "all" ? null : state.filterType?.toLowerCase(),
+      status: state.filterStatus == "all"
+          ? null
+          : state.filterStatus?.toLowerCase(),
+      filterCurrency: state.filterCurrency == "all"
+          ? null
+          : state.filterCurrency?.toLowerCase(),
       // type: state.filterType,
     ));
 
@@ -52,7 +55,7 @@ class PaymentHistoryNotifier extends StateNotifier<PaymentHistoryState> {
     fetchPaymentHistory();
   }
 
-  void changeFilterType(String type) {
+  void changeStatus(String type) {
     state = state.copyWith(
       filterType: type,
       page: 1,
@@ -61,6 +64,7 @@ class PaymentHistoryNotifier extends StateNotifier<PaymentHistoryState> {
   }
 
   void changeFilterCurrency(String currency) {
+    print("Changing filter currency to $currency");
     state = state.copyWith(
       filterCurrency: currency,
       page: 1,

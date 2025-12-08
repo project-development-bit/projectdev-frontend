@@ -10,7 +10,7 @@ class TransactionDesktopRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final values = [
-      item.status.toString(),
+      item.status.toUpperCase().toString(),
       item.amount.toString(),
       item.currency,
       item.fee.toString(),
