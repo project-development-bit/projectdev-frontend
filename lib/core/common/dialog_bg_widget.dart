@@ -32,8 +32,6 @@ class DialogBgWidget extends StatelessWidget {
   }
 
   double _getDialogHeight(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
-    if (context.isTablet) return height * 0.9;
     return dialogHeight ?? 470;
   }
 
@@ -43,88 +41,70 @@ class DialogBgWidget extends StatelessWidget {
     final height = _getDialogHeight(context);
     final colorScheme = Theme.of(context).colorScheme;
 
-    return ScaffoldMessenger(
-      child: Builder(builder: (context) {
-        return Scaffold(
-          backgroundColor: Colors.transparent,
-          body: Dialog(
-              backgroundColor: Colors.transparent,
-              insetPadding: const EdgeInsets.all(20),
-              clipBehavior: Clip.hardEdge,
-              child: Stack(
-                children: [
-                  DialogGradientBackground(width: width, height: height),
-                  SizedBox(
-                    width: width,
-                    height: height,
-                    child: SizedBox(
-                      height: height,
-                      child: Column(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 22, vertical: 22),
-                            child: Row(
+    return Stack(
+      children: [
+        DialogGradientBackground(width: width, height: height),
+        SizedBox(
+          width: width,
+          height: height,
+          child: Column(
+            children: [
+              Container(
+                padding: context.isMobile || context.isTablet
+                    ? const EdgeInsets.symmetric(horizontal: 17, vertical: 22)
+                    : const EdgeInsets.symmetric(horizontal: 31, vertical: 22),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: onRouteBack != null
+                          ? Row(
+                              mainAxisSize: MainAxisSize.min,
                               children: [
-                                Expanded(
-                                  child: onRouteBack != null
-                                      ? Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            GestureDetector(
-                                              onTap: () {
-                                                onRouteBack!();
-                                              },
-                                              child: Icon(
-                                                Icons.arrow_back,
-                                                color: Color(0xFF98989A),
-                                                weight: 16,
-                                              ),
-                                            ),
-                                            SizedBox(width: 16),
-                                            CommonText.headlineSmall(
-                                              title,
-                                              fontWeight: FontWeight.w700,
-                                              color: colorScheme.onPrimary,
-                                              overflow: TextOverflow.clip,
-                                            )
-                                          ],
-                                        )
-                                      : CommonText.headlineSmall(
-                                          title,
-                                          fontWeight: FontWeight.w700,
-                                          color: colorScheme.onPrimary,
-                                          overflow: TextOverflow.clip,
-                                        ),
+                                GestureDetector(
+                                  onTap: () {
+                                    onRouteBack!();
+                                  },
+                                  child: Icon(
+                                    Icons.arrow_back,
+                                    color: Color(0xFF98989A),
+                                    weight: 16,
+                                  ),
                                 ),
-                                CloseSquareButton(onTap: () {
-                                  context.pop();
-                                  if (onClose != null) {
-                                    onClose!();
-                                  }
-                                })
+                                SizedBox(width: 16),
+                                CommonText.headlineSmall(
+                                  title,
+                                  fontWeight: FontWeight.w700,
+                                  color: colorScheme.onPrimary,
+                                  overflow: TextOverflow.clip,
+                                )
                               ],
+                            )
+                          : CommonText.headlineSmall(
+                              title,
+                              fontWeight: FontWeight.w700,
+                              color: colorScheme.onPrimary,
+                              overflow: TextOverflow.clip,
                             ),
-                          ),
-                          Divider(
-                            color: dividerColor ??
-                                Color(0xFF003248), // TODO use from theme,
-                            thickness: 1,
-                          ),
-                          Expanded(
-                              child: Padding(
-                            padding: padding ??
-                                const EdgeInsets.symmetric(horizontal: 32),
-                            child: body,
-                          ))
-                        ],
-                      ),
                     ),
-                  )
-                ],
-              )),
-        );
-      }),
+                    CloseSquareButton(onTap: () {
+                      context.pop();
+                      if (onClose != null) {
+                        onClose!();
+                      }
+                    })
+                  ],
+                ),
+              ),
+              Divider(
+                color:
+                    dividerColor ?? Color(0xFF003248), // TODO use from theme,
+                thickness: 1,
+              ),
+              Expanded(child: body)
+            ],
+          ),
+        )
+      ],
     );
   }
 }

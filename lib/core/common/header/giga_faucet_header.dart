@@ -113,10 +113,14 @@ class GigaFaucetHeader extends ConsumerWidget {
                       )
                     : CustomUnderLineButtonWidget(
                         //TODO: Change to CustomButtonWidget after getting design confirmation
-                        padding: EdgeInsets.symmetric(horizontal: 12),
+                        padding: EdgeInsets.only(
+                          left: 12,
+                          right: 12,
+                          top: 8,
+                        ),
                         height: 41,
                         onTap: () => context.go('/auth/login'),
-                        fontSize: 16,
+                        fontSize: 14,
                         title: 'Login',
                       ),
                 if (isAuthenticated) ...[

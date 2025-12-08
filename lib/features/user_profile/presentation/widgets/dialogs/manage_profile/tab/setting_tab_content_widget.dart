@@ -48,12 +48,13 @@ class _SettingTabContentWidgetState
     final settingsData = ref.watch(settingProfileProvider);
     final language = settingsData.language;
     final languageFlag = Language.empty().getDisplayFlag(language);
+    final languageName = Language.empty().getDisplayName(language);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
-      spacing: 32.0,
+      spacing: 25.0,
       children: [
-        _languageWidget(context, languageFlag, language),
+        _languageWidget(context, languageFlag, languageName),
         _settingMenuItem(context,
             title: context.translate("notifications"),
             btnTitle: "",
@@ -66,7 +67,8 @@ class _SettingTabContentWidgetState
               );
         }),
         _settingMenuItem(context,
-            title: context.translate("show_your_stats"),
+            title: context.translate("show_your_stats",
+                args: [context.isDesktop ? "\n" : " "]),
             btnTitle: context.translate("manage_privacy"),
             isSwitch: true,
             isSelected: settingsData.showStatsEnabled,
@@ -77,7 +79,8 @@ class _SettingTabContentWidgetState
               );
         }),
         _settingMenuItem(context,
-            title: context.translate("anonymous_in_contests"),
+            title: context.translate("anonymous_in_contests",
+                args: [context.isDesktop ? "\n" : " "]),
             btnTitle: context.translate("manage_privacy"),
             isSwitch: true,
             isSelected: settingsData.anonymousInContests,
@@ -88,13 +91,13 @@ class _SettingTabContentWidgetState
               );
         }),
         _settingMenuItem(context,
-            title: context.translate("delete_account"),
-            btnTitle: context.translate("delete_account"), onPressed: () {
+            title: context.translate("delete_account",
+                args: [context.isDesktop ? "\n" : " "]),
+            btnTitle: context.translate("delete_your_account"), onPressed: () {
           showDeleteAccountConfirmationDialog(context);
         },
             description: context.translate("delete_account_description"),
             isDanger: true),
-        SizedBox(height: 20),
       ],
     );
   }
@@ -125,7 +128,8 @@ class _SettingTabContentWidgetState
                       SizedBox(width: 5),
                       CommonText.bodyMedium(
                         language,
-                        color: Color(0xff98989A),
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500,
                       ),
                     ],
                   ),
@@ -174,10 +178,11 @@ class _SettingTabContentWidgetState
                           height: 21,
                           fit: BoxFit.cover,
                         ),
-                        SizedBox(width: 5),
+                        SizedBox(width: 10),
                         CommonText.bodyMedium(
                           language,
-                          color: Color(0xff98989A),
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
                         ),
                       ],
                     ),
@@ -239,6 +244,7 @@ class _SettingTabContentWidgetState
                           : WidgetStatePropertyAll(
                               context.primary.withAlpha(150)),
                       inactiveTrackColor: Color(0xff4D4D4D),
+                      trackOutlineWidth: WidgetStatePropertyAll(0.0),
                       activeTrackColor: context.colorScheme.primary,
                     )
                 ],

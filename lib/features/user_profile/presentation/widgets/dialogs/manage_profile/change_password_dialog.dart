@@ -1,6 +1,7 @@
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/common/common_textfield.dart';
 import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
+import 'package:cointiply_app/core/common/dialog_bg_widget.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/change_password_notifier.dart';
 import 'package:cointiply_app/routing/routing.dart';
@@ -9,10 +10,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 showChangePasswordDialog(BuildContext context) {
   context.showManagePopup(
-      height: context.isMobile ? 550 : 450,
-      child: const ChangePasswordDialog(),
-      barrierDismissible: false,
-      title: context.translate("change_your_password"));
+    // height: context.isMobile ? 550 : 450,
+    child: const ChangePasswordDialog(),
+    barrierDismissible: false,
+    //
+  );
 }
 
 class ChangePasswordDialog extends ConsumerStatefulWidget {
@@ -39,16 +41,16 @@ class _ChangePasswordDialogState extends ConsumerState<ChangePasswordDialog> {
   void initState() {
     super.initState();
 
-    ref.listenManual(changePasswordNotifierProvider, (previous, next) {
+    ref.listenManual(changePasswordNotifierProvider, (previous, next) async {
       if (next.isChanging) return;
       if (next.status == ChangePasswordStatus.success) {
         if (mounted && context.mounted) {
-          context.showSnackBar(
-            message: context.translate('password_changed_successfully'),
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            textColor: Colors.white,
-          );
-          context.pop(); // close dialog
+          context.showSuccessSnackBar(
+              message: context.translate('password_changed_successfully'));
+      
+          if (mounted) {
+            context.pop(); // close dialog
+          }
         }
       } else if (next.status == ChangePasswordStatus.failure) {
         // Show error message
@@ -91,7 +93,15 @@ class _ChangePasswordDialogState extends ConsumerState<ChangePasswordDialog> {
   @override
   Widget build(BuildContext context) {
     final isLoading = ref.watch(changePasswordNotifierProvider).isChanging;
-    return _dialogBgWidget(isLoading: isLoading);
+    double dialogHeight = context.isDesktop
+        ? 450
+        : context.isTablet
+            ? 450
+            : 500;
+    return DialogBgWidget(
+        dialogHeight: dialogHeight,
+        title: context.translate("change_your_password"),
+        body: _dialogBgWidget(isLoading: isLoading));
   }
 
   Widget _dialogBgWidget({required bool isLoading}) {
@@ -99,14 +109,26 @@ class _ChangePasswordDialogState extends ConsumerState<ChangePasswordDialog> {
       key: _formKey,
       child: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          padding: context.isDesktop
+              ? const EdgeInsets.symmetric(horizontal: 31, vertical: 16)
+              : const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (context.isMobile) ...[
+              CommonText.bodyMedium(
+                context.translate("change_password_description"),
+              ),
+              context.isDesktop
+                  ? const SizedBox(height: 24)
+                  : const SizedBox(height: 32),
+              if (context.isMobile || context.isTablet) ...[
                 // Current Password
-                CommonText.bodyMedium(context.translate("current_password")),
+                CommonText.bodyMedium(
+                  context.translate("current_password"),
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white,
+                ),
                 const SizedBox(height: 8),
                 CommonTextField(
                   controller: _currentPasswordController,
@@ -136,7 +158,11 @@ class _ChangePasswordDialogState extends ConsumerState<ChangePasswordDialog> {
                 const SizedBox(height: 16),
 
                 // New Password
-                CommonText.bodyMedium(context.translate("new_password")),
+                CommonText.bodyMedium(
+                  context.translate("new_password"),
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white,
+                ),
                 const SizedBox(height: 8),
                 CommonTextField(
                   controller: _newPasswordController,
@@ -166,16 +192,23 @@ class _ChangePasswordDialogState extends ConsumerState<ChangePasswordDialog> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 16),
+                context.isDesktop
+                    ? const SizedBox(height: 24)
+                    : const SizedBox(height: 32),
 
                 // Repeat New Password
-                CommonText.bodyMedium(context.translate("repeat_new_password")),
+                CommonText.bodyMedium(
+                  context.translate("repeat_new_password"),
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white,
+                ),
                 const SizedBox(height: 8),
                 CommonTextField(
                   controller: _repeatNewPasswordController,
                   hintText: context.translate("enter_repeat_new_password"),
                   obscureText: !_isRepeatPasswordVisible,
                   enabled: !isLoading,
+                  onSubmitted: (_) => _handleSubmit(),
                   suffixIcon: IconButton(
                     icon: Icon(
                       _isRepeatPasswordVisible
@@ -205,9 +238,12 @@ class _ChangePasswordDialogState extends ConsumerState<ChangePasswordDialog> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(
-                      width: 150,
-                      child: CommonText.bodyMedium(
-                          context.translate("current_password")),
+                      width: 180,
+                      child: CommonText.bodyLarge(
+                        context.translate("current_password"),
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                      ),
                     ),
                     const SizedBox(width: 16),
                     Expanded(
@@ -241,16 +277,21 @@ class _ChangePasswordDialogState extends ConsumerState<ChangePasswordDialog> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 16),
+                context.isDesktop
+                    ? const SizedBox(height: 24)
+                    : const SizedBox(height: 32),
 
                 // Desktop layout - New Password
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(
-                      width: 150,
-                      child: CommonText.bodyMedium(
-                          context.translate("new_password")),
+                      width: 180,
+                      child: CommonText.bodyLarge(
+                        context.translate("new_password"),
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                      ),
                     ),
                     const SizedBox(width: 16),
                     Expanded(
@@ -285,16 +326,21 @@ class _ChangePasswordDialogState extends ConsumerState<ChangePasswordDialog> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 16),
+                context.isDesktop
+                    ? const SizedBox(height: 24)
+                    : const SizedBox(height: 32),
 
                 // Desktop layout - Repeat New Password
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(
-                      width: 150,
-                      child: CommonText.bodyMedium(
-                          context.translate("repeat_new_password")),
+                      width: 180,
+                      child: CommonText.bodyLarge(
+                        context.translate("repeat_new_password"),
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                      ),
                     ),
                     const SizedBox(width: 16),
                     Expanded(
@@ -304,6 +350,7 @@ class _ChangePasswordDialogState extends ConsumerState<ChangePasswordDialog> {
                             context.translate("enter_repeat_new_password"),
                         obscureText: !_isRepeatPasswordVisible,
                         enabled: !isLoading,
+                        onSubmitted: (_) => _handleSubmit(),
                         suffixIcon: IconButton(
                           icon: Icon(
                             _isRepeatPasswordVisible
@@ -339,6 +386,7 @@ class _ChangePasswordDialogState extends ConsumerState<ChangePasswordDialog> {
                 title: context.translate('change_password_btn_text'),
                 fontSize: 14,
                 isDark: true,
+                width: context.isDesktop ? 250 : double.infinity,
                 fontWeight: FontWeight.w700,
                 onTap: isLoading ? null : _handleSubmit,
                 isLoading: isLoading,

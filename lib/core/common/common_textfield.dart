@@ -158,6 +158,7 @@ class _CommonTextFieldState extends State<CommonTextField> {
         errorMaxLines: 2,
         suffixIcon: widget.obscureText
             ? IconButton(
+                focusNode: FocusNode(skipTraversal: true),
                 icon: Icon(
                   _obscureText ? Icons.visibility : Icons.visibility_off,
                   color: theme.colorScheme.onSurfaceVariant,
@@ -210,7 +211,7 @@ class _CommonTextFieldState extends State<CommonTextField> {
             (isDark
                 ? AppColors.websiteBorder
                 : Theme.of(context).colorScheme.outline),
-        width: widget.borderWidth ?? 1.0,
+        width: widget.borderWidth ?? 0.0,
       ),
     );
   }

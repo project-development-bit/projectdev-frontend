@@ -141,17 +141,9 @@ class _MyAppState extends ConsumerState<MyApp> {
       return MaterialApp(
         debugShowCheckedModeBanner: false,
         home: Scaffold(
+          backgroundColor: Color(0xff1A1A1A),
           body: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  AppTheme.lightTheme.colorScheme.primary,
-                  AppTheme.lightTheme.colorScheme.secondary,
-                ],
-              ),
-            ),
+            decoration: BoxDecoration(),
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
