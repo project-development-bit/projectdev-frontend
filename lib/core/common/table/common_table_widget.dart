@@ -29,7 +29,7 @@ class CommonTableWidget extends StatelessWidget {
     required this.changeLimit,
     this.filterBar,
     this.isLoading = false,
-    this.noDataText = "No data available",
+    this.noDataText = "no_data_available",
   });
 
   @override
@@ -107,12 +107,14 @@ class CommonTableWidget extends StatelessWidget {
 }
 
 Widget _buildNoData(BuildContext context,
-    {String noDataText = "No data available"}) {
+    {String noDataText = "no_data_available"}) {
+  final localizations = AppLocalizations.of(context);
+
   return Container(
     height: 80,
     alignment: Alignment.center,
     child: CommonText.bodyMedium(
-      noDataText,
+      localizations?.translate(noDataText) ?? "No data available",
       color: const Color(0xFF98989A), // TODO: use from scheme
       fontWeight: FontWeight.w600,
     ),
