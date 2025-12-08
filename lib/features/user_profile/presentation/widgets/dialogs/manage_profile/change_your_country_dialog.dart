@@ -162,7 +162,6 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
                             _selectedCountry = country;
                           });
                         },
-                        labelText: 'Country *',
                         getItemCode: (country) => country.code,
                         getItemName: (country) => country.name,
                         getItemIconUrl: (country) => country.flag,
@@ -200,7 +199,6 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
                     _selectedCountry = country;
                   });
                 },
-                labelText: 'Country *',
                 getItemCode: (country) => country.code,
                 getItemName: (country) => country.name,
                 getItemIconUrl: (country) => country.flag,

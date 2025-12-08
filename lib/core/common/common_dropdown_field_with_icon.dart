@@ -19,8 +19,9 @@ class SearchableDropdownWithIcon<T> extends StatelessWidget {
     required this.getItemIconUrl,
     this.selectedItem,
     this.validator,
-    this.labelText,
+    // this.labelText,
     this.hintText,
+    this.floatingLabelBehavior,
   });
 
   /// Function to provide the list of items based on filter (for search/remote loading)
@@ -45,12 +46,12 @@ class SearchableDropdownWithIcon<T> extends StatelessWidget {
   final String Function(T) getItemIconUrl;
 
   /// Label text for the field
-  final String? labelText;
+  // final String? labelText;
 
   /// Hint text for the search field inside the popup
   final String? hintText;
 
-  // --- Implementation Details for Reusability ---
+  final FloatingLabelBehavior? floatingLabelBehavior;
 
   // Builder for the selected item in the closed state (Flag | Name/Code)
   Widget _dropdownBuilder(BuildContext context, T? item) {
@@ -78,10 +79,10 @@ class SearchableDropdownWithIcon<T> extends StatelessWidget {
                 fontWeight: FontWeight.w500,
                 color: context.onSurface,
               ),
-              CommonText.bodySmall(
-                getItemCode(item),
-                color: context.onSurface.withValues(alpha: 0.6),
-              ),
+              // CommonText.bodySmall(
+              //   getItemCode(item),
+              //   color: context.onSurface.withValues(alpha: 0.6),
+              // ),
             ],
           ),
         ),
@@ -112,10 +113,6 @@ class SearchableDropdownWithIcon<T> extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                   color: context.onSurface,
                 ),
-                CommonText.bodySmall(
-                  getItemCode(item),
-                  color: context.onSurface.withValues(alpha: 0.6),
-                ),
               ],
             ),
           ),
@@ -139,28 +136,41 @@ class SearchableDropdownWithIcon<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return DropdownSearch<T>(
-      // 1. Data Source and Callbacks
+      suffixProps: const DropdownSuffixProps(
+        dropdownButtonProps: DropdownButtonProps(
+            iconOpened: Icon(
+              Icons.keyboard_arrow_up_rounded,
+              color: Color(0xFF98989A),
+              size: 24,
+            ),
+            highlightColor: Colors.transparent,
+            hoverColor: Colors.transparent,
+            focusColor: Colors.transparent,
+            disabledColor: Colors.transparent,
+            iconClosed: Icon(
+              Icons.keyboard_arrow_down_rounded,
+              color: Color(0xFF98989A),
+              size: 24,
+            )),
+      ),
       items: items,
       selectedItem: selectedItem,
       onChanged: onChanged,
-
-      // 2. Custom Builders and Logic
       dropdownBuilder: _dropdownBuilder,
       compareFn: _compareFn,
       filterFn: _filterFn,
-
-      // 3. Styling
       decoratorProps: DropDownDecoratorProps(
         decoration: InputDecoration(
-          floatingLabelBehavior: FloatingLabelBehavior.always,
-          labelText: labelText ?? 'Select Item *',
+          floatingLabelBehavior:
+              floatingLabelBehavior ?? FloatingLabelBehavior.never,
+          // labelText: labelText ?? 'Select Item *',
           filled: true,
           fillColor: (Theme.of(context).brightness == Brightness.dark
               ? AppColors.websiteCard
               : theme.colorScheme.surfaceContainerHighest
                   .withValues(alpha: 0.1)),
           contentPadding:
-              const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              const EdgeInsets.symmetric(horizontal: 6, vertical: 12),
         ),
       ),
 

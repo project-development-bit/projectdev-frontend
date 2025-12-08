@@ -143,11 +143,11 @@ class ProfileTabContent extends ConsumerWidget {
             spacing: 12.0,
             children: [
               if (!context.isMobile)
-              Expanded(
-                  child: CommonText.titleMedium(
-                "",
-                fontWeight: FontWeight.w700,
-              )),
+                Expanded(
+                    child: CommonText.titleMedium(
+                  "",
+                  fontWeight: FontWeight.w700,
+                )),
               Expanded(
                 flex: 4,
                 child: CommonText.bodyMedium(

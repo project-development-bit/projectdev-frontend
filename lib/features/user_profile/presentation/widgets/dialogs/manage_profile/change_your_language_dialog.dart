@@ -166,7 +166,7 @@ class _ChangeLanguageDialogState extends ConsumerState<ChangeLanguageDialog> {
                     _selectedLanguage = language;
                   });
                 },
-                labelText: context.translate("language"),
+                // labelText: context.translate("language"),
                 // hint: context.translate("select_your_language_hint"),
                 getItemCode: (language) => language.code,
                 getItemName: (language) => language.name,
@@ -203,7 +203,7 @@ class _ChangeLanguageDialogState extends ConsumerState<ChangeLanguageDialog> {
                       _selectedLanguage = language;
                     });
                   },
-                  labelText: context.translate("language"),
+                  // labelText: context.translate("language"),
                   // hint: context.translate("select_your_language_hint"),
                   getItemCode: (language) => language.code,
                   getItemName: (language) => language.name,

@@ -1,4 +1,3 @@
-import 'package:cointiply_app/core/common/common_button.dart';
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
@@ -147,14 +146,13 @@ class _Disable2FAConfirmationDialogState
                   fontWeight: FontWeight.w700,
                 ),
                 const SizedBox(width: 16),
-                
                 CustomUnderLineButtonWidget(
                   title: context.translate("disable_2fa"),
                   onTap: isDisabling ? null : _handleDisable2FA,
                   fontColor: Color(0xff98989A),
                   isRed: true,
                   width: context.isMobile ? double.infinity : 233,
-                    isLoading: isDisabling,
+                  isLoading: isDisabling,
                   padding: EdgeInsets.symmetric(
                     horizontal: 40,
                     vertical: 10,
@@ -162,7 +160,6 @@ class _Disable2FAConfirmationDialogState
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
                 ),
-                
               ],
             ),
           ],

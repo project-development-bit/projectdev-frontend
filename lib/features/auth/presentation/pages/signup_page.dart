@@ -251,8 +251,8 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                   _selectedCountry = country;
                 });
               },
-              labelText:
-                  localizations?.translate('country_required') ?? 'Country *',
+              // labelText:
+              //     localizations?.translate('country_required') ?? 'Country *',
               hintText: localizations?.translate('country_hint') ??
                   'Select Your Country',
               getItemCode: (country) => country.code,
