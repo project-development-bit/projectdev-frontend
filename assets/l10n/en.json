@@ -727,5 +727,10 @@
   "affiliate_program_title": "Affiliate Program",
   "affiliate_program_description": "Get a lifetime reward up 15% for inviting new people",
   "referral_link": "Referral Link",
-  "referral_link_copied_message": "Referral link copied to clipboard!"
+  "referral_link_copied_message": "Referral link copied to clipboard!",
+  "share": "Share",
+  "referral_earnings": "Referral Earnings",
+  "referral_users": "Referral Users",
+  "pending_earnings": "Pending Earnings",
+  "active_this_week": "Active This Week"
 }
