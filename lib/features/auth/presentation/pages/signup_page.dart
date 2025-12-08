@@ -18,7 +18,8 @@ import '../../../../core/enum/user_role.dart';
 import '../providers/register_provider.dart';
 import '../../../../routing/app_router.dart';
 
-final selectedCountryProvider = StateProvider<Country?>((ref) => null);
+final selectedCountryProvider =
+    StateProvider.autoDispose<Country?>((ref) => null);
 
 class SignUpPage extends ConsumerStatefulWidget {
   const SignUpPage({super.key});
