@@ -29,7 +29,7 @@ class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   Future<AppLocalizations> load(Locale locale) async {
     await localizationService.load(locale);
     final appLocalizations = AppLocalizations(locale);
-     return appLocalizations;
+    return appLocalizations;
   }
 
   @override

@@ -6,17 +6,10 @@ class DialogScaffoldWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ScaffoldMessenger(
-      child: Builder(builder: (context) {
-        return Scaffold(
-          backgroundColor: Colors.transparent,
-          body: Dialog(
-              backgroundColor: Colors.transparent,
-              insetPadding: const EdgeInsets.all(20),
-              clipBehavior: Clip.hardEdge,
-              child: child),
-        );
-      }),
-    );
+    return Dialog(
+        backgroundColor: Colors.transparent,
+        insetPadding: const EdgeInsets.all(20),
+        clipBehavior: Clip.hardEdge,
+        child: child);
   }
 }
