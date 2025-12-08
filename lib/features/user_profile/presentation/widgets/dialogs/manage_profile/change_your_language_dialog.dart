@@ -1,6 +1,7 @@
 import 'package:cointiply_app/core/common/common_dropdown_field_with_icon.dart';
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
+import 'package:cointiply_app/core/common/dialog_bg_widget.dart';
 import 'package:cointiply_app/core/extensions/extensions.dart';
 import 'package:cointiply_app/features/user_profile/domain/entities/language.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/change_language_notifier.dart';
@@ -13,9 +14,10 @@ import 'package:go_router/go_router.dart';
 
 void showChangeLanguageDialog(BuildContext context) {
   context.showManagePopup(
-      height: 400,
+    // height: 400,
       child: const ChangeLanguageDialog(),
-      title: context.translate("change_your_language_title"));
+    // title: context.translate("change_your_language_title")
+  );
 }
 
 class ChangeLanguageDialog extends ConsumerStatefulWidget {
@@ -61,7 +63,7 @@ class _ChangeLanguageDialogState extends ConsumerState<ChangeLanguageDialog> {
 
     ref.listenManual(
       changeLanguageProvider,
-      (previous, next) {
+      (previous, next) async {
         if (next.isChanging) {
           // Show loading indicator or disable inputs
         } else if (next.status == ChangeLanguageStatus.success) {
@@ -71,10 +73,15 @@ class _ChangeLanguageDialogState extends ConsumerState<ChangeLanguageDialog> {
           );
 
           // Refresh profile if needed
-          ref.read(getProfileNotifierProvider.notifier).fetchProfile();
-
+          
+      
           // Close dialog on success
-          context.pop();
+          if (mounted) {
+            ref
+                .read(getProfileNotifierProvider.notifier)
+                .fetchProfile(isLoading: false);
+            context.pop();
+          }
         } else if (next.hasError) {
           // Show error message
           final errorMessage = next.errorMessage ??
@@ -95,51 +102,58 @@ class _ChangeLanguageDialogState extends ConsumerState<ChangeLanguageDialog> {
     final languagesState = ref.watch(getLanguagesNotifierProvider);
     final isChangingLanguage = ref.watch(changeLanguageProvider).isChanging;
     final userId = (ref.read(currentUserProvider).user?.id ?? 0).toString();
-    final isMobile = context.isMobile;
 
-    return Container(
-      padding: !isMobile ? const EdgeInsets.symmetric(horizontal: 32) : null,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 20),
+    return DialogBgWidget(
+      title: context.translate("change_your_language_title"),
+      dialogHeight: context.isDesktop
+          ? 340
+          : context.isTablet
+              ? 350
+              : 400,
+      body: SingleChildScrollView(
+        padding: context.isMobile || context.isTablet
+            ? const EdgeInsets.symmetric(horizontal: 17, vertical: 22)
+            : const EdgeInsets.symmetric(horizontal: 31, vertical: 22),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Align(
+              alignment: Alignment.centerLeft,
               child: CommonText.bodyMedium(
                 context.translate("change_your_language_description"),
                 fontWeight: FontWeight.w500,
               ),
             ),
-          ),
+            SizedBox(height: 13),
+            // Languages dropdown
+            if (languagesState.isLoading)
+              _loadingState()
+            else if (languagesState.hasError)
+              _errorState(languagesState, context)
+            else if (languagesState.hasData)
+              _dataState(languagesState, context),
 
-          // Languages dropdown
-          if (languagesState.isLoading)
-            _loadingState()
-          else if (languagesState.hasError)
-            _errorState(languagesState, context)
-          else if (languagesState.hasData)
-            _dataState(languagesState, context),
-
-          const SizedBox(height: 24),
-          CustomUnderLineButtonWidget(
-            title: context.translate('change_your_language_btn_text'),
-            fontSize: 14,
-            isDark: true,
-            fontWeight: FontWeight.w700,
-            onTap: _selectedLanguage != null
-                ? () {
-                    ref.read(changeLanguageProvider.notifier).changeLanguage(
-                          languageCode: _selectedLanguage!.code,
-                          languageName: _selectedLanguage!.name,
-                          userid: userId,
-                        );
-                  }
-                : null,
-            isLoading: isChangingLanguage,
-          ),
-        ],
+            const SizedBox(height: 24),
+            CustomUnderLineButtonWidget(
+              title: context.translate('change_your_language_btn_text'),
+              fontSize: 14,
+              isDark: true,
+              width: 250,
+              fontWeight: FontWeight.w700,
+              onTap: _selectedLanguage != null
+                  ? () {
+                      ref.read(changeLanguageProvider.notifier).changeLanguage(
+                            languageCode: _selectedLanguage!.code,
+                            languageName: _selectedLanguage!.name,
+                            userid: userId,
+                          );
+                    }
+                  : null,
+              isLoading: isChangingLanguage,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -147,15 +161,17 @@ class _ChangeLanguageDialogState extends ConsumerState<ChangeLanguageDialog> {
   Widget _dataState(GetLanguagesState languagesState, BuildContext context) {
     final isMobile = context.isMobile;
 
-    return isMobile
+    return isMobile || context.isTablet
         ? Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
+            spacing: 12,
             children: [
               CommonText.bodyMedium(
                 context.translate("your_language"),
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w700,
+                color: Colors.white,
               ),
               SearchableDropdownWithIcon<Language>(
                 items: (filter, infiniteScrollProps) =>

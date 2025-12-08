@@ -44,6 +44,7 @@ class Language extends Equatable {
     // return "https://flagsapi.com/$formattedCode/flat/64.png";
     return 'https://flagcdn.com/w80/$formattedCode.png';
   }
+  
 
   String getDisplayName(String langCode) {
     switch (langCode.toLowerCase()) {

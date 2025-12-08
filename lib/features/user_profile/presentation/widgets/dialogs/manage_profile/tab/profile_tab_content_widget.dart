@@ -51,11 +51,11 @@ class ProfileTabContent extends ConsumerWidget {
           child: UserProfileImageWidget(size: 25),
           btnTitle: context.translate("change_your_avatar"),
           onPressed: () {
-            context.pop();
             showUploadAvatarDialog(context);
           },
           isMobile: isMobile,
         ),
+        SizedBox(height: 25),
         _profileTabContentItem(
           title: context.translate("name"),
           child: CommonText.bodyMedium(
@@ -69,6 +69,8 @@ class ProfileTabContent extends ConsumerWidget {
           },
           isMobile: isMobile,
         ),
+
+        SizedBox(height: 25),
         _profileTabContentItem(
           title: context.translate("email"),
           child: email.isNotEmpty
@@ -88,6 +90,8 @@ class ProfileTabContent extends ConsumerWidget {
           },
           isMobile: isMobile,
         ),
+
+        SizedBox(height: 25),
         _profileTabContentItem(
           title: context.translate("country"),
           child: account?.country != null
@@ -118,6 +122,8 @@ class ProfileTabContent extends ConsumerWidget {
           },
           isMobile: isMobile,
         ),
+
+        SizedBox(height: 25),
         _profileTabContentItem(
           title: context.translate("offer_token"),
           child: CommonText.bodyMedium(
@@ -130,33 +136,37 @@ class ProfileTabContent extends ConsumerWidget {
           btnTitle: context.translate(
               showOfferToken ? "hide_offer_token" : "show_offer_token"),
           onPressed: () {
-            ref.read(_showOfferTokenProvider.notifier).state = !showOfferToken;
+            if (offerToken.isEmpty) {
+              context.showSnackBar(
+                  message: context.translate("no_offer_token"));
+              return;
+            }
+            showOfferTokenDialog(context, offerToken: offerToken);
           },
           isMobile: isMobile,
         ),
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 12),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            spacing: 12.0,
-            children: [
-              if (!context.isMobile)
-                Expanded(
-                    child: CommonText.titleMedium(
-                  "",
-                  fontWeight: FontWeight.w700,
-                )),
+        SizedBox(height: 8),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          spacing: 12.0,
+          children: [
+            if (!context.isMobile)
               Expanded(
-                flex: 4,
-                child: CommonText.bodyMedium(
-                    context.translate("offer_token_description"),
-                    color: Color(0xff98989A)),
-              ),
-            ],
-          ),
-        )
+                  flex: 2,
+                  child: CommonText.titleMedium(
+                "",
+                fontWeight: FontWeight.w700,
+              )),
+            Expanded(
+              flex: 5,
+              child: CommonText.bodyMedium(
+                  context.translate("offer_token_description"),
+                  color: Color(0xff98989A)),
+            ),
+          ],
+        ),
       ],
     );
   }
@@ -167,70 +177,68 @@ class ProfileTabContent extends ConsumerWidget {
       required String btnTitle,
       required Function() onPressed,
       required bool isMobile}) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      child: isMobile
-          ? Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  // mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  spacing: 21.0,
-                  children: [
-                    CommonText.bodyLarge(
-                      title,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                    ),
-                    child
-                  ],
-                ),
-                SizedBox(
-                  height: 16,
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  child: CustomUnderLineButtonWidget(
-                    title: btnTitle,
-                    onTap: onPressed,
-                    isDark: true,
-                    backgroundColor: const Color(0xFF262626),
+    return isMobile
+        ? Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                // mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                spacing: 21.0,
+                children: [
+                  CommonText.bodyLarge(
+                    title,
                     fontWeight: FontWeight.w700,
-                    fontSize: 14,
+                    color: Colors.white,
                   ),
-                )
-              ],
-            )
-          : Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              spacing: 21.0,
-              children: [
-                Expanded(
-                    child: CommonText.bodyLarge(
-                  title,
+                  child
+                ],
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              SizedBox(
+                width: double.infinity,
+                child: CustomUnderLineButtonWidget(
+                  title: btnTitle,
+                  onTap: onPressed,
+                  isDark: true,
+                  backgroundColor: const Color(0xFF262626),
                   fontWeight: FontWeight.w700,
-                  color: Colors.white,
-                )),
-                Expanded(
-                  flex: 2,
-                  child: Align(alignment: Alignment.centerLeft, child: child),
+                  fontSize: 14,
                 ),
-                Expanded(
+              )
+            ],
+          )
+        : Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            spacing: 21.0,
+            children: [
+              Expanded(
                   flex: 2,
-                  child: CustomUnderLineButtonWidget(
-                    title: btnTitle,
-                    onTap: onPressed,
-                    isDark: true,
-                    backgroundColor: const Color(0xFF262626),
-                    fontWeight: FontWeight.w700,
-                    fontSize: 14,
-                  ),
+                  child: CommonText.bodyLarge(
+                title,
+                fontWeight: FontWeight.w700,
+                color: Colors.white,
+              )),
+              Expanded(
+                flex: 2,
+                child: Align(alignment: Alignment.centerLeft, child: child),
+              ),
+              Expanded(
+                flex: 3,
+                child: CustomUnderLineButtonWidget(
+                  title: btnTitle,
+                  onTap: onPressed,
+                  isDark: true,
+                  backgroundColor: const Color(0xFF262626),
+                  fontWeight: FontWeight.w700,
+                  fontSize: 14,
                 ),
-              ],
-            ),
-    );
+              ),
+            ],
+          );
   }
 }

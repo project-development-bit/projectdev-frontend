@@ -1,6 +1,7 @@
 import 'package:cointiply_app/core/common/common_dropdown_field_with_icon.dart';
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
+import 'package:cointiply_app/core/common/dialog_bg_widget.dart';
 import 'package:cointiply_app/core/extensions/extensions.dart';
 import 'package:cointiply_app/features/user_profile/domain/entities/country.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/change_country_notifier.dart';
@@ -12,10 +13,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void showChangeCountryDialog(BuildContext context) {
   context.showManagePopup(
-      barrierDismissible: true,
-      height: context.isMobile ? context.screenHeight * 0.7 : 400,
-      child: const ChangeCountryDialog(),
-      title: context.translate("change_your_country_title"));
+    barrierDismissible: true,
+    // height: context.isMobile ? context.screenHeight * 0.7 : 400,
+    child: const ChangeCountryDialog(),
+    // title: context.translate("change_your_country_title")
+  );
 }
 
 class ChangeCountryDialog extends ConsumerStatefulWidget {
@@ -80,17 +82,21 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return _manageDialogBody(context);
+    return DialogBgWidget(
+        dialogHeight: context.isDesktop ? 370 : 440,
+        title: context.translate("change_your_country_title"),
+        body: _manageDialogBody(context));
   }
 
   Widget _manageDialogBody(BuildContext context) {
     final countriesState = ref.watch(getCountriesNotifierProvider);
     final isChangingCountry = ref.watch(changeCountryProvider).isChanging;
-    final isMobile = context.isMobile;
 
     return SingleChildScrollView(
       child: Container(
-        padding: !isMobile ? const EdgeInsets.symmetric(horizontal: 32) : null,
+        padding: context.isDesktop
+            ? const EdgeInsets.symmetric(horizontal: 32)
+            : EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
@@ -117,6 +123,7 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
             const SizedBox(height: 24),
 
             CustomUnderLineButtonWidget(
+              width: context.isDesktop ? 250 : double.infinity,
               title: context.translate("change_your_country_btn_text"),
               fontSize: 14,
               isDark: true,
@@ -131,9 +138,9 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
   }
 
   Widget _dataState(GetCountriesState countriesState, BuildContext context) {
-    final isMobile = context.isMobile;
+    final isDesktop = context.isDesktop;
 
-    return !isMobile
+    return isDesktop
         ? Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -146,9 +153,10 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
                 children: [
                   Expanded(
                     flex: 1,
-                    child: CommonText.bodyMedium(
+                    child: CommonText.bodyLarge(
                       context.translate("your_country"),
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
                     ),
                   ),
                   Expanded(
@@ -186,9 +194,10 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
             mainAxisSize: MainAxisSize.min,
             spacing: 12.0,
             children: [
-              CommonText.bodyMedium(
+              CommonText.bodyLarge(
                 context.translate("your_country"),
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w700,
+                color: Colors.white,
               ),
               SearchableDropdownWithIcon<Country>(
                 items: (filter, infiniteScrollProps) =>

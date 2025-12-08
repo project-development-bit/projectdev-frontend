@@ -8,6 +8,8 @@ class DeleteAccountState {
   final DeleteAccountStatus status;
   final String? errorMessage;
   final String? successMessage;
+  final String? email;
+  final int? verificationCode;
 
   bool get isDeleting => status == DeleteAccountStatus.loading;
   bool get hasError => status == DeleteAccountStatus.failure;
@@ -17,6 +19,8 @@ class DeleteAccountState {
     this.status = DeleteAccountStatus.initial,
     this.errorMessage,
     this.successMessage,
+    this.email,
+    this.verificationCode,
   });
 }
 
@@ -53,6 +57,8 @@ class DeleteAccountNotifier extends StateNotifier<DeleteAccountState> {
         state = DeleteAccountState(
           status: DeleteAccountStatus.success,
           successMessage: response.message,
+          email: response.email,
+          verificationCode: response.verificationCode,
         );
       },
     );
