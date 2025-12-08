@@ -18,6 +18,8 @@ import '../../../../core/enum/user_role.dart';
 import '../providers/register_provider.dart';
 import '../../../../routing/app_router.dart';
 
+final selectedCountryProvider = StateProvider<Country?>((ref) => null);
+
 class SignUpPage extends ConsumerStatefulWidget {
   const SignUpPage({super.key});
 
@@ -26,8 +28,6 @@ class SignUpPage extends ConsumerStatefulWidget {
 }
 
 class _SignUpPageState extends ConsumerState<SignUpPage> {
-  Country? _selectedCountry;
-
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
@@ -50,9 +50,17 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(getCountriesNotifierProvider.notifier).fetchCountries();
-      ref.read(getIpCountryNotifierProvider.notifier).detectCountry();
     });
 
+    ref.listenManual<GetCountriesState>(getCountriesNotifierProvider,
+        (previous, next) {
+      if (mounted) {
+        if (next.status == GetCountriesStatus.success &&
+            ref.read(selectedCountryProvider) == null) {
+          ref.read(getIpCountryNotifierProvider.notifier).detectCountry();
+        }
+      }
+    });
     ref.listenManual<IpCountryState>(getIpCountryNotifierProvider,
         (prev, next) {
       final countriesState = ref.read(getCountriesNotifierProvider);
@@ -62,10 +70,10 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
           orElse: () => Country(code: "", name: "", flag: "", id: 0),
         );
         // Set detected country if not already selected by user or already detected
-        if (detected.code.isNotEmpty && mounted && _selectedCountry == null) {
-          setState(() {
-            _selectedCountry = detected;
-          });
+        if (detected.code.isNotEmpty &&
+            mounted &&
+            ref.read(selectedCountryProvider) == null) {
+          ref.read(selectedCountryProvider.notifier).state = detected;
         }
       }
     });
@@ -181,7 +189,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
       name: _nameController.text.trim(),
       email: _emailController.text.trim(),
       password: _passwordController.text,
-      countryCode: _selectedCountry?.code ?? '',
+      countryCode: ref.read(selectedCountryProvider)?.code ?? '',
       confirmPassword: _confirmPasswordController.text,
       role: UserRole.normalUser, // Default to normal user
       onSuccess: () {
@@ -263,11 +271,9 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
 
             SearchableDropdownWithIcon<Country>(
               items: (filter, infiniteScrollProps) => countriesState.countries!,
-              selectedItem: _selectedCountry,
+              selectedItem: ref.watch(selectedCountryProvider),
               onChanged: (country) {
-                setState(() {
-                  _selectedCountry = country;
-                });
+                ref.read(selectedCountryProvider.notifier).state = country;
               },
               // labelText:
               //     localizations?.translate('country_required') ?? 'Country *',
