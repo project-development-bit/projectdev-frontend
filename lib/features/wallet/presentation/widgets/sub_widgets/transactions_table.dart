@@ -1,65 +1,51 @@
-import 'package:cointiply_app/features/wallet/domain/entity/payment_history.dart';
-import 'package:cointiply_app/features/wallet/presentation/widgets/sub_widgets/transaction_desktop_header.dart';
-import 'package:cointiply_app/features/wallet/presentation/widgets/sub_widgets/transaction_desktop_row.dart';
-import 'package:cointiply_app/features/wallet/presentation/widgets/sub_widgets/transaction_filter_bar.dart';
-import 'package:cointiply_app/features/wallet/presentation/widgets/sub_widgets/transaction_table_footer.dart';
+import 'package:cointiply_app/core/common/table/table_widget.dart';
+import 'package:cointiply_app/core/localization/app_localizations.dart';
+import 'package:cointiply_app/features/wallet/presentation/providers/payment_history_notifier_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:cointiply_app/core/core.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class TransactionsTable extends StatelessWidget {
-  final List<PaymentHistory> items;
-
-  const TransactionsTable({
-    super.key,
-    required this.items,
-  });
+class PayamentHistoryTable extends ConsumerWidget {
+  const PayamentHistoryTable({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final isMobile = context.isMobile;
-    final isTablet = context.isTablet;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 12),
-        TransactionFilterBar(),
-        const SizedBox(height: 8),
-        Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: const Color(0xFF00131E), // TODO: to use from scheme
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: isMobile || isTablet
-              ? SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: SizedBox(
-                    width: items.length * 150.0,
-                    child: Column(
-                      children: [
-                        TransactionDesktopHeader(),
-                        Divider(
-                            color: const Color(
-                                0xFF333333), // TODO: to use from scheme
-                            height: 1),
-                        ...items.map((e) => TransactionDesktopRow(item: e)),
-                      ],
-                    ),
-                  ),
-                )
-              : Column(
-                  children: [
-                    TransactionDesktopHeader(),
-                    Divider(color: const Color(0xFF333333), height: 1),
-                    ...items.map((e) => TransactionDesktopRow(item: e)),
-                  ],
-                ),
-        ),
-        const SizedBox(height: 12),
-        // Table Footer (pagination)
-        TransactionTableFooter(),
+  Widget build(BuildContext context, WidgetRef ref) {
+    final localizations = AppLocalizations.of(context);
+    final items = ref.watch(paymentHistoryNotifierProvider).paymentHistory;
+    final state = ref.watch(paymentHistoryNotifierProvider);
+    final notifier = ref.read(paymentHistoryNotifierProvider.notifier);
+    final total = state.pagination?.total ?? 0;
+    final page = state.pagination?.currentPage ?? 1;
+    final limit = state.pagination?.limit ?? 10;
+    final totalPages = (total / limit).ceil() == 0 ? 1 : (total / limit).ceil();
+    return TableWidget(
+      headers: [
+        localizations?.translate("tx_status") ?? "Status",
+        localizations?.translate("tx_amount") ?? "Amount",
+        localizations?.translate("tx_currency") ?? "Currency",
+        localizations?.translate("tx_fee") ?? "Fee",
+        localizations?.translate("tx_address") ?? "Address",
+        localizations?.translate("tx_date") ?? "Date",
       ],
+      values: items
+          .map((e) => [
+                e.status.toUpperCase().toString(),
+                e.amount.toString(),
+                e.currency,
+                e.fee.toString(),
+                e.address,
+                e.updatedAt.toString(),
+              ])
+          .toList(),
+      total: total,
+      page: page,
+      limit: limit,
+      totalPages: totalPages,
+      changePage: (int page) {
+        notifier.changePage(page);
+      },
+      changeLimit: (int limit) {
+        notifier.changeLimit(limit);
+      },
     );
   }
 }

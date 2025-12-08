@@ -25,9 +25,6 @@ class _PayamentHistorySectionState
   Widget build(
     BuildContext context,
   ) {
-    final items = ref.watch(paymentHistoryNotifierProvider).paymentHistory;
-    return TransactionsTable(
-      items: items,
-    );
+    return PayamentHistoryTable();
   }
 }
