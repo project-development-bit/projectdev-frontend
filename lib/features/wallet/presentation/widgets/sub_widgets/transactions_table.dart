@@ -1,6 +1,7 @@
-import 'package:cointiply_app/core/common/table/table_widget.dart';
+import 'package:cointiply_app/core/common/table/common_table_widget.dart';
 import 'package:cointiply_app/core/localization/app_localizations.dart';
 import 'package:cointiply_app/features/wallet/presentation/providers/payment_history_notifier_provider.dart';
+import 'package:cointiply_app/features/wallet/presentation/widgets/sub_widgets/transaction_filter_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -17,7 +18,7 @@ class PayamentHistoryTable extends ConsumerWidget {
     final page = state.pagination?.currentPage ?? 1;
     final limit = state.pagination?.limit ?? 10;
     final totalPages = (total / limit).ceil() == 0 ? 1 : (total / limit).ceil();
-    return TableWidget(
+    return CommonTableWidget(
       headers: [
         localizations?.translate("tx_status") ?? "Status",
         localizations?.translate("tx_amount") ?? "Amount",
@@ -26,6 +27,7 @@ class PayamentHistoryTable extends ConsumerWidget {
         localizations?.translate("tx_address") ?? "Address",
         localizations?.translate("tx_date") ?? "Date",
       ],
+      filterBar: const TransactionFilterBar(),
       values: items
           .map((e) => [
                 e.status.toUpperCase().toString(),

@@ -1,11 +1,10 @@
+import 'package:cointiply_app/core/common/table/table_footer.dart';
 import 'package:cointiply_app/core/common/table/table_header_widget.dart';
 import 'package:cointiply_app/core/common/table/table_row_widget.dart';
-import 'package:cointiply_app/features/wallet/presentation/widgets/sub_widgets/transaction_filter_bar.dart';
-import 'package:cointiply_app/features/wallet/presentation/widgets/sub_widgets/transaction_table_footer.dart';
 import 'package:flutter/material.dart';
 import 'package:cointiply_app/core/core.dart';
 
-class TableWidget extends StatelessWidget {
+class CommonTableWidget extends StatelessWidget {
   final List<String> headers;
   final List<List<String>> values;
   final int total;
@@ -14,7 +13,8 @@ class TableWidget extends StatelessWidget {
   final int totalPages;
   final Function(int) changePage;
   final Function(int) changeLimit;
-  const TableWidget({
+  final Widget? filterBar;
+  const CommonTableWidget({
     super.key,
     required this.headers,
     required this.values,
@@ -24,6 +24,7 @@ class TableWidget extends StatelessWidget {
     required this.totalPages,
     required this.changePage,
     required this.changeLimit,
+    this.filterBar,
   });
 
   @override
@@ -34,8 +35,7 @@ class TableWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 12),
-        TransactionFilterBar(),
-        const SizedBox(height: 8),
+        if (filterBar != null) filterBar!,
         Container(
           width: double.infinity,
           decoration: BoxDecoration(
@@ -68,7 +68,7 @@ class TableWidget extends StatelessWidget {
                 ),
         ),
         const SizedBox(height: 12),
-        TransactionTableFooter(
+        TableFooter(
           total: total,
           page: page,
           limit: limit,
