@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/common/widgets/custom_pointer_interceptor.dart';
 import 'package:cointiply_app/core/core.dart';
 import 'package:cointiply_app/core/common/menu/profile_menu.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/user_profile_image_widget.dart';
@@ -25,10 +26,12 @@ class HeaderProfileAvatar extends StatelessWidget {
         PopupMenuItem(
           enabled: false,
           padding: EdgeInsets.zero,
-          child: ProfileMenu(
-            closeMenu: () {
-              Navigator.of(context).pop();
-            },
+          child: CustomPointerInterceptor(
+            child: ProfileMenu(
+              closeMenu: () {
+                Navigator.of(context).pop();
+              },
+            ),
           ),
         ),
       ],

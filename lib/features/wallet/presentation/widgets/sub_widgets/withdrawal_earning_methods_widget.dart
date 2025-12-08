@@ -1,14 +1,17 @@
+import 'package:cointiply_app/features/wallet/domain/entity/withdrawal_option.dart';
 import 'package:flutter/material.dart';
 import 'package:cointiply_app/core/core.dart';
 
 class WithdrawalEarningMethodsWidget extends StatelessWidget {
   final List<WithdrawalOption> methods;
-  final Function(String key) onSelect;
+  final Function(WithdrawalOption option) onSelect;
+  final bool isLoading;
 
   const WithdrawalEarningMethodsWidget({
     super.key,
     required this.methods,
     required this.onSelect,
+    this.isLoading = false,
   });
 
   @override
@@ -26,25 +29,27 @@ class WithdrawalEarningMethodsWidget extends StatelessWidget {
           fit: BoxFit.cover,
         ),
       ),
-      child: GridView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemCount: methods.length,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: isMobile ? 2 : 2,
-          mainAxisSpacing: isMobile ? 11 : 20,
-          crossAxisSpacing: isMobile ? 15 : 20,
-          childAspectRatio: isMobile ? 0.75 : 1.6,
-        ),
-        itemBuilder: (_, index) {
-          final item = methods[index];
+      child: isLoading
+          ? Center(child: CircularProgressIndicator())
+          : GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: methods.length,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: isMobile ? 2 : 2,
+                mainAxisSpacing: isMobile ? 11 : 20,
+                crossAxisSpacing: isMobile ? 15 : 20,
+                childAspectRatio: isMobile ? 0.75 : 1.6,
+              ),
+              itemBuilder: (_, index) {
+                final item = methods[index];
 
-          return WithdrawalCard(
-            item: item,
-            onTap: () => onSelect(item.key),
-          );
-        },
-      ),
+                return WithdrawalCard(
+                  item: item,
+                  onTap: () => onSelect(item),
+                );
+              },
+            ),
     );
   }
 }
@@ -93,19 +98,16 @@ class _WithdrawalCardState extends State<WithdrawalCard> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 CommonText.titleMedium(
-                  widget.item.title,
+                  widget.item.name,
                   color: colorScheme.primary,
                   fontWeight: FontWeight.w700,
                 ),
                 const SizedBox(height: 9),
-                Image.asset(
-                  widget.item.icon,
-                  width: 45,
-                  height: 45,
-                ),
+                CommonImage(
+                    imageUrl: widget.item.iconUrl, width: 45, height: 45),
                 const SizedBox(height: 9),
                 CommonText.bodySmall(
-                  "Minimum ${widget.item.minCoins.toString()} coins. ${widget.item.hasFees ? "Has Fees" : "No Fees"}",
+                  "Minimum ${widget.item.minAmountCoins.toString()} coins. ${widget.item.feeCoins > 0 ? "Has Fees" : "No Fees"}",
                   fontWeight: FontWeight.w500,
                   textAlign: TextAlign.center,
                   color: const Color(0xFF98989A), // TODO: use Color From Scheme
@@ -140,9 +142,8 @@ class _WithdrawalCardState extends State<WithdrawalCard> {
                       child: CommonText.bodySmall(
                         translation
                                 ?.translate('withdraw_button_text')
-                                .replaceFirst(
-                                    "{coinName}", widget.item.title) ??
-                            "Withdraw ${widget.item.title.toUpperCase()}",
+                                .replaceFirst("{coinName}", widget.item.name) ??
+                            "Withdraw ${widget.item.name.toUpperCase()}",
                         color: const Color(
                             0xFF333333), // TODO: use Color From Scheme
                         fontWeight: FontWeight.w500,
@@ -156,20 +157,4 @@ class _WithdrawalCardState extends State<WithdrawalCard> {
       ),
     );
   }
-}
-
-class WithdrawalOption {
-  final String key;
-  final String title;
-  final String icon;
-  final int minCoins;
-  final bool hasFees;
-
-  WithdrawalOption({
-    required this.key,
-    required this.title,
-    required this.icon,
-    required this.minCoins,
-    this.hasFees = false,
-  });
 }
