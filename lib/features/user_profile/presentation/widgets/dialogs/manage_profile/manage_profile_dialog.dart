@@ -2,7 +2,6 @@ import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/common/common_image_widget.dart';
 import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
 import 'package:cointiply_app/core/common/dialog_bg_widget.dart';
-import 'package:cointiply_app/core/common/tab_bar_menu_item.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:cointiply_app/features/auth/presentation/widgets/disable_2fa_confirmation_dialog.dart';
 import 'package:cointiply_app/features/auth/presentation/widgets/two_factor_auth_dialog.dart';
@@ -121,41 +120,7 @@ class _ManageProfileDialogState extends ConsumerState<ManageProfileDialog> {
 
   Widget _manageProfileTabBar() {
     final selectedIndex = ref.watch(profileTabBarIndexProvider);
-
-    // if (context.screenWidth > 600) {
-    //   return Container(
-    //     padding: const EdgeInsets.symmetric(vertical: 21.5),
-    //     child: Row(
-    //       mainAxisAlignment: MainAxisAlignment.center,
-    //       crossAxisAlignment: CrossAxisAlignment.center,
-    //       mainAxisSize: MainAxisSize.min,
-    //       spacing: 6.0,
-    //       children: [
-    //         _tabBarMenuItem(
-    //           context.translate("manage_profile_tab_profile"),
-    //           index: 0,
-    //           isSelected: selectedIndex == 0,
-    //           width:  150,
-    //         ),
-    //         _tabBarMenuItem(
-    //           context.translate("manage_profile_tab_security"),
-    //           index: 1,
-    //           isSelected: selectedIndex == 1,
-    //           width: 150,
-    //         ),
-    //         _tabBarMenuItem(
-    //           context.translate("manage_profile_tab_settings"),
-    //           index: 2,
-    //           isSelected: selectedIndex == 2,
-    //           width: 150,
-    //         ),
-    //       ],
-    //     ),
-    //   );
-    // }
-
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 21.5),
+    return SizedBox(
       width: double.infinity,
       child: LayoutBuilder(
         builder: (context, constraints) {
@@ -169,34 +134,50 @@ class _ManageProfileDialogState extends ConsumerState<ManageProfileDialog> {
             spacing: spacing,
             runSpacing: 12.0,
             children: [
-              TabBarMenuItem(
-                text: context.translate("manage_profile_tab_profile"),
+              _tabBarMenuItem(
+                context.translate("manage_profile_tab_profile"),
                 index: 0,
                 isSelected: selectedIndex == 0,
                 width: buttonWidth,
-                onTap: () =>
-                    ref.read(profileTabBarIndexProvider.notifier).state = 0,
+                
               ),
-              TabBarMenuItem(
-                text: context.translate("manage_profile_tab_security"),
+              _tabBarMenuItem(
+                context.translate("manage_profile_tab_security"),
                 index: 1,
                 isSelected: selectedIndex == 1,
                 width: buttonWidth,
-                onTap: () =>
-                    ref.read(profileTabBarIndexProvider.notifier).state = 1,
+                
               ),
-              TabBarMenuItem(
-                text: context.translate("manage_profile_tab_settings"),
+              _tabBarMenuItem(
+                context.translate("manage_profile_tab_settings"),
                 index: 2,
                 isSelected: selectedIndex == 2,
                 width: buttonWidth,
-                onTap: () =>
-                    ref.read(profileTabBarIndexProvider.notifier).state = 2,
+               
               ),
             ],
           );
         },
       ),
+    );
+  }
+
+  Widget _tabBarMenuItem(
+    String s, {
+    required int index,
+    required bool isSelected,
+    required double width,
+  }) {
+    return CustomButtonWidget(
+      isOutlined: true,
+      title: s,
+      width: width,
+      fontSize: 16,
+      fontWeight: FontWeight.w700,
+      isActive: isSelected,
+      onTap: () {
+        ref.read(profileTabBarIndexProvider.notifier).state = index;
+      },
     );
   }
 
