@@ -3,7 +3,7 @@ import 'package:cointiply_app/core/common/doted_line_divider.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:cointiply_app/features/affiliate_program/presentation/widgets/affiliate_program_dialog.dart';
 import 'package:cointiply_app/features/auth/presentation/providers/logout_provider.dart';
-import 'package:cointiply_app/core/common/widgets/custom_pointer_interceptor.dart';
+import 'package:cointiply_app/features/auth/presentation/widgets/logout_dialog_widget.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/dialog_scaffold_widget.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/profile_dialog.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/reward_dialog.dart';
@@ -105,6 +105,7 @@ class ProfileMenu extends StatelessWidget {
                 onTap: isLoading
                     ? () {}
                     : () {
+                        closeMenu();
                         _handleLogout(context, ref);
                       },
                 fontSize: 14,
@@ -155,70 +156,71 @@ class ProfileMenu extends StatelessWidget {
 
   Future<void> _handleLogout(BuildContext context, WidgetRef ref) async {
     // Show confirmation dialog
-    final shouldLogout = await showDialog<bool>(
-      context: context,
-      builder: (context) => CustomPointerInterceptor(
-        child: AlertDialog(
-          title: Text(context.translate('logout')),
-          content: Text(context.translate('logout_confirmation')),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              child: Text(context.translate('cancel')),
-            ),
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(true),
-              style: TextButton.styleFrom(
-                foregroundColor: context.error,
-              ),
-              child: Text(context.translate('logout')),
-            ),
-          ],
-        ),
-      ),
-    );
+    showLogoutDialog(context);
+    // final shouldLogout = await showDialog<bool>(
+    //   context: context,
+    //   builder: (context) => CustomPointerInterceptor(
+    //     child: AlertDialog(
+    //       title: Text(context.translate('logout')),
+    //       content: Text(context.translate('logout_confirmation')),
+    //       actions: [
+    //         TextButton(
+    //           onPressed: () => Navigator.of(context).pop(false),
+    //           child: Text(context.translate('cancel')),
+    //         ),
+    //         TextButton(
+    //           onPressed: () => Navigator.of(context).pop(true),
+    //           style: TextButton.styleFrom(
+    //             foregroundColor: context.error,
+    //           ),
+    //           child: Text(context.translate('logout')),
+    //         ),
+    //       ],
+    //     ),
+    //   ),
+    // );
 
-    if (shouldLogout == true) {
-      try {
-        // Perform logout - the UI should automatically update via the observable provider
-        await ref.read(logoutNotifierProvider.notifier).logout();
+    // if (shouldLogout == true) {
+    //   try {
+    //     // Perform logout - the UI should automatically update via the observable provider
+    //     await ref.read(logoutNotifierProvider.notifier).logout();
 
-        // Check the final state after logout
-        final logoutState = ref.read(logoutNotifierProvider);
+    //     // Check the final state after logout
+    //     final logoutState = ref.read(logoutNotifierProvider);
 
-        if (logoutState is LogoutSuccess) {
-          closeMenu.call();
-          if (context.mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(context.translate('logout_successful')),
-                backgroundColor: Colors.green,
-              ),
-            );
-          }
-        } else if (logoutState is LogoutError) {
-          // Show error message
-          if (context.mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(logoutState.message),
-                backgroundColor: context.error,
-              ),
-            );
-          }
-        }
-      } catch (e) {
-        // Handle any unexpected errors
-        if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(context.translate('logout_failed', args: ['$e'])),
-              backgroundColor: context.error,
-            ),
-          );
-        }
-      }
-    }
+    //     if (logoutState is LogoutSuccess) {
+    //       closeMenu.call();
+    //       if (context.mounted) {
+    //         ScaffoldMessenger.of(context).showSnackBar(
+    //           SnackBar(
+    //             content: Text(context.translate('logout_successful')),
+    //             backgroundColor: Colors.green,
+    //           ),
+    //         );
+    //       }
+    //     } else if (logoutState is LogoutError) {
+    //       // Show error message
+    //       if (context.mounted) {
+    //         ScaffoldMessenger.of(context).showSnackBar(
+    //           SnackBar(
+    //             content: Text(logoutState.message),
+    //             backgroundColor: context.error,
+    //           ),
+    //         );
+    //       }
+    //     }
+    //   } catch (e) {
+    //     // Handle any unexpected errors
+    //     if (context.mounted) {
+    //       ScaffoldMessenger.of(context).showSnackBar(
+    //         SnackBar(
+    //           content: Text(context.translate('logout_failed', args: ['$e'])),
+    //           backgroundColor: context.error,
+    //         ),
+    //       );
+    //     }
+    //   }
+    // }
   }
 }
 
