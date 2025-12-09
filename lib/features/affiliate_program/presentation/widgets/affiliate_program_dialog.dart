@@ -2,9 +2,13 @@ import 'dart:developer';
 
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/common/dialog_bg_widget.dart';
+import 'package:cointiply_app/core/common/table/common_table_widget.dart';
 import 'package:cointiply_app/core/extensions/extensions.dart';
+import 'package:cointiply_app/features/affiliate_program/presentation/providers/referral_link_provider.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 
 showAffiliateProgramDialog(BuildContext context) {
@@ -14,14 +18,16 @@ showAffiliateProgramDialog(BuildContext context) {
   );
 }
 
-class AffiliateProgramDialog extends StatefulWidget {
+class AffiliateProgramDialog extends ConsumerStatefulWidget {
   const AffiliateProgramDialog({super.key});
 
   @override
-  State<AffiliateProgramDialog> createState() => _AffiliateProgramDialogState();
+  ConsumerState<AffiliateProgramDialog> createState() =>
+      _AffiliateProgramDialogState();
 }
 
-class _AffiliateProgramDialogState extends State<AffiliateProgramDialog> {
+class _AffiliateProgramDialogState
+    extends ConsumerState<AffiliateProgramDialog> {
   final socialIconList = [
     {
       'iconPath': 'assets/images/icons/facebook.svg',
@@ -50,8 +56,55 @@ class _AffiliateProgramDialogState extends State<AffiliateProgramDialog> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Fetch referral link when dialog opens
+      ref.read(referralLinkProvider.notifier).getReferralLink();
+    });
+
+    // Listen to referral link state changes
+    // ref.listenManual<ReferralLinkState>(
+    //   referralLinkProvider,
+    //   (previous, next) {
+    //     if (next.isSuccess && next.message != null) {
+    //       // context.showSnackBar(
+    //       //   message: next.message!,
+    //       //   backgroundColor: context.colorScheme.primary,
+    //       // );
+    //     } else if (next.hasError && next.errorMessage != null) {
+    //       // context.showSnackBar(
+    //       //   message: next.errorMessage!,
+    //       //   backgroundColor: context.error,
+    //       // );
+    //     }
+    //   },
+    // );
+  }
+
+  String _buildReferralUrl(String referralCode) {
+    // For web platform
+    if (kIsWeb) {
+      final currentUrl = Uri.base;
+      final isLocalhost = currentUrl.host.contains('localhost') ||
+          currentUrl.host.contains('127.0.0.1');
+
+      if (isLocalhost) {
+        return 'localhost:8080/r/$referralCode';
+      } else {
+        return 'https://staging.gigafaucet.com/r/$referralCode';
+      }
+    }
+
+    // For Android and iOS platforms
+    return 'https://staging.gigafaucet.com/r/$referralCode';
+  }
+
+  @override
   Widget build(BuildContext context) {
     return DialogBgWidget(
+        dialogHeight: context.isDesktop ? 700 : context.screenHeight * 0.8,
         body: _dialogBody(),
         title: context.translate("affiliate_program_title"));
   }
@@ -72,12 +125,22 @@ class _AffiliateProgramDialogState extends State<AffiliateProgramDialog> {
           _referralLinkSection(),
           const SizedBox(height: 15),
           _referralInfoSection(),
+          const SizedBox(height: 15),
+          _referralCoinList(),
         ],
       ),
     );
   }
 
   Container _referralLinkSection() {
+    final referralLinkState = ref.watch(referralLinkProvider);
+    final isLoading = referralLinkState.isLoading;
+    final isError =
+        referralLinkState.hasError && referralLinkState.errorMessage != null;
+    final referralCode = referralLinkState.referralCode ?? '';
+    final referralUrl =
+        referralCode.isNotEmpty ? _buildReferralUrl(referralCode) : '';
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16.5),
@@ -104,30 +167,48 @@ class _AffiliateProgramDialogState extends State<AffiliateProgramDialog> {
 
                 /// TODO: replace with design system color
                 borderRadius: BorderRadius.circular(8)),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Flexible(
-                  child: CommonText.bodyMedium(
-                      'https://gigafaucet.com/referral/yourname',
-                      fontWeight: FontWeight.w500,
-                      color: Colors.white),
-                ),
-                IconButton(
-                    onPressed: () {
-                      Clipboard.setData(ClipboardData(
-                          text: 'https://gigafaucet.com/referral/yourname'));
-                      context.showSnackBar(
-                          message: context
-                              .translate("referral_link_copied_message"));
-                    },
-                    icon: Icon(
-                      Icons.copy,
-                      color: Colors.white,
-                      size: 24,
-                    ))
-              ],
-            ),
+            child: isLoading
+                ? Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    ),
+                  )
+                : isError
+                    ? CommonText.bodyMedium(
+                        referralLinkState.errorMessage ?? 'Error',
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white)
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Flexible(
+                            child: CommonText.bodyMedium(
+                                referralUrl.isNotEmpty
+                                    ? referralUrl
+                                    : 'Loading...',
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white),
+                          ),
+                          IconButton(
+                              onPressed: referralUrl.isEmpty
+                                  ? null
+                                  : () {
+                                      Clipboard.setData(
+                                          ClipboardData(text: referralUrl));
+                                      context.showSnackBar(
+                                          message: context.translate(
+                                              "referral_link_copied_message"));
+                                    },
+                              icon: Icon(
+                                Icons.copy,
+                                color: referralUrl.isEmpty
+                                    ? Colors.grey
+                                    : Colors.white,
+                                size: 24,
+                              ))
+                        ],
+                      ),
           ),
           CommonText.bodyMedium(
             context.translate("share"),
@@ -271,6 +352,43 @@ class _AffiliateProgramDialogState extends State<AffiliateProgramDialog> {
             fontWeight: FontWeight.w500,
             color: Colors.white,
           ),
+        ],
+      ),
+    );
+  }
+
+  _referralCoinList() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        border: Border.all(color: Color(0xff333333)),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          CommonText.headlineSmall(
+            context.translate("referral"),
+            color: context.primary,
+            fontWeight: FontWeight.w700,
+          ),
+          CommonTableWidget(
+              headers: [
+                context.translate("date"),
+                context.translate("user_name"),
+                context.translate("coin_earn")
+              ],
+              values: [
+                ["2024-01-01", "user1", "50"],
+                ["2024-01-02", "user2", "30"],
+                ["2024-01-03", "user3", "20"],
+              ],
+              total: 3,
+              page: 1,
+              limit: 10,
+              totalPages: 1,
+              changePage: (_) {},
+              changeLimit: (_) {})
         ],
       ),
     );

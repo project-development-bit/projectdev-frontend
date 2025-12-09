@@ -751,5 +751,8 @@
   "coins_balance": "Coins Balance",
   "usd_balance": "USD Balance",
   "btc_balance": "BTC Balance",
-  "tx_fee": "Fee"
+  "tx_fee": "Fee",
+  "referral": "Referral",
+  "date": "Date",
+  "coins_earn": "Coins Earn"
 }
