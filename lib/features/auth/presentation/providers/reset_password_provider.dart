@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/services/secure_storage_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../../data/repositories/auth_repo_impl.dart';
@@ -8,7 +9,8 @@ import '../../../../core/error/failures.dart';
 /// Provider for reset password functionality
 final resetPasswordProvider =
     StateNotifierProvider<ResetPasswordNotifier, ResetPasswordState>(
-  (ref) => ResetPasswordNotifier(ref.watch(authRepositoryProvider)),
+  (ref) => ResetPasswordNotifier(ref.watch(authRepositoryProvider),
+      ref.read(secureStorageServiceProvider)),
 );
 
 /// State for reset password operations
@@ -39,8 +41,10 @@ class ResetPasswordError extends ResetPasswordState {
 /// Notifier for reset password operations
 class ResetPasswordNotifier extends StateNotifier<ResetPasswordState> {
   final AuthRepository _authRepository;
+  final SecureStorageService secureStorageService;
 
-  ResetPasswordNotifier(this._authRepository) : super(ResetPasswordInitial());
+  ResetPasswordNotifier(this._authRepository, this.secureStorageService)
+      : super(ResetPasswordInitial());
 
   /// Reset password with new password
   Future<void> resetPassword({
@@ -72,10 +76,11 @@ class ResetPasswordNotifier extends StateNotifier<ResetPasswordState> {
           statusCode: failure is ServerFailure ? failure.statusCode : null,
         );
       },
-      (response) {
+      (response) async {
         // Successfully reset password
         // Note: We don't store tokens since user should login again
         state = ResetPasswordSuccess(response);
+        await secureStorageService.savePasswords(password: password);
       },
     );
   }

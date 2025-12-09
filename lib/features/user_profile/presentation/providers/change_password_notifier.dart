@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/core.dart';
 import 'package:cointiply_app/features/user_profile/domain/usecases/change_password_usecase.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/profile_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,16 +18,18 @@ class ChangePasswordState {
   });
 }
 
-final changePasswordNotifierProvider =
-    StateNotifierProvider.autoDispose<ChangePasswordNotifier, ChangePasswordState>(
-        (ref) {
+final changePasswordNotifierProvider = StateNotifierProvider.autoDispose<
+    ChangePasswordNotifier, ChangePasswordState>((ref) {
   final changePasswordUsecase = ref.read(changePasswordUseCaseProvider);
-  return ChangePasswordNotifier(changePasswordUsecase);
+  final secureStorageService = ref.read(secureStorageServiceProvider);
+  return ChangePasswordNotifier(changePasswordUsecase, secureStorageService);
 });
 
 class ChangePasswordNotifier extends StateNotifier<ChangePasswordState> {
   final ChangePasswordUsecase changePasswordUsecase;
-  ChangePasswordNotifier(this.changePasswordUsecase) : super(ChangePasswordState());
+  final SecureStorageService secureStorageService;
+  ChangePasswordNotifier(this.changePasswordUsecase, this.secureStorageService)
+      : super(ChangePasswordState());
 
   Future<void> changePassword({
     required String currentPassword,
@@ -47,11 +50,14 @@ class ChangePasswordNotifier extends StateNotifier<ChangePasswordState> {
       (failure) {
         state = ChangePasswordState(
           status: ChangePasswordStatus.failure,
-          errorMessage: failure.message ?? 'Failed to change password. Please try again.',
+          errorMessage:
+              failure.message ?? 'Failed to change password. Please try again.',
         );
       },
-      (response) {
+      (response) async {
         state = ChangePasswordState(status: ChangePasswordStatus.success);
+
+        await secureStorageService.savePasswords(password: newPassword);
       },
     );
   }

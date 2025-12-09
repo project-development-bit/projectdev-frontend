@@ -327,6 +327,19 @@ class SecureStorageService {
       debugPrint('Error clearing remember me credentials: $e');
     }
   }
+
+  Future<void> savePasswords({required String password}) async {
+    try {
+      if (_isWeb) {
+        final prefs = await _prefs;
+        await prefs.setString(_rememberMePasswordKey, password);
+      } else {
+        await _storage.write(key: _rememberMePasswordKey, value: password);
+      }
+    } catch (e) {
+      debugPrint('Error saving password: $e');
+    }
+  }
 }
 
 // Provider for secure storage service
