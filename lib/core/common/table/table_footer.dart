@@ -27,8 +27,8 @@ class TableFooter extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final isMobile = context.isMobile;
 
-    final start = ((page - 1) * limit) + 1;
-    final end = (start + total - 1).clamp(0, total);
+    final start = (total == 0) ? 0 : ((page - 1) * limit) + 1;
+    final end = (total == 0) ? 0 : (page * limit).clamp(1, total);
 
     // Pagination buttons
     final paginationWidget = Row(
