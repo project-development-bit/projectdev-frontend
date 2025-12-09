@@ -755,5 +755,7 @@
   "tx_fee": "Fee",
   "referral": "Referral",
   "date": "Date",
-  "coins_earn": "Coins Earn"
+  "coins_earn": "Coins Earn",
+  "logout_title": "အကောင့်မှ ထွက်ရန် အတည်ပြုချက်",
+  "logout_description": "သင်၏အကောင့်မှ ထွက်ရန် သေချာပါသလား?"
 }
