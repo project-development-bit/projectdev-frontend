@@ -15,15 +15,3 @@ final translationProvider =
     return localizationService.translate(key, args: args);
   };
 });
-
-// Provider for getting the current locale and ensuring translation service is in sync
-final translationServiceProvider =
-    FutureProvider<LocalizationService>((ref) async {
-  final locale = ref.watch(localizationNotifierProvider).currentLocale;
-
-  // Ensure the localization service is loaded with the current locale
-  await localizationService.load(locale);
-  debugPrint(
-      'TranslationServiceProvider loaded for locale: ${locale.languageCode}');
-  return localizationService;
-});

@@ -8,7 +8,7 @@ final localizationLocalDataSourceProvider =
     Provider<LocalizationLocalDataSource>((ref) {
   final sharedPreferences = ref.read(sharedPreferencesProviderForAppSettings);
 
-  return LocalizationLocalDataSourceImpl(sharedPreferences);
+  return LocalizationLocalDataSourceImpl(sharedPreferences: sharedPreferences);
 });
 
 abstract class LocalizationLocalDataSource {
@@ -25,7 +25,7 @@ abstract class LocalizationLocalDataSource {
 class LocalizationLocalDataSourceImpl implements LocalizationLocalDataSource {
   final SharedPreferences sharedPreferences;
 
-  const LocalizationLocalDataSourceImpl(this.sharedPreferences);
+  const LocalizationLocalDataSourceImpl({required this.sharedPreferences});
 
   @override
   Future<void> cacheLocalization(String locale, LocalizationModel model) async {

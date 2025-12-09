@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'package:cointiply_app/features/localization/data/datasource/local/localization_local_data_source.dart';
+import 'package:cointiply_app/features/localization/data/model/response/localization_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalizationService {
   static const String _localizationPath = 'assets/l10n';
@@ -14,13 +16,25 @@ class LocalizationService {
   Locale? get locale => _locale;
   bool get isInitialized => _locale != null && _localizedStrings != null;
 
-  Future<bool> load(Locale locale) async {
+  Future<LocalizationModel?> getCachedLocalization(String locale) async {
+    final sharedPreferences = await SharedPreferences.getInstance();
+
+    final jsonString = sharedPreferences.getString("localization_$locale");
+    if (jsonString == null) return null;
+
+    final Map<String, dynamic> jsonMap = jsonDecode(jsonString);
+    return LocalizationModel.fromJson(jsonMap);
+  }
+
+  Future<bool> load(Locale locale, WidgetRef ref) async {
     _locale = locale;
     debugPrint(
         'LocalizationService.load() called for locale: ${locale.languageCode}');
     try {
-      final container = ProviderContainer();
-      Map<String, dynamic>? jsonString = (await container
+      // Map<String, dynamic>? jsonString =
+      //     // (await getCachedLocalization(locale.languageCode))?.toJson();
+
+      Map<String, dynamic>? jsonString = (await ref
               .read(localizationLocalDataSourceProvider)
               .getCachedLocalization(locale.languageCode))
           ?.toJson();
@@ -73,8 +87,8 @@ class LocalizationService {
   }
 
   // Change locale
-  Future<void> changeLocale(String languageCode) async {
-    await load(Locale(languageCode));
+  Future<void> changeLocale(String languageCode, WidgetRef ref) async {
+    await load(Locale(languageCode), ref);
   }
 }
 

@@ -219,8 +219,8 @@ class _MyAppState extends ConsumerState<MyApp> {
           Locale('en', 'US'), // English
           Locale('my', 'MM'), // Burmese
         ],
-        localizationsDelegates: const [
-          AppLocalizationsDelegate(),
+        localizationsDelegates: [
+          AppLocalizationsDelegate(ref),
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../services/localization_service.dart';
 
 class AppLocalizations {
@@ -18,7 +19,8 @@ class AppLocalizations {
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
-  const AppLocalizationsDelegate();
+  final WidgetRef ref;
+  const AppLocalizationsDelegate(this.ref);
 
   @override
   bool isSupported(Locale locale) {
@@ -27,7 +29,7 @@ class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
 
   @override
   Future<AppLocalizations> load(Locale locale) async {
-    await localizationService.load(locale);
+    await localizationService.load(locale, ref);
     final appLocalizations = AppLocalizations(locale);
     return appLocalizations;
   }
