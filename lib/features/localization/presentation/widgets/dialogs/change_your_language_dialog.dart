@@ -95,29 +95,14 @@ class _ChangeLanguageDialogState extends ConsumerState<ChangeLanguageDialog> {
     ref.listenManual(
       localizationNotifierProvider,
       (previous, next) async {
-        if (next.status == LocalizationStatus.loading) {
-          // Show loading indicator or disable inputs
-        } else if (next.status == LocalizationStatus.success) {
-          // Show success message
-          // context.showSuccessSnackBar(
-          //   message: context.translate("language_changed_successfully"),
-          // );
-
-          // Refresh profile if needed
-
-          // Close dialog on success
-          if (mounted) {
-            ref
-                .read(getProfileNotifierProvider.notifier)
-                .fetchProfile(isLoading: false);
-            context.pop();
+        if (previous != next) {
+          if (next.status == LocalizationStatus.error) {
+            // Show error message
+            final errorMessage =
+                next.error ?? context.translate("failed_to_change_language");
+            context.showSnackBar(
+                message: errorMessage, backgroundColor: context.error);
           }
-        } else if (next.status == LocalizationStatus.error) {
-          // Show error message
-          final errorMessage =
-              next.error ?? context.translate("failed_to_change_language");
-          context.showSnackBar(
-              message: errorMessage, backgroundColor: context.error);
         }
       },
     );

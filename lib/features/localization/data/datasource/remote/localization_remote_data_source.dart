@@ -13,7 +13,13 @@ class LocalizationRemoteDataSourceImpl implements LocalizationRemoteDataSource {
   const LocalizationRemoteDataSourceImpl(this.dioClient);
 
   String getLocateCode(String locale) {
-    if (locale == "mm" ||
+    if ("english" == locale ||
+        locale == "en" ||
+        locale == "us" ||
+        locale == "united states" ||
+        locale == "united states of america") {
+      return "en";
+    } else if (locale == "mm" ||
         locale == "my " ||
         locale == "myanmar" ||
         locale == "burmese") {
@@ -29,7 +35,8 @@ class LocalizationRemoteDataSourceImpl implements LocalizationRemoteDataSource {
     var countryCode = getLocateCode(locale.toLowerCase());
     final url =
         "https://gigafaucet-images-s3.s3.ap-southeast-2.amazonaws.com/$countryCode.json";
-
+    print(
+        "🌐 Locate Change Error Fetching localization for locale: $locale from URL: $url");
     try {
       debugPrint('🌐 Fetching localization for: $locale');
       debugPrint('📤 Request URL: $url');

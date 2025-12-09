@@ -39,11 +39,10 @@ class LocalizationController extends StateNotifier<LocalizationState> {
   Future<void> _loadLocalizationFromApi(String locale, {String? userid}) async {
     state = state.copyWith(
       status: LocalizationStatus.loading,
-      error: null,
+      error: "",
     );
 
     final result = await _useCase(locale);
-    debugPrint("🌐 Fetched localization for locale: $locale");
 
     result.fold(
       (failure) {
@@ -82,7 +81,8 @@ class LocalizationController extends StateNotifier<LocalizationState> {
     debugPrint("🌐 Locale switched → ${locale.languageCode}");
 
     // Update state
-    state = state.copyWith(currentLocale: locale);
+    state = state.copyWith(
+        currentLocale: locale, error: "", status: LocalizationStatus.loading);
 
     // Fetch translations
     await _loadLocalizationFromApi(locale.languageCode, userid: userid);
