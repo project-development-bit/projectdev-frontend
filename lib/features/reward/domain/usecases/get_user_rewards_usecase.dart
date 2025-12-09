@@ -1,7 +1,7 @@
 import 'package:cointiply_app/core/error/failures.dart';
 import 'package:cointiply_app/core/usecases/usecase.dart';
+import 'package:cointiply_app/features/reward/data/models/response/reward_data_model.dart';
 import 'package:cointiply_app/features/reward/data/repositories/reward_repository_provider.dart';
-import 'package:cointiply_app/features/reward/domain/entities/reward_response.dart';
 import 'package:cointiply_app/features/reward/domain/repositories/reward_repository.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,13 +11,13 @@ final getUserRewardsUseCaseProvider = Provider<GetUserRewardsUseCase>((ref) {
   return GetUserRewardsUseCase(repo);
 });
 
-class GetUserRewardsUseCase implements UseCase<RewardResponse, NoParams> {
+class GetUserRewardsUseCase implements UseCase<RewardDataModel, NoParams> {
   final RewardRepository repository;
 
   GetUserRewardsUseCase(this.repository);
 
   @override
-  Future<Either<Failure, RewardResponse>> call(NoParams params) {
+  Future<Either<Failure, RewardDataModel>> call(NoParams params) {
     return repository.getUserRewards();
   }
 }

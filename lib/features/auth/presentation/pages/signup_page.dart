@@ -20,7 +20,8 @@ import '../providers/register_provider.dart';
 import '../../../../routing/app_router.dart';
 
 class SignUpPage extends ConsumerStatefulWidget {
-  const SignUpPage({super.key});
+  final String? referralCode;
+  const SignUpPage({super.key, this.referralCode});
 
   @override
   ConsumerState<SignUpPage> createState() => _SignUpPageState();
@@ -191,6 +192,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
       countryCode: ref.read(selectedCountryProvider)?.code ?? '',
       confirmPassword: _confirmPasswordController.text,
       role: UserRole.normalUser, // Default to normal user
+      referralCode: widget.referralCode,
       onSuccess: () {
         debugPrint('✅ SignUpPage: Registration successful callback triggered');
       },
@@ -436,6 +438,56 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
             ),
 
             const SizedBox(height: 32),
+
+            // Referral Bonus Message
+            if (widget.referralCode != null &&
+                widget.referralCode!.isNotEmpty) ...[
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: colorScheme.primary.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: colorScheme.primary.withValues(alpha: 0.3),
+                    width: 1.5,
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.card_giftcard,
+                      color: colorScheme.primary,
+                      size: 24,
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CommonText.titleSmall(
+                            localizations?.translate('referral_bonus') ??
+                                'Referral Bonus',
+                            fontWeight: FontWeight.w700,
+                            color: colorScheme.primary,
+                          ),
+                          const SizedBox(height: 4),
+                          CommonText.bodySmall(
+                            localizations
+                                    ?.translate('referral_bonus_message') ??
+                                'Sign up with this referral code and receive coins worth \$500!',
+                            color: colorScheme.onSurface,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              )
+            ],
 
             // Sign Up Button
             SizedBox(

@@ -10,4 +10,6 @@ extension IntExt on int {
       return NumberFormat('#,###').format(this);
     }
   }
+
+  String? commaFormat() => NumberFormat('#,###').format(this);
 }

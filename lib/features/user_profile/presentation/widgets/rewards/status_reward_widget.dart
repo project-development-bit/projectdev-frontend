@@ -1,14 +1,17 @@
 import 'package:cointiply_app/core/core.dart';
+import 'package:cointiply_app/features/reward/domain/entities/reward_level.dart';
 import 'package:flutter/material.dart';
 
 class StatusRewardsWidget extends StatelessWidget {
   final String selectedTier;
-  final List<String> tiers;
+  final List<RewardLevel> tiers;
+  final Function(RewardLevel) onTierSelected;
 
   const StatusRewardsWidget({
     super.key,
     required this.selectedTier,
     required this.tiers,
+    required this.onTierSelected,
   });
 
   @override
@@ -17,15 +20,6 @@ class StatusRewardsWidget extends StatelessWidget {
     final isMobile = context.isMobile;
     final isTablet = context.isTablet;
     final colorScheme = Theme.of(context).colorScheme;
-
-    final items = tiers.map((e) {
-      final tier = e.toLowerCase();
-      return StatusTierModel(
-        keyName: tier,
-        image: _tierImage(tier),
-        label: _tierLabel(t, tier),
-      );
-    }).toList();
 
     return Container(
       width: double.infinity,
@@ -70,12 +64,18 @@ class StatusRewardsWidget extends StatelessWidget {
                   alignment: WrapAlignment.center,
                   spacing: 16,
                   runSpacing: 16,
-                  children: items.map((tier) {
+                  children: tiers.map((tier) {
+                    final keyName = tier.label.toLowerCase();
                     return StatusRewardItem(
                       tier: tier,
-                      isSelected: tier.keyName.toLowerCase() ==
-                          selectedTier.toLowerCase(),
+                      isSelected: keyName == selectedTier.toLowerCase(),
                       spacing: 12,
+                      onTap: (selectedTier) {
+                        final matchedLevel = tiers.firstWhere(
+                          (level) => level.label.toLowerCase() == keyName,
+                        );
+                        onTierSelected(matchedLevel);
+                      },
                     );
                   }).toList(),
                 ),
@@ -91,14 +91,20 @@ class StatusRewardsWidget extends StatelessWidget {
                 physics: const BouncingScrollPhysics(),
                 padding: const EdgeInsets.symmetric(horizontal: 12),
                 child: Row(
-                  children: items.map((tier) {
+                  children: tiers.map((tier) {
+                    final keyName = tier.label.toLowerCase();
                     return Padding(
                       padding: const EdgeInsets.only(right: 16),
                       child: StatusRewardItem(
                         tier: tier,
-                        isSelected: tier.keyName.toLowerCase() ==
-                            selectedTier.toLowerCase(),
+                        isSelected: keyName == selectedTier.toLowerCase(),
                         spacing: 16,
+                        onTap: (selectedTier) {
+                          final matchedLevel = tiers.firstWhere(
+                            (level) => level.label.toLowerCase() == keyName,
+                          );
+                          onTierSelected(matchedLevel);
+                        },
                       ),
                     );
                   }).toList(),
@@ -106,6 +112,58 @@ class StatusRewardsWidget extends StatelessWidget {
               ),
             ),
         ],
+      ),
+    );
+  }
+}
+
+class StatusRewardItem extends StatelessWidget {
+  final RewardLevel tier;
+  final bool isSelected;
+  final double spacing;
+  final Function(RewardLevel) onTap;
+
+  const StatusRewardItem({
+    super.key,
+    required this.tier,
+    required this.isSelected,
+    required this.spacing,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final isMobile = context.isMobile;
+    final localizations = AppLocalizations.of(context);
+    return GestureDetector(
+      onTap: () => onTap(tier),
+      child: Container(
+        width: 90,
+        height: 90,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: isSelected ? const Color(0x8000131E) : Colors.transparent,
+          borderRadius: BorderRadius.circular(15),
+          border: Border.all(
+            color: isSelected ? const Color(0x80333333) : Colors.transparent,
+            width: 1.2,
+          ),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(_tierImage(tier.label.toLowerCase()),
+                width: 40, height: 40),
+            const SizedBox(height: 6),
+            CommonText.titleMedium(
+              _tierLabel(localizations, tier.label),
+              fontSize: isMobile ? 14 : 16,
+              color: colorScheme.onPrimary,
+              fontWeight: FontWeight.w700,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -127,7 +185,6 @@ class StatusRewardsWidget extends StatelessWidget {
     }
   }
 
-  /// Localization helper
   String _tierLabel(AppLocalizations? t, String tier) {
     switch (tier) {
       case "bronze":
@@ -144,61 +201,4 @@ class StatusRewardsWidget extends StatelessWidget {
         return tier;
     }
   }
-}
-
-class StatusRewardItem extends StatelessWidget {
-  final StatusTierModel tier;
-  final bool isSelected;
-  final double spacing;
-
-  const StatusRewardItem({
-    super.key,
-    required this.tier,
-    required this.isSelected,
-    required this.spacing,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final isMobile = context.isMobile;
-    return Container(
-      width: 90,
-      height: 90,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: isSelected ? const Color(0x8000131E) : Colors.transparent,
-        borderRadius: BorderRadius.circular(15),
-        border: Border.all(
-          color: isSelected ? const Color(0x80333333) : Colors.transparent,
-          width: 1.2,
-        ),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset(tier.image, width: 40, height: 40),
-          const SizedBox(height: 6),
-          CommonText.titleMedium(
-            tier.label,
-            fontSize: isMobile ? 14 : 16,
-            color: colorScheme.onPrimary,
-            fontWeight: FontWeight.w700,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class StatusTierModel {
-  final String keyName;
-  final String image;
-  final String label;
-
-  StatusTierModel({
-    required this.keyName,
-    required this.image,
-    required this.label,
-  });
 }

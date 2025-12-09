@@ -33,7 +33,6 @@ class GetEarningsHistoryNotifier extends StateNotifier<EarningsHistoryState> {
           data: response,
           error: null,
           page: response.data?.pagination.page,
-          totalPages: response.data?.pagination.totalPages,
         );
       },
     );
@@ -45,10 +44,10 @@ class GetEarningsHistoryNotifier extends StateNotifier<EarningsHistoryState> {
     final request = EarningsHistoryRequestModel(
       page: state.page,
       limit: 20,
-      days: days ?? 7,
+      days: days ?? 30,
     );
     if (state.isLoadingMore) return;
-    if (state.page >= state.totalPages) return;
+    if (state.page >= (state.data?.data?.pagination.totalPages ?? 0)) return;
 
     state = state.copyWith(isLoadingMore: true, days: request.days);
 
@@ -79,8 +78,73 @@ class GetEarningsHistoryNotifier extends StateNotifier<EarningsHistoryState> {
         state = state.copyWith(
           data: updatedResponse,
           page: nextPage,
-          totalPages: response.data?.pagination.totalPages,
           isLoadingMore: false,
+        );
+      },
+    );
+  }
+
+  Future<void> changePage(int newPage) async {
+    if (newPage == state.page) return;
+
+    final request = EarningsHistoryRequestModel(
+      page: newPage,
+      limit: state.limit,
+      days: state.days,
+    );
+
+    state = state.copyWith(
+      status: EarningsHistoryStatus.loading,
+      error: null,
+    );
+
+    final result = await _useCase.call(request);
+
+    result.fold(
+      (failure) {
+        state = state.copyWith(
+          status: EarningsHistoryStatus.error,
+          error: failure.message,
+        );
+      },
+      (response) {
+        state = state.copyWith(
+          status: EarningsHistoryStatus.data,
+          data: response,
+          page: newPage,
+        );
+      },
+    );
+  }
+
+  Future<void> changeLimit(int newLimit) async {
+    // Reset to page 1 whenever changing limit
+    final request = EarningsHistoryRequestModel(
+      page: 1,
+      limit: newLimit,
+      days: state.days,
+    );
+
+    state = state.copyWith(
+      status: EarningsHistoryStatus.loading,
+      error: null,
+      limit: newLimit,
+      page: 1,
+    );
+
+    final result = await _useCase.call(request);
+
+    result.fold(
+      (failure) {
+        state = state.copyWith(
+          status: EarningsHistoryStatus.error,
+          error: failure.message,
+        );
+      },
+      (response) {
+        state = state.copyWith(
+          status: EarningsHistoryStatus.data,
+          data: response,
         );
       },
     );

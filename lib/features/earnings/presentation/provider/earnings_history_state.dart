@@ -13,7 +13,7 @@ class EarningsHistoryState {
   final EarningsHistoryStatus status;
   final String? error;
   final int page;
-  final int totalPages;
+  final int limit;
   final int days;
   final bool isLoadingMore;
 
@@ -22,8 +22,8 @@ class EarningsHistoryState {
     this.status = EarningsHistoryStatus.initial,
     this.error,
     this.page = 1,
-    this.totalPages = 1,
-    this.days = 7,
+    this.limit = 10,
+    this.days = 30,
     this.isLoadingMore = false,
   });
 
@@ -31,21 +31,21 @@ class EarningsHistoryState {
     EarningsHistoryResponse? data,
     EarningsHistoryStatus? status,
     String? error,
-    int? page,
-    int? totalPages,
     bool? isLoadingMore,
     int? days,
+    int? page,
+    int? limit,
   }) {
     return EarningsHistoryState(
       data: data ?? this.data,
       status: status ?? this.status,
       error: error ?? this.error,
-      page: page ?? this.page,
-      totalPages: totalPages ?? this.totalPages,
       isLoadingMore: isLoadingMore ?? this.isLoadingMore,
       days: days ?? this.days,
+      page: page ?? this.page,
+      limit: limit ?? this.limit,
     );
   }
 
-  bool get canLoadMore => page < totalPages;
+  bool get canLoadMore => page < (data?.data?.pagination.totalPages ?? 0);
 }

@@ -1,11 +1,11 @@
 import 'package:cointiply_app/core/network/base_dio_client.dart';
-import 'package:cointiply_app/features/reward/data/models/response/reward_response_model.dart';
+import 'package:cointiply_app/features/reward/data/models/response/reward_data_model.dart';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
 abstract class RewardRemoteDataSource {
-  Future<RewardResponseModel> getUserRewards();
+  Future<RewardDataModel> getUserRewards();
 }
 
 class RewardRemoteDataSourceImpl implements RewardRemoteDataSource {
@@ -16,7 +16,7 @@ class RewardRemoteDataSourceImpl implements RewardRemoteDataSource {
   const RewardRemoteDataSourceImpl(this.dioClient);
 
   @override
-  Future<RewardResponseModel> getUserRewards() async {
+  Future<RewardDataModel> getUserRewards() async {
     try {
       debugPrint('📤 Fetching user rewards...');
       debugPrint('📤 Request URL: /users/rewards');
@@ -29,8 +29,8 @@ class RewardRemoteDataSourceImpl implements RewardRemoteDataSource {
       debugPrint('📥 Response status: ${response.statusCode}');
       debugPrint('📥 Response data: ${response.data}');
 
-      return RewardResponseModel.fromJson(
-        response.data as Map<String, dynamic>,
+      return RewardDataModel.fromJson(
+        response.data,
       );
     } on DioException catch (e) {
       debugPrint('❌ Get user rewards DioException: ${e.message}');

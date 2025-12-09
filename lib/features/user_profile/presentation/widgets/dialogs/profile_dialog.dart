@@ -86,6 +86,12 @@ class _ProfileDialogState extends ConsumerState<ProfileDialog> {
                       loadMore: () {
                         earningsHistoryNotifier.loadMore();
                       },
+                      onPageChange: (newPage) {
+                        earningsHistoryNotifier.changePage(newPage);
+                      },
+                      onLimitChange: (newLimit) {
+                        earningsHistoryNotifier.changeLimit(newLimit);
+                      },
                     ),
               const SizedBox(height: 20),
             ],

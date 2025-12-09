@@ -62,6 +62,7 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
     required String confirmPassword,
     required String countryCode,
     required UserRole role,
+    String? referralCode,
     VoidCallback? onSuccess,
     Function(String)? onError,
   }) async {
@@ -100,6 +101,7 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
         confirmPassword: confirmPassword,
         countryCode: countryCode,
         role: role,
+        referralCode: referralCode,
         recaptchaToken:
             turnstileToken, // Using recaptchaToken field for Turnstile token
         userAgent: await _deviceInfo.getUserAgent(),

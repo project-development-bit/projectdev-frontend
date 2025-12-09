@@ -1,9 +1,9 @@
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class TableFooter extends ConsumerWidget {
+class TableFooter extends StatelessWidget {
   const TableFooter({
     super.key,
     required this.total,
@@ -22,27 +22,24 @@ class TableFooter extends ConsumerWidget {
   final Function(int) changeLimit;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    // final state = ref.watch(paymentHistoryNotifierProvider);
-    // final notifier = ref.read(paymentHistoryNotifierProvider.notifier);
-
+  Widget build(
+    BuildContext context,
+  ) {
     final colorScheme = Theme.of(context).colorScheme;
     final isMobile = context.isMobile;
 
-    // final total = state.pagination?.total ?? 0;
-    // final page = state.pagination?.currentPage ?? 1;
-    // final limit = state.pagination?.limit ?? 10;
-    // final totalPages = (total / limit).ceil() == 0 ? 1 : (total / limit).ceil();
-
-    final start = ((page - 1) * limit) + 1;
-    final end = (start + total - 1).clamp(0, total);
+    final start = (total == 0) ? 0 : ((page - 1) * limit) + 1;
+    final end = (total == 0) ? 0 : (page * limit).clamp(1, total);
 
     // Pagination buttons
     final paginationWidget = Row(
+      mainAxisSize: MainAxisSize.min,
+      
       children: [
-        IconButton(
-          icon: Icon(Icons.chevron_left, color: const Color(0xFF98989A)),
-          onPressed: page > 1 ? () => changePage(page - 1) : null,
+        HoverIconButton(
+          icon: Icons.chevron_left,
+          enabled: page > 1,
+          onTap: () => changePage(page - 1),
         ),
         Container(
           width: 32,
@@ -55,11 +52,13 @@ class TableFooter extends ConsumerWidget {
           child: CommonText.bodyMedium(
             "$page",
             color: colorScheme.surface,
+            fontWeight: FontWeight.w500,
           ),
         ),
-        IconButton(
-          icon: Icon(Icons.chevron_right, color: const Color(0xFF98989A)),
-          onPressed: page < totalPages ? () => changePage(page + 1) : null,
+        HoverIconButton(
+          icon: Icons.chevron_right,
+          enabled: page < totalPages,
+          onTap: () => changePage(page + 1),
         ),
       ],
     );
@@ -76,7 +75,9 @@ class TableFooter extends ConsumerWidget {
                   value: limit,
                   underline: SizedBox(),
                   dropdownColor: const Color(0xFF00131E),
-                  items: [10, 20, 50, 100].map((v) {
+                  items:
+                      (kDebugMode ? [2, 10, 20, 50, 100] : [5, 10, 20, 50, 100])
+                          .map((v) {
                     return DropdownMenuItem(
                       value: v,
                       child: CommonText.bodyMedium(
@@ -99,11 +100,74 @@ class TableFooter extends ConsumerWidget {
           ],
         ),
         if (isMobile)
-          Padding(
-            padding: const EdgeInsets.only(top: 16),
-            child: paginationWidget,
+          Align(
+            alignment: Alignment.center,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 16),
+              child: paginationWidget,
+            ),
           ),
       ],
+    );
+  }
+}
+
+class HoverIconButton extends StatefulWidget {
+  final IconData icon;
+  final bool enabled;
+  final VoidCallback? onTap;
+
+  const HoverIconButton({
+    super.key,
+    required this.icon,
+    required this.enabled,
+    required this.onTap,
+  });
+
+  @override
+  State<HoverIconButton> createState() => _HoverIconButtonState();
+}
+
+class _HoverIconButtonState extends State<HoverIconButton> {
+  bool isHover = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (_) => setState(() => isHover = true),
+      onExit: (_) => setState(() => isHover = false),
+      cursor:
+          widget.enabled ? SystemMouseCursors.click : SystemMouseCursors.basic,
+      child: GestureDetector(
+        onTap: widget.enabled ? widget.onTap : null,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 150),
+          width: 36,
+          height: 36,
+          decoration: BoxDecoration(
+            color: widget.enabled ? (Colors.transparent) : Colors.transparent,
+            border: isHover && widget.enabled
+                ? Border.all(
+                    color: widget.enabled
+                        ? isHover
+                            ? const Color(0xFFFFCC00)
+                            : const Color(0xFF98989A)
+                        : const Color(0xFF555555),
+                    width: widget.enabled && isHover ? 1 : 0)
+                : null,
+            shape: BoxShape.circle,
+          ),
+          child: Icon(
+            widget.icon,
+            size: 20,
+            color: widget.enabled
+                ? isHover
+                    ? const Color(0xFFFFCC00)
+                    : const Color(0xFF98989A)
+                : const Color(0xFF555555),
+          ),
+        ),
+      ),
     );
   }
 }
