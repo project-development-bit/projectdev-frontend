@@ -5,12 +5,12 @@ import 'package:cointiply_app/features/user_profile/presentation/widgets/rewards
 import 'package:flutter/material.dart';
 
 class StatusRewardsTableSliver extends StatelessWidget {
-  final List<RewardLevel> levels;
+  final RewardLevel level;
   final int currentLevel;
 
   const StatusRewardsTableSliver({
     super.key,
-    required this.levels,
+    required this.level,
     required this.currentLevel,
   });
 
@@ -47,21 +47,21 @@ class StatusRewardsTableSliver extends StatelessWidget {
             if (index == 1) {
               return const SizedBox(height: 12);
             }
-            final level = levels[index - 2];
+            final subLevel = level.subLevels[index - 2];
             return StatusRewardRow(
               row: StatusRewardRowModel(
-                tier: level.tier,
-                bronzeLabel: "${level.tier} ${level.level}",
-                levelRequired: "${level.level}+",
-                dailySpin: "${level.dailySpin}",
-                treasureChest: "${level.weeklyChest}",
-                offerBoost: "${level.offerBoostPct}%",
-                ptcDiscount: "${level.ptcDiscountPct}%",
-                isCurrentLevel: level.level == currentLevel,
+                tier: subLevel.label,
+                bronzeLabel: "${subLevel.label} ${subLevel.minLevel}",
+                levelRequired: "${subLevel.minLevel}+",
+                dailySpin: "${subLevel.dailySpinFree}",
+                treasureChest: "${subLevel.weeklyChestFree}",
+                offerBoost: "${subLevel.offerBoostPercent}%",
+                ptcDiscount: "${subLevel.ptcDiscountPercent}%",
+                isCurrentLevel: subLevel.minLevel == currentLevel,
               ),
             );
           },
-          childCount: levels.length + 2,
+          childCount: level.subLevels.length + 2,
         ),
       ),
     );
@@ -73,16 +73,17 @@ class StatusRewardsTableSliver extends StatelessWidget {
       children: [
         const StatusRewardHeaderRow(),
         const SizedBox(height: 12),
-        ...levels.map(
-          (level) => StatusRewardRow(
+        ...level.subLevels.map(
+          (subLevel) => StatusRewardRow(
             row: StatusRewardRowModel(
-              tier: level.tier,
-              bronzeLabel: "${level.tier} ${level.level}",
-              levelRequired: "${level.level}+",
-              dailySpin: "${level.dailySpin}",
-              treasureChest: "${level.weeklyChest}",
-              offerBoost: "${level.offerBoostPct}%",
-              ptcDiscount: "${level.ptcDiscountPct}%",
+              tier: subLevel.label,
+              bronzeLabel: "${subLevel.label} ${subLevel.minLevel}",
+              levelRequired: "${subLevel.minLevel}+",
+              dailySpin: "${subLevel.dailySpinFree}",
+              treasureChest: "${subLevel.weeklyChestFree}",
+              offerBoost: "${subLevel.offerBoostPercent}%",
+              ptcDiscount: "${subLevel.ptcDiscountPercent}%",
+              isCurrentLevel: subLevel.minLevel == currentLevel,
             ),
           ),
         ),

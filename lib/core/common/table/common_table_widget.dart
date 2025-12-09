@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/common/table/models/table_column.dart';
 import 'package:cointiply_app/core/common/table/table_footer.dart';
 import 'package:cointiply_app/core/common/table/table_header_widget.dart';
 import 'package:cointiply_app/core/common/table/table_row_widget.dart';
@@ -6,7 +7,7 @@ import 'package:cointiply_app/core/core.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class CommonTableWidget extends StatelessWidget {
-  final List<String> headers;
+  final List<TableColumn> columns;
   final List<List<String>> values;
   final int total;
   final int page;
@@ -19,7 +20,7 @@ class CommonTableWidget extends StatelessWidget {
   final String noDataText;
   const CommonTableWidget({
     super.key,
-    required this.headers,
+    required this.columns,
     required this.values,
     required this.total,
     required this.page,
@@ -32,10 +33,13 @@ class CommonTableWidget extends StatelessWidget {
     this.noDataText = "no_data_available",
   });
 
+  double get totalWidth =>
+      columns.fold(0, (sum, col) => sum + col.width); // sum of all widths
   @override
   Widget build(BuildContext context) {
     final isMobile = context.isMobile;
     final isTablet = context.isTablet;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -52,14 +56,12 @@ class CommonTableWidget extends StatelessWidget {
               ? SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: SizedBox(
-                    width: values.length * 150.0,
+                    width: totalWidth,
                     child: Column(
                       children: [
-                        TableHeaderWidget(headers: headers),
-                        Divider(
-                            color: const Color(
-                                0xFF333333), // TODO: to use from scheme
-                            height: 1),
+                        TableHeaderWidget(
+                            headers: columns.map((col) => col.header).toList()),
+                        Divider(color: const Color(0xFF333333), height: 1),
                         Skeletonizer(
                           enabled: isLoading,
                           child: values.isEmpty && !isLoading
@@ -70,14 +72,15 @@ class CommonTableWidget extends StatelessWidget {
                                         .map((e) => TableRowWidget(values: e)),
                                   ],
                                 ),
-                        )
+                        ),
                       ],
                     ),
                   ),
                 )
               : Column(
                   children: [
-                    TableHeaderWidget(headers: headers),
+                    TableHeaderWidget(
+                        headers: columns.map((col) => col.header).toList()),
                     Divider(color: const Color(0xFF333333), height: 1),
                     Skeletonizer(
                       enabled: isLoading,

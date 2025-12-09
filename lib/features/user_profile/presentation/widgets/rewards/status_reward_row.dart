@@ -28,7 +28,7 @@ class StatusRewardRow extends StatelessWidget {
             child: Column(
               children: [
                 Image.asset(
-                  _tierImage(row.tier),
+                  _tierImage(),
                   width: 42,
                 ),
                 const SizedBox(height: 4),
@@ -64,6 +64,7 @@ class StatusRewardRow extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  Text("  "),
                   SizedBox(
                     width: 64,
                     child: Center(
@@ -137,8 +138,8 @@ class StatusRewardRow extends StatelessWidget {
     );
   }
 
-  String _tierImage(String tier) {
-    switch (tier.toLowerCase()) {
+  String _tierImage() {
+    switch (row.bronzeLabel.split(" ").first.toLowerCase()) {
       case "bronze":
         return "assets/images/levels/bronze.png";
       case "silver":

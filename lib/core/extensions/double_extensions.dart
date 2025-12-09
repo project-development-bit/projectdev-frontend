@@ -1,6 +1,6 @@
 import 'package:intl/intl.dart';
 
-extension IntExt on int {
+extension DoubleExt on double {
   String currencyFormat() {
     if (this >= 1000000) {
       return '${NumberFormat('#,##0.#').format(this / 1000000)}M';
@@ -11,5 +11,5 @@ extension IntExt on int {
     }
   }
 
-  String? commaFormat() => NumberFormat('#,###').format(this);
+  String commaFormat() => NumberFormat('#,###').format(this);
 }

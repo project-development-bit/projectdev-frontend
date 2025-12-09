@@ -10,6 +10,8 @@ class DialogBgWidget extends StatelessWidget {
   final String title;
   final Function()? onClose;
   final double? dialogHeight;
+  final double? dialogWidth;
+
   final Color? dividerColor;
   final EdgeInsetsGeometry? padding;
   final Function()? onRouteBack;
@@ -21,13 +23,16 @@ class DialogBgWidget extends StatelessWidget {
       this.dialogHeight,
       this.dividerColor,
       this.onRouteBack,
+      this.dialogWidth,
       this.padding});
 
   double _getDialogWidth(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-
-    if (context.isMobile) return width; // Mobile → full width
-    if (context.isTablet) return width * 0.8; // Tablet → 80%
+    if (context.isMobile) {
+      return MediaQuery.of(context).size.width; // Mobile → full width
+    }
+    if (context.isTablet) {
+      return MediaQuery.of(context).size.width * 0.8; // Tablet → 80%
+    }
     return 650; //Fixed width for desktop
   }
 
@@ -37,7 +42,7 @@ class DialogBgWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final width = _getDialogWidth(context);
+    final width = dialogWidth ?? _getDialogWidth(context);
     final height = _getDialogHeight(context);
     final colorScheme = Theme.of(context).colorScheme;
 

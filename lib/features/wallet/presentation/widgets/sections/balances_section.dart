@@ -1,3 +1,5 @@
+import 'package:cointiply_app/core/extensions/double_extensions.dart';
+import 'package:cointiply_app/core/extensions/int_extensions.dart';
 import 'package:cointiply_app/features/wallet/presentation/providers/get_balance_notifier_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:cointiply_app/core/core.dart';
@@ -31,7 +33,8 @@ class BalancesSection extends ConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       _balanceItem(
-                          "${balanceState.balance?.coinBalance ?? 0}",
+                          (balanceState.balance?.coinBalance ?? 0)
+                              .currencyFormat(),
                           localizations?.translate('coins_balance') ??
                               "Coins Balance",
                           colorScheme),
@@ -43,7 +46,7 @@ class BalancesSection extends ConsumerWidget {
                       ),
                       const SizedBox(height: 8),
                       _balanceItem(
-                          "\$${balanceState.balance?.usdBalance ?? 0}",
+                          "\$${(balanceState.balance?.usdBalance ?? 0).currencyFormat()}",
                           localizations?.translate('usd_balance') ??
                               "USD Balance",
                           colorScheme),
@@ -55,7 +58,7 @@ class BalancesSection extends ConsumerWidget {
                       ),
                       const SizedBox(height: 8),
                       _balanceItem(
-                          "${balanceState.balance?.btcBalance ?? 0}",
+                          "${(balanceState.balance?.btcBalance ?? 0).currencyFormat()}",
                           localizations?.translate('btc_balance') ??
                               "BTC Balance",
                           colorScheme),
@@ -65,7 +68,8 @@ class BalancesSection extends ConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       _balanceItem(
-                          "${balanceState.balance?.coinBalance ?? 0}",
+                          (balanceState.balance?.coinBalance ?? 0)
+                              .currencyFormat(),
                           localizations?.translate('coins_balance') ??
                               "Coins Balance",
                           colorScheme),
@@ -75,7 +79,7 @@ class BalancesSection extends ConsumerWidget {
                         fontWeight: FontWeight.w400,
                       ),
                       _balanceItem(
-                          "\$${balanceState.balance?.usdBalance ?? 0}",
+                          "\$${(balanceState.balance?.usdBalance ?? 0).currencyFormat()}",
                           localizations?.translate('usd_balance') ??
                               "USD Balance",
                           colorScheme),
@@ -85,7 +89,8 @@ class BalancesSection extends ConsumerWidget {
                         fontWeight: FontWeight.w400,
                       ),
                       _balanceItem(
-                          "${balanceState.balance?.btcBalance ?? 0}",
+                          (balanceState.balance?.btcBalance ?? 0)
+                              .currencyFormat(),
                           localizations?.translate('btc_balance') ??
                               "BTC Balance",
                           colorScheme),
