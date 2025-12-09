@@ -7,19 +7,16 @@ import 'package:cointiply_app/features/localization/domain/entities/localization
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/widgets.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../domain/repositories/localization_repository.dart';
 
 class LocalizationRepositoryImpl implements LocalizationRepository {
   final LocalizationRemoteDataSource remote;
   final LocalizationLocalDataSource local;
-  final SharedPreferences sharedPreferences;
 
   LocalizationRepositoryImpl({
     required this.remote,
     required this.local,
-    required this.sharedPreferences,
   });
 
   @override
@@ -27,12 +24,11 @@ class LocalizationRepositoryImpl implements LocalizationRepository {
       GetLocalizationRequest request) async {
     try {
       final String? locale = request.languageCode;
-      final languageCode =
-          sharedPreferences.getString("selected_language_code") ?? 'en';
+      final languageCode = await local.getSelectedLanguageCode() ?? 'en';
       // 1️⃣ Try local cache first
       final cached = await local.getCachedLocalization(locale ?? languageCode);
       final localVersion =
-          sharedPreferences.getString("localization_version_$languageCode");
+          await local.getLocalizationVersion(languageCode) ?? '';
 
       if (cached != null &&
           (!request.forceRefresh || localVersion == request.languageVersion)) {
@@ -48,17 +44,11 @@ class LocalizationRepositoryImpl implements LocalizationRepository {
 
       // 3️⃣ Cache it
       await local.cacheLocalization(locale ?? languageCode, model);
-      sharedPreferences.setString(
-          "localization_version_$languageCode", request.languageVersion ?? '');
+      await local.setLocalizationVersion(
+          languageCode, request.languageVersion ?? '');
 
       return Right(model);
     } on DioException catch (e) {
-      // ErrorModel? errorModel;
-
-      // if (e.response?.data != null) {
-      //   errorModel = ErrorModel.fromJson(e.response!.data);
-      // }
-
       return Left(
         ServerFailure(
           message: e.message,
