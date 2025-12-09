@@ -19,7 +19,8 @@ class WithdrawalEarningMethodsWidget extends StatelessWidget {
     final isMobile = context.isMobile;
 
     return Container(
-      padding: EdgeInsets.all(isMobile ? 16 : 22.5),
+      padding: EdgeInsets.symmetric(
+          horizontal: isMobile ? 11 : 22.5, vertical: isMobile ? 21 : 22.5),
       margin: const EdgeInsets.only(top: 16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
@@ -39,7 +40,7 @@ class WithdrawalEarningMethodsWidget extends StatelessWidget {
                 crossAxisCount: isMobile ? 2 : 2,
                 mainAxisSpacing: isMobile ? 11 : 20,
                 crossAxisSpacing: isMobile ? 15 : 20,
-                childAspectRatio: isMobile ? 0.75 : 1.6,
+                childAspectRatio: isMobile ? 0.75 : 2.3,
               ),
               itemBuilder: (_, index) {
                 final item = methods[index];
@@ -145,7 +146,7 @@ class _WithdrawalCardState extends State<WithdrawalCard> {
                                 .replaceFirst("{coinName}", widget.item.name) ??
                             "Withdraw ${widget.item.name.toUpperCase()}",
                         color: const Color(
-                            0xFF333333), // TODO: use Color From Scheme
+                            0xFF141414), // TODO: use Color From Scheme
                         fontWeight: FontWeight.w500,
                       ),
                     ),

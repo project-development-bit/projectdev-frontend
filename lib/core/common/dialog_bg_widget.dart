@@ -55,9 +55,9 @@ class DialogBgWidget extends StatelessWidget {
           child: Column(
             children: [
               Container(
-                padding: context.isMobile || context.isTablet
+                padding: (context.isMobile || context.isTablet
                     ? const EdgeInsets.symmetric(horizontal: 17, vertical: 22)
-                    : const EdgeInsets.symmetric(horizontal: 31, vertical: 22),
+                    : const EdgeInsets.symmetric(horizontal: 31, vertical: 22)),
                 child: Row(
                   children: [
                     Expanded(
