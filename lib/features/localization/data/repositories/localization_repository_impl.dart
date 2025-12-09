@@ -1,10 +1,12 @@
 import 'package:cointiply_app/core/error/failures.dart';
 import 'package:cointiply_app/features/localization/data/datasource/local/localization_local_data_source.dart';
 import 'package:cointiply_app/features/localization/data/datasource/remote/localization_remote_data_source.dart';
+import 'package:cointiply_app/features/localization/data/model/request/get_localization_request.dart';
 import 'package:cointiply_app/features/localization/data/model/response/localization_model.dart';
 import 'package:cointiply_app/features/localization/domain/entities/localization_entity.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../domain/repositories/localization_repository.dart';
@@ -12,30 +14,42 @@ import '../../domain/repositories/localization_repository.dart';
 class LocalizationRepositoryImpl implements LocalizationRepository {
   final LocalizationRemoteDataSource remote;
   final LocalizationLocalDataSource local;
+  final SharedPreferences sharedPreferences;
 
   LocalizationRepositoryImpl({
     required this.remote,
     required this.local,
+    required this.sharedPreferences,
   });
 
   @override
-  Future<Either<Failure, LocalizationEntity>> getLocalization(String? locale,
-      {bool refresh = false}) async {
+  Future<Either<Failure, LocalizationEntity>> getLocalization(
+      GetLocalizationRequest request) async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final languageCode = prefs.getString("selected_language_code") ?? 'en';
+      final String? locale = request.languageCode;
+      final languageCode =
+          sharedPreferences.getString("selected_language_code") ?? 'en';
       // 1️⃣ Try local cache first
       final cached = await local.getCachedLocalization(locale ?? languageCode);
-      if (cached != null) {
+      final localVersion =
+          sharedPreferences.getString("localization_version_$languageCode");
+
+      if (cached != null &&
+          (!request.forceRefresh || localVersion == request.languageVersion)) {
+        debugPrint(
+            '📦 Language version Returning cached localization for $languageCode (localVersion: $localVersion)');
         return Right(cached);
       }
-
+      debugPrint(
+          '🌐 Language version Fetching remote localization for $languageCode (requested version: ${request.languageVersion}, local version: $localVersion)');
       // 2️⃣ Fetch remote
       final LocalizationModel model =
           await remote.getLocalization(locale ?? languageCode);
 
       // 3️⃣ Cache it
       await local.cacheLocalization(locale ?? languageCode, model);
+      sharedPreferences.setString(
+          "localization_version_$languageCode", request.languageVersion ?? '');
 
       return Right(model);
     } on DioException catch (e) {

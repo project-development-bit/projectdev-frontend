@@ -1,6 +1,7 @@
 // domain/usecases/get_localization.dart
 import 'package:cointiply_app/core/error/failures.dart';
 import 'package:cointiply_app/core/usecases/usecase.dart';
+import 'package:cointiply_app/features/localization/data/model/request/get_localization_request.dart';
 import 'package:cointiply_app/features/localization/domain/entities/localization_entity.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,13 +13,15 @@ final getLocalizationUseCaseProvider = Provider<GetLocalizationUseCase>((ref) {
   return GetLocalizationUseCase(repo);
 });
 
-class GetLocalizationUseCase implements UseCase<LocalizationEntity, String> {
+class GetLocalizationUseCase
+    implements UseCase<LocalizationEntity, GetLocalizationRequest> {
   final LocalizationRepository repository;
 
   GetLocalizationUseCase(this.repository);
 
   @override
-  Future<Either<Failure, LocalizationEntity>> call(String? locale) async {
-    return await repository.getLocalization(locale);
+  Future<Either<Failure, LocalizationEntity>> call(
+      GetLocalizationRequest request) async {
+    return await repository.getLocalization(request);
   }
 }

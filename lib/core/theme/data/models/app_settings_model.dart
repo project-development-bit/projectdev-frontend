@@ -84,6 +84,7 @@ class AppConfigData {
   final TypographyConfig typography;
   final String colorScheme;
   final String configVersion;
+  final String languageVersion;
 
   AppConfigData({
     required this.fonts,
@@ -93,6 +94,7 @@ class AppConfigData {
     required this.typography,
     required this.colorScheme,
     required this.configVersion,
+    required this.languageVersion,
   });
 
   factory AppConfigData.fromJson(Map<String, dynamic> json) {
@@ -108,6 +110,7 @@ class AppConfigData {
           json['typography'] as Map<String, dynamic>? ?? {}),
       colorScheme: json['colorScheme'] as String? ?? '',
       configVersion: json['config_version'] as String? ?? '',
+      languageVersion: json['language_version'] as String? ?? '',
     );
   }
 
@@ -120,6 +123,7 @@ class AppConfigData {
       'typography': typography.toJson(),
       'colorScheme': colorScheme,
       'config_version': configVersion,
+      'language_version': languageVersion,
     };
   }
 }
