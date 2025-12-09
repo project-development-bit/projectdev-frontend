@@ -76,7 +76,7 @@ class TableFooter extends ConsumerWidget {
                   value: limit,
                   underline: SizedBox(),
                   dropdownColor: const Color(0xFF00131E),
-                  items: [10, 20, 50, 100].map((v) {
+                  items: [2, 10, 20, 50, 100].map((v) {
                     return DropdownMenuItem(
                       value: v,
                       child: CommonText.bodyMedium(

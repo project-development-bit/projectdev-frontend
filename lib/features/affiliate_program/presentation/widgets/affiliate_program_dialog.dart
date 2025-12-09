@@ -4,12 +4,16 @@ import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/common/dialog_bg_widget.dart';
 import 'package:cointiply_app/core/common/table/common_table_widget.dart';
 import 'package:cointiply_app/core/extensions/extensions.dart';
+import 'package:cointiply_app/features/affiliate_program/data/models/request/referred_users_request.dart';
 import 'package:cointiply_app/features/affiliate_program/presentation/providers/referral_link_provider.dart';
+import 'package:cointiply_app/features/affiliate_program/presentation/providers/referred_users_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 showAffiliateProgramDialog(BuildContext context) {
   context.showAffiliateProgramPopup(
@@ -62,6 +66,14 @@ class _AffiliateProgramDialogState
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // Fetch referral link when dialog opens
       ref.read(referralLinkProvider.notifier).getReferralLink();
+
+      // Fetch referred users list with initial parameters
+      ref.read(referredUsersProvider.notifier).getReferredUsers(
+            ReferredUsersRequest(
+              page: 1,
+              limit: 10,
+            ),
+          );
     });
 
     // Listen to referral link state changes
@@ -358,6 +370,13 @@ class _AffiliateProgramDialogState
   }
 
   _referralCoinList() {
+    final referredUsersState = ref.watch(referredUsersProvider);
+    final isLoading = referredUsersState.isLoading;
+    final hasError = referredUsersState.hasError;
+    final isEmpty = referredUsersState.isEmpty;
+    final users = referredUsersState.users;
+    final pagination = referredUsersState.pagination;
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -372,24 +391,126 @@ class _AffiliateProgramDialogState
             color: context.primary,
             fontWeight: FontWeight.w700,
           ),
-          CommonTableWidget(
+          const SizedBox(height: 16),
+          if (isLoading)
+            _buildSkeletonLoader()
+          else if (hasError)
+            _buildErrorWidget(
+                referredUsersState.errorMessage ?? 'Failed to load users')
+          else if (isEmpty)
+            _buildEmptyWidget()
+          else
+            CommonTableWidget(
               headers: [
                 context.translate("date"),
                 context.translate("username"),
                 context.translate("coins_earn")
               ],
-              values: [
-                ["2024-01-01", "user1", "50"],
-                ["2024-01-02", "user2", "30"],
-                ["2024-01-03", "user3", "20"],
-              ],
-              total: 3,
-              page: 1,
-              limit: 10,
-              totalPages: 1,
-              changePage: (_) {},
-              changeLimit: (_) {})
+              values: users.map((user) {
+                final date = user.referralDate != null
+                    ? DateFormat('yyyy-MM-dd')
+                        .format(DateTime.parse(user.referralDate!))
+                    : 'N/A';
+                final name = user.name ?? 'Unknown';
+                final earned = user.totalEarnedFromReferee?.toString() ?? '0';
+                return [date, name, earned];
+              }).toList(),
+              total: pagination?.total ?? 0,
+              page: pagination?.currentPage ?? 1,
+              limit: pagination?.limit ?? 10,
+              totalPages: pagination?.totalPages ?? 1,
+              changePage: (page) {
+                ref.read(referredUsersProvider.notifier).changePage(page);
+              },
+              changeLimit: (limit) {
+                ref.read(referredUsersProvider.notifier).changeLimit(limit);
+              },
+            ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildSkeletonLoader() {
+    return Skeletonizer(
+      enabled: true,
+      child: Column(
+        children: List.generate(
+          5,
+          (index) => Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Row(
+              children: [
+                Expanded(child: Container(height: 16, color: Colors.white)),
+                const SizedBox(width: 16),
+                Expanded(child: Container(height: 16, color: Colors.white)),
+                const SizedBox(width: 16),
+                Expanded(child: Container(height: 16, color: Colors.white)),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildErrorWidget(String message) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.error_outline,
+              size: 48,
+              color: context.error,
+            ),
+            const SizedBox(height: 16),
+            CommonText.bodyLarge(
+              message,
+              color: context.error,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                ref.read(referredUsersProvider.notifier).refreshData();
+              },
+              child: CommonText.bodyMedium('Retry'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEmptyWidget() {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.people_outline,
+              size: 48,
+              color: context.onSurface.withAlpha(128),
+            ),
+            const SizedBox(height: 16),
+            CommonText.bodyLarge(
+              'No referred users yet',
+              color: context.onSurface.withAlpha(179),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 8),
+            CommonText.bodyMedium(
+              'Share your referral link to start earning!',
+              color: context.onSurface.withAlpha(128),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
       ),
     );
   }
