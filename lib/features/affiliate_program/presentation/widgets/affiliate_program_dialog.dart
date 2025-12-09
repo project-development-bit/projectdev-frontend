@@ -375,8 +375,8 @@ class _AffiliateProgramDialogState
           CommonTableWidget(
               headers: [
                 context.translate("date"),
-                context.translate("user_name"),
-                context.translate("coin_earn")
+                context.translate("username"),
+                context.translate("coins_earn")
               ],
               values: [
                 ["2024-01-01", "user1", "50"],
