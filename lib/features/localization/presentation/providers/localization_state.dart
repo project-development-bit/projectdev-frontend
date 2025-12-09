@@ -5,7 +5,7 @@ import 'package:cointiply_app/features/localization/domain/entities/localization
 enum LocalizationStatus {
   initial,
   loading,
-  data,
+  success,
   error,
 }
 

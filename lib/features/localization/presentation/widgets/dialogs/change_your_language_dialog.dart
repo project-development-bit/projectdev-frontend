@@ -3,6 +3,8 @@ import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
 import 'package:cointiply_app/core/common/dialog_bg_widget.dart';
 import 'package:cointiply_app/core/extensions/extensions.dart';
+import 'package:cointiply_app/features/localization/presentation/providers/localization_notifier_provider.dart';
+import 'package:cointiply_app/features/localization/presentation/providers/localization_state.dart';
 import 'package:cointiply_app/features/user_profile/domain/entities/language.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/change_language_notifier.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
@@ -15,7 +17,7 @@ import 'package:go_router/go_router.dart';
 void showChangeLanguageDialog(BuildContext context) {
   context.showManagePopup(
     // height: 400,
-      child: const ChangeLanguageDialog(),
+    child: const ChangeLanguageDialog(),
     // title: context.translate("change_your_language_title")
   );
 }
@@ -73,8 +75,7 @@ class _ChangeLanguageDialogState extends ConsumerState<ChangeLanguageDialog> {
           );
 
           // Refresh profile if needed
-          
-      
+
           // Close dialog on success
           if (mounted) {
             ref
@@ -86,6 +87,35 @@ class _ChangeLanguageDialogState extends ConsumerState<ChangeLanguageDialog> {
           // Show error message
           final errorMessage = next.errorMessage ??
               context.translate("failed_to_change_language");
+          context.showSnackBar(
+              message: errorMessage, backgroundColor: context.error);
+        }
+      },
+    );
+    ref.listenManual(
+      localizationNotifierProvider,
+      (previous, next) async {
+        if (next.status == LocalizationStatus.loading) {
+          // Show loading indicator or disable inputs
+        } else if (next.status == LocalizationStatus.success) {
+          // Show success message
+          // context.showSuccessSnackBar(
+          //   message: context.translate("language_changed_successfully"),
+          // );
+
+          // Refresh profile if needed
+
+          // Close dialog on success
+          if (mounted) {
+            ref
+                .read(getProfileNotifierProvider.notifier)
+                .fetchProfile(isLoading: false);
+            context.pop();
+          }
+        } else if (next.status == LocalizationStatus.error) {
+          // Show error message
+          final errorMessage =
+              next.error ?? context.translate("failed_to_change_language");
           context.showSnackBar(
               message: errorMessage, backgroundColor: context.error);
         }
@@ -143,9 +173,11 @@ class _ChangeLanguageDialogState extends ConsumerState<ChangeLanguageDialog> {
               fontWeight: FontWeight.w700,
               onTap: _selectedLanguage != null
                   ? () {
-                      ref.read(changeLanguageProvider.notifier).changeLanguage(
-                            languageCode: _selectedLanguage!.code,
-                            languageName: _selectedLanguage!.name,
+                      ref
+                          .read(localizationNotifierProvider.notifier)
+                          .changeLocale(
+                            Locale(_selectedLanguage!.code.toLowerCase(),
+                                _selectedLanguage!.code.toUpperCase()),
                             userid: userId,
                           );
                     }

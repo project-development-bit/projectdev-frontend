@@ -12,10 +12,23 @@ class LocalizationRemoteDataSourceImpl implements LocalizationRemoteDataSource {
 
   const LocalizationRemoteDataSourceImpl(this.dioClient);
 
+  String getLocateCode(String locale) {
+    if (locale == "mm" ||
+        locale == "my " ||
+        locale == "myanmar" ||
+        locale == "burmese") {
+      return "my";
+    } else if (locale.length >= 2) {
+      return locale.substring(0, 2).toLowerCase();
+    }
+    return 'en';
+  }
+
   @override
   Future<LocalizationModel> getLocalization(String locale) async {
+    var countryCode = getLocateCode(locale.toLowerCase());
     final url =
-        "https://gigafaucet-images-s3.s3.ap-southeast-2.amazonaws.com/$locale.json";
+        "https://gigafaucet-images-s3.s3.ap-southeast-2.amazonaws.com/$countryCode.json";
 
     try {
       debugPrint('🌐 Fetching localization for: $locale');
@@ -47,7 +60,6 @@ class LocalizationRemoteDataSourceImpl implements LocalizationRemoteDataSource {
 
       final serverMessage = _extractServerErrorMessage(e.response?.data) ??
           _getFallbackMessage(e);
-      print("❌ Extracted server message: $serverMessage");
       throw DioException(
         requestOptions: e.requestOptions,
         response: e.response,
@@ -75,7 +87,7 @@ class LocalizationRemoteDataSourceImpl implements LocalizationRemoteDataSource {
       case 401:
         return "Unauthorized access";
       case 403:
-        return "Unsupported locale";
+        return "Sorry, we don’t support this language yet. Please choose another one.";
       case 404:
         return "Localization file not found";
       case 422:

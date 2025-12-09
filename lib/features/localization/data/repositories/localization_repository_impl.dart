@@ -1,5 +1,3 @@
-// data/repositories/localization_repository_impl.dart
-import 'package:cointiply_app/core/error/error_model.dart';
 import 'package:cointiply_app/core/error/failures.dart';
 import 'package:cointiply_app/features/localization/data/datasource/local/localization_local_data_source.dart';
 import 'package:cointiply_app/features/localization/data/datasource/remote/localization_remote_data_source.dart';
@@ -41,7 +39,6 @@ class LocalizationRepositoryImpl implements LocalizationRepository {
 
       return Right(model);
     } on DioException catch (e) {
-      print("DioException in LocalizationRepositoryImpl: $e");
       // ErrorModel? errorModel;
 
       // if (e.response?.data != null) {
@@ -56,7 +53,6 @@ class LocalizationRepositoryImpl implements LocalizationRepository {
         ),
       );
     } catch (e) {
-      print("LocalizationRepositoryImpl.getLocalization Error: $e");
       return Left(ServerFailure(
           message: e.toString(), statusCode: null, errorModel: null));
     }

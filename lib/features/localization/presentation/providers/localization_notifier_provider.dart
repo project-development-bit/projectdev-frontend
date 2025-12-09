@@ -7,5 +7,5 @@ import 'package:cointiply_app/features/localization/presentation/providers/local
 final localizationNotifierProvider =
     StateNotifierProvider<LocalizationController, LocalizationState>((ref) {
   final usecase = ref.read(getLocalizationUseCaseProvider);
-  return LocalizationController(usecase);
+  return LocalizationController(usecase, ref);
 });

@@ -1,3 +1,4 @@
+import 'package:cointiply_app/features/user_profile/presentation/providers/change_language_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -7,8 +8,10 @@ import 'package:cointiply_app/features/localization/presentation/providers/local
 
 class LocalizationController extends StateNotifier<LocalizationState> {
   final GetLocalizationUseCase _useCase;
+  final Ref _ref;
 
-  LocalizationController(this._useCase) : super(const LocalizationState()) {
+  LocalizationController(this._useCase, this._ref)
+      : super(const LocalizationState()) {
     _init(); // load saved locale + load translations
   }
 
@@ -33,27 +36,36 @@ class LocalizationController extends StateNotifier<LocalizationState> {
   // --------------------------
   // LOAD TRANSLATION API + CACHE
   // --------------------------
-  Future<void> _loadLocalizationFromApi(String locale) async {
+  Future<void> _loadLocalizationFromApi(String locale, {String? userid}) async {
     state = state.copyWith(
       status: LocalizationStatus.loading,
       error: null,
     );
 
     final result = await _useCase(locale);
+    debugPrint("🌐 Fetched localization for locale: $locale");
 
     result.fold(
       (failure) {
+        debugPrint("❌ Failed to load localization: ${failure.message}");
         state = state.copyWith(
           status: LocalizationStatus.error,
           error: failure.message,
         );
-        print("❌ Localization load error: ${failure.message}");
       },
       (localization) {
         state = state.copyWith(
-          status: LocalizationStatus.data,
+          status: LocalizationStatus.success,
           localization: localization,
         );
+        if (userid != null) {
+          debugPrint("🌐 Translations loaded for user: $userid");
+          _ref.read(changeLanguageProvider.notifier).changeLanguage(
+                languageCode: locale,
+                languageName: locale.toUpperCase(),
+                userid: userid,
+              );
+        }
       },
     );
   }
@@ -61,7 +73,7 @@ class LocalizationController extends StateNotifier<LocalizationState> {
   // --------------------------
   // CHANGE LOCALE (user action)
   // --------------------------
-  Future<void> changeLocale(Locale locale) async {
+  Future<void> changeLocale(Locale locale, {String? userid}) async {
     // Save locale to device
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_languageKey, locale.languageCode);
@@ -73,7 +85,7 @@ class LocalizationController extends StateNotifier<LocalizationState> {
     state = state.copyWith(currentLocale: locale);
 
     // Fetch translations
-    await _loadLocalizationFromApi(locale.languageCode);
+    await _loadLocalizationFromApi(locale.languageCode, userid: userid);
   }
 
   // --------------------------
