@@ -33,9 +33,10 @@ class TableFooter extends StatelessWidget {
     // Pagination buttons
     final paginationWidget = Row(
       children: [
-        IconButton(
-          icon: Icon(Icons.chevron_left, color: const Color(0xFF98989A)),
-          onPressed: page > 1 ? () => changePage(page - 1) : null,
+        HoverIconButton(
+          icon: Icons.chevron_left,
+          enabled: page > 1,
+          onTap: () => changePage(page - 1),
         ),
         Container(
           width: 32,
@@ -50,9 +51,10 @@ class TableFooter extends StatelessWidget {
             color: colorScheme.surface,
           ),
         ),
-        IconButton(
-          icon: Icon(Icons.chevron_right, color: const Color(0xFF98989A)),
-          onPressed: page < totalPages ? () => changePage(page + 1) : null,
+        HoverIconButton(
+          icon: Icons.chevron_right,
+          enabled: page < totalPages,
+          onTap: () => changePage(page + 1),
         ),
       ],
     );
@@ -97,6 +99,57 @@ class TableFooter extends StatelessWidget {
             child: paginationWidget,
           ),
       ],
+    );
+  }
+}
+
+class HoverIconButton extends StatefulWidget {
+  final IconData icon;
+  final bool enabled;
+  final VoidCallback? onTap;
+
+  const HoverIconButton({
+    super.key,
+    required this.icon,
+    required this.enabled,
+    required this.onTap,
+  });
+
+  @override
+  State<HoverIconButton> createState() => _HoverIconButtonState();
+}
+
+class _HoverIconButtonState extends State<HoverIconButton> {
+  bool isHover = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (_) => setState(() => isHover = true),
+      onExit: (_) => setState(() => isHover = false),
+      cursor:
+          widget.enabled ? SystemMouseCursors.click : SystemMouseCursors.basic,
+      child: GestureDetector(
+        onTap: widget.enabled ? widget.onTap : null,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 150),
+          width: 36,
+          height: 36,
+          decoration: BoxDecoration(
+            color: widget.enabled ? (Colors.transparent) : Colors.transparent,
+            shape: BoxShape.circle,
+          ),
+          child: Icon(
+            widget.icon,
+            size: 20,
+            color: widget.enabled
+                ? isHover
+                    ? const Color(0xFFFFCC00)
+                    : const Color(0xFF98989A)
+                : const Color(0xFF555555),
+          ),
+        ),
+      ),
     );
   }
 }
