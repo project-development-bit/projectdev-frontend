@@ -97,7 +97,7 @@ class _WithdrawalCardState extends State<WithdrawalCard> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CommonText.titleMedium(
+                CommonText.titleSmall(
                   widget.item.name,
                   color: colorScheme.primary,
                   fontWeight: FontWeight.w700,
