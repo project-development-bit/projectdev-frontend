@@ -33,6 +33,8 @@ class TableFooter extends StatelessWidget {
 
     // Pagination buttons
     final paginationWidget = Row(
+      mainAxisSize: MainAxisSize.min,
+      
       children: [
         HoverIconButton(
           icon: Icons.chevron_left,
@@ -50,6 +52,7 @@ class TableFooter extends StatelessWidget {
           child: CommonText.bodyMedium(
             "$page",
             color: colorScheme.surface,
+            fontWeight: FontWeight.w500,
           ),
         ),
         HoverIconButton(
@@ -73,7 +76,7 @@ class TableFooter extends StatelessWidget {
                   underline: SizedBox(),
                   dropdownColor: const Color(0xFF00131E),
                   items:
-                      (kDebugMode ? [1, 10, 20, 50, 100] : [5, 10, 20, 50, 100])
+                      (kDebugMode ? [2, 10, 20, 50, 100] : [5, 10, 20, 50, 100])
                           .map((v) {
                     return DropdownMenuItem(
                       value: v,
@@ -97,9 +100,12 @@ class TableFooter extends StatelessWidget {
           ],
         ),
         if (isMobile)
-          Padding(
-            padding: const EdgeInsets.only(top: 16),
-            child: paginationWidget,
+          Align(
+            alignment: Alignment.center,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 16),
+              child: paginationWidget,
+            ),
           ),
       ],
     );
@@ -140,6 +146,15 @@ class _HoverIconButtonState extends State<HoverIconButton> {
           height: 36,
           decoration: BoxDecoration(
             color: widget.enabled ? (Colors.transparent) : Colors.transparent,
+            border: isHover && widget.enabled
+                ? Border.all(
+                    color: widget.enabled
+                        ? isHover
+                            ? const Color(0xFFFFCC00)
+                            : const Color(0xFF98989A)
+                        : const Color(0xFF555555),
+                    width: widget.enabled && isHover ? 1 : 0)
+                : null,
             shape: BoxShape.circle,
           ),
           child: Icon(

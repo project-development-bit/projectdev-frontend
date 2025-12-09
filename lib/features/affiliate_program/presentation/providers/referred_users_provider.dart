@@ -6,6 +6,7 @@ import 'package:cointiply_app/features/affiliate_program/domain/usecases/get_ref
 import 'package:cointiply_app/features/affiliate_program/presentation/providers/referral_link_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 // Status enum
 enum ReferredUsersStatus { initial, loading, success, failure }
@@ -136,5 +137,16 @@ class ReferredUsersNotifier extends StateNotifier<ReferredUsersState> {
     if (state.currentRequest != null) {
       getReferredUsers(state.currentRequest!);
     }
+  }
+
+  void changeDate(DateTime date) {
+    DateFormat dateFormat = DateFormat('yyyy-MM-dd');
+    final dateTo = date.add(const Duration(days: 1));
+    getReferredUsers(ReferredUsersRequest(
+      page: 1,
+      limit: 10,
+      dateFrom: dateFormat.format(date),
+      dateTo: dateFormat.format(dateTo),
+    ));
   }
 }

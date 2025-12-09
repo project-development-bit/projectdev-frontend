@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/common/dialog_bg_widget.dart';
 import 'package:cointiply_app/core/common/table/common_table_widget.dart';
+import 'package:cointiply_app/core/common/table/models/table_column.dart';
 import 'package:cointiply_app/core/extensions/extensions.dart';
 import 'package:cointiply_app/features/affiliate_program/data/models/request/referred_users_request.dart';
 import 'package:cointiply_app/features/affiliate_program/presentation/providers/referral_link_provider.dart';
@@ -14,7 +15,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
-import 'package:skeletonizer/skeletonizer.dart';
+
+import 'affiliate_filter_bar_widget.dart';
 
 showAffiliateProgramDialog(BuildContext context) {
   context.showAffiliateProgramPopup(
@@ -427,7 +429,6 @@ class _AffiliateProgramDialogState
     final referredUsersState = ref.watch(referredUsersProvider);
     final isLoading = referredUsersState.isLoading;
     final hasError = referredUsersState.hasError;
-    final isEmpty = referredUsersState.isEmpty;
     final users = referredUsersState.users;
     final pagination = referredUsersState.pagination;
 
@@ -445,20 +446,20 @@ class _AffiliateProgramDialogState
             color: context.primary,
             fontWeight: FontWeight.w700,
           ),
-          const SizedBox(height: 16),
-          if (isLoading)
-            _buildSkeletonLoader()
-          else if (hasError)
+          if (hasError) ...[
+            const SizedBox(height: 16),
             _buildErrorWidget(
                 referredUsersState.errorMessage ?? 'Failed to load users')
-          else if (isEmpty)
-            _buildEmptyWidget()
+          ]
           else
             CommonTableWidget(
-              headers: [
-                context.translate("date"),
-                context.translate("username"),
-                context.translate("coins_earn")
+              filterBar: AffiliateFilterBarWidget(),
+              columns: [
+                TableColumn(header: context.translate("date"), width: 100),
+                TableColumn(header: context.translate("username"), width: 200),
+                TableColumn(
+                    header: context.translate("coins_earn"), width: 300),
+                
               ],
               values: users.map((user) {
                 final date = user.referralDate != null
@@ -469,6 +470,7 @@ class _AffiliateProgramDialogState
                 final earned = user.totalEarnedFromReferee?.toString() ?? '0';
                 return [date, name, earned];
               }).toList(),
+              isLoading: isLoading,
               total: pagination?.total ?? 0,
               page: pagination?.currentPage ?? 1,
               limit: pagination?.limit ?? 10,
@@ -481,29 +483,6 @@ class _AffiliateProgramDialogState
               },
             ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildSkeletonLoader() {
-    return Skeletonizer(
-      enabled: true,
-      child: Column(
-        children: List.generate(
-          5,
-          (index) => Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: Row(
-              children: [
-                Expanded(child: Container(height: 16, color: Colors.white)),
-                const SizedBox(width: 16),
-                Expanded(child: Container(height: 16, color: Colors.white)),
-                const SizedBox(width: 16),
-                Expanded(child: Container(height: 16, color: Colors.white)),
-              ],
-            ),
-          ),
-        ),
       ),
     );
   }
@@ -532,36 +511,6 @@ class _AffiliateProgramDialogState
                 ref.read(referredUsersProvider.notifier).refreshData();
               },
               child: CommonText.bodyMedium('Retry'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildEmptyWidget() {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.people_outline,
-              size: 48,
-              color: context.onSurface.withAlpha(128),
-            ),
-            const SizedBox(height: 16),
-            CommonText.bodyLarge(
-              'No referred users yet',
-              color: context.onSurface.withAlpha(179),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 8),
-            CommonText.bodyMedium(
-              'Share your referral link to start earning!',
-              color: context.onSurface.withAlpha(128),
-              textAlign: TextAlign.center,
             ),
           ],
         ),

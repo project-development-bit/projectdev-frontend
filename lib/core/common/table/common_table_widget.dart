@@ -39,6 +39,12 @@ class CommonTableWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final isMobile = context.isMobile;
     final isTablet = context.isTablet;
+    final newValues = !isLoading
+        ? values
+        : columns.isEmpty
+            ? []
+            : List.generate(
+                3, (index) => columns.map((head) => head.header).toList());
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,11 +70,11 @@ class CommonTableWidget extends StatelessWidget {
                         Divider(color: const Color(0xFF333333), height: 1),
                         Skeletonizer(
                           enabled: isLoading,
-                          child: values.isEmpty && !isLoading
+                          child: newValues.isEmpty && !isLoading
                               ? _buildNoData(context, noDataText: noDataText)
                               : Column(
                                   children: [
-                                    ...values
+                                    ...newValues
                                         .map((e) => TableRowWidget(values: e)),
                                   ],
                                 ),
@@ -84,11 +90,12 @@ class CommonTableWidget extends StatelessWidget {
                     Divider(color: const Color(0xFF333333), height: 1),
                     Skeletonizer(
                       enabled: isLoading,
-                      child: values.isEmpty && !isLoading
+                      child: newValues.isEmpty && !isLoading
                           ? _buildNoData(context, noDataText: noDataText)
                           : Column(
                               children: [
-                                ...values.map((e) => TableRowWidget(values: e)),
+                                ...newValues
+                                    .map((e) => TableRowWidget(values: e)),
                               ],
                             ),
                     )
