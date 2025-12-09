@@ -115,7 +115,9 @@ class _ChangeLanguageDialogState extends ConsumerState<ChangeLanguageDialog> {
 
   Widget _manageDialogBody(BuildContext context) {
     final languagesState = ref.watch(getLanguagesNotifierProvider);
-    final isChangingLanguage = ref.watch(changeLanguageProvider).isChanging;
+    final isChangingLanguage = ref.watch(changeLanguageProvider).isChanging ||
+        ref.watch(localizationNotifierProvider).status ==
+            LocalizationStatus.loading;
     final userId = (ref.read(currentUserProvider).user?.id ?? 0).toString();
 
     return DialogBgWidget(
