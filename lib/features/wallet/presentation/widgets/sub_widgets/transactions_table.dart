@@ -1,4 +1,5 @@
 import 'package:cointiply_app/core/common/table/common_table_widget.dart';
+import 'package:cointiply_app/core/common/table/models/table_column.dart';
 import 'package:cointiply_app/core/localization/app_localizations.dart';
 import 'package:cointiply_app/features/wallet/presentation/providers/payment_history_notifier_provider.dart';
 import 'package:cointiply_app/features/wallet/presentation/providers/payment_history_state.dart';
@@ -22,13 +23,23 @@ class PayamentHistoryTable extends ConsumerWidget {
 
     final bool isloading = state.status == GetPaymentHistoryStatus.loading;
     return CommonTableWidget(
-      headers: [
-        localizations?.translate("tx_status") ?? "Status",
-        localizations?.translate("tx_amount") ?? "Amount",
-        localizations?.translate("tx_currency") ?? "Currency",
-        localizations?.translate("tx_fee") ?? "Fee",
-        localizations?.translate("tx_address") ?? "Address",
-        localizations?.translate("tx_date") ?? "Date",
+      columns: [
+        TableColumn(
+            header: localizations?.translate("tx_status") ?? "Status",
+            width: 60),
+        TableColumn(
+            header: localizations?.translate("tx_amount") ?? "Amount",
+            width: 60),
+        TableColumn(
+            header: localizations?.translate("tx_currency") ?? "Currency",
+            width: 60),
+        TableColumn(
+            header: localizations?.translate("tx_fee") ?? "Fee", width: 60),
+        TableColumn(
+            header: localizations?.translate("tx_address") ?? "Address",
+            width: 150),
+        TableColumn(
+            header: localizations?.translate("tx_date") ?? "Date", width: 150),
       ],
       filterBar: const TransactionFilterBar(),
       isLoading: isloading,
