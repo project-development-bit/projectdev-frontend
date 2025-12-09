@@ -1,5 +1,6 @@
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class TableFooter extends StatelessWidget {
@@ -32,6 +33,8 @@ class TableFooter extends StatelessWidget {
 
     // Pagination buttons
     final paginationWidget = Row(
+      mainAxisSize: MainAxisSize.min,
+      
       children: [
         HoverIconButton(
           icon: Icons.chevron_left,
@@ -49,6 +52,7 @@ class TableFooter extends StatelessWidget {
           child: CommonText.bodyMedium(
             "$page",
             color: colorScheme.surface,
+            fontWeight: FontWeight.w500,
           ),
         ),
         HoverIconButton(
@@ -71,7 +75,9 @@ class TableFooter extends StatelessWidget {
                   value: limit,
                   underline: SizedBox(),
                   dropdownColor: const Color(0xFF00131E),
-                  items: [1, 10, 20, 50, 100].map((v) {
+                  items:
+                      (kDebugMode ? [2, 10, 20, 50, 100] : [5, 10, 20, 50, 100])
+                          .map((v) {
                     return DropdownMenuItem(
                       value: v,
                       child: CommonText.bodyMedium(
@@ -94,9 +100,12 @@ class TableFooter extends StatelessWidget {
           ],
         ),
         if (isMobile)
-          Padding(
-            padding: const EdgeInsets.only(top: 16),
-            child: paginationWidget,
+          Align(
+            alignment: Alignment.center,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 16),
+              child: paginationWidget,
+            ),
           ),
       ],
     );
@@ -137,6 +146,15 @@ class _HoverIconButtonState extends State<HoverIconButton> {
           height: 36,
           decoration: BoxDecoration(
             color: widget.enabled ? (Colors.transparent) : Colors.transparent,
+            border: isHover && widget.enabled
+                ? Border.all(
+                    color: widget.enabled
+                        ? isHover
+                            ? const Color(0xFFFFCC00)
+                            : const Color(0xFF98989A)
+                        : const Color(0xFF555555),
+                    width: widget.enabled && isHover ? 1 : 0)
+                : null,
             shape: BoxShape.circle,
           ),
           child: Icon(

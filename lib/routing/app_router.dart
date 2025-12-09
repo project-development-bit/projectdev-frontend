@@ -132,9 +132,15 @@ class BurgerEatsAppRoutes {
               GoRoute(
                 path: 'signup',
                 name: 'signup',
-                pageBuilder: (context, state) => const NoTransitionPage(
-                  child: SignUpPage(),
-                ),
+                pageBuilder: (context, state) {
+                  final referralCode = state.uri.queryParameters['ref'];
+                  debugPrint('🔄 Building SignUpPage with ref: $referralCode');
+                  return NoTransitionPage(
+                    child: SignUpPage(
+                      referralCode: referralCode,
+                    ),
+                  );
+                },
               ),
               GoRoute(
                 path: 'verification',
@@ -392,6 +398,16 @@ class BurgerEatsAppRoutes {
                 ],
               ),
             ],
+          ),
+
+          GoRoute(
+            path: '/r/:referralCode',
+            redirect: (context, state) {
+              final referralCode = state.pathParameters['referralCode'];
+              debugPrint(
+                  '🔄 Redirecting /r/$referralCode to signup with ref parameter');
+              return '/auth/signup?ref=$referralCode';
+            },
           ),
         ],
 
