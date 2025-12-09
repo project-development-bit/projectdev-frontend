@@ -16,36 +16,55 @@ class TransactionFilterBar extends ConsumerWidget {
 
     final isMobile = context.isMobile;
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        TableFilterDropdown(
-          selected: state.filterCurrency ?? "all",
-          options: const ["all", "usdt", "coin", "btc"],
-          onSelect: notifier.changeFilterCurrency,
-          child: TransactionFilterButton(
-            title: "Currency: ${(state.filterCurrency ?? "all").toUpperCase()}",
-          ),
-        ),
-        SizedBox(width: isMobile ? 6 : 10),
-        TableFilterDropdown(
-          selected: state.filterStatus ?? "all",
-          options: const ["all", "confirmed", "pending", "failed"],
-          onSelect: notifier.changeStatus,
-          child: TransactionFilterButton(
-            title: "Type: ${(state.filterStatus ?? "all").toUpperCase()}",
-          ),
-        ),
-        SizedBox(width: isMobile ? 6 : 10),
-        GestureDetector(
-          onTap: notifier.refresh,
-          child: SvgPicture.asset(
-            "assets/images/icons/Refresh ccw.svg",
-            width: isMobile ? 16 : 24,
-            height: isMobile ? 16 : 24,
-          ),
-        ),
-      ],
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 22.5),
+      width: double.infinity,
+      child: LayoutBuilder(builder: (context, constraints) {
+        const double spacing = 4;
+        return Wrap(
+          spacing: spacing,
+          runSpacing: 12,
+          alignment: context.screenWidth < 500
+              ? WrapAlignment.start
+              : WrapAlignment.end,
+          children: [
+            TableFilterDropdown(
+              width: 165,
+              selected: state.filterCurrency ?? "all",
+              options: const ["all", "usdt", "coin", "btc"],
+              onSelect: notifier.changeFilterCurrency,
+              child: TransactionFilterButton(
+                title:
+                    "Currency: ${(state.filterCurrency ?? "all").toUpperCase()}",
+              ),
+            ),
+            SizedBox(width: isMobile ? 6 : 10),
+            TableFilterDropdown(
+              width: 165,
+              selected: state.filterStatus ?? "all",
+              options: const ["all", "confirmed", "pending", "failed"],
+              onSelect: notifier.changeStatus,
+              child: TransactionFilterButton(
+                title: "Type: ${(state.filterStatus ?? "all").toUpperCase()}",
+              ),
+            ),
+            SizedBox(width: isMobile ? 6 : 10),
+            GestureDetector(
+              onTap: notifier.refresh,
+              child: Container(
+                width: 30,
+                height: 40,
+                alignment: Alignment.center,
+                child: SvgPicture.asset(
+                  "assets/images/icons/Refresh ccw.svg",
+                  width: isMobile ? 16 : 24,
+                  height: isMobile ? 16 : 24,
+                ),
+              ),
+            ),
+          ],
+        );
+      }),
     );
   }
 }

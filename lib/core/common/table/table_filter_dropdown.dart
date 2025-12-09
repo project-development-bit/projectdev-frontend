@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:flutter/material.dart';
 
 class TableFilterDropdown extends StatefulWidget {
@@ -13,7 +14,7 @@ class TableFilterDropdown extends StatefulWidget {
     required this.options,
     required this.selected,
     required this.onSelect,
-    this.width = 220,
+    this.width = 200,
   });
 
   @override
@@ -24,6 +25,9 @@ class _TableFilterDropdownState extends State<TableFilterDropdown> {
   final LayerLink _layerLink = LayerLink();
   OverlayEntry? _overlayEntry;
 
+  // Track hover index
+  int _hoverIndex = -1;
+
   void _toggleDropdown() {
     if (_overlayEntry == null) {
       _overlayEntry = _createOverlayEntry();
@@ -31,73 +35,114 @@ class _TableFilterDropdownState extends State<TableFilterDropdown> {
     } else {
       _overlayEntry?.remove();
       _overlayEntry = null;
+      _hoverIndex = -1;
     }
   }
 
   OverlayEntry _createOverlayEntry() {
     RenderBox renderBox = context.findRenderObject() as RenderBox;
     final offset = renderBox.localToGlobal(Offset.zero);
+    final colorScheme = Theme.of(context).colorScheme;
 
     return OverlayEntry(
-      builder: (_) => Positioned(
-        width: widget.width,
-        left: offset.dx,
-        top: offset.dy + renderBox.size.height + 6,
-        child: Material(
-          elevation: 8,
-          borderRadius: BorderRadius.circular(8),
-          color: const Color(0xFF00131E),
-          child: ListView(
-            padding: const EdgeInsets.symmetric(vertical: 6),
-            shrinkWrap: true,
-            children: widget.options.map((option) {
-              final isSelected = option == widget.selected;
-
-              return InkWell(
-                onTap: () {
-                  widget.onSelect(option);
-                  _toggleDropdown();
-                },
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                  child: Row(
-                    children: [
-                      Icon(
-                        isSelected
-                            ? Icons.radio_button_checked
-                            : Icons.circle_outlined,
-                        size: 18,
-                        color: isSelected
-                            ? Colors.blueAccent
-                            : const Color(0xFF98989A),
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        option.toUpperCase(),
-                        style: const TextStyle(
-                          color: Color(0xFFEEEEEE),
-                          fontSize: 14,
-                        ),
-                      ),
-                    ],
+      builder: (context) {
+        return Positioned(
+          width: widget.width,
+          left: offset.dx,
+          top: offset.dy + renderBox.size.height + 6,
+          child: Material(
+            color: Colors.transparent,
+            child: StatefulBuilder(
+              builder: (context, setOverlayState) {
+                return Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF141414),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: const Color(0x22FFFFFF)),
                   ),
-                ),
-              );
-            }).toList(),
+                  padding: const EdgeInsets.symmetric(vertical: 6),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: List.generate(widget.options.length, (index) {
+                      final option = widget.options[index];
+                      final isSelected = widget.selected == option;
+                      final isHover = index == _hoverIndex;
+
+                      return MouseRegion(
+                        onEnter: (_) => setOverlayState(() {
+                          _hoverIndex = index;
+                        }),
+                        onExit: (_) => setOverlayState(() {
+                          _hoverIndex = -1;
+                        }),
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 140),
+                          decoration: BoxDecoration(
+                            color: Colors.transparent,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(8),
+                            onTap: () {
+                              widget.onSelect(option);
+                              _toggleDropdown();
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12.5,
+                                vertical: 10,
+                              ),
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                    width: 20,
+                                    child: isSelected
+                                        ? Icon(Icons.check,
+                                            size: 18,
+                                            color: colorScheme.primary)
+                                        : const SizedBox(),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  CommonText.bodyMedium(
+                                    option.toUpperCase(),
+                                    fontWeight: FontWeight.w500,
+                                    overflow: TextOverflow.ellipsis,
+                                    color: isSelected
+                                        ? colorScheme.primary
+                                        : isHover
+                                            ? const Color(
+                                                0xFFFFD530) // TODO: Use from color scheme
+                                            : const Color(0xFFB5B5B5),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    }),
+                  ),
+                );
+              },
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return CompositedTransformTarget(
-      link: _layerLink,
-      child: GestureDetector(
-        onTap: _toggleDropdown,
-        child: widget.child,
+    return Container(
+      alignment: Alignment.center,
+      constraints: BoxConstraints(maxWidth: widget.width, minWidth: 100),
+      child: CompositedTransformTarget(
+        link: _layerLink,
+        child: GestureDetector(
+          onTap: _toggleDropdown,
+          child: widget.child,
+        ),
       ),
     );
   }

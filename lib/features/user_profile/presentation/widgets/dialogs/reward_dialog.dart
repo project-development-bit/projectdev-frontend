@@ -1,5 +1,4 @@
 import 'package:cointiply_app/core/common/common_rich_text_with_icon.dart';
-import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
 import 'package:cointiply_app/core/core.dart';
 import 'package:cointiply_app/features/reward/presentation/providers/reward_provider.dart';
 import 'package:cointiply_app/features/reward/presentation/providers/reward_state.dart';
@@ -22,8 +21,7 @@ class RewardDialog extends ConsumerWidget {
     final state = ref.watch(getRewardNotifierProvider);
     final isLoading = state.status == GetRewardStatus.loading;
     final error = state.error;
-    final data = state.rewards?.data;
-    final visibleLevels = state.visibleLevels;
+    final data = state.userLevelState;
     final isViewAll = state.isViewAll;
 
     final height = _dialogHeight(context);
@@ -31,12 +29,6 @@ class RewardDialog extends ConsumerWidget {
     return DialogBgWidget(
       padding: EdgeInsets.zero,
       dialogHeight: height,
-      onRouteBack: isViewAll
-          ? () {
-              final notifier = ref.read(getRewardNotifierProvider.notifier);
-              notifier.collapse();
-            }
-          : null,
       dividerColor: const Color(0xFF003248), //TODO: to use from schma color
       title: LocalizationHelper(context).translate("rewards_title"),
       body: CustomScrollView(
@@ -82,10 +74,15 @@ class RewardDialog extends ConsumerWidget {
                           .translate("reward_description_suffix"),
                       iconPath: "assets/images/rewards/coin.png",
                     ),
-                    RewardXpPrograssArea(data: data),
+                    RewardXpPrograssArea(userlevelState: data),
                     StatusRewardsWidget(
-                      selectedTier: data.currentTier,
-                      tiers: data.tiers,
+                      selectedTier: state.selectedLevel,
+                      tiers: state.levels,
+                      onTierSelected: (matchedLevel) {
+                        ref
+                            .read(getRewardNotifierProvider.notifier)
+                            .selectLevel(matchedLevel.id);
+                      },
                     )
                   ],
                 ),
@@ -94,28 +91,9 @@ class RewardDialog extends ConsumerWidget {
 
           if (!isLoading && error == null && data != null)
             StatusRewardsTableSliver(
-              levels: visibleLevels,
-              currentLevel: data.currentLevel,
-            ),
-
-          if (!isLoading && error == null && data != null && !isViewAll)
-            SliverToBoxAdapter(
-              child: Center(
-                child: CustomUnderLineButtonWidget(
-                  isDark: true,
-                  onTap: () {
-                    final notifier =
-                        ref.read(getRewardNotifierProvider.notifier);
-                    notifier.viewAll();
-                  },
-                  fontSize: 16,
-                  width: 115,
-                  fontWeight: FontWeight.w700,
-                  padding: EdgeInsets.symmetric(vertical: 4, horizontal: 0),
-                  margin: const EdgeInsets.symmetric(vertical: 8.5),
-                  title: "View All",
-                ),
-              ),
+              level: state.levels
+                  .firstWhere((level) => level.id == state.selectedLevel),
+              currentLevel: data.level,
             ),
           SliverToBoxAdapter(
             child: SizedBox(height: 24),

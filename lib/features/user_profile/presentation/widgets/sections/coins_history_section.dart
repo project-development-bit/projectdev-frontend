@@ -1,4 +1,4 @@
-import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
+import 'package:cointiply_app/core/common/table/table_footer.dart';
 import 'package:cointiply_app/core/core.dart';
 import 'package:cointiply_app/features/earnings/presentation/provider/earnings_history_state.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/cards/coins_earned_history_card.dart';
@@ -6,10 +6,15 @@ import 'package:flutter/material.dart';
 
 class CoinsHistorySection extends StatelessWidget {
   const CoinsHistorySection(
-      {super.key, required this.state, required this.loadMore});
+      {super.key,
+      required this.state,
+      required this.loadMore,
+      required this.onPageChange,
+      required this.onLimitChange});
   final EarningsHistoryState state;
   final Function loadMore;
-
+  final Function(int) onPageChange;
+  final Function(int) onLimitChange;
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context);
@@ -63,16 +68,23 @@ class CoinsHistorySection extends StatelessWidget {
               amount: item.amount,
               timeAgo: item.timeAgo,
             ),
-
-        const SizedBox(height: 20),
-        if (state.isLoadingMore)
-          const Center(child: CircularProgressIndicator()),
-        if (state.canLoadMore && !state.isLoadingMore)
-          CustomButtonWidget(
-            title: localizations?.translate("load_more") ?? "Load More",
-            onTap: () => loadMore(),
-            fontWeight: FontWeight.w700,
-          ),
+        TableFooter(
+          total: state.data?.data?.pagination.total ?? 0,
+          page: state.page,
+          limit: state.limit,
+          totalPages: (state.data?.data?.pagination.total != null &&
+                  state.data!.data!.pagination.limit > 0)
+              ? (state.data!.data!.pagination.total /
+                      state.data!.data!.pagination.limit)
+                  .ceil()
+              : 1,
+          changePage: (newPage) {
+            onPageChange(newPage);
+          },
+          changeLimit: (newLimit) {
+            onLimitChange(newLimit);
+          },
+        ),
       ],
     );
   }
