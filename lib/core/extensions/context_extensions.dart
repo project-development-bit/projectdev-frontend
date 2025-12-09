@@ -363,8 +363,10 @@ extension DialogExtension on BuildContext {
       context: this,
       barrierDismissible: barrierDismissible,
       barrierColor: barrierColor,
-      builder: (context) => DialogScaffoldWidget(
-        child: child,
+      builder: (context) => CustomPointerInterceptor(
+        child: DialogScaffoldWidget(
+          child: child,
+        ),
       ),
     ).then((value) => value as T);
   }
@@ -378,8 +380,10 @@ extension DialogExtension on BuildContext {
       context: this,
       barrierDismissible: barrierDismissible,
       barrierColor: barrierColor,
-      builder: (context) => DialogScaffoldWidget(
-        child: child,
+      builder: (context) => CustomPointerInterceptor(
+        child: DialogScaffoldWidget(
+          child: child,
+        ),
       ),
     ).then((value) => value as T);
   }

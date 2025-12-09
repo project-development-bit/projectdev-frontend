@@ -756,5 +756,7 @@
   "tx_fee": "Fee",
   "referral": "Referral",
   "date": "Date",
-  "coins_earn": "Coins Earn"
+  "coins_earn": "Coins Earn",
+  "logout_title": "Logout",
+  "logout_description": "Are you sure you want to logout?"
 }
