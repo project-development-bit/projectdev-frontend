@@ -11,7 +11,7 @@ import 'package:cointiply_app/features/user_profile/presentation/providers/get_c
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/common/common_textfield.dart';
-import '../../../../core/localization/app_localizations.dart';
+import '../../../localization/data/helpers/app_localizations.dart';
 import '../../../../core/widgets/cloudflare_turnstille_widgte.dart';
 import '../../../../core/providers/turnstile_provider.dart';
 import '../../../../core/extensions/context_extensions.dart';

@@ -34,9 +34,9 @@ export 'extensions/context_extensions.dart';
 export 'extensions/extensions.dart';
 
 // Localization
-export 'localization/app_localizations.dart';
-export 'localization/localization_helper.dart';
-export 'localization/localization_service.dart';
+export '../features/localization/data/helpers/app_localizations.dart';
+export '../features/localization/data/helpers/localization_helper.dart';
+export '../features/localization/data/services/localization_service.dart';
 
 // Network
 export 'network/auth_interceptor.dart';
@@ -46,7 +46,6 @@ export 'network/dio_provider.dart';
 // Providers
 export 'providers/auth_provider.dart' hide AuthState;
 export 'providers/auth_state_provider.dart';
-export 'providers/locale_provider.dart';
 export 'providers/theme_provider.dart';
 export '../features/localization/presentation/providers/translation_provider.dart';
 

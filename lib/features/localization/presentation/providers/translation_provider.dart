@@ -1,7 +1,7 @@
 import 'package:cointiply_app/features/localization/presentation/providers/localization_notifier_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/localization/localization_service.dart';
+import '../../data/services/localization_service.dart';
 
 // Provider that combines locale and translation service
 final translationProvider =

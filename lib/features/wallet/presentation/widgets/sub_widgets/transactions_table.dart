@@ -1,5 +1,5 @@
 import 'package:cointiply_app/core/common/table/common_table_widget.dart';
-import 'package:cointiply_app/core/localization/app_localizations.dart';
+import 'package:cointiply_app/features/localization/data/helpers/app_localizations.dart';
 import 'package:cointiply_app/features/wallet/presentation/providers/payment_history_notifier_provider.dart';
 import 'package:cointiply_app/features/wallet/presentation/providers/payment_history_state.dart';
 import 'package:cointiply_app/features/wallet/presentation/widgets/sub_widgets/transaction_filter_bar.dart';

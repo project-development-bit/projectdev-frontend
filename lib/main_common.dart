@@ -7,7 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:url_strategy/url_strategy.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cointiply_app/core/services/database_service.dart';
-import 'package:cointiply_app/core/localization/app_localizations.dart';
+import 'package:cointiply_app/features/localization/data/helpers/app_localizations.dart';
 import 'core/providers/theme_provider.dart';
 import 'core/theme/app_theme.dart';
 import 'core/config/app_flavor.dart';
