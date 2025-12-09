@@ -55,6 +55,7 @@ class _TableFilterDropdownState extends State<TableFilterDropdown> {
             child: StatefulBuilder(
               builder: (context, setOverlayState) {
                 return Container(
+                  alignment: Alignment.center,
                   decoration: BoxDecoration(
                     color: const Color(0xFF141414),
                     borderRadius: BorderRadius.circular(12),
@@ -106,6 +107,7 @@ class _TableFilterDropdownState extends State<TableFilterDropdown> {
                                   CommonText.bodyMedium(
                                     option.toUpperCase(),
                                     fontWeight: FontWeight.w500,
+                                    overflow: TextOverflow.ellipsis,
                                     color: isSelected
                                         ? colorScheme.primary
                                         : isHover
@@ -132,11 +134,15 @@ class _TableFilterDropdownState extends State<TableFilterDropdown> {
 
   @override
   Widget build(BuildContext context) {
-    return CompositedTransformTarget(
-      link: _layerLink,
-      child: GestureDetector(
-        onTap: _toggleDropdown,
-        child: widget.child,
+    return Container(
+      alignment: Alignment.center,
+      constraints: BoxConstraints(maxWidth: widget.width, minWidth: 100),
+      child: CompositedTransformTarget(
+        link: _layerLink,
+        child: GestureDetector(
+          onTap: _toggleDropdown,
+          child: widget.child,
+        ),
       ),
     );
   }
