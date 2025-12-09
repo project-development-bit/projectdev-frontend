@@ -10,6 +10,7 @@ class RegisterRequest {
   final String? countryCode;
   late final String userAgent;
   late final String deviceId;
+  final String? referralCode;
 
   RegisterRequest({
     required this.name,
@@ -21,6 +22,7 @@ class RegisterRequest {
     this.countryCode,
     this.role = UserRole.normalUser,
     this.recaptchaToken,
+    this.referralCode,
   });
 
   Future<Map<String, dynamic>> toJson() async {
@@ -33,6 +35,7 @@ class RegisterRequest {
       "password": password,
       "confirm_password": confirmPassword,
       "role": role.value,
+      if (referralCode != null) "referral_code": referralCode,
       if (recaptchaToken != null) "recaptchaToken": recaptchaToken,
     };
   }
@@ -48,6 +51,7 @@ class RegisterRequest {
       confirmPassword: json['confirm_password'] ?? '',
       role: UserRole.tryFromString(json['role']) ?? UserRole.normalUser,
       recaptchaToken: json['recaptchaToken'],
+      referralCode: json['referral_code'],
     );
   }
 
