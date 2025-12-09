@@ -6,6 +6,7 @@ import 'package:cointiply_app/core/common/table/common_table_widget.dart';
 import 'package:cointiply_app/core/extensions/extensions.dart';
 import 'package:cointiply_app/features/affiliate_program/data/models/request/referred_users_request.dart';
 import 'package:cointiply_app/features/affiliate_program/presentation/providers/referral_link_provider.dart';
+import 'package:cointiply_app/features/affiliate_program/presentation/providers/referral_stats_provider.dart';
 import 'package:cointiply_app/features/affiliate_program/presentation/providers/referred_users_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -67,6 +68,9 @@ class _AffiliateProgramDialogState
       // Fetch referral link when dialog opens
       ref.read(referralLinkProvider.notifier).getReferralLink();
 
+      // Fetch referral stats
+      ref.read(referralStatsProvider.notifier).fetchReferralStats();
+
       // Fetch referred users list with initial parameters
       ref.read(referredUsersProvider.notifier).getReferredUsers(
             ReferredUsersRequest(
@@ -100,7 +104,7 @@ class _AffiliateProgramDialogState
     if (kIsWeb) {
       final currentUrl = Uri.base;
       final isLocalhost = currentUrl.host.contains('localhost') ||
-          currentUrl.host.contains('127.0.0.1');
+          currentUrl.host.contains('127.0.1');
 
       if (isLocalhost) {
         return 'localhost:8080/r/$referralCode';
@@ -122,6 +126,12 @@ class _AffiliateProgramDialogState
   }
 
   Widget _dialogBody() {
+    final statsState = ref.watch(referralStatsProvider);
+    final isLoading = statsState.status == ReferralStatsStatus.loading;
+    final hasError = statsState.status == ReferralStatsStatus.failure;
+    final stats = statsState.data;
+    final referralPercent =
+        hasError || isLoading ? null : stats?.referralPercent.toString();
     return SingleChildScrollView(
       padding: context.isDesktop
           ? const EdgeInsets.symmetric(horizontal: 24, vertical: 16)
@@ -129,14 +139,16 @@ class _AffiliateProgramDialogState
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          
           CommonText.bodyMedium(
-            context.translate("affiliate_program_description"),
+            context.translate("affiliate_program_description",
+                args: [referralPercent ?? '0']),
             fontWeight: FontWeight.w500,
           ),
           const SizedBox(height: 24),
           _referralLinkSection(),
           const SizedBox(height: 15),
-          _referralInfoSection(),
+          _referralStatsSection(),
           const SizedBox(height: 15),
           _referralCoinList(),
         ],
@@ -270,7 +282,12 @@ class _AffiliateProgramDialogState
     );
   }
 
-  Widget _referralInfoSection() {
+  Widget _referralStatsSection() {
+    final statsState = ref.watch(referralStatsProvider);
+    final isLoading = statsState.status == ReferralStatsStatus.loading;
+    final hasError = statsState.status == ReferralStatsStatus.failure;
+    final stats = statsState.data;
+
     final isMobile = context.isMobile;
 
     return GridView(
@@ -282,59 +299,96 @@ class _AffiliateProgramDialogState
           crossAxisCount: isMobile ? 2 : 4),
       children: [
         _infoItem(
-            assetPath: "assets/images/money_bag.png",
-            value: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                CommonText.titleMedium("200",
-                    fontWeight: FontWeight.w700, color: context.primary),
-                const SizedBox(width: 4),
-                Image.asset(
-                  "assets/images/rewards/coin.png",
-                  height: 16,
-                  width: 16,
-                ),
-              ],
-            ),
-            label: context.translate("referral_earnings")),
+          assetPath: "assets/images/money_bag.png",
+          value: _buildStatValue(
+            isLoading: isLoading,
+            hasError: hasError,
+            value: stats?.referralEarningsCoins ?? 0,
+            hasCoin: true,
+          ),
+          label: context.translate("referral_earnings"),
+        ),
         _infoItem(
-            assetPath: "assets/images/referral_person.png",
-            value: CommonText.titleMedium("5",
-                fontWeight: FontWeight.w700, color: context.primary),
-            label: context.translate("referral_users")),
+          assetPath: "assets/images/referral_person.png",
+          value: _buildStatValue(
+            isLoading: isLoading,
+            hasError: hasError,
+            value: stats?.referralUsersCount ?? 0,
+            hasCoin: false,
+          ),
+          label: context.translate("referral_users"),
+        ),
         _infoItem(
-            assetPath: "assets/images/sand_watch.png",
-            value: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                CommonText.titleMedium("200",
-                    fontWeight: FontWeight.w700, color: context.primary),
-                const SizedBox(width: 4),
-                Image.asset(
-                  "assets/images/rewards/coin.png",
-                  height: 16,
-                  width: 16,
-                ),
-              ],
-            ),
-            label: context.translate("pending_earnings")),
+          assetPath: "assets/images/sand_watch.png",
+          value: _buildStatValue(
+            isLoading: isLoading,
+            hasError: hasError,
+            value: stats?.pendingEarningsCoins ?? 0,
+            hasCoin: true,
+          ),
+          label: context.translate("pending_earnings"),
+        ),
         _infoItem(
-            assetPath: "assets/images/week.png",
-            value: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                CommonText.titleMedium("200",
-                    fontWeight: FontWeight.w700, color: context.primary),
-                const SizedBox(width: 4),
-                Image.asset(
-                  "assets/images/rewards/coin.png",
-                  height: 16,
-                  width: 16,
-                ),
-              ],
-            ),
-            label: context.translate("active_this_week")),
+          assetPath: "assets/images/week.png",
+          value: _buildStatValue(
+            isLoading: isLoading,
+            hasError: hasError,
+            value: stats?.activeThisWeekCount ?? 0,
+            hasCoin: false,
+          ),
+          label: context.translate("active_this_week"),
+        ),
       ],
+    );
+  }
+
+  Widget _buildStatValue({
+    required bool isLoading,
+    required bool hasError,
+    required int value,
+    required bool hasCoin,
+  }) {
+    if (isLoading) {
+      return const SizedBox(
+        height: 20,
+        width: 20,
+        child: CircularProgressIndicator(
+          strokeWidth: 2,
+        ),
+      );
+    }
+
+    if (hasError) {
+      return Icon(
+        Icons.error_outline,
+        color: context.error,
+        size: 20,
+      );
+    }
+
+    if (hasCoin) {
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          CommonText.titleMedium(
+            value.toStringAsFixed(value),
+            fontWeight: FontWeight.w700,
+            color: context.primary,
+          ),
+          const SizedBox(width: 4),
+          Image.asset(
+            "assets/images/rewards/coin.png",
+            height: 16,
+            width: 16,
+          ),
+        ],
+      );
+    }
+
+    return CommonText.titleMedium(
+      value.toString(),
+      fontWeight: FontWeight.w700,
+      color: context.primary,
     );
   }
 

@@ -1,4 +1,5 @@
 import 'package:cointiply_app/features/affiliate_program/data/models/referral_link_response_model.dart';
+import 'package:cointiply_app/features/affiliate_program/data/models/referral_stats_response_model.dart';
 import 'package:cointiply_app/features/affiliate_program/data/models/referred_users_response_model.dart';
 import 'package:cointiply_app/features/affiliate_program/data/models/request/referred_users_request.dart';
 
@@ -10,4 +11,7 @@ abstract class AffiliateProgramRemoteDataSource {
   /// Get referred users list from the API
   Future<ReferredUsersResponseModel> getReferredUsers(
       ReferredUsersRequest request);
+
+  /// Get referral stats from the API
+  Future<ReferralStatsResponseModel> getReferralStats();
 }

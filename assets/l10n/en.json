@@ -728,7 +728,7 @@
   "interest_notification_description": "Keep at least 35,000 Coins to earn 5% interest. Interest is paid every week. Turn it on in your settings.",
   "withdrawal": "Withdrawal",
   "affiliate_program_title": "Affiliate Program",
-  "affiliate_program_description": "Get a lifetime reward up 15% for inviting new people",
+  "affiliate_program_description": "Get a lifetime reward up {0}% for inviting new people",
   "referral_link": "Referral Link",
   "referral_link_copied_message": "Referral link copied to clipboard!",
   "share": "Share",
