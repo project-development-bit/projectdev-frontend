@@ -48,7 +48,7 @@ export 'providers/auth_provider.dart' hide AuthState;
 export 'providers/auth_state_provider.dart';
 export 'providers/locale_provider.dart';
 export 'providers/theme_provider.dart';
-export 'providers/translation_provider.dart';
+export '../features/localization/presentation/providers/translation_provider.dart';
 
 // Services
 export 'services/database_service.dart';
