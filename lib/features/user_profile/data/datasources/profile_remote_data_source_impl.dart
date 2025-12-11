@@ -291,7 +291,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
       PlatformFile file) async {
     try {
       // Compress image and get bytes (works on both web and mobile)
-      final bytes = await compressImageToBytes(file, quality: 5);
+      final bytes = await compressImageToBytes(file, quality: 50);
 
       if (bytes.isEmpty) {
         throw ServerFailure(message: 'File bytes are empty');
