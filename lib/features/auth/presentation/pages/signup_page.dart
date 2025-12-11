@@ -172,7 +172,8 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
     }
 
     // Check if Turnstile verification is completed
-    final turnstileState = ref.read(turnstileNotifierProvider);
+    final turnstileState =
+        ref.read(turnstileNotifierProvider(TurnstileActionEnum.register));
     if (turnstileState is! TurnstileSuccess) {
       final localizations = AppLocalizations.of(context);
       context.showErrorSnackBar(
@@ -433,7 +434,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
 
             // Cloudflare Turnstile Widget (replaces reCAPTCHA)
             CloudflareTurnstileWidget(
-              action: "create_user",
+              action: TurnstileActionEnum.register,
               debugMode: false,
             ),
 

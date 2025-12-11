@@ -38,7 +38,7 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
     }
 
     // Check if Turnstile verification is completed
-    final turnstileState = ref.read(turnstileNotifierProvider);
+    final turnstileState = ref.read(turnstileNotifierProvider(TurnstileActionEnum.forgetPassword));
     if (turnstileState is! TurnstileSuccess) {
       final localizations = AppLocalizations.of(context);
       context.showErrorSnackBar(
@@ -141,6 +141,7 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
               // Cloudflare Turnstile Widget (replaces reCAPTCHA)
               const CloudflareTurnstileWidget(
                 debugMode: false,
+                action: TurnstileActionEnum.forgetPassword,
               ),
 
               const SizedBox(height: 32),

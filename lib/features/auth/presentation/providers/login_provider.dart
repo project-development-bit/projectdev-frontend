@@ -82,7 +82,8 @@ class LoginNotifier extends StateNotifier<LoginState> {
       String? turnstileToken;
 
       debugPrint('🔐 Checking Turnstile verification...');
-      final turnstileState = _ref.read(turnstileNotifierProvider);
+      final turnstileState =
+          _ref.read(turnstileNotifierProvider(TurnstileActionEnum.login));
 
       if (turnstileState is TurnstileSuccess) {
         turnstileToken = turnstileState.token;

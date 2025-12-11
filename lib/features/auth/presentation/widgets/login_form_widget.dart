@@ -155,7 +155,9 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
   void _handleLogin() async {
     if (_formKey.currentState!.validate()) {
       // Check Turnstile verification
-      final turnstileCanAttempt = ref.read(turnstileCanAttemptLoginProvider);
+      final turnstileCanAttempt =
+          ref.read(turnstileNotifierProvider(TurnstileActionEnum.login))
+              is TurnstileSuccess;
 
       if (!turnstileCanAttempt) {
         final localizations = AppLocalizations.of(context);
@@ -167,7 +169,11 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
       }
 
       // Get the Turnstile token
-      final turnstileToken = ref.read(turnstileTokenProvider);
+      final turnstileToken = turnstileCanAttempt
+          ? (ref.read(turnstileNotifierProvider(TurnstileActionEnum.login))
+                  as TurnstileSuccess)
+              .token
+          : null;
 
       if (turnstileToken == null) {
         final localizations = AppLocalizations.of(context);

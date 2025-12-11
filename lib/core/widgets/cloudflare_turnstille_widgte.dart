@@ -15,7 +15,7 @@ class CloudflareTurnstileWidget extends ConsumerStatefulWidget {
   final String? language;
   final bool retryAutomatically;
   final TurnstileRefreshExpired refreshExpired;
-  final String action;
+  final TurnstileActionEnum action;
   final bool debugMode;
 
   const CloudflareTurnstileWidget({
@@ -25,7 +25,7 @@ class CloudflareTurnstileWidget extends ConsumerStatefulWidget {
     this.theme,
     this.language,
     this.retryAutomatically = false,
-    this.action = "login",
+    this.action = TurnstileActionEnum.login,
     this.refreshExpired = TurnstileRefreshExpired.manual,
     this.debugMode = kDebugMode,
   });
@@ -56,7 +56,7 @@ class _CloudflareTurnstileWidgetState
         print('🌐 Environment: ${kDebugMode ? 'Debug' : 'Production'}');
       }
 
-      await ref.read(turnstileNotifierProvider.notifier).initializeController();
+      await _turnstilleNotifier.initializeController();
 
       if (mounted) {
         setState(() {
@@ -72,12 +72,15 @@ class _CloudflareTurnstileWidgetState
       }
       // Set error state
       if (mounted) {
-        ref.read(turnstileNotifierProvider.notifier).onTurnstileError(
+        _turnstilleNotifier.onTurnstileError(
             'Failed to load security verification. Please check your internet connection and refresh the page.');
       }
     }
   }
 
+  TurnstileNotifier get _turnstilleNotifier =>
+      ref.read(turnstileNotifierProvider(widget.action).notifier);
+  
   /// Get the correct site key based on environment
   String get _getLiveSiteKey {
     // IMPORTANT: Cloudflare Turnstile site key configuration
@@ -143,12 +146,12 @@ class _CloudflareTurnstileWidgetState
 
   /// Handle refresh token
   void _handleRefreshToken() async {
-    await ref.read(turnstileNotifierProvider.notifier).refreshToken();
+    await _turnstilleNotifier.refreshToken();
   }
 
   /// Handle validate token
   void _handleValidateToken() async {
-    final controller = ref.read(turnstileNotifierProvider.notifier).controller;
+    final controller = _turnstilleNotifier.controller;
     if (controller != null) {
       final isExpired = await controller.isExpired();
 
@@ -193,9 +196,9 @@ class _CloudflareTurnstileWidgetState
 
   @override
   Widget build(BuildContext context) {
-    final turnstileState = ref.watch(turnstileNotifierProvider);
-    final turnstileNotifier = ref.watch(turnstileNotifierProvider.notifier);
-    final controller = turnstileNotifier.controller;
+    final turnstileState = ref.watch(turnstileNotifierProvider(widget.action));
+
+    final controller = _turnstilleNotifier.controller;
 
     // Validate configuration on build
     _validateConfiguration();
@@ -206,6 +209,7 @@ class _CloudflareTurnstileWidgetState
       theme: _getTheme,
       refreshExpired: widget.refreshExpired,
       language: _getLanguage,
+      retryInterval: Duration(milliseconds: 300),
       retryAutomatically: widget.retryAutomatically,
     );
     // final isDarkMode = Theme.of(context).brightness == Brightness.dark;
@@ -223,7 +227,7 @@ class _CloudflareTurnstileWidgetState
                     siteKey: _getLiveSiteKey,
                     options: options,
                     controller: controller,
-                    action: widget.action,
+                    action: widget.action.name,
                     baseUrl: kDebugMode
                         ? "http://localhost"
                         : "https://staging.gigafaucet.com",
@@ -234,13 +238,13 @@ class _CloudflareTurnstileWidgetState
                         print(
                             '🌐 Environment: ${kDebugMode ? "Debug" : "Production"}');
                       }
-                      turnstileNotifier.onTokenReceived(token);
+                      _turnstilleNotifier.onTokenReceived(token);
                     },
                     onTokenExpired: () {
                       if (kDebugMode) {
                         print('⏰ Turnstile: Token expired');
                       }
-                      turnstileNotifier.onTokenExpired();
+                      _turnstilleNotifier.onTokenExpired();
                     },
                     onError: (error) {
                       if (kDebugMode) {
@@ -251,7 +255,7 @@ class _CloudflareTurnstileWidgetState
                         print('🔧 Domain: ${Uri.base.host}');
                         print('🔒 HTTPS: ${Uri.base.scheme == "https"}');
                       }
-                      turnstileNotifier.onTurnstileError(error.message);
+                      _turnstilleNotifier.onTurnstileError(error.message);
                     },
                   ),
                 )
@@ -327,7 +331,7 @@ class _CloudflareTurnstileWidgetState
         if ((widget.debugMode ||
                 state is TurnstileError ||
                 state is TurnstileExpired) &&
-            ref.watch(turnstileNotifierProvider.notifier).controller !=
+            _turnstilleNotifier.controller !=
                 null) ...[
           const SizedBox(height: 8),
           Row(

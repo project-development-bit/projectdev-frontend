@@ -33,12 +33,12 @@ class TurnstileExpired extends TurnstileState {
 /// Turnstile notifier
 class TurnstileNotifier extends StateNotifier<TurnstileState> {
   TurnstileNotifier() : super(const TurnstileInitial());
-  
+
   TurnstileController? _controller;
   bool _isInitializing = false;
   int _retryCount = 0;
   static const int _maxRetries = 3;
-  
+
   /// Initialize the controller with better retry logic
   Future<void> initializeController() async {
     if (_isInitializing || _controller != null) {
@@ -51,11 +51,12 @@ class TurnstileNotifier extends StateNotifier<TurnstileState> {
 
     await _attemptInitialization();
   }
-  
+
   Future<void> _attemptInitialization() async {
     try {
-      debugPrint('🔄 Attempting Turnstile initialization (attempt ${_retryCount + 1}/$_maxRetries)');
-      
+      debugPrint(
+          '🔄 Attempting Turnstile initialization (attempt ${_retryCount + 1}/$_maxRetries)');
+
       // Wait longer for Turnstile API to be available
       final delay = Duration(milliseconds: 300 * (_retryCount + 1));
       await Future.delayed(delay);
@@ -69,7 +70,6 @@ class TurnstileNotifier extends StateNotifier<TurnstileState> {
       debugPrint('✅ Turnstile controller created successfully');
       _isInitializing = false;
       _retryCount = 0;
-      
     } catch (e) {
       debugPrint('❌ Failed to create Turnstile controller: $e');
       _retryCount++;
@@ -81,52 +81,51 @@ class TurnstileNotifier extends StateNotifier<TurnstileState> {
         debugPrint('❌ Max retries reached. Initialization failed.');
         _isInitializing = false;
         state = TurnstileError(
-          'Failed to load security verification. Please check:\n'
-          '1. Your internet connection\n'
-          '2. That the site key is correct\n'
-          '3. That your domain is authorized in Cloudflare\n'
-          'Then refresh the page.'
-        );
+            'Failed to load security verification. Please check:\n'
+            '1. Your internet connection\n'
+            '2. That the site key is correct\n'
+            '3. That your domain is authorized in Cloudflare\n'
+            'Then refresh the page.');
       }
     }
   }
-  
+
   /// Get the controller
   TurnstileController? get controller => _controller;
-  
+
   /// Check if controller is ready
   bool get isControllerReady => _controller != null && !_isInitializing;
-  
+
   /// Handle token received
   void onTokenReceived(String token) {
     debugPrint('🔐 Turnstile token received: ${token.substring(0, 20)}...');
     state = TurnstileSuccess(token);
   }
-  
+
   /// Handle token expired
   void onTokenExpired() {
     debugPrint('⏰ Turnstile token expired');
     state = const TurnstileExpired();
   }
-  
+
   /// Handle error
   void onTurnstileError(String message) {
     debugPrint('❌ Turnstile error: $message');
     state = TurnstileError(message);
   }
-  
+
   /// Set loading state
   void setLoading() {
     debugPrint('🔄 Turnstile loading...');
     state = const TurnstileLoading();
   }
-  
+
   /// Reset state
   void reset() {
     debugPrint('🔄 Turnstile reset');
     state = const TurnstileInitial();
   }
-  
+
   /// Refresh token
   Future<void> refreshToken() async {
     if (_controller != null) {
@@ -138,7 +137,7 @@ class TurnstileNotifier extends StateNotifier<TurnstileState> {
       }
     }
   }
-  
+
   /// Check if token is expired
   Future<bool> isExpired() async {
     if (_controller != null) {
@@ -151,7 +150,7 @@ class TurnstileNotifier extends StateNotifier<TurnstileState> {
     }
     return true;
   }
-  
+
   /// Dispose controller
   void disposeController() {
     _controller?.dispose();
@@ -159,25 +158,25 @@ class TurnstileNotifier extends StateNotifier<TurnstileState> {
     _isInitializing = false;
     _retryCount = 0;
   }
-  
+
   /// Get current token
   String? get token {
     final currentState = state;
     return currentState is TurnstileSuccess ? currentState.token : null;
   }
-  
+
   /// Check if verified
   bool get isVerified => state is TurnstileSuccess;
-  
+
   /// Check if loading
   bool get isLoading => state is TurnstileLoading;
-  
+
   /// Check if has error
   bool get hasError => state is TurnstileError;
-  
+
   /// Check if current state is expired
   bool get isTokenExpired => state is TurnstileExpired;
-  
+
   /// Get error message
   String? get errorMessage {
     final currentState = state;
@@ -185,38 +184,53 @@ class TurnstileNotifier extends StateNotifier<TurnstileState> {
   }
 }
 
+enum TurnstileActionEnum {
+  login(name: 'login'),
+  register(name: 'create_user'),
+  resetPassword(name: 'resetPassword'),
+  forgetPassword(name: 'forgetPassword'),
+  contactUs(name: 'contact_us'),
+  tutorial(name: 'tutorial'),
+  other(name: 'other');
+
+  final String name;
+
+  const TurnstileActionEnum({required this.name});
+}
+
 /// Provider instances
 /// Turnstile notifier provider
-final turnstileNotifierProvider = StateNotifierProvider<TurnstileNotifier, TurnstileState>((ref) {
+final turnstileNotifierProvider = AutoDisposeStateNotifierProviderFamily<
+    TurnstileNotifier, TurnstileState, TurnstileActionEnum>((ref, action) {
   return TurnstileNotifier();
 });
 
 /// Provider that checks if login can be attempted based on Turnstile verification
-final turnstileCanAttemptLoginProvider = Provider<bool>((ref) {
-  final turnstileState = ref.watch(turnstileNotifierProvider);
-  return turnstileState is TurnstileSuccess;
-});
+// final turnstileCanAttemptLoginProvider = Provider<bool>((ref) {
+//   final turnstileState = ref.watch(turnstileNotifierProvider);
+//   return turnstileState is TurnstileSuccess;
+// });
 
-/// Provider that provides the current Turnstile token (if available)
-final turnstileTokenProvider = Provider<String?>((ref) {
-  final turnstileState = ref.watch(turnstileNotifierProvider);
-  return turnstileState is TurnstileSuccess ? turnstileState.token : null;
-});
+// /// Provider that provides the current Turnstile token (if available)
+// final turnstileTokenProvider = Provider<String?>((ref) {
+//   final turnstileState = ref.watch(turnstileNotifierProvider);
+//   return turnstileState is TurnstileSuccess ? turnstileState.token : null;
+// });
 
-/// Convenience providers
-final isTurnstileVerifiedProvider = Provider<bool>((ref) {
-  return ref.watch(turnstileNotifierProvider.notifier).isVerified;
-});
+// /// Convenience providers
+// final isTurnstileVerifiedProvider = Provider<bool>((ref) {
+//   return ref.watch(turnstileNotifierProvider.notifier).isVerified;
+// });
 
-final isTurnstileLoadingProvider = Provider<bool>((ref) {
-  return ref.watch(turnstileNotifierProvider.notifier).isLoading;
-});
+// final isTurnstileLoadingProvider = Provider<bool>((ref) {
+//   return ref.watch(turnstileNotifierProvider.notifier).isLoading;
+// });
 
-final turnstileErrorProvider = Provider<String?>((ref) {
-  return ref.watch(turnstileNotifierProvider.notifier).errorMessage;
-});
+// final turnstileErrorProvider = Provider<String?>((ref) {
+//   return ref.watch(turnstileNotifierProvider.notifier).errorMessage;
+// });
 
-/// Provider to check if controller is ready
-final turnstileControllerReadyProvider = Provider<bool>((ref) {
-  return ref.watch(turnstileNotifierProvider.notifier).isControllerReady;
-});
+// /// Provider to check if controller is ready
+// final turnstileControllerReadyProvider = Provider<bool>((ref) {
+//   return ref.watch(turnstileNotifierProvider.notifier).isControllerReady;
+// });
