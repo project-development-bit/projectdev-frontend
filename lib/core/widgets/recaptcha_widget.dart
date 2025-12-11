@@ -4,7 +4,7 @@ import '../common/common_text.dart';
 import '../extensions/context_extensions.dart';
 import '../providers/recaptcha_provider.dart';
 import '../services/platform_recaptcha_service.dart';
-import '../localization/app_localizations.dart';
+import '../../features/localization/data/helpers/app_localizations.dart';
 
 /// A platform-aware widget that provides reCAPTCHA verification functionality
 class RecaptchaWidget extends ConsumerWidget {

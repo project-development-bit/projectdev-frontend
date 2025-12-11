@@ -1,4 +1,5 @@
-import 'package:cointiply_app/core/providers/locale_provider.dart';
+import 'package:cointiply_app/features/localization/presentation/providers/get_localization_notifier.dart';
+import 'package:cointiply_app/features/localization/presentation/providers/localization_notifier_provider.dart';
 import 'package:cointiply_app/features/user_profile/data/models/request/user_update_request.dart';
 import 'package:cointiply_app/features/user_profile/user_profile.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +40,7 @@ final changeLanguageProvider =
   (ref) {
     final updateUserProfileUsecase =
         ref.watch(updateUserProfileUseCaseProvider);
-    final localeNotifier = ref.read(localeProvider.notifier);
+    final localeNotifier = ref.read(localizationNotifierProvider.notifier);
     return ChangeLanguageNotifier(
       ChangeLanguageState(),
       updateUserProfileUsecase,
@@ -50,7 +51,7 @@ final changeLanguageProvider =
 
 class ChangeLanguageNotifier extends StateNotifier<ChangeLanguageState> {
   final UpdateUserProfileUsecase _updateUserProfile;
-  final LocaleNotifier _localeNotifier;
+  final LocalizationController _localeNotifier;
 
   ChangeLanguageNotifier(
     super.state,
@@ -125,7 +126,7 @@ class ChangeLanguageNotifier extends StateNotifier<ChangeLanguageState> {
           final localeCountryCode = _mapLanguageCodeToCountry(languageCode);
           final newLocale = Locale(localeLanguageCode, localeCountryCode);
 
-          await _localeNotifier.setLocale(newLocale);
+          await _localeNotifier.changeLocale(newLocale);
 
           debugPrint('✅ Language changed to: $languageName ($languageCode)');
           debugPrint(

@@ -2,6 +2,7 @@ import 'package:cointiply_app/core/core.dart';
 import 'package:cointiply_app/core/error/error_model.dart';
 import 'package:cointiply_app/core/common/widgets/custom_pointer_interceptor.dart';
 import 'package:cointiply_app/features/auth/presentation/widgets/onboarding_background.dart';
+import 'package:cointiply_app/features/localization/presentation/providers/localization_notifier_provider.dart';
 import 'package:cointiply_app/features/terms_privacy/presentation/services/terms_privacy_navigation_service.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/get_profile_notifier.dart';
@@ -97,7 +98,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   @override
   Widget build(BuildContext context) {
     // Also watch the locale provider to force rebuilds when locale changes
-    final currentLocale = ref.watch(localeProvider);
+    final currentLocale = ref.watch(localizationNotifierProvider).currentLocale;
     final translate = ref.watch(translationProvider);
 
     debugPrint('LoginPage building with locale: ${currentLocale.languageCode}');

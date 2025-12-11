@@ -5,7 +5,7 @@ import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs
 import 'package:cointiply_app/main_common.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../localization/app_localizations.dart';
+import '../../features/localization/data/helpers/app_localizations.dart';
 import '../../routing/app_router.dart';
 import '../../features/auth/presentation/widgets/two_factor_auth_dialog.dart';
 
@@ -354,8 +354,8 @@ extension NavigationExtension on BuildContext {
 extension DialogExtension on BuildContext {
   /// showManagePopup
 
-  Future<T> showManagePopup<T>(
-      {required Widget child,
+  Future<T> showManagePopup<T>({
+    required Widget child,
     bool barrierDismissible = true,
   }) {
     final barrierColor = colorScheme.scrim.withValues(alpha: 0.6);

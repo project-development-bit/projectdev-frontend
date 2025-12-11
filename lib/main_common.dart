@@ -1,4 +1,6 @@
 import 'package:cointiply_app/core/theme/presentation/providers/app_setting_providers.dart';
+import 'package:cointiply_app/core/theme/presentation/providers/app_settings_norifier.dart';
+import 'package:cointiply_app/features/localization/presentation/providers/localization_notifier_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,8 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:url_strategy/url_strategy.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cointiply_app/core/services/database_service.dart';
-import 'package:cointiply_app/core/localization/app_localizations.dart';
-import 'core/providers/locale_provider.dart';
+import 'package:cointiply_app/features/localization/data/helpers/app_localizations.dart';
 import 'core/providers/theme_provider.dart';
 import 'core/theme/app_theme.dart';
 import 'core/config/app_flavor.dart';
@@ -116,14 +117,28 @@ class _MyAppState extends ConsumerState<MyApp> {
   void initState() {
     super.initState();
     // Load app settings theme from server on app start
-    Future.microtask(() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(appSettingsThemeProvider.notifier).loadConfig();
     });
+
+    ref.listenManual<AppSettingsState>(
+      appSettingsThemeProvider,
+      (previous, next) {
+        final oldVersion = previous?.config?.languageVersion;
+        final newVersion = next.config?.languageVersion;
+
+        if (oldVersion != newVersion) {
+          ref.read(localizationNotifierProvider.notifier).init(
+                languageVersion: newVersion,
+              );
+        }
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final currentLocale = ref.watch(localeProvider);
+    final currentLocale = ref.watch(localizationNotifierProvider).currentLocale;
     final currentThemeMode = ref.watch(themeProvider);
     final themeNotifier = ref.read(themeProvider.notifier);
     final currentFlavor = ref.watch(flavorProvider);
@@ -204,8 +219,8 @@ class _MyAppState extends ConsumerState<MyApp> {
           Locale('en', 'US'), // English
           Locale('my', 'MM'), // Burmese
         ],
-        localizationsDelegates: const [
-          AppLocalizationsDelegate(),
+        localizationsDelegates: [
+          AppLocalizationsDelegate(ref),
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,

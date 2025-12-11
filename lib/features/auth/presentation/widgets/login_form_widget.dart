@@ -9,7 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/common/common_textfield.dart';
 import '../../../../core/common/common_text.dart';
 import '../../../../core/common/common_button.dart';
-import '../../../../core/localization/app_localizations.dart';
+import '../../../localization/data/helpers/app_localizations.dart';
 import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/config/app_constant.dart';
 import '../../../../core/providers/consolidated_auth_provider.dart';
@@ -155,7 +155,9 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
   void _handleLogin() async {
     if (_formKey.currentState!.validate()) {
       // Check Turnstile verification
-      final turnstileCanAttempt = ref.read(turnstileCanAttemptLoginProvider);
+      final turnstileCanAttempt =
+          ref.read(turnstileNotifierProvider(TurnstileActionEnum.login))
+              is TurnstileSuccess;
 
       if (!turnstileCanAttempt) {
         final localizations = AppLocalizations.of(context);
@@ -167,7 +169,11 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
       }
 
       // Get the Turnstile token
-      final turnstileToken = ref.read(turnstileTokenProvider);
+      final turnstileToken = turnstileCanAttempt
+          ? (ref.read(turnstileNotifierProvider(TurnstileActionEnum.login))
+                  as TurnstileSuccess)
+              .token
+          : null;
 
       if (turnstileToken == null) {
         final localizations = AppLocalizations.of(context);
