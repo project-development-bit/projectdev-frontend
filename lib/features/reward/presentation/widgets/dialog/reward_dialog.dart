@@ -4,7 +4,7 @@ import 'package:cointiply_app/features/reward/presentation/providers/reward_prov
 import 'package:cointiply_app/features/reward/presentation/providers/reward_state.dart';
 import 'package:cointiply_app/core/common/dialog_bg_widget.dart';
 import 'package:cointiply_app/features/reward/presentation/widgets/reward_xp_prograss_area.dart';
-import 'package:cointiply_app/features/reward/presentation/widgets/rewards/status_reward_widget.dart';
+import 'package:cointiply_app/features/reward/presentation/widgets/status_reward_widget.dart';
 import 'package:cointiply_app/features/reward/presentation/widgets/status_rewards_table.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
