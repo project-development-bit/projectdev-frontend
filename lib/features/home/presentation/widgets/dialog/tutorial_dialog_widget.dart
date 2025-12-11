@@ -1,6 +1,7 @@
 import 'package:cointiply_app/core/common/close_square_button.dart';
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
+import 'package:cointiply_app/core/providers/turnstile_provider.dart';
 import 'package:cointiply_app/core/theme/app_colors.dart';
 import 'package:cointiply_app/core/widgets/cloudflare_turnstille_widgte.dart';
 import 'package:cointiply_app/features/home/presentation/providers/tutorial_provider.dart';
@@ -164,7 +165,9 @@ class _FirstTimeTutorialDialogState extends State<FirstTimeTutorialDialog> {
               // ─── Captcha + Reward for Final Step ────────
               if (data['final'] == true) ...[
                 const SizedBox(height: 10),
-                const CloudflareTurnstileWidget(debugMode: false),
+                const CloudflareTurnstileWidget(
+                  action: TurnstileActionEnum.tutorial,
+                  debugMode: false),
                 const SizedBox(height: 24),
                 _buildRewardBox(context),
               ],

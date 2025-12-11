@@ -69,7 +69,7 @@ class CommonTableWidget extends StatelessWidget {
                             headers: columns.map((col) => col.header).toList()),
                         Divider(color: const Color(0xFF333333), height: 1),
                         Skeletonizer(
-                          enabled: isLoading,
+                          enabled: true,
                           child: newValues.isEmpty && !isLoading
                               ? _buildNoData(context, noDataText: noDataText)
                               : Column(

@@ -19,7 +19,7 @@ import 'change_email_dialog.dart';
 import 'change_name_dialog.dart';
 import 'change_password_dialog.dart';
 import 'change_your_country_dialog.dart';
-import 'change_your_language_dialog.dart';
+import '../../../../../localization/presentation/widgets/dialogs/change_your_language_dialog.dart';
 import 'delete_account_dialog.dart';
 import 'show_offer_token_dialog.dart';
 
@@ -139,21 +139,18 @@ class _ManageProfileDialogState extends ConsumerState<ManageProfileDialog> {
                 index: 0,
                 isSelected: selectedIndex == 0,
                 width: buttonWidth,
-                
               ),
               _tabBarMenuItem(
                 context.translate("manage_profile_tab_security"),
                 index: 1,
                 isSelected: selectedIndex == 1,
                 width: buttonWidth,
-                
               ),
               _tabBarMenuItem(
                 context.translate("manage_profile_tab_settings"),
                 index: 2,
                 isSelected: selectedIndex == 2,
                 width: buttonWidth,
-               
               ),
             ],
           );

@@ -1,5 +1,5 @@
 import 'package:cointiply_app/core/common/webview_wrapper.dart';
-import 'package:cointiply_app/core/localization/app_localizations.dart';
+import 'package:cointiply_app/features/localization/data/helpers/app_localizations.dart';
 import 'package:cointiply_app/features/chat/presentation/provider/right_chat_overlay_provider.dart';
 import 'package:cointiply_app/core/common/widgets/custom_pointer_interceptor.dart';
 import 'package:flutter/material.dart';

@@ -78,7 +78,8 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
       String? turnstileToken;
 
       debugPrint('🔐 Checking Turnstile verification...');
-      final turnstileState = _ref.read(turnstileNotifierProvider);
+      final turnstileState =
+          _ref.read(turnstileNotifierProvider(TurnstileActionEnum.register));
 
       if (turnstileState is TurnstileSuccess) {
         turnstileToken = turnstileState.token;
