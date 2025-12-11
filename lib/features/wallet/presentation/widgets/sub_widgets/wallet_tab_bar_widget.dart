@@ -33,7 +33,7 @@ class WalletTabBarWidget extends ConsumerWidget {
                     : context.translate("withdrawal_earning"),
                 // index: 0,
                 isActive: selectedIndex == 0,
-                width: 245,
+                width: isMobile ? 132 : 245,
                 fontSize: 16,
                 onTap: () =>
                     ref.read(walletTabBarIndexProvider.notifier).state = 0,
@@ -43,7 +43,7 @@ class WalletTabBarWidget extends ConsumerWidget {
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 title: context.translate("balances"),
                 isActive: selectedIndex == 1,
-                width: 245,
+                width: isMobile ? 132 : 245,
                 fontSize: 16,
                 onTap: () =>
                     ref.read(walletTabBarIndexProvider.notifier).state = 1,
