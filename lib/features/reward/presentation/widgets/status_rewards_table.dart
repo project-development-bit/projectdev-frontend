@@ -51,7 +51,7 @@ class StatusRewardsTableSliver extends StatelessWidget {
             return StatusRewardRow(
               row: StatusRewardRowModel(
                 tier: subLevel.label,
-                bronzeLabel: "${subLevel.label} ${subLevel.minLevel}",
+                bronzeLabel: subLevel.label,
                 levelRequired: "${subLevel.minLevel}+",
                 dailySpin: "${subLevel.dailySpinFree}",
                 treasureChest: "${subLevel.weeklyChestFree}",
@@ -77,7 +77,7 @@ class StatusRewardsTableSliver extends StatelessWidget {
           (subLevel) => StatusRewardRow(
             row: StatusRewardRowModel(
               tier: subLevel.label,
-              bronzeLabel: "${subLevel.label} ${subLevel.minLevel}",
+              bronzeLabel: subLevel.label,
               levelRequired: "${subLevel.minLevel}+",
               dailySpin: "${subLevel.dailySpinFree}",
               treasureChest: "${subLevel.weeklyChestFree}",
