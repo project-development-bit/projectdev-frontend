@@ -72,11 +72,11 @@ class _ManageProfileDialogState extends ConsumerState<ManageProfileDialog> {
   double _getDialogHeight(BuildContext context) {
     final tabIndex = ref.watch(profileTabBarIndexProvider);
     if (tabIndex == 0) {
-      return context.isMobile ? context.screenHeight * 0.9 : 600;
+      return context.screenWidth <= 430 ? context.screenHeight * 0.9 : 600;
     } else if (tabIndex == 1) {
-      return context.isMobile ? context.screenHeight * 0.9 : 550;
+      return context.screenWidth <= 430 ? context.screenHeight * 0.9 : 550;
     } else {
-      return context.isMobile ? context.screenHeight * 0.9 : 720;
+      return context.screenWidth <= 430 ? context.screenHeight * 0.9 : 720;
     }
   }
 

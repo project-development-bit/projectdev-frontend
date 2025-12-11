@@ -85,7 +85,7 @@ class ProfileMenu extends StatelessWidget {
           ),
 
           _MenuItem(
-            title: context.translate("referrals"),
+            title: context.translate("affiliate_program_title"),
             onTap: () {
               closeMenu();
               showAffiliateProgramDialog(context);
