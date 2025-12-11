@@ -1,4 +1,5 @@
 import 'package:cointiply_app/core/core.dart';
+import 'package:cointiply_app/features/user_profile/data/enum/user_level.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -21,7 +22,7 @@ class UserProfileImageWidget extends ConsumerWidget {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: Border.all(
-          color: borderColor ?? Color(0xFF00A0DC), // TODO use from colorScheme
+          color: currentUser?.currentStatus.color ?? UserLevel.bronze.color,
           width: 2,
         ),
       ),

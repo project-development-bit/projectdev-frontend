@@ -1,3 +1,4 @@
+import 'package:cointiply_app/features/user_profile/data/enum/user_level.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:dartz/dartz.dart';
@@ -43,6 +44,7 @@ void main() {
       riskScore: 0,
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
+      currentStatus: UserLevel.bronze,
     );
 
     final testTokens = AuthTokens(
