@@ -17,6 +17,7 @@ class WithdrawalEarningMethodsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isMobile = context.isMobile;
+    final isTablet = context.isTablet;
 
     return Container(
       padding: EdgeInsets.symmetric(
@@ -40,7 +41,11 @@ class WithdrawalEarningMethodsWidget extends StatelessWidget {
                 crossAxisCount: isMobile ? 2 : 2,
                 mainAxisSpacing: isMobile ? 11 : 20,
                 crossAxisSpacing: isMobile ? 15 : 20,
-                childAspectRatio: isMobile ? 0.75 : 2.3,
+                childAspectRatio: isMobile
+                    ? 0.75
+                    : isTablet
+                        ? 1.9
+                        : 2.3,
               ),
               itemBuilder: (_, index) {
                 final item = methods[index];

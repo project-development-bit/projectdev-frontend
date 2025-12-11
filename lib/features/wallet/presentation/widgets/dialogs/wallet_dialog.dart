@@ -57,9 +57,10 @@ class _ProfileDialogState extends ConsumerState<WalletDialog> {
       padding: EdgeInsets.zero,
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.symmetric(
-              horizontal: context.isMobile ? 11 : 31,
-              vertical: context.isMobile ? 21 : 16),
+          padding: EdgeInsets.only(
+              left: context.isMobile ? 11 : 31,
+              right: context.isMobile ? 11 : 31,
+              bottom: context.isMobile ? 21 : 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
