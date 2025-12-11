@@ -1,15 +1,15 @@
+import 'package:cointiply_app/features/localization/presentation/providers/localization_notifier_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../providers/locale_provider.dart';
-import '../providers/translation_provider.dart';
+import '../../features/localization/presentation/providers/translation_provider.dart';
 
 class LocaleTestWidget extends ConsumerWidget {
   const LocaleTestWidget({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentLocale = ref.watch(localeProvider);
-    final localeNotifier = ref.read(localeProvider.notifier);
+    final currentLocale = ref.watch(localizationNotifierProvider).currentLocale;
+    final localeNotifier = ref.read(localizationNotifierProvider.notifier);
     final translate = ref.watch(translationProvider);
 
     return Card(
@@ -38,7 +38,7 @@ class LocaleTestWidget extends ConsumerWidget {
                 ElevatedButton(
                   onPressed: () async {
                     debugPrint('Button pressed: Switching to English');
-                    await localeNotifier.setLocale(const Locale('en', 'US'));
+                    await localeNotifier.changeLocale(const Locale('en', 'US'));
                     debugPrint('Button pressed: English switch completed');
                   },
                   child: const Text('English'),
@@ -47,7 +47,7 @@ class LocaleTestWidget extends ConsumerWidget {
                 ElevatedButton(
                   onPressed: () async {
                     debugPrint('Button pressed: Switching to Myanmar');
-                    await localeNotifier.setLocale(const Locale('my', 'MM'));
+                    await localeNotifier.changeLocale(const Locale('my', 'MM'));
                     debugPrint('Button pressed: Myanmar switch completed');
                   },
                   child: const Text('Myanmar'),
