@@ -23,7 +23,7 @@ class _ProfileDialogState extends ConsumerState<WalletDialog> {
 
   double _getDialogHeight(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
-    if (context.isTablet) return height * 0.9;
+    if (context.isTablet) return height * 0.8;
     return 680;
   }
 
@@ -43,7 +43,7 @@ class _ProfileDialogState extends ConsumerState<WalletDialog> {
     if (context.isTablet) {
       return MediaQuery.of(context).size.width * 0.8;
     }
-    return 820;
+    return 630;
   }
 
   @override
@@ -57,8 +57,7 @@ class _ProfileDialogState extends ConsumerState<WalletDialog> {
       padding: EdgeInsets.zero,
       body: SingleChildScrollView(
         child: Padding(
-          padding:
-              EdgeInsets.symmetric(horizontal: context.isMobile ? 9.5 : 31),
+          padding: EdgeInsets.symmetric(horizontal: context.isMobile ? 9.5 : 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,

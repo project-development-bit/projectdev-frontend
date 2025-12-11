@@ -20,7 +20,7 @@ class WalletTabBarWidget extends ConsumerWidget {
           const double spacing = 4;
 
           return Wrap(
-            alignment: WrapAlignment.start,
+            alignment: isMobile ? WrapAlignment.start : WrapAlignment.center,
             runAlignment: WrapAlignment.center,
             spacing: spacing,
             runSpacing: 12.0,
@@ -33,7 +33,7 @@ class WalletTabBarWidget extends ConsumerWidget {
                     : context.translate("withdrawal_earning"),
                 // index: 0,
                 isActive: selectedIndex == 0,
-                width: isMobile ? 132 : 245,
+                width: isMobile ? 132 : 209,
                 fontSize: 16,
                 onTap: () =>
                     ref.read(walletTabBarIndexProvider.notifier).state = 0,
@@ -43,7 +43,7 @@ class WalletTabBarWidget extends ConsumerWidget {
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 title: context.translate("balances"),
                 isActive: selectedIndex == 1,
-                width: isMobile ? 132 : 245,
+                width: isMobile ? 132 : 161,
                 fontSize: 16,
                 onTap: () =>
                     ref.read(walletTabBarIndexProvider.notifier).state = 1,
@@ -52,7 +52,7 @@ class WalletTabBarWidget extends ConsumerWidget {
                 title: context.translate("payment_history"),
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 isActive: selectedIndex == 2,
-                width: isMobile ? 185 : 245,
+                width: isMobile ? 185 : 209,
                 fontSize: 16,
                 isOutlined: true,
                 onTap: () =>
