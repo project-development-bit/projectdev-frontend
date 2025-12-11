@@ -141,6 +141,7 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
               // Cloudflare Turnstile Widget (replaces reCAPTCHA)
               const CloudflareTurnstileWidget(
                 debugMode: false,
+                action: TurnstileActionEnum.forgetPassword,
               ),
 
               const SizedBox(height: 32),

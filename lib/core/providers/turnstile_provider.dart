@@ -190,6 +190,7 @@ enum TurnstileActionEnum {
   resetPassword(name: 'resetPassword'),
   forgetPassword(name: 'forgetPassword'),
   contactUs(name: 'contact_us'),
+  tutorial(name: 'tutorial'),
   other(name: 'other');
 
   final String name;
