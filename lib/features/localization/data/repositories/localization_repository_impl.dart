@@ -45,7 +45,10 @@ class LocalizationRepositoryImpl implements LocalizationRepository {
       // 3️⃣ Cache it
       await local.cacheLocalization(locale ?? languageCode, model);
       await local.setLocalizationVersion(
-          languageCode, request.languageVersion ?? '');
+          languageCode,
+          (request.languageVersion?.isEmpty ?? false)
+              ? localVersion
+              : request.languageVersion ?? '');
 
       return Right(model);
     } on DioException catch (e) {
