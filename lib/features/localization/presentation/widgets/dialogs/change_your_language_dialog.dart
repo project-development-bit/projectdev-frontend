@@ -73,14 +73,11 @@ class _ChangeLanguageDialogState extends ConsumerState<ChangeLanguageDialog> {
           context.showSuccessSnackBar(
             message: context.translate("language_changed_successfully"),
           );
-
-          // Refresh profile if needed
-
+          ref
+              .read(getProfileNotifierProvider.notifier)
+              .fetchProfile(isLoading: false);
           // Close dialog on success
           if (mounted) {
-            ref
-                .read(getProfileNotifierProvider.notifier)
-                .fetchProfile(isLoading: false);
             context.pop();
           }
         } else if (next.hasError) {
