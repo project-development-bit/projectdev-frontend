@@ -1,4 +1,4 @@
-import 'package:cointiply_app/core/localization/app_localizations.dart';
+import 'package:cointiply_app/features/localization/data/helpers/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 enum UserLevel {
@@ -13,15 +13,15 @@ extension UserLevelColor on UserLevel {
   Color get color {
     switch (this) {
       case UserLevel.bronze:
-        return const Color(0xFFCD7F32); // Bronze
+        return const Color(0xFFEB681F); // Bronze
       case UserLevel.silver:
-        return const Color(0xFFC0C0C0); // Silver
+        return const Color(0xFFACB9BF); // Silver
       case UserLevel.gold:
-        return const Color(0xFFFFD700); // Gold
+        return const Color(0xFFF3A800); // Gold
       case UserLevel.diamond:
-        return const Color(0xFF4DD0E1); // Diamond
+        return const Color(0xFF00A0DC); // Diamond
       case UserLevel.legend:
-        return const Color(0xFFB71C1C); // Legendary
+        return const Color(0xFF860400); // Legendary
     }
   }
 }
