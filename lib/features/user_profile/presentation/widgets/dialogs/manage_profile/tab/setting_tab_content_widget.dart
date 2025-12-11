@@ -46,7 +46,9 @@ class _SettingTabContentWidgetState
   Widget build(BuildContext context) {
     final userId = (ref.watch(profileCurrentUserProvider)?.id ?? 0).toString();
     final settingsData = ref.watch(settingProfileProvider);
-    final language = settingsData.language;
+    final language =
+        ref.watch(getProfileNotifierProvider).profile?.settings.language ??
+            "En";
     final languageFlag = Language.empty().getDisplayFlag(language);
     final languageName = Language.empty().getDisplayName(language);
 
@@ -156,8 +158,7 @@ class _SettingTabContentWidgetState
               ),
             ],
           )
-        :
-     Row(
+        : Row(
             children: [
               SizedBox(
                 width: 130,
@@ -208,7 +209,7 @@ class _SettingTabContentWidgetState
                 ),
               ),
             ],
-    );
+          );
   }
 
   Widget _settingMenuItem(BuildContext context,

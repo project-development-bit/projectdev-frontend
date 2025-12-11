@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/common/common_text.dart';
 import '../../../../core/common/common_textfield.dart';
 import '../../../../core/theme/app_colors.dart';
-import '../../../../core/localization/app_localizations.dart';
+import '../../../localization/data/helpers/app_localizations.dart';
 import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/services/secure_storage_service.dart';
 import '../../../../core/config/flavor_manager.dart';

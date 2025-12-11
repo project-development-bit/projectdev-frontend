@@ -3,7 +3,7 @@ import 'package:cointiply_app/core/common/common_image_widget.dart';
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
 import 'package:cointiply_app/core/extensions/extensions.dart';
-import 'package:cointiply_app/core/localization/app_localizations.dart';
+import 'package:cointiply_app/features/localization/data/helpers/app_localizations.dart';
 import 'package:cointiply_app/core/theme/data/models/app_settings_model.dart';
 import 'package:cointiply_app/core/theme/presentation/providers/app_setting_providers.dart';
 import 'package:flutter/material.dart';

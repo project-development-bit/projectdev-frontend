@@ -1,4 +1,4 @@
-import 'package:cointiply_app/core/localization/app_localizations.dart';
+import 'package:cointiply_app/features/localization/data/helpers/app_localizations.dart';
 import 'package:cointiply_app/core/providers/turnstile_provider.dart';
 import 'package:cointiply_app/core/theme/app_colors.dart';
 import 'package:cointiply_app/core/widgets/cloudflare_turnstille_widgte.dart';

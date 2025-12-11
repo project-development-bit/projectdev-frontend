@@ -1,23 +1,24 @@
+import 'package:cointiply_app/features/localization/presentation/providers/get_localization_notifier.dart';
+import 'package:cointiply_app/features/localization/presentation/providers/localization_notifier_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../providers/locale_provider.dart';
 
 class LocaleSwitchWidget extends ConsumerWidget {
   const LocaleSwitchWidget({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentLocale = ref.watch(localeProvider);
-    final localeNotifier = ref.read(localeProvider.notifier);
+    final currentLocale = ref.watch(localizationNotifierProvider).currentLocale;
+    final localeNotifier = ref.read(localizationNotifierProvider.notifier);
     final theme = Theme.of(context);
 
     return PopupMenuButton<Locale>(
       onSelected: (Locale locale) async {
         debugPrint(
             'Locale selected: ${locale.languageCode}-${locale.countryCode}');
-        await localeNotifier.setLocale(locale);
+        await localeNotifier.changeLocale(locale);
         debugPrint(
-            'Current locale after change: ${ref.read(localeProvider).languageCode}');
+            'Current locale after change: ${ref.read(localizationNotifierProvider).currentLocale.languageCode}');
       },
       tooltip: 'Select Language',
       icon: Container(
@@ -32,12 +33,12 @@ class LocaleSwitchWidget extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              localeNotifier.getLocaleFlag(currentLocale),
+              localeNotifier.getFlag(currentLocale),
               style: const TextStyle(fontSize: 16),
             ),
             const SizedBox(width: 8),
             Text(
-              localeNotifier.getLocaleDisplayName(currentLocale),
+              localeNotifier.getLocaleName(currentLocale),
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: theme.colorScheme.onSurface,
                 fontWeight: FontWeight.w500,
@@ -53,7 +54,7 @@ class LocaleSwitchWidget extends ConsumerWidget {
         ),
       ),
       itemBuilder: (BuildContext context) {
-        return LocaleNotifier.supportedLocales.map((Locale locale) {
+        return LocalizationController.supportedLocales.map((Locale locale) {
           final isSelected = locale.languageCode == currentLocale.languageCode;
 
           return PopupMenuItem<Locale>(
@@ -69,13 +70,13 @@ class LocaleSwitchWidget extends ConsumerWidget {
               child: Row(
                 children: [
                   Text(
-                    localeNotifier.getLocaleFlag(locale),
+                    localeNotifier.getFlag(locale),
                     style: const TextStyle(fontSize: 18),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
-                      localeNotifier.getLocaleDisplayName(locale),
+                      localeNotifier.getLocaleName(locale),
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: isSelected
                             ? theme.colorScheme.primary
@@ -107,8 +108,8 @@ class LocaleToggleButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentLocale = ref.watch(localeProvider);
-    final localeNotifier = ref.read(localeProvider.notifier);
+    final currentLocale = ref.watch(localizationNotifierProvider).currentLocale;
+    final localeNotifier = ref.read(localizationNotifierProvider.notifier);
     final theme = Theme.of(context);
 
     return IconButton(
@@ -124,7 +125,7 @@ class LocaleToggleButton extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              localeNotifier.getLocaleFlag(currentLocale),
+              localeNotifier.getFlag(currentLocale),
               style: const TextStyle(fontSize: 16),
             ),
             const SizedBox(width: 4),
@@ -148,8 +149,8 @@ class CompactLocaleSwitcher extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentLocale = ref.watch(localeProvider);
-    final localeNotifier = ref.read(localeProvider.notifier);
+    final currentLocale = ref.watch(localizationNotifierProvider).currentLocale;
+    final localeNotifier = ref.read(localizationNotifierProvider.notifier);
     final theme = Theme.of(context);
 
     return GestureDetector(
@@ -158,7 +159,7 @@ class CompactLocaleSwitcher extends ConsumerWidget {
             'CompactLocaleSwitcher tapped - current: ${currentLocale.languageCode}');
         await localeNotifier.toggleLocale();
         debugPrint(
-            'After toggle - new locale: ${ref.read(localeProvider).languageCode}');
+            'After toggle - new locale: ${ref.read(localizationNotifierProvider).currentLocale.languageCode}');
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -171,7 +172,7 @@ class CompactLocaleSwitcher extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              localeNotifier.getLocaleFlag(currentLocale),
+              localeNotifier.getFlag(currentLocale),
               style: const TextStyle(fontSize: 14),
             ),
             const SizedBox(width: 4),
