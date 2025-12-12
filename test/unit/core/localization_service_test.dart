@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:cointiply_app/core/localization/localization_service.dart';
+import 'package:cointiply_app/features/localization/data/services/localization_service.dart';
 
 void main() {
   group('LocalizationService Tests', () {

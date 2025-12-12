@@ -1,4 +1,4 @@
-import 'package:cointiply_app/core/localization/app_localizations.dart';
+import 'package:cointiply_app/features/localization/data/helpers/app_localizations.dart';
 import 'package:cointiply_app/routing/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

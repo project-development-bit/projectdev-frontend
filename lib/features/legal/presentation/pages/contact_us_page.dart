@@ -1,4 +1,4 @@
-import 'package:cointiply_app/core/localization/app_localizations.dart';
+import 'package:cointiply_app/features/localization/data/helpers/app_localizations.dart';
 import 'package:cointiply_app/core/providers/turnstile_provider.dart';
 import 'package:cointiply_app/core/theme/app_colors.dart';
 import 'package:cointiply_app/core/widgets/cloudflare_turnstille_widgte.dart';
@@ -278,7 +278,7 @@ class _ContactUsPageState extends ConsumerState<ContactUsPage> {
 
                     // Cloudflare Turnstile Security Widget
                     const CloudflareTurnstileWidget(
-                      action: 'contact_us',
+                      action: TurnstileActionEnum.contactUs,
                     ),
 
                     const SizedBox(height: 24),
@@ -370,7 +370,9 @@ class _ContactUsPageState extends ConsumerState<ContactUsPage> {
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
       // Check Turnstile verification
-      final turnstileCanAttempt = ref.read(turnstileCanAttemptLoginProvider);
+      final turnstileCanAttempt =
+          ref.read(turnstileNotifierProvider(TurnstileActionEnum.contactUs))
+              is TurnstileSuccess;
 
       if (!turnstileCanAttempt) {
         final localizations = AppLocalizations.of(context);
@@ -382,7 +384,11 @@ class _ContactUsPageState extends ConsumerState<ContactUsPage> {
       }
 
       // Get the Turnstile token
-      final turnstileToken = ref.read(turnstileTokenProvider);
+      final turnstileToken = turnstileCanAttempt
+          ? (ref.read(turnstileNotifierProvider(TurnstileActionEnum.contactUs))
+                  as TurnstileSuccess)
+              .token
+          : null;
       final submission = ContactUsRequest(
           name: _nameController.text.trim(),
           email: _emailController.text.trim(),

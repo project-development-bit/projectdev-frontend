@@ -69,7 +69,6 @@ class ProfileTabContent extends ConsumerWidget {
           },
           isMobile: isMobile,
         ),
-
         SizedBox(height: 25),
         _profileTabContentItem(
           title: context.translate("email"),
@@ -90,7 +89,6 @@ class ProfileTabContent extends ConsumerWidget {
           },
           isMobile: isMobile,
         ),
-
         SizedBox(height: 25),
         _profileTabContentItem(
           title: context.translate("country"),
@@ -122,7 +120,6 @@ class ProfileTabContent extends ConsumerWidget {
           },
           isMobile: isMobile,
         ),
-
         SizedBox(height: 25),
         _profileTabContentItem(
           title: context.translate("offer_token"),
@@ -156,9 +153,9 @@ class ProfileTabContent extends ConsumerWidget {
               Expanded(
                   flex: 2,
                   child: CommonText.titleMedium(
-                "",
-                fontWeight: FontWeight.w700,
-              )),
+                    "",
+                    fontWeight: FontWeight.w700,
+                  )),
             Expanded(
               flex: 5,
               child: CommonText.bodyMedium(
@@ -219,10 +216,10 @@ class ProfileTabContent extends ConsumerWidget {
               Expanded(
                   flex: 2,
                   child: CommonText.bodyLarge(
-                title,
-                fontWeight: FontWeight.w700,
-                color: Colors.white,
-              )),
+                    title,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white,
+                  )),
               Expanded(
                 flex: 2,
                 child: Align(alignment: Alignment.centerLeft, child: child),

@@ -50,7 +50,7 @@ class _ChangeNameDialogState extends ConsumerState<ChangeNameDialog> {
           ref
               .read(currentUserProvider.notifier)
               .getCurrentUser(); // refresh current user
-      
+
           if (mounted) {
             context.pop(); // close dialog
           }

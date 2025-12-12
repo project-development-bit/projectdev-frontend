@@ -5,7 +5,7 @@ import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs
 import 'package:cointiply_app/main_common.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../localization/app_localizations.dart';
+import '../../features/localization/data/helpers/app_localizations.dart';
 import '../../routing/app_router.dart';
 import '../../features/auth/presentation/widgets/two_factor_auth_dialog.dart';
 
@@ -191,8 +191,6 @@ extension NavigationExtension on BuildContext {
   void goToHome() => GoRouter.of(this).go(AppRoutes.home);
   void goToLogin() => GoRouter.of(this).go(AppRoutes.login);
   void goToSignUp() => GoRouter.of(this).go(AppRoutes.signUp);
-  void goToProfile() => GoRouter.of(this).go(AppRoutes.profile);
-  void goToSettings() => GoRouter.of(this).go(AppRoutes.settings);
   void goToOffers() => GoRouter.of(this).go(AppRoutes.offers);
   void goToDashboard() => GoRouter.of(this).go(AppRoutes.dashboard);
   void goToForgotPassword() => GoRouter.of(this).go(AppRoutes.forgotPassword);
@@ -204,10 +202,6 @@ extension NavigationExtension on BuildContext {
       GoRouter.of(this).push<T>(AppRoutes.login);
   Future<T?> pushToSignUp<T extends Object?>() =>
       GoRouter.of(this).push<T>(AppRoutes.signUp);
-  Future<T?> pushToProfile<T extends Object?>() =>
-      GoRouter.of(this).push<T>(AppRoutes.profile);
-  Future<T?> pushToSettings<T extends Object?>() =>
-      GoRouter.of(this).push<T>(AppRoutes.settings);
   Future<T?> pushToOffers<T extends Object?>() =>
       GoRouter.of(this).push<T>(AppRoutes.offers);
   Future<T?> pushToDashboard<T extends Object?>() =>
@@ -354,8 +348,8 @@ extension NavigationExtension on BuildContext {
 extension DialogExtension on BuildContext {
   /// showManagePopup
 
-  Future<T> showManagePopup<T>(
-      {required Widget child,
+  Future<T> showManagePopup<T>({
+    required Widget child,
     bool barrierDismissible = true,
   }) {
     final barrierColor = colorScheme.scrim.withValues(alpha: 0.6);
