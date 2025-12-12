@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/extensions/double_extensions.dart';
 import 'package:cointiply_app/features/user_profile/data/enum/user_level.dart';
 import 'package:equatable/equatable.dart';
 import '../../../../core/enum/user_role.dart';
@@ -28,6 +29,9 @@ class User extends Equatable {
     required this.createdAt,
     required this.updatedAt,
     required this.currentStatus,
+    required this.countryID,
+    required this.countryName,
+    required this.coinBalance,
   });
 
   /// Unique user identifier
@@ -90,7 +94,16 @@ class User extends Equatable {
   /// Last update timestamp
   final DateTime updatedAt;
 
+  /// Current user level
   final UserLevel currentStatus;
+
+  /// Country ID
+  final int countryID;
+
+  /// Country Name
+  final String countryName;
+
+  final double coinBalance;
 
   /// Helper getter to check if user is banned
   bool get isUserBanned => isBanned == 1;
@@ -119,6 +132,8 @@ class User extends Equatable {
   /// Helper getter to check if user is anonymous in contests
   bool get isAnonymousInContests => anonymousInContests == 1;
 
+  String get formatedCoinBalance => coinBalance.currencyFormat();
+
   /// Create a copy of this User with updated values
   User copyWith({
     int? id,
@@ -142,6 +157,9 @@ class User extends Equatable {
     DateTime? createdAt,
     DateTime? updatedAt,
     UserLevel? currentStatus,
+    int? countryID,
+    String? countryName,
+    double? coinBalance,
   }) {
     return User(
       id: id ?? this.id,
@@ -165,6 +183,9 @@ class User extends Equatable {
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       currentStatus: currentStatus ?? this.currentStatus,
+      countryID: countryID ?? this.countryID,
+      countryName: countryName ?? this.countryName,
+      coinBalance: coinBalance ?? this.coinBalance,
     );
   }
 
@@ -190,6 +211,10 @@ class User extends Equatable {
         anonymousInContests,
         createdAt,
         updatedAt,
+        currentStatus,
+        countryID,
+        countryName,
+        coinBalance,
       ];
 
   @override

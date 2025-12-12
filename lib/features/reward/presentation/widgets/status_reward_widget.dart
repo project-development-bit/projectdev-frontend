@@ -156,7 +156,7 @@ class StatusRewardItem extends StatelessWidget {
             Image.asset(userLevel.asset, width: 40, height: 40),
             const SizedBox(height: 6),
             CommonText.titleMedium(
-              userLevel.lable(localizations, tier.label),
+              userLevel.labelByTier(localizations, tier.label),
               fontSize: isMobile ? 14 : 16,
               color: colorScheme.onPrimary,
               fontWeight: FontWeight.w700,

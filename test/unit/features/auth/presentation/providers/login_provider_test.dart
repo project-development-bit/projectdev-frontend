@@ -45,6 +45,9 @@ void main() {
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
       currentStatus: UserLevel.bronze,
+      countryID: 1,
+      countryName: 'Thailand',
+      coinBalance: 50.0,
     );
 
     final testTokens = AuthTokens(
