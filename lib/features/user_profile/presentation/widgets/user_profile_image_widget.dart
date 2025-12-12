@@ -13,6 +13,7 @@ class UserProfileImageWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final colorScheme = Theme.of(context).colorScheme;
     final currentUser = ref.watch(currentUserProvider).user;
+    final isLoading = ref.watch(currentUserProvider).isLoading;
     final avatarUrl = currentUser?.avatarUrl;
     final userName = currentUser?.name ?? 'U';
 
@@ -22,7 +23,9 @@ class UserProfileImageWidget extends ConsumerWidget {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: Border.all(
-          color: currentUser?.currentStatus.color ?? UserLevel.bronze.color,
+          color: isLoading
+              ? Colors.transparent
+              : currentUser?.currentStatus.color ?? UserLevel.bronze.color,
           width: 2,
         ),
       ),
