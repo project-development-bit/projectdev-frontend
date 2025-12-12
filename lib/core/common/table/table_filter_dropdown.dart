@@ -33,10 +33,20 @@ class _TableFilterDropdownState extends State<TableFilterDropdown> {
       _overlayEntry = _createOverlayEntry();
       Overlay.of(context).insert(_overlayEntry!);
     } else {
-      _overlayEntry?.remove();
-      _overlayEntry = null;
-      _hoverIndex = -1;
+      _closeOverlay();
     }
+  }
+
+  void _closeOverlay() {
+    _overlayEntry?.remove();
+    _overlayEntry = null;
+    _hoverIndex = -1;
+  }
+
+  @override
+  void dispose() {
+    _closeOverlay();
+    super.dispose();
   }
 
   OverlayEntry _createOverlayEntry() {
