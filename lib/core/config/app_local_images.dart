@@ -3,7 +3,7 @@ class AppLocalImages {
   static const String onboardingBgMobile =
       "assets/images/bg/onboarding_bg_mobile@2x.png";
   static const String onboardingBgDesktop =
-      "assets/images/bg/on_boarding_bg@2x.jpg";
+      "assets/images/bg/on_boarding_cartoon@2x.jpg";
 
   static const String onboardingCoinDesktop =
       "assets/images/bg/on_boarding_coin@2x.png";

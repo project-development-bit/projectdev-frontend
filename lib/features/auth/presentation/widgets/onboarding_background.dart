@@ -47,15 +47,6 @@ class OnboardingBackground extends StatelessWidget {
               fit: BoxFit.cover,
             ),
           ),
-          Positioned.fill(
-            child: CommonImage(
-              imageUrl: backgroundImagePath ??
-                  (isMobile
-                      ? AppLocalImages.onboardingCoinSection1Mobile
-                      : AppLocalImages.onboardingCoinDesktop),
-              fit: BoxFit.cover,
-            ),
-          ),
           SingleChildScrollView(
             child: ConstrainedBox(
               constraints: BoxConstraints(
