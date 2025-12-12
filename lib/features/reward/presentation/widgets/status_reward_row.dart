@@ -48,7 +48,7 @@ class StatusRewardRow extends StatelessWidget {
           const SizedBox(width: 12),
           Expanded(
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14),
+              // padding: const EdgeInsets.symmetric(horizontal: 14),
               height: 70,
               alignment: Alignment.center,
               decoration: BoxDecoration(
@@ -83,8 +83,7 @@ class StatusRewardRow extends StatelessWidget {
                       child: CommonText.bodyMedium(
                         dailySpinText,
                         fontWeight: FontWeight.w700,
-                        color: const Color(
-                            0xFF98989A), //TODO: use from color scheme
+                        color: colorScheme.onSurfaceVariant,
                         highlightColor: colorScheme.onPrimary,
                       ),
                     ),
@@ -97,8 +96,7 @@ class StatusRewardRow extends StatelessWidget {
                       child: CommonText.bodyMedium(
                         treasureChestText,
                         fontWeight: FontWeight.w700,
-                        color: const Color(
-                            0xFF98989A), //TODO: use from color scheme
+                        color: colorScheme.onSurfaceVariant,
                         highlightColor: colorScheme.onPrimary,
                       ),
                     ),
@@ -111,8 +109,7 @@ class StatusRewardRow extends StatelessWidget {
                       child: CommonText.titleMedium(
                         row.offerBoost,
                         fontWeight: FontWeight.w700,
-                        color: const Color(
-                            0xFF98989A), //TODO: use from color scheme                        fontWeight: FontWeight.w600,
+                        color: colorScheme.onSurfaceVariant,
                       ),
                     ),
                   ),
@@ -124,8 +121,7 @@ class StatusRewardRow extends StatelessWidget {
                       child: CommonText.titleMedium(
                         row.ptcDiscount,
                         fontWeight: FontWeight.w700,
-                        color: const Color(
-                            0xFF98989A), //TODO: use from color scheme                        fontWeight: FontWeight.w600,
+                        color: colorScheme.onSurfaceVariant,
                       ),
                     ),
                   ),

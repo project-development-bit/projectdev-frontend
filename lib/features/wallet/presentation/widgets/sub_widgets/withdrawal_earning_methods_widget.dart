@@ -17,10 +17,14 @@ class WithdrawalEarningMethodsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isMobile = context.isMobile;
-
+    final screenWidth = context.screenWidth;
+    final isSmallMobile = screenWidth < 364;
     return Container(
-      padding: EdgeInsets.all(isMobile ? 16 : 22.5),
+      padding: EdgeInsets.symmetric(
+          horizontal: isMobile ? 11 : 22.5, vertical: isMobile ? 21 : 22.5),
       margin: const EdgeInsets.only(top: 16),
+      width: isSmallMobile ? double.infinity : null,
+      alignment: isSmallMobile ? Alignment.center : null,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         border: Border.all(width: 1.4, color: const Color(0xFF333333)),
@@ -31,24 +35,19 @@ class WithdrawalEarningMethodsWidget extends StatelessWidget {
       ),
       child: isLoading
           ? Center(child: CircularProgressIndicator())
-          : GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: methods.length,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: isMobile ? 2 : 2,
-                mainAxisSpacing: isMobile ? 11 : 20,
-                crossAxisSpacing: isMobile ? 15 : 20,
-                childAspectRatio: isMobile ? 0.75 : 1.6,
-              ),
-              itemBuilder: (_, index) {
-                final item = methods[index];
-
-                return WithdrawalCard(
-                  item: item,
-                  onTap: () => onSelect(item),
+          : Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: methods.map((item) {
+                return SizedBox(
+                  width: isMobile ? 135 : 260,
+                  height: isMobile ? 141 : 125,
+                  child: WithdrawalCard(
+                    item: item,
+                    onTap: () => onSelect(item),
+                  ),
                 );
-              },
+              }).toList(),
             ),
     );
   }
@@ -97,7 +96,7 @@ class _WithdrawalCardState extends State<WithdrawalCard> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CommonText.titleMedium(
+                CommonText.titleSmall(
                   widget.item.name,
                   color: colorScheme.primary,
                   fontWeight: FontWeight.w700,
@@ -140,13 +139,12 @@ class _WithdrawalCardState extends State<WithdrawalCard> {
                         borderRadius: BorderRadius.circular(5),
                       ),
                       child: CommonText.bodySmall(
-                        translation
-                                ?.translate('withdraw_button_text')
-                                .replaceFirst("{coinName}", widget.item.name) ??
+                        translation?.translate('withdraw_button_text',
+                                args: []).replaceFirst("{coinName}", widget.item.name) ??
                             "Withdraw ${widget.item.name.toUpperCase()}",
                         color: const Color(
                             0xFF333333), // TODO: use Color From Scheme
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
                   ),

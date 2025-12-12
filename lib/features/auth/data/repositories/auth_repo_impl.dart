@@ -357,8 +357,21 @@ class AuthRepositoryImpl implements AuthRepository {
       final response = await remoteDataSource.disable2FA(request);
       return Right(response);
     } on DioException catch (e) {
+      // Handle the new error response format
+      String errorMessage = 'Failed to disable 2FA';
+
+      if (e.response?.data != null) {
+        final errorData = e.response!.data;
+        if (errorData is Map<String, dynamic>) {
+          // New error format: {"type": "error", "status": 401, "message": "...", "code": "..."}
+          errorMessage = errorData['message'] ?? errorMessage;
+        }
+      } else {
+        errorMessage = e.message ?? errorMessage;
+      }
+      
       return Left(ServerFailure(
-        message: e.message ?? 'Failed to disable 2FA',
+        message: errorMessage,
         statusCode: e.response?.statusCode,
       ));
     } catch (e) {

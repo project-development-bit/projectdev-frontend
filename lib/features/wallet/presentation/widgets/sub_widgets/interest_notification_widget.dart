@@ -14,7 +14,8 @@ class InterestNotificationWidget extends ConsumerWidget {
 
     return Container(
       padding: const EdgeInsets.all(16),
-      margin: const EdgeInsets.symmetric(vertical: 16),
+      margin: EdgeInsets.symmetric(
+          vertical: 16, horizontal: context.isMobile ? 0 : 31),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         border: Border.all(

@@ -6,7 +6,7 @@ import 'package:cointiply_app/features/auth/presentation/providers/logout_provid
 import 'package:cointiply_app/features/auth/presentation/widgets/logout_dialog_widget.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/dialog_scaffold_widget.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/profile_dialog.dart';
-import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/reward_dialog.dart';
+import 'package:cointiply_app/features/reward/presentation/widgets/dialog/reward_dialog.dart';
 import 'package:cointiply_app/features/wallet/presentation/widgets/dialogs/wallet_dialog.dart';
 import 'package:flutter/material.dart';
 
@@ -85,7 +85,7 @@ class ProfileMenu extends StatelessWidget {
           ),
 
           _MenuItem(
-            title: context.translate("referrals"),
+            title: context.translate("affiliate_program_title"),
             onTap: () {
               closeMenu();
               showAffiliateProgramDialog(context);
@@ -150,7 +150,12 @@ class ProfileMenu extends StatelessWidget {
       context: context,
       barrierDismissible: true,
       barrierColor: colorScheme.scrim.withValues(alpha: 0.6),
-      builder: (context) => DialogScaffoldWidget(child: const WalletDialog()),
+      builder: (context) => DialogScaffoldWidget(
+          padding: EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 20,
+          ),
+          child: const WalletDialog()),
     );
   }
 
