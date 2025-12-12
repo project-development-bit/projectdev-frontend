@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/common/common_loading_widget.dart';
 import 'package:cointiply_app/core/theme/presentation/providers/app_setting_providers.dart';
 import 'package:cointiply_app/core/theme/presentation/providers/app_settings_norifier.dart';
 import 'package:cointiply_app/features/localization/presentation/providers/localization_notifier_provider.dart';
@@ -154,48 +155,11 @@ class _MyAppState extends ConsumerState<MyApp> {
     // Show splash screen while theme is loading
     if (appSettingsThemeState.isLoading) {
       return MaterialApp(
+        color: Color(0xff1A1A1A),
         debugShowCheckedModeBanner: false,
         home: Scaffold(
           backgroundColor: Color(0xff1A1A1A),
-          body: Container(
-            decoration: BoxDecoration(),
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // App Logo/Icon
-                  Icon(
-                    Icons.restaurant_menu,
-                    size: 80,
-                    color: Colors.white,
-                  ),
-                  const SizedBox(height: 24),
-                  // App Name
-                  Text(
-                    FlavorManager.appName,
-                    style: const TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(height: 48),
-                  // Loading indicator
-                  const CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                  ),
-                  const SizedBox(height: 16),
-                  const Text(
-                    'Loading theme...',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white70,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          body: Center(child: CommonLoadingWidget.large()),
         ),
       );
     }

@@ -51,7 +51,7 @@ class ProfileTabContent extends ConsumerWidget {
           child: UserProfileImageWidget(size: 25),
           btnTitle: context.translate("change_your_avatar"),
           onPressed: () {
-            showUploadAvatarDialog(context);
+          showUploadAvatarDialog(context);
           },
           isMobile: isMobile,
         ),
