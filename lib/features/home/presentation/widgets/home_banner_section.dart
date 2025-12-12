@@ -170,6 +170,7 @@ class BannerSlide extends StatelessWidget {
       fit: StackFit.expand,
       children: [
         CommonImage(
+          // imageUrl: "assets/images/bg/Banner@2x.jpg",
           imageUrl: isMobile ? banner.imageMobile : banner.imageWeb,
           // imageUrl: isMobile
           //     ? 'assets/images/bg/banner_mobile@2x.png'
