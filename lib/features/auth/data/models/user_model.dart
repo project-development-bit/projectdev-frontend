@@ -31,6 +31,7 @@ class UserModel extends User {
     required super.currentStatus,
     required super.countryID,
     required super.countryName,
+    required super.coinBalance,
   });
 
   /// Create UserModel from JSON response
@@ -67,6 +68,14 @@ class UserModel extends User {
           UserLevel.bronze,
       countryID: _parseId(json['country_id']),
       countryName: json['country_name'] as String? ?? '',
+      coinBalance: json['coin_balance'] != null
+          ? (json['coin_balance'] is int)
+              ? (json['coin_balance'] as int).toDouble()
+              : (json['coin_balance'] is double)
+                  ? json['coin_balance'] as double
+                  : double.tryParse(json['coin_balance']?.toString() ?? '') ??
+                      0.0
+          : 0.0,
     );
   }
 
@@ -125,6 +134,10 @@ class UserModel extends User {
       'anonymous_in_contests': anonymousInContests,
       'created_at': createdAt.toIso8601String(),
       'updated_at': updatedAt.toIso8601String(),
+      'current_status': currentStatus.toStringValue,
+      'country_id': countryID,
+      'country_name': countryName,
+      'coin_balance': coinBalance,
     };
   }
 
@@ -154,6 +167,7 @@ class UserModel extends User {
       currentStatus: user.currentStatus,
       countryID: user.countryID,
       countryName: user.countryName,
+      coinBalance: user.coinBalance,
     );
   }
 
@@ -189,6 +203,14 @@ class UserModel extends User {
           UserLevel.bronze,
       countryID: json['country_id'] as int? ?? 0,
       countryName: json['country_name'] as String? ?? '',
+      coinBalance: json['coin_balance'] != null
+          ? (json['coin_balance'] is int)
+              ? (json['coin_balance'] as int).toDouble()
+              : (json['coin_balance'] is double)
+                  ? json['coin_balance'] as double
+                  : double.tryParse(json['coin_balance']?.toString() ?? '') ??
+                      0.0
+          : 0.0,
     );
   }
 
@@ -218,6 +240,7 @@ class UserModel extends User {
       currentStatus: currentStatus,
       countryID: countryID,
       countryName: countryName,
+      coinBalance: coinBalance,
     );
   }
 
@@ -247,6 +270,7 @@ class UserModel extends User {
     UserLevel? currentStatus,
     int? countryID,
     String? countryName,
+    double? coinBalance,
   }) {
     return UserModel(
       id: id ?? this.id,
@@ -272,6 +296,7 @@ class UserModel extends User {
       currentStatus: currentStatus ?? this.currentStatus,
       countryID: countryID ?? this.countryID,
       countryName: countryName ?? this.countryName,
+      coinBalance: coinBalance ?? this.coinBalance,
     );
   }
 }

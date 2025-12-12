@@ -75,6 +75,21 @@ extension UserLevelLabel on UserLevel {
         return t?.translate("status_legend") ?? "Legend";
     }
   }
+
+  String get toStringValue {
+    switch (this) {
+      case UserLevel.bronze:
+        return 'bronze';
+      case UserLevel.silver:
+        return 'silver';
+      case UserLevel.gold:
+        return 'gold';
+      case UserLevel.diamond:
+        return 'diamond';
+      case UserLevel.legend:
+        return 'legend';
+    }
+  }
 }
 
 extension UserLevelParsing on String {
