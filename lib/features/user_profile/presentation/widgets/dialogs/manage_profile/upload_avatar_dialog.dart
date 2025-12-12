@@ -1,6 +1,4 @@
-
-
-
+import 'dart:developer' show log;
 import 'dart:typed_data';
 
 import 'package:cointiply_app/core/common/common_text.dart';
@@ -10,6 +8,8 @@ import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/get_profile_notifier.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/upload_profile_avatar_provider.dart';
+import 'package:cointiply_app/features/user_profile/presentation/providers/image_picker_provider.dart';
+import 'package:cointiply_app/features/user_profile/presentation/providers/image_cropper_provider.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/user_profile_image_widget.dart';
 import 'package:crop_your_image/crop_your_image.dart';
 import 'package:file_picker/file_picker.dart';
@@ -31,26 +31,45 @@ class UploadAvatarDialog extends ConsumerStatefulWidget {
 }
 
 class _UploadAvatarDialogState extends ConsumerState<UploadAvatarDialog> {
-
   final CropController _cropController = CropController();
-
-  bool isCroppingImage = false;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Listen to upload success
       ref.listenManual<UploadProfileAvatarState>(
         uploadProfileAvatarProvider,
         (previous, next) async {
           if (next.status == UploadProfileAvatarStatus.success) {
             context.showSuccessSnackBar(
                 message: "Avatar uploaded successfully");
+            ref.read(imageCropperProvider.notifier).reset();
 
             ref.read(currentUserProvider.notifier).getCurrentUser();
             ref
                 .read(getProfileNotifierProvider.notifier)
                 .fetchProfile(isLoading: false);
+          } else if (next.status == UploadProfileAvatarStatus.failure) {
+            context.showErrorSnackBar(
+                message: next.errorMessage ?? "Failed to upload avatar");
+          }
+        },
+      );
+
+      // Listen to image picker
+      ref.listenManual<ImagePickerState>(
+        imagePickerProvider,
+        (previous, next) {
+          if (next.status == ImagePickerStatus.picked &&
+              next.pickedFile != null) {
+            // Set image for cropping
+            ref
+                .read(imageCropperProvider.notifier)
+                .setImageForCropping(next.pickedFile!);
+          } else if (next.status == ImagePickerStatus.error) {
+            context.showErrorSnackBar(
+                message: next.errorMessage ?? "Failed to pick image");
           }
         },
       );
@@ -67,15 +86,14 @@ class _UploadAvatarDialogState extends ConsumerState<UploadAvatarDialog> {
             ? 400
             : 450;
 
-    final isLoading = ref.watch(uploadProfileAvatarProvider).isLoading;
+    final uploadState = ref.watch(uploadProfileAvatarProvider);
+    final pickerState = ref.watch(imagePickerProvider);
+    final cropperState = ref.watch(imageCropperProvider);
 
-    final isErrorState = ref.watch(uploadProfileAvatarProvider).status ==
-        UploadProfileAvatarStatus.failure;
-    final errorMessage = ref.watch(uploadProfileAvatarProvider).errorMessage;
+    final isUploading = uploadState.isUploading;
+    final isPicking = pickerState.isPicking;
 
-    /// iscropping
-    final isCropping = ref.watch(uploadProfileAvatarProvider).isCropping;
-    final image = ref.watch(uploadProfileAvatarProvider).image;
+    final hasImageToCrop = cropperState.originalImage != null;
 
     return DialogBgWidget(
       dialogHeight: dialogHeight,
@@ -85,9 +103,9 @@ class _UploadAvatarDialogState extends ConsumerState<UploadAvatarDialog> {
             ? const EdgeInsets.all(32)
             : const EdgeInsets.symmetric(horizontal: 10, vertical: 10)
                 .copyWith(top: 36),
-        child: isCropping
+        child: hasImageToCrop
             ? _cropWidget(
-                image,
+                cropperState.originalImage!,
                 ref,
                 context,
               )
@@ -102,15 +120,15 @@ class _UploadAvatarDialogState extends ConsumerState<UploadAvatarDialog> {
                     SizedBox(height: 32),
                     CustomUnderLineButtonWidget(
                       title: context.translate("upload_your_new_avatar"),
-                      onTap: () {
-                        isLoading
-                            ? null
-                            : ref
-                                .read(uploadProfileAvatarProvider.notifier)
-                                .pickAndCropImage();
-                      },
+                      onTap: (isUploading || isPicking)
+                          ? null
+                          : () {
+                              ref
+                                  .read(imagePickerProvider.notifier)
+                                  .pickImage();
+                            },
                       width: context.isDesktop ? 250 : double.infinity,
-                      isLoading: isLoading,
+                      isLoading: isPicking,
                       isDark: true,
                       backgroundColor: const Color(0xFF262626),
                       fontWeight: FontWeight.w700,
@@ -118,15 +136,24 @@ class _UploadAvatarDialogState extends ConsumerState<UploadAvatarDialog> {
                     ),
                     SizedBox(
                         height: context.isDesktop ? 42 : 24,
-                        child: isErrorState
+                        child: uploadState.isFailure
                             ? Center(
                                 child: CommonText.bodyMedium(
-                                  errorMessage ??
+                                  uploadState.errorMessage ??
                                       context.translate("something_went_wrong"),
                                   color: Colors.red,
                                 ),
                               )
-                            : null),
+                            : pickerState.status == ImagePickerStatus.error
+                                ? Center(
+                                    child: CommonText.bodyMedium(
+                                      pickerState.errorMessage ??
+                                          context.translate(
+                                              "something_went_wrong"),
+                                      color: Colors.red,
+                                    ),
+                                  )
+                                : null),
                     CommonText.bodyMedium(
                       context.translate("upload_new_avatar_desc"),
                     ),
@@ -137,7 +164,12 @@ class _UploadAvatarDialogState extends ConsumerState<UploadAvatarDialog> {
     );
   }
 
-  Widget _cropWidget(PlatformFile? image, WidgetRef ref, BuildContext context) {
+  Widget _cropWidget(PlatformFile image, WidgetRef ref, BuildContext context) {
+    final uploadState = ref.watch(uploadProfileAvatarProvider);
+    final isUploading = uploadState.isUploading;
+    final cropperState = ref.watch(imageCropperProvider);
+    final isCropping = cropperState.status == ImageCropperStatus.cropping;
+
     return Column(
       children: [
         Expanded(
@@ -145,36 +177,41 @@ class _UploadAvatarDialogState extends ConsumerState<UploadAvatarDialog> {
               filterQuality: FilterQuality.high,
               progressIndicator: CircularProgressIndicator(),
               baseColor: Colors.transparent,
-              image: image?.bytes ?? Uint8List(0),
+              image: image.bytes ?? Uint8List(0),
               maskColor: Colors.black.withAlpha(100),
               controller: _cropController,
               interactive: true,
               aspectRatio: 1,
-              
               onStatusChanged: (cropStatus) {
-                if (cropStatus == CropStatus.cropping) {
-                  setState(() {
-                    isCroppingImage = true;
-                  });
-                } else {
-                  setState(() {
-                    isCroppingImage = false;
-                  });
+                log(cropStatus.toString());
+                if (cropStatus == CropStatus.cropping ||
+                    cropStatus == CropStatus.loading) {
+                  ref.read(imageCropperProvider.notifier).startCropping();
                 }
               },
               onCropped: (croppedData) async {
                 if (croppedData is CropSuccess) {
-                  await compute((message) {
-                    ref.read(uploadProfileAvatarProvider.notifier).uploadAvatar(
-                          name: image?.name ??
-                              '${DateTime.now().toIso8601String()}.png',
-                          size: croppedData.croppedImage.length,
-                          bytes: croppedData.croppedImage,
-                        );
-                  }, "croppedData, image, ref);");
+                  // Store cropped image in cropper provider
+                  ref.read(imageCropperProvider.notifier).setCroppedImage(
+                        name: image.name,
+                        size: croppedData.croppedImage.length,
+                        bytes: croppedData.croppedImage,
+                      );
+
+                  // Upload the cropped image
+                  await ref
+                      .read(uploadProfileAvatarProvider.notifier)
+                      .uploadAvatar(
+                        name: image.name,
+                        size: croppedData.croppedImage.length,
+                        bytes: croppedData.croppedImage,
+                      );
                 }
                 if (croppedData is CropFailure) {
-                  ref.read(uploadProfileAvatarProvider.notifier).setErrorState(
+                  ref.read(imageCropperProvider.notifier).setError(
+                        "Failed to crop image. Please try again.",
+                      );
+                  ref.read(uploadProfileAvatarProvider.notifier).setError(
                         "Failed to crop image. Please try again.",
                       );
                 }
@@ -187,12 +224,12 @@ class _UploadAvatarDialogState extends ConsumerState<UploadAvatarDialog> {
             Expanded(
               child: CustomUnderLineButtonWidget(
                 title: context.translate("cancel"),
-                onTap: ref.watch(uploadProfileAvatarProvider).isLoading
+                onTap: (isUploading || isCropping)
                     ? null
                     : () {
-                        ref
-                            .read(uploadProfileAvatarProvider.notifier)
-                            .resetState();
+                        ref.read(imageCropperProvider.notifier).reset();
+                        ref.read(imagePickerProvider.notifier).reset();
+                        ref.read(uploadProfileAvatarProvider.notifier).reset();
                       },
                 isDark: true,
                 backgroundColor: const Color(0xFF262626),
@@ -203,12 +240,13 @@ class _UploadAvatarDialogState extends ConsumerState<UploadAvatarDialog> {
             Expanded(
               child: CustomUnderLineButtonWidget(
                 title: context.translate("crop_and_upload"),
-                onTap: isCroppingImage
-                    ? () {}
+                onTap: (isCropping || isUploading)
+                    ? null
                     : () {
+                        ref.read(imageCropperProvider.notifier).startCropping();
                         _cropController.crop();
                       },
-                isLoading: isCroppingImage,
+                isLoading: isCropping || isUploading,
                 fontWeight: FontWeight.w700,
                 fontSize: 14,
               ),
@@ -218,5 +256,4 @@ class _UploadAvatarDialogState extends ConsumerState<UploadAvatarDialog> {
       ],
     );
   }
-
 }
