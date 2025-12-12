@@ -12,15 +12,22 @@ class BalancesSection extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final localizations = AppLocalizations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final screenWidth = context.screenWidth;
     final isMobile = context.isMobile;
     final balanceState = ref.watch(getBalanceNotifierProvider);
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 31),
+      alignment: Alignment.center,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            width: double.infinity,
+            width: screenWidth < 500
+                ? double.infinity
+                : screenWidth < 740
+                    ? null
+                    : 565,
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
@@ -58,14 +65,15 @@ class BalancesSection extends ConsumerWidget {
                       ),
                       const SizedBox(height: 8),
                       _balanceItem(
-                          "${(balanceState.balance?.btcBalance ?? 0).currencyFormat()}",
+                          (balanceState.balance?.btcBalance ?? 0)
+                              .currencyFormat(),
                           localizations?.translate('btc_balance') ??
                               "BTC Balance",
                           colorScheme),
                     ],
                   )
-                : Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                : Wrap(
+                    alignment: WrapAlignment.spaceBetween,
                     children: [
                       _balanceItem(
                           (balanceState.balance?.coinBalance ?? 0)
@@ -99,61 +107,37 @@ class BalancesSection extends ConsumerWidget {
           ),
 
           const SizedBox(height: 20),
-
-          isMobile
-              ? Column(
-                  children: [
-                    _statItem(
-                        "${balanceState.balance?.interestEarned ?? 'N/A'}",
-                        "Interest Earned",
-                        "assets/images/rewards/coin.png",
-                        colorScheme,
-                        isMobile),
-                    const SizedBox(height: 12),
-                    _statItem(
-                        "${balanceState.balance?.coinsToday ?? 'N/A'} coins",
-                        "Coins Today",
-                        "assets/images/rewards/coin.png",
-                        colorScheme,
-                        isMobile),
-                    const SizedBox(height: 12),
-                    _statItem(
-                        "${balanceState.balance?.coinsLast7Days ?? 'N/A'} coins",
-                        "Coins (7 Days)",
-                        "assets/images/rewards/coin.png",
-                        colorScheme,
-                        isMobile),
-                  ],
-                )
-              : Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _statItem(
-                        balanceState.balance?.interestEarned != null
-                            ? "${balanceState.balance?.interestEarned}"
-                            : 'N/A',
-                        "Interest Earned",
-                        "assets/images/rewards/coin.png",
-                        colorScheme,
-                        isMobile),
-                    _statItem(
-                        balanceState.balance?.coinsToday != null
-                            ? "${balanceState.balance?.coinsToday} coins"
-                            : 'N/A',
-                        "Coins Today",
-                        "assets/images/rewards/coin.png",
-                        colorScheme,
-                        isMobile),
-                    _statItem(
-                        balanceState.balance?.coinsLast7Days != null
-                            ? "${balanceState.balance?.coinsLast7Days} coins"
-                            : 'N/A',
-                        "Coins (7 Days)",
-                        "assets/images/rewards/coin.png",
-                        colorScheme,
-                        isMobile),
-                  ],
-                ),
+          Wrap(
+            alignment: WrapAlignment.spaceEvenly,
+            runSpacing: 11,
+            spacing: 11,
+            children: [
+              _statItem(
+                  balanceState.balance?.interestEarned != null
+                      ? "${balanceState.balance?.interestEarned}"
+                      : 'N/A',
+                  "Interest Earned",
+                  "assets/images/rewards/coin.png",
+                  colorScheme,
+                  screenWidth),
+              _statItem(
+                  balanceState.balance?.coinsToday != null
+                      ? "${balanceState.balance?.coinsToday} coins"
+                      : 'N/A',
+                  "Coins Today",
+                  "assets/images/rewards/coin.png",
+                  colorScheme,
+                  screenWidth),
+              _statItem(
+                  balanceState.balance?.coinsLast7Days != null
+                      ? "${balanceState.balance?.coinsLast7Days} coins"
+                      : 'N/A',
+                  "Coins (7 Days)",
+                  "assets/images/rewards/coin.png",
+                  colorScheme,
+                  screenWidth),
+            ],
+          ),
 
           const SizedBox(height: 16),
 
@@ -173,7 +157,11 @@ class BalancesSection extends ConsumerWidget {
   }
 
   // Helper widget for balance items (Coins Balance, USB Balance, etc.)
-  Widget _balanceItem(String value, String label, ColorScheme colorScheme) {
+  Widget _balanceItem(
+    String value,
+    String label,
+    ColorScheme colorScheme,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -194,10 +182,13 @@ class BalancesSection extends ConsumerWidget {
 
   // Helper widget for the statistics (Interest Earned, Coins Today, etc.)
   Widget _statItem(String value, String label, String icon,
-      ColorScheme colorScheme, bool isMobile) {
+      ColorScheme colorScheme, double screenWidth) {
     return Container(
-      width: isMobile ? double.infinity : 181,
-      padding: const EdgeInsets.symmetric(vertical: 10),
+      width: screenWidth < 500 ? double.infinity : 181,
+      padding: EdgeInsets.only(
+        top: 10,
+        bottom: 10,
+      ),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
