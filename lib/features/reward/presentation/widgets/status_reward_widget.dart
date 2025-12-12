@@ -47,6 +47,7 @@ class StatusRewardsWidget extends StatelessWidget {
           CommonText.headlineSmall(
             t?.translate("status_rewards_title") ?? "Status Rewards",
             fontWeight: FontWeight.w700,
+            textAlign: isMobile ? TextAlign.center : TextAlign.start,
             color: colorScheme.primary,
           ),
 
@@ -87,10 +88,12 @@ class StatusRewardsWidget extends StatelessWidget {
             SizedBox(
               height: 120,
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: tiers.map((tier) {
                   final keyName = tier.label.toLowerCase();
+                  final isLast = tiers.indexOf(tier) == tiers.length - 1;
                   return Padding(
-                    padding: const EdgeInsets.only(right: 16),
+                    padding: EdgeInsets.only(right: isLast ? 0 : 16),
                     child: StatusRewardItem(
                       tier: tier,
                       isSelected: keyName == selectedTier.toLowerCase(),
