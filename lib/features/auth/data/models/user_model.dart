@@ -1,3 +1,5 @@
+import 'package:cointiply_app/features/user_profile/data/enum/user_level.dart';
+
 import '../../domain/entities/user.dart';
 import '../../../../core/enum/user_role.dart';
 
@@ -26,6 +28,7 @@ class UserModel extends User {
     required super.anonymousInContests,
     required super.createdAt,
     required super.updatedAt,
+    required super.currentStatus,
   });
 
   /// Create UserModel from JSON response
@@ -58,6 +61,8 @@ class UserModel extends User {
           ? DateTime.tryParse(json['updated_at'] as String? ?? '') ??
               DateTime.now()
           : DateTime.now(),
+      currentStatus: (json['current_status'] as String?)?.toUserLevel() ??
+          UserLevel.bronze,
     );
   }
 
@@ -142,6 +147,7 @@ class UserModel extends User {
       anonymousInContests: user.anonymousInContests,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
+      currentStatus: user.currentStatus,
     );
   }
 
@@ -173,6 +179,8 @@ class UserModel extends User {
       updatedAt: json['updated_at'] != null
           ? DateTime.parse(json['updated_at'] as String)
           : DateTime.now(),
+      currentStatus: (json['current_status'] as String?)?.toUserLevel() ??
+          UserLevel.bronze,
     );
   }
 
@@ -199,6 +207,7 @@ class UserModel extends User {
       anonymousInContests: anonymousInContests,
       createdAt: createdAt,
       updatedAt: updatedAt,
+      currentStatus: currentStatus,
     );
   }
 
@@ -225,6 +234,7 @@ class UserModel extends User {
     int? anonymousInContests,
     DateTime? createdAt,
     DateTime? updatedAt,
+    UserLevel? currentStatus,
   }) {
     return UserModel(
       id: id ?? this.id,
@@ -247,6 +257,7 @@ class UserModel extends User {
       anonymousInContests: anonymousInContests ?? this.anonymousInContests,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      currentStatus: currentStatus ?? this.currentStatus,
     );
   }
 }
