@@ -12,6 +12,7 @@ import 'package:cointiply_app/features/auth/data/models/verify_code_request.dart
 import 'package:cointiply_app/features/auth/data/models/verify_code_response.dart';
 import 'package:cointiply_app/features/auth/domain/entities/login_response.dart';
 import 'package:cointiply_app/core/enum/user_role.dart';
+import 'package:cointiply_app/features/user_profile/data/enum/user_level.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -84,6 +85,7 @@ void main() {
             notificationsEnabled: 0,
             showStatsEnabled: 0,
             anonymousInContests: 0,
+            currentStatus: UserLevel.bronze,
           ),
           tokens: const AuthTokensModel(
             accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',

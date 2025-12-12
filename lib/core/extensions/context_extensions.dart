@@ -191,8 +191,6 @@ extension NavigationExtension on BuildContext {
   void goToHome() => GoRouter.of(this).go(AppRoutes.home);
   void goToLogin() => GoRouter.of(this).go(AppRoutes.login);
   void goToSignUp() => GoRouter.of(this).go(AppRoutes.signUp);
-  void goToProfile() => GoRouter.of(this).go(AppRoutes.profile);
-  void goToSettings() => GoRouter.of(this).go(AppRoutes.settings);
   void goToOffers() => GoRouter.of(this).go(AppRoutes.offers);
   void goToDashboard() => GoRouter.of(this).go(AppRoutes.dashboard);
   void goToForgotPassword() => GoRouter.of(this).go(AppRoutes.forgotPassword);
@@ -204,10 +202,6 @@ extension NavigationExtension on BuildContext {
       GoRouter.of(this).push<T>(AppRoutes.login);
   Future<T?> pushToSignUp<T extends Object?>() =>
       GoRouter.of(this).push<T>(AppRoutes.signUp);
-  Future<T?> pushToProfile<T extends Object?>() =>
-      GoRouter.of(this).push<T>(AppRoutes.profile);
-  Future<T?> pushToSettings<T extends Object?>() =>
-      GoRouter.of(this).push<T>(AppRoutes.settings);
   Future<T?> pushToOffers<T extends Object?>() =>
       GoRouter.of(this).push<T>(AppRoutes.offers);
   Future<T?> pushToDashboard<T extends Object?>() =>

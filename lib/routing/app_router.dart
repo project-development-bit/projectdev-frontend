@@ -17,7 +17,6 @@ import '../features/auth/presentation/pages/forgot_password_page.dart';
 import '../features/auth/presentation/pages/verification_page.dart';
 import '../features/auth/presentation/pages/reset_password_page.dart';
 import '../features/home/presentation/pages/home_page.dart';
-import '../features/user_profile/presentation/pages/profile_page.dart';
 import '../features/legal/presentation/pages/contact_us_page.dart';
 import '../core/providers/auth_provider.dart';
 import '../core/widgets/shell_route_wrapper.dart';
@@ -34,8 +33,8 @@ class AppRoutes {
   static const String twoFactorAuth = '/auth/2fa';
   static const String resetPassword = '/auth/reset-password';
   static const String auth = '/auth';
-  static const String profile = '/profile';
-  static const String settings = '/settings';
+  // static const String profile = '/profile';
+  // static const String settings = '/settings';
   static const String offers = '/offers';
   static const String dashboard = '/dashboard';
   static const String privacyPolicy = '/legal/privacy-policy';
@@ -300,49 +299,6 @@ class BurgerEatsAppRoutes {
                     ),
                   ),
                 ],
-              ),
-
-              // Profile Routes - Requires Authentication
-              GoRoute(
-                path: AppRoutes.profile,
-                name: 'profile',
-                redirect: (context, state) async {
-                  final isAuthenticated = await authProvider.isAuthenticated();
-
-                  if (!isAuthenticated) {
-                    debugPrint(
-                        '🔒 Profile access denied - redirecting to login');
-                    return AppRoutes.login;
-                  }
-
-                  return null; // Allow access to profile
-                },
-                pageBuilder: (context, state) => const NoTransitionPage(
-                  child: ProfilePage(),
-                ),
-              ),
-
-              // Settings Routes - Requires Authentication
-              GoRoute(
-                path: AppRoutes.settings,
-                redirect: (context, state) async {
-                  final isAuthenticated = await authProvider.isAuthenticated();
-
-                  if (!isAuthenticated) {
-                    debugPrint(
-                        '🔒 Settings access denied - redirecting to login');
-                    return AppRoutes.login;
-                  }
-
-                  return null; // Allow access to settings
-                },
-                pageBuilder: (context, state) => const NoTransitionPage(
-                  child: Scaffold(
-                    body: Center(
-                      child: Text('Settings Page - Coming Soon'),
-                    ),
-                  ),
-                ),
               ),
 
               // Dashboard Routes (for admin/advanced features) - Requires Authentication
