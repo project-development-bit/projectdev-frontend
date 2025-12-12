@@ -1,10 +1,12 @@
 import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
+import 'package:cointiply_app/core/extensions/date_extensions.dart';
 import 'package:cointiply_app/features/earnings/data/model/request/earnings_history_request.dart';
 import 'package:cointiply_app/features/earnings/data/model/request/earnings_statistics_request.dart';
 import 'package:cointiply_app/features/earnings/presentation/provider/get_earnings_history_notifier.dart';
 import 'package:cointiply_app/features/earnings/presentation/provider/get_earnings_statistics_notifier.dart';
 import 'package:cointiply_app/core/common/dialog_bg_widget.dart';
+import 'package:cointiply_app/features/localization/data/helpers/app_localizations.dart';
 import 'package:cointiply_app/features/user_profile/data/enum/user_level.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/overview/avatar_badge_info.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/sections/coins_history_section.dart';
@@ -54,6 +56,7 @@ class _ProfileDialogState extends ConsumerState<ProfileDialog> {
         ref.watch(earningsHistoryNotifierProvider);
     final earningsHistoryNotifier =
         ref.read(earningsHistoryNotifierProvider.notifier);
+    final AppLocalizations? appLocalizations = AppLocalizations.of(context);
 
     return DialogBgWidget(
       dialogHeight: height,
@@ -71,10 +74,23 @@ class _ProfileDialogState extends ConsumerState<ProfileDialog> {
               AvatarBadgeInfo(
                 levelImage: currentUserState.user?.currentStatus.asset ??
                     UserLevel.bronze.asset,
-                levelText: context.translate("profile_level_bronze_1"),
+                levelText: currentUserState.user?.currentStatus.label(
+                      appLocalizations,
+                    ) ??
+                    UserLevel.bronze.label(appLocalizations),
                 messageCount: "1542",
-                location: "Thailand",
-                createdText: context.translate("profile_created_days"),
+                location: currentUserState.user?.countryName ?? "Unknown",
+                createdText: context
+                    .translate(
+                      "profile_created_days",
+                    )
+                    .replaceAll(
+                      '{days}',
+                      DateTime.parse(currentUserState.user?.createdAt
+                                  .toIso8601String() ??
+                              DateTime.now().toIso8601String())
+                          .timeAgoDaysOnly(),
+                    ),
               ),
               SizedBox(height: isMobile || isTablet ? 31 : 40),
               ProfileTabs(

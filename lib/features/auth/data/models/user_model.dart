@@ -29,6 +29,8 @@ class UserModel extends User {
     required super.createdAt,
     required super.updatedAt,
     required super.currentStatus,
+    required super.countryID,
+    required super.countryName,
   });
 
   /// Create UserModel from JSON response
@@ -63,6 +65,8 @@ class UserModel extends User {
           : DateTime.now(),
       currentStatus: (json['current_status'] as String?)?.toUserLevel() ??
           UserLevel.bronze,
+      countryID: _parseId(json['country_id']),
+      countryName: json['country_name'] as String? ?? '',
     );
   }
 
@@ -148,6 +152,8 @@ class UserModel extends User {
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
       currentStatus: user.currentStatus,
+      countryID: user.countryID,
+      countryName: user.countryName,
     );
   }
 
@@ -181,6 +187,8 @@ class UserModel extends User {
           : DateTime.now(),
       currentStatus: (json['current_status'] as String?)?.toUserLevel() ??
           UserLevel.bronze,
+      countryID: json['country_id'] as int? ?? 0,
+      countryName: json['country_name'] as String? ?? '',
     );
   }
 
@@ -208,6 +216,8 @@ class UserModel extends User {
       createdAt: createdAt,
       updatedAt: updatedAt,
       currentStatus: currentStatus,
+      countryID: countryID,
+      countryName: countryName,
     );
   }
 
@@ -235,6 +245,8 @@ class UserModel extends User {
     DateTime? createdAt,
     DateTime? updatedAt,
     UserLevel? currentStatus,
+    int? countryID,
+    String? countryName,
   }) {
     return UserModel(
       id: id ?? this.id,
@@ -258,6 +270,8 @@ class UserModel extends User {
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       currentStatus: currentStatus ?? this.currentStatus,
+      countryID: countryID ?? this.countryID,
+      countryName: countryName ?? this.countryName,
     );
   }
 }

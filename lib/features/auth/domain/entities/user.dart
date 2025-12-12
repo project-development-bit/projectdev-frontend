@@ -28,6 +28,8 @@ class User extends Equatable {
     required this.createdAt,
     required this.updatedAt,
     required this.currentStatus,
+    required this.countryID,
+    required this.countryName,
   });
 
   /// Unique user identifier
@@ -90,7 +92,14 @@ class User extends Equatable {
   /// Last update timestamp
   final DateTime updatedAt;
 
+  /// Current user level
   final UserLevel currentStatus;
+
+  /// Country ID
+  final int countryID;
+
+  /// Country Name
+  final String countryName;
 
   /// Helper getter to check if user is banned
   bool get isUserBanned => isBanned == 1;
@@ -142,6 +151,8 @@ class User extends Equatable {
     DateTime? createdAt,
     DateTime? updatedAt,
     UserLevel? currentStatus,
+    int? countryID,
+    String? countryName,
   }) {
     return User(
       id: id ?? this.id,
@@ -165,6 +176,8 @@ class User extends Equatable {
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       currentStatus: currentStatus ?? this.currentStatus,
+      countryID: countryID ?? this.countryID,
+      countryName: countryName ?? this.countryName,
     );
   }
 
@@ -190,6 +203,9 @@ class User extends Equatable {
         anonymousInContests,
         createdAt,
         updatedAt,
+        currentStatus,
+        countryID,
+        countryName,
       ];
 
   @override
