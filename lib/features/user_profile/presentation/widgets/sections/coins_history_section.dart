@@ -54,6 +54,7 @@ class CoinsHistorySection extends StatelessWidget {
           Container(
             height: 200,
             padding: const EdgeInsets.symmetric(vertical: 40),
+            alignment: Alignment.center,
             child: CommonText.bodyMedium(
               localizations?.translate('no_coin_earn_history') ??
                   "No coin earning activity yet.",
