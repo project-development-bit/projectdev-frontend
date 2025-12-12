@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/extensions/double_extensions.dart';
 import 'package:cointiply_app/features/user_profile/data/enum/user_level.dart';
 import 'package:equatable/equatable.dart';
 import '../../../../core/enum/user_role.dart';
@@ -130,6 +131,8 @@ class User extends Equatable {
 
   /// Helper getter to check if user is anonymous in contests
   bool get isAnonymousInContests => anonymousInContests == 1;
+
+  String get formatedCoinBalance => coinBalance.currencyFormat();
 
   /// Create a copy of this User with updated values
   User copyWith({
