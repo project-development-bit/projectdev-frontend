@@ -150,7 +150,12 @@ class ProfileMenu extends StatelessWidget {
       context: context,
       barrierDismissible: true,
       barrierColor: colorScheme.scrim.withValues(alpha: 0.6),
-      builder: (context) => DialogScaffoldWidget(child: const WalletDialog()),
+      builder: (context) => DialogScaffoldWidget(
+          padding: EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 20,
+          ),
+          child: const WalletDialog()),
     );
   }
 
