@@ -53,6 +53,7 @@ class UserProfileImageWidget extends ConsumerWidget {
                     placeholder: Center(
                       child: CircularProgressIndicator(),
                     ),
+                    filterQuality: FilterQuality.high,
                   ),
                 ),
               ),

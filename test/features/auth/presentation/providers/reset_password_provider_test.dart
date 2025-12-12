@@ -23,9 +23,9 @@ void main() {
       mockAuthRepository = MockAuthRepository();
       container = ProviderContainer(
         overrides: [
-          resetPasswordProvider.overrideWith(
-            (ref) => ResetPasswordNotifier(mockAuthRepository),
-          ),
+          // resetPasswordProvider.overrideWith(
+          //   (ref) => ResetPasswordNotifier(mockAuthRepository),
+          // ),
         ],
       );
     });
