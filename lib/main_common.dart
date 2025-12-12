@@ -1,4 +1,5 @@
 import 'package:cointiply_app/core/common/common_loading_widget.dart';
+import 'package:cointiply_app/core/config/app_local_images.dart';
 import 'package:cointiply_app/core/theme/presentation/providers/app_setting_providers.dart';
 import 'package:cointiply_app/core/theme/presentation/providers/app_settings_norifier.dart';
 import 'package:cointiply_app/features/localization/presentation/providers/localization_notifier_provider.dart';
@@ -159,7 +160,17 @@ class _MyAppState extends ConsumerState<MyApp> {
         debugShowCheckedModeBanner: false,
         home: Scaffold(
           backgroundColor: Color(0xff1A1A1A),
-          body: Center(child: CommonLoadingWidget.large()),
+          body: Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                    repeat: ImageRepeat.repeat,
+                    image: AssetImage(
+                      AppLocalImages.homeBackgroundDesktop,
+                    ),
+                    fit: BoxFit.fitWidth,
+                    alignment: Alignment.topCenter),
+              ),
+              child: Center(child: CommonLoadingWidget.large())),
         ),
       );
     }

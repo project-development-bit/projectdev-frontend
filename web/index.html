@@ -325,6 +325,20 @@
       min-height: 100%;
       background-color: #000000;
       background-size: 100% 100%;
+
+    }
+
+    .web_container {
+      width: 100vw;
+      height: 100vh;
+      background-image: url('assets/images/bg/home_background@2x.png');
+      background-size: cover;
+      /* Equivalent to BoxFit.cover */
+      background-position: top;
+      /* Ensures the image is centered */
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .center {
@@ -383,6 +397,7 @@
       align-items: center;
       justify-content: center;
       color: #1A1A1A;
+      object-position: center;
     }
 
     .spinner {
@@ -439,9 +454,9 @@
 <body>
   <!-- Splash Screen -->
   <div id="splash" class="center">
-    <div class="loading-container">
-      <img src="assets/images/gigafaucet_loading.gif" alt="loading" class="cover"
-        style="width: 200px; height: 200px; margin:auto">
+    <div class="web_container">
+      <img src="assets/images/gigafaucet_loading.gif" alt="loading" style="width: 200px; height: 200px; margin:auto;">
+
     </div>
   </div>
   <script>
