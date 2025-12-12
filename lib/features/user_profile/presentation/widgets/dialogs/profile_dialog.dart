@@ -5,6 +5,7 @@ import 'package:cointiply_app/features/earnings/data/model/request/earnings_stat
 import 'package:cointiply_app/features/earnings/presentation/provider/get_earnings_history_notifier.dart';
 import 'package:cointiply_app/features/earnings/presentation/provider/get_earnings_statistics_notifier.dart';
 import 'package:cointiply_app/core/common/dialog_bg_widget.dart';
+import 'package:cointiply_app/features/user_profile/data/enum/user_level.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/overview/avatar_badge_info.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/sections/coins_history_section.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/sections/statistics_section.dart';
@@ -68,7 +69,8 @@ class _ProfileDialogState extends ConsumerState<ProfileDialog> {
             children: [
               const SizedBox(height: 24),
               AvatarBadgeInfo(
-                levelImage: "assets/images/levels/bronze.png",
+                levelImage: currentUserState.user?.currentStatus.asset ??
+                    UserLevel.bronze.asset,
                 levelText: context.translate("profile_level_bronze_1"),
                 messageCount: "1542",
                 location: "Thailand",

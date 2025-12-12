@@ -1,3 +1,4 @@
+import 'package:cointiply_app/features/user_profile/data/enum/user_level.dart';
 import 'package:equatable/equatable.dart';
 import '../../../../core/enum/user_role.dart';
 
@@ -26,6 +27,7 @@ class User extends Equatable {
     required this.anonymousInContests,
     required this.createdAt,
     required this.updatedAt,
+    required this.currentStatus,
   });
 
   /// Unique user identifier
@@ -88,6 +90,8 @@ class User extends Equatable {
   /// Last update timestamp
   final DateTime updatedAt;
 
+  final UserLevel currentStatus;
+
   /// Helper getter to check if user is banned
   bool get isUserBanned => isBanned == 1;
 
@@ -114,7 +118,6 @@ class User extends Equatable {
 
   /// Helper getter to check if user is anonymous in contests
   bool get isAnonymousInContests => anonymousInContests == 1;
-  
 
   /// Create a copy of this User with updated values
   User copyWith({
@@ -138,6 +141,7 @@ class User extends Equatable {
     int? anonymousInContests,
     DateTime? createdAt,
     DateTime? updatedAt,
+    UserLevel? currentStatus,
   }) {
     return User(
       id: id ?? this.id,
@@ -160,6 +164,7 @@ class User extends Equatable {
       anonymousInContests: anonymousInContests ?? this.anonymousInContests,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      currentStatus: currentStatus ?? this.currentStatus,
     );
   }
 

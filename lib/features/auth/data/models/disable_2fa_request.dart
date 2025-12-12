@@ -6,11 +6,14 @@ part 'disable_2fa_request.g.dart';
 /// Request model for disabling 2FA
 ///
 /// Used for POST /2fa/disable endpoint
-/// No fields required - just an empty request body
+/// Requires a 6-digit token from the authenticator app
 @JsonSerializable()
 class Disable2FARequest extends Equatable {
+  /// The 6-digit 2FA token from the authenticator app
+  final String token;
+
   /// Creates an instance of [Disable2FARequest]
-  const Disable2FARequest();
+  const Disable2FARequest({required this.token});
 
   /// Creates [Disable2FARequest] from JSON
   factory Disable2FARequest.fromJson(Map<String, dynamic> json) =>
@@ -20,5 +23,5 @@ class Disable2FARequest extends Equatable {
   Map<String, dynamic> toJson() => _$Disable2FARequestToJson(this);
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [token];
 }

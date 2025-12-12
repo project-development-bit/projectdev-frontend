@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:cointiply_app/features/localization/data/datasource/local/localization_local_data_source.dart';
 import 'package:cointiply_app/features/localization/data/model/response/localization_model.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -40,7 +41,7 @@ class LocalizationService {
           ?.toJson();
 
       Map<String, dynamic> jsonMap = jsonString ?? {};
-      if (jsonMap.isEmpty) {
+      if (jsonMap.isEmpty || kDebugMode) {
         String jsonString = await rootBundle
             .loadString('$_localizationPath/${locale.languageCode}.json');
         jsonMap = json.decode(jsonString);

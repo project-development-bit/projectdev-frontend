@@ -44,7 +44,7 @@
         https://challenges.cloudflare.com;
       style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
       font-src 'self' https://fonts.gstatic.com;
-      img-src 'self' data: https:;
+      img-src 'self' data: blob: filesystem: https:;
       connect-src 'self' http: https: wss: ws: https://challenges.cloudflare.com;
       frame-src 'self'
         https://ipapi.co
@@ -238,8 +238,8 @@
       return !!(window.grecaptcha && window.currentRecaptchaKey);
     };
 
-      // Function to hide reCAPTCHA badge
-      window.ensureRecaptchaBadgeVisible = function () {
+    // Function to hide reCAPTCHA badge
+    window.ensureRecaptchaBadgeVisible = function () {
       const badge = document.querySelector('.grecaptcha-badge');
       const iframe = document.querySelector('iframe[src*="recaptcha"]');
 

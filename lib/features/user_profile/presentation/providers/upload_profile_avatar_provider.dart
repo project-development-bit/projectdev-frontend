@@ -1,12 +1,13 @@
 import 'package:cointiply_app/features/user_profile/domain/usecases/upload_profile_picture.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'profile_providers.dart';
 
 enum UploadProfileAvatarStatus {
   initial,
-  loading,
+  uploading,
   success,
   failure,
 }
@@ -16,7 +17,9 @@ class UploadProfileAvatarState {
   final String? avatarUrl;
   final String? errorMessage;
 
-  bool get isLoading => status == UploadProfileAvatarStatus.loading;
+  bool get isUploading => status == UploadProfileAvatarStatus.uploading;
+  bool get isSuccess => status == UploadProfileAvatarStatus.success;
+  bool get isFailure => status == UploadProfileAvatarStatus.failure;
 
   UploadProfileAvatarState({
     this.status = UploadProfileAvatarStatus.initial,
@@ -34,6 +37,10 @@ class UploadProfileAvatarState {
       avatarUrl: avatarUrl ?? this.avatarUrl,
       errorMessage: errorMessage ?? this.errorMessage,
     );
+  }
+
+  UploadProfileAvatarState reset() {
+    return UploadProfileAvatarState();
   }
 }
 
@@ -54,17 +61,23 @@ class UploadProfileAvatarProvider
   final UploadProfilePictureUsecase _uploadProfilePictureUsecase;
   UploadProfileAvatarProvider(super.state, this._uploadProfilePictureUsecase);
 
-  Future<void> uploadAvatar() async {
+  /// Upload avatar with cropped image data
+  Future<void> uploadAvatar({
+    required String name,
+    required int size,
+    required Uint8List bytes,
+  }) async {
+    final image = PlatformFile(
+      name: name,
+      size: size,
+      bytes: bytes,
+    );
+
     state = state.copyWith(
-        status: UploadProfileAvatarStatus.loading, errorMessage: null);
-    final image = await _pickImage();
-    if (image == null) {
-      state = state.copyWith(
-        status: UploadProfileAvatarStatus.initial,
-        errorMessage: null,
-      );
-      return;
-    }
+      status: UploadProfileAvatarStatus.uploading,
+      errorMessage: null,
+    );
+
     final params = UploadProfilePictureParams(image: image);
     final result = await _uploadProfilePictureUsecase.call(params);
 
@@ -84,17 +97,16 @@ class UploadProfileAvatarProvider
     );
   }
 
-  Future<PlatformFile?> _pickImage() async {
-    final file = await FilePicker.platform.pickFiles(
-      type: FileType.image,
-      allowMultiple: false,
-      withData: true, // Must be true for web to load bytes
-      compressionQuality: 1,
+  /// Set error state
+  void setError(String message) {
+    state = state.copyWith(
+      status: UploadProfileAvatarStatus.failure,
+      errorMessage: message,
     );
-    if (file != null && file.files.isNotEmpty) {
-      return file.files.first;
-    } else {
-      return null;
-    }
+  }
+
+  /// Reset to initial state
+  void reset() {
+    state = UploadProfileAvatarState();
   }
 }
