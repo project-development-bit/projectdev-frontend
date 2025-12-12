@@ -6,7 +6,7 @@ import 'package:cointiply_app/features/auth/presentation/providers/logout_provid
 import 'package:cointiply_app/features/auth/presentation/widgets/logout_dialog_widget.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/dialog_scaffold_widget.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/profile_dialog.dart';
-import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/reward_dialog.dart';
+import 'package:cointiply_app/features/reward/presentation/widgets/dialog/reward_dialog.dart';
 import 'package:cointiply_app/features/wallet/presentation/widgets/dialogs/wallet_dialog.dart';
 import 'package:flutter/material.dart';
 

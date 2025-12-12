@@ -48,6 +48,7 @@ class StatusRewardsWidget extends StatelessWidget {
           CommonText.headlineSmall(
             t?.translate("status_rewards_title") ?? "Status Rewards",
             fontWeight: FontWeight.w700,
+            textAlign: isMobile ? TextAlign.center : TextAlign.start,
             color: colorScheme.primary,
           ),
 
@@ -87,29 +88,26 @@ class StatusRewardsWidget extends StatelessWidget {
           else
             SizedBox(
               height: 120,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                physics: const BouncingScrollPhysics(),
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: Row(
-                  children: tiers.map((tier) {
-                    final keyName = tier.label.toLowerCase();
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 16),
-                      child: StatusRewardItem(
-                        tier: tier,
-                        isSelected: keyName == selectedTier.toLowerCase(),
-                        spacing: 16,
-                        onTap: (selectedTier) {
-                          final matchedLevel = tiers.firstWhere(
-                            (level) => level.label.toLowerCase() == keyName,
-                          );
-                          onTierSelected(matchedLevel);
-                        },
-                      ),
-                    );
-                  }).toList(),
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: tiers.map((tier) {
+                  final keyName = tier.label.toLowerCase();
+                  final isLast = tiers.indexOf(tier) == tiers.length - 1;
+                  return Padding(
+                    padding: EdgeInsets.only(right: isLast ? 0 : 16),
+                    child: StatusRewardItem(
+                      tier: tier,
+                      isSelected: keyName == selectedTier.toLowerCase(),
+                      spacing: 16,
+                      onTap: (selectedTier) {
+                        final matchedLevel = tiers.firstWhere(
+                          (level) => level.label.toLowerCase() == keyName,
+                        );
+                        onTierSelected(matchedLevel);
+                      },
+                    ),
+                  );
+                }).toList(),
               ),
             ),
         ],
