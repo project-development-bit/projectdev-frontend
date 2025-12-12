@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cointiply_app/core/common/common_image_widget.dart';
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
+import 'package:cointiply_app/core/config/app_local_images.dart';
 import 'package:cointiply_app/core/extensions/extensions.dart';
 import 'package:cointiply_app/features/localization/data/helpers/app_localizations.dart';
 import 'package:cointiply_app/core/theme/data/models/app_settings_model.dart';
@@ -35,9 +36,7 @@ class HomeBannerSectionState extends ConsumerState<HomeBannerSection> {
 
     // Fallback static background image
     final fallbackImage = Image.asset(
-      isMobile
-          ? 'assets/images/bg/banner_mobile@2x.png'
-          : 'assets/images/bg/banner_web@2x.png',
+      isMobile ? AppLocalImages.bannerMobile : AppLocalImages.bannerDesktop,
       width: double.infinity,
       height: bannerHeight,
       fit: BoxFit.cover,

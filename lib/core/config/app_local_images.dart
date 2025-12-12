@@ -1,4 +1,8 @@
 class AppLocalImages {
+  // Banner Images
+  static const String bannerDesktop = "assets/images/bg/banner_web@2x.jpg";
+  static const String bannerMobile = 'assets/images/bg/banner_mobile@2x.png';
+
   // Onboarding Images
   static const String onboardingBgMobile =
       "assets/images/bg/onboarding_bg_mobile@2x.png";
