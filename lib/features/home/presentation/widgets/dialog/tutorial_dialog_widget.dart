@@ -166,8 +166,7 @@ class _FirstTimeTutorialDialogState extends State<FirstTimeTutorialDialog> {
               if (data['final'] == true) ...[
                 const SizedBox(height: 10),
                 const CloudflareTurnstileWidget(
-                  action: TurnstileActionEnum.tutorial,
-                  debugMode: false),
+                    action: TurnstileActionEnum.tutorial, debugMode: false),
                 const SizedBox(height: 24),
                 _buildRewardBox(context),
               ],
@@ -177,68 +176,96 @@ class _FirstTimeTutorialDialogState extends State<FirstTimeTutorialDialog> {
               const SizedBox(height: 16),
 
               // ─── Footer ────────────────────────────────
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: CommonText.labelMedium(
-                      context
-                          .translate('step_of')
-                          .replaceAll('{step}', '$step')
-                          .replaceAll('{totalSteps}', '$totalSteps'),
-                      color: colorScheme.tertiary,
-                      fontSize: context.isMobile ? 13 : 14,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
+              !context.isDesktop
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        _buildSteps(colorScheme),
+                        const SizedBox(height: 12),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            _buildBackBtn(colorScheme),
+                            SizedBox(width: context.isMobile ? 4 : 8),
+                            _buildNextBtn(colorScheme, data),
+                          ],
+                        ),
+                      ],
+                    )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: _buildSteps(colorScheme),
+                        ),
+                        Row(
+                          children: [
+                            _buildBackBtn(colorScheme),
+                            SizedBox(width: context.isMobile ? 4 : 8),
+                            _buildNextBtn(colorScheme, data),
+                          ],
+                        ),
+                      ],
                     ),
-                  ),
-                  Row(
-                    children: [
-                      TextButton(
-                        onPressed:
-                            step > 1 ? () => setState(() => step--) : null,
-                        style: TextButton.styleFrom(
-                          foregroundColor: colorScheme.primary,
-                        ),
-                        child: CommonText.labelMedium(
-                          context.translate('back'),
-                          color: colorScheme.inverseSurface,
-                        ),
-                      ),
-                      SizedBox(width: context.isMobile ? 4 : 8),
-                      ElevatedButton(
-                        onPressed: () {
-                          if (step < totalSteps) {
-                            setState(() => step++);
-                          } else {
-                            widget.onComplete();
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: data['final'] == true
-                              ? colorScheme.tertiary
-                              : colorScheme.primary,
-                          foregroundColor: colorScheme.inversePrimary,
-                          padding: EdgeInsets.symmetric(
-                            horizontal: context.isMobile ? 8 : 20,
-                            vertical: context.isMobile ? 8 : 12,
-                          ),
-                        ),
-                        child: CommonText.labelMedium(
-                          step == totalSteps
-                              ? context.translate('claim_tutorial_reward')
-                              : context.translate('continue'),
-                          color: AppColors.lightSurfaceVariant,
-                          fontSize: context.isMobile ? 12 : 13,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildSteps(ColorScheme colorScheme) {
+    return CommonText.labelMedium(
+      context
+          .translate('step_of')
+          .replaceAll('{step}', '$step')
+          .replaceAll('{totalSteps}', '$totalSteps'),
+      color: colorScheme.tertiary,
+      fontSize: context.isMobile ? 13 : 14,
+      maxLines: 2,
+      overflow: TextOverflow.ellipsis,
+    );
+  }
+
+  Widget _buildBackBtn(ColorScheme colorScheme) {
+    return TextButton(
+      onPressed: step > 1 ? () => setState(() => step--) : null,
+      style: TextButton.styleFrom(
+        foregroundColor: colorScheme.primary,
+      ),
+      child: CommonText.labelMedium(
+        context.translate('back'),
+        color: colorScheme.inverseSurface,
+      ),
+    );
+  }
+
+  Widget _buildNextBtn(ColorScheme colorScheme, Map<String, dynamic> data) {
+    return ElevatedButton(
+      onPressed: () {
+        if (step < totalSteps) {
+          setState(() => step++);
+        } else {
+          widget.onComplete();
+        }
+      },
+      style: ElevatedButton.styleFrom(
+        backgroundColor:
+            data['final'] == true ? colorScheme.tertiary : colorScheme.primary,
+        foregroundColor: colorScheme.inversePrimary,
+        padding: EdgeInsets.symmetric(
+          horizontal: context.isMobile ? 8 : 20,
+          vertical: context.isMobile ? 8 : 12,
+        ),
+      ),
+      child: CommonText.labelMedium(
+        step == totalSteps
+            ? context.isMobile
+                ? context.translate('claim')
+                : context.translate('claim_tutorial_reward')
+            : context.translate('continue'),
+        color: AppColors.lightSurfaceVariant,
+        fontSize: context.isMobile ? 12 : 13,
       ),
     );
   }

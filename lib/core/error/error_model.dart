@@ -20,7 +20,9 @@ class ErrorModel {
       type: json['type'] as String? ?? 'error',
       status: json['status'] as int? ?? 500,
       message: json['message'] as String? ?? 'Unknown error',
-      code: ErrorCode.fromString(json['code'] as String?),
+      code: json['code'] != null && json['code'] is String
+          ? ErrorCode.fromString(json['code'] as String)
+          : null,
     );
   }
 
