@@ -12,7 +12,7 @@ enum ImagePickerStatus {
 
 class ImagePickerState {
   final ImagePickerStatus status;
-  final PlatformFile? pickedFile;
+  final Uint8List? pickedFile;
   final String? errorMessage;
 
   bool get isPicking => status == ImagePickerStatus.picking;
@@ -26,7 +26,7 @@ class ImagePickerState {
 
   ImagePickerState copyWith({
     ImagePickerStatus? status,
-    PlatformFile? pickedFile,
+    Uint8List? pickedFile,
     String? errorMessage,
   }) {
     return ImagePickerState(
@@ -66,7 +66,7 @@ class ImagePickerNotifier extends StateNotifier<ImagePickerState> {
         final file = result.files.first;
         state = state.copyWith(
           status: ImagePickerStatus.picked,
-          pickedFile: file,
+          pickedFile: file.bytes,
           errorMessage: null,
         );
         return file;

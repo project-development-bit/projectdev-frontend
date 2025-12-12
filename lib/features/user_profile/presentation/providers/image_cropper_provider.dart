@@ -1,4 +1,3 @@
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -12,8 +11,8 @@ enum ImageCropperStatus {
 
 class ImageCropperState {
   final ImageCropperStatus status;
-  final PlatformFile? originalImage;
-  final Uint8List? croppedImageBytes;
+  final Uint8List? originalImage;
+  final String? croppedImageBytes;
   final String? croppedImageName;
   final int? croppedImageSize;
   final String? errorMessage;
@@ -32,8 +31,8 @@ class ImageCropperState {
 
   ImageCropperState copyWith({
     ImageCropperStatus? status,
-    PlatformFile? originalImage,
-    Uint8List? croppedImageBytes,
+    Uint8List? originalImage,
+    String? croppedImageBytes,
     String? croppedImageName,
     int? croppedImageSize,
     String? errorMessage,
@@ -62,10 +61,10 @@ class ImageCropperNotifier extends StateNotifier<ImageCropperState> {
   ImageCropperNotifier() : super(ImageCropperState());
 
   /// Set the image to be cropped
-  void setImageForCropping(PlatformFile image) {
+  void setImageForCropping(Uint8List imageData) {
     state = state.copyWith(
       status: ImageCropperStatus.initial,
-      originalImage: image,
+      originalImage: imageData,
       errorMessage: null,
     );
   }
@@ -79,11 +78,11 @@ class ImageCropperNotifier extends StateNotifier<ImageCropperState> {
   void setCroppedImage({
     required String name,
     required int size,
-    required Uint8List bytes,
+    required String path,
   }) {
     state = state.copyWith(
       status: ImageCropperStatus.cropped,
-      croppedImageBytes: bytes,
+      croppedImageBytes: path,
       croppedImageName: name,
       croppedImageSize: size,
       errorMessage: null,
