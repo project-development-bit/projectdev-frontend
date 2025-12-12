@@ -1,5 +1,6 @@
 import 'package:cointiply_app/core/core.dart';
 import 'package:cointiply_app/features/reward/domain/entities/reward_level.dart';
+import 'package:cointiply_app/features/user_profile/data/enum/user_level.dart';
 import 'package:flutter/material.dart';
 
 class StatusRewardsWidget extends StatelessWidget {
@@ -134,6 +135,7 @@ class StatusRewardItem extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final isMobile = context.isMobile;
     final localizations = AppLocalizations.of(context);
+    final UserLevel userLevel = tier.label.toLowerCase().toUserLevel();
     return GestureDetector(
       onTap: () => onTap(tier),
       child: Container(
@@ -151,11 +153,10 @@ class StatusRewardItem extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(_tierImage(tier.label.toLowerCase()),
-                width: 40, height: 40),
+            Image.asset(userLevel.asset, width: 40, height: 40),
             const SizedBox(height: 6),
             CommonText.titleMedium(
-              _tierLabel(localizations, tier.label),
+              userLevel.lable(localizations, tier.label),
               fontSize: isMobile ? 14 : 16,
               color: colorScheme.onPrimary,
               fontWeight: FontWeight.w700,
@@ -164,39 +165,5 @@ class StatusRewardItem extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  String _tierImage(String tier) {
-    switch (tier) {
-      case "bronze":
-        return "assets/images/rewards/bronze_level.png";
-      case "silver":
-        return "assets/images/rewards/sliver.png";
-      case "gold":
-        return "assets/images/rewards/gold.png";
-      case "diamond":
-        return "assets/images/rewards/diamond.png";
-      case "legend":
-        return "assets/images/rewards/legend.png";
-      default:
-        return "assets/images/rewards/bronze_level.png";
-    }
-  }
-
-  String _tierLabel(AppLocalizations? t, String tier) {
-    switch (tier) {
-      case "bronze":
-        return t?.translate("status_bronze") ?? "Bronze";
-      case "silver":
-        return t?.translate("status_silver") ?? "Silver";
-      case "gold":
-        return t?.translate("status_gold") ?? "Gold";
-      case "diamond":
-        return t?.translate("status_diamond") ?? "Diamond";
-      case "legend":
-        return t?.translate("status_legend") ?? "Legend";
-      default:
-        return tier;
-    }
   }
 }

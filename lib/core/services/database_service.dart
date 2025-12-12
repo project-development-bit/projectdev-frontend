@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cointiply_app/features/user_profile/data/enum/user_level.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:flutter/foundation.dart';
@@ -419,6 +420,7 @@ class DatabaseService {
           anonymousInContests: 0,
           createdAt: DateTime.now(),
           updatedAt: DateTime.now(),
+          currentStatus: UserLevel.bronze,
         ),
         UserModel(
           id: 2,
@@ -441,6 +443,7 @@ class DatabaseService {
           anonymousInContests: 0,
           createdAt: DateTime.now(),
           updatedAt: DateTime.now(),
+          currentStatus: UserLevel.bronze,
         ),
         UserModel(
           id: 3,
@@ -463,6 +466,7 @@ class DatabaseService {
           anonymousInContests: 0,
           createdAt: DateTime.now(),
           updatedAt: DateTime.now(),
+          currentStatus: UserLevel.bronze,
         ),
       ];
 
