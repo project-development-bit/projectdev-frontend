@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/common/common_loading_widget.dart';
 import 'package:cointiply_app/core/common/common_rich_text_with_icon.dart';
 import 'package:cointiply_app/core/core.dart';
 import 'package:cointiply_app/features/reward/presentation/providers/reward_provider.dart';
@@ -105,13 +106,10 @@ class RewardDialog extends ConsumerWidget {
 }
 
 Widget _loadingWidget() {
-  return const Padding(
-    padding: EdgeInsets.symmetric(vertical: 24, horizontal: 32),
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 32),
     child: Center(
-      child: CircularProgressIndicator(
-        strokeWidth: 3,
-        color: Colors.white,
-      ),
+      child: CommonLoadingWidget.medium(),
     ),
   );
 }

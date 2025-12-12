@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/common/common_loading_widget.dart';
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/common/common_image_widget.dart';
 import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
@@ -96,9 +97,7 @@ class _ManageProfileDialogState extends ConsumerState<ManageProfileDialog> {
             if (status == GetProfileStatus.loading) ...[
               const SizedBox(height: 50),
               Center(
-                child: CircularProgressIndicator(
-                  color: Theme.of(context).colorScheme.primary,
-                ),
+                child: CommonLoadingWidget.medium()
               ),
             ],
             if (status == GetProfileStatus.failure) ...[

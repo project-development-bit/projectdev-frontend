@@ -162,7 +162,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               Expanded(
                 child: TextButton(
                   onPressed: () =>
-                      GoRouter.of(context).push(AppRoutes.contactUs),
+                      GoRouter.of(context).goNamed(AppRoutes.contactUs),
                   style: TextButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 8),
                   ),

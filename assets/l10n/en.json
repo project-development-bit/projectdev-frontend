@@ -731,7 +731,7 @@
   "payment_history": "Payment History",
   "withdraw_button_text": "Withdraw {coinName}",
   "interest_notification_title": "Don’t miss out on 5% interest!",
-  "interest_notification_description": "Keep at least 35,000 Coins to earn 5% interest. Interest is paid every week. Turn it on in your settings.",
+  "interest_notification_description": "Keep at least {0} Coins to earn {1}% interest. Interest is paid every week. Turn it on in your settings.",
   "withdrawal": "Withdrawal",
   "affiliate_program_title": "Affiliate Program",
   "affiliate_program_description": "Get a lifetime reward up {0}% for inviting new people",
