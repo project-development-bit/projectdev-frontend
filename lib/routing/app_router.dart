@@ -202,9 +202,7 @@ class BurgerEatsAppRoutes {
                 child: InternalVerificationOverlay(
                   child: TutorialOverlay(
                     child: ShellRouteWrapper(
-                      child: RightChatOverlay(
-                        child: child
-                        ),
+                      child: RightChatOverlay(child: child),
                     ),
                   ),
                 ),
@@ -513,11 +511,10 @@ extension GoRouterExtension on BuildContext {
     go(
       AppRoutes.verification,
       extra: VerificationPageParameter(
-        email: email,
-        isSendCode: isSendCode,
-        isFromForgotPassword: isFromForgotPassword,
-        isFromChangeEmail: isFromChangeEmail
-      ),
+          email: email,
+          isSendCode: isSendCode,
+          isFromForgotPassword: isFromForgotPassword,
+          isFromChangeEmail: isFromChangeEmail),
     );
   }
 
@@ -530,11 +527,10 @@ extension GoRouterExtension on BuildContext {
     push(
       AppRoutes.verification,
       extra: VerificationPageParameter(
-        email: email,
-        isSendCode: isSendCode,
-        isFromForgotPassword: isFromForgotPassword,
-        isFromChangeEmail: isFromChangeEmail
-      ),
+          email: email,
+          isSendCode: isSendCode,
+          isFromForgotPassword: isFromForgotPassword,
+          isFromChangeEmail: isFromChangeEmail),
     );
   }
 
