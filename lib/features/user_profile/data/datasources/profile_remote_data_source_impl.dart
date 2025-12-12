@@ -38,7 +38,8 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
 
       if ((response.statusCode ?? 0) >= 200 &&
           (response.statusCode ?? 0) < 300) {
-        return ProfileDetailModel.fromJson(response.data as Map<String, dynamic>);
+        return ProfileDetailModel.fromJson(
+            response.data as Map<String, dynamic>);
       } else {
         throw Exception('Failed to fetch profile: ${response.statusCode}');
       }
@@ -248,35 +249,35 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
       debugPrint('❌ Change password DioException: ${e.message}');
       debugPrint('❌ Response status: ${e.response?.statusCode}');
       debugPrint('❌ Response data: ${e.response?.data}');
-      
+
       // Handle validation errors
       if (e.response?.data != null && e.response?.data is Map) {
         final responseData = e.response!.data as Map<String, dynamic>;
-        
+
         // Check for validation errors in the code.errors array
-        if (responseData['code'] != null && 
+        if (responseData['code'] != null &&
             responseData['code'] is Map &&
             responseData['code']['errors'] != null) {
           final errors = responseData['code']['errors'] as List<dynamic>;
-          
+
           // Combine all error messages into one text
           final errorMessages = errors
               .map((error) => error['msg'] as String?)
               .where((msg) => msg != null)
               .join('. ');
-          
+
           throw ServerFailure(
-            message: errorMessages.isNotEmpty 
-                ? errorMessages 
+            message: errorMessages.isNotEmpty
+                ? errorMessages
                 : responseData['message'] ?? 'Failed to change password',
           );
         }
-        
+
         // Fallback to general message
         final message = responseData['message'];
         throw ServerFailure(message: message ?? 'Failed to change password');
       }
-      
+
       // Generic error
       final message = e.response?.data?['message'] ?? e.message;
       throw ServerFailure(message: message ?? 'Unexpected error');
@@ -291,7 +292,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
       PlatformFile file) async {
     try {
       // Compress image and get bytes (works on both web and mobile)
-      final bytes = await compressImageToBytes(file, quality: 5);
+      final bytes = await compressImageToBytes(file, quality: 50);
 
       if (bytes.isEmpty) {
         throw ServerFailure(message: 'File bytes are empty');
@@ -462,5 +463,4 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
         return Exception('Network error: ${e.message}');
     }
   }
-
 }
