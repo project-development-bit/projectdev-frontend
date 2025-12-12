@@ -50,7 +50,7 @@ class _Disable2FAConfirmationDialogState
           context.showSnackBar(
             message: next.response.message,
             backgroundColor: context.primary,
-            textColor: Colors.white,
+            textColor: Colors.black,
           );
 
           // Close dialog
