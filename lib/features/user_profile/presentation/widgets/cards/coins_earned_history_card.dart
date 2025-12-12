@@ -1,4 +1,5 @@
 import 'package:cointiply_app/core/common/common_text.dart';
+import 'package:cointiply_app/core/config/app_local_images.dart';
 import 'package:cointiply_app/core/extensions/int_extensions.dart';
 import 'package:flutter/material.dart';
 
@@ -132,7 +133,7 @@ class CoinsEarnedHistoryCard extends StatelessWidget {
           ),
           const SizedBox(width: 6),
           Image.asset(
-            "assets/images/rewards/coin.png",
+            AppLocalImages.coin,
             width: 24,
           ),
         ],

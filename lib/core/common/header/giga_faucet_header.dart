@@ -2,6 +2,7 @@ import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
 import 'package:cointiply_app/core/common/header/header_coin_balance_box.dart';
 import 'package:cointiply_app/core/common/header/header_menu_item.dart';
 import 'package:cointiply_app/core/common/header/header_profile_avatar.dart';
+import 'package:cointiply_app/core/config/app_local_images.dart';
 import 'package:cointiply_app/core/core.dart';
 import 'package:cointiply_app/features/home/presentation/widgets/home_section_container.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +47,7 @@ class GigaFaucetHeader extends ConsumerWidget {
                   GestureDetector(
                     onTap: () => Scaffold.of(context).openDrawer(),
                     child: SvgPicture.asset(
-                      "assets/images/icons/menu.svg",
+                      AppLocalImages.menuIconSvg,
                       height: 32,
                       width: 32,
                     ),
@@ -63,8 +64,8 @@ class GigaFaucetHeader extends ConsumerWidget {
                   },
                   child: Image.asset(
                     screenWidth < 360
-                        ? "assets/images/gigafaucet_logo.png"
-                        : "assets/images/giga_faucet_text_logo.png",
+                        ? AppLocalImages.gigaFaucetLogo
+                        : AppLocalImages.gigaFaucetTextLogo,
                     height: 28,
                     width: screenWidth < 360
                         ? null

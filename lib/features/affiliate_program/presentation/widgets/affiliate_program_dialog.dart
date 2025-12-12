@@ -4,6 +4,7 @@ import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/common/dialog_bg_widget.dart';
 import 'package:cointiply_app/core/common/table/common_table_widget.dart';
 import 'package:cointiply_app/core/common/table/models/table_column.dart';
+import 'package:cointiply_app/core/config/app_local_images.dart';
 import 'package:cointiply_app/core/extensions/extensions.dart';
 import 'package:cointiply_app/features/affiliate_program/data/models/request/referred_users_request.dart';
 import 'package:cointiply_app/features/affiliate_program/presentation/providers/referral_link_provider.dart';
@@ -141,7 +142,6 @@ class _AffiliateProgramDialogState
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          
           CommonText.bodyMedium(
             context.translate("affiliate_program_description",
                 args: [referralPercent ?? '0']),
@@ -379,7 +379,7 @@ class _AffiliateProgramDialogState
           ),
           const SizedBox(width: 4),
           Image.asset(
-            "assets/images/rewards/coin.png",
+            AppLocalImages.coin,
             height: 16,
             width: 16,
           ),
@@ -450,8 +450,7 @@ class _AffiliateProgramDialogState
             const SizedBox(height: 16),
             _buildErrorWidget(
                 referredUsersState.errorMessage ?? 'Failed to load users')
-          ]
-          else
+          ] else
             CommonTableWidget(
               filterBar: AffiliateFilterBarWidget(),
               columns: [
@@ -459,7 +458,6 @@ class _AffiliateProgramDialogState
                 TableColumn(header: context.translate("username"), width: 200),
                 TableColumn(
                     header: context.translate("coins_earn"), width: 300),
-                
               ],
               values: users.map((user) {
                 final date = user.referralDate != null

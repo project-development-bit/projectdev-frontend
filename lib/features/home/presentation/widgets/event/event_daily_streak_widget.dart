@@ -1,5 +1,6 @@
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
+import 'package:cointiply_app/core/config/app_local_images.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:dotted_decoration/dotted_decoration.dart';
 import 'package:flutter/material.dart';
@@ -99,7 +100,7 @@ class EventDailyStreakWidget extends StatelessWidget {
               ),
               SizedBox(width: 4),
               Image.asset(
-                'assets/images/rewards/coin.png',
+                AppLocalImages.coin,
                 width: 24,
                 height: 24,
               ),
@@ -206,7 +207,7 @@ class EventDailyStreakWidget extends StatelessWidget {
               children: [
                 CommonText.titleMedium("300"),
                 Image.asset(
-                  'assets/images/rewards/coin.png',
+                  AppLocalImages.coin,
                   width: 24,
                   height: 24,
                 ),
@@ -284,7 +285,7 @@ class EventDailyStreakWidget extends StatelessWidget {
                 ),
                 SizedBox(width: 6),
                 Image.asset(
-                  'assets/images/rewards/coin.png',
+                  AppLocalImages.coin,
                   width: 24,
                   height: 24,
                 ),
@@ -423,7 +424,7 @@ class EventDailyStreakWidget extends StatelessWidget {
                               highlightColor: context.primary,
                             ),
                             Image.asset(
-                              'assets/images/rewards/coin.png',
+                              AppLocalImages.coin,
                               width: 24,
                               height: 24,
                             ),

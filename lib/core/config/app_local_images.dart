@@ -1,7 +1,19 @@
 class AppLocalImages {
+// LOGO
+
+  static const String gigaFaucetLogo = "assets/images/gigafaucet_logo.png";
+  static const String gigaFaucetTextLogo =
+      "assets/images/giga_faucet_text_logo.png";
+
+  // icons
+  static const String menuIconSvg = "assets/images/icons/menu.svg";
   // Banner Images
   static const String bannerDesktop = "assets/images/bg/banner_web@2x.jpg";
   static const String bannerMobile = 'assets/images/bg/banner_mobile@2x.png';
+
+  // coin Images
+  static const String coin = "assets/images/rewards/coin@2x.png";
+  static const String coinSvg = "assets/images/rewards/coin.svg";
 
   // Onboarding Images
   static const String onboardingBgMobile =
