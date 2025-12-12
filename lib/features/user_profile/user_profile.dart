@@ -11,4 +11,3 @@ export 'data/datasources/profile_database_data_source.dart';
 export 'data/repositories/profile_repository_impl.dart';
 
 export 'presentation/providers/profile_providers.dart';
-export 'presentation/pages/profile_page.dart';

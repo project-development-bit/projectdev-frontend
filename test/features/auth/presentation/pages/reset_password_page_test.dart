@@ -3,7 +3,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:cointiply_app/features/auth/presentation/pages/reset_password_page.dart';
-import 'package:cointiply_app/features/auth/presentation/providers/reset_password_provider.dart';
 import 'package:cointiply_app/features/auth/domain/repositories/auth_repository.dart';
 
 import 'package:cointiply_app/core/common/common_button.dart';
@@ -24,9 +23,9 @@ void main() {
     Widget createTestWidget() {
       return ProviderScope(
         overrides: [
-          resetPasswordProvider.overrideWith(
-            (ref) => ResetPasswordNotifier(mockAuthRepository),
-          ),
+          // resetPasswordProvider.overrideWith(
+          //   (ref) => ResetPasswordNotifier(mockAuthRepository,),
+          // ),
         ],
         child: TestAppWrapper(
           child: ResetPasswordPage(email: testEmail),
@@ -149,13 +148,13 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
-              resetPasswordProvider.overrideWith(
-                (ref) {
-                  final notifier = ResetPasswordNotifier(mockAuthRepository);
-                  notifier.state = ResetPasswordLoading();
-                  return notifier;
-                },
-              ),
+              // resetPasswordProvider.overrideWith(
+              //   (ref) {
+              //     final notifier = ResetPasswordNotifier(mockAuthRepository);
+              //     notifier.state = ResetPasswordLoading();
+              //     return notifier;
+              //   },
+              // ),
             ],
             child: TestAppWrapper(
               child: ResetPasswordPage(email: testEmail),

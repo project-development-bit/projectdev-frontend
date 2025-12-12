@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/common/common_textfield.dart';
 import '../../../../core/common/common_button.dart';
 import '../../../../core/common/common_text.dart';
-import '../../../../core/localization/app_localizations.dart';
+import '../../../localization/data/helpers/app_localizations.dart';
 import '../../../../core/widgets/cloudflare_turnstille_widgte.dart';
 import '../../../../core/providers/turnstile_provider.dart';
 import '../../../../core/extensions/context_extensions.dart';
@@ -38,7 +38,7 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
     }
 
     // Check if Turnstile verification is completed
-    final turnstileState = ref.read(turnstileNotifierProvider);
+    final turnstileState = ref.read(turnstileNotifierProvider(TurnstileActionEnum.forgetPassword));
     if (turnstileState is! TurnstileSuccess) {
       final localizations = AppLocalizations.of(context);
       context.showErrorSnackBar(
@@ -141,6 +141,7 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
               // Cloudflare Turnstile Widget (replaces reCAPTCHA)
               const CloudflareTurnstileWidget(
                 debugMode: false,
+                action: TurnstileActionEnum.forgetPassword,
               ),
 
               const SizedBox(height: 32),

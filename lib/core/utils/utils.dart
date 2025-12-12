@@ -91,14 +91,25 @@ Future<File> compressImage(PlatformFile file, {int quality = 70}) async {
 }
 
 /// Compress image and return bytes (preferred for web platform)
+/// Only compresses if file size is greater than 1MB
 Future<List<int>> compressImageToBytes(PlatformFile file,
     {int quality = 70}) async {
+  const int oneMB = 1024 * 1024; // 1MB in bytes
+
   if (kIsWeb) {
     if (file.bytes == null) {
       throw Exception('No bytes available for web compression');
     }
 
+    final originalSize = file.bytes!.length;
     final fileName = file.name;
+
+    // Check if file is less than 1MB - no compression needed
+    if (originalSize < oneMB) {
+      log('File $fileName is ${(originalSize / 1024 / 1024).toStringAsFixed(2)} MB - skipping compression');
+      return file.bytes!;
+    }
+
     final extension = p.extension(fileName).toLowerCase();
 
     // Determine appropriate compression format based on extension
@@ -121,19 +132,18 @@ Future<List<int>> compressImageToBytes(PlatformFile file,
         format = CompressFormat.jpeg;
     }
 
-    log('Compressing image to bytes: $fileName with format $format');
+    log('File size ${(originalSize / 1024 / 1024).toStringAsFixed(2)} MB > 1MB - compressing image: $fileName with format $format');
 
     try {
       final result = await FlutterImageCompress.compressWithList(
         file.bytes!,
         quality: quality,
         format: format,
-        minWidth: 100,
-        minHeight: 100,
+        minWidth: 500,
+        minHeight: 500,
         keepExif: false,
       );
 
-      final originalSize = file.bytes!.length;
       final compressedSize = result.length;
 
       log('Original size: ${(originalSize / 1024 / 1024).toStringAsFixed(2)} MB');
@@ -154,6 +164,14 @@ Future<List<int>> compressImageToBytes(PlatformFile file,
     }
 
     final fileBytes = await File(filePath).readAsBytes();
+    final originalSize = fileBytes.length;
+
+    // Check if file is less than 1MB - no compression needed
+    if (originalSize < oneMB) {
+      log('File ${p.basename(filePath)} is ${(originalSize / 1024 / 1024).toStringAsFixed(2)} MB - skipping compression');
+      return fileBytes;
+    }
+
     final extension = p.extension(filePath).toLowerCase();
 
     CompressFormat format;
@@ -175,19 +193,23 @@ Future<List<int>> compressImageToBytes(PlatformFile file,
         format = CompressFormat.jpeg;
     }
 
-    log('Compressing image to bytes from file: ${p.basename(filePath)}');
+    log('File size ${(originalSize / 1024 / 1024).toStringAsFixed(2)} MB > 1MB - compressing image from file: ${p.basename(filePath)}');
 
     try {
       final result = await FlutterImageCompress.compressWithList(
         fileBytes,
         quality: quality,
         format: format,
-        minWidth: 100,
-        minHeight: 100,
+        minWidth: 500,
+        minHeight: 500,
         keepExif: false,
       );
 
-      log('Compression complete: ${(result.length / 1024 / 1024).toStringAsFixed(2)} MB');
+      final compressedSize = result.length;
+      log('Original size: ${(originalSize / 1024 / 1024).toStringAsFixed(2)} MB');
+      log('Compressed size: ${(compressedSize / 1024 / 1024).toStringAsFixed(2)} MB');
+      log('Compression ratio: ${(compressedSize / originalSize * 100).toStringAsFixed(1)}%');
+
       return result;
     } catch (e) {
       log('Error compressing image to bytes: $e');
