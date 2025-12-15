@@ -15,7 +15,7 @@ class AppLocalImages {
   static const String starNavIcon = "assets/images/icons/star_nav_icon.png";
   // Banner Images
   static const String bannerDesktop = "assets/images/bg/banner_web@2x.jpg";
-  static const String bannerMobile = 'assets/images/bg/banner_mobile@2x.png';
+  static const String bannerMobile = 'assets/images/bg/banner_mobile@2x.jpg';
 
   // coin Images
   static const String coin = "assets/images/rewards/coin@3x.png";
