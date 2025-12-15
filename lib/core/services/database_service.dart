@@ -421,6 +421,9 @@ class DatabaseService {
           createdAt: DateTime.now(),
           updatedAt: DateTime.now(),
           currentStatus: UserLevel.bronze,
+          countryID: 1,
+          countryName: 'Thailand',
+          coinBalance: 50.0,
         ),
         UserModel(
           id: 2,
@@ -444,6 +447,9 @@ class DatabaseService {
           createdAt: DateTime.now(),
           updatedAt: DateTime.now(),
           currentStatus: UserLevel.bronze,
+          countryID: 1,
+          countryName: 'Thailand',
+          coinBalance: 50.0,
         ),
         UserModel(
           id: 3,
@@ -467,6 +473,9 @@ class DatabaseService {
           createdAt: DateTime.now(),
           updatedAt: DateTime.now(),
           currentStatus: UserLevel.bronze,
+          countryID: 1,
+          countryName: 'Thailand',
+          coinBalance: 50.0,
         ),
       ];
 
