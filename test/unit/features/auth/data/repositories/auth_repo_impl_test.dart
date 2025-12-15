@@ -86,6 +86,9 @@ void main() {
             showStatsEnabled: 0,
             anonymousInContests: 0,
             currentStatus: UserLevel.bronze,
+            countryID: 1,
+            countryName: 'Thailand',
+            coinBalance: 50.0,
           ),
           tokens: const AuthTokensModel(
             accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',

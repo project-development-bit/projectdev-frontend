@@ -503,7 +503,7 @@
   "view_home": "ပင်မစာမျက်နှာကို ကြည့်ပါ",
   "profile_level_bronze_1": "Bronze ၁",
   "profile_message": "စာတို",
-  "profile_created_days": "၅ ရက် အကြာတွင် ဖန်တီးပါသည်",
+  "profile_created_days": "{days} ရက် အကြာတွင် ဖန်တီးပါသည်",
   "profile_statistics": "သ الاح الاح",
   "profile_coins_earned_history": "အ Coins ရရှိမှု မှတ်တမ်း",
   "coins_history_title": "{days} ရက်အတွင်း မကြာသေးမီ Coin ဆုလာဘ် မှတ်တမ်း",
@@ -762,5 +762,12 @@
   "date": "Date",
   "coins_earn": "Coins Earn",
   "logout_title": "အကောင့်မှ ထွက်ရန် အတည်ပြုချက်",
-  "logout_description": "သင်၏အကောင့်မှ ထွက်ရန် သေချာပါသလား?"
+  "logout_description": "သင်၏အကောင့်မှ ထွက်ရန် သေချာပါသလား?",
+  "time_just_now": "ခုနစ်နာရီမကြာသေးပါ",
+  "time_min_ago": "{0} မိနစ်အကြာ",
+  "time_hr_ago": "{0} နာရီအကြာ",
+  "time_day_ago": "{0} ရက်အကြာ",
+  "time_week_ago": "{0} ပတ်အကြာ",
+  "time_month_ago": "{0} လအကြာ",
+  "time_year_ago": "{0} နှစ်အကြာ"
 }

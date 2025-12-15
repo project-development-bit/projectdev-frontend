@@ -5,6 +5,7 @@ import 'package:cointiply_app/core/common/header/header_profile_avatar.dart';
 import 'package:cointiply_app/core/config/app_local_images.dart';
 import 'package:cointiply_app/core/core.dart';
 import 'package:cointiply_app/features/home/presentation/widgets/home_section_container.dart';
+import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -21,6 +22,9 @@ class GigaFaucetHeader extends ConsumerWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final screenWidth = context.screenWidth;
     final isAuthenticated = ref.watch(isAuthenticatedObservableProvider);
+
+    final currentUser = ref.watch(currentUserProvider).user;
+
     return HomeSectionContainer(
         width: double.infinity,
         decoration: BoxDecoration(
@@ -103,7 +107,8 @@ class GigaFaucetHeader extends ConsumerWidget {
                     ? Row(
                         children: [
                           HeaderCoinBalanceBox(
-                            coinBalance: "14,212,568",
+                            coinBalance:
+                                currentUser?.formatedCoinBalance ?? '0',
                           ),
                           SizedBox(
                               width: screenWidth < 320 ||
