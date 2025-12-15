@@ -63,7 +63,7 @@ class Enable2FANotifier extends StateNotifier<Enable2FAState> {
   /// Enable 2FA by verifying the token from authenticator app
   /// 
   /// This method calls the API to verify:
-  /// - token: The 6-digit code from the authenticator app
+  /// - token: The 4-digit code from the authenticator app
   /// - secret: The secret key that was provided during setup
   Future<void> enable2FA({
     required String token,

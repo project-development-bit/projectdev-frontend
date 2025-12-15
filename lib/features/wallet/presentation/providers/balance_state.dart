@@ -12,6 +12,8 @@ class BalanceState {
   final GetBalanceStatus status;
   final String? error;
 
+  bool get isLoading => status == GetBalanceStatus.loading;
+
   const BalanceState({
     this.balance,
     this.status = GetBalanceStatus.initial,

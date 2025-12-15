@@ -114,6 +114,7 @@ class _ChangeNameDialogState extends ConsumerState<ChangeNameDialog> {
   Widget build(BuildContext context) {
     final isLoading = ref.watch(changeNameNotifierProvider).isChanging;
     return DialogBgWidget(
+        isOverlayLoading: isLoading,
         title: context.translate("change_your_name"),
         dialogHeight: context.isMobile ? 320 : 280,
         body: _dialogBgWidget(isLoading: isLoading));
@@ -166,7 +167,6 @@ class _ChangeNameDialogState extends ConsumerState<ChangeNameDialog> {
                 isDark: true,
                 fontWeight: FontWeight.w700,
                 width: context.isDesktop ? 200 : double.infinity,
-                isLoading: isLoading,
               )),
             ],
           ),

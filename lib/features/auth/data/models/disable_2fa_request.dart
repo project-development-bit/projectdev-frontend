@@ -6,10 +6,10 @@ part 'disable_2fa_request.g.dart';
 /// Request model for disabling 2FA
 ///
 /// Used for POST /2fa/disable endpoint
-/// Requires a 6-digit token from the authenticator app
+/// Requires a 4-digit token from the authenticator app
 @JsonSerializable()
 class Disable2FARequest extends Equatable {
-  /// The 6-digit 2FA token from the authenticator app
+  /// The 4-digit 2FA token from the authenticator app
   final String token;
 
   /// Creates an instance of [Disable2FARequest]

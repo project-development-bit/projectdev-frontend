@@ -28,6 +28,8 @@ class RewardDialog extends ConsumerWidget {
     final height = _dialogHeight(context);
 
     return DialogBgWidget(
+      isInitLoading: isLoading,
+      isOverlayLoading: false,
       padding: EdgeInsets.zero,
       dialogHeight: height,
       dividerColor: const Color(0xFF003248), //TODO: to use from schma color
@@ -38,11 +40,7 @@ class RewardDialog extends ConsumerWidget {
           // ---------------------------
           // LOADING
           // ---------------------------
-          if (isLoading)
-            SliverFillRemaining(
-              hasScrollBody: false,
-              child: _loadingWidget(),
-            ),
+          
 
           // ---------------------------
           // ERROR
@@ -105,17 +103,6 @@ class RewardDialog extends ConsumerWidget {
   }
 }
 
-Widget _loadingWidget() {
-  return const Padding(
-    padding: EdgeInsets.symmetric(vertical: 24, horizontal: 32),
-    child: Center(
-      child: CircularProgressIndicator(
-        strokeWidth: 3,
-        color: Colors.white,
-      ),
-    ),
-  );
-}
 
 Widget _errorWidget(String error) {
   return Padding(

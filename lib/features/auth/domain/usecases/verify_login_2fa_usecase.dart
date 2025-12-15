@@ -15,7 +15,7 @@ final verifyLogin2FAUseCaseProvider = Provider<VerifyLogin2FAUseCase>(
 
 /// Use case for verifying 2FA code during login
 ///
-/// This use case verifies the 6-digit code from authenticator app
+/// This use case verifies the 4-digit code from authenticator app
 /// when a user with 2FA enabled attempts to login.
 class VerifyLogin2FAUseCase implements UseCase<VerifyLogin2FAResponse, VerifyLogin2FARequest> {
   /// Authentication repository

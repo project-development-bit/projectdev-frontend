@@ -34,21 +34,15 @@ class LocalizationRemoteDataSourceImpl implements LocalizationRemoteDataSource {
   Future<LocalizationModel> getLocalization(String locale) async {
     var countryCode = getLocateCode(locale.toLowerCase());
     final url =
-        "https://gigafaucet-images-s3.s3.ap-southeast-2.amazonaws.com/$countryCode.json";
+        "/app_settings/locales/$countryCode.json";
 
     try {
       debugPrint('🌐 Fetching localization for: $locale');
       debugPrint('📤 Request URL: $url');
       debugPrint('📤 Base URL: ${dioClient.client.options.baseUrl}');
 
-      final response = await Dio().get(
+      final response = await dioClient.get(
         url,
-        options: Options(
-          responseType: ResponseType.json,
-          headers: {
-            "Accept": "application/json",
-          },
-        ),
       );
 
       debugPrint('📥 Localization response received');

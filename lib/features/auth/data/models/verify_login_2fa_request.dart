@@ -8,7 +8,7 @@ part 'verify_login_2fa_request.g.dart';
 /// Used for POST /2fa/verify-login endpoint
 @JsonSerializable()
 class VerifyLogin2FARequest extends Equatable {
-  /// 6-digit verification token from authenticator app
+  /// 4-digit verification token from authenticator app
   final String token;
 
   /// User ID returned from initial login response

@@ -56,6 +56,10 @@ class _ProfileDialogState extends ConsumerState<ProfileDialog> {
         ref.read(earningsHistoryNotifierProvider.notifier);
 
     return DialogBgWidget(
+      isInitLoading: currentUserState.isLoading ||
+          selectedStatisticsState.isLoading ||
+          selectedEarningsHistoryState.isLoading,
+      isOverlayLoading: false,
       dialogHeight: height,
       title: currentUserState.user?.name ?? "Unknown User",
       padding: EdgeInsets.zero,

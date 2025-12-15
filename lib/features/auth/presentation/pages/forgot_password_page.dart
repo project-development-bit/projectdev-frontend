@@ -91,6 +91,7 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
       girlHeight: 400,
       girlRightOffset: -150,
       girlBottomOffset: -160,
+      isLoading: isLoading,
       child: Form(
         key: _formKey,
         child: Column(
@@ -151,8 +152,8 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
               CustomUnderLineButtonWidget(
                 title: localizations?.translate('send_reset_email') ??
                     'Send Reset Email',
-                onTap: isLoading ? () {} : _handleSendResetEmail,
-                isLoading: isLoading,
+                onTap: _handleSendResetEmail,
+               
                 height: 56,
                 isActive: true,
 
