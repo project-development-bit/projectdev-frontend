@@ -762,5 +762,12 @@
   "date": "Date",
   "coins_earn": "Coins Earn",
   "logout_title": "အကောင့်မှ ထွက်ရန် အတည်ပြုချက်",
-  "logout_description": "သင်၏အကောင့်မှ ထွက်ရန် သေချာပါသလား?"
+  "logout_description": "သင်၏အကောင့်မှ ထွက်ရန် သေချာပါသလား?",
+  "time_just_now": "ခုနစ်နာရီမကြာသေးပါ",
+  "time_min_ago": "{count} မိနစ်အကြာ",
+  "time_hr_ago": "{count} နာရီအကြာ",
+  "time_day_ago": "{count} ရက်အကြာ",
+  "time_week_ago": "{count} ပတ်အကြာ",
+  "time_month_ago": "{count} လအကြာ",
+  "time_year_ago": "{count} နှစ်အကြာ"
 }

@@ -764,5 +764,12 @@
   "coins_earn": "Coins Earn",
   "logout_title": "Logout",
   "logout_description": "Are you sure you want to logout?",
-  "crop_and_upload": "Crop & Upload"
+  "crop_and_upload": "Crop & Upload",
+  "time_just_now": "just now",
+  "time_min_ago": "{count} min ago",
+  "time_hr_ago": "{count} hr ago",
+  "time_day_ago": "{count} day ago",
+  "time_week_ago": "{count} week ago",
+  "time_month_ago": "{count} month ago",
+  "time_year_ago": "{count} year ago"
 }

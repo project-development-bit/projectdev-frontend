@@ -84,17 +84,10 @@ class _ProfileDialogState extends ConsumerState<ProfileDialog> {
                     UserLevel.bronze.label(appLocalizations),
                 messageCount: "1542",
                 location: currentUserState.user?.countryName ?? "Unknown",
-                createdText: context
-                    .translate(
-                      "profile_created_days",
-                    )
-                    .replaceAll(
-                      '{days}',
-                      DateTime.parse(currentUserState.user?.createdAt
-                                  .toIso8601String() ??
-                              DateTime.now().toIso8601String())
-                          .timeAgoDaysOnly(),
-                    ),
+                createdText: DateTime.parse(
+                        currentUserState.user?.createdAt.toIso8601String() ??
+                            DateTime.now().toIso8601String())
+                    .timeAgo(context),
               ),
               SizedBox(height: isMobile || isTablet ? 31 : 40),
               ProfileTabs(
