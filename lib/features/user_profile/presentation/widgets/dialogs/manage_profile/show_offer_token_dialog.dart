@@ -33,8 +33,10 @@ class _OfferTokenDialogState extends ConsumerState<OfferTokenDialog> {
 
   @override
   Widget build(BuildContext context) {
+   
     return DialogBgWidget(
         title: context.translate("your_offer_token"),
+        isOverlayLoading: false,
         dialogHeight: context.isMobile ? 320 : 280,
         body: _dialogBgWidget());
   }

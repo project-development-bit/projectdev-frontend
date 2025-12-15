@@ -73,7 +73,7 @@ class _TwoFactorAuthPageState extends ConsumerState<TwoFactorAuthPage> {
 
   String? _validateCode(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Please enter the 6-digit code';
+      return 'Please enter the 4-digit code';
     }
     if (value.length != 6) {
       return 'Code must be exactly 6 digits';
@@ -175,7 +175,7 @@ class _TwoFactorAuthPageState extends ConsumerState<TwoFactorAuthPage> {
 
                   const SizedBox(height: 32),
 
-                  // 6-digit code input field
+                  // 4-digit code input field
                   TextFormField(
                     controller: _codeController,
                     focusNode: _codeFocusNode,

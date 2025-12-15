@@ -1,4 +1,5 @@
 import 'package:cointiply_app/core/common/common_image_widget.dart';
+import 'package:cointiply_app/core/common/common_loading_widget.dart';
 import 'package:cointiply_app/core/config/app_local_images.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:cointiply_app/core/widgets/responsive_container.dart';
@@ -16,6 +17,7 @@ class OnboardingBackground extends StatelessWidget {
     this.girlHeight,
     this.girlRightOffset,
     this.girlBottomOffset,
+    this.isLoading = false,
   });
 
   final Widget child;
@@ -27,6 +29,7 @@ class OnboardingBackground extends StatelessWidget {
   final double? girlHeight;
   final double? girlRightOffset;
   final double? girlBottomOffset;
+  final bool isLoading;
   @override
   Widget build(BuildContext context) {
     final isMobile = context.isMobile;
@@ -120,6 +123,16 @@ class OnboardingBackground extends StatelessWidget {
               ),
             ),
           ),
+          if (isLoading)
+            Positioned.fill(
+              child: Container(
+                color: Color(0xCC141414).withAlpha((0.80 * 255).toInt()),
+                child: Center(
+                    child: CommonLoadingWidget(
+                  height: 130,
+                )),
+              ),
+            ),
         ],
       ),
     );

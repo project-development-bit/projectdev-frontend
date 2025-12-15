@@ -110,22 +110,27 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return DialogBgWidget(
-        dialogHeight: context.isDesktop ? 370 : 440,
-        title: context.translate("change_your_country_title"),
-        body: _manageDialogBody(context));
-  }
-
-  Widget _manageDialogBody(BuildContext context) {
     final countriesState = ref.watch(getCountriesNotifierProvider);
     final isChangingCountry = ref.watch(changeCountryProvider).isChanging;
-    final _selectedCountry = ref.watch(selectedCountryProvider);
+    final selectedCountry = ref.watch(selectedCountryProvider);
+
+    return DialogBgWidget(
+        dialogHeight: context.isDesktop ? 370 : 440,
+        isInitLoading: countriesState.isLoading,
+        isOverlayLoading: isChangingCountry,
+        title: context.translate("change_your_country_title"),
+        body: _manageDialogBody(
+            context, selectedCountry, isChangingCountry, countriesState));
+  }
+
+  Widget _manageDialogBody(BuildContext context, Country? selectedCountry,
+      bool isChangingCountry, GetCountriesState countriesState) {
+    
 
     return SingleChildScrollView(
       child: Container(
         padding: context.isDesktop
-            ? const EdgeInsets.symmetric(horizontal: 32)
-            : EdgeInsets.symmetric(horizontal: 16),
+            ? EdgeInsets.all(32) : EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
@@ -157,10 +162,9 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
               fontSize: 14,
               isDark: true,
               fontWeight: FontWeight.w700,
-              onTap: _selectedCountry != null
+              onTap: selectedCountry != null
                   ? _onChangeCountry
                   : null,
-              isLoading: isChangingCountry,
             )
           ],
         ),

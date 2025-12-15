@@ -7,10 +7,14 @@ class DialogScaffoldWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-        backgroundColor: Colors.transparent,
-        insetPadding: padding ?? const EdgeInsets.all(20),
-        clipBehavior: Clip.hardEdge,
-        child: child);
+    return Container(
+      margin: const EdgeInsets.only(top: 40),
+      child: Dialog(
+          backgroundColor: Colors.transparent,
+          alignment: Alignment.topCenter,
+          insetPadding: padding ?? const EdgeInsets.all(20),
+          clipBehavior: Clip.hardEdge,
+          child: child),
+    );
   }
 }

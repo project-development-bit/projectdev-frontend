@@ -1,4 +1,3 @@
-import 'package:cointiply_app/core/common/common_loading_widget.dart';
 import 'package:cointiply_app/core/common/common_rich_text_with_icon.dart';
 import 'package:cointiply_app/core/core.dart';
 import 'package:cointiply_app/features/reward/presentation/providers/reward_provider.dart';
@@ -28,6 +27,8 @@ class RewardDialog extends ConsumerWidget {
     final height = _dialogHeight(context);
 
     return DialogBgWidget(
+      isInitLoading: isLoading,
+      isOverlayLoading: false,
       padding: EdgeInsets.zero,
       dialogHeight: height,
       dividerColor: const Color(0xFF003248), //TODO: to use from schma color
@@ -38,11 +39,7 @@ class RewardDialog extends ConsumerWidget {
           // ---------------------------
           // LOADING
           // ---------------------------
-          if (isLoading)
-            SliverFillRemaining(
-              hasScrollBody: false,
-              child: _loadingWidget(),
-            ),
+          
 
           // ---------------------------
           // ERROR
@@ -105,14 +102,6 @@ class RewardDialog extends ConsumerWidget {
   }
 }
 
-Widget _loadingWidget() {
-  return Padding(
-    padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 32),
-    child: Center(
-      child: CommonLoadingWidget.medium(),
-    ),
-  );
-}
 
 Widget _errorWidget(String error) {
   return Padding(
