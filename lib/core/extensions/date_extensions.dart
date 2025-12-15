@@ -8,10 +8,9 @@ extension TimeAgoExtension on DateTime {
     final l10n = AppLocalizations.of(context);
 
     String t(String key, {int? count}) {
-      final value = l10n?.translate(key);
-      if (value == null) return key;
-      if (count == null) return value;
-      return value.replaceAll('{count}', count.toString());
+      final value = l10n
+          ?.translate(key, args: [if (count != null) count.toString() else '']);
+      return value ?? '';
     }
 
     if (diff.inMinutes < 1) {
