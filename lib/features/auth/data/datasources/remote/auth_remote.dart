@@ -463,10 +463,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<VerifyCodeResponse> verifyCode(VerifyCodeRequest request) async {
     try {
-      // Option 1: Try with path parameters (current implementation)
-      final encodedEmail = Uri.encodeComponent(request.email);
-      final encodedCode = Uri.encodeComponent(request.code);
-      final url = '$verifyCodeEndpoints/$encodedEmail/$encodedCode';
+      final url = verifyCodeEndpoints;
 
       debugPrint('🔍 Verifying code with URL: $url');
       debugPrint(
@@ -474,7 +471,10 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       debugPrint(
           '🔍 Full URL will be: ${dioClient.client.options.baseUrl}$url');
 
-      final response = await dioClient.get(url);
+      final response = await dioClient.post(url, data: {
+        'email': request.email,
+        'security_code': request.code,
+      });
 
       return VerifyCodeResponse.fromJson(response.data as Map<String, dynamic>);
     } on DioException catch (e) {
@@ -675,11 +675,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<VerifyCodeForForgotPasswordResponse> verifyCodeForForgotPassword(
       VerifyCodeRequest request) async {
     try {
-      // First try the GET endpoint that expects path parameters
-      final encodedEmail = Uri.encodeComponent(request.email);
-      final encodedCode = Uri.encodeComponent(request.code);
-      final url =
-          '$forgetPasswordVerifyCodeEndpoints/$encodedEmail/$encodedCode';
+      final url = forgetPasswordVerifyCodeEndpoints;
 
       debugPrint('🔍 Verifying code with URL: $url');
       debugPrint(
@@ -687,7 +683,10 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       debugPrint(
           '🔍 Full URL will be: ${dioClient.client.options.baseUrl}$url');
 
-      final response = await dioClient.get(url);
+      final response = await dioClient.post(url, data: {
+        'email': request.email,
+        'security_code': request.code,
+      });
 
       return VerifyCodeForForgotPasswordResponse.fromJson(
           response.data as Map<String, dynamic>);
