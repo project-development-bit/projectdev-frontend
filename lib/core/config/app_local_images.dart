@@ -18,7 +18,7 @@ class AppLocalImages {
   static const String bannerMobile = 'assets/images/bg/banner_mobile@2x.png';
 
   // coin Images
-  static const String coin = "assets/images/rewards/coin@2x.png";
+  static const String coin = "assets/images/rewards/coin@3x.png";
   static const String coinSvg = "assets/images/rewards/coin.svg";
 
   // Onboarding Images
@@ -97,14 +97,29 @@ class AppLocalImages {
       "assets/images/rewards/ptc_ad_discount.png";
   static const String statusRewardBg =
       "assets/images/rewards/status_rewards_bg.png";
-  static const String bronze = "assets/images/levels/bronze.png";
-  static const String silver = "assets/images/rewards/silver.png";
+  static const String bronze = "assets/images/rewards/bronze_level.png";
+  static const String silver = "assets/images/rewards/sliver.png";
   static const String gold = "assets/images/rewards/gold.png";
   static const String diamond = "assets/images/rewards/diamond.png";
   static const String legend = "assets/images/rewards/legend.png";
 
   static String levelStatusImage(String status) {
-    return "assets/images/levels/$status.png";
+    // return "assets/images/levels/$status.png";
+
+    switch (status.toLowerCase()) {
+      case "bronze":
+        return AppLocalImages.bronze;
+      case "silver":
+        return AppLocalImages.silver;
+      case "gold":
+        return AppLocalImages.gold;
+      case "diamond":
+        return AppLocalImages.diamond;
+      case "legend":
+        return AppLocalImages.legend;
+      default:
+        return AppLocalImages.bronze;
+    }
   }
 
   // Profile

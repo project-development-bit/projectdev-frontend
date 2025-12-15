@@ -17,8 +17,9 @@ class RewardXpPrograssArea extends StatelessWidget {
     return Row(
       children: [
         CommonImage(
-          imageUrl:
-              AppLocalImages.levelStatusImage(userlevelState.currentStatus),
+          imageUrl: AppLocalImages.levelStatusImage(
+            userlevelState.currentStatus,
+          ),
           height: 50,
           width: 42,
         ),
