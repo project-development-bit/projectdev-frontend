@@ -1,6 +1,7 @@
 import 'package:cointiply_app/core/config/app_local_images.dart';
 import 'package:cointiply_app/core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class HeaderCoinBalanceBox extends StatelessWidget {
   const HeaderCoinBalanceBox({super.key, required this.coinBalance});
@@ -28,17 +29,17 @@ class HeaderCoinBalanceBox extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CommonImage(
-            imageUrl: AppLocalImages.coin,
-            width: context.isMobile ? 16 : 24,
-            height: context.isMobile ? 16 : 24,
-            filterQuality: FilterQuality.high,
-          ),
-          // SvgPicture.asset(
-          //   AppLocalImages.coinSvg,
+          // CommonImage(
+          //   imageUrl: AppLocalImages.coin,
           //   width: context.isMobile ? 16 : 24,
           //   height: context.isMobile ? 16 : 24,
+          //   filterQuality: FilterQuality.high,
           // ),
+          SvgPicture.asset(
+            AppLocalImages.coinSvg,
+            width: context.isMobile ? 16 : 24,
+            height: context.isMobile ? 16 : 24,
+          ),
           const SizedBox(width: 5),
           CommonText.titleMedium(
             coinBalance,
