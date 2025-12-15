@@ -1,4 +1,5 @@
 import 'package:cointiply_app/core/config/app_local_images.dart';
+import 'package:cointiply_app/features/faucet/presentation/provider/faucet_notifier_provider.dart';
 import 'package:cointiply_app/features/home/presentation/widgets/event/home_event_section.dart';
 import 'package:cointiply_app/features/home/presentation/widgets/home_features_section.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
@@ -25,6 +26,7 @@ class _HomePageState extends ConsumerState<HomePage> {
       if (isAuthenticated) {
         ref.read(currentUserProvider.notifier).initializeUser();
       }
+      ref.read(getFaucetNotifierProvider.notifier).fetchFaucetStatus();
     });
     super.initState();
   }
