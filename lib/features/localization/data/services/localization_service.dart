@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:cointiply_app/features/localization/data/datasource/local/localization_local_data_source.dart';
 import 'package:cointiply_app/features/localization/data/model/response/localization_model.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalizationService {
   static const String _localizationPath = 'assets/l10n';
-  static const List<String> supportedLocales = ['en', 'my'];
+  static const List<String> supportedLocales = ['en', 'my', 'fr'];
 
   Locale? _locale;
   Map<String, String>? _localizedStrings;
@@ -29,19 +28,15 @@ class LocalizationService {
 
   Future<bool> load(Locale locale, WidgetRef ref) async {
     _locale = locale;
-    debugPrint(
-        'LocalizationService.load() called for locale: ${locale.languageCode}');
+    debugPrint('Testing 101 : Load called for locale: ${locale.languageCode}');
     try {
-      // Map<String, dynamic>? jsonString =
-      //     // (await getCachedLocalization(locale.languageCode))?.toJson();
-
       Map<String, dynamic>? jsonString = (await ref
               .read(localizationLocalDataSourceProvider)
               .getCachedLocalization(locale.languageCode))
           ?.toJson();
 
       Map<String, dynamic> jsonMap = jsonString ?? {};
-      if (jsonMap.isEmpty || kDebugMode) {
+      if (jsonMap.isEmpty) {
         String jsonString = await rootBundle
             .loadString('$_localizationPath/${locale.languageCode}.json');
         jsonMap = json.decode(jsonString);

@@ -210,6 +210,7 @@ class _MyAppState extends ConsumerState<MyApp> {
         title: FlavorManager.appName, // Use flavor-specific app name
 
         // Theme configuration - Use app settings theme from server, fallback to default theme
+
         theme: appSettingsThemeState.lightTheme ?? AppTheme.lightTheme,
         darkTheme: appSettingsThemeState.darkTheme ?? AppTheme.darkTheme,
         themeMode: themeNotifier.getEffectiveThemeMode(
@@ -218,6 +219,7 @@ class _MyAppState extends ConsumerState<MyApp> {
         supportedLocales: const [
           Locale('en', 'US'), // English
           Locale('my', 'MM'), // Burmese
+          Locale('fr', 'FR'), // French
         ],
         localizationsDelegates: [
           AppLocalizationsDelegate(ref),

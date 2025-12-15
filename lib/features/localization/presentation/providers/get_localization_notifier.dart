@@ -65,7 +65,8 @@ class LocalizationController extends StateNotifier<LocalizationState> {
           localization: localization,
         );
         if (request.userId != null && request.languageCode != null) {
-          debugPrint("🌐 Translations loaded for user: ${request.userId}");
+          debugPrint(
+              "🌐 Translations loaded for user: ${request.userId} languageCode ${request.languageCode}");
           _ref.read(changeLanguageProvider.notifier).changeLanguage(
                 languageCode: request.languageCode!,
                 languageName: request.languageCode!.toUpperCase(),
