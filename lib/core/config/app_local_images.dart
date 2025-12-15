@@ -34,19 +34,21 @@ class AppLocalImages {
       "assets/images/bg/home_background_desktop@2x.png";
 
   static const String homeCoinBackgroundSection1Desktop =
-      "assets/images/bg/coin_background_section_1_desktop@2x.png";
+      "assets/images/bg/home_coin_section_1_desktop@2x.png";
   static const String homeCoinBackgroundSection1Mobile =
-      "assets/images/bg/coin_background_section_1_mobile@2x.png";
+      "assets/images/bg/home_coin_section_1_mobile@2x.png";
 
-  // static const String homeCoinBackgroundSection2Desktop =
-  //     "https://gigafaucet-images-s3.s3.ap-southeast-2.amazonaws.com/avatars/54/54-1764641967080-co861n23nmdwh7qz.png";
   static const String homeCoinBackgroundSection2Mobile =
-      "assets/images/bg/coin_background_section_2_mobile@2x.png";
+      "assets/images/bg/home_coin_section_2_mobile@2x.png";
 
   static const String homeCoinBackgroundSection3Desktop =
-      "assets/images/bg/coin_background_section_3_desktop@2x.png";
-  static const String homeCoinBackgroundSection3Mobile =
-      "assets/images/bg/coin_background_section_3_mobile@2x.png";
+      "assets/images/bg/home_coin_section_3_desktop@2x.png";
+  // No Section 3 For Mobile
+
+  static const String homeCoinBackgroundSection4Desktop =
+      "assets/images/bg/home_coin_section_4_desktop@2x.png";
+  static const String homeCoinBackgroundSection4Mobile =
+      "assets/images/bg/home_coin_section_4_mobile@2x.png";
 
   // Girl Image
   static const String girlWholeBody = "assets/images/girl_whole_body.png";
