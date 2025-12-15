@@ -59,6 +59,10 @@ class _ProfileDialogState extends ConsumerState<ProfileDialog> {
     final AppLocalizations? appLocalizations = AppLocalizations.of(context);
 
     return DialogBgWidget(
+      isInitLoading: currentUserState.isLoading ||
+          selectedStatisticsState.isLoading ||
+          selectedEarningsHistoryState.isLoading,
+      isOverlayLoading: false,
       dialogHeight: height,
       title: currentUserState.user?.name ?? "Unknown User",
       padding: EdgeInsets.zero,

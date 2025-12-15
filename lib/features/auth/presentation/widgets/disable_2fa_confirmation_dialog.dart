@@ -107,6 +107,7 @@ class _Disable2FAConfirmationDialogState
     final isDisabling = disable2FAState is Disable2FALoading;
 
     return DialogBgWidget(
+      isOverlayLoading: isDisabling,
       dialogHeight: context.isDesktop
           ? 450
           : context.isTablet

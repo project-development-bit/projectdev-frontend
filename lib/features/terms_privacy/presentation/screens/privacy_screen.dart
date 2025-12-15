@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/common/common_loading_widget.dart';
 import 'package:cointiply_app/core/core.dart';
 import 'package:cointiply_app/routing/app_router.dart';
 import 'package:flutter/material.dart';
@@ -52,18 +53,7 @@ class _PrivacyScreenState extends ConsumerState<PrivacyScreen> {
     return Container(
       padding: const EdgeInsets.all(24),
       child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CircularProgressIndicator(),
-            SizedBox(height: 16),
-            CommonText(
-              AppLocalizations.of(context)!.translate("loading_privacy_policy"),
-              fontSize: 16,
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
+        child: CommonLoadingWidget.large(),
       ),
     );
   }

@@ -134,16 +134,20 @@ class _ChangeEmailDialogState extends ConsumerState<ChangeEmailDialog> {
     return DialogBgWidget(
         title: context.translate("change_your_email_title"),
         dialogHeight: dialogHeight,
-        body: _manageDialogBody(context, isChanging));
+        isOverlayLoading: isChanging,
+        body: _manageDialogBody(context));
   }
 
-  Widget _manageDialogBody(BuildContext context, bool isChanging) {
+  Widget _manageDialogBody(BuildContext context) {
     return Form(
       key: _formKey,
       child: SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.symmetric(
-              horizontal: context.isMobile || context.isTablet ? 16 : 32),
+            horizontal: context.isMobile || context.isTablet ? 16 : 32,
+          ).copyWith(
+            bottom: context.isMobile || context.isTablet ? 16 : 32,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
@@ -330,8 +334,7 @@ class _ChangeEmailDialogState extends ConsumerState<ChangeEmailDialog> {
                 width: context.isMobile || context.isTablet
                     ? double.infinity
                     : 300,
-                isLoading: isChanging,
-                onTap: isChanging ? null : _handleChangeEmail,
+                onTap: _handleChangeEmail,
               )
             ],
           ),

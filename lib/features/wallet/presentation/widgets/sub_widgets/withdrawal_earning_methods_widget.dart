@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/common/common_loading_widget.dart';
 import 'package:cointiply_app/features/wallet/domain/entity/withdrawal_option.dart';
 import 'package:flutter/material.dart';
 import 'package:cointiply_app/core/core.dart';
@@ -34,7 +35,7 @@ class WithdrawalEarningMethodsWidget extends StatelessWidget {
         ),
       ),
       child: isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? Center(child: CommonLoadingWidget.medium())
           : Wrap(
               spacing: 8,
               runSpacing: 8,

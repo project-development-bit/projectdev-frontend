@@ -103,14 +103,15 @@ class CommonTableWidget extends StatelessWidget {
                 ),
         ),
         const SizedBox(height: 12),
-        TableFooter(
-          total: total,
-          page: page,
-          limit: limit,
-          totalPages: totalPages,
-          changePage: changePage,
-          changeLimit: changeLimit,
-        ),
+        if (!(newValues.isEmpty && !isLoading))
+          TableFooter(
+            total: total,
+            page: page,
+            limit: limit,
+            totalPages: totalPages,
+            changePage: changePage,
+            changeLimit: changeLimit,
+          ),
       ],
     );
   }
