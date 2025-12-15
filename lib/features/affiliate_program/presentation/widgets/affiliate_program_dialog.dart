@@ -3,6 +3,7 @@ import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/common/dialog_bg_widget.dart';
 import 'package:cointiply_app/core/common/table/common_table_widget.dart';
 import 'package:cointiply_app/core/common/table/models/table_column.dart';
+import 'package:cointiply_app/core/config/app_local_images.dart';
 import 'package:cointiply_app/core/extensions/extensions.dart';
 import 'package:cointiply_app/features/affiliate_program/data/models/request/referred_users_request.dart';
 import 'package:cointiply_app/features/affiliate_program/presentation/providers/referral_link_provider.dart';
@@ -36,27 +37,27 @@ class _AffiliateProgramDialogState
     extends ConsumerState<AffiliateProgramDialog> {
   final socialIconList = [
     {
-      'iconPath': 'assets/images/icons/facebook.svg',
+      'iconPath': AppLocalImages.facebookIcon,
       'name': 'facebook',
     },
     {
-      'iconPath': 'assets/images/icons/gmail.svg',
+      'iconPath': AppLocalImages.gmailIcon,
       'name': 'gmail',
     },
     {
-      'iconPath': 'assets/images/icons/whatsapp.svg',
+      'iconPath': AppLocalImages.whatsappIcon,
       'name': 'whatsapp',
     },
     {
-      'iconPath': 'assets/images/icons/linkedin.svg',
+      'iconPath': AppLocalImages.linkedinIcon,
       'name': 'linkedin',
     },
     {
-      'iconPath': 'assets/images/icons/twitter.svg',
+      'iconPath': AppLocalImages.twitterIcon,
       'name': 'twitter',
     },
     {
-      'iconPath': 'assets/images/icons/telegram.svg',
+      'iconPath': AppLocalImages.telegramIcon,
       'name': 'telegram',
     },
   ];
@@ -175,7 +176,7 @@ class _AffiliateProgramDialogState
       decoration: BoxDecoration(
         border: Border.all(color: Color(0xff333333)),
         image: DecorationImage(
-          image: AssetImage('assets/images/trophy.png'),
+          image: AssetImage(AppLocalImages.eventDailyStreakBg),
           alignment: Alignment(0, 0),
           fit: BoxFit.cover,
         ),
@@ -303,7 +304,7 @@ class _AffiliateProgramDialogState
           crossAxisCount: isMobile ? 2 : 4),
       children: [
         _infoItem(
-          assetPath: "assets/images/money_bag.png",
+          assetPath: AppLocalImages.moneyBag,
           value: _buildStatValue(
             isLoading: isLoading,
             hasError: hasError,
@@ -313,7 +314,7 @@ class _AffiliateProgramDialogState
           label: context.translate("referral_earnings"),
         ),
         _infoItem(
-          assetPath: "assets/images/referral_person.png",
+          assetPath: AppLocalImages.referralPerson,
           value: _buildStatValue(
             isLoading: isLoading,
             hasError: hasError,
@@ -323,7 +324,7 @@ class _AffiliateProgramDialogState
           label: context.translate("referral_users"),
         ),
         _infoItem(
-          assetPath: "assets/images/sand_watch.png",
+          assetPath: AppLocalImages.sandWatch,
           value: _buildStatValue(
             isLoading: isLoading,
             hasError: hasError,
@@ -333,7 +334,7 @@ class _AffiliateProgramDialogState
           label: context.translate("pending_earnings"),
         ),
         _infoItem(
-          assetPath: "assets/images/week.png",
+          assetPath: AppLocalImages.week,
           value: _buildStatValue(
             isLoading: isLoading,
             hasError: hasError,
@@ -381,7 +382,7 @@ class _AffiliateProgramDialogState
           ),
           const SizedBox(width: 4),
           Image.asset(
-            "assets/images/rewards/coin.png",
+            AppLocalImages.coin,
             height: 16,
             width: 16,
           ),

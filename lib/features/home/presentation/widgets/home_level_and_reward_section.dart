@@ -99,7 +99,7 @@ class HomeLevelAndRewardSection extends StatelessWidget {
           border: Border.all(color: context.secondary, width: 5),
         ),
         child: Image.asset(
-          'assets/images/levels/whale.png',
+          AppLocalImages.whale,
           width: 83,
           height: 83,
         ),
@@ -134,7 +134,7 @@ class HomeLevelAndRewardSection extends StatelessWidget {
                 child: Row(
                   children: [
                     Image.asset(
-                      'assets/images/rewards/offer_boost_reward.png',
+                      AppLocalImages.offerBoostReward,
                       width: 41,
                     ),
                     SizedBox(width: 14),
@@ -168,7 +168,7 @@ class HomeLevelAndRewardSection extends StatelessWidget {
                 child: Row(
                   children: [
                     Image.asset(
-                      'assets/images/rewards/shop_discount.png',
+                      AppLocalImages.shopDiscount,
                       width: 41,
                     ),
                     SizedBox(width: 14),
@@ -223,7 +223,7 @@ class HomeLevelAndRewardSection extends StatelessWidget {
             spacing: 20.0,
             children: [
               Image.asset(
-                'assets/images/rewards/shield_icon.png',
+                AppLocalImages.shieldIcon,
                 width: 32,
               ),
               Flexible(

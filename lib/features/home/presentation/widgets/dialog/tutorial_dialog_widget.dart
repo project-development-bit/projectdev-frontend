@@ -1,5 +1,6 @@
 import 'package:cointiply_app/core/common/close_square_button.dart';
 import 'package:cointiply_app/core/common/common_text.dart';
+import 'package:cointiply_app/core/config/app_local_images.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:cointiply_app/core/providers/turnstile_provider.dart';
 import 'package:cointiply_app/core/theme/app_colors.dart';
@@ -23,48 +24,48 @@ class _FirstTimeTutorialDialogState extends State<FirstTimeTutorialDialog> {
   final List<Map<String, dynamic>> steps = [
     {
       'title': 'welcome_to_gigafaucet',
-      'image': 'assets/tutorial/welcome.png',
+      'image': AppLocalImages.tutorialWelcome,
       'gradient': true,
       'description': 'welcome_description',
     },
     {
       'title': 'free_spins_and_mystery_boxes',
-      'image': 'assets/tutorial/spin.png',
+      'image': AppLocalImages.tutorialSpin,
       'description': 'free_spins_description',
     },
     {
       'title': 'daily_streak',
-      'image': 'assets/tutorial/streak.webp',
+      'image': AppLocalImages.tutorialStreak,
       'description': 'daily_streak_description',
     },
     {
       'title': 'ptc_ads',
-      'image': 'assets/tutorial/ptc.jpg',
+      'image': AppLocalImages.tutorialPtc,
       'description': 'ptc_ads_description',
     },
     {
       'title': 'missions_and_quests',
-      'image': 'assets/tutorial/missions.png',
+      'image': AppLocalImages.tutorialMissions,
       'description': 'missions_description',
     },
     {
       'title': 'completing_offers',
-      'image': 'assets/tutorial/offers.png',
+      'image': AppLocalImages.tutorialOffers,
       'description': 'offers_description',
     },
     {
       'title': 'xp_points',
-      'image': 'assets/tutorial/xp.png',
+      'image': AppLocalImages.tutorialXp,
       'description': 'xp_description',
     },
     {
       'title': 'withdrawing_coins',
-      'image': 'assets/tutorial/withdraw.png',
+      'image': AppLocalImages.tutorialWithdraw,
       'description': 'withdraw_description',
     },
     {
       'title': 'you_are_all_set',
-      'image': 'assets/tutorial/reward.png',
+      'image': AppLocalImages.tutorialReward,
       'description': 'all_set_description',
       'final': true,
     },

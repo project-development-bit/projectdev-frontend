@@ -1,4 +1,5 @@
 import 'package:cointiply_app/core/common/common_text.dart';
+import 'package:cointiply_app/core/config/app_local_images.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:dotted_decoration/dotted_decoration.dart';
 import 'package:flutter/material.dart';
@@ -149,7 +150,7 @@ class HomeDailyFaucetWidget extends ConsumerWidget {
               ),
               SizedBox(width: 4),
               Image.asset(
-                'assets/images/rewards/coin.png',
+                AppLocalImages.coin,
                 width: 24,
                 height: 24,
               ),
@@ -256,7 +257,7 @@ class HomeDailyFaucetWidget extends ConsumerWidget {
                 ),
                 SizedBox(width: 6),
                 Image.asset(
-                  'assets/images/rewards/coin.png',
+                  AppLocalImages.coin,
                   width: 24,
                   height: 24,
                 ),

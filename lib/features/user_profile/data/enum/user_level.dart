@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/config/app_local_images.dart';
 import 'package:cointiply_app/features/localization/data/helpers/app_localizations.dart';
 import 'package:flutter/material.dart';
 
@@ -30,21 +31,21 @@ extension UserLevelIcon on UserLevel {
   String get asset {
     switch (this) {
       case UserLevel.bronze:
-        return "assets/images/rewards/bronze_level.png";
+        return AppLocalImages.bronze;
       case UserLevel.silver:
-        return "assets/images/rewards/sliver.png";
+        return AppLocalImages.silver;
       case UserLevel.gold:
-        return "assets/images/rewards/gold.png";
+        return AppLocalImages.gold;
       case UserLevel.diamond:
-        return "assets/images/rewards/diamond.png";
+        return AppLocalImages.diamond;
       case UserLevel.legend:
-        return "assets/images/rewards/legend.png";
+        return AppLocalImages.legend;
     }
   }
 }
 
 extension UserLevelLabel on UserLevel {
-  String lable(AppLocalizations? t, String tier) {
+  String labelByTier(AppLocalizations? t, String tier) {
     switch (tier) {
       case "bronze":
         return t?.translate("status_bronze") ?? "Bronze";
@@ -58,6 +59,36 @@ extension UserLevelLabel on UserLevel {
         return t?.translate("status_legend") ?? "Legend";
       default:
         return tier;
+    }
+  }
+
+  String label(AppLocalizations? t) {
+    switch (this) {
+      case UserLevel.bronze:
+        return t?.translate("status_bronze") ?? "Bronze";
+      case UserLevel.silver:
+        return t?.translate("status_silver") ?? "Silver";
+      case UserLevel.gold:
+        return t?.translate("status_gold") ?? "Gold";
+      case UserLevel.diamond:
+        return t?.translate("status_diamond") ?? "Diamond";
+      case UserLevel.legend:
+        return t?.translate("status_legend") ?? "Legend";
+    }
+  }
+
+  String get toStringValue {
+    switch (this) {
+      case UserLevel.bronze:
+        return 'bronze';
+      case UserLevel.silver:
+        return 'silver';
+      case UserLevel.gold:
+        return 'gold';
+      case UserLevel.diamond:
+        return 'diamond';
+      case UserLevel.legend:
+        return 'legend';
     }
   }
 }

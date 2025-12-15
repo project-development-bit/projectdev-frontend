@@ -50,15 +50,6 @@ class OnboardingBackground extends StatelessWidget {
               fit: BoxFit.cover,
             ),
           ),
-          Positioned.fill(
-            child: CommonImage(
-              imageUrl: backgroundImagePath ??
-                  (isMobile
-                      ? AppLocalImages.onboardingCoinSection1Mobile
-                      : AppLocalImages.onboardingCoinDesktop),
-              fit: BoxFit.cover,
-            ),
-          ),
           SingleChildScrollView(
             child: ConstrainedBox(
               constraints: BoxConstraints(
@@ -75,8 +66,8 @@ class OnboardingBackground extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     CommonImage(
-                      imageUrl: logoImagePath ??
-                          "assets/images/giga_faucet_text_logo.png",
+                      imageUrl:
+                          logoImagePath ?? AppLocalImages.gigaFaucetTextLogo,
                       width: isMobile ? 240 : 360,
                       height: isMobile ? 40 : 52,
                       fit: BoxFit.contain,
@@ -109,8 +100,7 @@ class OnboardingBackground extends StatelessWidget {
                             child: IgnorePointer(
                               ignoring: true,
                               child: Image.asset(
-                                // "assets/images/girl.png",
-                                "assets/images/girl_whole_body.png",
+                                AppLocalImages.girlWholeBody,
                                 height: localGirlHeight,
                                 fit: BoxFit.contain,
                               ),

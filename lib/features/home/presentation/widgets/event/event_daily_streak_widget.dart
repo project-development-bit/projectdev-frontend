@@ -1,5 +1,6 @@
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
+import 'package:cointiply_app/core/config/app_local_images.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:cointiply_app/features/faucet/presentation/widgets/home_daily_faucet_widget.dart';
 import 'package:flutter/material.dart';
@@ -65,7 +66,7 @@ class EventDailyStreakWidget extends StatelessWidget {
       decoration: BoxDecoration(
         border: Border.all(color: Color(0xff333333)),
         image: DecorationImage(
-          image: AssetImage('assets/images/trophy.png'),
+          image: AssetImage(AppLocalImages.eventDailyStreakBg),
           alignment: Alignment(0, 0),
           fit: BoxFit.cover,
         ),
@@ -139,7 +140,7 @@ class EventDailyStreakWidget extends StatelessWidget {
       child: Column(
         children: [
           Image.asset(
-            'assets/images/treasure_box.png',
+            AppLocalImages.eventTreasureBox,
             width: 100,
             height: 100,
           ),
@@ -186,7 +187,7 @@ class EventDailyStreakWidget extends StatelessWidget {
                               highlightColor: context.primary,
                             ),
                             Image.asset(
-                              'assets/images/rewards/coin.png',
+                              AppLocalImages.coin,
                               width: 24,
                               height: 24,
                             ),

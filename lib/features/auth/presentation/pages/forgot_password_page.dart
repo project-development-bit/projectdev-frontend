@@ -38,7 +38,8 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
     }
 
     // Check if Turnstile verification is completed
-    final turnstileState = ref.read(turnstileNotifierProvider(TurnstileActionEnum.forgetPassword));
+    final turnstileState =
+        ref.read(turnstileNotifierProvider(TurnstileActionEnum.forgetPassword));
     if (turnstileState is! TurnstileSuccess) {
       final localizations = AppLocalizations.of(context);
       context.showErrorSnackBar(

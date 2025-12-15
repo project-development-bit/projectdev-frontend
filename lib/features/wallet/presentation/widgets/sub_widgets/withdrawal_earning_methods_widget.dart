@@ -1,4 +1,5 @@
 import 'package:cointiply_app/core/common/common_loading_widget.dart';
+import 'package:cointiply_app/core/config/app_local_images.dart';
 import 'package:cointiply_app/features/wallet/domain/entity/withdrawal_option.dart';
 import 'package:flutter/material.dart';
 import 'package:cointiply_app/core/core.dart';
@@ -29,8 +30,8 @@ class WithdrawalEarningMethodsWidget extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         border: Border.all(width: 1.4, color: const Color(0xFF333333)),
-        image: const DecorationImage(
-          image: AssetImage("assets/images/bg/withdrawal_earning_bg@2x.png"),
+        image: DecorationImage(
+          image: AssetImage(AppLocalImages.withdrawalEarningBg),
           fit: BoxFit.cover,
         ),
       ),

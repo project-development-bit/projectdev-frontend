@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:cointiply_app/core/config/app_assets.dart';
 import 'package:flutter/services.dart';
 import '../models/theme_config_model.dart';
 
@@ -9,17 +10,17 @@ abstract class ThemeAssetDataSource {
 }
 
 class ThemeAssetDataSourceImpl implements ThemeAssetDataSource {
-  static const String _defaultThemePath = 'assets/theme/default_theme.json';
+  static const String _defaultThemePath = AppAssets.defaultTheme;
 
   @override
   Future<ThemeConfigModel> loadDefaultTheme() async {
     try {
       // Load JSON file from assets
       final jsonString = await rootBundle.loadString(_defaultThemePath);
-      
+
       // Parse JSON
       final jsonData = json.decode(jsonString) as Map<String, dynamic>;
-      
+
       // Convert to model
       return ThemeConfigModel.fromJson(jsonData);
     } catch (e) {
