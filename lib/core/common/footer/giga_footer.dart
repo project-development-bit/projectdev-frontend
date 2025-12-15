@@ -1,5 +1,6 @@
 import 'package:cointiply_app/core/common/footer/footer_section.dart';
 import 'package:cointiply_app/core/common/store_button.dart';
+import 'package:cointiply_app/core/config/app_local_images.dart';
 import 'package:cointiply_app/features/home/presentation/widgets/home_section_container.dart';
 import 'package:cointiply_app/features/terms_privacy/presentation/services/terms_privacy_navigation_service.dart';
 import 'package:flutter/material.dart';
@@ -157,7 +158,7 @@ class GigaFooter extends StatelessWidget {
 
   Widget _buildLogo() {
     return Image.asset(
-      "assets/images/giga_faucet_color_text_logo.png",
+      AppLocalImages.gigaFaucetColorTextLogo,
       height: 32,
     );
   }

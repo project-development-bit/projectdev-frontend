@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/config/app_assets.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -84,7 +85,7 @@ class ThemeRepositoryImpl implements ThemeRepository {
       } on DioException catch (apiError) {
         // Step 3: API failed - try to load from default JSON file
         debugPrint('⚠️ API fetch failed: ${apiError.message}');
-        debugPrint('📦 Loading from assets/theme/default_theme.json...');
+        debugPrint('📦 Loading from ${AppAssets.defaultTheme}...');
 
         try {
           final defaultTheme = await assetDataSource.loadDefaultTheme();
@@ -113,7 +114,7 @@ class ThemeRepositoryImpl implements ThemeRepository {
       } catch (e) {
         // Unexpected error - try JSON file
         debugPrint('⚠️ Unexpected error fetching from API: $e');
-        debugPrint('📦 Loading from assets/theme/default_theme.json...');
+        debugPrint('📦 Loading from ${AppAssets.defaultTheme}...');
 
         try {
           final defaultTheme = await assetDataSource.loadDefaultTheme();

@@ -1,4 +1,5 @@
 import 'package:cointiply_app/core/common/common_text.dart';
+import 'package:cointiply_app/core/config/app_local_images.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/user_profile_image_widget.dart';
 import 'package:flutter/material.dart';
@@ -68,7 +69,7 @@ class AvatarBadgeInfo extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SvgPicture.asset(
-                  "assets/images/icons/message.svg",
+                  AppLocalImages.message,
                   width: 32,
                   height: 32,
                 ),
@@ -96,7 +97,7 @@ class AvatarBadgeInfo extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SvgPicture.asset(
-                  "assets/images/icons/location.svg",
+                  AppLocalImages.location,
                   width: 32,
                   height: 32,
                 ),
@@ -160,7 +161,7 @@ class AvatarBadgeInfo extends StatelessWidget {
                 Row(
                   children: [
                     SvgPicture.asset(
-                      "assets/images/icons/message.svg",
+                      AppLocalImages.message,
                       width: 38,
                       height: 38,
                     ),
@@ -190,7 +191,7 @@ class AvatarBadgeInfo extends StatelessWidget {
                 Row(
                   children: [
                     SvgPicture.asset(
-                      "assets/images/icons/location.svg",
+                      AppLocalImages.location,
                       width: 38,
                       height: 38,
                     ),

@@ -303,7 +303,7 @@ class EventDailyStreakWidget extends StatelessWidget {
       decoration: BoxDecoration(
         border: Border.all(color: Color(0xff333333)),
         image: DecorationImage(
-          image: AssetImage('assets/images/trophy.png'),
+          image: AssetImage(AppLocalImages.eventDailyStreakBg),
           alignment: Alignment(0, 0),
           fit: BoxFit.cover,
         ),
@@ -377,7 +377,7 @@ class EventDailyStreakWidget extends StatelessWidget {
       child: Column(
         children: [
           Image.asset(
-            'assets/images/treasure_box.png',
+            AppLocalImages.eventTreasureBox,
             width: 100,
             height: 100,
           ),

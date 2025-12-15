@@ -1,6 +1,6 @@
-import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/common/perceant_process_bar.dart';
-import 'package:cointiply_app/core/extensions/extensions.dart';
+import 'package:cointiply_app/core/config/app_local_images.dart';
+import 'package:cointiply_app/core/core.dart';
 import 'package:cointiply_app/features/reward/domain/entities/user_level_state.dart';
 import 'package:flutter/material.dart';
 
@@ -16,8 +16,9 @@ class RewardXpPrograssArea extends StatelessWidget {
 
     return Row(
       children: [
-        Image.asset(
-          "assets/images/levels/${userlevelState.currentStatus}.png",
+        CommonImage(
+          imageUrl:
+              AppLocalImages.levelStatusImage(userlevelState.currentStatus),
           height: 50,
           width: 42,
         ),
