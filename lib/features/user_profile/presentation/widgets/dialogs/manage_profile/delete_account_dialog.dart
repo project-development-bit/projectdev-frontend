@@ -86,6 +86,7 @@ class _DeleteAccountConfirmationDialogState
     final isDeleting = ref.watch(deleteAccountNotifierProvider).isDeleting;
 
     return DialogBgWidget(
+      isOverlayLoading: isDeleting,
       dialogHeight: context.isDesktop
           ? 400
           : context.isTablet
@@ -158,7 +159,6 @@ class _DeleteAccountConfirmationDialogState
                             fontSize: 14,
                             isRed: true,
                             fontWeight: FontWeight.w700,
-                            isLoading: isDeleting,
                           ),
                         ),
                       ],
@@ -181,7 +181,6 @@ class _DeleteAccountConfirmationDialogState
                           isRed: true,
                           width: double.infinity,
                           fontWeight: FontWeight.w700,
-                          isLoading: isDeleting,
                         ),
                       ],
                     )

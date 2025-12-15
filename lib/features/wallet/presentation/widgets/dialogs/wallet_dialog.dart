@@ -1,5 +1,6 @@
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:cointiply_app/core/common/dialog_bg_widget.dart';
+import 'package:cointiply_app/features/wallet/presentation/providers/balance_state.dart';
 import 'package:cointiply_app/features/wallet/presentation/providers/get_balance_notifier_provider.dart';
 import 'package:cointiply_app/features/wallet/presentation/providers/get_withdrawal_options_notifier_provider.dart';
 import 'package:cointiply_app/features/wallet/presentation/widgets/sections/balances_section.dart';
@@ -49,8 +50,13 @@ class _ProfileDialogState extends ConsumerState<WalletDialog> {
   @override
   Widget build(BuildContext context) {
     final height = _getDialogHeight(context);
+    final isLoading = ref.watch(getBalanceNotifierProvider).status ==
+            GetBalanceStatus.loading ||
+        ref.watch(getWithdrawalNotifierProvider).isLoading;
 
     return DialogBgWidget(
+      isInitLoading: isLoading,
+      isOverlayLoading: false,
       dialogHeight: height,
       dialogWidth: _getDialogWidth(context),
       title: context.translate("wallet"),

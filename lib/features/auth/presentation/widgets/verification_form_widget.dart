@@ -46,7 +46,7 @@ class _VerificationFormWidgetState
     });
 
     ref.listenManual<VerificationState>(
-      verificationNotifierProvider,
+    verificationNotifierProvider,
       (previous, next) async {
         if (next is VerificationSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -88,11 +88,9 @@ class _VerificationFormWidgetState
         }
 
         if (next is ResendCodeSuccess) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(next.message),
-              backgroundColor: AppColors.success,
-            ),
+          context.showSnackBar(
+            message: next.message,
+            backgroundColor: AppColors.success,
           );
         }
       },

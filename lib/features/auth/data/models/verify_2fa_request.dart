@@ -9,7 +9,7 @@ class Verify2FARequest extends Equatable {
   /// User's email address
   final String email;
 
-  /// 6-digit 2FA code from authenticator app
+  /// 4-digit 2FA code from authenticator app
   @JsonKey(name: 'twoFactorCode')
   final String twoFactorCode;
 

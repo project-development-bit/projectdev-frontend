@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/common/dialog_bg_widget.dart';
 import 'package:cointiply_app/core/common/table/common_table_widget.dart';
@@ -121,19 +120,23 @@ class _AffiliateProgramDialogState
 
   @override
   Widget build(BuildContext context) {
-    return DialogBgWidget(
-        dialogHeight: context.isDesktop ? 700 : context.screenHeight * 0.8,
-        body: _dialogBody(),
-        title: context.translate("affiliate_program_title"));
-  }
-
-  Widget _dialogBody() {
     final statsState = ref.watch(referralStatsProvider);
     final isLoading = statsState.status == ReferralStatsStatus.loading;
     final hasError = statsState.status == ReferralStatsStatus.failure;
     final stats = statsState.data;
     final referralPercent =
         hasError || isLoading ? null : stats?.referralPercent.toString();
+
+    return DialogBgWidget(
+        isInitLoading: isLoading,
+        isOverlayLoading: false,
+        dialogHeight: context.isDesktop ? 700 : context.screenHeight * 0.8,
+        body: _dialogBody(
+            referralPercent != null ? int.parse(referralPercent) : 0),
+        title: context.translate("affiliate_program_title"));
+  }
+
+  Widget _dialogBody(int referralPercent) {
     return SingleChildScrollView(
       padding: context.isDesktop
           ? const EdgeInsets.symmetric(horizontal: 24, vertical: 16)
@@ -141,10 +144,9 @@ class _AffiliateProgramDialogState
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          
           CommonText.bodyMedium(
             context.translate("affiliate_program_description",
-                args: [referralPercent ?? '0']),
+                args: [referralPercent.toString()]),
             fontWeight: FontWeight.w500,
           ),
           const SizedBox(height: 24),
@@ -373,7 +375,7 @@ class _AffiliateProgramDialogState
         mainAxisSize: MainAxisSize.min,
         children: [
           CommonText.titleMedium(
-            value.toStringAsFixed(value),
+            value.toString(),
             fontWeight: FontWeight.w700,
             color: context.primary,
           ),
@@ -450,8 +452,7 @@ class _AffiliateProgramDialogState
             const SizedBox(height: 16),
             _buildErrorWidget(
                 referredUsersState.errorMessage ?? 'Failed to load users')
-          ]
-          else
+          ] else
             CommonTableWidget(
               filterBar: AffiliateFilterBarWidget(),
               columns: [
@@ -459,7 +460,6 @@ class _AffiliateProgramDialogState
                 TableColumn(header: context.translate("username"), width: 200),
                 TableColumn(
                     header: context.translate("coins_earn"), width: 300),
-                
               ],
               values: users.map((user) {
                 final date = user.referralDate != null

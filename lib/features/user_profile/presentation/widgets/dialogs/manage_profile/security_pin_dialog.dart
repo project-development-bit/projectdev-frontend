@@ -125,7 +125,9 @@ class _SecurityPinDialogState extends ConsumerState<SecurityPinDialog> {
   @override
   Widget build(BuildContext context) {
     final isLoading = ref.watch(setSecurityPinNotifierProvider).isSetting;
+
     return DialogBgWidget(
+      isOverlayLoading: isLoading,
       dialogHeight: _getDialogHeight(),
       title: context.translate(
           widget.isPinEnabled ? "disable_security_pin" : "enable_security_pin"),
@@ -224,7 +226,6 @@ class _SecurityPinDialogState extends ConsumerState<SecurityPinDialog> {
               Center(
                 child: CustomUnderLineButtonWidget(
                   onTap: isLoading ? null : _validateAndSubmit,
-                  isLoading: isLoading,
                   width: context.isDesktop ? 233 : double.infinity,
                   fontSize: 14,
                   title: context.translate(widget.isPinEnabled

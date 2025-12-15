@@ -91,7 +91,7 @@ class _UploadAvatarDialogState extends ConsumerState<UploadAvatarDialog> {
     BuildContext context,
   ) {
     double dialogHeight = context.isDesktop
-        ? 470
+        ? 480
         : context.isTablet
             ? 400
             : 450;
@@ -103,9 +103,12 @@ class _UploadAvatarDialogState extends ConsumerState<UploadAvatarDialog> {
     final isUploading = uploadState.isUploading;
     final isPicking = pickerState.isPicking;
 
+    final isCropping = cropperState.status == ImageCropperStatus.cropping;
+
     final hasImageToCrop = (cropperState.originalImage != null);
 
     return DialogBgWidget(
+      isOverlayLoading: isCropping || isUploading,
       dialogHeight: dialogHeight,
       title: context.translate("change_your_avatar"),
       body: Padding(
@@ -175,17 +178,23 @@ class _UploadAvatarDialogState extends ConsumerState<UploadAvatarDialog> {
   }
 
   Widget _cropWidget(Uint8List imageData, WidgetRef ref, BuildContext context) {
-    final uploadState = ref.watch(uploadProfileAvatarProvider);
-    final isUploading = uploadState.isUploading;
-    final cropperState = ref.watch(imageCropperProvider);
-    final isCropping = cropperState.status == ImageCropperStatus.cropping;
+    // final uploadState = ref.watch(uploadProfileAvatarProvider);
+    // final isUploading = uploadState.isUploading;
+    // final cropperState = ref.watch(imageCropperProvider);
+    // final isCropping = cropperState.status == ImageCropperStatus.cropping;
 
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Expanded(
+        SizedBox(
+          height: 260,
           child: CropImage(
-            image: Image.memory(imageData),
+            image: Image.memory(
+              imageData,
+            ),
             controller: _cropController,
+            gridThickWidth: 1,
+            gridThinWidth: 1,
             loadingPlaceholder: Center(
               child: CircularProgressIndicator(),
             ),
@@ -198,9 +207,7 @@ class _UploadAvatarDialogState extends ConsumerState<UploadAvatarDialog> {
             Expanded(
               child: CustomUnderLineButtonWidget(
                 title: context.translate("cancel"),
-                onTap: (isUploading || isCropping)
-                    ? null
-                    : () {
+                onTap: () {
                         ref.read(imageCropperProvider.notifier).reset();
                         ref.read(imagePickerProvider.notifier).reset();
                         ref.read(uploadProfileAvatarProvider.notifier).reset();
@@ -214,9 +221,7 @@ class _UploadAvatarDialogState extends ConsumerState<UploadAvatarDialog> {
             Expanded(
               child: CustomUnderLineButtonWidget(
                 title: context.translate("crop_and_upload"),
-                onTap: (isCropping || isUploading)
-                    ? null
-                    : () async {
+                onTap: () async {
                         ref.read(imageCropperProvider.notifier).startCropping();
                         ui.Image bitmap = await _cropController.croppedBitmap();
                         final data = await bitmap.toByteData(format: ui.ImageByteFormat.png);
@@ -225,8 +230,7 @@ class _UploadAvatarDialogState extends ConsumerState<UploadAvatarDialog> {
                               name: "avatar.png", size: bytes.length, bytes: bytes,
                             );
 
-                      },
-                isLoading: isCropping || isUploading,
+                },
                 fontWeight: FontWeight.w700,
                 fontSize: 14,
               ),

@@ -6,10 +6,10 @@ part 'enable_2fa_request.g.dart';
 /// Request model for enabling 2FA after setup
 ///
 /// This request is sent to verify the authenticator app setup
-/// by providing the 6-digit token and the secret key
+/// by providing the 4-digit token and the secret key
 @JsonSerializable(createToJson: true)
 class Enable2FARequest extends Equatable {
-  /// The 6-digit verification token from authenticator app
+  /// The 4-digit verification token from authenticator app
   final String token;
 
   /// The secret key that was provided during setup
