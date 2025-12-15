@@ -12,6 +12,8 @@ class WithdrawalOptionState {
   final GetWithdrawalOptionStatus status;
   final String? error;
 
+  bool get isLoading => status == GetWithdrawalOptionStatus.loading;
+
   const WithdrawalOptionState({
     this.withdrawalOptions = const [],
     this.status = GetWithdrawalOptionStatus.initial,

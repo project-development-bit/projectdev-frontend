@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/common/common_loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -51,22 +52,11 @@ class _PrivacyPolicyPageState extends ConsumerState<PrivacyPolicyPage> {
     );
   }
 
-  Widget _buildBody(BuildContext context, bool isLoading, String? error, dynamic document) {
+  Widget _buildBody(
+      BuildContext context, bool isLoading, String? error, dynamic document) {
     if (isLoading) {
       return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(context.primary),
-            ),
-            const SizedBox(height: 16),
-            CommonText.bodyMedium(
-              context.translate('loading'),
-              color: context.onSurfaceVariant,
-            ),
-          ],
-        ),
+        child: CommonLoadingWidget.large(),
       );
     }
 
@@ -96,7 +86,8 @@ class _PrivacyPolicyPageState extends ConsumerState<PrivacyPolicyPage> {
               ),
               const SizedBox(height: 24),
               ElevatedButton(
-                onPressed: () => ref.read(legalNotifierProvider.notifier).getPrivacyPolicy(),
+                onPressed: () =>
+                    ref.read(legalNotifierProvider.notifier).getPrivacyPolicy(),
                 child: CommonText.bodyMedium(
                   context.translate('retry'),
                   color: context.onPrimary,
@@ -124,27 +115,27 @@ class _PrivacyPolicyPageState extends ConsumerState<PrivacyPolicyPage> {
                 fontWeight: FontWeight.bold,
               ),
               const SizedBox(height: 8),
-              
+
               // Last updated
               CommonText.bodySmall(
                 '${context.translate('last_updated')}: ${_formatDate(document.lastUpdated)}',
                 color: context.onSurfaceVariant,
               ),
               const SizedBox(height: 8),
-              
+
               // Version
               CommonText.bodySmall(
                 '${context.translate('version')}: ${document.version}',
                 color: context.onSurfaceVariant,
               ),
               const SizedBox(height: 24),
-              
+
               // Content
               CommonText.bodyMedium(
                 document.content,
                 color: context.onSurface,
               ),
-              
+
               // Sections (if any)
               if (document.sections.isNotEmpty) ...[
                 const SizedBox(height: 32),

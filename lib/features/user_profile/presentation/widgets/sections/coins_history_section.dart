@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/common/common_loading_widget.dart';
 import 'package:cointiply_app/core/common/table/table_footer.dart';
 import 'package:cointiply_app/core/core.dart';
 import 'package:cointiply_app/features/earnings/presentation/provider/earnings_history_state.dart';
@@ -97,10 +98,6 @@ class _HistoryLoading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: CircularProgressIndicator(
-        color: Theme.of(context).colorScheme.primary,
-      ),
-    );
+    return Center(child: CommonLoadingWidget.medium());
   }
 }

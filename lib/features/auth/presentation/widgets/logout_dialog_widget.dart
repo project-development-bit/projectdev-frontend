@@ -22,10 +22,16 @@ class LogoutDialogWidget extends ConsumerStatefulWidget {
 }
 
 class _LogoutDialogWidgetState extends ConsumerState<LogoutDialogWidget> {
+
+
   @override
   Widget build(BuildContext context) {
+
+    final isLoading = ref.watch(logoutNotifierProvider) is LogoutLoading;
+
     return DialogBgWidget(
         dialogWidth: 400,
+        isOverlayLoading: isLoading,
         dialogHeight: context.isDesktop ? 250 : 240,
         body: _dialogBody(),
         title: context.translate("logout_title"));
@@ -38,6 +44,7 @@ class _LogoutDialogWidgetState extends ConsumerState<LogoutDialogWidget> {
           : const EdgeInsets.symmetric(vertical: 21.0, horizontal: 33),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           CommonText.bodyMedium(
             context.translate("logout_description"),

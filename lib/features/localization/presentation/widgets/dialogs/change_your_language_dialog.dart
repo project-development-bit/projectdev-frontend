@@ -118,6 +118,7 @@ class _ChangeLanguageDialogState extends ConsumerState<ChangeLanguageDialog> {
     final userId = (ref.read(currentUserProvider).user?.id ?? 0).toString();
 
     return DialogBgWidget(
+      isOverlayLoading: isChangingLanguage,
       title: context.translate("change_your_language_title"),
       dialogHeight: context.isDesktop
           ? 340
@@ -166,7 +167,6 @@ class _ChangeLanguageDialogState extends ConsumerState<ChangeLanguageDialog> {
                           );
                     }
                   : null,
-              isLoading: isChangingLanguage,
             ),
           ],
         ),

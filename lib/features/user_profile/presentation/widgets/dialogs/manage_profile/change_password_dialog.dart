@@ -100,6 +100,7 @@ class _ChangePasswordDialogState extends ConsumerState<ChangePasswordDialog> {
             : 500;
     return DialogBgWidget(
         dialogHeight: dialogHeight,
+        isOverlayLoading: isLoading,
         title: context.translate("change_your_password"),
         body: _dialogBgWidget(isLoading: isLoading));
   }
@@ -389,7 +390,6 @@ class _ChangePasswordDialogState extends ConsumerState<ChangePasswordDialog> {
                 width: context.isDesktop ? 250 : double.infinity,
                 fontWeight: FontWeight.w700,
                 onTap: isLoading ? null : _handleSubmit,
-                isLoading: isLoading,
               )),
             ],
           ),
