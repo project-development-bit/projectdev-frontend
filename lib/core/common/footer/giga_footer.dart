@@ -5,6 +5,7 @@ import 'package:cointiply_app/features/terms_privacy/presentation/services/terms
 import 'package:flutter/material.dart';
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
+import 'package:go_router/go_router.dart';
 
 class GigaFooter extends StatelessWidget {
   const GigaFooter({super.key});
@@ -73,7 +74,7 @@ class GigaFooter extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildLogo(),
+        _buildLogo(context),
         _buildAboutSection(context),
         _buildServicesSection(context),
         _buildInfoSection(context),
@@ -90,7 +91,7 @@ class GigaFooter extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildLogo(),
+        _buildLogo(context),
         const SizedBox(height: 24),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -113,7 +114,7 @@ class GigaFooter extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildLogo(),
+        _buildLogo(context),
         const SizedBox(height: 24),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -141,7 +142,7 @@ class GigaFooter extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildLogo(),
+        _buildLogo(context),
         const SizedBox(height: 32),
         _buildAboutSection(context),
         _buildServicesSection(context),
@@ -155,10 +156,21 @@ class GigaFooter extends StatelessWidget {
   // SECTIONS
   // -----------------------------------------------------------
 
-  Widget _buildLogo() {
-    return Image.asset(
-      "assets/images/giga_faucet_color_text_logo.png",
-      height: 32,
+  Widget _buildLogo(BuildContext context) {
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: () {
+          final currentRoute = GoRouterState.of(context).uri.toString();
+          if (!currentRoute.contains('home')) {
+            context.go('/home');
+          }
+        },
+        child: Image.asset(
+          "assets/images/giga_faucet_color_text_logo.png",
+          height: 32,
+        ),
+      ),
     );
   }
 

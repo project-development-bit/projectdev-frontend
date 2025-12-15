@@ -55,6 +55,7 @@ class CoinsHistorySection extends StatelessWidget {
           Container(
             height: 200,
             padding: const EdgeInsets.symmetric(vertical: 40),
+            alignment: Alignment.center,
             child: CommonText.bodyMedium(
               localizations?.translate('no_coin_earn_history') ??
                   "No coin earning activity yet.",
@@ -69,23 +70,24 @@ class CoinsHistorySection extends StatelessWidget {
               amount: item.amount,
               timeAgo: item.timeAgo,
             ),
-        TableFooter(
-          total: state.data?.data?.pagination.total ?? 0,
-          page: state.page,
-          limit: state.limit,
-          totalPages: (state.data?.data?.pagination.total != null &&
-                  state.data!.data!.pagination.limit > 0)
-              ? (state.data!.data!.pagination.total /
-                      state.data!.data!.pagination.limit)
-                  .ceil()
-              : 1,
-          changePage: (newPage) {
-            onPageChange(newPage);
-          },
-          changeLimit: (newLimit) {
-            onLimitChange(newLimit);
-          },
-        ),
+        if (items.isNotEmpty)
+          TableFooter(
+            total: state.data?.data?.pagination.total ?? 0,
+            page: state.page,
+            limit: state.limit,
+            totalPages: (state.data?.data?.pagination.total != null &&
+                    state.data!.data!.pagination.limit > 0)
+                ? (state.data!.data!.pagination.total /
+                        state.data!.data!.pagination.limit)
+                    .ceil()
+                : 1,
+            changePage: (newPage) {
+              onPageChange(newPage);
+            },
+            changeLimit: (newLimit) {
+              onLimitChange(newLimit);
+            },
+          ),
       ],
     );
   }
