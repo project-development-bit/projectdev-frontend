@@ -2,6 +2,7 @@ import 'package:cointiply_app/core/common/footer/giga_footer.dart';
 import 'package:cointiply_app/core/common/footer/mobile_bottom_nav.dart';
 import 'package:cointiply_app/core/common/header/giga_faucet_header.dart';
 import 'package:cointiply_app/core/common/widgets/custom_pointer_interceptor.dart';
+import 'package:cointiply_app/core/config/app_local_images.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:cointiply_app/core/theme/app_colors.dart';
 import 'package:cointiply_app/features/chat/presentation/provider/right_chat_overlay_provider.dart';
@@ -70,29 +71,23 @@ class ShellRouteWrapper extends StatelessWidget {
           Positioned(
             bottom: 12,
             right: 12,
-            child: Consumer(
-              builder: (context, ref, child) {
-                final isChatOpen = ref.watch(rightChatOverlayProvider);
+            child: Consumer(builder: (context, ref, child) {
+              final isChatOpen = ref.watch(rightChatOverlayProvider);
 
-                if (isChatOpen || context.isMobile) {
-                  return const SizedBox.shrink();
-                }
-
-                return MouseRegion(
-                  cursor: SystemMouseCursors.click,
-                  child: GestureDetector(
-                    onTap: () {
-                      ref.read(rightChatOverlayProvider.notifier).toggle();
-                    },
-                    child: SvgPicture.asset(
-                      'assets/images/icons/chat_message.svg',
-                      width: 60,
-                      height: 60,
-                    ),
-                  ),
-                );
-              },
-            ),
+              if (isChatOpen || context.isMobile) {
+                return const SizedBox.shrink();
+              }
+              return GestureDetector(
+                onTap: () {
+                  ref.read(rightChatOverlayProvider.notifier).toggle();
+                },
+                child: SvgPicture.asset(
+                  AppLocalImages.chatMessageIcon,
+                  width: 60,
+                  height: 60,
+                ),
+              );
+            }),
           )
         ],
       ),

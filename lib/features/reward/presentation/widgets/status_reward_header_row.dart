@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/config/app_local_images.dart';
 import 'package:cointiply_app/core/core.dart';
 import 'package:flutter/material.dart';
 
@@ -21,21 +22,21 @@ class StatusRewardHeaderRow extends StatelessWidget {
         ),
 
         _HeaderItem(
-          image: "assets/images/rewards/daily_spin.png",
+          image: AppLocalImages.dailySpin,
           label: localizations?.translate("status_daily_spin") ?? "Daily Spin",
         ),
         _HeaderItem(
-          image: "assets/images/rewards/treasure_chest.png",
+          image: AppLocalImages.treasureChest,
           label: localizations?.translate("status_treasure_chest") ??
               "Treasure Chest",
         ),
         _HeaderItem(
-          image: "assets/images/rewards/offer_boost_reward.png",
+          image: AppLocalImages.offerBoostReward,
           label:
               localizations?.translate("status_offer_boost") ?? "Offer Boost",
         ),
         _HeaderItem(
-          image: "assets/images/rewards/ptc_ad_discount.png",
+          image: AppLocalImages.ptcAdDiscount,
           label: localizations?.translate("status_ptc_discount") ??
               "PTC Ad Discount",
         ),

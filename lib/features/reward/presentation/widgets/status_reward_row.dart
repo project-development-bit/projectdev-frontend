@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/config/app_local_images.dart';
 import 'package:cointiply_app/core/core.dart';
 import 'package:flutter/material.dart';
 
@@ -137,17 +138,17 @@ class StatusRewardRow extends StatelessWidget {
   String _tierImage() {
     switch (row.bronzeLabel.split(" ").first.toLowerCase()) {
       case "bronze":
-        return "assets/images/levels/bronze.png";
+        return AppLocalImages.bronze;
       case "silver":
-        return "assets/images/rewards/sliver.png";
+        return AppLocalImages.silver;
       case "gold":
-        return "assets/images/rewards/gold.png";
+        return AppLocalImages.gold;
       case "diamond":
-        return "assets/images/rewards/diamond.png";
+        return AppLocalImages.diamond;
       case "legend":
-        return "assets/images/rewards/legend.png";
+        return AppLocalImages.legend;
       default:
-        return "assets/images/levels/bronze.png"; // fallback
+        return AppLocalImages.bronze;
     }
   }
 }

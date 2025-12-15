@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/config/app_local_images.dart';
 import 'package:cointiply_app/features/localization/data/helpers/app_localizations.dart';
 import 'package:flutter/material.dart';
 
@@ -30,15 +31,15 @@ extension UserLevelIcon on UserLevel {
   String get asset {
     switch (this) {
       case UserLevel.bronze:
-        return "assets/images/rewards/bronze_level.png";
+        return AppLocalImages.bronze;
       case UserLevel.silver:
-        return "assets/images/rewards/sliver.png";
+        return AppLocalImages.silver;
       case UserLevel.gold:
-        return "assets/images/rewards/gold.png";
+        return AppLocalImages.gold;
       case UserLevel.diamond:
-        return "assets/images/rewards/diamond.png";
+        return AppLocalImages.diamond;
       case UserLevel.legend:
-        return "assets/images/rewards/legend.png";
+        return AppLocalImages.legend;
     }
   }
 }

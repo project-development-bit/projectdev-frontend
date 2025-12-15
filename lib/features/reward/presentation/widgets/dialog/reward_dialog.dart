@@ -1,4 +1,5 @@
 import 'package:cointiply_app/core/common/common_rich_text_with_icon.dart';
+import 'package:cointiply_app/core/config/app_local_images.dart';
 import 'package:cointiply_app/core/core.dart';
 import 'package:cointiply_app/features/reward/presentation/providers/reward_provider.dart';
 import 'package:cointiply_app/features/reward/presentation/providers/reward_state.dart';
@@ -70,7 +71,7 @@ class RewardDialog extends ConsumerWidget {
                       boldNumber: "5",
                       suffixText: LocalizationHelper(context)
                           .translate("reward_description_suffix"),
-                      iconPath: "assets/images/rewards/coin.png",
+                      iconPath: AppLocalImages.coin,
                     ),
                     RewardXpPrograssArea(userlevelState: data),
                     StatusRewardsWidget(

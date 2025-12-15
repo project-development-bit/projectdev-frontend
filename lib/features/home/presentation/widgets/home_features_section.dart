@@ -10,46 +10,46 @@ class HomeFeaturesSection extends StatelessWidget {
   List<dynamic> get _featureItemsData {
     return [
       {
-        'image': 'assets/images/features/features_1.png',
+        'image': AppLocalImages.features1,
         'title': 'Claim Faucet',
         'description': 'Next Faucet\n[03:52:21]'
       },
       {
-        'image': 'assets/images/features/features_2.png',
+        'image': AppLocalImages.features2,
         'title': 'Treasure Chest',
         'description': 'Up to [\$2,000]'
       },
       {
-        'image': 'assets/images/features/features_3.png',
+        'image': AppLocalImages.features3,
         'title': 'fortune Wheel',
         'description': 'Up to [\$2,000]'
       },
       {
-        'image': 'assets/images/features/features_4.png',
+        'image': AppLocalImages.features4,
         'title': 'Surveys',
       },
       {
-        'image': 'assets/images/features/features_5.png',
+        'image': AppLocalImages.features5,
         'title': 'Exchanger',
       },
       {
-        'image': 'assets/images/features/features_6.png',
+        'image': AppLocalImages.features6,
         'title': 'Play Game App',
       },
       {
-        'image': 'assets/images/features/features_7.png',
+        'image': AppLocalImages.features7,
         'title': 'Watch Videos',
       },
       {
-        'image': 'assets/images/features/features_8.png',
+        'image': AppLocalImages.features8,
         'title': 'Visit Websites',
       },
       {
-        'image': 'assets/images/features/features_9.png',
+        'image': AppLocalImages.features9,
         'title': 'Pirate Treasure Hunt',
       },
       {
-        'image': 'assets/images/features/features_10.png',
+        'image': AppLocalImages.features10,
         'title': 'Quests',
       }
     ];

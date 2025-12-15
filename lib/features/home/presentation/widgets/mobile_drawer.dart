@@ -1,4 +1,5 @@
 import 'package:cointiply_app/core/common/common_image_widget.dart';
+import 'package:cointiply_app/core/config/app_local_images.dart';
 import 'package:cointiply_app/core/extensions/extensions.dart';
 import 'package:cointiply_app/features/home/presentation/widgets/drawer_item.dart';
 import 'package:cointiply_app/features/home/presentation/widgets/drawer_sub_item.dart';
@@ -133,7 +134,7 @@ class _MobileDrawerState extends ConsumerState<MobileDrawer> {
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
         alignment: Alignment.centerLeft,
         child: CommonImage(
-          imageUrl: "assets/images/giga_faucet_text_logo.png",
+          imageUrl: AppLocalImages.gigaFaucetLogo,
           width: 180,
           height: 74,
           fit: BoxFit.contain,

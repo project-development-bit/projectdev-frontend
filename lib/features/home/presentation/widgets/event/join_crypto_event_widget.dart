@@ -1,4 +1,5 @@
 import 'package:cointiply_app/core/common/common_text.dart';
+import 'package:cointiply_app/core/config/app_local_images.dart';
 import 'package:cointiply_app/core/extensions/extensions.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +15,7 @@ class JoinCryptoEventWidget extends StatelessWidget {
       spacing: 10.0,
       children: [
         Image.asset(
-          'assets/images/gigafaucet_logo.png',
+          AppLocalImages.gigaFaucetLogo,
           width: isSmallSize ? 68 : 120,
           height: isSmallSize ? 68 : 120,
         ),
