@@ -7,7 +7,7 @@ import '../../data/datasources/profile_remote_data_source_impl.dart';
 import '../../data/repositories/profile_repository_impl.dart';
 import '../../domain/repositories/profile_repository.dart';
 import '../../domain/usecases/get_countries_usecase.dart';
-import '../../domain/usecases/get_languages_usecase.dart';
+import '../../../localization/domain/usecases/get_languages_usecase.dart';
 import '../../domain/usecases/get_profile_usecase.dart';
 import '../../domain/usecases/update_user_profile.dart';
 import '../../domain/usecases/upload_profile_picture.dart';
@@ -22,15 +22,13 @@ import 'set_security_pin_notifier.dart';
 /// Provider for profile remote data source
 final profileRemoteDataSourceProvider =
     Provider<ProfileRemoteDataSource>((ref) {
-  
-    // 🌐 API mode: Using real backend calls
-    if (ProfileConfig.enableDebugLogging) {
-      debugPrint('🌐 Profile Module: Using REAL API data source');
-    }
-    final dio = ref.read(dioClientProvider);
+  // 🌐 API mode: Using real backend calls
+  if (ProfileConfig.enableDebugLogging) {
+    debugPrint('🌐 Profile Module: Using REAL API data source');
+  }
+  final dio = ref.read(dioClientProvider);
   return ProfileRemoteDataSourceImpl(dioClient: dio);
 });
-
 
 // /// Provider for profile repository
 final profileRepositoryProvider = Provider<ProfileRepository>((ref) {
@@ -114,9 +112,8 @@ final setSecurityPinUseCaseProvider = Provider<SetSecurityPinUsecase>((ref) {
 });
 
 /// Provider for set security PIN notifier
-final setSecurityPinNotifierProvider =
-    StateNotifierProvider.autoDispose<SetSecurityPinNotifier, SetSecurityPinState>(
-        (ref) {
+final setSecurityPinNotifierProvider = StateNotifierProvider.autoDispose<
+    SetSecurityPinNotifier, SetSecurityPinState>((ref) {
   final setSecurityPinUsecase = ref.read(setSecurityPinUseCaseProvider);
   return SetSecurityPinNotifier(setSecurityPinUsecase);
 });

@@ -8,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalizationService {
   static const String _localizationPath = 'assets/l10n';
-  static const List<String> supportedLocales = ['en', 'my', 'fr'];
+  // static const List<String> supportedLocales = ['en', 'my', 'fr'];
 
   Locale? _locale;
   Map<String, String>? _localizedStrings;
@@ -28,7 +28,7 @@ class LocalizationService {
 
   Future<bool> load(Locale locale, WidgetRef ref) async {
     _locale = locale;
-    debugPrint('Testing 101 : Load called for locale: ${locale.languageCode}');
+    debugPrint('Load called for locale: ${locale.languageCode}');
     try {
       Map<String, dynamic>? jsonString = (await ref
               .read(localizationLocalDataSourceProvider)
@@ -37,10 +37,23 @@ class LocalizationService {
 
       Map<String, dynamic> jsonMap = jsonString ?? {};
       if (jsonMap.isEmpty) {
-        String jsonString = await rootBundle
-            .loadString('$_localizationPath/${locale.languageCode}.json');
-        jsonMap = json.decode(jsonString);
+        try {
+          final jsonString = await rootBundle.loadString(
+            '$_localizationPath/${locale.languageCode}.json',
+          );
+          jsonMap = json.decode(jsonString);
+        } catch (e) {
+          debugPrint(
+            'Localization file not found for ${locale.languageCode}, falling back to en',
+          );
+          // Fallback to English
+          final fallbackString = await rootBundle.loadString(
+            '$_localizationPath/en.json',
+          );
+          jsonMap = json.decode(fallbackString);
+        }
       }
+
       _localizedStrings = {};
       jsonMap.forEach((key, value) {
         _localizedStrings![key] = value.toString();

@@ -8,7 +8,7 @@ import 'package:cointiply_app/features/localization/presentation/providers/local
 import 'package:cointiply_app/features/user_profile/domain/entities/language.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/change_language_notifier.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
-import 'package:cointiply_app/features/user_profile/presentation/providers/get_languages_state.dart';
+import 'package:cointiply_app/features/localization/presentation/providers/get_languages_state.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/get_profile_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

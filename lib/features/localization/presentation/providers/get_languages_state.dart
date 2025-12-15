@@ -1,7 +1,9 @@
+import 'dart:ui';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../domain/entities/language.dart';
+import '../../../user_profile/domain/entities/language.dart';
 import '../../domain/usecases/get_languages_usecase.dart';
-import 'profile_providers.dart';
+import '../../../user_profile/presentation/providers/profile_providers.dart';
 
 /// Status enum for languages fetching
 enum GetLanguagesStatus {
@@ -38,14 +40,20 @@ class GetLanguagesState {
       errorMessage: errorMessage ?? this.errorMessage,
     );
   }
+
+  List<Locale> get localeList {
+    if (languages == null) return [];
+    return languages!
+        .map((lang) => Locale(lang.code.toLowerCase(), lang.code.toUpperCase()))
+        .toList();
+  }
 }
 
 /// State notifier for managing languages fetching
 class GetLanguagesNotifier extends StateNotifier<GetLanguagesState> {
   final GetLanguagesUseCase _getLanguagesUseCase;
 
-  GetLanguagesNotifier(this._getLanguagesUseCase)
-      : super(GetLanguagesState());
+  GetLanguagesNotifier(this._getLanguagesUseCase) : super(GetLanguagesState());
 
   /// Fetch languages list
   Future<void> fetchLanguages() async {
