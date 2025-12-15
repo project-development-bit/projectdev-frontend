@@ -99,17 +99,6 @@ class LocalizationController extends StateNotifier<LocalizationState> {
   }
 
   // --------------------------
-  // TOGGLE EN/MY (optional)
-  // --------------------------
-  Future<void> toggleLocale() async {
-    if (state.currentLocale.languageCode == "en") {
-      await changeLocale(const Locale("my", "MM"));
-    } else {
-      await changeLocale(const Locale("en", "US"));
-    }
-  }
-
-  // --------------------------
   // TRANSLATE
   // --------------------------
   String t(String key, {List<String>? args}) {
@@ -122,29 +111,5 @@ class LocalizationController extends StateNotifier<LocalizationState> {
     }
 
     return value;
-  }
-
-  // Helpers
-  static const supportedLocales = [
-    Locale("en", "US"),
-    Locale("my", "MM"),
-  ];
-
-  String getLocaleName(Locale code) {
-    switch (code.languageCode) {
-      case "my":
-        return "မြန်မာ";
-      default:
-        return "English";
-    }
-  }
-
-  String getFlag(Locale code) {
-    switch (code.languageCode) {
-      case "my":
-        return "🇲🇲";
-      default:
-        return "🇺🇸";
-    }
   }
 }

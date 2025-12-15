@@ -56,12 +56,13 @@ class GetLanguagesNotifier extends StateNotifier<GetLanguagesState> {
   GetLanguagesNotifier(this._getLanguagesUseCase) : super(GetLanguagesState());
 
   /// Fetch languages list
-  Future<void> fetchLanguages() async {
-    state = state.copyWith(
-      status: GetLanguagesStatus.loading,
-      errorMessage: null,
-    );
-
+  Future<void> fetchLanguages({bool showLoading = true}) async {
+    if (showLoading) {
+      state = state.copyWith(
+        status: GetLanguagesStatus.loading,
+        errorMessage: null,
+      );
+    }
     final result = await _getLanguagesUseCase.call();
 
     result.fold(

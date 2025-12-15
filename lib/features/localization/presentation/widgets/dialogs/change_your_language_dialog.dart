@@ -38,7 +38,9 @@ class _ChangeLanguageDialogState extends ConsumerState<ChangeLanguageDialog> {
     super.initState();
     // Fetch languages when dialog opens
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(getLanguagesNotifierProvider.notifier).fetchLanguages();
+      ref
+          .read(getLanguagesNotifierProvider.notifier)
+          .fetchLanguages(showLoading: false);
     });
 
     ref.listenManual(

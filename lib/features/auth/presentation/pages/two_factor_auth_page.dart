@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/common/common_button.dart';
 import '../../../../core/common/common_text.dart';
 import '../../../localization/data/helpers/app_localizations.dart';
-import '../../../../core/widgets/locale_switch_widget.dart';
 import '../../../../core/widgets/responsive_container.dart';
 import '../../../../core/extensions/context_extensions.dart';
 import '../providers/verify_2fa_provider.dart';
@@ -124,7 +123,6 @@ class _TwoFactorAuthPageState extends ConsumerState<TwoFactorAuthPage> {
           onPressed: () => context.goToLogin(),
         ),
         actions: [
-          const CompactLocaleSwitcher(),
           const SizedBox(width: 16),
         ],
       ),
