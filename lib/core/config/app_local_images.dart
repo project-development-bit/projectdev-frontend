@@ -132,7 +132,7 @@ class AppLocalImages {
   static const String chatMessageIcon = 'assets/images/icons/chat_message.svg';
   static const String moneyBag = "assets/images/money_bag@2x.png";
   static const String referralPerson = "assets/images/referral_users@2x.png";
-  static const String sandWatch = "assets/images/pending earnings@2x.png";
+  static const String sandWatch = "assets/images/pending_earnings@2x.png";
   static const String week = "assets/images/weekly@2x.png";
 
   //Tutorial
