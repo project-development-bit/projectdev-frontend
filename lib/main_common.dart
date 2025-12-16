@@ -177,7 +177,6 @@ class _MyAppState extends ConsumerState<MyApp> {
         ),
       );
     }
-
     return FlavorBanner(
       child: MaterialApp.router(
         scaffoldMessengerKey: rootScaffoldMessengerKey,
@@ -194,7 +193,7 @@ class _MyAppState extends ConsumerState<MyApp> {
         themeMode: themeNotifier.getEffectiveThemeMode(
           MediaQuery.platformBrightnessOf(context),
         ),
-        supportedLocales: languageState.localeList.isEmpty
+        supportedLocales: languageState.localeList.isNotEmpty
             ? languageState.localeList
             : const [
                 Locale('en', 'US'),

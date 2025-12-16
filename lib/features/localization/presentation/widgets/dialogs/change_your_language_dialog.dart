@@ -165,7 +165,7 @@ class _ChangeLanguageDialogState extends ConsumerState<ChangeLanguageDialog> {
                           .read(localizationNotifierProvider.notifier)
                           .changeLocale(
                             Locale(_selectedLanguage!.code.toLowerCase(),
-                                _selectedLanguage!.code.toUpperCase()),
+                                _selectedLanguage!.countryCode.toUpperCase()),
                             userid: userId,
                           );
                     }

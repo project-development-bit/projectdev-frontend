@@ -27,14 +27,14 @@ class LocalizationService {
     return LocalizationModel.fromJson(jsonMap);
   }
 
-  Future<bool> load(Locale locale, WidgetRef ref) async {
+  Future<bool> load(
+      Locale locale, LocalizationLocalDataSource localDataSource) async {
     _locale = locale;
     debugPrint('Load called for locale: ${locale.languageCode}');
     try {
-      Map<String, dynamic>? jsonString = (await ref
-              .read(localizationLocalDataSourceProvider)
-              .getCachedLocalization(locale.languageCode))
-          ?.toJson();
+      Map<String, dynamic>? jsonString =
+          (await localDataSource.getCachedLocalization(locale.languageCode))
+              ?.toJson();
 
       Map<String, dynamic> jsonMap = jsonString ?? {};
       if (jsonMap.isEmpty) {
@@ -97,8 +97,9 @@ class LocalizationService {
   }
 
   // Change locale
-  Future<void> changeLocale(String languageCode, WidgetRef ref) async {
-    await load(Locale(languageCode), ref);
+  Future<void> changeLocale(Locale locale, Ref ref) async {
+    print("Testing 101: Changing locale to ${locale.languageCode}");
+    await load(locale, ref.read(localizationLocalDataSourceProvider));
   }
 }
 

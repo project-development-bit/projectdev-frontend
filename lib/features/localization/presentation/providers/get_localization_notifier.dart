@@ -35,6 +35,7 @@ class LocalizationController extends StateNotifier<LocalizationState> {
 
     await _loadLocalizationFromApi(GetLocalizationRequest(
         languageCode: locale.languageCode,
+        countryCode: locale.countryCode,
         forceRefresh: forceRefresh,
         userId: userId,
         languageVersion: languageVersion));
@@ -69,7 +70,7 @@ class LocalizationController extends StateNotifier<LocalizationState> {
               "🌐 Translations loaded for user: ${request.userId} languageCode ${request.languageCode}");
           _ref.read(changeLanguageProvider.notifier).changeLanguage(
                 languageCode: request.languageCode!,
-                languageName: request.languageCode!.toUpperCase(),
+                countryName: request.languageCode!.toUpperCase(),
                 userid: request.userId!,
               );
         }
@@ -95,7 +96,9 @@ class LocalizationController extends StateNotifier<LocalizationState> {
 
     // Fetch translations
     await _loadLocalizationFromApi(GetLocalizationRequest(
-        languageCode: locale.languageCode, userId: userid));
+        countryCode: locale.countryCode,
+        languageCode: locale.languageCode,
+        userId: userid));
   }
 
   // --------------------------
