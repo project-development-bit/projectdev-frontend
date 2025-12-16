@@ -154,4 +154,13 @@ class AppLocalImages {
   // Others
   static const String warning = "assets/images/warning.png";
   static const String refreshCcw = "assets/images/icons/Refresh ccw.svg";
+
+  // Fortune Wheel
+  static const String fortuneWheelGirl = "assets/images/fortune_wheel_girl.png";
+  static const String wheelBanner = "assets/images/wheel_banner.png";
+  static const String wheelIndicator = "assets/images/wheel_indicator.png";
+  static const String spinningInnerWheel =
+      "assets/images/spinning_inner_wheel.png";
+  static const String outerWheel = "assets/images/outer_wheel.png";
+  static const String wheelCenterPath = "assets/images/wheel_center_path.png";
 }
