@@ -48,6 +48,20 @@ class GetLanguagesState {
             Locale(lang.code.toLowerCase(), lang.countryCode.toUpperCase()))
         .toList();
   }
+
+  Locale getLocateByLanguageCode(String code) {
+    if (languages == null) return Locale('en', 'US');
+    Language lang = languages!.firstWhere(
+      (lang) => lang.code.toLowerCase() == code.toLowerCase(),
+      orElse: () => Language(
+          code: 'en',
+          countryCode: 'US',
+          name: 'English',
+          flag: '',
+          isDefault: true),
+    );
+    return Locale(lang.code.toLowerCase(), lang.countryCode.toUpperCase());
+  }
 }
 
 /// State notifier for managing languages fetching

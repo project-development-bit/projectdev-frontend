@@ -424,6 +424,7 @@ class DatabaseService {
           countryID: 1,
           countryName: 'Thailand',
           coinBalance: 50.0,
+          language: 'en',
         ),
         UserModel(
           id: 2,
@@ -450,6 +451,7 @@ class DatabaseService {
           countryID: 1,
           countryName: 'Thailand',
           coinBalance: 50.0,
+          language: 'en',
         ),
         UserModel(
           id: 3,
@@ -476,6 +478,7 @@ class DatabaseService {
           countryID: 1,
           countryName: 'Thailand',
           coinBalance: 50.0,
+          language: 'en',
         ),
       ];
 

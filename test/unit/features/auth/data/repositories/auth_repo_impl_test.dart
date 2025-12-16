@@ -89,6 +89,7 @@ void main() {
             countryID: 1,
             countryName: 'Thailand',
             coinBalance: 50.0,
+            language: 'en',
           ),
           tokens: const AuthTokensModel(
             accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
