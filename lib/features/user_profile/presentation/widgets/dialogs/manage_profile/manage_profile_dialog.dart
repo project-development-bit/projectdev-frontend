@@ -11,6 +11,7 @@ import 'package:cointiply_app/features/user_profile/presentation/providers/get_p
 import 'package:cointiply_app/features/user_profile/presentation/providers/setting_profile_notifier.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/manage_profile/security_pin_dialog.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/manage_profile/upload_avatar_dialog.dart';
+import 'package:cointiply_app/routing/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

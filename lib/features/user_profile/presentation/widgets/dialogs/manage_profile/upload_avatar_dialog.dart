@@ -1,5 +1,5 @@
+import 'dart:developer' show log;
 import 'dart:typed_data';
-import 'dart:ui' as ui;
 
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
@@ -11,9 +11,9 @@ import 'package:cointiply_app/features/user_profile/presentation/providers/uploa
 import 'package:cointiply_app/features/user_profile/presentation/providers/image_picker_provider.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/image_cropper_provider.dart';
 import 'package:cointiply_app/features/user_profile/presentation/widgets/user_profile_image_widget.dart';
-import 'package:crop_image/crop_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:custom_image_crop/custom_image_crop.dart';
 
 void showUploadAvatarDialog(BuildContext context) {
   context.showManagePopup(
@@ -29,13 +29,9 @@ class UploadAvatarDialog extends ConsumerStatefulWidget {
 }
 
 class _UploadAvatarDialogState extends ConsumerState<UploadAvatarDialog> {
-  final _cropController = CropController(
-    /// If not specified, [aspectRatio] will not be enforced.
-    aspectRatio: 1,
+  final CustomImageCropController _cropController = CustomImageCropController();
 
-    /// Specify in percentages (1 means full width and height). Defaults to the full image.
-    defaultCrop: Rect.fromLTRB(0.1, 0.1, 0.9, 0.9),
-  );
+  double _scaleIndex = 1;
 
   @override
   void initState() {
@@ -90,12 +86,6 @@ class _UploadAvatarDialogState extends ConsumerState<UploadAvatarDialog> {
   Widget build(
     BuildContext context,
   ) {
-    double dialogHeight = context.isDesktop
-        ? 480
-        : context.isTablet
-            ? 400
-            : 450;
-
     final uploadState = ref.watch(uploadProfileAvatarProvider);
     final pickerState = ref.watch(imagePickerProvider);
     final cropperState = ref.watch(imageCropperProvider);
@@ -107,6 +97,29 @@ class _UploadAvatarDialogState extends ConsumerState<UploadAvatarDialog> {
 
     final hasImageToCrop = (cropperState.originalImage != null);
 
+    double dialogHeight;
+    if (context.isDesktop) {
+      if (hasImageToCrop || isCropping) {
+        dialogHeight = 660;
+      } else {
+        dialogHeight = 480;
+      }
+    } else {
+      if (context.isTablet) {
+        if (hasImageToCrop || isCropping) {
+          dialogHeight = 600;
+        } else {
+          dialogHeight = 400;
+        }
+      } else {
+        if (hasImageToCrop || isCropping) {
+          dialogHeight = 600;
+        } else {
+          dialogHeight = 450;
+        }
+      }
+    }
+
     return DialogBgWidget(
       isOverlayLoading: isCropping || isUploading,
       dialogHeight: dialogHeight,
@@ -116,14 +129,14 @@ class _UploadAvatarDialogState extends ConsumerState<UploadAvatarDialog> {
             ? const EdgeInsets.all(32)
             : const EdgeInsets.symmetric(horizontal: 10, vertical: 10)
                 .copyWith(top: 36),
-        child: hasImageToCrop
-            ? _cropWidget(
-                cropperState.originalImage!,
-                ref,
-                context,
-              )
-            : SingleChildScrollView(
-                child: Column(
+        child: SingleChildScrollView(
+          child: hasImageToCrop
+              ? _cropWidget(
+                  cropperState.originalImage!,
+                  ref,
+                  context,
+                )
+              : Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -172,35 +185,59 @@ class _UploadAvatarDialogState extends ConsumerState<UploadAvatarDialog> {
                     ),
                   ],
                 ),
-              ),
+        ),
       ),
     );
   }
 
   Widget _cropWidget(Uint8List imageData, WidgetRef ref, BuildContext context) {
-    // final uploadState = ref.watch(uploadProfileAvatarProvider);
-    // final isUploading = uploadState.isUploading;
-    // final cropperState = ref.watch(imageCropperProvider);
-    // final isCropping = cropperState.status == ImageCropperStatus.cropping;
-
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        SizedBox(
-          height: 260,
-          child: CropImage(
-            image: Image.memory(
-              imageData,
-            ),
-            controller: _cropController,
-            gridThickWidth: 1,
-            gridThinWidth: 1,
-            loadingPlaceholder: Center(
-              child: CircularProgressIndicator(),
+        Container(
+          height: 360,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: Colors.black.withOpacity(0.1),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: CustomImageCrop(
+              cropController: _cropController,
+              image: MemoryImage(imageData),
+              shape: CustomCropShape.Square,
+              canRotate: false,
+              forceInsideCropArea: true,
+              canMove: true,
+              canScale: true,
+              clipShapeOnCrop: false,
+              borderRadius: 0,
+              pathPaint: Paint()
+                ..color = Colors.white
+                ..style = PaintingStyle.stroke
+                ..strokeWidth = 2,
+              cropPercentage: 0.8,
+              drawPath: SolidCropPathPainter.drawPath,
+              backgroundColor: Colors.black.withOpacity(0.5),
             ),
           ),
         ),
-        SizedBox(height: 12),
+        Slider(
+            value: _scaleIndex,
+            max: 10,
+            min: 1,
+            onChanged: (value) {
+              setState(() {
+                _scaleIndex = value;
+              });
+              final scale = value.clamp(1, 10).toDouble();
+              log(scale.toString());
+              log(_cropController.cropImageData.toString());
+              _cropController.addTransition(CropImageData(
+                  scale: scale / (_cropController.cropImageData?.scale ?? 1)));
+            }),
+        SizedBox(height: 16),
         Row(
           spacing: 10,
           children: [
@@ -208,10 +245,10 @@ class _UploadAvatarDialogState extends ConsumerState<UploadAvatarDialog> {
               child: CustomUnderLineButtonWidget(
                 title: context.translate("cancel"),
                 onTap: () {
-                        ref.read(imageCropperProvider.notifier).reset();
-                        ref.read(imagePickerProvider.notifier).reset();
-                        ref.read(uploadProfileAvatarProvider.notifier).reset();
-                      },
+                  ref.read(imageCropperProvider.notifier).reset();
+                  ref.read(imagePickerProvider.notifier).reset();
+                  ref.read(uploadProfileAvatarProvider.notifier).reset();
+                },
                 isDark: true,
                 backgroundColor: const Color(0xFF262626),
                 fontWeight: FontWeight.w700,
@@ -222,21 +259,37 @@ class _UploadAvatarDialogState extends ConsumerState<UploadAvatarDialog> {
               child: CustomUnderLineButtonWidget(
                 title: context.translate("crop_and_upload"),
                 onTap: () async {
-                        ref.read(imageCropperProvider.notifier).startCropping();
-                        ui.Image bitmap = await _cropController.croppedBitmap();
-                        final data = await bitmap.toByteData(format: ui.ImageByteFormat.png);
-                        final bytes = data!.buffer.asUint8List();
-                        await ref.read(uploadProfileAvatarProvider.notifier).uploadAvatar(
-                              name: "avatar.png", size: bytes.length, bytes: bytes,
-                            );
+                  _scaleIndex = 1;
+                  try {
+                    ref.read(imageCropperProvider.notifier).setLoading(true);
 
+                    final croppedImage = await _cropController.onCropImage();
+                    if (croppedImage != null) {
+                      await ref
+                          .read(uploadProfileAvatarProvider.notifier)
+                          .uploadAvatar(
+                            name: "avatar.png",
+                            size: croppedImage.bytes.length,
+                            bytes: croppedImage.bytes,
+                          );
+                    }
+                  } catch (e) {
+                    log("Error cropping image: $e");
+                    if (context.mounted) {
+                      context.showErrorSnackBar(
+                          message: context.translate("failed_to_crop_image"));
+                    }
+                    
+                  } finally {
+                    ref.read(imageCropperProvider.notifier).setLoading(false);
+                  }
                 },
                 fontWeight: FontWeight.w700,
                 fontSize: 14,
               ),
             ),
           ],
-        )
+        ),
       ],
     );
   }

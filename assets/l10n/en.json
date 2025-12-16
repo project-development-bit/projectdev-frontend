@@ -416,8 +416,8 @@
   "2fa_login_info": "Open your authenticator app to get the code.",
   "2fa_code_required": "2FA code is required",
   "2fa_code_must_be_6_digits": "2FA code must be 6 digits",
-  "enter_2fa_code_from_app": "Enter your 4-digit code from authenticator app",
-  "please_enter_2fa_code": "Please enter the 4-digit code",
+  "enter_2fa_code_from_app": "Enter your 6-digit code from authenticator app",
+  "please_enter_2fa_code": "Please enter the 6-digit code",
   "code_must_be_exactly_6_digits": "Code must be exactly 6 digits",
   "code_must_be_numbers_only": "Code must contain only numbers",
   "verify": "Verify",
@@ -771,5 +771,6 @@
   "time_day_ago": "{0} day ago",
   "time_week_ago": "{0} week ago",
   "time_month_ago": "{0} month ago",
-  "time_year_ago": "{0  } year ago"
+  "time_year_ago": "{0  } year ago",
+  "failed_to_crop_image": "Failed to crop image"
 }
