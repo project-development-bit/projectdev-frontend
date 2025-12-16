@@ -245,7 +245,7 @@ class BurgerEatsAppRoutes {
               // Legal Routes - Public access
               GoRoute(
                 path: AppRoutes.contactUs,
-                name: 'contact-us',
+                name:  AppRoutes.contactUs,
                 pageBuilder: (context, state) => const NoTransitionPage(
                   child: ContactUsPage(),
                 ),

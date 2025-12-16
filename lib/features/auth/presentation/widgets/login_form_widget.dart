@@ -212,12 +212,9 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
             // }
           },
           onError: (v) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(v),
-                backgroundColor: Theme.of(context).colorScheme.error,
-              ),
-            );
+            context.showSnackBar(
+                message: v,
+                backgroundColor: Theme.of(context).colorScheme.error);
           });
     }
   }
@@ -256,7 +253,6 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context);
-    final isLoading = ref.watch(isAnyAuthLoadingProvider);
     return AutofillGroup(
       child: Form(
         key: _formKey,
@@ -335,11 +331,9 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
             // Login Button
             CustomUnderLineButtonWidget(
               title: localizations?.translate('sign_in') ?? 'Sign In',
-              onTap: isLoading ? () {} : _handleLogin,
+              onTap: _handleLogin,
               height: 56,
               borderRadius: 12,
-              isLoading: isLoading,
-              isActive: !isLoading,
               fontSize: 14,
             ),
 

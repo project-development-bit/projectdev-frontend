@@ -1,6 +1,6 @@
 import 'package:cointiply_app/core/common/close_square_button.dart';
+import 'package:cointiply_app/core/common/common_loading_widget.dart';
 import 'package:cointiply_app/core/common/common_text.dart';
-import 'package:cointiply_app/core/common/dialog_gradient_backgroud.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -9,12 +9,17 @@ class DialogBgWidget extends StatelessWidget {
   final Widget body;
   final String title;
   final Function()? onClose;
+
+  /// this will be used to set fixed height for dialog loading state
   final double? dialogHeight;
   final double? dialogWidth;
 
   final Color? dividerColor;
   final EdgeInsetsGeometry? padding;
   final Function()? onRouteBack;
+  final bool isOverlayLoading;
+  final bool isInitLoading;
+
   const DialogBgWidget(
       {super.key,
       required this.body,
@@ -24,6 +29,8 @@ class DialogBgWidget extends StatelessWidget {
       this.dividerColor,
       this.onRouteBack,
       this.dialogWidth,
+      this.isOverlayLoading = false,
+      this.isInitLoading = false,
       this.padding});
 
   double _getDialogWidth(BuildContext context) {
@@ -36,23 +43,31 @@ class DialogBgWidget extends StatelessWidget {
     return dialogWidth ?? 650; //Fixed width for desktop
   }
 
-  double _getDialogHeight(BuildContext context) {
-    return dialogHeight ?? 470;
-  }
-
   @override
   Widget build(BuildContext context) {
     final width = dialogWidth ?? _getDialogWidth(context);
-    final height = _getDialogHeight(context);
+    // final height = _getDialogHeight(context);
     final colorScheme = Theme.of(context).colorScheme;
 
-    return Stack(
-      children: [
-        DialogGradientBackground(width: width, height: height),
-        SizedBox(
-          width: width,
-          height: height,
-          child: Column(
+    return Container(
+      width: width,
+      height: isInitLoading || isOverlayLoading ? dialogHeight : null,
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/images/dialog_background.png'),
+          fit: BoxFit.cover,
+          alignment: Alignment.topCenter,
+        ),
+      ),
+      constraints: BoxConstraints(
+        maxHeight: context.isMobile
+            ? context.screenHeight * 0.8
+            : context.screenHeight * 0.9,
+      ),
+      child: Stack(
+        children: [
+          Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               Container(
                 padding: (context.isMobile || context.isTablet
@@ -105,11 +120,22 @@ class DialogBgWidget extends StatelessWidget {
                     dividerColor ?? Color(0xFF003248), // TODO use from theme,
                 thickness: 1,
               ),
-              Expanded(child: body)
+              isInitLoading
+                  ? Expanded(
+                      child: Center(child: CommonLoadingWidget.medium()),
+                    )
+                  : Flexible(child: body)
             ],
           ),
-        )
-      ],
+          Visibility(
+            visible: isOverlayLoading,
+            child: Container(
+                height: dialogHeight,
+                color: Colors.black.withValues(alpha: 150),
+                child: Center(child: CommonLoadingWidget.medium())),
+          )
+        ],
+      ),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:cointiply_app/core/common/footer/bottom_nav_item.dart';
+import 'package:cointiply_app/core/config/app_local_images.dart';
 import 'package:cointiply_app/core/core.dart';
 import 'package:cointiply_app/features/chat/presentation/provider/right_chat_overlay_provider.dart';
 import 'package:flutter/material.dart';
@@ -55,7 +56,7 @@ class _MobileBottomNavState extends ConsumerState<MobileBottomNav> {
                       BottomNavItem(
                         index: 0,
                         label: localizations?.translate("nav_home") ?? "Home",
-                        iconPath: "assets/images/icons/home_icon.svg",
+                        iconPath: AppLocalImages.homeMenuIcon,
                         currentIndex: currentIndex,
                         onTap: onTap,
                       ),
@@ -63,7 +64,7 @@ class _MobileBottomNavState extends ConsumerState<MobileBottomNav> {
                         index: 1,
                         label:
                             localizations?.translate("nav_wallet") ?? "Wallet",
-                        iconPath: "assets/images/icons/wallet_icon.svg",
+                        iconPath: AppLocalImages.walletIcon,
                         currentIndex: currentIndex,
                         onTap: onTap,
                       ),
@@ -75,14 +76,14 @@ class _MobileBottomNavState extends ConsumerState<MobileBottomNav> {
                         index: 2,
                         label: localizations?.translate("nav_account") ??
                             "Account",
-                        iconPath: "assets/images/icons/account_icon.svg",
+                        iconPath: AppLocalImages.accountIcon,
                         currentIndex: currentIndex,
                         onTap: onTap,
                       ),
                       BottomNavItem(
                         index: 3,
                         label: localizations?.translate("nav_chat") ?? "Chat",
-                        iconPath: "assets/images/icons/chat_icon.svg",
+                        iconPath: AppLocalImages.chatIcon,
                         currentIndex: currentIndex,
                         onTap: onTap,
                       ),
@@ -101,8 +102,8 @@ class _MobileBottomNavState extends ConsumerState<MobileBottomNav> {
                         decoration: const BoxDecoration(
                           shape: BoxShape.circle,
                         ),
-                        child: CommonImage(
-                            imageUrl: "assets/images/icons/star_nav_icon.png")),
+                        child:
+                            CommonImage(imageUrl: AppLocalImages.starNavIcon)),
                   ),
                 ),
               ],

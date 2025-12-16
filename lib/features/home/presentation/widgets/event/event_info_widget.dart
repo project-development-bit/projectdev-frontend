@@ -1,5 +1,6 @@
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
+import 'package:cointiply_app/core/config/app_local_images.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:flutter/material.dart';
 
@@ -42,7 +43,7 @@ class EventInfoWidget extends StatelessWidget {
                 right: isSmallSize ? Radius.circular(20) : Radius.circular(0),
               ),
               child: Image.asset(
-                'assets/images/event_poster_image.png',
+                AppLocalImages.eventPosterImage,
                 width: double.infinity,
                 height: isSmallSize ? null : 370,
                 fit: BoxFit.cover,
@@ -155,12 +156,12 @@ class EventInfoWidget extends StatelessWidget {
       children: [
         _moreEventItemWidget(
             context: context,
-            image: 'assets/images/event_visit_shop.png',
+            image: AppLocalImages.eventVisitShop,
             title: context.translate("event_visit_shop"),
             isSmallSize: isSmallSize),
         _moreEventItemWidget(
             context: context,
-            image: 'assets/images/event_our_quest_today.png',
+            image: AppLocalImages.eventOurQuestToday,
             title: context.translate("event_our_quests_today"),
             isSmallSize: isSmallSize),
       ],

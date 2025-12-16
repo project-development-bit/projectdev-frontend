@@ -1,4 +1,5 @@
 import 'package:cointiply_app/core/common/common_rich_text_with_icon.dart';
+import 'package:cointiply_app/core/config/app_local_images.dart';
 import 'package:cointiply_app/core/core.dart';
 import 'package:cointiply_app/features/reward/presentation/providers/reward_provider.dart';
 import 'package:cointiply_app/features/reward/presentation/providers/reward_state.dart';
@@ -27,6 +28,8 @@ class RewardDialog extends ConsumerWidget {
     final height = _dialogHeight(context);
 
     return DialogBgWidget(
+      isInitLoading: isLoading,
+      isOverlayLoading: false,
       padding: EdgeInsets.zero,
       dialogHeight: height,
       dividerColor: const Color(0xFF003248), //TODO: to use from schma color
@@ -37,11 +40,7 @@ class RewardDialog extends ConsumerWidget {
           // ---------------------------
           // LOADING
           // ---------------------------
-          if (isLoading)
-            SliverFillRemaining(
-              hasScrollBody: false,
-              child: _loadingWidget(),
-            ),
+          
 
           // ---------------------------
           // ERROR
@@ -72,7 +71,7 @@ class RewardDialog extends ConsumerWidget {
                       boldNumber: "5",
                       suffixText: LocalizationHelper(context)
                           .translate("reward_description_suffix"),
-                      iconPath: "assets/images/rewards/coin.png",
+                      iconPath: AppLocalImages.coin,
                     ),
                     RewardXpPrograssArea(userlevelState: data),
                     StatusRewardsWidget(
@@ -104,17 +103,6 @@ class RewardDialog extends ConsumerWidget {
   }
 }
 
-Widget _loadingWidget() {
-  return const Padding(
-    padding: EdgeInsets.symmetric(vertical: 24, horizontal: 32),
-    child: Center(
-      child: CircularProgressIndicator(
-        strokeWidth: 3,
-        color: Colors.white,
-      ),
-    ),
-  );
-}
 
 Widget _errorWidget(String error) {
   return Padding(

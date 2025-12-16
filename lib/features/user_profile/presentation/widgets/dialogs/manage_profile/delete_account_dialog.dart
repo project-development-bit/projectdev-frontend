@@ -1,6 +1,7 @@
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
 import 'package:cointiply_app/core/common/dialog_bg_widget.dart';
+import 'package:cointiply_app/core/config/app_local_images.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/delete_account_notifier.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
@@ -86,6 +87,7 @@ class _DeleteAccountConfirmationDialogState
     final isDeleting = ref.watch(deleteAccountNotifierProvider).isDeleting;
 
     return DialogBgWidget(
+      isOverlayLoading: isDeleting,
       dialogHeight: context.isDesktop
           ? 400
           : context.isTablet
@@ -120,7 +122,7 @@ class _DeleteAccountConfirmationDialogState
                 child: Row(
                   children: [
                     Image.asset(
-                      "assets/images/warning.png",
+                      AppLocalImages.warning,
                       width: 24,
                       height: 24,
                     ),
@@ -158,7 +160,6 @@ class _DeleteAccountConfirmationDialogState
                             fontSize: 14,
                             isRed: true,
                             fontWeight: FontWeight.w700,
-                            isLoading: isDeleting,
                           ),
                         ),
                       ],
@@ -181,7 +182,6 @@ class _DeleteAccountConfirmationDialogState
                           isRed: true,
                           width: double.infinity,
                           fontWeight: FontWeight.w700,
-                          isLoading: isDeleting,
                         ),
                       ],
                     )

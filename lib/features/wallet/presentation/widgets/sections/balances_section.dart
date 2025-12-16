@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/config/app_local_images.dart';
 import 'package:cointiply_app/core/extensions/double_extensions.dart';
 import 'package:cointiply_app/core/extensions/int_extensions.dart';
 import 'package:cointiply_app/features/wallet/presentation/providers/get_balance_notifier_provider.dart';
@@ -117,7 +118,7 @@ class BalancesSection extends ConsumerWidget {
                       ? "${balanceState.balance?.interestEarned}"
                       : 'N/A',
                   "Interest Earned",
-                  "assets/images/rewards/coin.png",
+                  AppLocalImages.coin,
                   colorScheme,
                   screenWidth),
               _statItem(
@@ -125,7 +126,7 @@ class BalancesSection extends ConsumerWidget {
                       ? "${balanceState.balance?.coinsToday} coins"
                       : 'N/A',
                   "Coins Today",
-                  "assets/images/rewards/coin.png",
+                  AppLocalImages.coin,
                   colorScheme,
                   screenWidth),
               _statItem(
@@ -133,7 +134,7 @@ class BalancesSection extends ConsumerWidget {
                       ? "${balanceState.balance?.coinsLast7Days} coins"
                       : 'N/A',
                   "Coins (7 Days)",
-                  "assets/images/rewards/coin.png",
+                  AppLocalImages.coin,
                   colorScheme,
                   screenWidth),
             ],

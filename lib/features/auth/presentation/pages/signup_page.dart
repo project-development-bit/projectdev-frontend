@@ -1,5 +1,6 @@
 import 'package:cointiply_app/core/common/common_dropdown_field_with_icon.dart';
 import 'package:cointiply_app/core/common/common_text.dart';
+import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
 import 'package:cointiply_app/core/theme/app_colors.dart';
 import 'package:cointiply_app/features/auth/presentation/providers/ip_country_state.dart';
 import 'package:cointiply_app/features/auth/presentation/providers/selected_country_provider.dart';
@@ -90,22 +91,16 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
             isSendCode: false,
             isFromForgotPassword: false,
           );
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                  'Registration successful! Please check your email for the verification code.'),
-              backgroundColor: AppColors.success,
-            ),
-          );
+          context.showSnackBar(
+              message:
+                  'Registration successful! Please check your email for the verification code.',
+              backgroundColor: AppColors.success);
           break;
         case RegisterError():
           // Show error message
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(next.message),
-              backgroundColor: Theme.of(context).colorScheme.error,
-            ),
-          );
+          context.showSnackBar(
+              message: next.message,
+              backgroundColor: Theme.of(context).colorScheme.error);  
           break;
         default:
           break;
@@ -161,12 +156,10 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
 
     if (!_agreeToTerms) {
       final localizations = AppLocalizations.of(context);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(localizations?.translate('agree_to_terms_error') ??
-              'Please agree to the terms and conditions'),
-          backgroundColor: Theme.of(context).colorScheme.error,
-        ),
+      context.showSnackBar(
+        message: localizations?.translate('agree_to_terms_error') ??
+            'Please agree to the terms and conditions',
+        backgroundColor: Theme.of(context).colorScheme.error,
       );
       return;
     }
@@ -218,6 +211,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
       girlHeight: 400,
       girlRightOffset: -140,
       girlBottomOffset: -180,
+      isLoading: isLoading,
       child: Form(
         key: _formKey,
         child: Column(
@@ -491,35 +485,12 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
             ],
 
             // Sign Up Button
-            SizedBox(
+            CustomUnderLineButtonWidget(
+              title: localizations?.translate('sign_up') ?? 'Sign Up',
+              onTap: _handleSignUp,
               height: 56,
-              child: ElevatedButton(
-                onPressed: isLoading ? null : _handleSignUp,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: colorScheme.primary,
-                  foregroundColor: colorScheme.onPrimary,
-                  elevation: 2,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: isLoading
-                    ? SizedBox(
-                        width: 24,
-                        height: 24,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                            colorScheme.onPrimary,
-                          ),
-                        ),
-                      )
-                    : CommonText.titleMedium(
-                        localizations?.translate('sign_up') ?? 'Sign Up',
-                        fontWeight: FontWeight.w600,
-                        color: colorScheme.onPrimary,
-                      ),
-              ),
+              borderRadius: 12,
+              fontSize: 14,
             ),
 
             const SizedBox(height: 32),

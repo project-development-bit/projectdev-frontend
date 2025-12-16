@@ -1,5 +1,6 @@
 import 'package:cointiply_app/core/common/close_square_button.dart';
 import 'package:cointiply_app/core/common/common_text.dart';
+import 'package:cointiply_app/core/config/app_local_images.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:cointiply_app/core/providers/turnstile_provider.dart';
 import 'package:cointiply_app/core/theme/app_colors.dart';
@@ -23,48 +24,48 @@ class _FirstTimeTutorialDialogState extends State<FirstTimeTutorialDialog> {
   final List<Map<String, dynamic>> steps = [
     {
       'title': 'welcome_to_gigafaucet',
-      'image': 'assets/tutorial/welcome.png',
+      'image': AppLocalImages.tutorialWelcome,
       'gradient': true,
       'description': 'welcome_description',
     },
     {
       'title': 'free_spins_and_mystery_boxes',
-      'image': 'assets/tutorial/spin.png',
+      'image': AppLocalImages.tutorialSpin,
       'description': 'free_spins_description',
     },
     {
       'title': 'daily_streak',
-      'image': 'assets/tutorial/streak.webp',
+      'image': AppLocalImages.tutorialStreak,
       'description': 'daily_streak_description',
     },
     {
       'title': 'ptc_ads',
-      'image': 'assets/tutorial/ptc.jpg',
+      'image': AppLocalImages.tutorialPtc,
       'description': 'ptc_ads_description',
     },
     {
       'title': 'missions_and_quests',
-      'image': 'assets/tutorial/missions.png',
+      'image': AppLocalImages.tutorialMissions,
       'description': 'missions_description',
     },
     {
       'title': 'completing_offers',
-      'image': 'assets/tutorial/offers.png',
+      'image': AppLocalImages.tutorialOffers,
       'description': 'offers_description',
     },
     {
       'title': 'xp_points',
-      'image': 'assets/tutorial/xp.png',
+      'image': AppLocalImages.tutorialXp,
       'description': 'xp_description',
     },
     {
       'title': 'withdrawing_coins',
-      'image': 'assets/tutorial/withdraw.png',
+      'image': AppLocalImages.tutorialWithdraw,
       'description': 'withdraw_description',
     },
     {
       'title': 'you_are_all_set',
-      'image': 'assets/tutorial/reward.png',
+      'image': AppLocalImages.tutorialReward,
       'description': 'all_set_description',
       'final': true,
     },
@@ -166,8 +167,7 @@ class _FirstTimeTutorialDialogState extends State<FirstTimeTutorialDialog> {
               if (data['final'] == true) ...[
                 const SizedBox(height: 10),
                 const CloudflareTurnstileWidget(
-                  action: TurnstileActionEnum.tutorial,
-                  debugMode: false),
+                    action: TurnstileActionEnum.tutorial, debugMode: false),
                 const SizedBox(height: 24),
                 _buildRewardBox(context),
               ],
@@ -177,68 +177,96 @@ class _FirstTimeTutorialDialogState extends State<FirstTimeTutorialDialog> {
               const SizedBox(height: 16),
 
               // ─── Footer ────────────────────────────────
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: CommonText.labelMedium(
-                      context
-                          .translate('step_of')
-                          .replaceAll('{step}', '$step')
-                          .replaceAll('{totalSteps}', '$totalSteps'),
-                      color: colorScheme.tertiary,
-                      fontSize: context.isMobile ? 13 : 14,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
+              !context.isDesktop
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        _buildSteps(colorScheme),
+                        const SizedBox(height: 12),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            _buildBackBtn(colorScheme),
+                            SizedBox(width: context.isMobile ? 4 : 8),
+                            _buildNextBtn(colorScheme, data),
+                          ],
+                        ),
+                      ],
+                    )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: _buildSteps(colorScheme),
+                        ),
+                        Row(
+                          children: [
+                            _buildBackBtn(colorScheme),
+                            SizedBox(width: context.isMobile ? 4 : 8),
+                            _buildNextBtn(colorScheme, data),
+                          ],
+                        ),
+                      ],
                     ),
-                  ),
-                  Row(
-                    children: [
-                      TextButton(
-                        onPressed:
-                            step > 1 ? () => setState(() => step--) : null,
-                        style: TextButton.styleFrom(
-                          foregroundColor: colorScheme.primary,
-                        ),
-                        child: CommonText.labelMedium(
-                          context.translate('back'),
-                          color: colorScheme.inverseSurface,
-                        ),
-                      ),
-                      SizedBox(width: context.isMobile ? 4 : 8),
-                      ElevatedButton(
-                        onPressed: () {
-                          if (step < totalSteps) {
-                            setState(() => step++);
-                          } else {
-                            widget.onComplete();
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: data['final'] == true
-                              ? colorScheme.tertiary
-                              : colorScheme.primary,
-                          foregroundColor: colorScheme.inversePrimary,
-                          padding: EdgeInsets.symmetric(
-                            horizontal: context.isMobile ? 8 : 20,
-                            vertical: context.isMobile ? 8 : 12,
-                          ),
-                        ),
-                        child: CommonText.labelMedium(
-                          step == totalSteps
-                              ? context.translate('claim_tutorial_reward')
-                              : context.translate('continue'),
-                          color: AppColors.lightSurfaceVariant,
-                          fontSize: context.isMobile ? 12 : 13,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildSteps(ColorScheme colorScheme) {
+    return CommonText.labelMedium(
+      context
+          .translate('step_of')
+          .replaceAll('{step}', '$step')
+          .replaceAll('{totalSteps}', '$totalSteps'),
+      color: colorScheme.tertiary,
+      fontSize: context.isMobile ? 13 : 14,
+      maxLines: 2,
+      overflow: TextOverflow.ellipsis,
+    );
+  }
+
+  Widget _buildBackBtn(ColorScheme colorScheme) {
+    return TextButton(
+      onPressed: step > 1 ? () => setState(() => step--) : null,
+      style: TextButton.styleFrom(
+        foregroundColor: colorScheme.primary,
+      ),
+      child: CommonText.labelMedium(
+        context.translate('back'),
+        color: colorScheme.inverseSurface,
+      ),
+    );
+  }
+
+  Widget _buildNextBtn(ColorScheme colorScheme, Map<String, dynamic> data) {
+    return ElevatedButton(
+      onPressed: () {
+        if (step < totalSteps) {
+          setState(() => step++);
+        } else {
+          widget.onComplete();
+        }
+      },
+      style: ElevatedButton.styleFrom(
+        backgroundColor:
+            data['final'] == true ? colorScheme.tertiary : colorScheme.primary,
+        foregroundColor: colorScheme.inversePrimary,
+        padding: EdgeInsets.symmetric(
+          horizontal: context.isMobile ? 8 : 20,
+          vertical: context.isMobile ? 8 : 12,
+        ),
+      ),
+      child: CommonText.labelMedium(
+        step == totalSteps
+            ? context.isMobile
+                ? context.translate('claim')
+                : context.translate('claim_tutorial_reward')
+            : context.translate('continue'),
+        color: AppColors.lightSurfaceVariant,
+        fontSize: context.isMobile ? 12 : 13,
       ),
     );
   }

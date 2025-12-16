@@ -40,7 +40,7 @@ class LocalizationRemoteDataSourceImpl implements LocalizationRemoteDataSource {
       debugPrint('📤 Request URL: $url');
       debugPrint('📤 Base URL: ${dioClient.client.options.baseUrl}');
 
-      final response = await dioClient.client.get(
+      final response = await dioClient.get(
         url,
       );
 

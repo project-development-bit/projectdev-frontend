@@ -114,6 +114,7 @@ class _VerifyDeleteAccountDialogState
     final colorScheme = Theme.of(context).colorScheme;
 
     return DialogBgWidget(
+      isOverlayLoading: isLoading,
       title: context.translate('delete_confirmation'),
       dialogHeight: context.isDesktop
           ? 550

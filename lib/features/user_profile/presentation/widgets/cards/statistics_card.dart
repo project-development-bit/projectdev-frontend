@@ -1,4 +1,5 @@
 import 'package:cointiply_app/core/common/common_text.dart';
+import 'package:cointiply_app/core/config/app_local_images.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:cointiply_app/core/extensions/int_extensions.dart';
 import 'package:cointiply_app/core/theme/theme.dart';
@@ -202,7 +203,7 @@ class StatCard extends StatelessWidget {
           ),
           const SizedBox(width: 5),
           Image(
-            image: const AssetImage("assets/images/rewards/coin.png"),
+            image: const AssetImage(AppLocalImages.coin),
             width: 20,
           ),
         ],

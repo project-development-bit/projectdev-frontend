@@ -50,7 +50,7 @@ class Disable2FANotifier extends StateNotifier<Disable2FAState> {
 
   /// Disable 2FA for the authenticated user
   /// 
-  /// [token] - The 6-digit 2FA token from the authenticator app
+  /// [token] - The 4-digit 2FA token from the authenticator app
   Future<void> disable2FA(String token) async {
     state = const Disable2FALoading();
 

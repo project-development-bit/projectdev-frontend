@@ -1,4 +1,5 @@
 import 'package:cointiply_app/core/common/common_image_widget.dart';
+import 'package:cointiply_app/core/common/common_loading_widget.dart';
 import 'package:cointiply_app/core/config/app_local_images.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:cointiply_app/core/widgets/responsive_container.dart';
@@ -16,6 +17,7 @@ class OnboardingBackground extends StatelessWidget {
     this.girlHeight,
     this.girlRightOffset,
     this.girlBottomOffset,
+    this.isLoading = false,
   });
 
   final Widget child;
@@ -27,6 +29,7 @@ class OnboardingBackground extends StatelessWidget {
   final double? girlHeight;
   final double? girlRightOffset;
   final double? girlBottomOffset;
+  final bool isLoading;
   @override
   Widget build(BuildContext context) {
     final isMobile = context.isMobile;
@@ -47,15 +50,6 @@ class OnboardingBackground extends StatelessWidget {
               fit: BoxFit.cover,
             ),
           ),
-          Positioned.fill(
-            child: CommonImage(
-              imageUrl: backgroundImagePath ??
-                  (isMobile
-                      ? AppLocalImages.onboardingCoinSection1Mobile
-                      : AppLocalImages.onboardingCoinDesktop),
-              fit: BoxFit.cover,
-            ),
-          ),
           SingleChildScrollView(
             child: ConstrainedBox(
               constraints: BoxConstraints(
@@ -72,8 +66,8 @@ class OnboardingBackground extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     CommonImage(
-                      imageUrl: logoImagePath ??
-                          "assets/images/giga_faucet_text_logo.png",
+                      imageUrl:
+                          logoImagePath ?? AppLocalImages.gigaFaucetTextLogo,
                       width: isMobile ? 240 : 360,
                       height: isMobile ? 40 : 52,
                       fit: BoxFit.contain,
@@ -106,8 +100,7 @@ class OnboardingBackground extends StatelessWidget {
                             child: IgnorePointer(
                               ignoring: true,
                               child: Image.asset(
-                                // "assets/images/girl.png",
-                                "assets/images/girl_whole_body.png",
+                                AppLocalImages.girlWholeBody,
                                 height: localGirlHeight,
                                 fit: BoxFit.contain,
                               ),
@@ -120,6 +113,16 @@ class OnboardingBackground extends StatelessWidget {
               ),
             ),
           ),
+          if (isLoading)
+            Positioned.fill(
+              child: Container(
+                color: Color(0xCC141414).withAlpha((0.80 * 255).toInt()),
+                child: Center(
+                    child: CommonLoadingWidget(
+                  height: 130,
+                )),
+              ),
+            ),
         ],
       ),
     );

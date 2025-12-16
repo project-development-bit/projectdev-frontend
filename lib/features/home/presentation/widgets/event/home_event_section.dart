@@ -23,7 +23,7 @@ class HomeEventSection extends StatelessWidget {
                   fit: BoxFit.fitWidth,
                   alignment: Alignment(0, -0.85),
                   image: AssetImage(
-                      AppLocalImages.homeCoinBackgroundSection3Desktop),
+                      AppLocalImages.homeCoinBackgroundSection4Desktop),
                 )),
           child: Column(
             children: [
@@ -65,7 +65,7 @@ class HomeEventSection extends StatelessWidget {
                   fit: BoxFit.fitWidth,
                   alignment: Alignment(0, -1.5),
                   image: AssetImage(
-                      AppLocalImages.homeCoinBackgroundSection3Mobile),
+                      AppLocalImages.homeCoinBackgroundSection4Mobile),
                 )),
               ),
             ),

@@ -100,6 +100,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     // Also watch the locale provider to force rebuilds when locale changes
     final currentLocale = ref.watch(localizationNotifierProvider).currentLocale;
     final translate = ref.watch(translationProvider);
+    final loginState = ref.watch(loginNotifierProvider);
+    final isLoading = loginState is LoginLoading;
 
     debugPrint('LoginPage building with locale: ${currentLocale.languageCode}');
     debugPrint(
@@ -112,6 +114,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       girlHeight: 400,
       girlRightOffset: -150,
       girlBottomOffset: -110,
+      isLoading: isLoading,
       child: Column(
         children: [
           LoginFormWidget(
@@ -162,7 +165,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               Expanded(
                 child: TextButton(
                   onPressed: () =>
-                      GoRouter.of(context).push(AppRoutes.contactUs),
+                      GoRouter.of(context).goNamed(AppRoutes.contactUs),
                   style: TextButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 8),
                   ),

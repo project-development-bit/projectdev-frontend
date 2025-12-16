@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:cointiply_app/core/config/app_assets.dart';
 import 'package:cointiply_app/features/localization/data/datasource/local/localization_local_data_source.dart';
 import 'package:cointiply_app/features/localization/data/model/response/localization_model.dart';
 import 'package:flutter/material.dart';
@@ -7,8 +8,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalizationService {
-  static const String _localizationPath = 'assets/l10n';
-  // static const List<String> supportedLocales = ['en', 'my', 'fr'];
+  static const String _localizationPath = AppAssets.localizationPath;
+  static const List<String> supportedLocales = ['en', 'my'];
 
   Locale? _locale;
   Map<String, String>? _localizedStrings;

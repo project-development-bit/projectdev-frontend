@@ -12,11 +12,14 @@ class EarningsStatisticsState {
   final EarningsStatisticsStatus status;
   final String? error;
 
+  
   const EarningsStatisticsState({
     this.data,
     this.status = EarningsStatisticsStatus.initial,
     this.error,
   });
+
+  bool get isLoading => status == EarningsStatisticsStatus.loading;
 
   EarningsStatisticsState copyWith({
     StatisticsResponse? data,

@@ -27,6 +27,8 @@ class EarningsHistoryState {
     this.isLoadingMore = false,
   });
 
+  bool get isLoading => status == EarningsHistoryStatus.loading;
+
   EarningsHistoryState copyWith({
     EarningsHistoryResponse? data,
     EarningsHistoryStatus? status,

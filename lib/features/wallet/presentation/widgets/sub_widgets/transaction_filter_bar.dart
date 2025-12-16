@@ -1,4 +1,5 @@
 import 'package:cointiply_app/core/common/table/table_filter_dropdown.dart';
+import 'package:cointiply_app/core/config/app_local_images.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:cointiply_app/features/wallet/presentation/providers/payment_history_notifier_provider.dart';
 import 'package:cointiply_app/features/wallet/presentation/widgets/sub_widgets/transaction_filter_button.dart';
@@ -56,7 +57,7 @@ class TransactionFilterBar extends ConsumerWidget {
                 height: 40,
                 alignment: Alignment.center,
                 child: SvgPicture.asset(
-                  "assets/images/icons/Refresh ccw.svg",
+                  AppLocalImages.refreshCcw,
                   width: isMobile ? 16 : 24,
                   height: isMobile ? 16 : 24,
                 ),

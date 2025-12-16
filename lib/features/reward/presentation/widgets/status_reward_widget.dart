@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/config/app_local_images.dart';
 import 'package:cointiply_app/core/core.dart';
 import 'package:cointiply_app/features/reward/domain/entities/reward_level.dart';
 import 'package:cointiply_app/features/user_profile/data/enum/user_level.dart';
@@ -39,7 +40,7 @@ class StatusRewardsWidget extends StatelessWidget {
           color: const Color(0xFF333333),
         ),
         image: DecorationImage(
-          image: AssetImage("assets/images/rewards/status_rewards_bg.png"),
+          image: AssetImage(AppLocalImages.statusRewardBg),
           fit: isMobile ? BoxFit.cover : BoxFit.contain,
         ),
       ),
@@ -156,7 +157,7 @@ class StatusRewardItem extends StatelessWidget {
             Image.asset(userLevel.asset, width: 40, height: 40),
             const SizedBox(height: 6),
             CommonText.titleMedium(
-              userLevel.lable(localizations, tier.label),
+              userLevel.labelByTier(localizations, tier.label),
               fontSize: isMobile ? 14 : 16,
               color: colorScheme.onPrimary,
               fontWeight: FontWeight.w700,

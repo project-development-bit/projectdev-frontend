@@ -63,6 +63,8 @@ class _ManageProfileDialogState extends ConsumerState<ManageProfileDialog> {
     final getProfileStatus = ref.watch(getProfileNotifierProvider).status;
 
     return DialogBgWidget(
+      isInitLoading: getProfileStatus == GetProfileStatus.loading,
+      isOverlayLoading: false,
       dialogHeight: _getDialogHeight(context),
       body: _manageDialogBody(status: getProfileStatus),
       title: context.translate("manage_profile_title"),
@@ -93,14 +95,7 @@ class _ManageProfileDialogState extends ConsumerState<ManageProfileDialog> {
           children: [
             _manageProfileTabBar(),
             SizedBox(height: 16),
-            if (status == GetProfileStatus.loading) ...[
-              const SizedBox(height: 50),
-              Center(
-                child: CircularProgressIndicator(
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-              ),
-            ],
+           
             if (status == GetProfileStatus.failure) ...[
               const SizedBox(height: 50),
               Center(

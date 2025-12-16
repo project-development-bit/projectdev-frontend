@@ -126,12 +126,12 @@ class _TwoFactorAuthDialogState extends ConsumerState<TwoFactorAuthDialog> {
 
   String? _validateCode(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Please enter the 6-digit code';
+      return 'Please enter the 4-digit code';
     }
-    if (value.length != 6) {
-      return 'Code must be exactly 6 digits';
+    if (value.length != 4) {
+      return 'Code must be exactly 4 digits';
     }
-    if (!RegExp(r'^\d{6}$').hasMatch(value)) {
+    if (!RegExp(r'^\d{4}$').hasMatch(value)) {
       return 'Code must contain only numbers';
     }
     return null;
@@ -165,6 +165,8 @@ class _TwoFactorAuthDialogState extends ConsumerState<TwoFactorAuthDialog> {
   Widget build(BuildContext context) {
     final setup2FAState = ref.watch(setup2FAProvider);
     final isEnabling = ref.watch(isEnable2FALoadingProvider);
+
+    final isInitLoading = ref.watch(setup2FAProvider) is Setup2FALoading;
     double dialogHeight = context.isDesktop
         ? 645
         : context.isTablet
@@ -172,7 +174,9 @@ class _TwoFactorAuthDialogState extends ConsumerState<TwoFactorAuthDialog> {
             : 750;
 
     return DialogBgWidget(
+      isOverlayLoading: isEnabling,
       dialogHeight: dialogHeight,
+      isInitLoading: isInitLoading,
       title: context.translate("setup_2fa_app_title"),
       body: SingleChildScrollView(
         child: Padding(
@@ -512,7 +516,6 @@ class _VerificationForm extends StatelessWidget {
           fontColor: Color(0xff98989A),
           isDark: true,
           width: isMobile ? double.infinity : 233,
-          isLoading: isVerifying,
           padding: EdgeInsets.symmetric(
             horizontal: 40,
             vertical: 10,
