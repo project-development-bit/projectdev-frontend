@@ -11,6 +11,7 @@ class Language extends Equatable {
     required this.name,
     required this.flag,
     required this.isDefault,
+    required this.countryCode,
   });
 
   /// Language code (e.g., "EN", "FR", "MM")
@@ -25,6 +26,8 @@ class Language extends Equatable {
   /// Whether this is the default language
   final bool isDefault;
 
+  final String countryCode;
+
   String get displayFlag {
     return getDisplayFlag(code);
   }
@@ -35,6 +38,7 @@ class Language extends Equatable {
       name: '',
       flag: '',
       isDefault: false,
+      countryCode: '',
     );
   }
 
@@ -59,9 +63,9 @@ class Language extends Equatable {
   }
 
   @override
-  List<Object> get props => [code, name, flag, isDefault];
+  List<Object> get props => [code, name, flag, isDefault, countryCode];
 
   @override
   String toString() =>
-      'Language(code: $code, name: $name, flag: $flag, isDefault: $isDefault)';
+      'Language(code: $code, name: $name, flag: $flag, isDefault: $isDefault, countryCode: $countryCode)';
 }

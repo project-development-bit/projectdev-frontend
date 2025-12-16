@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../user_profile/domain/entities/language.dart';
+import '../../domain/entities/language.dart';
 import '../../domain/usecases/get_languages_usecase.dart';
 import '../../../user_profile/presentation/providers/profile_providers.dart';
 
@@ -44,7 +44,8 @@ class GetLanguagesState {
   List<Locale> get localeList {
     if (languages == null) return [];
     return languages!
-        .map((lang) => Locale(lang.code.toLowerCase(), lang.code.toUpperCase()))
+        .map((lang) =>
+            Locale(lang.code.toLowerCase(), lang.countryCode.toUpperCase()))
         .toList();
   }
 }

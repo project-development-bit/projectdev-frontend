@@ -1,7 +1,7 @@
 import 'package:cointiply_app/core/core.dart';
 import 'package:cointiply_app/core/utils/utils.dart';
 import 'package:cointiply_app/features/user_profile/data/models/country_model.dart';
-import 'package:cointiply_app/features/user_profile/data/models/language_model.dart';
+import 'package:cointiply_app/features/localization/data/model/response/language_model.dart';
 import 'package:cointiply_app/features/user_profile/data/models/profile_detail_model.dart';
 import 'package:cointiply_app/features/user_profile/data/models/response/upload_profile_avatar_response_model.dart';
 import 'package:cointiply_app/features/user_profile/data/models/response/user_update_respons.dart';

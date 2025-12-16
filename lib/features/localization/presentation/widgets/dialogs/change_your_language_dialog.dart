@@ -5,7 +5,7 @@ import 'package:cointiply_app/core/common/dialog_bg_widget.dart';
 import 'package:cointiply_app/core/extensions/extensions.dart';
 import 'package:cointiply_app/features/localization/presentation/providers/localization_notifier_provider.dart';
 import 'package:cointiply_app/features/localization/presentation/providers/localization_state.dart';
-import 'package:cointiply_app/features/user_profile/domain/entities/language.dart';
+import 'package:cointiply_app/features/localization/domain/entities/language.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/change_language_notifier.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
 import 'package:cointiply_app/features/localization/presentation/providers/get_languages_state.dart';

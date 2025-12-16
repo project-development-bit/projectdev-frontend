@@ -2,7 +2,7 @@ import 'package:cointiply_app/features/user_profile/data/models/request/user_upd
 import 'package:cointiply_app/features/user_profile/data/models/response/upload_profile_avatar_response_model.dart';
 import 'package:cointiply_app/features/user_profile/data/models/response/user_update_respons.dart';
 import 'package:cointiply_app/features/user_profile/domain/entities/country.dart';
-import 'package:cointiply_app/features/user_profile/domain/entities/language.dart';
+import 'package:cointiply_app/features/localization/domain/entities/language.dart';
 import 'package:cointiply_app/features/user_profile/domain/entities/profile_detail.dart';
 import 'package:cointiply_app/features/user_profile/domain/entities/verify_delete_account_result.dart';
 import 'package:dartz/dartz.dart';
@@ -41,7 +41,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
     try {
       debugPrint('🔄 Repository: Fetching profile...');
       final profileModel = await remoteDataSource.getProfile();
-      
+
       debugPrint('✅ Repository: Profile fetched successfully');
       return Right(profileModel.toEntity());
     } on DioException catch (e) {
@@ -92,10 +92,10 @@ class ProfileRepositoryImpl implements ProfileRepository {
     } on DioException catch (e) {
       debugPrint('❌ Repository: DioException - ${e.message}');
       debugPrint('❌ Repository: Response data - ${e.response?.data}');
-      
+
       ErrorModel? errorModel;
       String errorMessage = 'Failed to verify email change';
-      
+
       if (e.response?.data != null) {
         try {
           // Try to parse as ErrorModel
@@ -120,7 +120,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
       }
 
       debugPrint('❌ Final error message: $errorMessage');
-      
+
       return Left(ServerFailure(
         message: errorMessage,
         statusCode: e.response?.statusCode,
@@ -253,8 +253,8 @@ class ProfileRepositoryImpl implements ProfileRepository {
   }
 
   @override
-  Future<Either<Failure, UploadProfileAvatarResponseModel>> uploadProfilePicture(
-      PlatformFile file) async {
+  Future<Either<Failure, UploadProfileAvatarResponseModel>>
+      uploadProfilePicture(PlatformFile file) async {
     try {
       final imageUrl = await remoteDataSource.uploadProfilePicture(file);
       return Right(imageUrl);
@@ -262,7 +262,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
       if (e is Failure) {
         return Left(e);
       }
-      
+
       return Left(ServerFailure(message: e.toString()));
     }
   }

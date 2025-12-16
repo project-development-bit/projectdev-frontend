@@ -14,19 +14,20 @@ class CountryModel extends Country {
   /// Create CountryModel from JSON response
   factory CountryModel.fromJson(Map<String, dynamic> json) {
     String flagUrl = json['flag'] as String? ?? '';
-    
+
     // Convert flagsapi.com URLs to CORS-friendly flagcdn.com URLs for web
     // flagcdn.com supports CORS while flagsapi.com does not
     if (flagUrl.contains('flagsapi.com')) {
       // Extract country code from flagsapi.com URL
       // Example: https://flagsapi.com/AU/flat/64.png -> https://flagcdn.com/w80/au.png
-      final codeMatch = RegExp(r'flagsapi\.com/([A-Z]{2})/').firstMatch(flagUrl);
+      final codeMatch =
+          RegExp(r'flagsapi\.com/([A-Z]{2})/').firstMatch(flagUrl);
       if (codeMatch != null) {
         final countryCode = codeMatch.group(1)!.toLowerCase();
         flagUrl = 'https://flagcdn.com/w80/$countryCode.png';
       }
     }
-    
+
     return CountryModel(
       code: json['code'] as String? ?? '',
       name: json['name'] as String? ?? '',
