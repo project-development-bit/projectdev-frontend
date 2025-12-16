@@ -32,8 +32,7 @@ class ClaimFaucetNotifier extends StateNotifier<ClaimFaucetState> {
     } else {
       debugPrint('❌ Turnstile verification incomplete');
       state = const ClaimFaucetState(
-        error:
-            'Security verification required. Please complete the verification and try again.',
+        error: 'You need to resolve a captcha to claim your faucet',
       );
       return;
     }

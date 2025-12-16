@@ -160,8 +160,8 @@ class _YourFaucetDialogState extends ConsumerState<ClaimYourFaucetDialog> {
                       TurnstileActionEnum.faucetClaim));
                   if (turnstileState is! TurnstileSuccess) {
                     context.showErrorSnackBar(
-                      message:
-                          context.translate('security_verification_required'),
+                      message: context.translate(
+                          'you_need_to_resolve_captcha_to_claim_your_faucet'),
                     );
                     return;
                   }
