@@ -24,7 +24,6 @@ class NextFaucetWidget extends ConsumerWidget {
     final countdown = ref.watch(
       faucetCountdownProvider(status),
     );
-
     return Container(
       width: 365,
       height: 127,
@@ -44,7 +43,7 @@ class NextFaucetWidget extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          if (!status.isClaimNow) ...[
+          if (!status.isClaimNow || !status.canClaim) ...[
             CommonText.titleMedium(
               context.translate('event_next_faucet'),
               fontWeight: FontWeight.w600,

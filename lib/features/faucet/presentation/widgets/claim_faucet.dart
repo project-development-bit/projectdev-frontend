@@ -27,7 +27,7 @@ class ClaimFaucet extends ConsumerWidget {
       faucetCountdownProvider(status),
     );
 
-    final timeText = status.isClaimNow
+    final timeText = status.isClaimNow || status.canClaim
         ? context.translate('ready')
         : '${countdown.hours.toString().padLeft(2, '0')}:'
             '${countdown.minutes.toString().padLeft(2, '0')}:'

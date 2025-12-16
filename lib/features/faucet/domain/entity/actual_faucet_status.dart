@@ -19,6 +19,8 @@ class ActualFaucetStatus extends Equatable {
   final DailyReset dailyReset;
   final FaucetStreak streak;
 
+  bool get canClaim => nextFaucetAt.isBefore(DateTime.now());
+
   ActualFaucetStatus copyWith({
     int? rewardPerClaim,
     int? intervalHours,
