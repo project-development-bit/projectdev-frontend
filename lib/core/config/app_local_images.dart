@@ -154,4 +154,7 @@ class AppLocalImages {
   // Others
   static const String warning = "assets/images/warning.png";
   static const String refreshCcw = "assets/images/icons/Refresh ccw.svg";
+
+  // Faucet Images
+  static const String nextFaucetBg = "assets/images/bg/next_faucet_bg.png";
 }

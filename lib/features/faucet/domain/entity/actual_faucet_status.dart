@@ -1,3 +1,4 @@
+import 'package:cointiply_app/features/faucet/domain/entity/daily_reset.dart';
 import 'package:cointiply_app/features/faucet/domain/entity/faucet_streak.dart';
 import 'package:equatable/equatable.dart';
 
@@ -7,30 +8,32 @@ class ActualFaucetStatus extends Equatable {
     required this.intervalHours,
     required this.nextFaucetAt,
     required this.streak,
+    required this.dailyReset,
+    required this.isClaimNow,
   });
 
   final int rewardPerClaim;
   final int intervalHours;
   final DateTime nextFaucetAt;
+  final bool isClaimNow;
+  final DailyReset dailyReset;
   final FaucetStreak streak;
-
-  /// Helper: can user claim now?
-  bool get canClaim => DateTime.now().isAfter(nextFaucetAt);
-
-  /// Helper: remaining time until next claim
-  Duration get timeUntilNextClaim => nextFaucetAt.difference(DateTime.now());
 
   ActualFaucetStatus copyWith({
     int? rewardPerClaim,
     int? intervalHours,
     DateTime? nextFaucetAt,
     FaucetStreak? streak,
+    DailyReset? dailyReset,
+    bool? isClaimNow,
   }) {
     return ActualFaucetStatus(
       rewardPerClaim: rewardPerClaim ?? this.rewardPerClaim,
       intervalHours: intervalHours ?? this.intervalHours,
       nextFaucetAt: nextFaucetAt ?? this.nextFaucetAt,
       streak: streak ?? this.streak,
+      dailyReset: dailyReset ?? this.dailyReset,
+      isClaimNow: isClaimNow ?? this.isClaimNow,
     );
   }
 
@@ -40,5 +43,7 @@ class ActualFaucetStatus extends Equatable {
         intervalHours,
         nextFaucetAt,
         streak,
+        dailyReset,
+        isClaimNow,
       ];
 }

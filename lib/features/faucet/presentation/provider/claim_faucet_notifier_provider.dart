@@ -1,3 +1,4 @@
+import 'package:cointiply_app/core/services/device_info.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'claim_faucet_notifier.dart';
 import 'claim_faucet_state.dart';
@@ -7,5 +8,5 @@ final claimFaucetNotifierProvider =
     StateNotifierProvider.autoDispose<ClaimFaucetNotifier, ClaimFaucetState>(
         (ref) {
   final usecase = ref.read(claimFaucetUseCaseProvider);
-  return ClaimFaucetNotifier(usecase);
+  return ClaimFaucetNotifier(usecase, ref, ref.read(deviceInfoProvider));
 });

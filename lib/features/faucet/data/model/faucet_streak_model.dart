@@ -2,14 +2,14 @@ import 'package:cointiply_app/features/faucet/data/model/faucet_streak_day_model
 import 'package:cointiply_app/features/faucet/domain/entity/faucet_streak.dart';
 
 class FaucetStreakModel extends FaucetStreak {
-  const FaucetStreakModel({
-    required super.currentDay,
-    required super.progressPercent,
-    required super.dailyTarget,
-    required super.earnedToday,
-    required super.remaining,
-    required super.days,
-  });
+  const FaucetStreakModel(
+      {required super.currentDay,
+      required super.progressPercent,
+      required super.dailyTarget,
+      required super.earnedToday,
+      required super.remaining,
+      required super.days,
+      required super.maxDays});
 
   factory FaucetStreakModel.fromJson(Map<String, dynamic> json) {
     return FaucetStreakModel(
@@ -21,6 +21,7 @@ class FaucetStreakModel extends FaucetStreak {
       days: (json['days'] as List? ?? [])
           .map((e) => FaucetStreakDayModel.fromJson(e))
           .toList(),
+      maxDays: json['max_day'] ?? 0,
     );
   }
 
@@ -31,5 +32,6 @@ class FaucetStreakModel extends FaucetStreak {
         'earned_today': earnedToday,
         'remaining': remaining,
         'days': days.map((e) => (e as FaucetStreakDayModel).toJson()).toList(),
+        'max_day': maxDays,
       };
 }

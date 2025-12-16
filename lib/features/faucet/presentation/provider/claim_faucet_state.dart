@@ -23,4 +23,6 @@ class ClaimFaucetState {
       error: error,
     );
   }
+
+  bool get isLoading => status == ClaimFaucetStatus.loading;
 }

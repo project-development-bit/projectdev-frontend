@@ -283,6 +283,10 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
               //     localizations?.translate('country_required') ?? 'Country *',
               hintText: localizations?.translate('country_hint') ??
                   'Select Your Country',
+              placeholder: Icon(
+                Icons.flag,
+                color: context.primary,
+              ),
               getItemCode: (country) => country.code,
               getItemName: (country) => country.name,
               getItemIconUrl: (country) => country.flag,

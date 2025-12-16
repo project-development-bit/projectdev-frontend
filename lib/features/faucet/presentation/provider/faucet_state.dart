@@ -29,4 +29,6 @@ class FaucetState {
       error: error ?? this.error,
     );
   }
+
+  bool get isLoading => state == GetFaucetStatusState.loading;
 }

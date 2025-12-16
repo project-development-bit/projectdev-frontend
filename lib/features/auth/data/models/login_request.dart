@@ -41,7 +41,7 @@ class LoginRequest extends Equatable {
 
     // Only add recaptchaToken if it's not null
     if (recaptchaToken != null) {
-      json['recaptchaToken'] = recaptchaToken!;
+      json['turnstileToken'] = recaptchaToken!;
     }
 
     return json;
@@ -53,7 +53,7 @@ class LoginRequest extends Equatable {
       email: json['email'] ?? '',
       password: json['password'] ?? '',
       countryCode: json['country_code'] ?? '',
-      recaptchaToken: json['recaptchaToken'],
+      recaptchaToken: json['turnstileToken'],
       userAgent: json['userAgent'] ?? '',
       deviceFingerprint: json['device_fingerprint'] ?? '',
     );

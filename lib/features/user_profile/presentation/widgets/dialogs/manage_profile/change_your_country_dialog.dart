@@ -125,12 +125,9 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
 
   Widget _manageDialogBody(BuildContext context, Country? selectedCountry,
       bool isChangingCountry, GetCountriesState countriesState) {
-    
-
     return SingleChildScrollView(
       child: Container(
-        padding: context.isDesktop
-            ? EdgeInsets.all(32) : EdgeInsets.all(16),
+        padding: context.isDesktop ? EdgeInsets.all(32) : EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
@@ -162,9 +159,7 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
               fontSize: 14,
               isDark: true,
               fontWeight: FontWeight.w700,
-              onTap: selectedCountry != null
-                  ? _onChangeCountry
-                  : null,
+              onTap: selectedCountry != null ? _onChangeCountry : null,
             )
           ],
         ),
@@ -207,6 +202,10 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
                         getItemCode: (country) => country.code,
                         getItemName: (country) => country.name,
                         getItemIconUrl: (country) => country.flag,
+                        placeholder: Icon(
+                          Icons.flag,
+                          color: context.primary,
+                        ),
                         validator: (value) {
                           if (value == null) {
                             return context

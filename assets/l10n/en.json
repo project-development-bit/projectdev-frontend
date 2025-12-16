@@ -771,5 +771,14 @@
   "time_day_ago": "{0} day ago",
   "time_week_ago": "{0} week ago",
   "time_month_ago": "{0} month ago",
-  "time_year_ago": "{0  } year ago"
+  "time_year_ago": "{0  } year ago",
+  "remaining": "Remaining",
+  "you_have_reached_max_faucet_reward": "You’ve reached max faucet reward 🎉 Keep your streak to maintain it!",
+  "your_faucet": "Your Faucet",
+  "your_faucet_ready": "Your Faucet is Ready!",
+  "claim_your_faucet": "Claim Your Faucet",
+  "event_your_faucet": "Your Faucet",
+  "claim_faucet": "Claim Faucet",
+  "faucet_claimed_successfully": "Faucet claimed successfully!",
+  "ready": "Ready"
 }

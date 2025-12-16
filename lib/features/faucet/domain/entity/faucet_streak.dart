@@ -9,7 +9,15 @@ class FaucetStreak extends Equatable {
     required this.earnedToday,
     required this.remaining,
     required this.days,
+    required this.maxDays,
   });
+
+  //   "current_day": 1,
+  // "max_days": 30,
+  // "progress_percent": 4,
+  // "daily_target": 300,
+  // "earned_today": 12,
+  // "remaining": 288,
 
   final int currentDay;
   final int progressPercent;
@@ -17,6 +25,7 @@ class FaucetStreak extends Equatable {
   final int earnedToday;
   final int remaining;
   final List<FaucetStreakDay> days;
+  final int maxDays;
 
   /// Helper: streak completed today?
   bool get isDailyTargetReached => earnedToday >= dailyTarget;
@@ -29,5 +38,6 @@ class FaucetStreak extends Equatable {
         earnedToday,
         remaining,
         days,
+        maxDays,
       ];
 }

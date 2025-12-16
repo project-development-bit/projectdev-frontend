@@ -1,5 +1,6 @@
 import 'package:cointiply_app/core/network/base_dio_client.dart';
 import 'package:cointiply_app/features/faucet/data/model/actual_faucet_status_model.dart';
+import 'package:cointiply_app/features/faucet/data/model/daily_reset_model.dart';
 import 'package:cointiply_app/features/faucet/data/model/faucet_streak_day_model.dart';
 import 'package:cointiply_app/features/faucet/data/model/faucet_streak_model.dart';
 import 'package:cointiply_app/features/faucet/data/request/claim_faucet_request_model.dart';
@@ -19,37 +20,34 @@ class FaucetRemoteDataSourceImpl implements FaucetRemoteDataSource {
 
   @override
   Future<ActualFaucetStatusModel> getFaucetStatus() async {
-//     {
-//   "reward_per_claim": 14,
-//   "interval_hours": 4,
-//   "next_faucet_at": "2025-12-15T14:00:00Z",
-//   "streak": {
-//     "current_day": 2,
-//     "progress_percent": 78,
-//     "daily_target": 300,
-//     "earned_today": 46,
-//     "remaining": 254,
-//     "days": [
-//       { "day": 1, "reward": 12 },
-//       { "day": 2, "reward": 14 },
-//       { "day": 3, "reward": 17 }
-//     ]
-//   }
-// }
     return ActualFaucetStatusModel(
       rewardPerClaim: 14,
       intervalHours: 4,
-      nextFaucetAt: DateTime.parse("2025-12-15T14:00:00Z"),
+      nextFaucetAt: DateTime.parse("2025-12-16T14:00:00Z"),
+      isClaimNow: true,
+      dailyReset: DailyResetModel(
+        resetTimeUtc: DateTime.parse("2025-12-15T00:00:00Z"),
+        nextResetAt: DateTime.parse("2025-12-16T00:00:00Z"),
+        timeUntilReset: TimeUntilResetModel(
+          hours: 2,
+          minutes: 120,
+          seconds: 0,
+          totalSeconds: 7200,
+        ),
+      ),
       streak: FaucetStreakModel(
         currentDay: 2,
         progressPercent: 78,
         dailyTarget: 300,
         earnedToday: 46,
         remaining: 254,
+        maxDays: 30,
         days: [
-          FaucetStreakDayModel(day: 1, reward: 12),
-          FaucetStreakDayModel(day: 2, reward: 14),
-          FaucetStreakDayModel(day: 3, reward: 17),
+          FaucetStreakDayModel(day: 1, reward: 12, target: 300),
+          FaucetStreakDayModel(day: 2, reward: 14, target: 300),
+          FaucetStreakDayModel(day: 3, reward: 17, target: 300),
+          FaucetStreakDayModel(day: 4, reward: 20, target: 300),
+          FaucetStreakDayModel(day: 5, reward: 24, target: 300),
         ],
       ),
     );
@@ -96,7 +94,7 @@ class FaucetRemoteDataSourceImpl implements FaucetRemoteDataSource {
     //   debugPrint('📤 Payload: ${request.toJson()}');
 
     //   await dioClient.post(
-    //     '/api/faucet/claim',
+    //     '/faucet/claim',
     //     data: request.toJson(),
     //   );
 

@@ -36,7 +36,7 @@ class RegisterRequest {
       "confirm_password": confirmPassword,
       "role": role.value,
       if (referralCode != null) "referral_code": referralCode,
-      if (recaptchaToken != null) "recaptchaToken": recaptchaToken,
+      if (recaptchaToken != null) "turnstileToken": recaptchaToken,
     };
   }
 
@@ -50,7 +50,7 @@ class RegisterRequest {
       password: json['password'] ?? '',
       confirmPassword: json['confirm_password'] ?? '',
       role: UserRole.tryFromString(json['role']) ?? UserRole.normalUser,
-      recaptchaToken: json['recaptchaToken'],
+      recaptchaToken: json['turnstileToken'],
       referralCode: json['referral_code'],
     );
   }
