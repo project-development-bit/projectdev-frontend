@@ -212,12 +212,9 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
             // }
           },
           onError: (v) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(v),
-                backgroundColor: Theme.of(context).colorScheme.error,
-              ),
-            );
+            context.showSnackBar(
+                message: v,
+                backgroundColor: Theme.of(context).colorScheme.error);
           });
     }
   }

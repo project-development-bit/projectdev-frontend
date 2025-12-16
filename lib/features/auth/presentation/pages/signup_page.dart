@@ -91,22 +91,16 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
             isSendCode: false,
             isFromForgotPassword: false,
           );
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                  'Registration successful! Please check your email for the verification code.'),
-              backgroundColor: AppColors.success,
-            ),
-          );
+          context.showSnackBar(
+              message:
+                  'Registration successful! Please check your email for the verification code.',
+              backgroundColor: AppColors.success);
           break;
         case RegisterError():
           // Show error message
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(next.message),
-              backgroundColor: Theme.of(context).colorScheme.error,
-            ),
-          );
+          context.showSnackBar(
+              message: next.message,
+              backgroundColor: Theme.of(context).colorScheme.error);  
           break;
         default:
           break;
@@ -162,12 +156,10 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
 
     if (!_agreeToTerms) {
       final localizations = AppLocalizations.of(context);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(localizations?.translate('agree_to_terms_error') ??
-              'Please agree to the terms and conditions'),
-          backgroundColor: Theme.of(context).colorScheme.error,
-        ),
+      context.showSnackBar(
+        message: localizations?.translate('agree_to_terms_error') ??
+            'Please agree to the terms and conditions',
+        backgroundColor: Theme.of(context).colorScheme.error,
       );
       return;
     }

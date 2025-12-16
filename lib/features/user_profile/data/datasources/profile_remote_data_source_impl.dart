@@ -190,8 +190,10 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
     try {
       debugPrint('🔎 Verifying email change for $email with code $code');
 
-      final response =
-          await _dio.get('/users/verify-email-change/$email/$code');
+      final response = await _dio.post('/users/verify-email-change', data: {
+        'email': email,
+        'security_code': code,
+      });
 
       debugPrint('✅ Verify email change response: ${response.statusCode}');
 
@@ -370,7 +372,9 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
     try {
       debugPrint('🔎 Verifying account deletion with code: $code');
 
-      final response = await _dio.get('/users/verify-delete-account/$code');
+      final response = await _dio.post('/users/verify-delete-account', data: {
+        'verification_code': code,
+      });
 
       debugPrint('✅ Account deletion verified: ${response.statusCode}');
 
