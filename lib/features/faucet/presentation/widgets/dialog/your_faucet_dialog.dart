@@ -19,11 +19,12 @@ void showYourFaucetDialog(BuildContext context, Function onClaimTap) {
     context: context,
     barrierDismissible: true,
     barrierColor: colorScheme.scrim.withValues(alpha: 0.6),
-    builder: (context) =>
-        DialogScaffoldWidget(child: YourFaucetDialog(onClaimTap: () {
-      context.pop();
-      onClaimTap();
-    })),
+    builder: (context) => DialogScaffoldWidget(
+        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+        child: YourFaucetDialog(onClaimTap: () {
+          context.pop();
+          onClaimTap();
+        })),
   );
 }
 
@@ -56,7 +57,8 @@ class _YourFaucetDialogState extends ConsumerState<YourFaucetDialog> {
       body: SingleChildScrollView(
         child: Container(
           width: double.infinity,
-          padding: EdgeInsets.symmetric(horizontal: 10.5),
+          padding:
+              EdgeInsets.symmetric(horizontal: context.isMobile ? 10 : 10.5),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
           ),

@@ -32,18 +32,24 @@ class FaucetStatusProgressBar extends ConsumerWidget {
                   backgroundColor: Colors.white.withAlpha(50),
                   valueColor: AlwaysStoppedAnimation<Color>(context.primary),
                 ),
-                Row(
+                Flex(
+                  direction: Axis.horizontal,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    CommonText.titleMedium(
-                      "[${status?.streak.remaining ?? 0}] ",
-                      highlightColor: context.primary,
-                      fontWeight: FontWeight.w700,
-                    ),
-                    Image.asset(
-                      AppLocalImages.coin,
-                      width: 24,
-                      height: 24,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CommonText.titleMedium(
+                          "[${status?.streak.remaining ?? 0}] ",
+                          highlightColor: context.primary,
+                          fontWeight: FontWeight.w700,
+                        ),
+                        Image.asset(
+                          AppLocalImages.coin,
+                          width: 24,
+                          height: 24,
+                        ),
+                      ],
                     ),
                     CommonText.titleMedium(
                       " ${context.translate("remaining")}",
@@ -57,7 +63,6 @@ class FaucetStatusProgressBar extends ConsumerWidget {
           ),
           SizedBox(width: 14),
           SizedBox(
-            height: context.isMobile ? 80 : null,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
