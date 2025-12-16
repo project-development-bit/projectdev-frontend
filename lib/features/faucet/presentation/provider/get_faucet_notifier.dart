@@ -8,17 +8,17 @@ import 'faucet_state.dart';
 class GetFaucetNotifier extends StateNotifier<FaucetState> {
   final GetFaucetStatusUseCase _getFaucetStatusUseCase;
 
-  GetFaucetNotifier(this._getFaucetStatusUseCase) : super(const FaucetState()) {
-    fetchFaucetStatus();
-  }
+  GetFaucetNotifier(
+    this._getFaucetStatusUseCase,
+  ) : super(const FaucetState());
 
-  Future<void> fetchFaucetStatus() async {
+  Future<void> fetchFaucetStatus({bool isPublic = false}) async {
     state = state.copyWith(
       state: GetFaucetStatusState.loading,
       error: null,
     );
 
-    final result = await _getFaucetStatusUseCase.call(NoParams());
+    final result = await _getFaucetStatusUseCase.call(isPublic);
 
     result.fold(
       (failure) {

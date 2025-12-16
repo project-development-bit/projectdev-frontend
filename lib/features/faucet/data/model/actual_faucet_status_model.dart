@@ -17,9 +17,10 @@ class ActualFaucetStatusModel extends ActualFaucetStatus {
       rewardPerClaim: json['reward_per_claim'] ?? 0,
       intervalHours: json['interval_hours'] ?? 0,
       isClaimNow: json['can_claim_now'] ?? false,
-      nextFaucetAt: DateTime.parse(
-        json['next_faucet_at'] ?? DateTime.now().toIso8601String(),
-      ),
+      nextFaucetAt: DateTime.tryParse(
+            json['next_faucet_at'] ?? DateTime.now().toIso8601String(),
+          ) ??
+          DateTime.now(),
       dailyReset: DailyResetModel.fromJson(
         json['daily_reset'] ?? {},
       ),

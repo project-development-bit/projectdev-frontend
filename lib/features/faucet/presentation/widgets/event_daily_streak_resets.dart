@@ -17,7 +17,7 @@ class EventDailyStreakResets extends ConsumerWidget {
             (status?.streak.maxDays ?? 30)) ...[
           CommonText.bodyMedium(
             context.translate(
-              "event_daily_streak_resets_full_streak_earned",
+              "you_have_reached_max_faucet_reward",
             ),
             color: Color(0xFFFFFFFF),
             fontWeight: FontWeight.w700,

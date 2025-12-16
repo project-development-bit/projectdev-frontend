@@ -26,7 +26,9 @@ class _HomePageState extends ConsumerState<HomePage> {
       if (isAuthenticated) {
         ref.read(currentUserProvider.notifier).initializeUser();
       }
-      ref.read(getFaucetNotifierProvider.notifier).fetchFaucetStatus();
+      ref.read(getFaucetNotifierProvider.notifier).fetchFaucetStatus(
+            isPublic: !isAuthenticated,
+          );
     });
     super.initState();
   }

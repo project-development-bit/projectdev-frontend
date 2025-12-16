@@ -13,10 +13,11 @@ class FaucetRepositoryImpl implements FaucetRepository {
   FaucetRepositoryImpl(this.remoteDataSource);
 
   @override
-  Future<Either<Failure, ActualFaucetStatusModel>> getFaucetStatus() async {
+  Future<Either<Failure, ActualFaucetStatusModel>> getFaucetStatus(
+      {bool isPublic = false}) async {
     try {
       final ActualFaucetStatusModel responseModel =
-          await remoteDataSource.getFaucetStatus();
+          await remoteDataSource.getFaucetStatus(isPublic: isPublic);
 
       return Right(responseModel);
     } on DioException catch (e) {

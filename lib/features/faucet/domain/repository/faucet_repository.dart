@@ -4,7 +4,8 @@ import 'package:cointiply_app/features/faucet/data/request/claim_faucet_request_
 import 'package:dartz/dartz.dart';
 
 abstract class FaucetRepository {
-  Future<Either<Failure, ActualFaucetStatusModel>> getFaucetStatus();
+  Future<Either<Failure, ActualFaucetStatusModel>> getFaucetStatus(
+      {bool isPublic = false});
   Future<Either<Failure, Unit>> claimFaucet(
     ClaimFaucetRequestModel request,
   );

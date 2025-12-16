@@ -11,14 +11,13 @@ final getFaucetStatusUseCaseProvider = Provider<GetFaucetStatusUseCase>((ref) {
   return GetFaucetStatusUseCase(repo);
 });
 
-class GetFaucetStatusUseCase
-    implements UseCase<ActualFaucetStatusModel, NoParams> {
+class GetFaucetStatusUseCase implements UseCase<ActualFaucetStatusModel, bool> {
   final FaucetRepository repository;
 
   GetFaucetStatusUseCase(this.repository);
 
   @override
-  Future<Either<Failure, ActualFaucetStatusModel>> call(NoParams params) {
-    return repository.getFaucetStatus();
+  Future<Either<Failure, ActualFaucetStatusModel>> call(bool isPublic) {
+    return repository.getFaucetStatus(isPublic: isPublic);
   }
 }

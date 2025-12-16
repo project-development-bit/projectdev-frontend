@@ -10,10 +10,12 @@ class DailyResetModel extends DailyReset {
   factory DailyResetModel.fromJson(Map<String, dynamic>? json) {
     return DailyResetModel(
         resetTimeUtc: json != null && json['reset_time_utc'] != null
-            ? DateTime.parse(json['reset_time_utc'] as String)
+            ? DateTime.tryParse(json['reset_time_utc'] as String) ??
+                DateTime.now()
             : DateTime.now(),
         nextResetAt: json != null && json['next_reset_at'] != null
-            ? DateTime.parse(json['next_reset_at'] as String)
+            ? DateTime.tryParse(json['next_reset_at'] as String) ??
+                DateTime.now()
             : DateTime.now(),
         timeUntilReset: json != null && json['time_until_reset'] != null
             ? TimeUntilResetModel.fromJson(
