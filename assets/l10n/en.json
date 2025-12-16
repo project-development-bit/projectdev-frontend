@@ -780,5 +780,7 @@
   "event_your_faucet": "Your Faucet",
   "claim_faucet": "Claim Faucet",
   "faucet_claimed_successfully": "Faucet claimed successfully!",
-  "ready": "Ready"
+  "ready": "Ready",
+  "login_required": "Login Required",
+  "you_must_login_to_continue": "You must login to continue"
 }

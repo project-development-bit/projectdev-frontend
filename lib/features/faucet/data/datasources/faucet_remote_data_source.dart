@@ -23,8 +23,8 @@ class FaucetRemoteDataSourceImpl implements FaucetRemoteDataSource {
     return ActualFaucetStatusModel(
       rewardPerClaim: 14,
       intervalHours: 4,
-      nextFaucetAt: DateTime.parse("2025-12-16T14:00:00Z"),
-      isClaimNow: true,
+      nextFaucetAt: DateTime.parse("2025-12-16T08:00:00Z"),
+      isClaimNow: false,
       dailyReset: DailyResetModel(
         resetTimeUtc: DateTime.parse("2025-12-15T00:00:00Z"),
         nextResetAt: DateTime.parse("2025-12-16T00:00:00Z"),

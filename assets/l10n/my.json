@@ -778,5 +778,7 @@
   "event_your_faucet": "သင့် Faucet",
   "claim_faucet": "Faucet ကို ယူလိုက်ပါ",
   "faucet_claimed_successfully": "Faucet claimed successfully!",
-  "ready": "အဆင်သင့်"
+  "ready": "အဆင်သင့်",
+  "login_required": "Login လိုအပ်ပါသည်",
+  "you_must_login_to_continue": "သင့်အကောင့်သို့ ဝင်ရောက်ရန် လိုအပ်ပါသည်။ ဆက်လက်လုပ်ဆောင်ရန် အကောင့်သို့ ဝင်ရောက်ပါ။"
 }
