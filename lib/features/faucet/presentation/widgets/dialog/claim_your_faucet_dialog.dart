@@ -148,7 +148,7 @@ class _YourFaucetDialogState extends ConsumerState<ClaimYourFaucetDialog> {
             ),
             SizedBox(height: 40),
             CloudflareTurnstileWidget(
-              action: TurnstileActionEnum.claimFaucet,
+              action: TurnstileActionEnum.faucetClaim,
               debugMode: false,
             ),
             SizedBox(height: 40),
@@ -157,7 +157,7 @@ class _YourFaucetDialogState extends ConsumerState<ClaimYourFaucetDialog> {
                 isDark: true,
                 onTap: () {
                   final turnstileState = ref.read(turnstileNotifierProvider(
-                      TurnstileActionEnum.claimFaucet));
+                      TurnstileActionEnum.faucetClaim));
                   if (turnstileState is! TurnstileSuccess) {
                     context.showErrorSnackBar(
                       message:

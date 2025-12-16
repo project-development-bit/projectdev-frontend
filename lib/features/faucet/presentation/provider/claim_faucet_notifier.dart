@@ -2,6 +2,8 @@ import 'package:cointiply_app/core/providers/turnstile_provider.dart';
 import 'package:cointiply_app/core/services/device_info.dart';
 import 'package:cointiply_app/features/faucet/data/request/claim_faucet_request_model.dart';
 import 'package:cointiply_app/features/faucet/domain/usecases/claim_faucet_usecase.dart';
+import 'package:cointiply_app/features/faucet/presentation/provider/faucet_notifier_provider.dart';
+import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -22,7 +24,7 @@ class ClaimFaucetNotifier extends StateNotifier<ClaimFaucetState> {
 
     debugPrint('🔐 Checking Turnstile verification...');
     final turnstileState =
-        _ref.read(turnstileNotifierProvider(TurnstileActionEnum.claimFaucet));
+        _ref.read(turnstileNotifierProvider(TurnstileActionEnum.faucetClaim));
 
     if (turnstileState is TurnstileSuccess) {
       turnstileToken = turnstileState.token;
@@ -45,18 +47,17 @@ class ClaimFaucetNotifier extends StateNotifier<ClaimFaucetState> {
 
     result.fold(
       (failure) {
+        _ref.read(getFaucetNotifierProvider.notifier).fetchFaucetStatus();
+        _ref.read(currentUserProvider.notifier).getCurrentUser();
         state = state.copyWith(
           status: ClaimFaucetStatus.error,
           error: failure.message,
         );
       },
       (_) {
-        Future.delayed(
-          const Duration(seconds: 1),
-          () {
-            state = state.copyWith(status: ClaimFaucetStatus.success);
-          },
-        );
+        _ref.read(getFaucetNotifierProvider.notifier).fetchFaucetStatus();
+        _ref.read(currentUserProvider.notifier).getCurrentUser();
+        state = state.copyWith(status: ClaimFaucetStatus.success);
       },
     );
   }
