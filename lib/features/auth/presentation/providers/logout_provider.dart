@@ -1,4 +1,5 @@
 import 'package:cointiply_app/features/home/presentation/providers/tutorial_provider.dart';
+import 'package:cointiply_app/features/localization/domain/usecases/clear_selected_language_usecase.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/services/database_service.dart';
@@ -76,6 +77,7 @@ class LogoutNotifier extends StateNotifier<LogoutState> {
 
           // Clear local database
           try {
+            await _ref.read(clearSelectedLanguageUseCaseProvider).call();
             await _ref.read(tutorialProvider.notifier).reset();
             await DatabaseService.clearAllUsers();
             debugPrint('✅ User data cleared from database');

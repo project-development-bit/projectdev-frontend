@@ -20,6 +20,8 @@ abstract class LocalizationLocalDataSource {
 
   Future<String?> getLocalizationVersion(String languageCode);
   Future<void> setLocalizationVersion(String languageCode, String version);
+
+  Future<void> clearSelectedLanguageCode();
 }
 
 class LocalizationLocalDataSourceImpl implements LocalizationLocalDataSource {
@@ -50,6 +52,11 @@ class LocalizationLocalDataSourceImpl implements LocalizationLocalDataSource {
   @override
   Future<void> setSelectedLanguageCode(String languageCode) async {
     await sharedPreferences.setString("selected_language_code", languageCode);
+  }
+
+  @override
+  Future<void> clearSelectedLanguageCode() async {
+    await sharedPreferences.remove("selected_language_code");
   }
 
   @override

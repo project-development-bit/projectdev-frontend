@@ -62,4 +62,15 @@ class LocalizationRepositoryImpl implements LocalizationRepository {
           message: e.toString(), statusCode: null, errorModel: null));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> clearSelectedLanguageCode() async {
+    try {
+      await local.clearSelectedLanguageCode();
+      return const Right(null);
+    } catch (e) {
+      return Left(ServerFailure(
+          message: e.toString(), statusCode: null, errorModel: null));
+    }
+  }
 }
