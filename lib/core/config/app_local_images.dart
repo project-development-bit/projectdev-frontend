@@ -57,7 +57,7 @@ class AppLocalImages {
   static const String shopDiscount = 'assets/images/rewards/shop_discount.png';
   static const String shieldIcon = 'assets/images/rewards/shield_icon.png';
   static const String offerBoostReward =
-      'assets/images/rewards/offer_boost_reward.png';
+      'assets/images/rewards/offer_boast@3x.png';
 
   static const String whale = 'assets/images/levels/whale.png';
   static const String eventPosterImage =
@@ -86,11 +86,11 @@ class AppLocalImages {
 
   //Status Reward
 
-  static const String dailySpin = "assets/images/rewards/daily_spin.png";
+  static const String dailySpin = "assets/images/rewards/daily_spin@3x.png";
   static const String treasureChest =
-      "assets/images/rewards/treasure_chest.png";
+      "assets/images/rewards/treasure_chest@3x.png";
   static const String ptcAdDiscount =
-      "assets/images/rewards/ptc_ad_discount.png";
+      "assets/images/rewards/ptc_ad_discount@2x.png";
   static const String statusRewardBg =
       "assets/images/rewards/status_rewards_bg.png";
   static const String bronze = "assets/images/rewards/bronze_level.png";
