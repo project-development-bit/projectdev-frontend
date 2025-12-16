@@ -130,7 +130,7 @@ class AppLocalImages {
   static const String twitterIcon = 'assets/images/icons/twitter.svg';
   static const String telegramIcon = 'assets/images/icons/telegram.svg';
   static const String chatMessageIcon = 'assets/images/icons/chat_message.svg';
-  static const String moneyBag = "assets/images/money_bag.png";
+  static const String moneyBag = "assets/images/money_bag@2x.png";
   static const String referralPerson = "assets/images/referral_person.png";
   static const String sandWatch = "assets/images/sand_watch.png";
   static const String week = "assets/images/week.png";
