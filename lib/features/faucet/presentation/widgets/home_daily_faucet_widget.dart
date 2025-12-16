@@ -1,6 +1,7 @@
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:cointiply_app/features/faucet/presentation/widgets/actual_faucet_title.dart';
+import 'package:cointiply_app/features/faucet/presentation/widgets/dialog/claim_your_faucet_dialog.dart';
 import 'package:cointiply_app/features/faucet/presentation/widgets/event_daily_streak_resets.dart';
 import 'package:cointiply_app/features/faucet/presentation/widgets/faucet_status_day_list_widget.dart';
 import 'package:cointiply_app/features/faucet/presentation/widgets/faucet_status_progress_bar.dart';
@@ -27,7 +28,9 @@ class HomeDailyFaucetWidget extends StatelessWidget {
         ),
         SizedBox(height: 17),
         NextFaucetWidget(
-          onClaimTap: () {},
+          onClaimTap: () {
+            showClaimYourFaucetDialog(context);
+          },
         ),
         SizedBox(height: 17),
         CommonText.titleLarge(
