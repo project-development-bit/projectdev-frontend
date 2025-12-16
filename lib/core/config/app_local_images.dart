@@ -18,7 +18,7 @@ class AppLocalImages {
   static const String bannerMobile = 'assets/images/bg/banner_mobile@2x.jpg';
 
   // coin Images
-  static const String coin = "assets/images/rewards/coin@3x.png";
+  static const String coin = "assets/images/rewards/coin@2x.png";
   static const String coinSvg = "assets/images/rewards/coin.svg";
 
   // Onboarding Images
@@ -60,25 +60,29 @@ class AppLocalImages {
       'assets/images/rewards/offer_boost_reward.png';
 
   static const String whale = 'assets/images/levels/whale.png';
-  static const String eventPosterImage = 'assets/images/event_poster_image.png';
-  static const String eventVisitShop = 'assets/images/event_visit_shop.png';
+  static const String eventPosterImage =
+      'assets/images/event_poster_image@2x.jpg';
+  static const String eventVisitShop = 'assets/images/event_visit_shop@2x.jpg';
   static const String eventOurQuestToday =
-      'assets/images/event_our_quest_today.png';
-  static const String eventTreasureBox = 'assets/images/treasure_box.png';
+      'assets/images/event_our_quest_today@2x.jpg';
+  static const String eventTreasureBox = 'assets/images/treasure_box@2x.png';
   static const String eventDailyStreakBg = 'assets/images/trophy.png';
 
   // Home Features Section
 
-  static const String features1 = 'assets/images/features/features_1.png';
-  static const String features2 = 'assets/images/features/features_2.png';
-  static const String features3 = 'assets/images/features/features_3.png';
-  static const String features4 = 'assets/images/features/features_4.png';
-  static const String features5 = 'assets/images/features/features_5.png';
-  static const String features6 = 'assets/images/features/features_6.png';
-  static const String features7 = 'assets/images/features/features_7.png';
-  static const String features8 = 'assets/images/features/features_8.png';
-  static const String features9 = 'assets/images/features/features_9.png';
-  static const String features10 = 'assets/images/features/features_10.png';
+  static const String features1 = 'assets/images/features/claim_faucet@2x.png';
+  static const String features2 =
+      'assets/images/features/treasure_chest@2x.jpg';
+  static const String features3 = 'assets/images/features/fortune_wheel@2x.png';
+  static const String features4 = 'assets/images/features/surveys@2x.jpg';
+  static const String features5 = 'assets/images/features/exchanger@2x.jpg';
+  static const String features6 = 'assets/images/features/play_game_app@2x.jpg';
+  static const String features7 = 'assets/images/features/watch_videos@2x.jpg';
+  static const String features8 =
+      'assets/images/features/visit_websites@2x.jpg';
+  static const String features9 =
+      'assets/images/features/pirate_treasure_hunt@2x.jpg';
+  static const String features10 = 'assets/images/features/quest@2x.jpg';
 
   //Status Reward
 

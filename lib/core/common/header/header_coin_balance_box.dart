@@ -29,12 +29,6 @@ class HeaderCoinBalanceBox extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // CommonImage(
-          //   imageUrl: AppLocalImages.coin,
-          //   width: context.isMobile ? 16 : 24,
-          //   height: context.isMobile ? 16 : 24,
-          //   filterQuality: FilterQuality.high,
-          // ),
           SvgPicture.asset(
             AppLocalImages.coinSvg,
             width: context.isMobile ? 16 : 24,
