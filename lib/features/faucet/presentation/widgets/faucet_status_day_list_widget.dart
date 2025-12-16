@@ -25,7 +25,7 @@ class FaucetStatusDayListWidget extends ConsumerWidget {
         child: SingleChildScrollView(
           controller: scrollController,
           scrollDirection: Axis.horizontal,
-          padding: const EdgeInsets.only(bottom: 10),
+          padding: const EdgeInsets.only(bottom: 10, left: 5, top: 5),
           child: Row(
             spacing: 12,
             children: (status?.streak.days ?? []).map((day) {
