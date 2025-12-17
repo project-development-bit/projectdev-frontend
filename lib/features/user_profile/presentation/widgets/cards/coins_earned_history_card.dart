@@ -1,5 +1,6 @@
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/config/app_local_images.dart';
+import 'package:cointiply_app/core/extensions/extensions.dart';
 import 'package:cointiply_app/core/extensions/int_extensions.dart';
 import 'package:flutter/material.dart';
 
@@ -20,9 +21,11 @@ class CoinsEarnedHistoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final isMobile = context.isMobile;
 
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 36, horizontal: 32),
+      padding: EdgeInsets.symmetric(
+          vertical: isMobile ? 22 : 36, horizontal: isMobile ? 13 : 32),
       margin: const EdgeInsets.symmetric(vertical: 6.5),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
@@ -41,33 +44,46 @@ class CoinsEarnedHistoryCard extends StatelessWidget {
   }
 
   Widget _buildMobileLayout(ColorScheme colorScheme) {
-    return Column(
+    return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        CommonText.bodyLarge(
-          title,
-          maxLines: 3,
-          fontWeight: FontWeight.w700,
-          color: colorScheme.onPrimary,
-          overflow: TextOverflow.ellipsis,
+        Expanded(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CommonText.bodyLarge(
+                title,
+                fontWeight: FontWeight.w700,
+                color: colorScheme.onPrimary,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 3,
+              ),
+              const SizedBox(height: 4),
+              CommonText.bodyMedium(
+                subtitle,
+                fontWeight: FontWeight.w500,
+                color: colorScheme.onSurfaceVariant,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
         ),
-        const SizedBox(height: 4),
-        CommonText.bodyMedium(
-          subtitle,
-          fontWeight: FontWeight.w500,
-          color: Color(0xFF98989A),
-
-          /// TODO: Use from scheme,
-          overflow: TextOverflow.ellipsis,
-        ),
-        const SizedBox(width: 10),
-        _buildAmountPill(colorScheme, isMobile: true),
-        const SizedBox(height: 4),
-        CommonText.bodyMedium(
-          timeAgo,
-          fontWeight: FontWeight.w700,
-          color: colorScheme.onPrimary,
-          overflow: TextOverflow.ellipsis,
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              _buildAmountPill(colorScheme, isMobile: true),
+              const SizedBox(height: 4),
+              CommonText.bodyMedium(
+                timeAgo,
+                fontWeight: FontWeight.w500,
+                color: colorScheme.onPrimary,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
         ),
       ],
     );
@@ -88,12 +104,10 @@ class CoinsEarnedHistoryCard extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
               const SizedBox(height: 4),
-              CommonText.bodyMedium(
+              CommonText.bodyLarge(
                 subtitle,
                 fontWeight: FontWeight.w500,
-                color: Color(0xFF98989A),
-
-                /// TODO: Use from scheme
+                color: colorScheme.onSurfaceVariant,
                 overflow: TextOverflow.ellipsis,
               ),
             ],
@@ -104,7 +118,7 @@ class CoinsEarnedHistoryCard extends StatelessWidget {
         const SizedBox(width: 16),
         CommonText.bodyLarge(
           timeAgo,
-          fontWeight: FontWeight.w700,
+          fontWeight: FontWeight.w500,
           color: colorScheme.onPrimary,
           overflow: TextOverflow.ellipsis,
         ),
