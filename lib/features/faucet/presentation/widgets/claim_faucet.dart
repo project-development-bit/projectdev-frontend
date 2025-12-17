@@ -41,8 +41,10 @@ class ClaimFaucet extends ConsumerWidget {
             showClaimYourFaucetDialog(context);
           });
         } else {
-          showLoginRequiredDialog(context, onGoToLogin: () {
-            context.go('/auth/login');
+          showYourFaucetDialog(context, () {
+            showLoginRequiredDialog(context, onGoToLogin: () {
+              context.go('/auth/login');
+            });
           });
         }
       },
