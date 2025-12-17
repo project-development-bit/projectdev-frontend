@@ -21,16 +21,26 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // Only initialize user if authenticated
       final isAuthenticated = ref.read(isAuthenticatedObservableProvider);
       if (isAuthenticated) {
         ref.read(currentUserProvider.notifier).initializeUser();
       }
-      ref.read(getFaucetNotifierProvider.notifier).fetchFaucetStatus(
-            isPublic: !isAuthenticated,
-          );
+      fectchApi(isAuthenticated);
+    });
+
+    ref.listenManual<bool>(isAuthenticatedObservableProvider, (previous, next) {
+      // Refetch faucet status and user data on authentication state change
+      if (next != previous) {
+        fectchApi(next);
+      }
     });
     super.initState();
+  }
+
+  void fectchApi(bool isAuthenticated) {
+    ref.read(getFaucetNotifierProvider.notifier).fetchFaucetStatus(
+          isPublic: !isAuthenticated,
+        );
   }
 
   @override
