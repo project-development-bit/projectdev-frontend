@@ -125,12 +125,11 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
 
   Widget _manageDialogBody(BuildContext context, Country? selectedCountry,
       bool isChangingCountry, GetCountriesState countriesState) {
-    
-
     return SingleChildScrollView(
       child: Container(
         padding: context.isDesktop
-            ? EdgeInsets.all(32) : EdgeInsets.all(16),
+            ? EdgeInsets.only(left: 29, right: 29, bottom: 39)
+            : EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
@@ -138,7 +137,7 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
             Align(
               alignment: Alignment.centerLeft,
               child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 20),
+                padding: const EdgeInsets.only(top: 18, bottom: 13),
                 child: CommonText.bodyMedium(
                   context.translate("change_your_country_description"),
                   fontWeight: FontWeight.w500,
@@ -157,14 +156,12 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
             const SizedBox(height: 24),
 
             CustomUnderLineButtonWidget(
-              width: context.isDesktop ? 250 : double.infinity,
+              width: context.screenWidth > 400 ? 250 : double.infinity,
               title: context.translate("change_your_country_btn_text"),
               fontSize: 14,
               isDark: true,
               fontWeight: FontWeight.w700,
-              onTap: selectedCountry != null
-                  ? _onChangeCountry
-                  : null,
+              onTap: selectedCountry != null ? _onChangeCountry : null,
             )
           ],
         ),
@@ -173,9 +170,9 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
   }
 
   Widget _dataState(GetCountriesState countriesState, BuildContext context) {
-    final isDesktop = context.isDesktop;
+    final isMobile = context.screenWidth > 400;
 
-    return isDesktop
+    return isMobile
         ? Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
