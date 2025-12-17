@@ -1,3 +1,5 @@
+import 'package:cointiply_app/features/localization/data/datasource/local/localization_local_data_source.dart';
+import 'package:cointiply_app/features/localization/presentation/providers/get_languages_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../services/localization_service.dart';
@@ -24,12 +26,13 @@ class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
 
   @override
   bool isSupported(Locale locale) {
-    return LocalizationService.supportedLocales.contains(locale.languageCode);
+    return ref.read(getLanguagesNotifierProvider).localeList.contains(locale);
   }
 
   @override
   Future<AppLocalizations> load(Locale locale) async {
-    await localizationService.load(locale, ref);
+    await localizationService.load(
+        locale, ref.read(localizationLocalDataSourceProvider));
     final appLocalizations = AppLocalizations(locale);
     return appLocalizations;
   }

@@ -63,6 +63,7 @@ void main() {
       countryID: 1,
       countryName: 'Thailand',
       coinBalance: 100.0,
+      language: 'en',
     );
 
     final testTokens = AuthTokens(

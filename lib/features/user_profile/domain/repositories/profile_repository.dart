@@ -5,7 +5,7 @@ import 'package:dartz/dartz.dart';
 import 'package:file_picker/file_picker.dart';
 import '../../../../core/error/failures.dart';
 import '../entities/country.dart';
-import '../entities/language.dart';
+import '../../../localization/domain/entities/language.dart';
 import '../entities/profile_detail.dart';
 import '../entities/change_email_result.dart';
 import '../entities/verify_email_change_result.dart';

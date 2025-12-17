@@ -1,3 +1,5 @@
+import 'package:cointiply_app/features/localization/presentation/providers/get_languages_state.dart';
+import 'package:cointiply_app/features/localization/presentation/providers/localization_notifier_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/error/failures.dart';
@@ -63,6 +65,13 @@ class CurrentUserNotifier extends StateNotifier<CurrentUserState> {
         );
       },
       (user) {
+        _ref.read(localizationNotifierProvider.notifier).changeLocale(
+              _ref
+                  .read(getLanguagesNotifierProvider)
+                  .getLocateByLanguageCode(user.language),
+              userid: user.id.toString(),
+            );
+
         state = state.copyWith(
           user: user,
           isLoading: false,

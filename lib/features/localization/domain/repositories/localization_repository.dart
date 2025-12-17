@@ -19,4 +19,5 @@ final localizationRepositoryProvider = Provider<LocalizationRepository>((ref) {
 abstract class LocalizationRepository {
   Future<Either<Failure, LocalizationEntity>> getLocalization(
       GetLocalizationRequest request);
+  Future<Either<Failure, void>> clearSelectedLanguageCode();
 }

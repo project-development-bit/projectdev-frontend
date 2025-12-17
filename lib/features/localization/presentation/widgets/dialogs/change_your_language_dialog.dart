@@ -5,10 +5,10 @@ import 'package:cointiply_app/core/common/dialog_bg_widget.dart';
 import 'package:cointiply_app/core/extensions/extensions.dart';
 import 'package:cointiply_app/features/localization/presentation/providers/localization_notifier_provider.dart';
 import 'package:cointiply_app/features/localization/presentation/providers/localization_state.dart';
-import 'package:cointiply_app/features/user_profile/domain/entities/language.dart';
+import 'package:cointiply_app/features/localization/domain/entities/language.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/change_language_notifier.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
-import 'package:cointiply_app/features/user_profile/presentation/providers/get_languages_state.dart';
+import 'package:cointiply_app/features/localization/presentation/providers/get_languages_state.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/get_profile_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -38,7 +38,9 @@ class _ChangeLanguageDialogState extends ConsumerState<ChangeLanguageDialog> {
     super.initState();
     // Fetch languages when dialog opens
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(getLanguagesNotifierProvider.notifier).fetchLanguages();
+      ref
+          .read(getLanguagesNotifierProvider.notifier)
+          .fetchLanguages(showLoading: false);
     });
 
     ref.listenManual(
@@ -163,7 +165,7 @@ class _ChangeLanguageDialogState extends ConsumerState<ChangeLanguageDialog> {
                           .read(localizationNotifierProvider.notifier)
                           .changeLocale(
                             Locale(_selectedLanguage!.code.toLowerCase(),
-                                _selectedLanguage!.code.toUpperCase()),
+                                _selectedLanguage!.countryCode.toUpperCase()),
                             userid: userId,
                           );
                     }
@@ -207,8 +209,7 @@ class _ChangeLanguageDialogState extends ConsumerState<ChangeLanguageDialog> {
                   Icons.flag,
                   color: context.primary,
                 ),
-                getItemIconUrl: (language) =>
-                    language.getDisplayFlag(language.code),
+                getItemIconUrl: (language) => language.flag,
                 validator: (value) {
                   if (value == null) {
                     return context.translate("please_select_language_error");
@@ -245,8 +246,7 @@ class _ChangeLanguageDialogState extends ConsumerState<ChangeLanguageDialog> {
                   // hint: context.translate("select_your_language_hint"),
                   getItemCode: (language) => language.code,
                   getItemName: (language) => language.name,
-                  getItemIconUrl: (language) =>
-                      language.getDisplayFlag(language.code),
+                  getItemIconUrl: (language) => language.flag,
                   validator: (value) {
                     if (value == null) {
                       return context.translate("please_select_language_error");

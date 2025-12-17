@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:cointiply_app/core/config/app_assets.dart';
 import 'package:cointiply_app/features/localization/data/datasource/local/localization_local_data_source.dart';
 import 'package:cointiply_app/features/localization/data/model/response/localization_model.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,25 +27,34 @@ class LocalizationService {
     return LocalizationModel.fromJson(jsonMap);
   }
 
-  Future<bool> load(Locale locale, WidgetRef ref) async {
+  Future<bool> load(
+      Locale locale, LocalizationLocalDataSource localDataSource) async {
     _locale = locale;
-    debugPrint(
-        'LocalizationService.load() called for locale: ${locale.languageCode}');
+    debugPrint('Load called for locale: ${locale.languageCode}');
     try {
-      // Map<String, dynamic>? jsonString =
-      //     // (await getCachedLocalization(locale.languageCode))?.toJson();
-
-      Map<String, dynamic>? jsonString = (await ref
-              .read(localizationLocalDataSourceProvider)
-              .getCachedLocalization(locale.languageCode))
-          ?.toJson();
+      Map<String, dynamic>? jsonString =
+          (await localDataSource.getCachedLocalization(locale.languageCode))
+              ?.toJson();
 
       Map<String, dynamic> jsonMap = jsonString ?? {};
-      if (jsonMap.isEmpty || kDebugMode) {
-        String jsonString = await rootBundle
-            .loadString('$_localizationPath/${locale.languageCode}.json');
-        jsonMap = json.decode(jsonString);
+      if (jsonMap.isEmpty) {
+        try {
+          final jsonString = await rootBundle.loadString(
+            '$_localizationPath/${locale.languageCode}.json',
+          );
+          jsonMap = json.decode(jsonString);
+        } catch (e) {
+          debugPrint(
+            'Localization file not found for ${locale.languageCode}, falling back to en',
+          );
+          // Fallback to English
+          final fallbackString = await rootBundle.loadString(
+            '$_localizationPath/en.json',
+          );
+          jsonMap = json.decode(fallbackString);
+        }
       }
+
       _localizedStrings = {};
       jsonMap.forEach((key, value) {
         _localizedStrings![key] = value.toString();
@@ -89,8 +97,9 @@ class LocalizationService {
   }
 
   // Change locale
-  Future<void> changeLocale(String languageCode, WidgetRef ref) async {
-    await load(Locale(languageCode), ref);
+  Future<void> changeLocale(Locale locale, Ref ref) async {
+    print("Testing 101: Changing locale to ${locale.languageCode}");
+    await load(locale, ref.read(localizationLocalDataSourceProvider));
   }
 }
 

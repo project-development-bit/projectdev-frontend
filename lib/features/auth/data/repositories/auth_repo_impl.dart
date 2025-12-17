@@ -369,7 +369,7 @@ class AuthRepositoryImpl implements AuthRepository {
       } else {
         errorMessage = e.message ?? errorMessage;
       }
-      
+
       return Left(ServerFailure(
         message: errorMessage,
         statusCode: e.response?.statusCode,
