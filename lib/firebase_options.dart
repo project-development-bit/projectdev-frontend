@@ -70,6 +70,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '645002434672',
     projectId: 'gigafaucet-dev',
     storageBucket: 'gigafaucet-dev.firebasestorage.app',
+    androidClientId: '645002434672-ds5lvknbedq2duci3iplhcii5qbvo3ca.apps.googleusercontent.com',
+    iosClientId: '645002434672-c3ln8ahjr6qgcuubaj3su6lnt5f8fqap.apps.googleusercontent.com',
     iosBundleId: 'com.burgereat.gigafaucet.dev',
   );
 
