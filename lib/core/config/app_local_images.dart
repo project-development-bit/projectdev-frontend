@@ -70,7 +70,7 @@ class AppLocalImages {
 
   // Home Features Section
 
-  static const String features1 = 'assets/images/features/claim_faucet@2x.png';
+  static const String features1 = 'assets/images/features/claim_faucet@2x.jpg';
   static const String features2 =
       'assets/images/features/treasure_chest@2x.jpg';
   static const String features3 = 'assets/images/features/fortune_wheel@2x.png';
@@ -93,7 +93,7 @@ class AppLocalImages {
       "assets/images/rewards/ptc_ad_discount@2x.png";
   static const String statusRewardBg =
       "assets/images/rewards/status_rewards_bg.png";
-  static const String bronze = "assets/images/rewards/bronze_level.png";
+  static const String bronze = "assets/images/rewards/bronze_level.svg";
   static const String silver = "assets/images/rewards/sliver.png";
   static const String gold = "assets/images/rewards/gold.png";
   static const String diamond = "assets/images/rewards/diamond.png";
