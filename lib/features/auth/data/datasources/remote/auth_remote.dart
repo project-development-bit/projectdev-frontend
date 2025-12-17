@@ -95,7 +95,11 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   /// HTTP client for making network requests
   final DioClient dioClient;
 
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
+      clientId:
+          "645002434672-nji58g0s1sdqfpu679h3h7cc3v9diaue.apps.googleusercontent.com");
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   /// Creates an instance of [AuthRemoteDataSourceImpl]
   AuthRemoteDataSourceImpl(this.dioClient);
@@ -747,35 +751,39 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<User> googleSignIn() async {
+    print('Remote Starting Google sign-in process...');
     try {
-      // Step 1: Google Sign-In
+      print('Remote Initiating GoogleSignIn...');
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      print('Remote Google sign-in account obtained.');
       if (googleUser == null) {
+        print('Remote Google sign-in aborted by user.');
         throw Exception("Google sign in aborted");
       }
+      print('Remote Retrieving Google authentication tokens...');
 
-      // Step 2: Get authentication details from Google
       final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;
-
-      // Step 3: Authenticate with Firebase using the Google Auth credentials
+      print('Remote Google authentication tokens obtained.');
       final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
+      print('Remote Signing in with Firebase using Google credentials...');
 
-      // Step 4: Sign in to Firebase
       final UserCredential userCredential =
           await FirebaseAuth.instance.signInWithCredential(credential);
       final User? firebaseUser = userCredential.user;
 
       if (firebaseUser == null) {
+        print("Google sign-in failed: User is null");
         throw Exception("Failed to sign in with Google");
       }
 
-      // Step 5: Return the user model
+      print('Google sign-in successful: ${firebaseUser.email}');
       return firebaseUser;
     } catch (e) {
+      print('Remote Google sign-in failed: $e');
       throw Exception("Google sign in failed: $e");
     }
   }

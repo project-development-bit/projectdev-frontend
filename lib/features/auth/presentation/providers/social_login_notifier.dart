@@ -46,7 +46,6 @@ class SocialLoginNotifier extends StateNotifier<SocialLoginState> {
     try {
       final result =
           await _ref.read(googleSignInUseCaseProvider).call(NoParams());
-
       result.fold(
         (failure) {
           state = SocialLoginError(message: failure.message ?? "");

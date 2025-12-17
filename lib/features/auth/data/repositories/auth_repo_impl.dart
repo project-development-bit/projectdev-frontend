@@ -1,4 +1,5 @@
 import 'package:gigafaucet/core/error/error_model.dart';
+import 'package:gigafaucet/features/auth/data/datasources/remote/google_auth_service.dart';
 import 'package:gigafaucet/features/auth/data/models/verify_code_forgot_password_response.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
@@ -35,9 +36,9 @@ import '../datasources/remote/auth_remote.dart';
 /// Provider for the authentication repository
 final authRepositoryProvider = Provider<AuthRepository>(
   (ref) => AuthRepositoryImpl(
-    ref.watch(authRemoteDataSourceProvider),
-    ref.watch(secureStorageServiceProvider),
-  ),
+      ref.watch(authRemoteDataSourceProvider),
+      ref.watch(secureStorageServiceProvider),
+      ref.watch(googleAuthServiceProvider)),
 );
 
 /// Implementation of [AuthRepository]
@@ -50,8 +51,11 @@ class AuthRepositoryImpl implements AuthRepository {
   /// Secure storage service for token management
   final SecureStorageService secureStorage;
 
+  final GoogleAuthService googleAuthService;
+
   /// Creates an instance of [AuthRepositoryImpl]
-  const AuthRepositoryImpl(this.remoteDataSource, this.secureStorage);
+  const AuthRepositoryImpl(
+      this.remoteDataSource, this.secureStorage, this.googleAuthService);
 
   @override
   Future<Either<Failure, void>> register(RegisterRequest request) async {
@@ -432,7 +436,7 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Either<Failure, fb_auth.User>> googleSignIn() async {
     try {
-      final userModel = await remoteDataSource.googleSignIn();
+      final userModel = await googleAuthService.signInWithGoogle();
       return Right(userModel);
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));

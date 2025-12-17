@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:gigafaucet/core/common/common_loading_widget.dart';
 import 'package:gigafaucet/core/config/app_local_images.dart';
 import 'package:gigafaucet/core/theme/presentation/providers/app_setting_providers.dart';
@@ -9,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/foundation.dart';
+import 'package:gigafaucet/firebase_options.dart';
 import 'package:url_strategy/url_strategy.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:gigafaucet/core/services/database_service.dart';
@@ -27,6 +29,9 @@ final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey =
 
 /// Common app initialization function for all flavors
 Future<void> runAppWithFlavor(AppFlavor flavor) async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
   // Set the flavor first so configuration is available
   FlavorManager.setFlavor(flavor);
 
