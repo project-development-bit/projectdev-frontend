@@ -81,6 +81,10 @@ dependencies:
   vph_web_date_picker: ^0.1.7
   skeletonizer: ^2.1.1 
   crop_image: ^1.0.16 
+  croppy: ^1.4.1
+  custom_image_crop: ^0.0.13
+  flutter_fortune_wheel: 
+    path: ./packages/flutter_fortune_wheel
   
 dev_dependencies:
   flutter_test:

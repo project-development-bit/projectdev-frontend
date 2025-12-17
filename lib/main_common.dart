@@ -2,7 +2,9 @@ import 'package:cointiply_app/core/common/common_loading_widget.dart';
 import 'package:cointiply_app/core/config/app_local_images.dart';
 import 'package:cointiply_app/core/theme/presentation/providers/app_setting_providers.dart';
 import 'package:cointiply_app/core/theme/presentation/providers/app_settings_norifier.dart';
+import 'package:cointiply_app/features/localization/presentation/providers/get_languages_state.dart';
 import 'package:cointiply_app/features/localization/presentation/providers/localization_notifier_provider.dart';
+import 'package:croppy/croppy.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -30,6 +32,12 @@ Future<void> runAppWithFlavor(AppFlavor flavor) async {
 
   // Initialize reCAPTCHA for all platforms
   final recaptchaSiteKey = FlavorManager.recaptchaSiteKey;
+  if (!kIsWeb) {
+    // For some reason, the C++ implementation of the Cassowary solver is super
+    // slow in debug mode. So we force the Dart implementation to be used in
+    // debug mode. This only applies to Windows.
+    croppyForceUseCassowaryDartImpl = true;
+  }
   if (recaptchaSiteKey != null) {
     try {
       if (kIsWeb) {
@@ -121,6 +129,7 @@ class _MyAppState extends ConsumerState<MyApp> {
     // Load app settings theme from server on app start
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(appSettingsThemeProvider.notifier).loadConfig();
+      ref.read(getLanguagesNotifierProvider.notifier).fetchLanguages();
     });
 
     ref.listenManual<AppSettingsState>(
@@ -145,6 +154,7 @@ class _MyAppState extends ConsumerState<MyApp> {
     final themeNotifier = ref.read(themeProvider.notifier);
     final currentFlavor = ref.watch(flavorProvider);
     final appSettingsThemeState = ref.watch(appSettingsThemeProvider);
+    final languageState = ref.watch(getLanguagesNotifierProvider);
 
     debugPrint(
         'MyApp building with locale: ${currentLocale.languageCode}-${currentLocale.countryCode}');
@@ -154,7 +164,7 @@ class _MyAppState extends ConsumerState<MyApp> {
         'App settings theme loading: ${appSettingsThemeState.isLoading}');
 
     // Show splash screen while theme is loading
-    if (appSettingsThemeState.isLoading) {
+    if (appSettingsThemeState.isLoading || languageState.isLoading) {
       return MaterialApp(
         color: Color(0xff1A1A1A),
         debugShowCheckedModeBanner: false,
@@ -174,7 +184,6 @@ class _MyAppState extends ConsumerState<MyApp> {
         ),
       );
     }
-
     return FlavorBanner(
       child: MaterialApp.router(
         scaffoldMessengerKey: rootScaffoldMessengerKey,
@@ -185,17 +194,21 @@ class _MyAppState extends ConsumerState<MyApp> {
         title: FlavorManager.appName, // Use flavor-specific app name
 
         // Theme configuration - Use app settings theme from server, fallback to default theme
+
         theme: appSettingsThemeState.lightTheme ?? AppTheme.lightTheme,
         darkTheme: appSettingsThemeState.darkTheme ?? AppTheme.darkTheme,
         themeMode: themeNotifier.getEffectiveThemeMode(
           MediaQuery.platformBrightnessOf(context),
         ),
-        supportedLocales: const [
-          Locale('en', 'US'), // English
-          Locale('my', 'MM'), // Burmese
-        ],
+        supportedLocales: languageState.localeList.isNotEmpty
+            ? languageState.localeList
+            : const [
+                Locale('en', 'US'),
+                Locale('my', 'MM'),
+              ],
         localizationsDelegates: [
           AppLocalizationsDelegate(ref),
+          CroppyLocalizations.delegate, // <- This here
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,

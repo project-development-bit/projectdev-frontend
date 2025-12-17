@@ -32,6 +32,7 @@ class UserModel extends User {
     required super.countryID,
     required super.countryName,
     required super.coinBalance,
+    required super.language,
   });
 
   /// Create UserModel from JSON response
@@ -76,6 +77,7 @@ class UserModel extends User {
                   : double.tryParse(json['coin_balance']?.toString() ?? '') ??
                       0.0
           : 0.0,
+      language: json['language'] as String? ?? 'en',
     );
   }
 
@@ -138,6 +140,7 @@ class UserModel extends User {
       'country_id': countryID,
       'country_name': countryName,
       'coin_balance': coinBalance,
+      'language': language,
     };
   }
 
@@ -168,6 +171,7 @@ class UserModel extends User {
       countryID: user.countryID,
       countryName: user.countryName,
       coinBalance: user.coinBalance,
+      language: user.language,
     );
   }
 
@@ -211,37 +215,38 @@ class UserModel extends User {
                   : double.tryParse(json['coin_balance']?.toString() ?? '') ??
                       0.0
           : 0.0,
+      language: json['language'] as String? ?? 'en',
     );
   }
 
   /// Convert to User entity
   User toEntity() {
     return User(
-      id: id,
-      name: name,
-      email: email,
-      refreshToken: refreshToken,
-      role: role,
-      securityCode: securityCode,
-      twofaEnabled: twofaEnabled,
-      twofaSecret: twofaSecret,
-      securityPinEnabled: securityPinEnabled,
-      isBanned: isBanned,
-      isVerified: isVerified,
-      avatarUrl: avatarUrl,
-      interestEnable: interestEnable,
-      riskScore: riskScore,
-      showOnboarding: showOnboarding,
-      notificationsEnabled: notificationsEnabled,
-      showStatsEnabled: showStatsEnabled,
-      anonymousInContests: anonymousInContests,
-      createdAt: createdAt,
-      updatedAt: updatedAt,
-      currentStatus: currentStatus,
-      countryID: countryID,
-      countryName: countryName,
-      coinBalance: coinBalance,
-    );
+        id: id,
+        name: name,
+        email: email,
+        refreshToken: refreshToken,
+        role: role,
+        securityCode: securityCode,
+        twofaEnabled: twofaEnabled,
+        twofaSecret: twofaSecret,
+        securityPinEnabled: securityPinEnabled,
+        isBanned: isBanned,
+        isVerified: isVerified,
+        avatarUrl: avatarUrl,
+        interestEnable: interestEnable,
+        riskScore: riskScore,
+        showOnboarding: showOnboarding,
+        notificationsEnabled: notificationsEnabled,
+        showStatsEnabled: showStatsEnabled,
+        anonymousInContests: anonymousInContests,
+        createdAt: createdAt,
+        updatedAt: updatedAt,
+        currentStatus: currentStatus,
+        countryID: countryID,
+        countryName: countryName,
+        coinBalance: coinBalance,
+        language: language);
   }
 
   /// Create a copy with updated values (returns UserModel)
@@ -271,32 +276,33 @@ class UserModel extends User {
     int? countryID,
     String? countryName,
     double? coinBalance,
+    String? language,
   }) {
     return UserModel(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      email: email ?? this.email,
-      refreshToken: refreshToken ?? this.refreshToken,
-      role: role ?? this.role,
-      securityCode: securityCode ?? this.securityCode,
-      twofaEnabled: twofaEnabled ?? this.twofaEnabled,
-      twofaSecret: twofaSecret ?? this.twofaSecret,
-      securityPinEnabled: securityPinEnabled ?? this.securityPinEnabled,
-      isBanned: isBanned ?? this.isBanned,
-      isVerified: isVerified ?? this.isVerified,
-      avatarUrl: avatarUrl ?? this.avatarUrl,
-      interestEnable: interestEnable ?? this.interestEnable,
-      riskScore: riskScore ?? this.riskScore,
-      showOnboarding: showOnboarding ?? this.showOnboarding,
-      notificationsEnabled: notificationsEnabled ?? this.notificationsEnabled,
-      showStatsEnabled: showStatsEnabled ?? this.showStatsEnabled,
-      anonymousInContests: anonymousInContests ?? this.anonymousInContests,
-      createdAt: createdAt ?? this.createdAt,
-      updatedAt: updatedAt ?? this.updatedAt,
-      currentStatus: currentStatus ?? this.currentStatus,
-      countryID: countryID ?? this.countryID,
-      countryName: countryName ?? this.countryName,
-      coinBalance: coinBalance ?? this.coinBalance,
-    );
+        id: id ?? this.id,
+        name: name ?? this.name,
+        email: email ?? this.email,
+        refreshToken: refreshToken ?? this.refreshToken,
+        role: role ?? this.role,
+        securityCode: securityCode ?? this.securityCode,
+        twofaEnabled: twofaEnabled ?? this.twofaEnabled,
+        twofaSecret: twofaSecret ?? this.twofaSecret,
+        securityPinEnabled: securityPinEnabled ?? this.securityPinEnabled,
+        isBanned: isBanned ?? this.isBanned,
+        isVerified: isVerified ?? this.isVerified,
+        avatarUrl: avatarUrl ?? this.avatarUrl,
+        interestEnable: interestEnable ?? this.interestEnable,
+        riskScore: riskScore ?? this.riskScore,
+        showOnboarding: showOnboarding ?? this.showOnboarding,
+        notificationsEnabled: notificationsEnabled ?? this.notificationsEnabled,
+        showStatsEnabled: showStatsEnabled ?? this.showStatsEnabled,
+        anonymousInContests: anonymousInContests ?? this.anonymousInContests,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: updatedAt ?? this.updatedAt,
+        currentStatus: currentStatus ?? this.currentStatus,
+        countryID: countryID ?? this.countryID,
+        countryName: countryName ?? this.countryName,
+        coinBalance: coinBalance ?? this.coinBalance,
+        language: language ?? this.language);
   }
 }

@@ -11,6 +11,7 @@ class Language extends Equatable {
     required this.name,
     required this.flag,
     required this.isDefault,
+    required this.countryCode,
   });
 
   /// Language code (e.g., "EN", "FR", "MM")
@@ -25,9 +26,7 @@ class Language extends Equatable {
   /// Whether this is the default language
   final bool isDefault;
 
-  String get displayFlag {
-    return getDisplayFlag(code);
-  }
+  final String countryCode;
 
   factory Language.empty() {
     return Language(
@@ -35,33 +34,14 @@ class Language extends Equatable {
       name: '',
       flag: '',
       isDefault: false,
+      countryCode: '',
     );
   }
 
-  String getDisplayFlag(String langCode) {
-    final formattedCode =
-        langCode.toLowerCase() == 'en' ? 'us' : langCode.toLowerCase();
-    // return "https://flagsapi.com/$formattedCode/flat/64.png";
-    return 'https://flagcdn.com/w80/$formattedCode.png';
-  }
-
-  String getDisplayName(String langCode) {
-    switch (langCode.toLowerCase()) {
-      case 'en':
-        return 'English';
-      case 'fr':
-        return 'French';
-      case 'mm':
-        return 'Myanmar';
-      default:
-        return 'Unknown';
-    }
-  }
-
   @override
-  List<Object> get props => [code, name, flag, isDefault];
+  List<Object> get props => [code, name, flag, isDefault, countryCode];
 
   @override
   String toString() =>
-      'Language(code: $code, name: $name, flag: $flag, isDefault: $isDefault)';
+      'Language(code: $code, name: $name, flag: $flag, isDefault: $isDefault, countryCode: $countryCode)';
 }

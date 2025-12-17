@@ -126,12 +126,12 @@ class _TwoFactorAuthDialogState extends ConsumerState<TwoFactorAuthDialog> {
 
   String? _validateCode(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Please enter the 4-digit code';
+      return 'Please enter the 6-digit code';
     }
-    if (value.length != 4) {
-      return 'Code must be exactly 4 digits';
+    if (value.length != 6) {
+      return 'Code must be exactly 6 digits';
     }
-    if (!RegExp(r'^\d{4}$').hasMatch(value)) {
+    if (!RegExp(r'^\d{6}$').hasMatch(value)) {
       return 'Code must contain only numbers';
     }
     return null;

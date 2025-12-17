@@ -1,4 +1,5 @@
 import 'package:cointiply_app/core/config/app_local_images.dart';
+import 'package:cointiply_app/features/faucet/presentation/provider/faucet_notifier_provider.dart';
 import 'package:cointiply_app/features/home/presentation/widgets/event/home_event_section.dart';
 import 'package:cointiply_app/features/home/presentation/widgets/home_features_section.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
@@ -20,13 +21,26 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // Only initialize user if authenticated
       final isAuthenticated = ref.read(isAuthenticatedObservableProvider);
       if (isAuthenticated) {
         ref.read(currentUserProvider.notifier).initializeUser();
       }
+      fectchApi(isAuthenticated);
+    });
+
+    ref.listenManual<bool>(isAuthenticatedObservableProvider, (previous, next) {
+      // Refetch faucet status and user data on authentication state change
+      if (next != previous) {
+        fectchApi(next);
+      }
     });
     super.initState();
+  }
+
+  void fectchApi(bool isAuthenticated) {
+    ref.read(getFaucetNotifierProvider.notifier).fetchFaucetStatus(
+          isPublic: !isAuthenticated,
+        );
   }
 
   @override

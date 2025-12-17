@@ -49,14 +49,15 @@ class _SettingTabContentWidgetState
     final language =
         ref.watch(getProfileNotifierProvider).profile?.settings.language ??
             "En";
-    final languageFlag = Language.empty().getDisplayFlag(language);
-    final languageName = Language.empty().getDisplayName(language);
+
+    Language languageObj =
+        ref.read(getLanguagesNotifierProvider).getLanguageByCode(language);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       spacing: 25.0,
       children: [
-        _languageWidget(context, languageFlag, languageName),
+        _languageWidget(context, languageObj.flag, languageObj.name),
         _settingMenuItem(context,
             title: context.translate("notifications"),
             btnTitle: "",
@@ -64,6 +65,7 @@ class _SettingTabContentWidgetState
             isSelected: settingsData.notificationsEnabled,
             description: context.translate("notifications_description"),
             onPressed: () {}, onChanged: (v) {
+              
           ref.read(settingProfileProvider.notifier).toggleNotifications(
                 userId: userId,
               );
@@ -96,6 +98,7 @@ class _SettingTabContentWidgetState
             title: context.translate("delete_account",
                 args: [context.isDesktop ? "\n" : " "]),
             btnTitle: context.translate("delete_your_account"), onPressed: () {
+          context.pop();
           showDeleteAccountConfirmationDialog(context);
         },
             description: context.translate("delete_account_description"),
@@ -143,6 +146,7 @@ class _SettingTabContentWidgetState
               CustomUnderLineButtonWidget(
                 title: context.translate("change_language"),
                 onTap: () {
+                  context.pop();
                   showChangeLanguageDialog(context);
                 },
                 fontColor: Color(0xff98989A),
@@ -192,6 +196,7 @@ class _SettingTabContentWidgetState
                       child: CustomUnderLineButtonWidget(
                         title: context.translate("change_language"),
                         onTap: () {
+                          context.pop();
                           showChangeLanguageDialog(context);
                         },
                         fontColor: Color(0xff98989A),
