@@ -62,6 +62,26 @@ class GetLanguagesState {
     );
     return Locale(lang.code.toLowerCase(), lang.countryCode.toUpperCase());
   }
+
+  Language getLanguageByCode(String code) {
+    if (languages == null) {
+      return Language(
+          code: 'en',
+          countryCode: 'US',
+          name: 'English',
+          flag: '',
+          isDefault: true);
+    }
+    return languages!.firstWhere(
+      (lang) => lang.code.toLowerCase() == code.toLowerCase(),
+      orElse: () => Language(
+          code: 'en',
+          countryCode: 'US',
+          name: 'English',
+          flag: '',
+          isDefault: true),
+    );
+  }
 }
 
 /// State notifier for managing languages fetching
