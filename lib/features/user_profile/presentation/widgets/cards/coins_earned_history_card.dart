@@ -63,9 +63,7 @@ class CoinsEarnedHistoryCard extends StatelessWidget {
               CommonText.bodyMedium(
                 subtitle,
                 fontWeight: FontWeight.w500,
-                color: Color(0xFF98989A),
-
-                /// TODO: Use from scheme
+                color: colorScheme.onSurfaceVariant,
                 overflow: TextOverflow.ellipsis,
               ),
             ],
@@ -80,7 +78,7 @@ class CoinsEarnedHistoryCard extends StatelessWidget {
               const SizedBox(height: 4),
               CommonText.bodyMedium(
                 timeAgo,
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w500,
                 color: colorScheme.onPrimary,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -106,12 +104,10 @@ class CoinsEarnedHistoryCard extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
               const SizedBox(height: 4),
-              CommonText.bodyMedium(
+              CommonText.bodyLarge(
                 subtitle,
                 fontWeight: FontWeight.w500,
-                color: Color(0xFF98989A),
-
-                /// TODO: Use from scheme
+                color: colorScheme.onSurfaceVariant,
                 overflow: TextOverflow.ellipsis,
               ),
             ],
@@ -122,7 +118,7 @@ class CoinsEarnedHistoryCard extends StatelessWidget {
         const SizedBox(width: 16),
         CommonText.bodyLarge(
           timeAgo,
-          fontWeight: FontWeight.w700,
+          fontWeight: FontWeight.w500,
           color: colorScheme.onPrimary,
           overflow: TextOverflow.ellipsis,
         ),
