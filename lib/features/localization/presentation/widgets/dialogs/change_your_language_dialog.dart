@@ -203,6 +203,10 @@ class _ChangeLanguageDialogState extends ConsumerState<ChangeLanguageDialog> {
                 // hint: context.translate("select_your_language_hint"),
                 getItemCode: (language) => language.code,
                 getItemName: (language) => language.name,
+                placeholder: Icon(
+                  Icons.flag,
+                  color: context.primary,
+                ),
                 getItemIconUrl: (language) =>
                     language.getDisplayFlag(language.code),
                 validator: (value) {
