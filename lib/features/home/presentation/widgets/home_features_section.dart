@@ -7,6 +7,8 @@ import 'package:cointiply_app/features/faucet/presentation/widgets/dialog/your_f
 import 'package:cointiply_app/features/home/presentation/widgets/home_section_container.dart';
 import 'package:flutter/material.dart';
 
+import 'fortune_wheel_widget.dart';
+
 class HomeFeaturesSection extends StatelessWidget {
   const HomeFeaturesSection({super.key});
 
@@ -99,6 +101,10 @@ class HomeFeaturesSection extends StatelessWidget {
                       return ClaimFaucet();
                     }
                     return featuresItemWidget(feature, context, () {
+                       if (feature['title'] == 'fortune Wheel') {
+                        showFortuneWheelDialog(context);
+                        return;
+                      }
                       if (feature['title'] == 'Claim Faucet') {
                         // Show faucet dialog
                         // Assuming showYourFaucetDialog is defined elsewhere
