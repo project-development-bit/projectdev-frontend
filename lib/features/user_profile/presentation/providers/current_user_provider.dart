@@ -35,7 +35,7 @@ class CurrentUserState {
 /// Notifier for managing current user state in profile context
 class CurrentUserNotifier extends StateNotifier<CurrentUserState> {
   final GetCurrentUserUseCase _getCurrentUserUseCase;
-  
+
   final Ref _ref;
 
   CurrentUserNotifier(this._getCurrentUserUseCase, this._ref)

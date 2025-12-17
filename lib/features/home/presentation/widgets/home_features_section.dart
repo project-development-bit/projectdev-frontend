@@ -1,6 +1,9 @@
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/config/app_local_images.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
+import 'package:cointiply_app/features/faucet/presentation/widgets/claim_faucet.dart';
+import 'package:cointiply_app/features/faucet/presentation/widgets/dialog/claim_your_faucet_dialog.dart';
+import 'package:cointiply_app/features/faucet/presentation/widgets/dialog/your_faucet_dialog.dart';
 import 'package:cointiply_app/features/home/presentation/widgets/home_section_container.dart';
 import 'package:flutter/material.dart';
 
@@ -94,7 +97,22 @@ class HomeFeaturesSection extends StatelessWidget {
                   runSpacing: 32,
                   alignment: WrapAlignment.center,
                   children: _featureItemsData.map((feature) {
-                    return featuresItemWidget(feature, context);
+                    if (feature['title'] == 'Claim Faucet') {
+                      return ClaimFaucet();
+                    }
+                    return featuresItemWidget(feature, context, () {
+                       if (feature['title'] == 'fortune Wheel') {
+                        showFortuneWheelDialog(context);
+                        return;
+                      }
+                      if (feature['title'] == 'Claim Faucet') {
+                        // Show faucet dialog
+                        // Assuming showYourFaucetDialog is defined elsewhere
+                        showYourFaucetDialog(context, () {
+                          showClaimYourFaucetDialog(context);
+                        });
+                      }
+                    });
                   }).toList(),
                 ),
               ],
@@ -105,13 +123,9 @@ class HomeFeaturesSection extends StatelessWidget {
     );
   }
 
-  Widget featuresItemWidget(feature, BuildContext context) {
-    return InkWell(
-      onTap: () {
-        if (feature['title'] == 'fortune Wheel') {
-          showFortuneWheelDialog(context);
-        }
-      },
+  Widget featuresItemWidget(feature, BuildContext context, Function()? onTap) {
+    return GestureDetector(
+      onTap: onTap,
       child: SizedBox(
         width: 190,
         child: Column(
