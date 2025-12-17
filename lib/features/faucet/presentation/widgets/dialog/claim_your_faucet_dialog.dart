@@ -20,8 +20,12 @@ void showClaimYourFaucetDialog(BuildContext context) {
     context: context,
     barrierDismissible: true,
     barrierColor: colorScheme.scrim.withValues(alpha: 0.6),
-    builder: (context) =>
-        DialogScaffoldWidget(child: ClaimYourFaucetDialog(onClaimTap: () {})),
+    builder: (context) => DialogScaffoldWidget(
+        padding: EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 20,
+        ),
+        child: ClaimYourFaucetDialog(onClaimTap: () {})),
   );
 }
 
@@ -35,12 +39,6 @@ class ClaimYourFaucetDialog extends ConsumerStatefulWidget {
 
 class _YourFaucetDialogState extends ConsumerState<ClaimYourFaucetDialog> {
   int selectedTab = 0;
-
-  double _getDialogHeight(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
-    if (context.isTablet) return height * 0.9;
-    return 680;
-  }
 
   @override
   void initState() {
@@ -75,16 +73,15 @@ class _YourFaucetDialogState extends ConsumerState<ClaimYourFaucetDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final height = _getDialogHeight(context);
     final currentUserState = ref.watch(getFaucetNotifierProvider);
     final status = ref.watch(getFaucetNotifierProvider).status;
     final claimFaucetState = ref.watch(claimFaucetNotifierProvider);
-
-    final isColumn = context.isMobile;
+    final colorScheme = Theme.of(context).colorScheme;
     return DialogBgWidget(
-      isInitLoading: currentUserState.isLoading || claimFaucetState.isLoading,
-      isOverlayLoading: false,
-      dialogHeight: height,
+      isOverlayLoading:
+          currentUserState.isLoading || claimFaucetState.isLoading,
+      dialogHeight:
+          context.screenWidth <= 430 ? context.screenHeight * 0.9 : 500,
       title: context.translate("claim_your_faucet"),
       padding: EdgeInsets.zero,
       body: SingleChildScrollView(
@@ -104,35 +101,45 @@ class _YourFaucetDialogState extends ConsumerState<ClaimYourFaucetDialog> {
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Container(
               padding: EdgeInsets.symmetric(vertical: 20),
-              child: CommonText.bodyLarge(
-                context.translate("event_earn_coins_continue_streak"),
+              child: CommonText.bodyMedium(
+                context.translate(
+                    "you_need_to_resolve_captcha_to_claim_your_faucet"),
                 color: Color(0xFF98989A),
+                fontWeight: FontWeight.w500,
               ),
             ),
             SizedBox(height: 24),
             Center(
               child: Flex(
-                direction: isColumn ? Axis.vertical : Axis.horizontal,
+                direction:
+                    context.screenWidth < 365 ? Axis.vertical : Axis.horizontal,
                 spacing: 8,
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  CommonText.titleMedium(context.translate('event_your_faucet'),
+                  CommonText.headlineSmall(
+                      context.translate('event_your_faucet'),
+                      color: colorScheme.inversePrimary,
                       fontWeight: FontWeight.w700),
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+                    width: 130,
+                    height: 40,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 18,
+                    ),
                     decoration: BoxDecoration(
                         color: Color(0xff100E1C),
                         borderRadius: BorderRadius.circular(50),
                         border: Border.all(color: Color(0xff333333))),
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        CommonText.titleMedium(
+                        CommonText.headlineSmall(
                           "${status?.rewardPerClaim ?? 0}",
                           fontWeight: FontWeight.w700,
-                          fontSize: 20.0,
+                          color: colorScheme.inversePrimary,
                         ),
                         SizedBox(width: 4),
                         Image.asset(

@@ -80,7 +80,7 @@ class _CloudflareTurnstileWidgetState
 
   TurnstileNotifier get _turnstilleNotifier =>
       ref.read(turnstileNotifierProvider(widget.action).notifier);
-  
+
   /// Get the correct site key based on environment
   String get _getLiveSiteKey {
     // IMPORTANT: Cloudflare Turnstile site key configuration
@@ -331,8 +331,7 @@ class _CloudflareTurnstileWidgetState
         if ((widget.debugMode ||
                 state is TurnstileError ||
                 state is TurnstileExpired) &&
-            _turnstilleNotifier.controller !=
-                null) ...[
+            _turnstilleNotifier.controller != null) ...[
           const SizedBox(height: 8),
           Row(
             children: [

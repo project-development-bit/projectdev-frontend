@@ -36,7 +36,7 @@ class HeaderCoinBalanceBox extends StatelessWidget {
           //   filterQuality: FilterQuality.high,
           // ),
           SvgPicture.asset(
-            AppLocalImages.coinSvg,
+            "assets/images/rewards/kk.svg",
             width: context.isMobile ? 16 : 24,
             height: context.isMobile ? 16 : 24,
           ),
