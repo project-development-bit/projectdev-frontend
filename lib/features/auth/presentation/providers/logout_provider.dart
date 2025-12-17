@@ -1,3 +1,4 @@
+import 'package:cointiply_app/features/faucet/presentation/provider/faucet_notifier_provider.dart';
 import 'package:cointiply_app/features/home/presentation/providers/tutorial_provider.dart';
 import 'package:cointiply_app/features/localization/domain/usecases/clear_selected_language_usecase.dart';
 import 'package:flutter/material.dart';
@@ -75,6 +76,9 @@ class LogoutNotifier extends StateNotifier<LogoutState> {
         (_) async {
           debugPrint('✅ Logout successful');
 
+          // _ref.read(getFaucetNotifierProvider.notifier).fetchFaucetStatus(
+          //       isPublic: true,
+          //     );
           // Clear local database
           try {
             await _ref.read(clearSelectedLanguageUseCaseProvider).call();

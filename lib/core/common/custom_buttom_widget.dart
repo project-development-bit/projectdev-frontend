@@ -1,4 +1,5 @@
 import 'package:cointiply_app/core/common/common_text.dart';
+import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:flutter/material.dart';
 
 class CustomUnderLineButtonWidget extends StatefulWidget {
@@ -13,6 +14,7 @@ class CustomUnderLineButtonWidget extends StatefulWidget {
   final bool isDisabled;
   final bool isDark;
   final bool isRed;
+  final bool isViolet;
 
   final EdgeInsetsGeometry? padding;
   final EdgeInsetsGeometry? margin;
@@ -45,6 +47,7 @@ class CustomUnderLineButtonWidget extends StatefulWidget {
     this.fontColor,
     this.borderColor,
     this.gradient,
+    this.isViolet = false,
   });
 
   @override
@@ -90,6 +93,10 @@ class _CustomUnderLineButtonWidgetState
       bgColor = activeBg;
       shadowColor = activeShadow;
       finalTextColor = textColor;
+    } else if (widget.isViolet) {
+      bgColor = Color(0xff9D46B6);
+      shadowColor = Color(0xFF6F1F86);
+      finalTextColor = context.primary;
     } else if (widget.isRed) {
       bgColor = Color(0xffB02419);
       shadowColor = Color(0xFF7A1B12);
