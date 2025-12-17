@@ -2,7 +2,7 @@ import 'package:dartz/dartz.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/usecases/usecase.dart';
 import '../entities/language.dart';
-import '../repositories/profile_repository.dart';
+import '../../../user_profile/domain/repositories/profile_repository.dart';
 
 /// Use case for getting list of languages
 ///

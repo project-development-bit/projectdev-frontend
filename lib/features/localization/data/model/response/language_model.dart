@@ -1,4 +1,4 @@
-import '../../domain/entities/language.dart';
+import '../../../domain/entities/language.dart';
 
 /// Language Model for data layer
 ///
@@ -9,6 +9,7 @@ class LanguageModel extends Language {
     required super.name,
     required super.flag,
     required super.isDefault,
+    required super.countryCode,
   });
 
   /// Create LanguageModel from JSON response
@@ -18,6 +19,7 @@ class LanguageModel extends Language {
       name: json['name'] as String? ?? '',
       flag: json['flag'] as String? ?? '',
       isDefault: json['default'] as bool? ?? false,
+      countryCode: json['country_code'] as String? ?? '',
     );
   }
 
@@ -28,6 +30,7 @@ class LanguageModel extends Language {
       name: name,
       flag: flag,
       isDefault: isDefault,
+      countryCode: countryCode,
     );
   }
 
@@ -38,6 +41,7 @@ class LanguageModel extends Language {
       'name': name,
       'flag': flag,
       'default': isDefault,
+      'country_code': countryCode,
     };
   }
 }

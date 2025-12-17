@@ -49,14 +49,15 @@ class _SettingTabContentWidgetState
     final language =
         ref.watch(getProfileNotifierProvider).profile?.settings.language ??
             "En";
-    final languageFlag = Language.empty().getDisplayFlag(language);
-    final languageName = Language.empty().getDisplayName(language);
+
+    Language languageObj =
+        ref.read(getLanguagesNotifierProvider).getLanguageByCode(language);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       spacing: 25.0,
       children: [
-        _languageWidget(context, languageFlag, languageName),
+        _languageWidget(context, languageObj.flag, languageObj.name),
         _settingMenuItem(context,
             title: context.translate("notifications"),
             btnTitle: "",

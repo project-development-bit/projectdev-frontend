@@ -35,6 +35,7 @@ class LocalizationController extends StateNotifier<LocalizationState> {
 
     await _loadLocalizationFromApi(GetLocalizationRequest(
         languageCode: locale.languageCode,
+        countryCode: locale.countryCode,
         forceRefresh: forceRefresh,
         userId: userId,
         languageVersion: languageVersion));
@@ -65,10 +66,11 @@ class LocalizationController extends StateNotifier<LocalizationState> {
           localization: localization,
         );
         if (request.userId != null && request.languageCode != null) {
-          debugPrint("🌐 Translations loaded for user: ${request.userId}");
+          debugPrint(
+              "🌐 Translations loaded for user: ${request.userId} languageCode ${request.languageCode}");
           _ref.read(changeLanguageProvider.notifier).changeLanguage(
                 languageCode: request.languageCode!,
-                languageName: request.languageCode!.toUpperCase(),
+                countryName: request.languageCode!.toUpperCase(),
                 userid: request.userId!,
               );
         }
@@ -94,18 +96,9 @@ class LocalizationController extends StateNotifier<LocalizationState> {
 
     // Fetch translations
     await _loadLocalizationFromApi(GetLocalizationRequest(
-        languageCode: locale.languageCode, userId: userid));
-  }
-
-  // --------------------------
-  // TOGGLE EN/MY (optional)
-  // --------------------------
-  Future<void> toggleLocale() async {
-    if (state.currentLocale.languageCode == "en") {
-      await changeLocale(const Locale("my", "MM"));
-    } else {
-      await changeLocale(const Locale("en", "US"));
-    }
+        countryCode: locale.countryCode,
+        languageCode: locale.languageCode,
+        userId: userid));
   }
 
   // --------------------------
@@ -121,29 +114,5 @@ class LocalizationController extends StateNotifier<LocalizationState> {
     }
 
     return value;
-  }
-
-  // Helpers
-  static const supportedLocales = [
-    Locale("en", "US"),
-    Locale("my", "MM"),
-  ];
-
-  String getLocaleName(Locale code) {
-    switch (code.languageCode) {
-      case "my":
-        return "မြန်မာ";
-      default:
-        return "English";
-    }
-  }
-
-  String getFlag(Locale code) {
-    switch (code.languageCode) {
-      case "my":
-        return "🇲🇲";
-      default:
-        return "🇺🇸";
-    }
   }
 }

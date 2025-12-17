@@ -1,7 +1,9 @@
+import 'dart:ui';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/entities/language.dart';
 import '../../domain/usecases/get_languages_usecase.dart';
-import 'profile_providers.dart';
+import '../../../user_profile/presentation/providers/profile_providers.dart';
 
 /// Status enum for languages fetching
 enum GetLanguagesStatus {
@@ -38,22 +40,64 @@ class GetLanguagesState {
       errorMessage: errorMessage ?? this.errorMessage,
     );
   }
+
+  List<Locale> get localeList {
+    if (languages == null) return [];
+    return languages!
+        .map((lang) =>
+            Locale(lang.code.toLowerCase(), lang.countryCode.toUpperCase()))
+        .toList();
+  }
+
+  Locale getLocateByLanguageCode(String code) {
+    if (languages == null) return Locale('en', 'US');
+    Language lang = languages!.firstWhere(
+      (lang) => lang.code.toLowerCase() == code.toLowerCase(),
+      orElse: () => Language(
+          code: 'en',
+          countryCode: 'US',
+          name: 'English',
+          flag: '',
+          isDefault: true),
+    );
+    return Locale(lang.code.toLowerCase(), lang.countryCode.toUpperCase());
+  }
+
+  Language getLanguageByCode(String code) {
+    if (languages == null) {
+      return Language(
+          code: 'en',
+          countryCode: 'US',
+          name: 'English',
+          flag: '',
+          isDefault: true);
+    }
+    return languages!.firstWhere(
+      (lang) => lang.code.toLowerCase() == code.toLowerCase(),
+      orElse: () => Language(
+          code: 'en',
+          countryCode: 'US',
+          name: 'English',
+          flag: '',
+          isDefault: true),
+    );
+  }
 }
 
 /// State notifier for managing languages fetching
 class GetLanguagesNotifier extends StateNotifier<GetLanguagesState> {
   final GetLanguagesUseCase _getLanguagesUseCase;
 
-  GetLanguagesNotifier(this._getLanguagesUseCase)
-      : super(GetLanguagesState());
+  GetLanguagesNotifier(this._getLanguagesUseCase) : super(GetLanguagesState());
 
   /// Fetch languages list
-  Future<void> fetchLanguages() async {
-    state = state.copyWith(
-      status: GetLanguagesStatus.loading,
-      errorMessage: null,
-    );
-
+  Future<void> fetchLanguages({bool showLoading = true}) async {
+    if (showLoading) {
+      state = state.copyWith(
+        status: GetLanguagesStatus.loading,
+        errorMessage: null,
+      );
+    }
     final result = await _getLanguagesUseCase.call();
 
     result.fold(

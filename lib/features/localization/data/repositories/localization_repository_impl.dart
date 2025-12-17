@@ -29,7 +29,11 @@ class LocalizationRepositoryImpl implements LocalizationRepository {
       final cached = await local.getCachedLocalization(locale ?? languageCode);
       final localVersion =
           await local.getLocalizationVersion(languageCode) ?? '';
-
+      await local.setLocalizationVersion(
+          languageCode,
+          (request.languageVersion?.isEmpty ?? false)
+              ? localVersion
+              : request.languageVersion ?? '');
       if (cached != null &&
           (!request.forceRefresh || localVersion == request.languageVersion)) {
         debugPrint(
@@ -44,12 +48,6 @@ class LocalizationRepositoryImpl implements LocalizationRepository {
 
       // 3️⃣ Cache it
       await local.cacheLocalization(locale ?? languageCode, model);
-      await local.setLocalizationVersion(
-          languageCode,
-          (request.languageVersion?.isEmpty ?? false)
-              ? localVersion
-              : request.languageVersion ?? '');
-
       return Right(model);
     } on DioException catch (e) {
       return Left(
@@ -59,6 +57,17 @@ class LocalizationRepositoryImpl implements LocalizationRepository {
           // errorModel: errorModel,
         ),
       );
+    } catch (e) {
+      return Left(ServerFailure(
+          message: e.toString(), statusCode: null, errorModel: null));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> clearSelectedLanguageCode() async {
+    try {
+      await local.clearSelectedLanguageCode();
+      return const Right(null);
     } catch (e) {
       return Left(ServerFailure(
           message: e.toString(), statusCode: null, errorModel: null));

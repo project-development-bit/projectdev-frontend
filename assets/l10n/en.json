@@ -772,5 +772,17 @@
   "time_week_ago": "{0} week ago",
   "time_month_ago": "{0} month ago",
   "time_year_ago": "{0  } year ago",
-  "failed_to_crop_image": "Failed to crop image"
+  "failed_to_crop_image": "Failed to crop image",
+  "remaining": "Remaining",
+  "you_have_reached_max_faucet_reward": "You’ve reached max faucet reward 🎉 Keep your streak to maintain it!",
+  "your_faucet": "Your Faucet",
+  "your_faucet_ready": "Your Faucet is Ready!",
+  "claim_your_faucet": "Claim Your Faucet",
+  "event_your_faucet": "Your Faucet",
+  "claim_faucet": "Claim Faucet",
+  "faucet_claimed_successfully": "Faucet claimed successfully!",
+  "ready": "Ready",
+  "login_required": "Login Required",
+  "you_must_login_to_continue": "You must login to continue",
+  "you_need_to_resolve_captcha_to_claim_your_faucet": "You need to resolve a captcha to claim your faucet."
 }

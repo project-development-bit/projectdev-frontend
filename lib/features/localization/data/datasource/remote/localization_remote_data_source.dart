@@ -33,8 +33,7 @@ class LocalizationRemoteDataSourceImpl implements LocalizationRemoteDataSource {
   @override
   Future<LocalizationModel> getLocalization(String locale) async {
     var countryCode = getLocateCode(locale.toLowerCase());
-    final url =
-        "/app_settings/locales/$countryCode.json";
+    final url = "/app_settings/locales/$countryCode.json";
 
     try {
       debugPrint('🌐 Fetching localization for: $locale');

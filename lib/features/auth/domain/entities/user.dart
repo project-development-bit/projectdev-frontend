@@ -32,6 +32,7 @@ class User extends Equatable {
     required this.countryID,
     required this.countryName,
     required this.coinBalance,
+    required this.language,
   });
 
   /// Unique user identifier
@@ -105,6 +106,8 @@ class User extends Equatable {
 
   final double coinBalance;
 
+  final String language;
+
   /// Helper getter to check if user is banned
   bool get isUserBanned => isBanned == 1;
 
@@ -160,6 +163,7 @@ class User extends Equatable {
     int? countryID,
     String? countryName,
     double? coinBalance,
+    String? language,
   }) {
     return User(
       id: id ?? this.id,
@@ -186,6 +190,7 @@ class User extends Equatable {
       countryID: countryID ?? this.countryID,
       countryName: countryName ?? this.countryName,
       coinBalance: coinBalance ?? this.coinBalance,
+      language: language ?? this.language,
     );
   }
 
@@ -215,9 +220,10 @@ class User extends Equatable {
         countryID,
         countryName,
         coinBalance,
+        language,
       ];
 
   @override
   String toString() =>
-      'User(id: $id, name: $name, email: $email, role: $role, isVerified: $isUserVerified, isBanned: $isUserBanned)';
+      'User(id: $id, name: $name, email: $email, role: $role, isVerified: $isUserVerified, isBanned: $isUserBanned, coinBalance: $coinBalance, language: $language)';
 }

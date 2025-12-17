@@ -5,7 +5,8 @@ import 'package:cointiply_app/core/common/dialog_bg_widget.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
 import 'package:cointiply_app/features/auth/presentation/widgets/disable_2fa_confirmation_dialog.dart';
 import 'package:cointiply_app/features/auth/presentation/widgets/two_factor_auth_dialog.dart';
-import 'package:cointiply_app/features/user_profile/domain/entities/language.dart';
+import 'package:cointiply_app/features/localization/domain/entities/language.dart';
+import 'package:cointiply_app/features/localization/presentation/providers/get_languages_state.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/get_profile_notifier.dart';
 import 'package:cointiply_app/features/user_profile/presentation/providers/setting_profile_notifier.dart';
@@ -96,7 +97,6 @@ class _ManageProfileDialogState extends ConsumerState<ManageProfileDialog> {
           children: [
             _manageProfileTabBar(),
             SizedBox(height: 16),
-           
             if (status == GetProfileStatus.failure) ...[
               const SizedBox(height: 50),
               Center(
