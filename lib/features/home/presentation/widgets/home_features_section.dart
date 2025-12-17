@@ -101,7 +101,7 @@ class HomeFeaturesSection extends StatelessWidget {
                       return ClaimFaucet();
                     }
                     return featuresItemWidget(feature, context, () {
-                       if (feature['title'] == 'fortune Wheel') {
+                      if (feature['title'] == 'fortune Wheel') {
                         showFortuneWheelDialog(context);
                         return;
                       }

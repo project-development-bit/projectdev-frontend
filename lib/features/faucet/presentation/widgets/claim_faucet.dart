@@ -32,10 +32,10 @@ class ClaimFaucet extends ConsumerWidget {
         : '${countdown.hours.toString().padLeft(2, '0')}:'
             '${countdown.minutes.toString().padLeft(2, '0')}:'
             '${countdown.seconds.toString().padLeft(2, '0')}';
+    final isAuthenticated = ref.watch(isAuthenticatedObservableProvider);
 
     return GestureDetector(
       onTap: () {
-        final isAuthenticated = ref.read(isAuthenticatedObservableProvider);
         if (isAuthenticated) {
           showYourFaucetDialog(context, () {
             showClaimYourFaucetDialog(context);
@@ -83,7 +83,9 @@ class ClaimFaucet extends ConsumerWidget {
                         ),
                       ),
                       child: CommonText.titleMedium(
-                        '${context.translate("event_next_faucet")}\n[$timeText]',
+                        !isAuthenticated
+                            ? "Up to [\$4,000]"
+                            : '${context.translate("event_next_faucet")}\n[$timeText]',
                         color: Colors.white,
                         maxLines: 2,
                         fontWeight: FontWeight.w600,
