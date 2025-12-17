@@ -51,7 +51,8 @@ class ProfileTabContent extends ConsumerWidget {
           child: UserProfileImageWidget(size: 25),
           btnTitle: context.translate("change_your_avatar"),
           onPressed: () {
-          showUploadAvatarDialog(context);
+            context.pop();
+            showUploadAvatarDialog(context);
           },
           isMobile: isMobile,
         ),
@@ -65,6 +66,7 @@ class ProfileTabContent extends ConsumerWidget {
           ),
           btnTitle: context.translate("change_your_name"),
           onPressed: () {
+            context.pop();
             showChangeNameDialog(context);
           },
           isMobile: isMobile,
@@ -85,6 +87,7 @@ class ProfileTabContent extends ConsumerWidget {
                 ),
           btnTitle: context.translate("change_your_email"),
           onPressed: () {
+            context.pop();
             showChangeEmailDialog(context);
           },
           isMobile: isMobile,
@@ -116,6 +119,7 @@ class ProfileTabContent extends ConsumerWidget {
                 ),
           btnTitle: context.translate("change_your_country"),
           onPressed: () {
+            context.pop();
             showChangeCountryDialog(context);
           },
           isMobile: isMobile,
@@ -133,11 +137,13 @@ class ProfileTabContent extends ConsumerWidget {
           btnTitle: context.translate(
               showOfferToken ? "hide_offer_token" : "show_offer_token"),
           onPressed: () {
+            
             if (offerToken.isEmpty) {
               context.showSnackBar(
                   message: context.translate("no_offer_token"));
               return;
             }
+            context.pop();
             showOfferTokenDialog(context, offerToken: offerToken);
           },
           isMobile: isMobile,
