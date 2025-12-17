@@ -4,6 +4,7 @@ import 'package:cointiply_app/core/theme/presentation/providers/app_setting_prov
 import 'package:cointiply_app/core/theme/presentation/providers/app_settings_norifier.dart';
 import 'package:cointiply_app/features/localization/presentation/providers/get_languages_state.dart';
 import 'package:cointiply_app/features/localization/presentation/providers/localization_notifier_provider.dart';
+import 'package:croppy/croppy.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -31,6 +32,12 @@ Future<void> runAppWithFlavor(AppFlavor flavor) async {
 
   // Initialize reCAPTCHA for all platforms
   final recaptchaSiteKey = FlavorManager.recaptchaSiteKey;
+  if (!kIsWeb) {
+    // For some reason, the C++ implementation of the Cassowary solver is super
+    // slow in debug mode. So we force the Dart implementation to be used in
+    // debug mode. This only applies to Windows.
+    croppyForceUseCassowaryDartImpl = true;
+  }
   if (recaptchaSiteKey != null) {
     try {
       if (kIsWeb) {
@@ -201,6 +208,7 @@ class _MyAppState extends ConsumerState<MyApp> {
               ],
         localizationsDelegates: [
           AppLocalizationsDelegate(ref),
+          CroppyLocalizations.delegate, // <- This here
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,

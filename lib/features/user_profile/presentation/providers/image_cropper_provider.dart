@@ -1,4 +1,6 @@
+import 'package:croppy/croppy.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 enum ImageCropperStatus {
@@ -28,6 +30,15 @@ class ImageCropperState {
     this.croppedImageSize,
     this.errorMessage,
   });
+
+
+  Future<CroppableImageData> get croppableImageData async {
+    if (originalImage == null) {
+      throw Exception('No image data available for cropping.');
+    }
+    return await CroppableImageData.fromImageProvider(
+        MemoryImage(originalImage!));
+  }
 
   ImageCropperState copyWith({
     ImageCropperStatus? status,
@@ -69,6 +80,7 @@ class ImageCropperNotifier extends StateNotifier<ImageCropperState> {
     );
   }
 
+
   /// Start cropping process
   void startCropping() {
     state = state.copyWith(status: ImageCropperStatus.cropping);
@@ -107,6 +119,13 @@ class ImageCropperNotifier extends StateNotifier<ImageCropperState> {
     state = state.copyWith(
       status: ImageCropperStatus.error,
       errorMessage: message,
+    );
+  }
+
+  void setLoading(bool isLoading) {
+    state = state.copyWith(
+      status:
+          isLoading ? ImageCropperStatus.cropping : ImageCropperStatus.initial,
     );
   }
 }

@@ -65,6 +65,7 @@ class _SettingTabContentWidgetState
             isSelected: settingsData.notificationsEnabled,
             description: context.translate("notifications_description"),
             onPressed: () {}, onChanged: (v) {
+              
           ref.read(settingProfileProvider.notifier).toggleNotifications(
                 userId: userId,
               );
@@ -97,6 +98,7 @@ class _SettingTabContentWidgetState
             title: context.translate("delete_account",
                 args: [context.isDesktop ? "\n" : " "]),
             btnTitle: context.translate("delete_your_account"), onPressed: () {
+          context.pop();
           showDeleteAccountConfirmationDialog(context);
         },
             description: context.translate("delete_account_description"),
@@ -144,6 +146,7 @@ class _SettingTabContentWidgetState
               CustomUnderLineButtonWidget(
                 title: context.translate("change_language"),
                 onTap: () {
+                  context.pop();
                   showChangeLanguageDialog(context);
                 },
                 fontColor: Color(0xff98989A),
@@ -193,6 +196,7 @@ class _SettingTabContentWidgetState
                       child: CustomUnderLineButtonWidget(
                         title: context.translate("change_language"),
                         onTap: () {
+                          context.pop();
                           showChangeLanguageDialog(context);
                         },
                         fontColor: Color(0xff98989A),

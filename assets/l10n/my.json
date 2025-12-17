@@ -770,6 +770,7 @@
   "time_week_ago": "{0} ပတ်အကြာ",
   "time_month_ago": "{0} လအကြာ",
   "time_year_ago": "{0} နှစ်အကြာ",
+  "failed_to_crop_image": "ပုံကို crop ၍မရပါ",
   "remaining": "ကျန်ရှိသည်",
   "you_have_reached_max_faucet_reward": "သင် Faucet ဆုအများဆုံးကို ရရှိပြီးပါပြီ 🎉 ဆုကို ဆက်လက်ရရှိနေစေရန် သင့် streak ကို ဆက်လက်ထိန်းထားပါ!",
   "your_faucet": "သင့် Faucet",

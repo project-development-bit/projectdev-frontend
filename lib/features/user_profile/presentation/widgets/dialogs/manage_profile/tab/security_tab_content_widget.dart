@@ -33,11 +33,13 @@ class _SecurityTabContentWidgetState
             btnTitle: context.translate("change_your_password"),
             isPrimaryColor: false,
             onPressed: () {
+              context.pop();
               showChangePasswordDialog(context);
             }),
         _securityMenuItem(
             title: context.translate("twofa_authenticator_app"),
             onPressed: () {
+              context.pop();
               if (is2FAEnabled) {
                 showDisable2FAConfirmationDialog(
                   context,
@@ -69,6 +71,7 @@ class _SecurityTabContentWidgetState
                 ? context.translate("disable_security_pin")
                 : context.translate("enable_security_pin_btn"),
             onPressed: () {
+              context.pop();
               showSecurityPinDialog(context, isPinEnabled: isPinEnabled);
             },
             description: context.translate("security_pin_description")),
