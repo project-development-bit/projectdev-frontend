@@ -28,10 +28,6 @@ class Language extends Equatable {
 
   final String countryCode;
 
-  String get displayFlag {
-    return getDisplayFlag(code);
-  }
-
   factory Language.empty() {
     return Language(
       code: '',
@@ -40,26 +36,6 @@ class Language extends Equatable {
       isDefault: false,
       countryCode: '',
     );
-  }
-
-  String getDisplayFlag(String langCode) {
-    final formattedCode =
-        langCode.toLowerCase() == 'en' ? 'us' : langCode.toLowerCase();
-    // return "https://flagsapi.com/$formattedCode/flat/64.png";
-    return 'https://flagcdn.com/w80/$formattedCode.png';
-  }
-
-  String getDisplayName(String langCode) {
-    switch (langCode.toLowerCase()) {
-      case 'en':
-        return 'English';
-      case 'fr':
-        return 'French';
-      case 'mm':
-        return 'Myanmar';
-      default:
-        return 'Unknown';
-    }
   }
 
   @override

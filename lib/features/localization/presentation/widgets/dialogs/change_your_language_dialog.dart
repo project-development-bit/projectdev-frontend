@@ -205,8 +205,7 @@ class _ChangeLanguageDialogState extends ConsumerState<ChangeLanguageDialog> {
                 // hint: context.translate("select_your_language_hint"),
                 getItemCode: (language) => language.code,
                 getItemName: (language) => language.name,
-                getItemIconUrl: (language) =>
-                    language.getDisplayFlag(language.code),
+                getItemIconUrl: (language) => language.flag,
                 validator: (value) {
                   if (value == null) {
                     return context.translate("please_select_language_error");
@@ -243,8 +242,7 @@ class _ChangeLanguageDialogState extends ConsumerState<ChangeLanguageDialog> {
                   // hint: context.translate("select_your_language_hint"),
                   getItemCode: (language) => language.code,
                   getItemName: (language) => language.name,
-                  getItemIconUrl: (language) =>
-                      language.getDisplayFlag(language.code),
+                  getItemIconUrl: (language) => language.flag,
                   validator: (value) {
                     if (value == null) {
                       return context.translate("please_select_language_error");
