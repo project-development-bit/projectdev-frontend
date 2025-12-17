@@ -3,7 +3,7 @@ import 'package:gigafaucet/features/auth/data/models/verify_code_forgot_password
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
 import '../../../../core/error/failures.dart';
 import '../../../../core/services/secure_storage_service.dart';
 import '../../domain/repositories/auth_repository.dart';
@@ -424,6 +424,16 @@ class AuthRepositoryImpl implements AuthRepository {
         message: e.message ?? 'Failed to verify code',
         statusCode: e.response?.statusCode,
       ));
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, fb_auth.User>> googleSignIn() async {
+    try {
+      final userModel = await remoteDataSource.googleSignIn();
+      return Right(userModel);
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));
     }

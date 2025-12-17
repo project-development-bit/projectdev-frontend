@@ -23,6 +23,7 @@ import '../../data/models/disable_2fa_response.dart';
 import '../../data/models/forgot_password_request.dart';
 import '../../data/models/forgot_password_response.dart';
 import '../../data/models/reset_password_request.dart';
+import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
 
 /// Authentication repository interface
 ///
@@ -94,4 +95,6 @@ abstract class AuthRepository {
   /// Disable 2FA for the authenticated user
   Future<Either<Failure, Disable2FAResponse>> disable2FA(
       Disable2FARequest request);
+
+  Future<Either<Failure, fb_auth.User>> googleSignIn();
 }

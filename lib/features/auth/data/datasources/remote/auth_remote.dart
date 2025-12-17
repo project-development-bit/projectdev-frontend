@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gigafaucet/core/config/api_endpoints.dart';
 import 'package:gigafaucet/core/network/base_dio_client.dart';
 import 'package:gigafaucet/features/auth/data/models/register_request.dart';
@@ -8,7 +9,8 @@ import 'package:gigafaucet/features/auth/data/models/resend_code_request.dart';
 import 'package:gigafaucet/features/auth/data/models/resend_code_response.dart';
 import 'package:gigafaucet/features/auth/data/models/verify_code_forgot_password_response.dart';
 import 'package:gigafaucet/features/auth/data/models/verify_code_request.dart';
-import 'package:gigafaucet/features/auth/data/models/verify_code_response.dart';
+import 'package:gigafaucet/features/auth/data/models/verify_code_response.dart'
+    hide User;
 import 'package:gigafaucet/features/auth/data/models/verify_2fa_request.dart';
 import 'package:gigafaucet/features/auth/data/models/verify_2fa_response.dart';
 import 'package:gigafaucet/features/auth/data/models/verify_login_2fa_request.dart';
@@ -26,6 +28,7 @@ import 'package:gigafaucet/features/auth/data/models/reset_password_request.dart
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 /// Provider for the authentication remote data source
 final authRemoteDataSourceProvider = Provider<AuthRemoteDataSource>(
@@ -82,6 +85,9 @@ abstract class AuthRemoteDataSource {
 
   /// Disable 2FA for the authenticated user
   Future<Disable2FAResponse> disable2FA(Disable2FARequest request);
+
+  /// Sign in with Google OAuth
+  Future<User> googleSignIn();
 }
 
 /// Implementation of [AuthRemoteDataSource] that handles HTTP requests
@@ -89,8 +95,10 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   /// HTTP client for making network requests
   final DioClient dioClient;
 
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+
   /// Creates an instance of [AuthRemoteDataSourceImpl]
-  const AuthRemoteDataSourceImpl(this.dioClient);
+  AuthRemoteDataSourceImpl(this.dioClient);
 
   @override
   Future<void> register(RegisterRequest request) async {
@@ -734,6 +742,41 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     } catch (e) {
       // Handle any other unexpected exceptions
       throw Exception('Unexpected error during verification: $e');
+    }
+  }
+
+  @override
+  Future<User> googleSignIn() async {
+    try {
+      // Step 1: Google Sign-In
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      if (googleUser == null) {
+        throw Exception("Google sign in aborted");
+      }
+
+      // Step 2: Get authentication details from Google
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      // Step 3: Authenticate with Firebase using the Google Auth credentials
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      // Step 4: Sign in to Firebase
+      final UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+      final User? firebaseUser = userCredential.user;
+
+      if (firebaseUser == null) {
+        throw Exception("Failed to sign in with Google");
+      }
+
+      // Step 5: Return the user model
+      return firebaseUser;
+    } catch (e) {
+      throw Exception("Google sign in failed: $e");
     }
   }
 }
