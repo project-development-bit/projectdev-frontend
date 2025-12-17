@@ -38,7 +38,7 @@ android {
     productFlavors {
         dev {
             dimension "default"
-            applicationId "com.burgereat.gigafaucet.dev"
+        applicationId "com.burgereat.gigafaucet.dev"
             versionNameSuffix "-dev"
             resValue "string", "app_name", "Gigafaucet Dev"
             manifestPlaceholders = [

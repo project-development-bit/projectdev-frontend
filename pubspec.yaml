@@ -85,6 +85,7 @@ dependencies:
   custom_image_crop: ^0.0.13
   flutter_fortune_wheel: 
     path: ./packages/flutter_fortune_wheel
+  firebase_core: ^4.3.0
   
 dev_dependencies:
   flutter_test:
