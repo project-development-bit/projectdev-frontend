@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:cointiply_app/core/providers/recaptcha_provider.dart';
-import 'package:cointiply_app/core/providers/consolidated_auth_provider.dart';
+import 'package:gigafaucet/core/providers/recaptcha_provider.dart';
+import 'package:gigafaucet/core/providers/consolidated_auth_provider.dart';
 
 void main() {
   group('Riverpod reCAPTCHA State Management Tests', () {

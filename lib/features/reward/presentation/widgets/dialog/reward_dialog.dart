@@ -1,12 +1,12 @@
-import 'package:cointiply_app/core/common/common_rich_text_with_icon.dart';
-import 'package:cointiply_app/core/config/app_local_images.dart';
-import 'package:cointiply_app/core/core.dart';
-import 'package:cointiply_app/features/reward/presentation/providers/reward_provider.dart';
-import 'package:cointiply_app/features/reward/presentation/providers/reward_state.dart';
-import 'package:cointiply_app/core/common/dialog_bg_widget.dart';
-import 'package:cointiply_app/features/reward/presentation/widgets/reward_xp_prograss_area.dart';
-import 'package:cointiply_app/features/reward/presentation/widgets/status_reward_widget.dart';
-import 'package:cointiply_app/features/reward/presentation/widgets/status_rewards_table.dart';
+import 'package:gigafaucet/core/common/common_rich_text_with_icon.dart';
+import 'package:gigafaucet/core/config/app_local_images.dart';
+import 'package:gigafaucet/core/core.dart';
+import 'package:gigafaucet/features/reward/presentation/providers/reward_provider.dart';
+import 'package:gigafaucet/features/reward/presentation/providers/reward_state.dart';
+import 'package:gigafaucet/core/common/dialog_bg_widget.dart';
+import 'package:gigafaucet/features/reward/presentation/widgets/reward_xp_prograss_area.dart';
+import 'package:gigafaucet/features/reward/presentation/widgets/status_reward_widget.dart';
+import 'package:gigafaucet/features/reward/presentation/widgets/status_rewards_table.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -40,7 +40,6 @@ class RewardDialog extends ConsumerWidget {
           // ---------------------------
           // LOADING
           // ---------------------------
-          
 
           // ---------------------------
           // ERROR
@@ -102,7 +101,6 @@ class RewardDialog extends ConsumerWidget {
     );
   }
 }
-
 
 Widget _errorWidget(String error) {
   return Padding(

@@ -1,6 +1,6 @@
-import 'package:cointiply_app/core/common/common_loading_widget.dart';
-import 'package:cointiply_app/features/localization/data/helpers/app_localizations.dart';
-import 'package:cointiply_app/routing/app_router.dart';
+import 'package:gigafaucet/core/common/common_loading_widget.dart';
+import 'package:gigafaucet/features/localization/data/helpers/app_localizations.dart';
+import 'package:gigafaucet/routing/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/common/common_text.dart';
@@ -51,11 +51,10 @@ class _TermsScreenState extends ConsumerState<TermsScreen> {
 
   Widget _buildLoadingView() {
     return Container(
-      padding: const EdgeInsets.all(24),
-      child: Center(
+        padding: const EdgeInsets.all(24),
+        child: Center(
           child: CommonLoadingWidget.large(),
-        )
-    );
+        ));
   }
 
   Widget _buildWebView(String url) {

@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:cointiply_app/features/auth/data/models/forgot_password_response.dart';
+import 'package:gigafaucet/features/auth/data/models/forgot_password_response.dart';
 
 void main() {
   group('ForgotPasswordData', () {

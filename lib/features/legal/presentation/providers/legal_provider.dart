@@ -1,5 +1,5 @@
-import 'package:cointiply_app/features/legal/data/datasource/legal_remote_data_source.dart';
-import 'package:cointiply_app/features/legal/data/models/request/contact_us_request.dart';
+import 'package:gigafaucet/features/legal/data/datasource/legal_remote_data_source.dart';
+import 'package:gigafaucet/features/legal/data/models/request/contact_us_request.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/entities/legal_document.dart';

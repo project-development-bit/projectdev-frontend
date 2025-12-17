@@ -1,18 +1,18 @@
-import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
-import 'package:cointiply_app/core/extensions/context_extensions.dart';
-import 'package:cointiply_app/core/extensions/date_extensions.dart';
-import 'package:cointiply_app/features/earnings/data/model/request/earnings_history_request.dart';
-import 'package:cointiply_app/features/earnings/data/model/request/earnings_statistics_request.dart';
-import 'package:cointiply_app/features/earnings/presentation/provider/get_earnings_history_notifier.dart';
-import 'package:cointiply_app/features/earnings/presentation/provider/get_earnings_statistics_notifier.dart';
-import 'package:cointiply_app/core/common/dialog_bg_widget.dart';
-import 'package:cointiply_app/features/localization/data/helpers/app_localizations.dart';
-import 'package:cointiply_app/features/user_profile/data/enum/user_level.dart';
-import 'package:cointiply_app/features/user_profile/presentation/widgets/overview/avatar_badge_info.dart';
-import 'package:cointiply_app/features/user_profile/presentation/widgets/sections/coins_history_section.dart';
-import 'package:cointiply_app/features/user_profile/presentation/widgets/sections/statistics_section.dart';
+import 'package:gigafaucet/core/common/custom_buttom_widget.dart';
+import 'package:gigafaucet/core/extensions/context_extensions.dart';
+import 'package:gigafaucet/core/extensions/date_extensions.dart';
+import 'package:gigafaucet/features/earnings/data/model/request/earnings_history_request.dart';
+import 'package:gigafaucet/features/earnings/data/model/request/earnings_statistics_request.dart';
+import 'package:gigafaucet/features/earnings/presentation/provider/get_earnings_history_notifier.dart';
+import 'package:gigafaucet/features/earnings/presentation/provider/get_earnings_statistics_notifier.dart';
+import 'package:gigafaucet/core/common/dialog_bg_widget.dart';
+import 'package:gigafaucet/features/localization/data/helpers/app_localizations.dart';
+import 'package:gigafaucet/features/user_profile/data/enum/user_level.dart';
+import 'package:gigafaucet/features/user_profile/presentation/widgets/overview/avatar_badge_info.dart';
+import 'package:gigafaucet/features/user_profile/presentation/widgets/sections/coins_history_section.dart';
+import 'package:gigafaucet/features/user_profile/presentation/widgets/sections/statistics_section.dart';
 import 'package:flutter/material.dart';
-import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
+import 'package:gigafaucet/features/user_profile/presentation/providers/current_user_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ProfileDialog extends ConsumerStatefulWidget {

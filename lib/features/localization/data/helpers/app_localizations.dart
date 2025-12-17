@@ -1,5 +1,5 @@
-import 'package:cointiply_app/features/localization/data/datasource/local/localization_local_data_source.dart';
-import 'package:cointiply_app/features/localization/presentation/providers/get_languages_state.dart';
+import 'package:gigafaucet/features/localization/data/datasource/local/localization_local_data_source.dart';
+import 'package:gigafaucet/features/localization/presentation/providers/get_languages_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../services/localization_service.dart';

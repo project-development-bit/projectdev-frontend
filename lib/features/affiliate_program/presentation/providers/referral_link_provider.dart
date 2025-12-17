@@ -1,11 +1,11 @@
-import 'package:cointiply_app/core/error/failures.dart';
-import 'package:cointiply_app/features/affiliate_program/data/datasources/affiliate_program_remote_data_source_impl.dart';
-import 'package:cointiply_app/features/affiliate_program/data/repositories/affiliate_program_repository_impl.dart';
-import 'package:cointiply_app/features/affiliate_program/domain/repositories/affiliate_program_repository.dart';
-import 'package:cointiply_app/features/affiliate_program/domain/usecases/get_referral_link_usecase.dart';
+import 'package:gigafaucet/core/error/failures.dart';
+import 'package:gigafaucet/features/affiliate_program/data/datasources/affiliate_program_remote_data_source_impl.dart';
+import 'package:gigafaucet/features/affiliate_program/data/repositories/affiliate_program_repository_impl.dart';
+import 'package:gigafaucet/features/affiliate_program/domain/repositories/affiliate_program_repository.dart';
+import 'package:gigafaucet/features/affiliate_program/domain/usecases/get_referral_link_usecase.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:cointiply_app/core/network/base_dio_client.dart';
+import 'package:gigafaucet/core/network/base_dio_client.dart';
 
 // Status enum
 enum ReferralLinkStatus { initial, loading, success, failure }

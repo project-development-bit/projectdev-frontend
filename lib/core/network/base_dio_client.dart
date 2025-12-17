@@ -1,7 +1,7 @@
 // core/network/dio_client.dart
-import 'package:cointiply_app/core/config/flavor_manager.dart';
-import 'package:cointiply_app/core/network/auth_interceptor.dart';
-import 'package:cointiply_app/core/services/secure_storage_service.dart';
+import 'package:gigafaucet/core/config/flavor_manager.dart';
+import 'package:gigafaucet/core/network/auth_interceptor.dart';
+import 'package:gigafaucet/core/services/secure_storage_service.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

@@ -1,5 +1,5 @@
-import 'package:cointiply_app/features/user_profile/domain/usecases/verify_delete_account_usecase.dart';
-import 'package:cointiply_app/features/user_profile/presentation/providers/profile_providers.dart';
+import 'package:gigafaucet/features/user_profile/domain/usecases/verify_delete_account_usecase.dart';
+import 'package:gigafaucet/features/user_profile/presentation/providers/profile_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 enum VerifyDeleteAccountStatus { initial, loading, success, failure }

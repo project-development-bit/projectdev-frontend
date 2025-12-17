@@ -1,8 +1,8 @@
-import 'package:cointiply_app/core/error/failures.dart';
-import 'package:cointiply_app/features/auth/domain/usecases/forget_password_resend_code_usecase.dart';
-import 'package:cointiply_app/features/auth/domain/usecases/verify_code_forgot_password_usecase.dart';
-import 'package:cointiply_app/features/user_profile/domain/usecases/verify_email_change_usecase.dart';
-import 'package:cointiply_app/features/user_profile/user_profile.dart';
+import 'package:gigafaucet/core/error/failures.dart';
+import 'package:gigafaucet/features/auth/domain/usecases/forget_password_resend_code_usecase.dart';
+import 'package:gigafaucet/features/auth/domain/usecases/verify_code_forgot_password_usecase.dart';
+import 'package:gigafaucet/features/user_profile/domain/usecases/verify_email_change_usecase.dart';
+import 'package:gigafaucet/features/user_profile/user_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/models/resend_code_request.dart';

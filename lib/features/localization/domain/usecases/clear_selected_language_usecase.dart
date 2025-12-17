@@ -1,4 +1,4 @@
-import 'package:cointiply_app/features/localization/domain/repositories/localization_repository.dart';
+import 'package:gigafaucet/features/localization/domain/repositories/localization_repository.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/error/failures.dart';

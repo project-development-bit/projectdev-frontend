@@ -1,8 +1,8 @@
-import 'package:cointiply_app/core/common/common_text.dart';
-import 'package:cointiply_app/core/theme/app_colors.dart';
-import 'package:cointiply_app/core/common/widgets/custom_pointer_interceptor.dart';
-import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/dialog_scaffold_widget.dart';
-import 'package:cointiply_app/main_common.dart';
+import 'package:gigafaucet/core/common/common_text.dart';
+import 'package:gigafaucet/core/theme/app_colors.dart';
+import 'package:gigafaucet/core/common/widgets/custom_pointer_interceptor.dart';
+import 'package:gigafaucet/features/user_profile/presentation/widgets/dialogs/dialog_scaffold_widget.dart';
+import 'package:gigafaucet/main_common.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../features/localization/data/helpers/app_localizations.dart';

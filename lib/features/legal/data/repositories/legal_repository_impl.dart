@@ -1,7 +1,6 @@
-import 'package:cointiply_app/core/error/error_handling.dart'
-    show ErrorHandling;
-import 'package:cointiply_app/features/legal/data/datasource/legal_remote_data_source.dart';
-import 'package:cointiply_app/features/legal/data/models/request/contact_us_request.dart';
+import 'package:gigafaucet/core/error/error_handling.dart' show ErrorHandling;
+import 'package:gigafaucet/features/legal/data/datasource/legal_remote_data_source.dart';
+import 'package:gigafaucet/features/legal/data/models/request/contact_us_request.dart';
 import 'package:dartz/dartz.dart';
 import '../../../../core/error/failures.dart';
 import '../../domain/entities/legal_document.dart';

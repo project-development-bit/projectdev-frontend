@@ -1,6 +1,6 @@
-import 'package:cointiply_app/core/usecases/usecase.dart';
-import 'package:cointiply_app/features/wallet/domain/entity/balance.dart';
-import 'package:cointiply_app/features/wallet/domain/usecases/get_user_balance_usecase.dart';
+import 'package:gigafaucet/core/usecases/usecase.dart';
+import 'package:gigafaucet/features/wallet/domain/entity/balance.dart';
+import 'package:gigafaucet/features/wallet/domain/usecases/get_user_balance_usecase.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'balance_state.dart';

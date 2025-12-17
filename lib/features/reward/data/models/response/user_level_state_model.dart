@@ -1,4 +1,4 @@
-import 'package:cointiply_app/features/reward/domain/entities/user_level_state.dart';
+import 'package:gigafaucet/features/reward/domain/entities/user_level_state.dart';
 
 class UserLevelStateModel extends UserLevelState {
   const UserLevelStateModel({

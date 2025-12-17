@@ -1,4 +1,4 @@
-import 'package:cointiply_app/features/earnings/domain/entity/statistics_response.dart';
+import 'package:gigafaucet/features/earnings/domain/entity/statistics_response.dart';
 
 enum EarningsStatisticsStatus {
   initial,
@@ -12,7 +12,6 @@ class EarningsStatisticsState {
   final EarningsStatisticsStatus status;
   final String? error;
 
-  
   const EarningsStatisticsState({
     this.data,
     this.status = EarningsStatisticsStatus.initial,

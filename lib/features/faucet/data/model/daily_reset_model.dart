@@ -1,4 +1,4 @@
-import 'package:cointiply_app/features/faucet/domain/entity/daily_reset.dart';
+import 'package:gigafaucet/features/faucet/domain/entity/daily_reset.dart';
 
 class DailyResetModel extends DailyReset {
   const DailyResetModel({

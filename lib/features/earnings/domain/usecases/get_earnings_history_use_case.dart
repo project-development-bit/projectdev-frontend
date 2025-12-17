@@ -1,5 +1,5 @@
-import 'package:cointiply_app/features/earnings/domain/entity/earnings_history_response.dart';
-import 'package:cointiply_app/features/earnings/domain/repository/earnings_history_repository.dart';
+import 'package:gigafaucet/features/earnings/domain/entity/earnings_history_response.dart';
+import 'package:gigafaucet/features/earnings/domain/repository/earnings_history_repository.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

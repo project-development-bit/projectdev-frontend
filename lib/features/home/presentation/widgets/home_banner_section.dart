@@ -1,12 +1,12 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:cointiply_app/core/common/common_image_widget.dart';
-import 'package:cointiply_app/core/common/common_text.dart';
-import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
-import 'package:cointiply_app/core/config/app_local_images.dart';
-import 'package:cointiply_app/core/extensions/extensions.dart';
-import 'package:cointiply_app/features/localization/data/helpers/app_localizations.dart';
-import 'package:cointiply_app/core/theme/data/models/app_settings_model.dart';
-import 'package:cointiply_app/core/theme/presentation/providers/app_setting_providers.dart';
+import 'package:gigafaucet/core/common/common_image_widget.dart';
+import 'package:gigafaucet/core/common/common_text.dart';
+import 'package:gigafaucet/core/common/custom_buttom_widget.dart';
+import 'package:gigafaucet/core/config/app_local_images.dart';
+import 'package:gigafaucet/core/extensions/extensions.dart';
+import 'package:gigafaucet/features/localization/data/helpers/app_localizations.dart';
+import 'package:gigafaucet/core/theme/data/models/app_settings_model.dart';
+import 'package:gigafaucet/core/theme/presentation/providers/app_setting_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

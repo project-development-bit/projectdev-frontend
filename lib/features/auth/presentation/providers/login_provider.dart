@@ -1,5 +1,5 @@
-import 'package:cointiply_app/core/error/error_model.dart';
-import 'package:cointiply_app/core/services/device_info.dart';
+import 'package:gigafaucet/core/error/error_model.dart';
+import 'package:gigafaucet/core/services/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/services/database_service.dart';

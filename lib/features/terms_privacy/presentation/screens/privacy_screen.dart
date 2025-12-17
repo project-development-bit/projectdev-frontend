@@ -1,6 +1,6 @@
-import 'package:cointiply_app/core/common/common_loading_widget.dart';
-import 'package:cointiply_app/core/core.dart';
-import 'package:cointiply_app/routing/app_router.dart';
+import 'package:gigafaucet/core/common/common_loading_widget.dart';
+import 'package:gigafaucet/core/core.dart';
+import 'package:gigafaucet/routing/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/terms_privacy_provider.dart';

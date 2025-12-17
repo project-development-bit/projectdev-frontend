@@ -1,15 +1,15 @@
-import 'package:cointiply_app/core/common/common_dropdown_field_with_icon.dart';
-import 'package:cointiply_app/core/common/common_text.dart';
-import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
-import 'package:cointiply_app/core/common/dialog_bg_widget.dart';
-import 'package:cointiply_app/core/extensions/extensions.dart';
-import 'package:cointiply_app/features/auth/presentation/providers/selected_country_provider.dart';
-import 'package:cointiply_app/features/user_profile/domain/entities/country.dart';
-import 'package:cointiply_app/features/user_profile/presentation/providers/change_country_notifier.dart';
-import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
-import 'package:cointiply_app/features/user_profile/presentation/providers/get_countries_state.dart';
-import 'package:cointiply_app/features/user_profile/presentation/providers/get_profile_notifier.dart';
-import 'package:cointiply_app/routing/app_router.dart';
+import 'package:gigafaucet/core/common/common_dropdown_field_with_icon.dart';
+import 'package:gigafaucet/core/common/common_text.dart';
+import 'package:gigafaucet/core/common/custom_buttom_widget.dart';
+import 'package:gigafaucet/core/common/dialog_bg_widget.dart';
+import 'package:gigafaucet/core/extensions/extensions.dart';
+import 'package:gigafaucet/features/auth/presentation/providers/selected_country_provider.dart';
+import 'package:gigafaucet/features/user_profile/domain/entities/country.dart';
+import 'package:gigafaucet/features/user_profile/presentation/providers/change_country_notifier.dart';
+import 'package:gigafaucet/features/user_profile/presentation/providers/current_user_provider.dart';
+import 'package:gigafaucet/features/user_profile/presentation/providers/get_countries_state.dart';
+import 'package:gigafaucet/features/user_profile/presentation/providers/get_profile_notifier.dart';
+import 'package:gigafaucet/routing/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

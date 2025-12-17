@@ -1,4 +1,4 @@
-import 'package:cointiply_app/features/faucet/domain/entity/faucet_streak_day.dart';
+import 'package:gigafaucet/features/faucet/domain/entity/faucet_streak_day.dart';
 
 class FaucetStreakDayModel extends FaucetStreakDay {
   const FaucetStreakDayModel({

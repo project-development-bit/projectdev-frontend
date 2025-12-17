@@ -1,10 +1,10 @@
-import 'package:cointiply_app/core/common/footer/footer_section.dart';
-import 'package:cointiply_app/core/common/store_button.dart';
-import 'package:cointiply_app/features/home/presentation/widgets/home_section_container.dart';
-import 'package:cointiply_app/features/terms_privacy/presentation/services/terms_privacy_navigation_service.dart';
+import 'package:gigafaucet/core/common/footer/footer_section.dart';
+import 'package:gigafaucet/core/common/store_button.dart';
+import 'package:gigafaucet/features/home/presentation/widgets/home_section_container.dart';
+import 'package:gigafaucet/features/terms_privacy/presentation/services/terms_privacy_navigation_service.dart';
 import 'package:flutter/material.dart';
-import 'package:cointiply_app/core/common/common_text.dart';
-import 'package:cointiply_app/core/extensions/context_extensions.dart';
+import 'package:gigafaucet/core/common/common_text.dart';
+import 'package:gigafaucet/core/extensions/context_extensions.dart';
 import 'package:go_router/go_router.dart';
 
 class GigaFooter extends StatelessWidget {

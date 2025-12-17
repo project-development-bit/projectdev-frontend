@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:cointiply_app/core/theme/data/datasources/theme_database_source.dart';
-import 'package:cointiply_app/core/theme/data/models/theme_config_model.dart';
+import 'package:gigafaucet/core/theme/data/datasources/theme_database_source.dart';
+import 'package:gigafaucet/core/theme/data/models/theme_config_model.dart';
 import 'package:flutter/material.dart';
 
 class MockDatabase extends Mock implements Database {}

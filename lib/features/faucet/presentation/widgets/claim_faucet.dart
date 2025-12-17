@@ -1,13 +1,13 @@
-import 'package:cointiply_app/core/common/common_text.dart';
-import 'package:cointiply_app/core/config/app_local_images.dart';
-import 'package:cointiply_app/core/extensions/context_extensions.dart';
-import 'package:cointiply_app/core/providers/auth_provider.dart';
-import 'package:cointiply_app/features/auth/presentation/widgets/dialog/login_required_dialog.dart';
-import 'package:cointiply_app/features/faucet/presentation/provider/faucet_countdown_provider.dart';
-import 'package:cointiply_app/features/faucet/presentation/provider/faucet_notifier_provider.dart';
-import 'package:cointiply_app/features/faucet/presentation/widgets/dialog/claim_your_faucet_dialog.dart';
-import 'package:cointiply_app/features/faucet/presentation/widgets/dialog/your_faucet_dialog.dart';
-import 'package:cointiply_app/routing/app_router.dart';
+import 'package:gigafaucet/core/common/common_text.dart';
+import 'package:gigafaucet/core/config/app_local_images.dart';
+import 'package:gigafaucet/core/extensions/context_extensions.dart';
+import 'package:gigafaucet/core/providers/auth_provider.dart';
+import 'package:gigafaucet/features/auth/presentation/widgets/dialog/login_required_dialog.dart';
+import 'package:gigafaucet/features/faucet/presentation/provider/faucet_countdown_provider.dart';
+import 'package:gigafaucet/features/faucet/presentation/provider/faucet_notifier_provider.dart';
+import 'package:gigafaucet/features/faucet/presentation/widgets/dialog/claim_your_faucet_dialog.dart';
+import 'package:gigafaucet/features/faucet/presentation/widgets/dialog/your_faucet_dialog.dart';
+import 'package:gigafaucet/routing/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

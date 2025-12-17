@@ -1,4 +1,4 @@
-import 'package:cointiply_app/core/config/app_assets.dart';
+import 'package:gigafaucet/core/config/app_assets.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';

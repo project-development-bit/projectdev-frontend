@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:cointiply_app/core/config/app_assets.dart';
+import 'package:gigafaucet/core/config/app_assets.dart';
 import 'package:flutter/services.dart';
 import '../models/theme_config_model.dart';
 

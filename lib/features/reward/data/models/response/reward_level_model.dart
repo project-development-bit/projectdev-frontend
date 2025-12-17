@@ -1,5 +1,5 @@
-import 'package:cointiply_app/features/reward/data/models/response/sub_level_model.dart';
-import 'package:cointiply_app/features/reward/domain/entities/reward_level.dart';
+import 'package:gigafaucet/features/reward/data/models/response/sub_level_model.dart';
+import 'package:gigafaucet/features/reward/domain/entities/reward_level.dart';
 
 class RewardLevelModel extends RewardLevel {
   const RewardLevelModel({

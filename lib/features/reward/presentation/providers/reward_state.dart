@@ -1,7 +1,7 @@
 // reward_state.dart
 
-import 'package:cointiply_app/features/reward/domain/entities/reward_level.dart';
-import 'package:cointiply_app/features/reward/domain/entities/user_level_state.dart';
+import 'package:gigafaucet/features/reward/domain/entities/reward_level.dart';
+import 'package:gigafaucet/features/reward/domain/entities/user_level_state.dart';
 
 enum GetRewardStatus {
   initial,

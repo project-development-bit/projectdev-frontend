@@ -1,9 +1,9 @@
-import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
-import 'package:cointiply_app/core/theme/app_colors.dart';
-import 'package:cointiply_app/core/widgets/cloudflare_turnstille_widgte.dart';
-import 'package:cointiply_app/core/providers/turnstile_provider.dart';
-import 'package:cointiply_app/features/auth/presentation/widgets/remember_me_widget.dart';
-import 'package:cointiply_app/features/auth/presentation/providers/ip_country_provider.dart';
+import 'package:gigafaucet/core/common/custom_buttom_widget.dart';
+import 'package:gigafaucet/core/theme/app_colors.dart';
+import 'package:gigafaucet/core/widgets/cloudflare_turnstille_widgte.dart';
+import 'package:gigafaucet/core/providers/turnstile_provider.dart';
+import 'package:gigafaucet/features/auth/presentation/widgets/remember_me_widget.dart';
+import 'package:gigafaucet/features/auth/presentation/providers/ip_country_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/common/common_textfield.dart';

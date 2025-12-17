@@ -1,4 +1,4 @@
-import 'package:cointiply_app/core/config/app_local_images.dart';
+import 'package:gigafaucet/core/config/app_local_images.dart';
 import 'package:flutter/material.dart';
 
 enum StoreButtonType { googlePlay, appStore }

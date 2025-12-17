@@ -1,4 +1,4 @@
-import 'package:cointiply_app/features/reward/domain/entities/sub_level.dart';
+import 'package:gigafaucet/features/reward/domain/entities/sub_level.dart';
 import 'package:equatable/equatable.dart';
 
 class RewardLevel extends Equatable {

@@ -1,5 +1,5 @@
-import 'package:cointiply_app/features/referrals/domain/entity/referred_user_entity.dart';
-import 'package:cointiply_app/features/referrals/domain/usecases/get_referred_users_usecase.dart';
+import 'package:gigafaucet/features/referrals/domain/entity/referred_user_entity.dart';
+import 'package:gigafaucet/features/referrals/domain/usecases/get_referred_users_usecase.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/error/failures.dart';

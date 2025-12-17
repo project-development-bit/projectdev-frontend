@@ -1,10 +1,10 @@
-import 'package:cointiply_app/core/common/common_text.dart';
-import 'package:cointiply_app/core/common/common_textfield.dart';
-import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
-import 'package:cointiply_app/core/common/dialog_bg_widget.dart';
-import 'package:cointiply_app/core/extensions/context_extensions.dart';
-import 'package:cointiply_app/features/user_profile/presentation/providers/change_password_notifier.dart';
-import 'package:cointiply_app/routing/routing.dart';
+import 'package:gigafaucet/core/common/common_text.dart';
+import 'package:gigafaucet/core/common/common_textfield.dart';
+import 'package:gigafaucet/core/common/custom_buttom_widget.dart';
+import 'package:gigafaucet/core/common/dialog_bg_widget.dart';
+import 'package:gigafaucet/core/extensions/context_extensions.dart';
+import 'package:gigafaucet/features/user_profile/presentation/providers/change_password_notifier.dart';
+import 'package:gigafaucet/routing/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -47,7 +47,7 @@ class _ChangePasswordDialogState extends ConsumerState<ChangePasswordDialog> {
         if (mounted && context.mounted) {
           context.showSuccessSnackBar(
               message: context.translate('password_changed_successfully'));
-      
+
           if (mounted) {
             context.pop(); // close dialog
           }

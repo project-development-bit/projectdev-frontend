@@ -1,4 +1,4 @@
-import 'package:cointiply_app/features/wallet/domain/entity/interest_info.dart';
+import 'package:gigafaucet/features/wallet/domain/entity/interest_info.dart';
 
 class InterestInfoModel extends InterestInfo {
   const InterestInfoModel({

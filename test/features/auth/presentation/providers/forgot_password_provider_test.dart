@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:cointiply_app/features/auth/presentation/providers/forgot_password_provider.dart';
-import 'package:cointiply_app/features/auth/data/models/forgot_password_response.dart';
+import 'package:gigafaucet/features/auth/presentation/providers/forgot_password_provider.dart';
+import 'package:gigafaucet/features/auth/data/models/forgot_password_response.dart';
 
 void main() {
   group('ForgotPasswordProvider', () {

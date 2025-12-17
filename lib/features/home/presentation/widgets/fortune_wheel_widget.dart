@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:cointiply_app/core/common/common_text.dart';
-import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
-import 'package:cointiply_app/core/config/app_local_images.dart';
-import 'package:cointiply_app/core/extensions/context_extensions.dart';
+import 'package:gigafaucet/core/common/common_text.dart';
+import 'package:gigafaucet/core/common/custom_buttom_widget.dart';
+import 'package:gigafaucet/core/config/app_local_images.dart';
+import 'package:gigafaucet/core/extensions/context_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -134,7 +134,7 @@ class _FortuneWheelWidgetState extends State<FortuneWheelWidget> {
             title: context.translate("Spin"),
             fontSize: 14,
             height: 40,
-            isViolet:true,
+            isViolet: true,
             padding: EdgeInsets.symmetric(horizontal: 40, vertical: 5),
             onTap: () {
               setState(() {

@@ -1,6 +1,6 @@
-import 'package:cointiply_app/core/config/app_local_images.dart';
-import 'package:cointiply_app/core/extensions/extensions.dart';
-import 'package:cointiply_app/features/home/presentation/widgets/home_section_container.dart';
+import 'package:gigafaucet/core/config/app_local_images.dart';
+import 'package:gigafaucet/core/extensions/extensions.dart';
+import 'package:gigafaucet/features/home/presentation/widgets/home_section_container.dart';
 import 'package:flutter/material.dart';
 
 import 'event_daily_streak_widget.dart';

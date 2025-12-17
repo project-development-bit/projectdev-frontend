@@ -1,4 +1,4 @@
-import 'package:cointiply_app/features/user_profile/domain/entities/set_security_pin_result.dart';
+import 'package:gigafaucet/features/user_profile/domain/entities/set_security_pin_result.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import '../../../../core/error/failures.dart';

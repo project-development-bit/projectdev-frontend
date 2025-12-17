@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:cointiply_app/features/auth/data/models/user_model.dart';
-import 'package:cointiply_app/core/enum/user_role.dart';
+import 'package:gigafaucet/features/auth/data/models/user_model.dart';
+import 'package:gigafaucet/core/enum/user_role.dart';
 
 void main() {
   group('UserModel Null Safety Tests', () {
@@ -141,17 +141,17 @@ void main() {
     test('should handle mixed valid and invalid values', () {
       // Arrange - JSON with mixed valid/invalid values
       final Map<String, dynamic> mixedJson = {
-        'id': '999',  // valid string ID
-        'name': 'Mixed User',  // valid string
-        'email': null,  // null email
-        'role': '',  // empty role (should use fallback)
+        'id': '999', // valid string ID
+        'name': 'Mixed User', // valid string
+        'email': null, // null email
+        'role': '', // empty role (should use fallback)
         'refresh_token': 'valid_token',
-        'security_code': null,  // null security code
-        'is_banned': null,  // null boolean
-        'is_verified': true,  // valid boolean
-        'risk_score': '88',  // string number
-        'created_at': null,  // null date
-        'updated_at': 'invalid-date',  // invalid date
+        'security_code': null, // null security code
+        'is_banned': null, // null boolean
+        'is_verified': true, // valid boolean
+        'risk_score': '88', // string number
+        'created_at': null, // null date
+        'updated_at': 'invalid-date', // invalid date
       };
 
       // Act
@@ -160,15 +160,16 @@ void main() {
       // Assert
       expect(userModel.id, equals(999));
       expect(userModel.name, equals('Mixed User'));
-      expect(userModel.email, equals(''));  // null becomes empty string
-      expect(userModel.role, equals(UserRole.normalUser));  // empty string uses fallback
+      expect(userModel.email, equals('')); // null becomes empty string
+      expect(userModel.role,
+          equals(UserRole.normalUser)); // empty string uses fallback
       expect(userModel.refreshToken, equals('valid_token'));
-      expect(userModel.securityCode, equals(''));  // null uses fallback
-      expect(userModel.isBanned, equals(0));  // null uses fallback
-      expect(userModel.isVerified, equals(1));  // valid boolean converted to int
-      expect(userModel.riskScore, equals(88));  // string parsed to int
-      expect(userModel.createdAt, isNotNull);  // null uses current time
-      expect(userModel.updatedAt, isNotNull);  // invalid date uses current time
+      expect(userModel.securityCode, equals('')); // null uses fallback
+      expect(userModel.isBanned, equals(0)); // null uses fallback
+      expect(userModel.isVerified, equals(1)); // valid boolean converted to int
+      expect(userModel.riskScore, equals(88)); // string parsed to int
+      expect(userModel.createdAt, isNotNull); // null uses current time
+      expect(userModel.updatedAt, isNotNull); // invalid date uses current time
     });
   });
 }

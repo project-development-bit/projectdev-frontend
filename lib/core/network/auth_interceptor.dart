@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:developer' as logger show log;
-import 'package:cointiply_app/core/config/flavor_manager.dart';
-import 'package:cointiply_app/core/services/secure_storage_service.dart';
-import 'package:cointiply_app/core/services/platform_recaptcha_service.dart';
+import 'package:gigafaucet/core/config/flavor_manager.dart';
+import 'package:gigafaucet/core/services/secure_storage_service.dart';
+import 'package:gigafaucet/core/services/platform_recaptcha_service.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 

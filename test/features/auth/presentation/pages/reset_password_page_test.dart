@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:cointiply_app/features/auth/presentation/pages/reset_password_page.dart';
-import 'package:cointiply_app/features/auth/domain/repositories/auth_repository.dart';
+import 'package:gigafaucet/features/auth/presentation/pages/reset_password_page.dart';
+import 'package:gigafaucet/features/auth/domain/repositories/auth_repository.dart';
 
-import 'package:cointiply_app/core/common/common_button.dart';
-import 'package:cointiply_app/core/common/common_textfield.dart';
+import 'package:gigafaucet/core/common/common_button.dart';
+import 'package:gigafaucet/core/common/common_textfield.dart';
 import '../../../../test_helpers/test_app_wrapper.dart';
 
 class MockAuthRepository extends Mock implements AuthRepository {}

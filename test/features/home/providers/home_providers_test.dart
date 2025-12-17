@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:cointiply_app/features/home/presentation/providers/home_providers.dart';
-import 'package:cointiply_app/features/home/data/models/offer_model.dart';
-import 'package:cointiply_app/features/home/data/models/home_models.dart';
+import 'package:gigafaucet/features/home/presentation/providers/home_providers.dart';
+import 'package:gigafaucet/features/home/data/models/offer_model.dart';
+import 'package:gigafaucet/features/home/data/models/home_models.dart';
 
 void main() {
   group('Home Providers Tests', () {

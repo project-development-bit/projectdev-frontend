@@ -1,9 +1,9 @@
-import 'package:cointiply_app/core/common/common_image_widget.dart';
-import 'package:cointiply_app/core/config/app_local_images.dart';
-import 'package:cointiply_app/core/extensions/extensions.dart';
-import 'package:cointiply_app/features/home/presentation/widgets/drawer_item.dart';
-import 'package:cointiply_app/features/home/presentation/widgets/drawer_sub_item.dart';
-import 'package:cointiply_app/routing/routing.dart';
+import 'package:gigafaucet/core/common/common_image_widget.dart';
+import 'package:gigafaucet/core/config/app_local_images.dart';
+import 'package:gigafaucet/core/extensions/extensions.dart';
+import 'package:gigafaucet/features/home/presentation/widgets/drawer_item.dart';
+import 'package:gigafaucet/features/home/presentation/widgets/drawer_sub_item.dart';
+import 'package:gigafaucet/routing/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart' show GoRouterState;

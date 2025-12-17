@@ -1,7 +1,7 @@
-import 'package:cointiply_app/core/common/widgets/custom_pointer_interceptor.dart';
-import 'package:cointiply_app/core/core.dart';
-import 'package:cointiply_app/core/common/menu/profile_menu.dart';
-import 'package:cointiply_app/features/user_profile/presentation/widgets/user_profile_image_widget.dart';
+import 'package:gigafaucet/core/common/widgets/custom_pointer_interceptor.dart';
+import 'package:gigafaucet/core/core.dart';
+import 'package:gigafaucet/core/common/menu/profile_menu.dart';
+import 'package:gigafaucet/features/user_profile/presentation/widgets/user_profile_image_widget.dart';
 import 'package:flutter/material.dart';
 
 class HeaderProfileAvatar extends StatelessWidget {

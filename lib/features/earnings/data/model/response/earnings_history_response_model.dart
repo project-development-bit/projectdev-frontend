@@ -1,4 +1,4 @@
-import 'package:cointiply_app/features/earnings/domain/entity/earnings_history_response.dart';
+import 'package:gigafaucet/features/earnings/domain/entity/earnings_history_response.dart';
 
 import 'earnings_history_data_model.dart';
 

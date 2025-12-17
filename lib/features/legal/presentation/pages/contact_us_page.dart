@@ -1,8 +1,8 @@
-import 'package:cointiply_app/features/localization/data/helpers/app_localizations.dart';
-import 'package:cointiply_app/core/providers/turnstile_provider.dart';
-import 'package:cointiply_app/core/theme/app_colors.dart';
-import 'package:cointiply_app/core/widgets/cloudflare_turnstille_widgte.dart';
-import 'package:cointiply_app/features/legal/data/models/request/contact_us_request.dart';
+import 'package:gigafaucet/features/localization/data/helpers/app_localizations.dart';
+import 'package:gigafaucet/core/providers/turnstile_provider.dart';
+import 'package:gigafaucet/core/theme/app_colors.dart';
+import 'package:gigafaucet/core/widgets/cloudflare_turnstille_widgte.dart';
+import 'package:gigafaucet/features/legal/data/models/request/contact_us_request.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/common/common_text.dart';

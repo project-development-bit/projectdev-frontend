@@ -1,4 +1,4 @@
-import 'package:cointiply_app/features/user_profile/data/models/response/upload_profile_avatar_response_model.dart';
+import 'package:gigafaucet/features/user_profile/data/models/response/upload_profile_avatar_response_model.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';

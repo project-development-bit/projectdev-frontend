@@ -1,7 +1,7 @@
-import 'package:cointiply_app/features/referrals/data/datasources/referral_banner_remote_service.dart';
-import 'package:cointiply_app/features/referrals/data/models/refferal_banner_model.dart';
-import 'package:cointiply_app/features/referrals/domain/entity/banner_entity.dart';
-import 'package:cointiply_app/features/referrals/domain/repository/referral_banner_repository.dart';
+import 'package:gigafaucet/features/referrals/data/datasources/referral_banner_remote_service.dart';
+import 'package:gigafaucet/features/referrals/data/models/refferal_banner_model.dart';
+import 'package:gigafaucet/features/referrals/domain/entity/banner_entity.dart';
+import 'package:gigafaucet/features/referrals/domain/repository/referral_banner_repository.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';

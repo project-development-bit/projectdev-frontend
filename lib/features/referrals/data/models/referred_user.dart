@@ -1,4 +1,4 @@
-import 'package:cointiply_app/features/referrals/domain/entity/referred_user_entity.dart';
+import 'package:gigafaucet/features/referrals/domain/entity/referred_user_entity.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 

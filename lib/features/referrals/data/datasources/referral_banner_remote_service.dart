@@ -1,4 +1,4 @@
-import 'package:cointiply_app/features/referrals/data/models/refferal_banner_model.dart';
+import 'package:gigafaucet/features/referrals/data/models/refferal_banner_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import '../../../../core/network/base_dio_client.dart';

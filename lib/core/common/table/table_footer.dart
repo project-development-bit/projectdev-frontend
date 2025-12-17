@@ -1,5 +1,5 @@
-import 'package:cointiply_app/core/common/common_text.dart';
-import 'package:cointiply_app/core/extensions/context_extensions.dart';
+import 'package:gigafaucet/core/common/common_text.dart';
+import 'package:gigafaucet/core/extensions/context_extensions.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -34,7 +34,6 @@ class TableFooter extends StatelessWidget {
     // Pagination buttons
     final paginationWidget = Row(
       mainAxisSize: MainAxisSize.min,
-      
       children: [
         HoverIconButton(
           icon: Icons.chevron_left,

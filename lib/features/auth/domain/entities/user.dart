@@ -1,5 +1,5 @@
-import 'package:cointiply_app/core/extensions/double_extensions.dart';
-import 'package:cointiply_app/features/user_profile/data/enum/user_level.dart';
+import 'package:gigafaucet/core/extensions/double_extensions.dart';
+import 'package:gigafaucet/features/user_profile/data/enum/user_level.dart';
 import 'package:equatable/equatable.dart';
 import '../../../../core/enum/user_role.dart';
 

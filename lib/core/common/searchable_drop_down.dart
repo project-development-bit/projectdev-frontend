@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:cointiply_app/core/common/common_text.dart';
-import 'package:cointiply_app/core/extensions/context_extensions.dart';
+import 'package:gigafaucet/core/common/common_text.dart';
+import 'package:gigafaucet/core/extensions/context_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 

@@ -1,6 +1,6 @@
-import 'package:cointiply_app/core/error/error_model.dart';
-import 'package:cointiply_app/core/error/failures.dart';
-import 'package:cointiply_app/features/earnings/data/datasources/remote/earnings_remote_data_source.dart';
+import 'package:gigafaucet/core/error/error_model.dart';
+import 'package:gigafaucet/core/error/failures.dart';
+import 'package:gigafaucet/features/earnings/data/datasources/remote/earnings_remote_data_source.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 

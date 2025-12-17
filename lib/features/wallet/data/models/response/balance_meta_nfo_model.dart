@@ -1,5 +1,5 @@
-import 'package:cointiply_app/features/wallet/data/models/response/rates_model.dart';
-import 'package:cointiply_app/features/wallet/domain/entity/balance_meta_info.dart';
+import 'package:gigafaucet/features/wallet/data/models/response/rates_model.dart';
+import 'package:gigafaucet/features/wallet/domain/entity/balance_meta_info.dart';
 
 class MetaInfoModel extends BalanceMetaInfo {
   const MetaInfoModel({

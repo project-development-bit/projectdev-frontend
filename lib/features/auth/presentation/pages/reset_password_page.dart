@@ -1,7 +1,7 @@
-import 'package:cointiply_app/core/core.dart';
-import 'package:cointiply_app/features/auth/presentation/providers/reset_password_provider.dart';
-import 'package:cointiply_app/features/auth/presentation/widgets/onboarding_background.dart';
-import 'package:cointiply_app/features/auth/presentation/widgets/reset_password_form.dart';
+import 'package:gigafaucet/core/core.dart';
+import 'package:gigafaucet/features/auth/presentation/providers/reset_password_provider.dart';
+import 'package:gigafaucet/features/auth/presentation/widgets/onboarding_background.dart';
+import 'package:gigafaucet/features/auth/presentation/widgets/reset_password_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

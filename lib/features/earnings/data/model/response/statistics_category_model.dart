@@ -1,4 +1,4 @@
-import 'package:cointiply_app/features/earnings/domain/entity/statistics_category.dart';
+import 'package:gigafaucet/features/earnings/domain/entity/statistics_category.dart';
 
 class StatisticsCategoryModel extends StatisticsCategory {
   const StatisticsCategoryModel({

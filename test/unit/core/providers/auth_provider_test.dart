@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:cointiply_app/core/providers/auth_provider.dart';
-import 'package:cointiply_app/features/auth/presentation/providers/logout_provider.dart';
+import 'package:gigafaucet/core/providers/auth_provider.dart';
+import 'package:gigafaucet/features/auth/presentation/providers/logout_provider.dart';
 
 void main() {
   group('Authentication Observable Provider Tests', () {

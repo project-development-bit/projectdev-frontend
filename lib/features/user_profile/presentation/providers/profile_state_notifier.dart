@@ -1,6 +1,6 @@
-// import 'package:cointiply_app/features/auth/domain/entities/user.dart';
-// import 'package:cointiply_app/features/auth/domain/usecases/get_current_user_usecase.dart';
-// import 'package:cointiply_app/features/user_profile/data/models/request/user_update_request.dart';
+// import 'package:gigafaucet/features/auth/domain/entities/user.dart';
+// import 'package:gigafaucet/features/auth/domain/usecases/get_current_user_usecase.dart';
+// import 'package:gigafaucet/features/user_profile/data/models/request/user_update_request.dart';
 // import 'package:flutter_riverpod/flutter_riverpod.dart';
 // import '../../domain/entities/user_profile.dart';
 // import '../../domain/usecases/get_user_profile.dart';

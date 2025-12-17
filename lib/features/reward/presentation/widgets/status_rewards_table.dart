@@ -1,7 +1,7 @@
-import 'package:cointiply_app/core/core.dart';
-import 'package:cointiply_app/features/reward/domain/entities/reward_level.dart';
-import 'package:cointiply_app/features/reward/presentation/widgets/status_reward_header_row.dart';
-import 'package:cointiply_app/features/reward/presentation/widgets/status_reward_row.dart';
+import 'package:gigafaucet/core/core.dart';
+import 'package:gigafaucet/features/reward/domain/entities/reward_level.dart';
+import 'package:gigafaucet/features/reward/presentation/widgets/status_reward_header_row.dart';
+import 'package:gigafaucet/features/reward/presentation/widgets/status_reward_row.dart';
 import 'package:flutter/material.dart';
 
 class StatusRewardsTableSliver extends StatelessWidget {

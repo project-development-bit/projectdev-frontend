@@ -1,5 +1,5 @@
-import 'package:cointiply_app/core/common/model/pagination_model.dart';
-import 'package:cointiply_app/features/wallet/data/models/response/payment_history_model.dart';
+import 'package:gigafaucet/core/common/model/pagination_model.dart';
+import 'package:gigafaucet/features/wallet/data/models/response/payment_history_model.dart';
 import 'package:equatable/equatable.dart';
 
 class PaymentHistoryResponse extends Equatable {

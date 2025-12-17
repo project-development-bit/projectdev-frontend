@@ -1,4 +1,4 @@
-import 'package:cointiply_app/features/user_profile/data/enum/user_level.dart';
+import 'package:gigafaucet/features/user_profile/data/enum/user_level.dart';
 
 import '../../domain/entities/user.dart';
 import '../../../../core/enum/user_role.dart';

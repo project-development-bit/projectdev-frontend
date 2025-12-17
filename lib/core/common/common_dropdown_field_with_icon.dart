@@ -1,11 +1,11 @@
 import 'dart:async';
 
-import 'package:cointiply_app/core/common/common_image_widget.dart';
-import 'package:cointiply_app/core/common/common_text.dart';
-import 'package:cointiply_app/core/theme/app_colors.dart';
+import 'package:gigafaucet/core/common/common_image_widget.dart';
+import 'package:gigafaucet/core/common/common_text.dart';
+import 'package:gigafaucet/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:dropdown_search/dropdown_search.dart';
-import 'package:cointiply_app/core/extensions/extensions.dart';
+import 'package:gigafaucet/core/extensions/extensions.dart';
 
 /// A searchable dropdown field specialized for items needing a flag/icon,
 /// name, and code display in both the list and the selected field.

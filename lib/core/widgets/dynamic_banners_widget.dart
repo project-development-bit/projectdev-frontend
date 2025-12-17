@@ -1,4 +1,4 @@
-import 'package:cointiply_app/core/theme/presentation/providers/app_setting_providers.dart';
+import 'package:gigafaucet/core/theme/presentation/providers/app_setting_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';

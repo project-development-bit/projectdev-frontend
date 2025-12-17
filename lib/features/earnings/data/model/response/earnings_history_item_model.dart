@@ -1,4 +1,4 @@
-import 'package:cointiply_app/features/earnings/domain/entity/earnings_history_item.dart';
+import 'package:gigafaucet/features/earnings/domain/entity/earnings_history_item.dart';
 
 class EarningsHistoryItemModel extends EarningsHistoryItem {
   const EarningsHistoryItemModel({

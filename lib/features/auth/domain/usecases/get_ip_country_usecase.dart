@@ -1,4 +1,4 @@
-import 'package:cointiply_app/core/error/failures.dart';
+import 'package:gigafaucet/core/error/failures.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

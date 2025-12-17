@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:cointiply_app/features/home/presentation/widgets/offer_card.dart';
-import 'package:cointiply_app/features/home/data/models/offer_model.dart';
+import 'package:gigafaucet/features/home/presentation/widgets/offer_card.dart';
+import 'package:gigafaucet/features/home/data/models/offer_model.dart';
 
 void main() {
   group('OfferCard Widget Tests', () {

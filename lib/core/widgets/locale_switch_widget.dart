@@ -1,6 +1,6 @@
-// import 'package:cointiply_app/features/localization/presentation/providers/get_languages_state.dart';
-// import 'package:cointiply_app/features/localization/presentation/providers/get_localization_notifier.dart';
-// import 'package:cointiply_app/features/localization/presentation/providers/localization_notifier_provider.dart';
+// import 'package:gigafaucet/features/localization/presentation/providers/get_languages_state.dart';
+// import 'package:gigafaucet/features/localization/presentation/providers/get_localization_notifier.dart';
+// import 'package:gigafaucet/features/localization/presentation/providers/localization_notifier_provider.dart';
 // import 'package:flutter/material.dart';
 // import 'package:flutter_riverpod/flutter_riverpod.dart';
 
