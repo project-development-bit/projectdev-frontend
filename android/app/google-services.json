@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "645002434672",
+    "project_id": "gigafaucet-dev",
+    "storage_bucket": "gigafaucet-dev.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:645002434672:android:7aebe7d704f45a63a2fcb5",
+        "android_client_info": {
+          "package_name": "com.burgereat.gigafaucet.dev"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjrNhTkizyKefk7fZhPeWZPIrEmQR2hyI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
