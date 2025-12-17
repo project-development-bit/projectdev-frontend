@@ -1,8 +1,13 @@
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/config/app_local_images.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
+import 'package:cointiply_app/features/faucet/presentation/widgets/claim_faucet.dart';
+import 'package:cointiply_app/features/faucet/presentation/widgets/dialog/claim_your_faucet_dialog.dart';
+import 'package:cointiply_app/features/faucet/presentation/widgets/dialog/your_faucet_dialog.dart';
 import 'package:cointiply_app/features/home/presentation/widgets/home_section_container.dart';
 import 'package:flutter/material.dart';
+
+import 'fortune_wheel_widget.dart';
 
 class HomeFeaturesSection extends StatelessWidget {
   const HomeFeaturesSection({super.key});
@@ -92,7 +97,22 @@ class HomeFeaturesSection extends StatelessWidget {
                   runSpacing: 32,
                   alignment: WrapAlignment.center,
                   children: _featureItemsData.map((feature) {
-                    return featuresItemWidget(feature, context);
+                    if (feature['title'] == 'Claim Faucet') {
+                      return ClaimFaucet();
+                    }
+                    return featuresItemWidget(feature, context, () {
+                       if (feature['title'] == 'fortune Wheel') {
+                        showFortuneWheelDialog(context);
+                        return;
+                      }
+                      if (feature['title'] == 'Claim Faucet') {
+                        // Show faucet dialog
+                        // Assuming showYourFaucetDialog is defined elsewhere
+                        showYourFaucetDialog(context, () {
+                          showClaimYourFaucetDialog(context);
+                        });
+                      }
+                    });
                   }).toList(),
                 ),
               ],
@@ -103,62 +123,65 @@ class HomeFeaturesSection extends StatelessWidget {
     );
   }
 
-  SizedBox featuresItemWidget(feature, BuildContext context) {
-    return SizedBox(
-      width: 190,
-      child: Column(
-        children: [
-          SizedBox(
-            width: 190,
-            height: 190,
-            child: Stack(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: Image.asset(
-                    feature['image'],
-                    width: 190,
-                    height: 190,
-                    fit: BoxFit.contain,
-                  ),
-                ),
-                if (feature['description'] != null)
-                  Positioned(
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: Colors.black.withAlpha(150),
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20),
-                        ),
-                      ),
-                      child: CommonText.titleMedium(
-                        feature['description'],
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                        textAlign: TextAlign.center,
-                        highlightFontSize: 24,
-                        highlightColor: context.primary,
-                      ),
+  Widget featuresItemWidget(feature, BuildContext context, Function()? onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: SizedBox(
+        width: 190,
+        child: Column(
+          children: [
+            SizedBox(
+              width: 190,
+              height: 190,
+              child: Stack(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Image.asset(
+                      feature['image'],
+                      width: 190,
+                      height: 190,
+                      fit: BoxFit.contain,
                     ),
                   ),
-              ],
+                  if (feature['description'] != null)
+                    Positioned(
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withAlpha(150),
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            topRight: Radius.circular(20),
+                          ),
+                        ),
+                        child: CommonText.titleMedium(
+                          feature['description'],
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                          textAlign: TextAlign.center,
+                          highlightFontSize: 24,
+                          highlightColor: context.primary,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
             ),
-          ),
-          SizedBox(height: 16.0),
-          CommonText.labelMedium(
-            feature['title'],
-            fontWeight: FontWeight.w700,
-            fontSize: 16,
-            textAlign: TextAlign.center,
-            color: Theme.of(context).colorScheme.onSurface,
-          ),
-        ],
+            SizedBox(height: 16.0),
+            CommonText.labelMedium(
+              feature['title'],
+              fontWeight: FontWeight.w700,
+              fontSize: 16,
+              textAlign: TextAlign.center,
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
+          ],
+        ),
       ),
     );
   }

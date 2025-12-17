@@ -1,5 +1,4 @@
-import 'package:cointiply_app/features/localization/presentation/providers/get_localization_notifier.dart';
-import 'package:cointiply_app/features/localization/presentation/providers/localization_notifier_provider.dart';
+import 'package:cointiply_app/core/core.dart';
 import 'package:cointiply_app/features/user_profile/data/models/request/user_update_request.dart';
 import 'package:cointiply_app/features/user_profile/user_profile.dart';
 import 'package:flutter/material.dart';
@@ -40,56 +39,31 @@ final changeLanguageProvider =
   (ref) {
     final updateUserProfileUsecase =
         ref.watch(updateUserProfileUseCaseProvider);
-    final localeNotifier = ref.read(localizationNotifierProvider.notifier);
     return ChangeLanguageNotifier(
       ChangeLanguageState(),
       updateUserProfileUsecase,
-      localeNotifier,
+      ref,
     );
   },
 );
 
 class ChangeLanguageNotifier extends StateNotifier<ChangeLanguageState> {
   final UpdateUserProfileUsecase _updateUserProfile;
-  final LocalizationController _localeNotifier;
+  // final LocalizationController _localeNotifier;
+  final Ref _ref;
 
   ChangeLanguageNotifier(
     super.state,
     this._updateUserProfile,
-    this._localeNotifier,
+    this._ref,
+    // this._localeNotifier,
   );
 
   /// Map language codes from API (EN, FR, MM) to locale language codes (en, fr, my)
-  String _mapLanguageCodeToLocale(String languageCode) {
-    switch (languageCode.toUpperCase()) {
-      case 'EN':
-        return 'en';
-      case 'FR':
-        return 'fr';
-      case 'MM':
-        return 'my';
-      default:
-        return 'en'; // Default to English
-    }
-  }
-
-  /// Map language codes to country codes for Locale
-  String _mapLanguageCodeToCountry(String languageCode) {
-    switch (languageCode.toUpperCase()) {
-      case 'EN':
-        return 'US';
-      case 'FR':
-        return 'FR';
-      case 'MM':
-        return 'MM';
-      default:
-        return 'US'; // Default to US
-    }
-  }
 
   Future<void> changeLanguage({
     required String languageCode,
-    required String languageName,
+    required String countryName,
     required String userid,
   }) async {
     state = state.copyWith(
@@ -122,13 +96,12 @@ class ChangeLanguageNotifier extends StateNotifier<ChangeLanguageState> {
         (response) async {
           // Continue to update locale
           // Update app locale
-          final localeLanguageCode = _mapLanguageCodeToLocale(languageCode);
-          final localeCountryCode = _mapLanguageCodeToCountry(languageCode);
-          final newLocale = Locale(localeLanguageCode, localeCountryCode);
 
-          await _localeNotifier.changeLocale(newLocale);
+          final newLocale = Locale(languageCode, countryName);
 
-          debugPrint('✅ Language changed to: $languageName ($languageCode)');
+          // await _localeNotifier.changeLocale(newLocale);
+          localizationService.changeLocale(newLocale, _ref);
+          debugPrint('✅ Language changed to: $countryName ($languageCode)');
           debugPrint(
               '✅ Locale set to: ${newLocale.languageCode}-${newLocale.countryCode}');
 

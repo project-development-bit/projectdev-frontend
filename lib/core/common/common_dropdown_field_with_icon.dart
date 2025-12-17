@@ -22,6 +22,7 @@ class SearchableDropdownWithIcon<T> extends StatelessWidget {
     // this.labelText,
     this.hintText,
     this.floatingLabelBehavior,
+    this.placeholder,
   });
 
   /// Function to provide the list of items based on filter (for search/remote loading)
@@ -52,6 +53,8 @@ class SearchableDropdownWithIcon<T> extends StatelessWidget {
   final String? hintText;
 
   final FloatingLabelBehavior? floatingLabelBehavior;
+
+  final Widget? placeholder;
 
   // Builder for the selected item in the closed state (Flag | Name/Code)
   Widget _dropdownBuilder(BuildContext context, T? item) {
@@ -100,7 +103,10 @@ class SearchableDropdownWithIcon<T> extends StatelessWidget {
           SizedBox(
             width: 32,
             height: 21,
-            child: CommonImage(imageUrl: getItemIconUrl(item)),
+            child: CommonImage(
+              imageUrl: getItemIconUrl(item),
+              placeholder: placeholder,
+            ),
           ),
           const SizedBox(width: 12),
           Expanded(

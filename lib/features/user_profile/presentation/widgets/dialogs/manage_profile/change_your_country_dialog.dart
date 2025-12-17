@@ -204,6 +204,10 @@ class _ChangeCountryDialogState extends ConsumerState<ChangeCountryDialog> {
                         getItemCode: (country) => country.code,
                         getItemName: (country) => country.name,
                         getItemIconUrl: (country) => country.flag,
+                        placeholder: Icon(
+                          Icons.flag,
+                          color: context.primary,
+                        ),
                         validator: (value) {
                           if (value == null) {
                             return context
