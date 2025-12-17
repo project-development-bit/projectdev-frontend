@@ -72,4 +72,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'gigafaucet-dev.firebasestorage.app',
     iosBundleId: 'com.burgereat.gigafaucet.dev',
   );
+
 }
