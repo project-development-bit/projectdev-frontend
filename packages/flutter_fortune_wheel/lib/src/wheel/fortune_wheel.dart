@@ -195,13 +195,34 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
     this.width,
     this.height,
     this.wheelCenterPath,
-    this.padding,  this.centerWidgetSize,
+    this.padding,
+    this.centerWidgetSize,
   })  : physics = physics ?? CircularPanPhysics(),
         assert(items.length > 1),
         super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    // Initialize AudioPlayer for tick sound
+    final audioPlayer = useMemoized(() {
+      final player = AudioPlayer();
+      // Configure player for low latency and better web support
+      player.setReleaseMode(ReleaseMode.stop);
+      player.setPlayerMode(PlayerMode.lowLatency);
+      return player;
+    });
+
+    useEffect(() {
+      // Preload the audio file (do not prefix with 'assets/')
+      () async {
+        try {
+          await audioPlayer.setSource(AssetSource('sound/tap.mp3'));
+        } catch (_) {}
+      }();
+      // Dispose audio player when widget is disposed
+      return audioPlayer.dispose;
+    }, []);
+
     // Arrow animation: Setting up the AnimationController and Animation
     final arrowController =
         useAnimationController(duration: const Duration(milliseconds: 300));
@@ -240,6 +261,16 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
       }
       // Start the animation moving forward from the current position
       arrowController.forward();
+    }
+
+    Future<void> _playTickSound() async {
+      try {
+        // Restart from beginning using the same preloaded player
+        
+        audioPlayer.stop();
+        audioPlayer.seek(Duration(milliseconds: 40));
+        audioPlayer.resume();
+      } catch (_) {}
     }
 
     final rotateAnimCtrl = useAnimationController(duration: duration);
@@ -316,7 +347,8 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
                         lastVibratedAngle,
                         items.length,
                         hapticImpact,
-                        _animateArrow, // _tetikle fonksiyonunu burada geçiriyoruz
+                        _animateArrow,
+                        _playTickSound,
                       );
                       if (focusedIndex != null) {
                         onFocusItemChanged?.call(focusedIndex % items.length);
@@ -438,13 +470,14 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
     );
   }
 
-  /// * vibrate and animate arrow when cross border
+  /// * vibrate, animate arrow, and play sound when cross border
   int? _borderCross(
     double angle,
     ObjectRef<double> lastVibratedAngle,
     int itemsNumber,
     HapticImpact hapticImpact,
     VoidCallback animateArrow,
+    Future<void> Function() playTickSound,
   ) {
     final step = 360 / itemsNumber;
     final angleDegrees = (angle * 180 / _math.pi).abs() + step / 2;
@@ -463,6 +496,10 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
     final hapticFeedbackFunction;
     switch (hapticImpact) {
       case HapticImpact.none:
+        // Play sound even if haptic is disabled
+        playTickSound();
+        // Update last segment to avoid repeated triggers within same slice
+        lastVibratedAngle.value = (angleDegrees ~/ step) * step;
         return index;
       case HapticImpact.heavy:
         hapticFeedbackFunction = HapticFeedback.heavyImpact;
@@ -476,6 +513,7 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
     }
     hapticFeedbackFunction();
     animateArrow();
+    playTickSound();
     lastVibratedAngle.value = (angleDegrees ~/ step) * step;
     return index;
   }

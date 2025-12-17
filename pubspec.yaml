@@ -83,6 +83,7 @@ dependencies:
   crop_image: ^1.0.16 
   croppy: ^1.4.1
   custom_image_crop: ^0.0.13
+  audioplayers: ^6.5.1
   flutter_fortune_wheel: 
     path: ./packages/flutter_fortune_wheel
   
@@ -136,6 +137,7 @@ flutter:
     - assets/theme/
     - assets/images/icons/
     - assets/images/coins/
+    - assets/sound/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 

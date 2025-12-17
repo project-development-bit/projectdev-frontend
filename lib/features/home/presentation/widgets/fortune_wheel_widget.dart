@@ -89,10 +89,10 @@ class _FortuneWheelWidgetState extends State<FortuneWheelWidget> {
                         ),
                         animateFirst: false,
                         physics: CircularPanPhysics(
-                          duration: Duration(seconds: 4),
+                          duration: Duration(seconds: 5),
                           curve: Curves.decelerate,
                         ),
-                        rotationCount: 20,
+                        rotationCount: 10,
                         selected: selected.stream,
                         onAnimationStart: () {
                           // Do something when the animation starts
