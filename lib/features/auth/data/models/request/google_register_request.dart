@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:gigafaucet/core/enum/user_role.dart';
 
 /// Login request model for API calls
 class GoogleRegisterRequest extends Equatable {
@@ -9,6 +10,8 @@ class GoogleRegisterRequest extends Equatable {
     required this.countryCode,
     required this.userAgent,
     required this.deviceFingerprint,
+    required this.role,
+    this.referralCode,
   });
 
   /// User's Firebase UserCredential obtained from Google sign-in
@@ -26,6 +29,10 @@ class GoogleRegisterRequest extends Equatable {
   // Device unique identifier
   final String deviceFingerprint;
 
+  final String? referralCode;
+
+  final UserRole role;
+
   /// Convert to JSON for API request
   Future<Map<String, dynamic>> toJson() async {
     if (userCredential == null) {
@@ -35,8 +42,10 @@ class GoogleRegisterRequest extends Equatable {
       'country_code': countryCode,
       'userAgent': userAgent,
       'device_fingerprint': deviceFingerprint,
-      'id_token': userCredential?.credential?.token ?? '',
+      'idToken': userCredential?.credential?.accessToken ?? '',
       'avatar': userCredential?.user?.photoURL ?? '',
+      'role': role.toString(),
+      'referralCode': referralCode,
     };
 
     // Only add recaptchaToken if it's not null
@@ -54,6 +63,8 @@ class GoogleRegisterRequest extends Equatable {
     String? countryCode,
     String? userAgent,
     String? deviceFingerprint,
+    UserRole? role,
+    String? referralCode,
   }) {
     return GoogleRegisterRequest(
       userCredential: userCredential ?? this.userCredential,
@@ -61,6 +72,8 @@ class GoogleRegisterRequest extends Equatable {
       countryCode: countryCode ?? this.countryCode,
       userAgent: userAgent ?? this.userAgent,
       deviceFingerprint: deviceFingerprint ?? this.deviceFingerprint,
+      role: role ?? this.role,
+      referralCode: referralCode ?? this.referralCode,
     );
   }
 

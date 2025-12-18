@@ -35,7 +35,7 @@ class GoogleLoginRequest extends Equatable {
       'country_code': countryCode,
       'userAgent': userAgent,
       'device_fingerprint': deviceFingerprint,
-      'id_token': userCredential?.credential?.token ?? '',
+      'idToken': userCredential?.credential?.accessToken ?? '',
     };
 
     // Only add recaptchaToken if it's not null

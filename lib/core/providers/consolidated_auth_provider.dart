@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gigafaucet/core/enum/user_role.dart';
 import '../../features/auth/presentation/providers/login_provider.dart';
 import '../../features/auth/presentation/providers/logout_provider.dart';
 import '../../features/auth/presentation/providers/register_provider.dart';
@@ -240,6 +241,18 @@ class AuthActions {
   }) async {
     final loginNotifier = _ref.read(loginNotifierProvider.notifier);
     await loginNotifier.googleSignIn(
+        countryCode: countryCode, onError: onError, onSuccess: onSuccess);
+  }
+
+  Future<void> googleSignUp({
+    required String countryCode,
+    VoidCallback? onSuccess,
+    UserRole? role,
+    String? referralCode,
+    Function(String)? onError,
+  }) async {
+    final loginNotifier = _ref.read(loginNotifierProvider.notifier);
+    await loginNotifier.googleSignUp(
         countryCode: countryCode, onError: onError, onSuccess: onSuccess);
   }
 

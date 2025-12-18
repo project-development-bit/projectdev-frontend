@@ -4,6 +4,7 @@ import 'package:gigafaucet/core/common/custom_buttom_widget.dart';
 import 'package:gigafaucet/core/theme/app_colors.dart';
 import 'package:gigafaucet/features/auth/presentation/providers/ip_country_state.dart';
 import 'package:gigafaucet/features/auth/presentation/providers/selected_country_provider.dart';
+import 'package:gigafaucet/features/auth/presentation/widgets/google_signup_buttom.dart';
 import 'package:gigafaucet/features/auth/presentation/widgets/onboarding_background.dart';
 import 'package:gigafaucet/features/terms_privacy/presentation/services/terms_privacy_navigation_service.dart';
 import 'package:gigafaucet/features/auth/presentation/providers/ip_country_provider.dart';
@@ -496,7 +497,36 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
               borderRadius: 12,
               fontSize: 14,
             ),
+            const SizedBox(height: 24),
 
+            Row(
+              children: [
+                Expanded(
+                  child: Divider(
+                    color: context.outline.withAlpha(15),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: CommonText.bodySmall(
+                    localizations?.translate('or') ?? 'OR',
+                    color: context.onSurfaceVariant,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Expanded(
+                  child: Divider(
+                    color: context.outline.withAlpha(15),
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 24),
+            GoogleSignupButton(
+              referralCode: widget.referralCode,
+              agreeToTerms: _agreeToTerms,
+            ),
             const SizedBox(height: 32),
 
             // Already have account link
