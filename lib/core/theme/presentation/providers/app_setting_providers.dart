@@ -1,3 +1,5 @@
+import 'package:cointiply_app/core/theme/domain/usecases/asset_theme_usecase.dart';
+
 import '../../../providers/theme_provider.dart' as theme_provider;
 
 import 'package:cointiply_app/core/theme/data/models/app_settings_model.dart';
@@ -47,6 +49,7 @@ final appSettingsThemeProvider =
   return AppSettingsNotifier(
     getLocalAppSettingsUseCase: ref.watch(getLocalAppSettingsUseCaseProvider),
     getRemoteAppSettingsUseCase: ref.watch(getAppSettingsUseCaseProvider),
+    getAssetThemeUsecase: ref.watch(themeAssetUsecaseProvider),
   );
 });
 
