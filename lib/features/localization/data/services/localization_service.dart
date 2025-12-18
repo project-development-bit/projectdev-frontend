@@ -39,8 +39,12 @@ class LocalizationService {
       Map<String, dynamic> jsonMap = jsonString ?? {};
       if (jsonMap.isEmpty) {
         try {
+          final languageCode =
+              locale.languageCode == "my" || locale.languageCode == "mm"
+                  ? "my"
+                  : "en";
           final jsonString = await rootBundle.loadString(
-            '$_localizationPath/${locale.languageCode}.json',
+            '$_localizationPath/$languageCode.json',
           );
           jsonMap = json.decode(jsonString);
         } catch (e) {
