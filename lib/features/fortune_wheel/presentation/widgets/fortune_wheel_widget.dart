@@ -1,9 +1,11 @@
 import 'dart:async';
 
+import 'package:cointiply_app/core/common/common_loading_widget.dart';
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
 import 'package:cointiply_app/core/config/app_local_images.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
+import 'package:cointiply_app/features/fortune_wheel/presentation/providers/fortune_wheel_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,23 +21,49 @@ final wheelProvider = StateProvider<int>((ref) {
   return 0;
 });
 
-class FortuneWheelWidget extends StatefulWidget {
+class FortuneWheelWidget extends ConsumerStatefulWidget {
   const FortuneWheelWidget({super.key});
 
   @override
-  State<FortuneWheelWidget> createState() => _FortuneWheelWidgetState();
+  ConsumerState<FortuneWheelWidget> createState() => _FortuneWheelWidgetState();
 }
 
-class _FortuneWheelWidgetState extends State<FortuneWheelWidget> {
-  StreamController<int> selected = StreamController<int>();
+class _FortuneWheelWidgetState extends ConsumerState<FortuneWheelWidget> {
+  StreamController<int> selected = StreamController<int>.broadcast();
 
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(fortuneWheelProvider.notifier).fetchFortuneWheelRewards(
+        onSuccess: () {
+          debugPrint('🎡 Rewards loaded successfully');
+        },
+        onError: (message) {
+          debugPrint('🎡 Error loading rewards: $message');
+          // Show error to user
+          if (mounted) {
+            context.showSnackBar(message: message);
+          }
+        },
+      );
+    });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(fortuneWheelProvider);
+    if (state is FortuneWheelLoading) {
+      return Center(child: CommonLoadingWidget.medium());
+    } else if (state is FortuneWheelError) {
+      return Center(
+        child: CommonText.bodyMedium(
+          state.message,
+          color: Colors.red,
+        ),
+      );
+    }
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -134,7 +162,7 @@ class _FortuneWheelWidgetState extends State<FortuneWheelWidget> {
             title: context.translate("Spin"),
             fontSize: 14,
             height: 40,
-            isViolet:true,
+            isViolet: true,
             padding: EdgeInsets.symmetric(horizontal: 40, vertical: 5),
             onTap: () {
               setState(() {
@@ -143,5 +171,11 @@ class _FortuneWheelWidgetState extends State<FortuneWheelWidget> {
             })
       ],
     );
+  }
+
+  @override
+  void dispose() {
+    selected.close();
+    super.dispose();
   }
 }
