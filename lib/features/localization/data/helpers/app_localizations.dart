@@ -26,7 +26,14 @@ class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
 
   @override
   bool isSupported(Locale locale) {
-    return ref.read(getLanguagesNotifierProvider).localeList.contains(locale);
+    final localeList = ref.read(getLanguagesNotifierProvider).localeList;
+    return (localeList.isNotEmpty
+            ? localeList
+            : [
+                Locale('en', 'US'),
+                Locale('my', 'MM'),
+              ])
+        .contains(locale);
   }
 
   @override

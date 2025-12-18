@@ -19,15 +19,16 @@ class ClaimFaucet extends ConsumerWidget {
     final faucetState = ref.watch(getFaucetNotifierProvider);
     final status = faucetState.status;
 
-    if (status == null) {
-      return const SizedBox.shrink();
-    }
+    // if (status == null) {
+    //   print('ClaimFaucet: Faucet status is null');
+    //   return const SizedBox.shrink();
+    // }
 
     final countdown = ref.watch(
       faucetCountdownProvider(status),
     );
 
-    final timeText = status.canClaim
+    final timeText = status?.canClaim ?? false
         ? context.translate('ready')
         : '${countdown.hours.toString().padLeft(2, '0')}:'
             '${countdown.minutes.toString().padLeft(2, '0')}:'

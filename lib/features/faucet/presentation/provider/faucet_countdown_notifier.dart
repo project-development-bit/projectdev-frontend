@@ -6,14 +6,18 @@ import 'faucet_countdown_state.dart';
 class FaucetCountdownNotifier extends StateNotifier<FaucetCountdownState> {
   Timer? _timer;
 
-  FaucetCountdownNotifier(ActualFaucetStatus status)
+  FaucetCountdownNotifier(ActualFaucetStatus? status)
       : super(_calculate(status)) {
     _start(status);
   }
 
   static FaucetCountdownState _calculate(
-    ActualFaucetStatus status,
+    ActualFaucetStatus? status,
   ) {
+    if (status == null) {
+      return FaucetCountdownState.zero();
+    }
+
     final diff = status.nextFaucetAt.difference(DateTime.now());
 
     if (diff.isNegative || diff.inSeconds <= 0) {
@@ -32,7 +36,7 @@ class FaucetCountdownNotifier extends StateNotifier<FaucetCountdownState> {
     );
   }
 
-  void _start(ActualFaucetStatus status) {
+  void _start(ActualFaucetStatus? status) {
     _timer = Timer.periodic(
       const Duration(seconds: 1),
       (_) {
