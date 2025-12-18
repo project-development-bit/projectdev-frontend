@@ -181,7 +181,7 @@ class _MyAppState extends ConsumerState<MyApp> {
                     ? 427
                     : context.isMobile
                         ? context.screenWidth * 0.8
-                        : context.screenWidth * 0.6,
+                        : context.screenWidth * 0.4,
               ))),
         ),
       );
