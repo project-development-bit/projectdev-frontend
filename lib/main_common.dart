@@ -166,13 +166,12 @@ class _MyAppState extends ConsumerState<MyApp> {
           body: Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
-                    repeat: ImageRepeat.repeat,
                     image: AssetImage(
-                      context.isMobile
+                      !context.isMobile
                           ? AppLocalImages.splashBackground
                           : AppLocalImages.splashBackgroundMobile,
                     ),
-                    fit: BoxFit.fitWidth,
+                    fit: context.isMobile ? BoxFit.fitWidth : BoxFit.cover,
                     alignment: Alignment.topCenter),
               ),
               child: Center(
