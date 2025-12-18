@@ -169,4 +169,8 @@ class AppLocalImages {
   static const String wheelCenterPath = "assets/images/wheel_center_path.png";
   // Faucet Images
   static const String nextFaucetBg = "assets/images/bg/next_faucet_bg.png";
+  static const String splashLogo = "assets/images/splash_logo.png";
+  static const String splashBackground = "assets/images/splash_background.png";
+  static const String splashBackgroundMobile =
+      "assets/images/splash_background_mobile.png";
 }
