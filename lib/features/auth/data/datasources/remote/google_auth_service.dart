@@ -24,6 +24,7 @@ class GoogleAuthService {
       final userCredential =
           await FirebaseAuth.instance.signInWithCredential(credential);
       final firebaseUser = userCredential.user;
+      print('Google sign-in successful: ${firebaseUser?.email}');
 
       if (firebaseUser == null) {
         throw Exception("Failed to sign in with Google");

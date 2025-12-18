@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gigafaucet/core/config/api_endpoints.dart';
 import 'package:gigafaucet/core/network/base_dio_client.dart';
 import 'package:gigafaucet/features/auth/data/models/register_request.dart';
@@ -28,7 +27,6 @@ import 'package:gigafaucet/features/auth/data/models/reset_password_request.dart
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 /// Provider for the authentication remote data source
 final authRemoteDataSourceProvider = Provider<AuthRemoteDataSource>(
@@ -85,21 +83,12 @@ abstract class AuthRemoteDataSource {
 
   /// Disable 2FA for the authenticated user
   Future<Disable2FAResponse> disable2FA(Disable2FARequest request);
-
-  /// Sign in with Google OAuth
-  Future<User> googleSignIn();
 }
 
 /// Implementation of [AuthRemoteDataSource] that handles HTTP requests
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   /// HTTP client for making network requests
   final DioClient dioClient;
-
-  final GoogleSignIn _googleSignIn = GoogleSignIn(
-      clientId:
-          "645002434672-nji58g0s1sdqfpu679h3h7cc3v9diaue.apps.googleusercontent.com");
-
-  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   /// Creates an instance of [AuthRemoteDataSourceImpl]
   AuthRemoteDataSourceImpl(this.dioClient);
@@ -746,45 +735,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     } catch (e) {
       // Handle any other unexpected exceptions
       throw Exception('Unexpected error during verification: $e');
-    }
-  }
-
-  @override
-  Future<User> googleSignIn() async {
-    print('Remote Starting Google sign-in process...');
-    try {
-      print('Remote Initiating GoogleSignIn...');
-      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-      print('Remote Google sign-in account obtained.');
-      if (googleUser == null) {
-        print('Remote Google sign-in aborted by user.');
-        throw Exception("Google sign in aborted");
-      }
-      print('Remote Retrieving Google authentication tokens...');
-
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
-      print('Remote Google authentication tokens obtained.');
-      final AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
-      print('Remote Signing in with Firebase using Google credentials...');
-
-      final UserCredential userCredential =
-          await FirebaseAuth.instance.signInWithCredential(credential);
-      final User? firebaseUser = userCredential.user;
-
-      if (firebaseUser == null) {
-        print("Google sign-in failed: User is null");
-        throw Exception("Failed to sign in with Google");
-      }
-
-      print('Google sign-in successful: ${firebaseUser.email}');
-      return firebaseUser;
-    } catch (e) {
-      print('Remote Google sign-in failed: $e');
-      throw Exception("Google sign in failed: $e");
     }
   }
 }
