@@ -8,7 +8,7 @@ class GoogleAuthService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
-  Future<User> signInWithGoogle() async {
+  Future<UserCredential> signInWithGoogle() async {
     try {
       final googleUser = await _googleSignIn.signIn();
       if (googleUser == null) {
@@ -29,7 +29,7 @@ class GoogleAuthService {
       if (firebaseUser == null) {
         throw Exception("Failed to sign in with Google");
       }
-      return firebaseUser;
+      return userCredential;
     } catch (e) {
       rethrow; // Let the caller handle it further if needed
     }

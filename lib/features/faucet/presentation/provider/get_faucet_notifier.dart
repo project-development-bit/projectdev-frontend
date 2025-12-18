@@ -1,4 +1,3 @@
-import 'package:gigafaucet/core/usecases/usecase.dart';
 import 'package:gigafaucet/features/faucet/data/model/actual_faucet_status_model.dart';
 import 'package:gigafaucet/features/faucet/domain/usecases/get_faucet_status_usecase.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

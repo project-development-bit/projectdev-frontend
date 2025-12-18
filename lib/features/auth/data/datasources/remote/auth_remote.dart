@@ -3,6 +3,8 @@ import 'package:gigafaucet/core/network/base_dio_client.dart';
 import 'package:gigafaucet/features/auth/data/models/register_request.dart';
 import 'package:gigafaucet/features/auth/data/models/login_request.dart';
 import 'package:gigafaucet/features/auth/data/models/login_response_model.dart';
+import 'package:gigafaucet/features/auth/data/models/request/google_login_request.dart';
+import 'package:gigafaucet/features/auth/data/models/request/google_register_request.dart';
 import 'package:gigafaucet/features/auth/data/models/user_model.dart';
 import 'package:gigafaucet/features/auth/data/models/resend_code_request.dart';
 import 'package:gigafaucet/features/auth/data/models/resend_code_response.dart';
@@ -39,9 +41,11 @@ final authRemoteDataSourceProvider = Provider<AuthRemoteDataSource>(
 abstract class AuthRemoteDataSource {
   /// Register a new user with the provided request data
   Future<void> register(RegisterRequest request);
+  Future<void> googleRegister(GoogleRegisterRequest request);
 
   /// Login user with email and password
   Future<LoginResponseModel> login(LoginRequest request);
+  Future<LoginResponseModel> googleLogin(GoogleLoginRequest request);
 
   /// Get current user information from server
   Future<UserModel> whoami();
@@ -98,6 +102,32 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     try {
       await dioClient.post(
         registerEndpoints,
+        data: await request.toJson(),
+      );
+
+      // Successful responses (200-299) don't need explicit handling
+      // Dio automatically throws for non-2xx responses
+    } on DioException catch (e) {
+      // Extract server error message from response data
+      final serverMessage = _extractServerErrorMessage(e.response?.data);
+
+      // Create new DioException with server message or appropriate fallback
+      throw DioException(
+        requestOptions: e.requestOptions,
+        response: e.response,
+        message: serverMessage ?? _getFallbackMessage(e),
+      );
+    } catch (e) {
+      // Handle any other unexpected exceptions
+      throw Exception('Unexpected error during code verification: $e');
+    }
+  }
+
+  @override
+  Future<void> googleRegister(GoogleRegisterRequest request) async {
+    try {
+      await dioClient.post(
+        googleRegisterEndpoints,
         data: await request.toJson(),
       );
 
@@ -261,6 +291,45 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     try {
       final response = await dioClient.post(
         loginEndpoints,
+        data: await request.toJson(),
+      );
+
+      return LoginResponseModel.fromJson(response.data as Map<String, dynamic>);
+    } on DioException catch (e) {
+      debugPrint('❌ Login DioException: ${e.message}');
+      debugPrint('❌ Request URL: ${e.requestOptions.uri}');
+      debugPrint('❌ Response status: ${e.response?.statusCode}');
+      debugPrint('❌ Response data: ${e.response?.data}');
+
+      // Check for the specific "Client error" message
+      if (e.response?.data?.toString().contains('Client error') == true ||
+          e.message?.contains('Client error') == true) {
+        debugPrint('🚨 FOUND "CLIENT ERROR" MESSAGE IN LOGIN!');
+        debugPrint('🚨 Full response: ${e.response?.data}');
+        debugPrint('🚨 Full message: ${e.message}');
+        debugPrint('🚨 This error is likely from the API server!');
+      }
+
+      // Extract server error message from response data
+      final serverMessage = _extractServerErrorMessage(e.response?.data);
+
+      // Create new DioException with server message or appropriate fallback
+      throw DioException(
+        requestOptions: e.requestOptions,
+        response: e.response,
+        message: serverMessage ?? _getFallbackMessage(e),
+      );
+    } catch (e) {
+      // Handle any other unexpected exceptions
+      throw Exception('Unexpected error during login: $e');
+    }
+  }
+
+  @override
+  Future<LoginResponseModel> googleLogin(GoogleLoginRequest request) async {
+    try {
+      final response = await dioClient.post(
+        googleLoginEndpoints,
         data: await request.toJson(),
       );
 

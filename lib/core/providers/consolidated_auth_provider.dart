@@ -233,6 +233,16 @@ class AuthActions {
         onSuccess: onSuccess);
   }
 
+  Future<void> googleLogin({
+    required String countryCode,
+    VoidCallback? onSuccess,
+    Function(String)? onError,
+  }) async {
+    final loginNotifier = _ref.read(loginNotifierProvider.notifier);
+    await loginNotifier.googleSignIn(
+        countryCode: countryCode, onError: onError, onSuccess: onSuccess);
+  }
+
   /// Logout current user
   Future<void> logout() async {
     final logoutNotifier = _ref.read(logoutNotifierProvider.notifier);

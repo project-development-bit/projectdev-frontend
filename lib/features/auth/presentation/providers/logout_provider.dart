@@ -1,4 +1,3 @@
-import 'package:gigafaucet/features/faucet/presentation/provider/faucet_notifier_provider.dart';
 import 'package:gigafaucet/features/home/presentation/providers/tutorial_provider.dart';
 import 'package:gigafaucet/features/localization/domain/usecases/clear_selected_language_usecase.dart';
 import 'package:flutter/material.dart';

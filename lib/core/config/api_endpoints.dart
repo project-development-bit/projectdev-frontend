@@ -1,5 +1,7 @@
 const registerEndpoints = 'users';
+const googleRegisterEndpoints = 'users/google/signup';
 const loginEndpoints = 'users/login';
+const googleLoginEndpoints = 'users/google/signin';
 const resendCodeEndpoints = 'users/resend-code';
 const forgetPasswordResendCodeEndpoints = 'users/resend-forgot-password-code';
 const forgetPasswordVerifyCodeEndpoints = 'users/verify-forgot-password';

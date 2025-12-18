@@ -4,7 +4,6 @@ import 'package:gigafaucet/core/config/app_local_images.dart';
 import 'package:gigafaucet/core/theme/app_colors.dart';
 import 'package:gigafaucet/core/widgets/cloudflare_turnstille_widgte.dart';
 import 'package:gigafaucet/core/providers/turnstile_provider.dart';
-import 'package:gigafaucet/features/auth/presentation/providers/social_login_notifier.dart';
 import 'package:gigafaucet/features/auth/presentation/widgets/remember_me_widget.dart';
 import 'package:gigafaucet/features/auth/presentation/providers/ip_country_provider.dart';
 import 'package:flutter/material.dart';
@@ -222,6 +221,55 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
     }
   }
 
+  void _handleGoogleLogin() async {
+    // Check Turnstile verification
+    final turnstileCanAttempt =
+        ref.read(turnstileNotifierProvider(TurnstileActionEnum.login))
+            is TurnstileSuccess;
+
+    if (!turnstileCanAttempt) {
+      final localizations = AppLocalizations.of(context);
+      context.showErrorSnackBar(
+        message: localizations?.translate('turnstile_required') ??
+            'Please complete the security verification',
+      );
+      return;
+    }
+
+    // Get the Turnstile token
+    final turnstileToken = turnstileCanAttempt
+        ? (ref.read(turnstileNotifierProvider(TurnstileActionEnum.login))
+                as TurnstileSuccess)
+            .token
+        : null;
+
+    if (turnstileToken == null) {
+      final localizations = AppLocalizations.of(context);
+      context.showErrorSnackBar(
+        message: localizations?.translate('turnstile_token_missing') ??
+            'Security verification token is missing. Please try again.',
+      );
+      return;
+    }
+
+    // Use consolidated auth actions for login
+    final authActions = ref.read(authActionsProvider);
+
+    // Reset previous states
+    authActions.resetAllStates();
+    final ipState = ref.read(getIpCountryNotifierProvider);
+
+    await authActions.googleLogin(
+        countryCode: ipState.country?.code ?? "Unknown",
+        onSuccess: () async {
+          widget.onLoginSuccess?.call();
+        },
+        onError: (v) {
+          context.showSnackBar(
+              message: v, backgroundColor: Theme.of(context).colorScheme.error);
+        });
+  }
+
   void _handleForgotPassword() {
     widget.onForgotPassword?.call();
   }
@@ -372,7 +420,7 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
             CommonButton(
               text: 'Google',
               onPressed: () {
-                ref.read(socialLoginNotifierProvider.notifier).googleSignIn();
+                _handleGoogleLogin();
               },
               icon: CommonImage(
                 imageUrl: AppLocalImages.googleLogo,

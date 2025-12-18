@@ -1,3 +1,6 @@
+import 'package:gigafaucet/features/auth/data/models/login_response_model.dart';
+import 'package:gigafaucet/features/auth/data/models/request/google_login_request.dart';
+import 'package:gigafaucet/features/auth/data/models/request/google_register_request.dart';
 import 'package:gigafaucet/features/auth/data/models/verify_code_forgot_password_response.dart';
 import 'package:dartz/dartz.dart';
 import '../../../../core/error/failures.dart';
@@ -23,7 +26,6 @@ import '../../data/models/disable_2fa_response.dart';
 import '../../data/models/forgot_password_request.dart';
 import '../../data/models/forgot_password_response.dart';
 import '../../data/models/reset_password_request.dart';
-import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
 
 /// Authentication repository interface
 ///
@@ -96,5 +98,7 @@ abstract class AuthRepository {
   Future<Either<Failure, Disable2FAResponse>> disable2FA(
       Disable2FARequest request);
 
-  Future<Either<Failure, fb_auth.User>> googleSignIn();
+  Future<Either<Failure, LoginResponseModel>> googleSignIn(
+      GoogleLoginRequest request);
+  Future<Either<Failure, void>> googleRegister(GoogleRegisterRequest request);
 }

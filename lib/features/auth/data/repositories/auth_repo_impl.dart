@@ -1,10 +1,11 @@
 import 'package:gigafaucet/core/error/error_model.dart';
 import 'package:gigafaucet/features/auth/data/datasources/remote/google_auth_service.dart';
+import 'package:gigafaucet/features/auth/data/models/request/google_login_request.dart';
+import 'package:gigafaucet/features/auth/data/models/request/google_register_request.dart';
 import 'package:gigafaucet/features/auth/data/models/verify_code_forgot_password_response.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
 import '../../../../core/error/failures.dart';
 import '../../../../core/services/secure_storage_service.dart';
 import '../../domain/repositories/auth_repository.dart';
@@ -434,10 +435,31 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<Failure, fb_auth.User>> googleSignIn() async {
+  Future<Either<Failure, LoginResponseModel>> googleSignIn(
+      GoogleLoginRequest request) async {
     try {
       final userModel = await googleAuthService.signInWithGoogle();
-      return Right(userModel);
+      request = request.copyWith(userCredential: userModel);
+      final response = await remoteDataSource.googleLogin(request);
+      return Right(response);
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> googleRegister(
+      GoogleRegisterRequest request) async {
+    try {
+      final userModel = await googleAuthService.signInWithGoogle();
+      request = request.copyWith(userCredential: userModel);
+      await remoteDataSource.googleRegister(request);
+      return const Right(null);
+    } on DioException catch (e) {
+      return Left(ServerFailure(
+        message: e.message,
+        statusCode: e.response?.statusCode,
+      ));
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));
     }
