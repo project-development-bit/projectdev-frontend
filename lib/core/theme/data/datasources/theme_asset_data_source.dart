@@ -1,19 +1,19 @@
 import 'dart:convert';
 import 'package:cointiply_app/core/config/app_assets.dart';
+import 'package:cointiply_app/core/theme/data/models/app_settings_model.dart';
 import 'package:flutter/services.dart';
-import '../models/theme_config_model.dart';
 
 /// Data source for loading theme from asset files
 abstract class ThemeAssetDataSource {
   /// Load default theme from JSON asset file
-  Future<ThemeConfigModel> loadDefaultTheme();
+  Future<AppSettingsData> loadDefaultTheme();
 }
 
 class ThemeAssetDataSourceImpl implements ThemeAssetDataSource {
   static const String _defaultThemePath = AppAssets.defaultTheme;
 
   @override
-  Future<ThemeConfigModel> loadDefaultTheme() async {
+  Future<AppSettingsData> loadDefaultTheme() async {
     try {
       // Load JSON file from assets
       final jsonString = await rootBundle.loadString(_defaultThemePath);
@@ -22,7 +22,7 @@ class ThemeAssetDataSourceImpl implements ThemeAssetDataSource {
       final jsonData = json.decode(jsonString) as Map<String, dynamic>;
 
       // Convert to model
-      return ThemeConfigModel.fromJson(jsonData);
+      return AppSettingsData.fromJson(jsonData);
     } catch (e) {
       throw Exception('Failed to load default theme from assets: $e');
     }
