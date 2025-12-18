@@ -1,5 +1,5 @@
-import 'package:cointiply_app/core/common/common_loading_widget.dart';
 import 'package:cointiply_app/core/config/app_local_images.dart';
+import 'package:cointiply_app/core/core.dart';
 import 'package:cointiply_app/core/theme/presentation/providers/app_setting_providers.dart';
 import 'package:cointiply_app/core/theme/presentation/providers/app_settings_norifier.dart';
 import 'package:cointiply_app/features/localization/presentation/providers/get_languages_state.dart';
@@ -11,13 +11,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/foundation.dart';
 import 'package:url_strategy/url_strategy.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:cointiply_app/core/services/database_service.dart';
-import 'package:cointiply_app/features/localization/data/helpers/app_localizations.dart';
-import 'core/providers/theme_provider.dart';
-import 'core/theme/app_theme.dart';
-import 'core/config/app_flavor.dart';
-import 'core/config/flavor_manager.dart';
-import 'core/widgets/flavor_banner.dart';
 import 'core/services/platform_recaptcha_service.dart';
 import 'routing/app_router.dart';
 
@@ -175,12 +168,22 @@ class _MyAppState extends ConsumerState<MyApp> {
                 image: DecorationImage(
                     repeat: ImageRepeat.repeat,
                     image: AssetImage(
-                      AppLocalImages.homeBackgroundDesktop,
+                      context.isMobile
+                          ? AppLocalImages.splashBackground
+                          : AppLocalImages.splashBackgroundMobile,
                     ),
                     fit: BoxFit.fitWidth,
                     alignment: Alignment.topCenter),
               ),
-              child: Center(child: CommonLoadingWidget.large())),
+              child: Center(
+                  child: Image.asset(
+                AppLocalImages.splashLogo,
+                width: context.isDesktop
+                    ? 427
+                    : context.isMobile
+                        ? context.screenWidth * 0.8
+                        : context.screenWidth * 0.6,
+              ))),
         ),
       );
     }
