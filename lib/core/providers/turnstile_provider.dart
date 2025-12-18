@@ -192,6 +192,9 @@ enum TurnstileActionEnum {
   contactUs(name: 'contact_us'),
   tutorial(name: 'tutorial'),
   faucetClaim(name: 'faucet_claim'),
+  googleSignIn(name: 'google-signin'),
+  googleSignUp(name: 'google-signup'),
+
   other(name: 'other');
 
   final String name;

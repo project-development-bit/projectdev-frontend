@@ -4,6 +4,8 @@ import 'package:gigafaucet/core/services/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gigafaucet/features/auth/data/models/request/google_login_request.dart';
+import 'package:gigafaucet/features/auth/data/models/request/google_register_request.dart';
+import 'package:gigafaucet/features/auth/domain/usecases/google_siginup_usecase.dart';
 import 'package:gigafaucet/features/auth/domain/usecases/google_signin_usecase.dart';
 import '../../../../core/services/database_service.dart';
 import '../../../../core/services/secure_storage_service.dart';
@@ -218,8 +220,8 @@ class LoginNotifier extends StateNotifier<LoginState> {
       String? turnstileToken;
 
       debugPrint('🔐 Checking Turnstile verification...');
-      final turnstileState =
-          _ref.read(turnstileNotifierProvider(TurnstileActionEnum.login));
+      final turnstileState = _ref
+          .read(turnstileNotifierProvider(TurnstileActionEnum.googleSignIn));
 
       if (turnstileState is TurnstileSuccess) {
         turnstileToken = turnstileState.token;
@@ -351,8 +353,8 @@ class LoginNotifier extends StateNotifier<LoginState> {
       String? turnstileToken;
 
       debugPrint('🔐 Checking Turnstile verification...');
-      final turnstileState =
-          _ref.read(turnstileNotifierProvider(TurnstileActionEnum.register));
+      final turnstileState = _ref
+          .read(turnstileNotifierProvider(TurnstileActionEnum.googleSignUp));
 
       if (turnstileState is TurnstileSuccess) {
         turnstileToken = turnstileState.token;
@@ -367,7 +369,9 @@ class LoginNotifier extends StateNotifier<LoginState> {
         return;
       }
 
-      final loginRequest = GoogleLoginRequest(
+      final loginRequest = GoogleRegisterRequest(
+        role: role,
+        referralCode: referralCode,
         countryCode: countryCode,
         recaptchaToken: turnstileToken,
         deviceFingerprint: await _deviceInfo.getUniqueIdentifier() ?? '',
@@ -376,7 +380,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
 
       debugPrint('📤 Sending login request with Turnstile token');
 
-      final loginUseCase = _ref.read(googleSignInUseCaseProvider);
+      final loginUseCase = _ref.read(googleSignUpUseCaseProvider);
 
       // Add timeout to prevent infinite loading
       final result = await loginUseCase(loginRequest).timeout(

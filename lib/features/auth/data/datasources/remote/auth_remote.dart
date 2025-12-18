@@ -41,7 +41,7 @@ final authRemoteDataSourceProvider = Provider<AuthRemoteDataSource>(
 abstract class AuthRemoteDataSource {
   /// Register a new user with the provided request data
   Future<void> register(RegisterRequest request);
-  Future<void> googleRegister(GoogleRegisterRequest request);
+  Future<LoginResponseModel> googleRegister(GoogleRegisterRequest request);
 
   /// Login user with email and password
   Future<LoginResponseModel> login(LoginRequest request);
@@ -124,13 +124,14 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<void> googleRegister(GoogleRegisterRequest request) async {
+  Future<LoginResponseModel> googleRegister(
+      GoogleRegisterRequest request) async {
     try {
-      await dioClient.post(
+      final response = await dioClient.post(
         googleRegisterEndpoints,
         data: await request.toJson(),
       );
-
+      return LoginResponseModel.fromJson(response.data as Map<String, dynamic>);
       // Successful responses (200-299) don't need explicit handling
       // Dio automatically throws for non-2xx responses
     } on DioException catch (e) {

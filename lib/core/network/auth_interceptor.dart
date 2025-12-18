@@ -123,7 +123,9 @@ class TokenInterceptor extends Interceptor {
 
     bool isPublicRoute = options.path.contains('/api/v1/contact') ||
         options.path.contains('/contact') ||
-        options.path.contains('ipapi.co');
+        options.path.contains('ipapi.co') ||
+        options.path.contains('/users/google/signup/') ||
+        options.path.contains('/users/google/login/');
     debugPrint(
         "isTokenRequired for PATH: ${options.path} => ${!isPublicRoute}");
     return !isPublicRoute; // For all other routes, no token is added

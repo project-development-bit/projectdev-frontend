@@ -93,7 +93,7 @@ class _GoogleSignupButtonState extends ConsumerState<GoogleSignupButton> {
 
     // Check if Turnstile verification is completed
     final turnstileState =
-        ref.read(turnstileNotifierProvider(TurnstileActionEnum.register));
+        ref.read(turnstileNotifierProvider(TurnstileActionEnum.googleSignUp));
     if (turnstileState is! TurnstileSuccess) {
       final localizations = AppLocalizations.of(context);
       context.showErrorSnackBar(
@@ -105,6 +105,7 @@ class _GoogleSignupButtonState extends ConsumerState<GoogleSignupButton> {
 
     // Use the new register state notifier
     final authActions = ref.read(authActionsProvider);
+    authActions.resetAllStates();
 
     await authActions.googleSignUp(
       countryCode: ref.read(selectedCountryProvider)?.code ?? '',
@@ -112,9 +113,11 @@ class _GoogleSignupButtonState extends ConsumerState<GoogleSignupButton> {
       referralCode: widget.referralCode,
       onSuccess: () {
         debugPrint('✅ SignUpPage: Registration successful callback triggered');
+        authActions.resetAllStates();
       },
       onError: (errorMessage) {
         debugPrint('❌ SignUpPage: Registration error callback: $errorMessage');
+        authActions.resetAllStates();
       },
     );
   }

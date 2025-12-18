@@ -320,6 +320,7 @@ class AuthActions {
 
   /// Reset all auth states
   void resetAllStates() {
+    debugPrint('🔄 AuthActions: Resetting all auth states');
     _ref.read(loginNotifierProvider.notifier).reset();
     // Note: LogoutNotifier doesn't have a reset method
     _ref.read(recaptchaNotifierProvider.notifier).reset();

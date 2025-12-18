@@ -448,13 +448,14 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<Failure, void>> googleRegister(
+  Future<Either<Failure, LoginResponseModel>> googleRegister(
       GoogleRegisterRequest request) async {
     try {
       final userModel = await googleAuthService.signInWithGoogle();
+
       request = request.copyWith(userCredential: userModel);
-      await remoteDataSource.googleRegister(request);
-      return const Right(null);
+      final response = await remoteDataSource.googleRegister(request);
+      return Right(response);
     } on DioException catch (e) {
       return Left(ServerFailure(
         message: e.message,

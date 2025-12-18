@@ -224,7 +224,7 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
   void _handleGoogleLogin() async {
     // Check Turnstile verification
     final turnstileCanAttempt =
-        ref.read(turnstileNotifierProvider(TurnstileActionEnum.login))
+        ref.read(turnstileNotifierProvider(TurnstileActionEnum.googleSignIn))
             is TurnstileSuccess;
 
     if (!turnstileCanAttempt) {
@@ -238,7 +238,7 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
 
     // Get the Turnstile token
     final turnstileToken = turnstileCanAttempt
-        ? (ref.read(turnstileNotifierProvider(TurnstileActionEnum.login))
+        ? (ref.read(turnstileNotifierProvider(TurnstileActionEnum.googleSignIn))
                 as TurnstileSuccess)
             .token
         : null;

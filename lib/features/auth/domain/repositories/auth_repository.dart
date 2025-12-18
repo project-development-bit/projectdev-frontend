@@ -100,5 +100,6 @@ abstract class AuthRepository {
 
   Future<Either<Failure, LoginResponseModel>> googleSignIn(
       GoogleLoginRequest request);
-  Future<Either<Failure, void>> googleRegister(GoogleRegisterRequest request);
+  Future<Either<Failure, LoginResponseModel>> googleRegister(
+      GoogleRegisterRequest request);
 }
