@@ -41,7 +41,7 @@ class CoinsHistorySection extends StatelessWidget {
         Center(
           child: CommonText.bodyLarge(
             (localizations?.translate('coins_history_title') ??
-                    "Last Coins Earned (Past 7 Days)")
+                    "Last Coins Earned (Past ${days.toString()} Days)")
                 .replaceAll("{days}", days.toString()),
             fontWeight: FontWeight.w500,
             color: Color(0xFF98989A),

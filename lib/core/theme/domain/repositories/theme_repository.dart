@@ -10,9 +10,6 @@ abstract class ThemeRepository {
   /// Cache theme configuration locally
   Future<Either<Failure, void>> cacheThemeConfig(ThemeConfig config);
 
-  /// Get cached theme configuration
-  Future<Either<Failure, ThemeConfig>> getCachedThemeConfig();
-
   /// Clear cached theme
   Future<Either<Failure, void>> clearCache();
 }

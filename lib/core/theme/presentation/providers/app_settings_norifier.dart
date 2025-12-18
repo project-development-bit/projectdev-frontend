@@ -3,6 +3,7 @@ import 'package:gigafaucet/core/usecases/usecase.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/models/app_settings_model.dart';
+import '../../domain/usecases/asset_theme_usecase.dart';
 import '../../dynamic_app_theme.dart';
 
 /// State class for app settings theme
@@ -50,9 +51,14 @@ class AppSettingsState {
 class AppSettingsNotifier extends StateNotifier<AppSettingsState> {
   final GetRemoteAppSettingsUseCase getRemoteAppSettingsUseCase;
   final GetLocalAppSettingsUseCase getLocalAppSettingsUseCase;
+
+  /// get the fallback theme from assets
+  final GetAssetThemeUsecase getAssetThemeUsecase;
+
   AppSettingsNotifier({
     required this.getRemoteAppSettingsUseCase,
     required this.getLocalAppSettingsUseCase,
+    required this.getAssetThemeUsecase,
   }) : super(const AppSettingsState());
 
   Future<void> loadConfig({bool forceRefresh = false}) async {
@@ -66,7 +72,9 @@ class AppSettingsNotifier extends StateNotifier<AppSettingsState> {
       final localResult = await getLocalAppSettingsUseCase.call(NoParams());
 
       localResult.fold(
-        (_) {}, // ignore local error
+        (_) {
+          state = state.copyWith();
+        }, // ignore local error
         (cached) {
           debugPrint(
             '🌈 Loaded app settings theme from cache, version: ${cached?.version}',
@@ -99,14 +107,24 @@ class AppSettingsNotifier extends StateNotifier<AppSettingsState> {
       final remoteResult = await getRemoteAppSettingsUseCase.call(NoParams());
 
       remoteResult.fold(
-        (failure) {
+        (failure) async {
           debugPrint(
             '🌈 Failed to load app settings theme from server: ${failure.message}',
           );
-          state = state.copyWith(
-            isLoading: false,
-            error: failure.message ?? 'Failed to load theme configuration',
-          );
+          final assetData = await getAssetThemeUsecase.call();
+
+          assetData.fold((_) {}, (assetTheme) {
+            debugPrint(
+              '🌈 Loaded app settings theme from assets as fallback, version: ${assetTheme.configData}',
+            );
+            state = state.copyWith(
+              isLoading: false,
+              error: failure.message ?? 'Failed to load theme configuration',
+              lightTheme:
+                  DynamicAppTheme.buildLightTheme(assetTheme.configData),
+              darkTheme: DynamicAppTheme.buildDarkTheme(assetTheme.configData),
+            );
+          });
         },
         (config) {
           debugPrint(

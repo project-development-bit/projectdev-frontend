@@ -1,8 +1,6 @@
 import 'package:gigafaucet/core/services/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gigafaucet/features/auth/data/models/request/google_register_request.dart';
-import 'package:gigafaucet/features/auth/domain/usecases/google_siginup_usecase.dart';
 import '../../../../core/enum/user_role.dart';
 import '../../../../core/providers/turnstile_provider.dart';
 import '../../data/models/register_request.dart';

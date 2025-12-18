@@ -68,8 +68,7 @@ class _ProfileDialogState extends ConsumerState<ProfileDialog> {
       padding: EdgeInsets.zero,
       body: SingleChildScrollView(
         child: Padding(
-          padding:
-              EdgeInsets.symmetric(horizontal: context.isMobile ? 10.5 : 32),
+          padding: EdgeInsets.symmetric(horizontal: context.isMobile ? 17 : 32),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,

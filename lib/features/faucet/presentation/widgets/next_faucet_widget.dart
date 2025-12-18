@@ -17,9 +17,6 @@ class NextFaucetWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final status = ref.watch(getFaucetNotifierProvider).status;
-    if (status == null) {
-      return const SizedBox.shrink();
-    }
 
     final countdown = ref.watch(
       faucetCountdownProvider(status),
@@ -43,7 +40,7 @@ class NextFaucetWidget extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          if (!status.canClaim) ...[
+          if (!(status?.canClaim ?? true)) ...[
             CommonText.titleMedium(
               context.translate('event_next_faucet'),
               fontWeight: FontWeight.w600,
