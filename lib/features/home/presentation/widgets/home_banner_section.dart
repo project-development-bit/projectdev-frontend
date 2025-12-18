@@ -72,7 +72,9 @@ class HomeBannerSectionState extends ConsumerState<HomeBannerSection> {
               viewportFraction: 1.0,
               autoPlay: banners.length > 1,
               autoPlayInterval: const Duration(seconds: 5),
-              autoPlayAnimationDuration: const Duration(milliseconds: 500),
+              autoPlayAnimationDuration: const Duration(
+                seconds: 2,
+              ),
               autoPlayCurve: Curves.easeInOut,
               enableInfiniteScroll: banners.length > 1,
               onPageChanged: (index, reason) {

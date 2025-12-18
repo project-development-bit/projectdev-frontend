@@ -1,372 +1,117 @@
 {
-  "version": "1.0.0",
-  "lastUpdated": "2025-11-10T00:00:00.000Z",
-  "fonts": {
-    "primary": "Inter",
-    "title": "Orbitron",
-    "fallback": [
-      "Orbitron",
-      "Inter",
-      "-apple-system",
-      "BlinkMacSystemFont",
-      "Segoe UI",
-      "system-ui",
-      "sans-serif"
-    ]
-  },
-  "customColors": {
-    "websiteGold": "#E6A030",
-    "websiteGreen": "#00FF00",
-    "linkBlue": "#3B82F6"
-  },
-  "themes": {
-    "light": {
-      "colorScheme": {
-        "brightness": "light",
-        "primary": "#E8631C",
-        "onPrimary": "#FFFFFF",
-        "primaryContainer": "#FFF3E0",
-        "onPrimaryContainer": "#CF7A11",
-        "secondary": "#E6A030",
-        "onSecondary": "#000000",
-        "secondaryContainer": "#FFF3E0",
-        "onSecondaryContainer": "#92400E",
-        "tertiary": "#9692BC",
-        "onTertiary": "#FFFFFF",
-        "tertiaryContainer": "#F3F4F6",
-        "onTertiaryContainer": "#9692BC",
-        "error": "#B0251A",
-        "onError": "#FFFFFF",
-        "errorContainer": "#FEE2E2",
-        "onErrorContainer": "#B0251A",
-        "surface": "#FAFAFA",
-        "onSurface": "#1F2937",
-        "surfaceContainerLowest": "#FFFFFF",
-        "surfaceContainerLow": "#F9FAFB",
-        "surfaceContainer": "#F3F4F6",
-        "surfaceContainerHigh": "#E5E7EB",
-        "surfaceContainerHighest": "#E5E7EB",
-        "onSurfaceVariant": "#6B7280",
-        "outline": "#D1D5DB",
-        "outlineVariant": "#E5E7EB",
-        "shadow": "#000000",
-        "scrim": "#000000",
-        "inverseSurface": "#1F2937",
-        "onInverseSurface": "#FAFAFA",
-        "inversePrimary": "#E9D5FF"
+  "config_key": "app_config",
+  "config_data": {
+    "fonts": {
+      "body": "Inter",
+      "heading": "Orbitron"
+    },
+    "texts": {
+      "cta_button": "Join Now",
+      "home_title": "Start earning rewards!"
+    },
+    "colors": {
+      "dark": {
+        "box": {
+          "first": "rgba(0, 19, 30, 0.5)",
+          "second": "rgba(255, 255, 255, 0.5)"
+        },
+        "body": "#00131E",
+        "border": "#333333",
+        "button": "#333333",
+        "status": {
+          "info": "#00A0DC",
+          "success": "#4AC97E",
+          "warning": "#FFD166",
+          "destructive": "#D0302F",
+          "seriousWarning": "#E26F20"
+        },
+        "heading": {
+          "first": "#FFFFFF",
+          "third": "#7E7E81",
+          "second": "#ffcc00"
+        },
+        "primary": "#ffcc00",
+        "paragraph": {
+          "first": "#FFFFFF",
+          "third": "#ffcc00",
+          "second": "#98989A"
+        },
+        "secondary": "#00A0DC"
       },
-      "components": {
-        "appBar": {
-          "elevation": 0,
-          "scrolledUnderElevation": 1
+      "light": {
+        "box": {
+          "first": "rgba(0, 19, 30, 0.5)",
+          "second": "rgba(255, 255, 255, 0.5)"
         },
-        "button": {
-          "borderRadius": 12.0,
-          "elevation": 2.0,
-          "padding": {
-            "horizontal": 24.0,
-            "vertical": 12.0
-          }
+        "body": "#00131E",
+        "border": "#333333",
+        "button": "#333333",
+        "status": {
+          "info": "#00A0DC",
+          "success": "#4AC97E",
+          "warning": "#FFD166",
+          "destructive": "#D0302F",
+          "seriousWarning": "#E26F20"
         },
-        "textButton": {
-          "borderRadius": 8.0,
-          "elevation": 0.0,
-          "padding": {
-            "horizontal": 16.0,
-            "vertical": 8.0
-          }
+        "heading": {
+          "first": "#FFFFFF",
+          "third": "#7E7E81",
+          "second": "#ffcc00"
         },
-        "inputField": {
-          "borderRadius": 12.0,
-          "fillOpacity": 0.3,
-          "contentPadding": {
-            "horizontal": 16.0,
-            "vertical": 16.0
-          },
-          "focusedBorderWidth": 2.0
+        "primary": "#ffcc00",
+        "paragraph": {
+          "first": "#FFFFFF",
+          "third": "#ffcc00",
+          "second": "#98989A"
         },
-        "card": {
-          "borderRadius": 16.0,
-          "elevation": 1.0,
-          "margin": 8.0
-        },
-        "dialog": {
-          "borderRadius": 20.0,
-          "elevation": 8.0
-        },
-        "bottomNavigation": {
-          "elevation": 8.0,
-          "type": "fixed"
-        },
-        "floatingActionButton": {
-          "borderRadius": 16.0,
-          "elevation": 6.0
-        },
-        "checkbox": {
-          "borderRadius": 4.0,
-          "borderWidth": 2.0
-        }
-      },
-      "typography": {
-        "displayLarge": {
-          "fontSize": 57.0,
-          "fontWeight": 400,
-          "lineHeight": 1.12,
-          "letterSpacing": -0.25
-        },
-        "displayMedium": {
-          "fontSize": 45.0,
-          "fontWeight": 400,
-          "lineHeight": 1.16
-        },
-        "displaySmall": {
-          "fontSize": 36.0,
-          "fontWeight": 400,
-          "lineHeight": 1.22
-        },
-        "headlineLarge": {
-          "fontSize": 32.0,
-          "fontWeight": 400,
-          "lineHeight": 1.25
-        },
-        "headlineMedium": {
-          "fontSize": 28.0,
-          "fontWeight": 600,
-          "lineHeight": 1.29
-        },
-        "headlineSmall": {
-          "fontSize": 24.0,
-          "fontWeight": 600,
-          "lineHeight": 1.33
-        },
-        "titleLarge": {
-          "fontSize": 22.0,
-          "fontWeight": 600,
-          "lineHeight": 1.27
-        },
-        "titleMedium": {
-          "fontSize": 16.0,
-          "fontWeight": 600,
-          "lineHeight": 1.5,
-          "letterSpacing": 0.15
-        },
-        "titleSmall": {
-          "fontSize": 14.0,
-          "fontWeight": 600,
-          "lineHeight": 1.43,
-          "letterSpacing": 0.1
-        },
-        "bodyLarge": {
-          "fontSize": 16.0,
-          "fontWeight": 400,
-          "lineHeight": 1.5,
-          "letterSpacing": 0.5
-        },
-        "bodyMedium": {
-          "fontSize": 14.0,
-          "fontWeight": 400,
-          "lineHeight": 1.43,
-          "letterSpacing": 0.25
-        },
-        "bodySmall": {
-          "fontSize": 12.0,
-          "fontWeight": 400,
-          "lineHeight": 1.33,
-          "letterSpacing": 0.4
-        },
-        "labelLarge": {
-          "fontSize": 14.0,
-          "fontWeight": 600,
-          "lineHeight": 1.43,
-          "letterSpacing": 0.1
-        },
-        "labelMedium": {
-          "fontSize": 12.0,
-          "fontWeight": 600,
-          "lineHeight": 1.33,
-          "letterSpacing": 0.5
-        },
-        "labelSmall": {
-          "fontSize": 11.0,
-          "fontWeight": 600,
-          "lineHeight": 1.45,
-          "letterSpacing": 0.5
-        }
+        "secondary": "#00A0DC"
       }
     },
-    "dark": {
-      "colorScheme": {
-        "brightness": "dark",
-        "primary": "#E6A030",
-        "onPrimary": "#050317",
-        "primaryContainer": "#313144",
-        "onPrimaryContainer": "#9692BC",
-        "secondary": "#E6A030",
-        "onSecondary": "#050317",
-        "secondaryContainer": "#313144",
-        "onSecondaryContainer": "#9692BC",
-        "tertiary": "#9692BC",
-        "onTertiary": "#050317",
-        "tertiaryContainer": "#313144",
-        "onTertiaryContainer": "#9692BC",
-        "error": "#B0251A",
-        "onError": "#FFFFFF",
-        "errorContainer": "#313144",
-        "onErrorContainer": "#FFB4AB",
-        "surface": "#1C1B1F",
-        "onSurface": "#E6E1E5",
-        "surfaceContainerLowest": "#0F0E11",
-        "surfaceContainerLow": "#1C1B1F",
-        "surfaceContainer": "#201F23",
-        "surfaceContainerHigh": "#2B292D",
-        "surfaceContainerHighest": "#363438",
-        "onSurfaceVariant": "#CAC4D0",
-        "outline": "#938F99",
-        "outlineVariant": "#49454F",
-        "shadow": "#000000",
-        "scrim": "#000000",
-        "inverseSurface": "#E6E1E5",
-        "onInverseSurface": "#313033",
-        "inversePrimary": "#E8631C"
+    "banners": [
+      {
+        "link": "/offer",
+        "label": "Top Crypto Faucet #1",
+        "title": "Trusted and Secure \n Bitcoin and Crypto [Faucet]",
+        "btnText": "Claim Now",
+        "image_web": "https://gigafaucet-images-s3.s3.ap-southeast-2.amazonaws.com/avatars/56/56-1765773462870-5jfvgyh2oxbdwtdg.jpg",
+        "description": "We prioritize security, transparency, and a seamless user experience. So you can earn crypto with confidence, every day.",
+        "image_mobile": "https://gigafaucet-images-s3.s3.ap-southeast-2.amazonaws.com/avatars/56/56-1765773411271-jqxe0pk6dr5cicwt.jpg"
       },
-      "components": {
-        "appBar": {
-          "elevation": 0,
-          "scrolledUnderElevation": 1
-        },
-        "button": {
-          "borderRadius": 12.0,
-          "elevation": 2.0,
-          "padding": {
-            "horizontal": 24.0,
-            "vertical": 12.0
-          }
-        },
-        "textButton": {
-          "borderRadius": 8.0,
-          "elevation": 0.0,
-          "padding": {
-            "horizontal": 16.0,
-            "vertical": 8.0
-          }
-        },
-        "inputField": {
-          "borderRadius": 12.0,
-          "fillOpacity": 0.3,
-          "contentPadding": {
-            "horizontal": 16.0,
-            "vertical": 16.0
-          },
-          "focusedBorderWidth": 2.0
-        },
-        "card": {
-          "borderRadius": 16.0,
-          "elevation": 1.0,
-          "margin": 8.0
-        },
-        "dialog": {
-          "borderRadius": 20.0,
-          "elevation": 8.0
-        },
-        "bottomNavigation": {
-          "elevation": 8.0,
-          "type": "fixed"
-        },
-        "floatingActionButton": {
-          "borderRadius": 16.0,
-          "elevation": 6.0
-        },
-        "checkbox": {
-          "borderRadius": 4.0,
-          "borderWidth": 2.0
-        }
-      },
-      "typography": {
-        "displayLarge": {
-          "fontSize": 57.0,
-          "fontWeight": 400,
-          "lineHeight": 1.12,
-          "letterSpacing": -0.25
-        },
-        "displayMedium": {
-          "fontSize": 45.0,
-          "fontWeight": 400,
-          "lineHeight": 1.16
-        },
-        "displaySmall": {
-          "fontSize": 36.0,
-          "fontWeight": 400,
-          "lineHeight": 1.22
-        },
-        "headlineLarge": {
-          "fontSize": 32.0,
-          "fontWeight": 400,
-          "lineHeight": 1.25
-        },
-        "headlineMedium": {
-          "fontSize": 28.0,
-          "fontWeight": 600,
-          "lineHeight": 1.29
-        },
-        "headlineSmall": {
-          "fontSize": 24.0,
-          "fontWeight": 600,
-          "lineHeight": 1.33
-        },
-        "titleLarge": {
-          "fontSize": 22.0,
-          "fontWeight": 600,
-          "lineHeight": 1.27
-        },
-        "titleMedium": {
-          "fontSize": 16.0,
-          "fontWeight": 600,
-          "lineHeight": 1.5,
-          "letterSpacing": 0.15
-        },
-        "titleSmall": {
-          "fontSize": 14.0,
-          "fontWeight": 600,
-          "lineHeight": 1.43,
-          "letterSpacing": 0.1
-        },
-        "bodyLarge": {
-          "fontSize": 16.0,
-          "fontWeight": 400,
-          "lineHeight": 1.5,
-          "letterSpacing": 0.5
-        },
-        "bodyMedium": {
-          "fontSize": 14.0,
-          "fontWeight": 400,
-          "lineHeight": 1.43,
-          "letterSpacing": 0.25
-        },
-        "bodySmall": {
-          "fontSize": 12.0,
-          "fontWeight": 400,
-          "lineHeight": 1.33,
-          "letterSpacing": 0.4
-        },
-        "labelLarge": {
-          "fontSize": 14.0,
-          "fontWeight": 600,
-          "lineHeight": 1.43,
-          "letterSpacing": 0.1
-        },
-        "labelMedium": {
-          "fontSize": 12.0,
-          "fontWeight": 600,
-          "lineHeight": 1.33,
-          "letterSpacing": 0.5
-        },
-        "labelSmall": {
-          "fontSize": 11.0,
-          "fontWeight": 600,
-          "lineHeight": 1.45,
-          "letterSpacing": 0.5
-        }
+      {
+        "link": "/offer",
+        "label": "Top Crypto Faucet #2",
+        "title": "Trusted and Secure \n Bitcoin and Crypto [Faucet 2]",
+        "btnText": "Claim Now",
+        "image_web": "https://gigafaucet-images-s3.s3.ap-southeast-2.amazonaws.com/avatars/56/56-1765773462870-5jfvgyh2oxbdwtdg.jpg",
+        "description": "We prioritize security, transparency, and a seamless user experience. So you can earn crypto with confidence, every day 2.",
+        "image_mobile": "https://gigafaucet-images-s3.s3.ap-southeast-2.amazonaws.com/avatars/56/56-1765773411271-jqxe0pk6dr5cicwt.jpg"
       }
-    }
-  }
+    ],
+    "typography": {
+      "h1": {
+        "usage": "Page titles, key section headers",
+        "fontSize": "40px",
+        "fontWeight": 700
+      },
+      "h2": {
+        "usage": "Section titles or feature highlights",
+        "fontSize": "32px",
+        "fontWeight": 700
+      },
+      "h3": {
+        "usage": "Sub-sections, card titles",
+        "fontSize": "20px",
+        "fontWeight": 700
+      },
+      "body": {
+        "usage": "Body copy, descriptions, and details",
+        "fontSize": "16px",
+        "fontWeight": "500-700"
+      }
+    },
+    "colorScheme": "dark",
+    "config_version": "2025.10.24",
+    "language_version": "2025.12.08"
+  },
+  "version": "2025.12.17"
 }
