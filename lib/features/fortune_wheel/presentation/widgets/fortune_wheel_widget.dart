@@ -1,10 +1,13 @@
 import 'dart:async';
+import 'dart:math' as math;
 
+import 'package:cointiply_app/core/common/common_image_widget.dart';
 import 'package:cointiply_app/core/common/common_loading_widget.dart';
 import 'package:cointiply_app/core/common/common_text.dart';
 import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
 import 'package:cointiply_app/core/config/app_local_images.dart';
 import 'package:cointiply_app/core/extensions/context_extensions.dart';
+import 'package:cointiply_app/features/fortune_wheel/domain/entities/fortune_wheel_reward.dart';
 import 'package:cointiply_app/features/fortune_wheel/presentation/providers/fortune_wheel_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
@@ -34,6 +37,7 @@ class _FortuneWheelWidgetState extends ConsumerState<FortuneWheelWidget> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Fetch rewards
       ref.read(fortuneWheelProvider.notifier).fetchFortuneWheelRewards(
         onSuccess: () {
           debugPrint('🎡 Rewards loaded successfully');
@@ -46,6 +50,16 @@ class _FortuneWheelWidgetState extends ConsumerState<FortuneWheelWidget> {
           }
         },
       );
+
+      // Fetch status
+      ref.read(fortuneWheelStatusProvider.notifier).fetchFortuneWheelStatus(
+        onSuccess: () {
+          debugPrint('🎡 Status loaded successfully');
+        },
+        onError: (message) {
+          debugPrint('🎡 Error loading status: $message');
+        },
+      );
     });
     super.initState();
   }
@@ -53,7 +67,7 @@ class _FortuneWheelWidgetState extends ConsumerState<FortuneWheelWidget> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(fortuneWheelProvider);
-    if (state is FortuneWheelLoading) {
+    if (state is FortuneWheelLoading || state is FortuneWheelInitial) {
       return Center(child: CommonLoadingWidget.medium());
     } else if (state is FortuneWheelError) {
       return Center(
@@ -63,6 +77,16 @@ class _FortuneWheelWidgetState extends ConsumerState<FortuneWheelWidget> {
         ),
       );
     }
+    
+    // Get rewards from any valid state
+    final rewards = switch (state) {
+      FortuneWheelLoaded(:final rewards) => rewards,
+      FortuneWheelSpinning(:final rewards) => rewards,
+      FortuneWheelSpinSuccess(:final rewards) => rewards,
+      _ => <FortuneWheelReward>[],
+    };
+
+   
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -129,28 +153,9 @@ class _FortuneWheelWidgetState extends ConsumerState<FortuneWheelWidget> {
                         wheelOuterPath: AppLocalImages.outerWheel,
                         wheelCenterPath: AppLocalImages.wheelCenterPath,
                         onAnimationEnd: () {},
-                        items: List.generate(10, (v) {
-                          return FortuneItem(
-                              child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              SizedBox(width: 65),
-                              Image.asset(
-                                AppLocalImages.ptcAdDiscount,
-                                width: 30,
-                                height: 30,
-                              ),
-                              Transform.rotate(
-                                angle: -1.57,
-                                child: CommonText.titleSmall(
-                                  'Prize ${v + 1}',
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                            ],
-                          ));
-                        })),
+                        items: rewards.map((e) {
+                          return _fortuneWheelItem(e);
+                        }).toList()),
                   ),
                 ],
               ),
@@ -158,19 +163,105 @@ class _FortuneWheelWidgetState extends ConsumerState<FortuneWheelWidget> {
           ),
         ),
         SizedBox(height: 20),
-        CustomUnderLineButtonWidget(
-            title: context.translate("Spin"),
-            fontSize: 14,
-            height: 40,
-            isViolet: true,
-            padding: EdgeInsets.symmetric(horizontal: 40, vertical: 5),
-            onTap: () {
-              setState(() {
-                selected.add(2);
-              });
-            })
+        // Display spin status info
+        Builder(
+          builder: (context) {
+            final statusState = ref.watch(fortuneWheelStatusProvider);
+            if (statusState is FortuneWheelStatusLoaded) {
+              final status = statusState.status;
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: CommonText.bodyMedium(
+                  'Spins: ${status.todaySpins}/${status.dailyLimit} | Remaining: ${status.remainingSpins}',
+                  color: Colors.white70,
+                ),
+              );
+            }
+            return SizedBox.shrink();
+          },
+        ),
+        Builder(
+          builder: (context) {
+            final statusState = ref.watch(fortuneWheelStatusProvider);
+            final canSpin = statusState is FortuneWheelStatusLoaded 
+                ? statusState.status.canSpin 
+                : true;
+            final isSpinning = state is FortuneWheelSpinning;
+            
+            return CustomUnderLineButtonWidget(
+              title: context.translate(isSpinning ? "Spinning..." : "Spin"),
+              fontSize: 14,
+              height: 40,
+              isViolet: true,
+              padding: EdgeInsets.symmetric(horizontal: 40, vertical: 5),
+              onTap: (!canSpin || isSpinning) ? null : () async {
+                // Call the spin API
+                ref.read(fortuneWheelProvider.notifier).spinFortuneWheel(
+                  onSpinResult: (winningIndex) {
+                    // The API returned the winning index, now spin to that position
+                    debugPrint('🎡 Spinning to index: $winningIndex');
+                    setState(() {
+                      selected.add(winningIndex);
+                    });
+                  },
+                  onSuccess: () {
+                    debugPrint('🎡 Spin completed successfully');
+
+                    // Show success message after animation completes
+                    final currentState = ref.read(fortuneWheelProvider);
+                    if (currentState is FortuneWheelSpinSuccess) {
+                      final spinResponse = currentState.spinResponse;
+
+                      // Wait for animation to complete
+                      Future.delayed(const Duration(seconds: 6), () {
+                        if (context.mounted) {
+                          context.showSnackBar(
+                            message:
+                                '${spinResponse.message}\nRemaining spins: ${spinResponse.remainingDailyCap}',
+                          );
+                          
+                          // Refresh status after spin
+                          ref.read(fortuneWheelStatusProvider.notifier).fetchFortuneWheelStatus();
+                        }
+                      });
+                    }
+                  },
+                  onError: (message) {
+                    debugPrint('🎡 Spin error: $message');
+                    context.showSnackBar(message: message);
+                  },
+                );
+              },
+            );
+          },
+        )
       ],
     );
+  }
+
+  FortuneItem _fortuneWheelItem(FortuneWheelReward reward) {
+    return FortuneItem(
+        child: Row(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        SizedBox(width: 65),
+        CommonImage(
+          imageUrl: reward.iconUrl,
+          width: 37,
+          placeholder: Icon(Icons.image, color: Colors.white),
+          height: 37,
+        ),
+        SizedBox(width: 10),
+        Transform.rotate(
+          angle: math.pi / 2, // 90 degrees in radians
+          child: CommonText.titleSmall(
+            '+ 100',
+            color: Colors.white,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ],
+    ));
   }
 
   @override

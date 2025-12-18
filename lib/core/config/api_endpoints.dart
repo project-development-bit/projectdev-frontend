@@ -18,3 +18,7 @@ const whoamiEndpoints = 'users/whoami';
 // Fortune Wheel Endpoints
 const fortuneWheelRewardsEndpoint =
     'fortune-wheel/rewards'; // GET fortune wheel rewards
+const fortuneWheelSpinEndpoint =
+    'fortune-wheel/spin'; // POST spin fortune wheel
+const fortuneWheelStatusEndpoint =
+    'fortune-wheel/rewards/status'; // GET fortune wheel status
