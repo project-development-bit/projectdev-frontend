@@ -123,6 +123,7 @@ class _MyAppState extends ConsumerState<MyApp> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(appSettingsThemeProvider.notifier).loadConfig();
       ref.read(getLanguagesNotifierProvider.notifier).fetchLanguages();
+      ref.read(localizationNotifierProvider.notifier).init();
     });
 
     ref.listenManual<AppSettingsState>(

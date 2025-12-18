@@ -28,12 +28,12 @@ class ThemeNotifier extends StateNotifier<AppThemeMode> {
         debugPrint('Loaded theme mode: ${state.name}');
       } else {
         // Default to system theme
-        state = AppThemeMode.system;
+        state = AppThemeMode.dark;
         debugPrint('Using default theme mode: system');
       }
     } catch (e) {
       // If there's an error, keep the default system theme
-      state = AppThemeMode.system;
+      state = AppThemeMode.dark;
       debugPrint('Error loading theme mode: $e');
     }
   }
