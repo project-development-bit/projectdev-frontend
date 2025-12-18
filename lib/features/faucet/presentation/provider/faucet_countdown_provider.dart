@@ -4,7 +4,7 @@ import 'faucet_countdown_notifier.dart';
 import 'faucet_countdown_state.dart';
 
 final faucetCountdownProvider = StateNotifierProvider.autoDispose
-    .family<FaucetCountdownNotifier, FaucetCountdownState, ActualFaucetStatus>(
+    .family<FaucetCountdownNotifier, FaucetCountdownState, ActualFaucetStatus?>(
         (ref, status) {
   return FaucetCountdownNotifier(status);
 });
