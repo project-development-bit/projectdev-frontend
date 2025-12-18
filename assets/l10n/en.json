@@ -784,5 +784,6 @@
   "ready": "Ready",
   "login_required": "Login Required",
   "you_must_login_to_continue": "You must login to continue",
-  "you_need_to_resolve_captcha_to_claim_your_faucet": "You need to resolve a captcha to claim your faucet."
+  "you_need_to_resolve_captcha_to_claim_your_faucet": "You need to resolve a captcha to claim your faucet.",
+  "login": "Login"
 }
