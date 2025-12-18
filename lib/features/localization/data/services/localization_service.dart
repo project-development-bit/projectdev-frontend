@@ -66,7 +66,7 @@ class LocalizationService {
       });
       debugPrint(
           'Successfully loaded ${_localizedStrings!.length} strings for locale: ${locale.languageCode}');
-      await loadFallbackStrings();
+      await loadFallbackStrings(locale);
       return true;
     } catch (e) {
       debugPrint('Failed to load localization: $e');
@@ -77,7 +77,7 @@ class LocalizationService {
   String translate(String key, {List<String>? args}) {
     if (_localizedStrings == null) {
       debugPrint('Translation failed: No localized strings loaded');
-      return key;
+      return key; // Return the key itself if no localization is loaded
     }
 
     String? value = _localizedStrings![key];
@@ -108,15 +108,20 @@ class LocalizationService {
       }
     }
 
-    return value!;
+    // If we reach here and the value is null, return the key itself to prevent any null issues
+    return value ?? key;
   }
 
   // Load fallback strings from en.json
-  Future<bool> loadFallbackStrings() async {
+  Future<bool> loadFallbackStrings(Locale locale) async {
     debugPrint('Loading fallback localization for en');
     try {
+      final languageCode =
+          locale.languageCode == "my" || locale.languageCode == "mm"
+              ? "my"
+              : "en";
       final jsonString =
-          await rootBundle.loadString('$_localizationPath/en.json');
+          await rootBundle.loadString('$_localizationPath/$languageCode.json');
       final Map<String, dynamic> jsonMap = json.decode(jsonString);
 
       _localizedFallbackStrings = {};
@@ -140,7 +145,6 @@ class LocalizationService {
 
   // Change locale
   Future<void> changeLocale(Locale locale, Ref ref) async {
-    print("Testing 101: Changing locale to ${locale.languageCode}");
     await load(locale, ref.read(localizationLocalDataSourceProvider));
   }
 }
