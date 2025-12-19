@@ -444,7 +444,7 @@ class AuthRepositoryImpl implements AuthRepository {
         return Left(ServerFailure(message: 'User cancelled Google sign-in'));
       }
       request = request.copyWith(
-        idToken: userModel.idToken,
+        idToken: userModel,
       );
       final response = await remoteDataSource.googleLogin(request);
       // Store tokens in secure storage
@@ -465,7 +465,7 @@ class AuthRepositoryImpl implements AuthRepository {
         return Left(ServerFailure(message: 'User cancelled Google sign-up'));
       }
       request = request.copyWith(
-        idToken: userModel.idToken,
+        idToken: userModel,
       );
       final response = await remoteDataSource.googleRegister(request);
       // Store tokens in secure storage
