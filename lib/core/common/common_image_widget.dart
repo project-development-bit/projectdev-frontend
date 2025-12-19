@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_svg/svg.dart';
 import '../extensions/context_extensions.dart';
 
 /// A common image widget that handles network images with loading and error states
@@ -125,6 +126,20 @@ class _CommonImageState extends State<CommonImage> {
                     if (!mounted) return const SizedBox.shrink();
                     return defaultLoadingWidget;
                   },
+      );
+    } else if (widget.imageUrl.endsWith('.svg')) {
+      imageWidget = SvgPicture.asset(
+        widget.imageUrl,
+        width: widget.width,
+        height: widget.height,
+        fit: widget.fit,
+        placeholderBuilder: widget.placeholder != null
+            ? (context) {
+                if (!mounted) return const SizedBox.shrink();
+                return widget.placeholder!;
+              }
+            : null,
+        colorFilter: null,
       );
     } else {
       // Handle asset images
