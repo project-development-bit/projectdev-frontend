@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -80,26 +79,26 @@ class GoogleAuthService {
   }
 
   /// Signs into Firebase using the provided Google authentication details.
-  Future<User?> _signInToFirebaseWithGoogle(
-      GoogleSignInAuthentication googleAuth) async {
-    // CRITICAL FIX: Provide both accessToken and idToken to the credential.
-    // This is the most robust way to authenticate with Firebase.
-    final AuthCredential credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
+  // Future<User?> _signInToFirebaseWithGoogle(
+  //     GoogleSignInAuthentication googleAuth) async {
+  //   // CRITICAL FIX: Provide both accessToken and idToken to the credential.
+  //   // This is the most robust way to authenticate with Firebase.
+  //   final AuthCredential credential = GoogleAuthProvider.credential(
+  //     accessToken: googleAuth.accessToken,
+  //     idToken: googleAuth.idToken,
+  //   );
 
-    final userCredential =
-        await FirebaseAuth.instance.signInWithCredential(credential);
-    final firebaseUser = userCredential.user;
+  //   final userCredential =
+  //       await FirebaseAuth.instance.signInWithCredential(credential);
+  //   final firebaseUser = userCredential.user;
 
-    if (firebaseUser != null) {
-      debugPrint(
-          'Firebase Sign-In Successful. UID: ${firebaseUser.uid}, Email: ${firebaseUser.email}');
-    }
+  //   if (firebaseUser != null) {
+  //     debugPrint(
+  //         'Firebase Sign-In Successful. UID: ${firebaseUser.uid}, Email: ${firebaseUser.email}');
+  //   }
 
-    return firebaseUser;
-  }
+  //   return firebaseUser;
+  // }
 
   Future<void> signOut() async {
     await _googleSignIn.signOut();
