@@ -19,7 +19,3 @@ dev_dependencies:
     sdk: flutter
 
   effective_dart: ^1.3.2
-
-flutter:
-  assets:
-    - assets/sound/

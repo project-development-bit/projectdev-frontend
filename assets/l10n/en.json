@@ -785,5 +785,10 @@
   "login_required": "Login Required",
   "you_must_login_to_continue": "You must login to continue",
   "you_need_to_resolve_captcha_to_claim_your_faucet": "You need to resolve a captcha to claim your faucet.",
-  "login": "Login"
+  "login": "Login",
+  "come_back_later_for_more": "Come back later for more!",
+  "login_to_spin": "Login to Spin & Earn",
+  "spin_success_message": "Spin successful! You earned {0}",
+  "congratulations": "Congratulations!",
+  "spin_wheel_error_message": "Failed to spin the wheel. Please try again."
 }

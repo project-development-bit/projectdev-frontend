@@ -130,10 +130,11 @@ class FortuneWheelNotifier extends StateNotifier<FortuneWheelState> {
       result.fold(
         (failure) {
           debugPrint('🎡 Failed to fetch rewards: ${failure.message}');
-          
+
           // Check if it's a network error (ServerFailure without status code)
-          final isNetworkError = failure is ServerFailure && failure.statusCode == null;
-          
+          final isNetworkError =
+              failure is ServerFailure && failure.statusCode == null;
+
           state = FortuneWheelError(
             message: failure.message ?? 'Failed to load fortune wheel rewards',
             isNetworkError: isNetworkError,
@@ -158,7 +159,7 @@ class FortuneWheelNotifier extends StateNotifier<FortuneWheelState> {
 
   /// Spin the fortune wheel
   Future<void> spinFortuneWheel({
-    VoidCallback? onSuccess,
+    Function(String)? onSuccess,
     Function(String)? onError,
     Function(int)? onSpinResult,
   }) async {
@@ -177,6 +178,12 @@ class FortuneWheelNotifier extends StateNotifier<FortuneWheelState> {
 
     // Set spinning state
     state = FortuneWheelSpinning(currentRewards);
+
+    // await Future.delayed(const Duration(seconds: 1), () {
+    //   onSpinResult?.call(2);
+    //   onSuccess?.call();
+    // }); // Simulate network delay
+    // return;
 
     try {
       final useCase = SpinFortuneWheelUseCase(
@@ -200,14 +207,15 @@ class FortuneWheelNotifier extends StateNotifier<FortuneWheelState> {
           debugPrint('🎡 Message: ${spinResponse.message}');
           debugPrint(
               '🎡 Remaining Daily Cap: ${spinResponse.remainingDailyCap}');
-
-          state = FortuneWheelSpinSuccess(
-            rewards: currentRewards,
-            spinResponse: spinResponse,
-          );
-
           onSpinResult?.call(spinResponse.wheelIndex);
-          onSuccess?.call();
+
+          Future.delayed(const Duration(seconds: 6), () async {
+            state = FortuneWheelSpinSuccess(
+              rewards: currentRewards,
+              spinResponse: spinResponse,
+            );
+            onSuccess?.call(spinResponse.message);
+          });
         },
       );
     } catch (e) {

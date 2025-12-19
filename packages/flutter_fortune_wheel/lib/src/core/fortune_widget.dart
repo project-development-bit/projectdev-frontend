@@ -24,7 +24,7 @@ abstract class FortuneWidget implements Widget {
   /// selected.Used by [FortuneWidget]s to align [indicators] on the selected
   /// item.
   /// {@endtemplate}
-  Stream<int> get selected;
+  Stream<FortuneReward> get selected;
 
   /// {@template flutter_fortune_wheel.FortuneWidget.rotationCount}
   /// The number of times a [FortuneWidget] rotates around all
