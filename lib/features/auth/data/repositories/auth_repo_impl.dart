@@ -439,8 +439,11 @@ class AuthRepositoryImpl implements AuthRepository {
       GoogleLoginRequest request) async {
     try {
       final userModel = await googleAuthService.getGoogleIdToken();
+      if (userModel == null) {
+        return Left(ServerFailure(message: 'User cancelled Google sign-in'));
+      }
       request = request.copyWith(
-        idToken: userModel?.idToken,
+        idToken: userModel.idToken,
       );
       final response = await remoteDataSource.googleLogin(request);
       return Right(response);
@@ -454,9 +457,11 @@ class AuthRepositoryImpl implements AuthRepository {
       GoogleRegisterRequest request) async {
     try {
       final userModel = await googleAuthService.getGoogleIdToken();
+      if (userModel == null) {
+        return Left(ServerFailure(message: 'User cancelled Google sign-up'));
+      }
       request = request.copyWith(
-        idToken: userModel?.idToken,
-        // avatar: userModel?.user?.photoURL,
+        idToken: userModel.idToken,
       );
       final response = await remoteDataSource.googleRegister(request);
       return Right(response);
