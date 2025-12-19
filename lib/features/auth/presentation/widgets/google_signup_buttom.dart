@@ -93,7 +93,7 @@ class _GoogleSignupButtonState extends ConsumerState<GoogleSignupButton> {
 
     // Check if Turnstile verification is completed
     final turnstileState =
-        ref.read(turnstileNotifierProvider(TurnstileActionEnum.googleSignUp));
+        ref.read(turnstileNotifierProvider(TurnstileActionEnum.register));
     if (turnstileState is! TurnstileSuccess) {
       final localizations = AppLocalizations.of(context);
       context.showErrorSnackBar(

@@ -436,7 +436,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
 
             // Cloudflare Turnstile Widget (replaces reCAPTCHA)
             CloudflareTurnstileWidget(
-              action: TurnstileActionEnum.googleSignUp,
+              action: TurnstileActionEnum.register,
               debugMode: false,
             ),
 

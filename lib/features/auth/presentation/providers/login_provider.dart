@@ -220,8 +220,8 @@ class LoginNotifier extends StateNotifier<LoginState> {
       String? turnstileToken;
 
       debugPrint('🔐 Checking Turnstile verification...');
-      final turnstileState = _ref
-          .read(turnstileNotifierProvider(TurnstileActionEnum.googleSignIn));
+      final turnstileState =
+          _ref.read(turnstileNotifierProvider(TurnstileActionEnum.login));
 
       if (turnstileState is TurnstileSuccess) {
         turnstileToken = turnstileState.token;
@@ -353,8 +353,8 @@ class LoginNotifier extends StateNotifier<LoginState> {
       String? turnstileToken;
 
       debugPrint('🔐 Checking Turnstile verification...');
-      final turnstileState = _ref
-          .read(turnstileNotifierProvider(TurnstileActionEnum.googleSignUp));
+      final turnstileState =
+          _ref.read(turnstileNotifierProvider(TurnstileActionEnum.register));
 
       if (turnstileState is TurnstileSuccess) {
         turnstileToken = turnstileState.token;
