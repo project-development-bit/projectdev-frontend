@@ -34,6 +34,9 @@ class GoogleAuthService {
         throw Exception(
             "Failed to sign in to Firebase after getting Google credential.");
       }
+      debugPrint('Google ID Token: ${googleAuth.idToken}');
+      debugPrint('Firebase User UID: ${firebaseUser.uid}');
+      debugPrint('Firebase User Email: ${firebaseUser.email}');
 
       // Step 3: If successful, update and return the request object.
       debugPrint('Successfully signed in with Google and Firebase.');
@@ -51,7 +54,7 @@ class GoogleAuthService {
   /// Includes the necessary workaround for Flutter Web.
   Future<GoogleSignInAuthentication?> _getGoogleAuthDetails() async {
     // 1. Attempt to sign in silently. This is the recommended first step on web.
-    GoogleSignInAccount? account = await _googleSignIn.signInSilently();
+    GoogleSignInAccount? account = await _googleSignIn.signIn();
 
     // 2. If silent sign-in fails, fall back to the interactive sign-in.
     account ??= await _googleSignIn.signIn();
