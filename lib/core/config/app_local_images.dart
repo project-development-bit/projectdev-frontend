@@ -96,7 +96,7 @@ class AppLocalImages {
   static const String bronze = "assets/images/rewards/bronze.svg";
   static const String silver = "assets/images/rewards/silver.svg";
   static const String gold = "assets/images/rewards/gold.svg";
-  static const String diamond = "assets/images/rewards/diamond.svg";
+  static const String diamond = "assets/images/rewards/diamond.webp";
   static const String legend = "assets/images/rewards/legend.svg";
   static String levelStatusImage(String status) {
     // return "assets/images/levels/$status.png";
