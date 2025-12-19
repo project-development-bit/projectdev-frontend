@@ -53,22 +53,12 @@ class GoogleAuthService {
   /// Handles the Google Sign-In flow and retrieves the authentication tokens.
   /// Includes the necessary workaround for Flutter Web.
   Future<GoogleSignInAuthentication?> _getGoogleAuthDetails() async {
-    // 1. Attempt to sign in silently. This is the recommended first step on web.
     GoogleSignInAccount? account = await _googleSignIn.signIn();
-
-    // 2. If silent sign-in fails, fall back to the interactive sign-in.
-    account ??= await _googleSignIn.signIn();
-
-    // 3. If there's still no account, the user likely cancelled the sign-in flow.
     if (account == null) {
       debugPrint("Google Sign-In aborted by user.");
       return null;
     }
-
-    // 4. Get the authentication object from the account.
     GoogleSignInAuthentication auth = await account.authentication;
-
-    // 5. Web-specific workaround: If idToken is null, force a re-authentication.
     if (kIsWeb && auth.idToken == null) {
       debugPrint(
           "idToken was null on web, attempting to re-authenticate silently...");
@@ -78,8 +68,6 @@ class GoogleAuthService {
         auth = await silentAuthAccount.authentication;
       }
     }
-
-    // 6. After all attempts, if idToken is still null, something is wrong.
     if (auth.idToken == null) {
       throw Exception(
           "Failed to retrieve idToken from Google after all attempts.");
