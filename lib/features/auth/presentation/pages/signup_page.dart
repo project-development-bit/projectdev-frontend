@@ -3,6 +3,7 @@ import 'package:gigafaucet/core/common/common_text.dart';
 import 'package:gigafaucet/core/common/custom_buttom_widget.dart';
 import 'package:gigafaucet/core/theme/app_colors.dart';
 import 'package:gigafaucet/features/auth/presentation/providers/ip_country_state.dart';
+import 'package:gigafaucet/features/auth/presentation/providers/login_provider.dart';
 import 'package:gigafaucet/features/auth/presentation/providers/selected_country_provider.dart';
 import 'package:gigafaucet/features/auth/presentation/widgets/google_signup_buttom.dart';
 import 'package:gigafaucet/features/auth/presentation/widgets/onboarding_background.dart';
@@ -202,7 +203,9 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final localizations = AppLocalizations.of(context);
-    final isLoading = ref.watch(isRegisterLoadingProvider);
+    final loginState = ref.watch(loginNotifierProvider);
+    final isLoading =
+        ref.watch(isRegisterLoadingProvider) || loginState is LoginLoading;
     final countriesState = ref.watch(getCountriesNotifierProvider);
 
     return OnboardingBackground(
