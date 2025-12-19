@@ -1,21 +1,21 @@
 import 'package:equatable/equatable.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gigafaucet/core/enum/user_role.dart';
 
 /// Login request model for API calls
 class GoogleRegisterRequest extends Equatable {
   const GoogleRegisterRequest({
-    this.userCredential,
+    this.avatar,
     required this.recaptchaToken,
     required this.countryCode,
     required this.userAgent,
     required this.deviceFingerprint,
     required this.role,
+    this.idToken,
     this.referralCode,
   });
 
   /// User's Firebase UserCredential obtained from Google sign-in
-  final UserCredential? userCredential;
+  final String? avatar;
 
   /// reCAPTCHA token for verification (optional, will be null in debug mode)
   final String? recaptchaToken;
@@ -33,17 +33,16 @@ class GoogleRegisterRequest extends Equatable {
 
   final UserRole role;
 
+  final String? idToken;
+
   /// Convert to JSON for API request
   Future<Map<String, dynamic>> toJson() async {
-    if (userCredential == null) {
-      throw Exception('UserCredential is cannot be null');
-    }
     final json = {
       'country_code': countryCode,
       'userAgent': userAgent,
       'device_fingerprint': deviceFingerprint,
-      'idToken': userCredential?.credential?.accessToken ?? '',
-      'avatar': userCredential?.user?.photoURL ?? '',
+      'idToken': idToken ?? '',
+      'avatar': avatar ?? '',
       'role': role.toString(),
       'referralCode': referralCode,
     };
@@ -58,7 +57,8 @@ class GoogleRegisterRequest extends Equatable {
 
   /// Create a copy with updated values
   GoogleRegisterRequest copyWith({
-    UserCredential? userCredential,
+    String? avatar,
+    String? idToken,
     String? recaptchaToken,
     String? countryCode,
     String? userAgent,
@@ -67,18 +67,30 @@ class GoogleRegisterRequest extends Equatable {
     String? referralCode,
   }) {
     return GoogleRegisterRequest(
-      userCredential: userCredential ?? this.userCredential,
       recaptchaToken: recaptchaToken ?? this.recaptchaToken,
       countryCode: countryCode ?? this.countryCode,
       userAgent: userAgent ?? this.userAgent,
       deviceFingerprint: deviceFingerprint ?? this.deviceFingerprint,
       role: role ?? this.role,
       referralCode: referralCode ?? this.referralCode,
+      idToken: idToken ?? this.idToken,
     );
   }
 
   @override
-  List<Object?> get props => [userCredential];
+  List<Object?> get props => [
+        avatar,
+        idToken,
+        recaptchaToken,
+        countryCode,
+        userAgent,
+        deviceFingerprint,
+        role,
+        referralCode
+      ];
   @override
-  String toString() => 'GoogleLoginRequest(userCredential: $userCredential)';
+  String toString() => 'GoogleLoginRequest(avatar: $avatar, idToken: $idToken, '
+      'recaptchaToken: $recaptchaToken, countryCode: $countryCode, '
+      'userAgent: $userAgent, deviceFingerprint: $deviceFingerprint, '
+      'role: $role, referralCode: $referralCode)';
 }

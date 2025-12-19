@@ -1,18 +1,18 @@
 import 'package:equatable/equatable.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 /// Login request model for API calls
 class GoogleLoginRequest extends Equatable {
   const GoogleLoginRequest({
-    this.userCredential,
+    this.idToken,
+    this.avatar,
     required this.recaptchaToken,
     required this.countryCode,
     required this.userAgent,
     required this.deviceFingerprint,
   });
 
-  /// User's Firebase UserCredential obtained from Google sign-in
-  final UserCredential? userCredential;
+  final String? idToken;
+  final String? avatar;
 
   /// reCAPTCHA token for verification (optional, will be null in debug mode)
   final String? recaptchaToken;
@@ -28,14 +28,15 @@ class GoogleLoginRequest extends Equatable {
 
   /// Convert to JSON for API request
   Future<Map<String, dynamic>> toJson() async {
-    if (userCredential == null) {
-      throw Exception('UserCredential is required to create JSON payload.');
+    if (idToken == null) {
+      throw Exception('ID Token is required to create JSON payload.');
     }
     final json = {
       'country_code': countryCode,
       'userAgent': userAgent,
       'device_fingerprint': deviceFingerprint,
-      'idToken': userCredential?.credential?.accessToken ?? '',
+      'idToken': idToken ?? '',
+      'avatar': avatar ?? '',
     };
 
     // Only add recaptchaToken if it's not null
@@ -48,14 +49,16 @@ class GoogleLoginRequest extends Equatable {
 
   /// Create a copy with updated values
   GoogleLoginRequest copyWith({
-    UserCredential? userCredential,
+    String? idToken,
+    String? avatar,
     String? recaptchaToken,
     String? countryCode,
     String? userAgent,
     String? deviceFingerprint,
   }) {
     return GoogleLoginRequest(
-      userCredential: userCredential ?? this.userCredential,
+      idToken: idToken ?? this.idToken,
+      avatar: avatar ?? this.avatar,
       recaptchaToken: recaptchaToken ?? this.recaptchaToken,
       countryCode: countryCode ?? this.countryCode,
       userAgent: userAgent ?? this.userAgent,
@@ -64,7 +67,15 @@ class GoogleLoginRequest extends Equatable {
   }
 
   @override
-  List<Object?> get props => [userCredential];
+  List<Object?> get props => [
+        idToken,
+        avatar,
+        recaptchaToken,
+        countryCode,
+        userAgent,
+        deviceFingerprint
+      ];
   @override
-  String toString() => 'GoogleLoginRequest(userCredential: $userCredential)';
+  String toString() =>
+      'GoogleLoginRequest(idToken: $idToken, avatar: $avatar, recaptchaToken: $recaptchaToken, countryCode: $countryCode, userAgent: $userAgent, deviceFingerprint: $deviceFingerprint)';
 }

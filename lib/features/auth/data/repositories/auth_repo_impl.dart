@@ -438,8 +438,11 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Either<Failure, LoginResponseModel>> googleSignIn(
       GoogleLoginRequest request) async {
     try {
-      final userModel = await googleAuthService.signInWithGoogle();
-      request = request.copyWith(userCredential: userModel);
+      final userModel = await googleAuthService.getGoogleIdToken();
+      request = request.copyWith(
+        idToken: userModel?.idToken,
+        avatar: userModel?.user?.photoURL,
+      );
       final response = await remoteDataSource.googleLogin(request);
       return Right(response);
     } catch (e) {
@@ -451,9 +454,11 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Either<Failure, LoginResponseModel>> googleRegister(
       GoogleRegisterRequest request) async {
     try {
-      final userModel = await googleAuthService.signInWithGoogle();
-
-      request = request.copyWith(userCredential: userModel);
+      final userModel = await googleAuthService.getGoogleIdToken();
+      request = request.copyWith(
+        idToken: userModel?.idToken,
+        avatar: userModel?.user?.photoURL,
+      );
       final response = await remoteDataSource.googleRegister(request);
       return Right(response);
     } on DioException catch (e) {
