@@ -36,7 +36,7 @@ class GoogleLoginRequest extends Equatable {
       'userAgent': userAgent,
       'device_fingerprint': deviceFingerprint,
       'idToken': idToken ?? '',
-      'avatar': avatar ?? '',
+      // 'avatar': avatar ?? '',
     };
 
     // Only add recaptchaToken if it's not null

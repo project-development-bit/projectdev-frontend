@@ -441,7 +441,6 @@ class AuthRepositoryImpl implements AuthRepository {
       final userModel = await googleAuthService.getGoogleIdToken();
       request = request.copyWith(
         idToken: userModel?.idToken,
-        avatar: userModel?.user?.photoURL,
       );
       final response = await remoteDataSource.googleLogin(request);
       return Right(response);
@@ -457,7 +456,7 @@ class AuthRepositoryImpl implements AuthRepository {
       final userModel = await googleAuthService.getGoogleIdToken();
       request = request.copyWith(
         idToken: userModel?.idToken,
-        avatar: userModel?.user?.photoURL,
+        // avatar: userModel?.user?.photoURL,
       );
       final response = await remoteDataSource.googleRegister(request);
       return Right(response);

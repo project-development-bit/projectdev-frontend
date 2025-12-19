@@ -6,7 +6,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 final googleAuthServiceProvider = Provider((ref) => GoogleAuthService());
 
 class GoogleAuthService {
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  // final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   final GoogleSignIn _googleSignIn = GoogleSignIn(
     clientId:
@@ -20,29 +20,28 @@ class GoogleAuthService {
 
   Future<GoolgeSignInResult?> getGoogleIdToken() async {
     try {
-      // Step 1: Get Google authentication details (idToken and accessToken).
       final googleAuth = await _getGoogleAuthDetails();
       if (googleAuth == null) {
-        // This means the sign-in was cancelled by the user.
         return null;
       }
 
-      // Step 2: Use the Google credential to sign in to Firebase.
-      final firebaseUser = await _signInToFirebaseWithGoogle(googleAuth);
-      if (firebaseUser == null) {
-        // This would be an unexpected error if Firebase sign-in fails.
-        throw Exception(
-            "Failed to sign in to Firebase after getting Google credential.");
-      }
       debugPrint('Google ID Token: ${googleAuth.idToken}');
-      debugPrint('Firebase User UID: ${firebaseUser.uid}');
-      debugPrint('Firebase User Email: ${firebaseUser.email}');
+      debugPrint('Google Access Token: ${googleAuth.accessToken}');
+      debugPrint('Google Sign-In serverAuthCode: ${googleAuth.serverAuthCode}');
+      debugPrint('Google Sign-In successful.');
+
+      // final firebaseUser = await _signInToFirebaseWithGoogle(googleAuth);
+
+      // debugPrint('Firebase User UID: ${firebaseUser?.uid}');
+      // debugPrint('Firebase User Email: ${firebaseUser?.email}');
+      // debugPrint('Firebase User Display Name: ${firebaseUser?.displayName}');
+      // debugPrint('Firebase User Photo URL: ${firebaseUser?.photoURL}');
 
       // Step 3: If successful, update and return the request object.
       debugPrint('Successfully signed in with Google and Firebase.');
       return GoolgeSignInResult(
         idToken: googleAuth.idToken,
-        user: firebaseUser,
+        // user: firebaseUser,
       );
     } catch (error) {
       debugPrint("An error occurred during the Google sign-in process: $error");
@@ -104,13 +103,16 @@ class GoogleAuthService {
 
   Future<void> signOut() async {
     await _googleSignIn.signOut();
-    await _firebaseAuth.signOut();
+    // await _firebaseAuth.signOut();
   }
 }
 
 class GoolgeSignInResult {
   final String? idToken;
-  final User? user;
+  // final User? user;
 
-  GoolgeSignInResult({this.idToken, this.user});
+  GoolgeSignInResult({
+    this.idToken,
+    // this.user
+  });
 }
