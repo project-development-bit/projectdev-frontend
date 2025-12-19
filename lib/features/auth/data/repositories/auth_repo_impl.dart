@@ -162,6 +162,7 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Either<Failure, void>> logout() async {
     try {
       // Clear all stored authentication data
+      await googleAuthService.signOut();
       await secureStorage.clearAllAuthData();
       return const Right(null);
     } catch (e) {
@@ -446,6 +447,8 @@ class AuthRepositoryImpl implements AuthRepository {
         idToken: userModel.idToken,
       );
       final response = await remoteDataSource.googleLogin(request);
+      // Store tokens in secure storage
+      await _storeTokens(response);
       return Right(response);
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));
@@ -464,6 +467,8 @@ class AuthRepositoryImpl implements AuthRepository {
         idToken: userModel.idToken,
       );
       final response = await remoteDataSource.googleRegister(request);
+      // Store tokens in secure storage
+      await _storeTokens(response);
       return Right(response);
     } on DioException catch (e) {
       return Left(ServerFailure(
