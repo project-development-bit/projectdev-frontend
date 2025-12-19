@@ -451,6 +451,7 @@ class AuthRepositoryImpl implements AuthRepository {
       await _storeTokens(response);
       return Right(response);
     } catch (e) {
+      await googleAuthService.signOut();
       return Left(ServerFailure(message: e.toString()));
     }
   }
@@ -471,11 +472,13 @@ class AuthRepositoryImpl implements AuthRepository {
       await _storeTokens(response);
       return Right(response);
     } on DioException catch (e) {
+      await googleAuthService.signOut();
       return Left(ServerFailure(
         message: e.message,
         statusCode: e.response?.statusCode,
       ));
     } catch (e) {
+      await googleAuthService.signOut();
       return Left(ServerFailure(message: e.toString()));
     }
   }

@@ -101,6 +101,9 @@ class GoogleAuthService {
   // }
 
   Future<void> signOut() async {
+    if (_googleSignIn.currentUser == null) {
+      return;
+    }
     await _googleSignIn.signOut();
     // await _firebaseAuth.signOut();
   }
@@ -108,10 +111,8 @@ class GoogleAuthService {
 
 class GoolgeSignInResult {
   final String? idToken;
-  // final User? user;
 
   GoolgeSignInResult({
     this.idToken,
-    // this.user
   });
 }

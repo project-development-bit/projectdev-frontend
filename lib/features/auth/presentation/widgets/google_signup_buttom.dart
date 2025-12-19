@@ -113,7 +113,6 @@ class _GoogleSignupButtonState extends ConsumerState<GoogleSignupButton> {
       referralCode: widget.referralCode,
       onSuccess: () {
         debugPrint('✅ SignUpPage: Registration successful callback triggered');
-        authActions.resetAllStates();
       },
       onError: (errorMessage) {
         debugPrint('❌ SignUpPage: Registration error callback: $errorMessage');
