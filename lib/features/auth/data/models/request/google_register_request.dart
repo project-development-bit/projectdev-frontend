@@ -43,7 +43,7 @@ class GoogleRegisterRequest extends Equatable {
       'device_fingerprint': deviceFingerprint,
       'idToken': idToken ?? '',
       'avatar': avatar ?? '',
-      // 'role': role.toString(),
+      'role': role.toString(),
       'referralCode': referralCode,
     };
 
