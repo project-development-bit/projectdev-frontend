@@ -1,4 +1,5 @@
 // 📦 Package imports
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:gigafaucet/features/auth/presentation/examples/two_factor_auth_example.dart';
 import 'package:gigafaucet/features/auth/presentation/widgets/internal_verification_overlay.dart';
 import 'package:gigafaucet/features/home/presentation/widgets/dialog/tutorial_overlay.dart';
@@ -71,6 +72,10 @@ class BurgerEatsAppRoutes {
   static final _rootNavigatorKey = GlobalKey<NavigatorState>();
   static final _shellNavigatorKey = GlobalKey<NavigatorState>();
   //--------------Navigator Keys--------------//
+  static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+
+  static FirebaseAnalyticsObserver observer =
+      FirebaseAnalyticsObserver(analytics: analytics);
 
   static const _initialPath = '/';
 
@@ -78,7 +83,9 @@ class BurgerEatsAppRoutes {
         navigatorKey: _rootNavigatorKey,
         initialLocation: _initialPath,
         debugLogDiagnostics: true,
-
+        observers: <NavigatorObserver>[
+          observer,
+        ],
         routes: [
           // Landing Route Handler
           GoRoute(

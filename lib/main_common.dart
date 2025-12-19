@@ -31,7 +31,7 @@ final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey =
 Future<void> runAppWithFlavor(AppFlavor flavor) async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
+  // FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true);
   // Set the flavor first so configuration is available
   FlavorManager.setFlavor(flavor);
 
@@ -197,10 +197,7 @@ class _MyAppState extends ConsumerState<MyApp> {
             !FlavorManager.isProd, // Hide debug banner in production
         routerConfig: ref.read(goRouterProvider), // Using persistent router
         locale: currentLocale,
-        title: FlavorManager.appName, // Use flavor-specific app name
-
-        // Theme configuration - Use app settings theme from server, fallback to default theme
-
+        title: FlavorManager.appName,
         theme: appSettingsThemeState.lightTheme ?? AppTheme.lightTheme,
         darkTheme: appSettingsThemeState.darkTheme ?? AppTheme.darkTheme,
         themeMode: themeNotifier.getEffectiveThemeMode(
