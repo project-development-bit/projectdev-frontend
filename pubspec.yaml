@@ -87,6 +87,8 @@ dependencies:
   flutter_fortune_wheel: 
     path: ./packages/flutter_fortune_wheel
   flutter_native_splash: ^2.4.7
+  url_launcher: ^6.3.1
+  web: ^1.0.0
   lottie: ^3.3.2
   wndr_flutter_confetti: ^0.3.0
   

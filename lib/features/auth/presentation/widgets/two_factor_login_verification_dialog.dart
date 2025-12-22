@@ -2,6 +2,7 @@ import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
 import 'package:cointiply_app/core/common/dialog_bg_widget.dart';
 import 'package:cointiply_app/core/config/app_local_images.dart';
 import 'package:cointiply_app/routing/routing.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/common/common_text.dart';
 import '../../../../core/common/common_textfield.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/services/support_email_launcher.dart';
 import '../../../localization/data/helpers/app_localizations.dart';
 import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/services/secure_storage_service.dart';
@@ -40,10 +42,26 @@ class _TwoFactorLoginVerificationDialogState
   String? _errorText;
 
   final GlobalKey _boxKey = GlobalKey();
+  late final TapGestureRecognizer _contactSupportTap;
 
   @override
   void initState() {
     super.initState();
+
+    _contactSupportTap = TapGestureRecognizer()
+      ..onTap = () {
+        if (!mounted) return;
+        launchSupportEmail().then((ok) {
+          if (!mounted) return;
+          if (!ok) {
+            context.showErrorSnackBar(
+              message:
+                  'Unable to open email app. Please email $kSupportEmailAddress',
+            );
+          }
+        });
+      };
+
     // Auto-focus the input field
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _codeFocusNode.requestFocus();
@@ -95,6 +113,7 @@ class _TwoFactorLoginVerificationDialogState
 
   @override
   void dispose() {
+    _contactSupportTap.dispose();
     _codeController.dispose();
     _codeFocusNode.dispose();
     super.dispose();
@@ -298,6 +317,7 @@ class _TwoFactorLoginVerificationDialogState
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
                         ),
+                        recognizer: _contactSupportTap,
                       ),
                     ],
                   ),
