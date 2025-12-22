@@ -11,12 +11,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/foundation.dart';
 import 'package:url_strategy/url_strategy.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:js_interop';
 import 'core/services/platform_recaptcha_service.dart';
 import 'routing/app_router.dart';
-
-@JS('window.removeSplashFromWeb')
-external void _jsRemoveSplashFromWeb();
+import 'package:cointiply_app/core/utils/web_helpers.dart'
+    if (dart.library.io) 'package:cointiply_app/core/utils/web_helpers_stub.dart';
 
 // Global key for ScaffoldMessenger to show snackbars above dialogs
 final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey =
@@ -187,9 +185,7 @@ class _MyAppState extends ConsumerState<MyApp>
   }
 
   void _removeSplash() {
-    if (kIsWeb) {
-      _jsRemoveSplashFromWeb();
-    }
+    removeSplashFromWeb();
   }
 
   void _startFadeIn() {
@@ -233,7 +229,7 @@ class _MyAppState extends ConsumerState<MyApp>
         _startFadeIn();
       });
     }
-    
+
     return FadeTransition(
       opacity: _fadeAnimation,
       child: FlavorBanner(
