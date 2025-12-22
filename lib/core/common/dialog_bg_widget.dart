@@ -19,6 +19,8 @@ class DialogBgWidget extends StatelessWidget {
   final Function()? onRouteBack;
   final bool isOverlayLoading;
   final bool isInitLoading;
+  final bool isShowingCloseButton;
+  final double? titleFontSize;
 
   const DialogBgWidget(
       {super.key,
@@ -31,7 +33,9 @@ class DialogBgWidget extends StatelessWidget {
       this.dialogWidth,
       this.isOverlayLoading = false,
       this.isInitLoading = false,
-      this.padding});
+      this.padding,
+      this.titleFontSize,
+      this.isShowingCloseButton = true});
 
   double _getDialogWidth(BuildContext context) {
     if (context.isMobile) {
@@ -104,14 +108,19 @@ class DialogBgWidget extends StatelessWidget {
                               fontWeight: FontWeight.w700,
                               color: colorScheme.onPrimary,
                               overflow: TextOverflow.clip,
+                              fontSize: titleFontSize,
+                              textAlign: isShowingCloseButton
+                                  ? TextAlign.left
+                                  : TextAlign.center,
                             ),
                     ),
-                    CloseSquareButton(onTap: () {
-                      context.pop();
-                      if (onClose != null) {
-                        onClose!();
-                      }
-                    })
+                    if (isShowingCloseButton)
+                      CloseSquareButton(onTap: () {
+                        context.pop();
+                        if (onClose != null) {
+                          onClose!();
+                        }
+                      })
                   ],
                 ),
               ),
