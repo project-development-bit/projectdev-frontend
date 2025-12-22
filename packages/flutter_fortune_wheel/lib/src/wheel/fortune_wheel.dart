@@ -216,25 +216,38 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Initialize AudioPlayer for tick sound
-    final audioPlayer = useMemoized(() {
-      final player = AudioPlayer();
-      // Configure player for low latency and better web support
-      player.setReleaseMode(ReleaseMode.stop);
-      player.setPlayerMode(PlayerMode.lowLatency);
-      return player;
+    // Tick sound: use a small pool of preloaded low-latency players.
+    // This avoids dropped/quiet ticks when the wheel spins very fast.
+    final tickPlayers = useMemoized(() {
+      return List<AudioPlayer>.generate(4, (_) {
+        final player = AudioPlayer();
+        player.setReleaseMode(ReleaseMode.stop);
+        player.setPlayerMode(PlayerMode.lowLatency);
+        player.seek(Duration(milliseconds: 40));
+        player.setVolume(1.0);
+        return player;
+      });
     });
 
+    final tickPlayerIndex = useRef<int>(0);
+
     useEffect(() {
-      // Preload the audio file (do not prefix with 'assets/')
       () async {
-        try {
-          await audioPlayer.setSource(AssetSource('sound/tap.mp3'));
-          // ignore: avoid_catches_without_on_clauses
-        } catch (_) {}
+        for (final player in tickPlayers) {
+          try {
+            // Preload the audio file (do not prefix with 'assets/')
+            await player.setSource(AssetSource('sound/tap.mp3'));
+            await player.setVolume(1.0);
+            // ignore: avoid_catches_without_on_clauses
+          } catch (_) {}
+        }
       }();
-      // Dispose audio player when widget is disposed
-      return audioPlayer.dispose;
+
+      return () {
+        for (final player in tickPlayers) {
+          player.dispose();
+        }
+      };
     }, []);
 
     // Arrow animation: Setting up the AnimationController and Animation
@@ -281,11 +294,15 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
 
     Future<void> _playTickSound() async {
       try {
-        // Restart from beginning using the same preloaded player
+        final player = tickPlayers[tickPlayerIndex.value];
+        tickPlayerIndex.value =
+            (tickPlayerIndex.value + 1) % tickPlayers.length;
 
-        audioPlayer.stop();
-        audioPlayer.seek(Duration(milliseconds: 40));
-        audioPlayer.resume();
+        // Restart from beginning. Using a pool prevents rapid ticks from cutting
+        // each other off.
+        await player.stop();
+        await player.seek(Duration.zero);
+        await player.resume();
         // ignore: avoid_catches_without_on_clauses
       } catch (_) {}
     }
@@ -306,7 +323,8 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
         }
         // Reset controller to start fresh
         rotateAnimCtrl.reset();
-        rotateAnimCtrl.duration = Duration(seconds: 1);
+        // Slower loop so the wheel doesn't spin too fast while waiting.
+        rotateAnimCtrl.duration = const Duration(milliseconds: 10000);
         rotateAnim.value = CurvedAnimation(
             parent: rotateAnimCtrl,
             curve: Curves.linear,
@@ -334,21 +352,18 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
       }
     }
 
-
     final selectedIndex = useState<int>(0);
 
     useEffect(() {
       final subscription = selected.listen((event) async {
         if (event.status == FortuneWheelStatus.animating) {
-          await audioPlayer.setSource(AssetSource('sound/tap.mp3'));
-          await audioPlayer.resume();
           animate(isForeverRun: true);
         } else if (event.status == FortuneWheelStatus.completed) {
           selectedIndex.value = event.id;
           await stopAnimation();
 
           await Future.microtask(() => onAnimationEnd?.call());
-        } 
+        }
       });
       return subscription.cancel;
     }, []);
