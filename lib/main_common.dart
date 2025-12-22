@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:url_strategy/url_strategy.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'core/services/platform_recaptcha_service.dart';
@@ -23,7 +22,6 @@ final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey =
 
 /// Common app initialization function for all flavors
 Future<void> runAppWithFlavor(AppFlavor flavor) async {
-
   FlavorManager.setFlavor(flavor);
   // Initialize reCAPTCHA for all platforms
   final recaptchaSiteKey = FlavorManager.recaptchaSiteKey;
@@ -126,7 +124,7 @@ class _MyAppState extends ConsumerState<MyApp>
   @override
   void initState() {
     super.initState();
-    
+
     // Initialize fade animation
     _fadeController = AnimationController(
       duration: const Duration(milliseconds: 800),
@@ -137,7 +135,7 @@ class _MyAppState extends ConsumerState<MyApp>
       parent: _fadeController,
       curve: Curves.easeIn,
     );
-    
+
     // Load app settings theme from server on app start
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(appSettingsThemeProvider.notifier).loadConfig();
@@ -186,13 +184,7 @@ class _MyAppState extends ConsumerState<MyApp>
   }
 
   void _removeSplash() {
-    // Remove splash on web
-    if (kIsWeb) {
-      removeSplashFromWeb();
-    } else {
-      // Remove splash on mobile (Android/iOS) with smooth animation
-      FlutterNativeSplash.remove();
-    }
+    removeSplashFromWeb();
   }
 
   void _startFadeIn() {
@@ -229,7 +221,7 @@ class _MyAppState extends ConsumerState<MyApp>
         ),
       );
     }
-    
+
     // Start fade-in when theme is loaded
     if (!_fadeController.isAnimating && _fadeController.value == 0) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
