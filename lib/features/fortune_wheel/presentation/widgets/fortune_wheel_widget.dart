@@ -241,7 +241,8 @@ class _FortuneWheelWidgetState extends ConsumerState<FortuneWheelWidget> {
     
     
       final reward = currentState.rewards
-          .firstWhere((element) => element.id == spinResponse.wheelIndex);
+          .firstWhere(
+          (element) => element.wheelIndex == spinResponse.wheelIndex);
 
       await celebrationSound();
       // Wait for animation to complete
