@@ -9,10 +9,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:url_strategy/url_strategy.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'core/services/platform_recaptcha_service.dart';
 import 'routing/app_router.dart';
+import 'package:cointiply_app/core/utils/web_helpers.dart'
+    if (dart.library.io) 'package:cointiply_app/core/utils/web_helpers_stub.dart';
 
 // Global key for ScaffoldMessenger to show snackbars above dialogs
 final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey =
@@ -20,9 +23,8 @@ final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey =
 
 /// Common app initialization function for all flavors
 Future<void> runAppWithFlavor(AppFlavor flavor) async {
-  // Set the flavor first so configuration is available
-  FlavorManager.setFlavor(flavor);
 
+  FlavorManager.setFlavor(flavor);
   // Initialize reCAPTCHA for all platforms
   final recaptchaSiteKey = FlavorManager.recaptchaSiteKey;
   if (!kIsWeb) {
@@ -115,10 +117,27 @@ class MyApp extends ConsumerStatefulWidget {
   ConsumerState<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends ConsumerState<MyApp> {
+class _MyAppState extends ConsumerState<MyApp>
+    with SingleTickerProviderStateMixin {
+  bool _splashImageLoaded = false;
+  late AnimationController _fadeController;
+  late Animation<double> _fadeAnimation;
+
   @override
   void initState() {
     super.initState();
+    
+    // Initialize fade animation
+    _fadeController = AnimationController(
+      duration: const Duration(milliseconds: 800),
+      vsync: this,
+    );
+
+    _fadeAnimation = CurvedAnimation(
+      parent: _fadeController,
+      curve: Curves.easeIn,
+    );
+    
     // Load app settings theme from server on app start
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(appSettingsThemeProvider.notifier).loadConfig();
@@ -142,6 +161,48 @@ class _MyAppState extends ConsumerState<MyApp> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_splashImageLoaded) {
+      Future.wait([
+        precacheImage(AssetImage(AppLocalImages.splashLogo), context),
+        precacheImage(AssetImage(AppLocalImages.splashBackground), context),
+        precacheImage(
+            AssetImage(AppLocalImages.splashBackgroundMobile), context),
+      ]).then((_) {
+        if (mounted) {
+          setState(() {
+            _splashImageLoaded = true;
+          });
+        }
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _fadeController.dispose();
+    super.dispose();
+  }
+
+  void _removeSplash() {
+    // Remove splash on web
+    if (kIsWeb) {
+      removeSplashFromWeb();
+    } else {
+      // Remove splash on mobile (Android/iOS) with smooth animation
+      FlutterNativeSplash.remove();
+    }
+  }
+
+  void _startFadeIn() {
+    _fadeController.forward().then((_) {
+      // Remove native splash after fade-in completes
+      Future.delayed(const Duration(milliseconds: 300), _removeSplash);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final currentLocale = ref.watch(localizationNotifierProvider).currentLocale;
     final currentThemeMode = ref.watch(themeProvider);
@@ -157,89 +218,81 @@ class _MyAppState extends ConsumerState<MyApp> {
     debugPrint(
         'App settings theme loading: ${appSettingsThemeState.isLoading}');
 
-    // Show splash screen while theme is loading
+    // Show transparent container while theme is loading - native splash is underneath
     if (appSettingsThemeState.isLoading || languageState.isLoading) {
       return MaterialApp(
-        color: Color(0xff1A1A1A),
+        color: Colors.transparent,
         debugShowCheckedModeBanner: false,
         home: Scaffold(
-          backgroundColor: Color(0xff1A1A1A),
-          body: Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage(
-                      !context.isMobile
-                          ? AppLocalImages.splashBackground
-                          : AppLocalImages.splashBackgroundMobile,
-                    ),
-                    fit: context.isMobile ? BoxFit.fitWidth : BoxFit.cover,
-                    alignment: Alignment.topCenter),
-              ),
-              child: Center(
-                  child: Image.asset(
-                AppLocalImages.splashLogo,
-                width: context.isDesktop
-                    ? 427
-                    : context.isMobile
-                        ? context.screenWidth * 0.8
-                        : context.screenWidth * 0.4,
-              ))),
+          backgroundColor: Colors.transparent,
+          body: SizedBox.shrink(),
         ),
       );
     }
-    return FlavorBanner(
-      child: MaterialApp.router(
-        scaffoldMessengerKey: rootScaffoldMessengerKey,
-        debugShowCheckedModeBanner:
-            !FlavorManager.isProd, // Hide debug banner in production
-        routerConfig: ref.read(goRouterProvider), // Using persistent router
-        locale: currentLocale,
-        title: FlavorManager.appName, // Use flavor-specific app name
+    
+    // Start fade-in when theme is loaded
+    if (!_fadeController.isAnimating && _fadeController.value == 0) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _startFadeIn();
+      });
+    }
 
-        // Theme configuration - Use app settings theme from server, fallback to default theme
+    return FadeTransition(
+      opacity: _fadeAnimation,
+      child: FlavorBanner(
+        child: MaterialApp.router(
+          scaffoldMessengerKey: rootScaffoldMessengerKey,
+          debugShowCheckedModeBanner:
+              !FlavorManager.isProd, // Hide debug banner in production
+          routerConfig: ref.read(goRouterProvider), // Using persistent router
+          locale: currentLocale,
+          title: FlavorManager.appName, // Use flavor-specific app name
 
-        theme: appSettingsThemeState.lightTheme ?? AppTheme.lightTheme,
-        darkTheme: appSettingsThemeState.darkTheme ?? AppTheme.darkTheme,
-        themeMode: themeNotifier.getEffectiveThemeMode(
-          MediaQuery.platformBrightnessOf(context),
-        ),
-        supportedLocales: languageState.localeList.isNotEmpty
-            ? languageState.localeList
-            : const [
-                Locale('en', 'US'),
-                Locale('my', 'MM'),
-              ],
-        localizationsDelegates: [
-          AppLocalizationsDelegate(ref),
-          CroppyLocalizations.delegate, // <- This here
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        localeResolutionCallback: (locale, supportedLocales) {
-          debugPrint(
-              'Locale resolution - device: $locale, current: $currentLocale');
+          // Theme configuration - Use app settings theme from server, fallback to default theme
 
-          // First check if the current locale from provider is supported
-          for (var supportedLocale in supportedLocales) {
-            if (supportedLocale.languageCode == currentLocale.languageCode) {
-              debugPrint('Using provider locale: $currentLocale');
-              return currentLocale;
-            }
-          }
+          theme: appSettingsThemeState.lightTheme ?? AppTheme.lightTheme,
+          darkTheme: appSettingsThemeState.darkTheme ?? AppTheme.darkTheme,
+          themeMode: themeNotifier.getEffectiveThemeMode(
+            MediaQuery.platformBrightnessOf(context),
+          ),
+          supportedLocales: languageState.localeList.isNotEmpty
+              ? languageState.localeList
+              : const [
+                  Locale('en', 'US'),
+                  Locale('my', 'MM'),
+                ],
+          localizationsDelegates: [
+            AppLocalizationsDelegate(ref),
+            CroppyLocalizations.delegate, // <- This here
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          localeResolutionCallback: (locale, supportedLocales) {
+            debugPrint(
+                'Locale resolution - device: $locale, current: $currentLocale');
 
-          // Fallback to device locale if supported
-          if (locale != null) {
+            // First check if the current locale from provider is supported
             for (var supportedLocale in supportedLocales) {
-              if (supportedLocale.languageCode == locale.languageCode) {
-                return supportedLocale;
+              if (supportedLocale.languageCode == currentLocale.languageCode) {
+                debugPrint('Using provider locale: $currentLocale');
+                return currentLocale;
               }
             }
-          }
 
-          debugPrint('Using default locale: ${supportedLocales.first}');
-          return supportedLocales.first;
-        },
+            // Fallback to device locale if supported
+            if (locale != null) {
+              for (var supportedLocale in supportedLocales) {
+                if (supportedLocale.languageCode == locale.languageCode) {
+                  return supportedLocale;
+                }
+              }
+            }
+
+            debugPrint('Using default locale: ${supportedLocales.first}');
+            return supportedLocales.first;
+          },
+        ),
       ),
     );
   }

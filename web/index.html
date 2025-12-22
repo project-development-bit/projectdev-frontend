@@ -324,7 +324,7 @@
     body {
       margin: 0;
       min-height: 100%;
-      background-color: #000000;
+        background-color:  #1E005E;;
       background-size: 100% 100%;
     }
 
@@ -332,6 +332,7 @@
     .web_container {
       width: 100vw;
       height: 100vh;
+      background-color:  #1E005E;
       background-image: url('splash_background.png');
       background-size: cover;
       background-position: center;
@@ -453,6 +454,7 @@
     /* Mobile Devices (≤600px) */
     @media (max-width: 600px) {
       .web_container {
+        background-color:  #1E005E;
         background-image: url('splash_background_mobile.png');
       }
 
@@ -464,24 +466,35 @@
     /* Tablet Devices (601px - 1024px) */
     @media (min-width: 601px) and (max-width: 1024px) {
       .splash-logo {
-        width: 60vw;
-        max-width: 380px;
+        width: 40vw;
       }
     }
   </style>
   <script id="splash-screen-script">
-    function removeSplashFromWeb() {
-      document.getElementById("splash")?.remove();
-      document.getElementById("splash-branding")?.remove();
-      document.getElementById("splash-screen-style")?.remove();
-      document.body.style.background = "transparent";
-    }
+      // Function to remove splash - will be called from Flutter after fade-in
+      window.removeSplashFromWeb = function () {
+        const splash = document.getElementById("splash");
+        const splashStyle = document.getElementById("splash-screen-style");
 
-    // Remove splash screen when Flutter is ready
-    window.addEventListener('flutter-initialized', removeSplashFromWeb);
+        if (splash) {
+          splash.style.transition = "opacity 0.3s ease-out";
+          splash.style.opacity = "0";
+          setTimeout(() => {
+            splash.remove();
+            document.getElementById("splash-branding")?.remove();
+          splashStyle?.remove();
+          document.body.style.background = "transparent";
+        }, 300);
+      }
+    };
 
-    // Fallback: Remove splash screen after 5 seconds if Flutter doesn't initialize
-    setTimeout(removeSplashFromWeb, 5000);
+      // Fallback: Remove splash screen after 10 seconds if Flutter doesn't call it
+      setTimeout(() => {
+        if (document.getElementById("splash")) {
+          console.log('Splash: Fallback removal after 10 seconds');
+          window.removeSplashFromWeb();
+        }
+      }, 10000);
   </script>
 </head>
 

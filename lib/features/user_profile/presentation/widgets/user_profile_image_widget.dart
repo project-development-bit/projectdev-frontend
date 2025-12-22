@@ -30,7 +30,7 @@ class UserProfileImageWidget extends ConsumerWidget {
         ),
       ),
       child: ClipOval(
-        child: avatarUrl == null || avatarUrl.isEmpty
+        child: (avatarUrl == null || avatarUrl.isEmpty) 
             ? Container(
                 width: size,
                 height: size,
@@ -39,7 +39,9 @@ class UserProfileImageWidget extends ConsumerWidget {
                     shape: BoxShape.circle),
                 child: Center(
                   child: CommonText.titleLarge(
-                    userName.substring(0, 1).toUpperCase(),
+                    userName.isNotEmpty
+                        ? userName.substring(0, 1).toUpperCase()
+                        : 'A',
                   ),
                 ),
               )

@@ -166,10 +166,18 @@ class AppLocalImages {
       "assets/images/spinning_inner_wheel.png";
   static const String outerWheel = "assets/images/outer_wheel.png";
   static const String wheelCenterPath = "assets/images/wheel_center_path.png";
+  static const String spinNotRemainBg = "assets/images/spin_not_remain_bg.png";
+  static const String spinNotRemainBgMobile = 
+      "assets/images/spin_not_remain_bg_mobile.png";
+  static const String spinWheelIcon = "assets/images/spin_wheel_icon.png";
+  static const String outOfSpins = "assets/images/out_of_spins.png";
+
   // Faucet Images
   static const String nextFaucetBg = "assets/images/bg/next_faucet_bg.png";
-  static const String splashLogo = "assets/images/splash_logo.png";
+  static const String splashLogo = "assets/images/giga_faucet_text_logo.png";
   static const String splashBackground = "assets/images/splash_background.png";
   static const String splashBackgroundMobile =
       "assets/images/splash_background_mobile.png";
+  
+
 }

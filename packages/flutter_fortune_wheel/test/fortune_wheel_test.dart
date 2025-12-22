@@ -88,7 +88,7 @@ void main() {
             endLog.add(true);
           }
 
-          final controller = StreamController<int>();
+          final controller = StreamController<FortuneReward>();
 
           await pumpFortuneWidget(
             tester,
@@ -106,7 +106,7 @@ void main() {
           expect(startLog, isEmpty);
           expect(endLog, isEmpty);
 
-          controller.add(1);
+          controller.add(FortuneReward(id: 1, status: FortuneWheelStatus.idle));
           await tester.pumpAndSettle();
 
           expect(startLog, hasLength(1));

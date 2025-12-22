@@ -14,3 +14,11 @@ const disable2FAEndpoints = '2fa/disable'; // POST to disable 2FA
 const forgotPasswordEndpoints = 'users/forgot_password';
 const savePasswordEndpoints = 'users/save_password';
 const whoamiEndpoints = 'users/whoami';
+
+// Fortune Wheel Endpoints
+const fortuneWheelRewardsEndpoint =
+    'fortune-wheel/rewards'; // GET fortune wheel rewards
+const fortuneWheelSpinEndpoint =
+    'fortune-wheel/spin'; // POST spin fortune wheel
+const fortuneWheelStatusEndpoint =
+    'fortune-wheel/rewards/status'; // GET fortune wheel status
