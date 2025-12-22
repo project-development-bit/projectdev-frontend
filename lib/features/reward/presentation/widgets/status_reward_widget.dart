@@ -154,7 +154,7 @@ class StatusRewardItem extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(userLevel.asset, width: 40, height: 40),
+            CommonImage(imageUrl: userLevel.asset, width: 40, height: 40),
             const SizedBox(height: 6),
             CommonText.titleMedium(
               userLevel.labelByTier(localizations, tier.label),

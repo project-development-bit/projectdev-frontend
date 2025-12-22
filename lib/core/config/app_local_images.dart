@@ -93,12 +93,11 @@ class AppLocalImages {
       "assets/images/rewards/ptc_ad_discount@2x.png";
   static const String statusRewardBg =
       "assets/images/rewards/status_rewards_bg.png";
-  static const String bronze = "assets/images/rewards/bronze_level.png";
-  static const String silver = "assets/images/rewards/sliver.png";
-  static const String gold = "assets/images/rewards/gold.png";
-  static const String diamond = "assets/images/rewards/diamond.png";
-  static const String legend = "assets/images/rewards/legend.png";
-
+  static const String bronze = "assets/images/rewards/bronze.webp";
+  static const String silver = "assets/images/rewards/silver.webp";
+  static const String gold = "assets/images/rewards/gold.webp";
+  static const String diamond = "assets/images/rewards/diamond.webp";
+  static const String legend = "assets/images/rewards/legend.svg";
   static String levelStatusImage(String status) {
     // return "assets/images/levels/$status.png";
 
