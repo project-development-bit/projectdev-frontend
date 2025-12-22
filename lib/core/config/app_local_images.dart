@@ -167,7 +167,7 @@ class AppLocalImages {
   static const String outerWheel = "assets/images/outer_wheel.png";
   static const String wheelCenterPath = "assets/images/wheel_center_path.png";
   static const String spinNotRemainBg = "assets/images/spin_not_remain_bg.png";
-  static const String spinNotRemainBgMobile = 
+  static const String spinNotRemainBgMobile =
       "assets/images/spin_not_remain_bg_mobile.png";
   static const String spinWheelIcon = "assets/images/spin_wheel_icon.png";
   static const String outOfSpins = "assets/images/out_of_spins.png";
@@ -178,6 +178,5 @@ class AppLocalImages {
   static const String splashBackground = "assets/images/splash_background.png";
   static const String splashBackgroundMobile =
       "assets/images/splash_background_mobile.png";
-  
-
+  static const String twoFABackground = "assets/images/bg/2fa_background.png";
 }

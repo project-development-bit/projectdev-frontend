@@ -332,7 +332,7 @@
   "profile_country": "Country",
   "profile_referred_by": "Referred By",
   "profile_2fa_title": "We Recommend You Enable 2FA",
-  "profile_2fa_description": "We noticed you do not have two-factor authentication enabled. We recommend you enable 2FA to keep your account secure.",
+  "profile_2fa_description": "We noticed you are logging in from an unknown device.",
   "tab_overview": "Overview",
   "tab_settings": "Settings",
   "tab_cash_out": "Cash Out",
@@ -790,5 +790,7 @@
   "login_to_spin": "Login to Spin & Earn",
   "spin_success_message": "Spin successful! You earned {0}",
   "congratulations": "Congratulations!",
-  "spin_wheel_error_message": "Failed to spin the wheel. Please try again."
+  "spin_wheel_error_message": "Failed to spin the wheel. Please try again.",
+  "enter_2fa_code_caption": "Enter the 6-digit code from your authenticator app to complete your login.",
+  "sign_to_a_different_account": "Sign in to a different account"
 }
