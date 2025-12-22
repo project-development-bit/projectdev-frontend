@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:url_strategy/url_strategy.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'core/services/platform_recaptcha_service.dart';
@@ -185,7 +186,13 @@ class _MyAppState extends ConsumerState<MyApp>
   }
 
   void _removeSplash() {
-    removeSplashFromWeb();
+    // Remove splash on web
+    if (kIsWeb) {
+      removeSplashFromWeb();
+    } else {
+      // Remove splash on mobile (Android/iOS) with smooth animation
+      FlutterNativeSplash.remove();
+    }
   }
 
   void _startFadeIn() {
