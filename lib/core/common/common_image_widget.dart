@@ -98,35 +98,56 @@ class _CommonImageState extends State<CommonImage> {
     if (widget.imageUrl.isEmpty) {
       imageWidget = defaultErrorWidget;
     } else if (widget.imageUrl.startsWith('http')) {
-      imageWidget = CachedNetworkImage(
-        imageUrl: widget.imageUrl,
-        width: widget.width,
-        height: widget.height,
-        fit: widget.fit,
-        filterQuality: widget.filterQuality ?? FilterQuality.high,
-        // imageRenderMethodForWeb: ImageRenderMethodForWeb.HtmlImage,
-        placeholder: widget.placeholder != null
-            ? (context, url) {
-                if (!mounted) return const SizedBox.shrink();
-                return widget.placeholder!;
-              }
-            : null,
-        errorWidget: (context, url, error) {
-          if (!mounted) return const SizedBox.shrink();
-          return defaultErrorWidget;
-        },
-        progressIndicatorBuilder: widget.placeholder != null
-            ? null
-            : widget.loadingWidget != null
-                ? (context, url, progress) {
+      if (widget.imageUrl.endsWith('.svg')) {
+        // Handle SVG images
+        imageWidget = SizedBox(
+          width: widget.width,
+          height: widget.height,
+          child: SvgPicture.network(
+            widget.imageUrl,
+            width: widget.width,
+            height: widget.height,
+            fit: widget.fit,
+            placeholderBuilder: widget.placeholder != null
+                ? (context) {
                     if (!mounted) return const SizedBox.shrink();
-                    return widget.loadingWidget!;
+                    return widget.placeholder!;
                   }
-                : (context, url, progress) {
-                    if (!mounted) return const SizedBox.shrink();
-                    return defaultLoadingWidget;
-                  },
-      );
+                : null,
+            colorFilter: null,
+          ),
+        );
+      } else {
+        imageWidget = CachedNetworkImage(
+          imageUrl: widget.imageUrl,
+          width: widget.width,
+          height: widget.height,
+          fit: widget.fit,
+          filterQuality: widget.filterQuality ?? FilterQuality.high,
+          // imageRenderMethodForWeb: ImageRenderMethodForWeb.HtmlImage,
+          placeholder: widget.placeholder != null
+              ? (context, url) {
+                  if (!mounted) return const SizedBox.shrink();
+                  return widget.placeholder!;
+                }
+              : null,
+          errorWidget: (context, url, error) {
+            if (!mounted) return const SizedBox.shrink();
+            return defaultErrorWidget;
+          },
+          progressIndicatorBuilder: widget.placeholder != null
+              ? null
+              : widget.loadingWidget != null
+                  ? (context, url, progress) {
+                      if (!mounted) return const SizedBox.shrink();
+                      return widget.loadingWidget!;
+                    }
+                  : (context, url, progress) {
+                      if (!mounted) return const SizedBox.shrink();
+                      return defaultLoadingWidget;
+                    },
+        );
+      }
     } else if (widget.imageUrl.endsWith('.svg')) {
       // Handle SVG images
       imageWidget = SizedBox(
