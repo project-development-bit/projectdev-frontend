@@ -28,8 +28,8 @@ class StatusRewardRow extends StatelessWidget {
             width: 70,
             child: Column(
               children: [
-                Image.asset(
-                  _tierImage(),
+                CommonImage(
+                  imageUrl: _tierImage(),
                   width: 42,
                 ),
                 const SizedBox(height: 4),

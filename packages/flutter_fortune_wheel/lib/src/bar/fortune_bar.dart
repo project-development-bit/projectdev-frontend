@@ -29,7 +29,7 @@ class FortuneBar extends HookWidget implements FortuneWidget {
   final List<FortuneItem> items;
 
   /// {@macro flutter_fortune_wheel.FortuneWidget.selected}
-  final Stream<int> selected;
+  final Stream<FortuneReward> selected;
 
   /// {@macro flutter_fortune_wheel.FortuneWidget.rotationCount}
   final int rotationCount;
@@ -124,7 +124,7 @@ class FortuneBar extends HookWidget implements FortuneWidget {
 
     useEffect(() {
       final subscription = selected.listen((event) {
-        selectedIndex.value = event;
+        selectedIndex.value = event.id;
         animate();
       });
       return subscription.cancel;

@@ -77,6 +77,19 @@ class _WheelData {
   });
 }
 
+enum FortuneWheelStatus {
+  idle,
+  animating,
+  completed,
+}
+
+class FortuneReward {
+  final int id;
+  final FortuneWheelStatus status;
+
+  FortuneReward({required this.id, required this.status});
+}
+
 /// A fortune wheel visualizes a (random) selection process as a spinning wheel
 /// divided into uniformly sized slices, which correspond to the number of
 /// [items].
@@ -104,7 +117,7 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
   final List<FortuneItem> items;
 
   /// {@macro flutter_fortune_wheel.FortuneWidget.selected}
-  final Stream<int> selected;
+  final Stream<FortuneReward> selected;
 
   /// {@macro flutter_fortune_wheel.FortuneWidget.rotationCount}
   final int rotationCount;
@@ -177,7 +190,7 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
     Key? key,
     required this.items,
     this.rotationCount = FortuneWidget.kDefaultRotationCount,
-    this.selected = const Stream<int>.empty(),
+    this.selected = const Stream<FortuneReward>.empty(),
     this.duration = FortuneWidget.kDefaultDuration,
     this.curve = FortuneCurve.spin,
     this.indicators = kDefaultIndicators,
@@ -195,13 +208,48 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
     this.width,
     this.height,
     this.wheelCenterPath,
-    this.padding,  this.centerWidgetSize,
+    this.padding,
+    this.centerWidgetSize,
   })  : physics = physics ?? CircularPanPhysics(),
         assert(items.length > 1),
         super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    // Tick sound: use a small pool of preloaded low-latency players.
+    // This avoids dropped/quiet ticks when the wheel spins very fast.
+    final tickPlayers = useMemoized(() {
+      return List<AudioPlayer>.generate(4, (_) {
+        final player = AudioPlayer();
+        player.setReleaseMode(ReleaseMode.stop);
+        player.setPlayerMode(PlayerMode.lowLatency);
+        player.seek(Duration(milliseconds: 40));
+        player.setVolume(1.0);
+        return player;
+      });
+    });
+
+    final tickPlayerIndex = useRef<int>(0);
+
+    useEffect(() {
+      () async {
+        for (final player in tickPlayers) {
+          try {
+            // Preload the audio file (do not prefix with 'assets/')
+            await player.setSource(AssetSource('sound/tap.mp3'));
+            await player.setVolume(1.0);
+            // ignore: avoid_catches_without_on_clauses
+          } catch (_) {}
+        }
+      }();
+
+      return () {
+        for (final player in tickPlayers) {
+          player.dispose();
+        }
+      };
+    }, []);
+
     // Arrow animation: Setting up the AnimationController and Animation
     final arrowController =
         useAnimationController(duration: const Duration(milliseconds: 300));
@@ -217,9 +265,11 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
       ),
     );
 // Creates an Animation that interpolates from 0 to -20 using a Tween.
+// ignore: lines_longer_than_80_chars
 // The animation uses a CurvedAnimation to apply easing curves for smoother motion.
 
     useEffect(() {
+      // ignore: lines_longer_than_80_chars
       // Add a listener to the arrowController to monitor animation status changes
       arrowController.addStatusListener((status) {
         // If the animation has completed (reached the end)
@@ -242,29 +292,78 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
       arrowController.forward();
     }
 
+    Future<void> _playTickSound() async {
+      try {
+        final player = tickPlayers[tickPlayerIndex.value];
+        tickPlayerIndex.value =
+            (tickPlayerIndex.value + 1) % tickPlayers.length;
+
+        // Restart from beginning. Using a pool prevents rapid ticks from cutting
+        // each other off.
+        await player.stop();
+        await player.seek(Duration.zero);
+        await player.resume();
+        // ignore: avoid_catches_without_on_clauses
+      } catch (_) {}
+    }
+
     final rotateAnimCtrl = useAnimationController(duration: duration);
-    final rotateAnim = CurvedAnimation(parent: rotateAnimCtrl, curve: curve);
-    Future<void> animate() async {
-      if (rotateAnimCtrl.isAnimating) {
+    final rotateAnim = useState<Animation<double>>(
+        CurvedAnimation(parent: rotateAnimCtrl, curve: curve));
+
+    Future<void> animate({bool isForeverRun = false}) async {
+      if (rotateAnimCtrl.isAnimating && !isForeverRun) {
         return;
       }
 
-      await Future.microtask(() => onAnimationStart?.call());
-      await rotateAnimCtrl.forward(from: 0);
-      await Future.microtask(() => onAnimationEnd?.call());
+      if (isForeverRun) {
+        // Stop any existing animation first
+        if (rotateAnimCtrl.isAnimating) {
+          rotateAnimCtrl.stop();
+        }
+        // Reset controller to start fresh
+        rotateAnimCtrl.reset();
+        // Slower loop so the wheel doesn't spin too fast while waiting.
+        rotateAnimCtrl.duration = const Duration(milliseconds: 10000);
+        rotateAnim.value = CurvedAnimation(
+            parent: rotateAnimCtrl,
+            curve: Curves.linear,
+            reverseCurve: Curves.linear);
+        rotateAnimCtrl.repeat();
+        return;
+      } else {
+        rotateAnimCtrl.duration = duration;
+        rotateAnim.value =
+            CurvedAnimation(parent: rotateAnimCtrl, curve: curve);
+        await Future.microtask(() => onAnimationStart?.call());
+        await rotateAnimCtrl.forward(from: 0);
+      }
     }
 
-    useEffect(() {
-      if (animateFirst) animate();
-      return null;
-    }, []);
+    Future<void> stopAnimation() async {
+      if (rotateAnimCtrl.isAnimating) {
+        rotateAnimCtrl.stop();
+        // Reset and animate to final position with deceleration
+        rotateAnimCtrl.reset();
+        rotateAnimCtrl.duration = duration;
+        rotateAnim.value =
+            CurvedAnimation(parent: rotateAnimCtrl, curve: curve);
+        await rotateAnimCtrl.forward(from: 0);
+      }
+    }
 
     final selectedIndex = useState<int>(0);
 
     useEffect(() {
-      final subscription = selected.listen((event) {
-        selectedIndex.value = event;
-        animate();
+      final subscription = selected.listen((event) async {
+        if (event.status == FortuneWheelStatus.animating) {
+          animate(isForeverRun: true);
+        } else if (event.status == FortuneWheelStatus.completed) {
+          selectedIndex.value = event.id;
+          await stopAnimation();
+
+          await Future.microtask(() => onAnimationEnd?.call());
+        }
       });
       return subscription.cancel;
     }, []);
@@ -286,7 +385,7 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
                 height: height,
                 width: width,
                 child: AnimatedBuilder(
-                  animation: rotateAnim,
+                  animation: rotateAnim.value,
                   builder: (context, _) {
                     final size = MediaQuery.of(context).size;
                     final meanSize = (size.width + size.height) / 2;
@@ -305,7 +404,7 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
                           -2 * _math.pi * (selectedIndex.value / items.length);
                       final panAngle =
                           panState.distance * panFactor * isAnimatingPanFactor;
-                      final rotationAngle = _getAngle(rotateAnim.value);
+                      final rotationAngle = _getAngle(rotateAnim.value.value);
                       final alignmentOffset =
                           _calculateAlignmentOffset(alignment);
                       final totalAngle =
@@ -316,7 +415,8 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
                         lastVibratedAngle,
                         items.length,
                         hapticImpact,
-                        _animateArrow, // _tetikle fonksiyonunu burada geçiriyoruz
+                        _animateArrow,
+                        _playTickSound,
                       );
                       if (focusedIndex != null) {
                         onFocusItemChanged?.call(focusedIndex % items.length);
@@ -364,7 +464,7 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
               wheelOuterPath != null
                   ? Center(
                       child: AnimatedBuilder(
-                          animation: rotateAnim,
+                          animation: rotateAnim.value,
                           builder: (context, _) {
                             final size = MediaQuery.of(context).size;
                             final meanSize = (size.width + size.height) / 2;
@@ -386,7 +486,8 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
                               final panAngle = panState.distance *
                                   panFactor *
                                   isAnimatingPanFactor;
-                              final rotationAngle = _getAngle(rotateAnim.value);
+                              final rotationAngle =
+                                  _getAngle(rotateAnim.value.value);
                               final alignmentOffset =
                                   _calculateAlignmentOffset(alignment);
                               final totalAngle =
@@ -438,13 +539,20 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
     );
   }
 
-  /// * vibrate and animate arrow when cross border
+  // Future<void> celebration(
+  //     AudioPlayer audioPlayer, BuildContext context) async {
+  //   await audioPlayer.setSource(AssetSource('sound/celebration_sound.mp3'));
+  //   await audioPlayer.resume();
+  // }
+
+  /// * vibrate, animate arrow, and play sound when cross border
   int? _borderCross(
     double angle,
     ObjectRef<double> lastVibratedAngle,
     int itemsNumber,
     HapticImpact hapticImpact,
     VoidCallback animateArrow,
+    Future<void> Function() playTickSound,
   ) {
     final step = 360 / itemsNumber;
     final angleDegrees = (angle * 180 / _math.pi).abs() + step / 2;
@@ -463,6 +571,10 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
     final hapticFeedbackFunction;
     switch (hapticImpact) {
       case HapticImpact.none:
+        // Play sound even if haptic is disabled
+        playTickSound();
+        // Update last segment to avoid repeated triggers within same slice
+        lastVibratedAngle.value = (angleDegrees ~/ step) * step;
         return index;
       case HapticImpact.heavy:
         hapticFeedbackFunction = HapticFeedback.heavyImpact;
@@ -476,6 +588,7 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
     }
     hapticFeedbackFunction();
     animateArrow();
+    playTickSound();
     lastVibratedAngle.value = (angleDegrees ~/ step) * step;
     return index;
   }

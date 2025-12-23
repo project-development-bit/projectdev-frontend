@@ -1,5 +1,4 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:gigafaucet/core/common/common_loading_widget.dart';
 import 'package:gigafaucet/core/config/app_local_images.dart';
 import 'package:gigafaucet/core/theme/presentation/providers/app_setting_providers.dart';
 import 'package:gigafaucet/core/theme/presentation/providers/app_settings_norifier.dart';
@@ -22,6 +21,8 @@ import 'core/config/flavor_manager.dart';
 import 'core/widgets/flavor_banner.dart';
 import 'core/services/platform_recaptcha_service.dart';
 import 'routing/app_router.dart';
+import 'package:gigafaucet/core/utils/web_helpers.dart'
+    if (dart.library.io) 'package:gigafaucet/core/utils/web_helpers_stub.dart';
 
 // Global key for ScaffoldMessenger to show snackbars above dialogs
 final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey =
@@ -34,7 +35,6 @@ Future<void> runAppWithFlavor(AppFlavor flavor) async {
   // FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true);
   // Set the flavor first so configuration is available
   FlavorManager.setFlavor(flavor);
-
   // Initialize reCAPTCHA for all platforms
   final recaptchaSiteKey = FlavorManager.recaptchaSiteKey;
   if (!kIsWeb) {
@@ -127,10 +127,27 @@ class MyApp extends ConsumerStatefulWidget {
   ConsumerState<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends ConsumerState<MyApp> {
+class _MyAppState extends ConsumerState<MyApp>
+    with SingleTickerProviderStateMixin {
+  bool _splashImageLoaded = false;
+  late AnimationController _fadeController;
+  late Animation<double> _fadeAnimation;
+
   @override
   void initState() {
     super.initState();
+
+    // Initialize fade animation
+    _fadeController = AnimationController(
+      duration: const Duration(milliseconds: 800),
+      vsync: this,
+    );
+
+    _fadeAnimation = CurvedAnimation(
+      parent: _fadeController,
+      curve: Curves.easeIn,
+    );
+
     // Load app settings theme from server on app start
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(appSettingsThemeProvider.notifier).loadConfig();
@@ -154,6 +171,42 @@ class _MyAppState extends ConsumerState<MyApp> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_splashImageLoaded) {
+      Future.wait([
+        precacheImage(AssetImage(AppLocalImages.splashLogo), context),
+        precacheImage(AssetImage(AppLocalImages.splashBackground), context),
+        precacheImage(
+            AssetImage(AppLocalImages.splashBackgroundMobile), context),
+      ]).then((_) {
+        if (mounted) {
+          setState(() {
+            _splashImageLoaded = true;
+          });
+        }
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _fadeController.dispose();
+    super.dispose();
+  }
+
+  void _removeSplash() {
+    removeSplashFromWeb();
+  }
+
+  void _startFadeIn() {
+    _fadeController.forward().then((_) {
+      // Remove native splash after fade-in completes
+      Future.delayed(const Duration(milliseconds: 300), _removeSplash);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final currentLocale = ref.watch(localizationNotifierProvider).currentLocale;
     final currentThemeMode = ref.watch(themeProvider);
@@ -169,77 +222,81 @@ class _MyAppState extends ConsumerState<MyApp> {
     debugPrint(
         'App settings theme loading: ${appSettingsThemeState.isLoading}');
 
-    // Show splash screen while theme is loading
+    // Show transparent container while theme is loading - native splash is underneath
     if (appSettingsThemeState.isLoading || languageState.isLoading) {
       return MaterialApp(
-        color: Color(0xff1A1A1A),
+        color: Colors.transparent,
         debugShowCheckedModeBanner: false,
         home: Scaffold(
-          backgroundColor: Color(0xff1A1A1A),
-          body: Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                    repeat: ImageRepeat.repeat,
-                    image: AssetImage(
-                      AppLocalImages.homeBackgroundDesktop,
-                    ),
-                    fit: BoxFit.fitWidth,
-                    alignment: Alignment.topCenter),
-              ),
-              child: Center(child: CommonLoadingWidget.large())),
+          backgroundColor: Colors.transparent,
+          body: SizedBox.shrink(),
         ),
       );
     }
-    return FlavorBanner(
-      child: MaterialApp.router(
-        scaffoldMessengerKey: rootScaffoldMessengerKey,
-        debugShowCheckedModeBanner:
-            !FlavorManager.isProd, // Hide debug banner in production
-        routerConfig: ref.read(goRouterProvider), // Using persistent router
-        locale: currentLocale,
-        title: FlavorManager.appName,
-        theme: appSettingsThemeState.lightTheme ?? AppTheme.lightTheme,
-        darkTheme: appSettingsThemeState.darkTheme ?? AppTheme.darkTheme,
-        themeMode: themeNotifier.getEffectiveThemeMode(
-          MediaQuery.platformBrightnessOf(context),
-        ),
-        supportedLocales: languageState.localeList.isNotEmpty
-            ? languageState.localeList
-            : const [
-                Locale('en', 'US'),
-                Locale('my', 'MM'),
-              ],
-        localizationsDelegates: [
-          AppLocalizationsDelegate(ref),
-          CroppyLocalizations.delegate, // <- This here
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        localeResolutionCallback: (locale, supportedLocales) {
-          debugPrint(
-              'Locale resolution - device: $locale, current: $currentLocale');
 
-          // First check if the current locale from provider is supported
-          for (var supportedLocale in supportedLocales) {
-            if (supportedLocale.languageCode == currentLocale.languageCode) {
-              debugPrint('Using provider locale: $currentLocale');
-              return currentLocale;
-            }
-          }
+    // Start fade-in when theme is loaded
+    if (!_fadeController.isAnimating && _fadeController.value == 0) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _startFadeIn();
+      });
+    }
 
-          // Fallback to device locale if supported
-          if (locale != null) {
+    return FadeTransition(
+      opacity: _fadeAnimation,
+      child: FlavorBanner(
+        child: MaterialApp.router(
+          scaffoldMessengerKey: rootScaffoldMessengerKey,
+          debugShowCheckedModeBanner:
+              !FlavorManager.isProd, // Hide debug banner in production
+          routerConfig: ref.read(goRouterProvider), // Using persistent router
+          locale: currentLocale,
+          title: FlavorManager.appName, // Use flavor-specific app name
+
+          // Theme configuration - Use app settings theme from server, fallback to default theme
+
+          theme: appSettingsThemeState.lightTheme ?? AppTheme.lightTheme,
+          darkTheme: appSettingsThemeState.darkTheme ?? AppTheme.darkTheme,
+          themeMode: themeNotifier.getEffectiveThemeMode(
+            MediaQuery.platformBrightnessOf(context),
+          ),
+          supportedLocales: languageState.localeList.isNotEmpty
+              ? languageState.localeList
+              : const [
+                  Locale('en', 'US'),
+                  Locale('my', 'MM'),
+                ],
+          localizationsDelegates: [
+            AppLocalizationsDelegate(ref),
+            CroppyLocalizations.delegate, // <- This here
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          localeResolutionCallback: (locale, supportedLocales) {
+            debugPrint(
+                'Locale resolution - device: $locale, current: $currentLocale');
+
+            // First check if the current locale from provider is supported
             for (var supportedLocale in supportedLocales) {
-              if (supportedLocale.languageCode == locale.languageCode) {
-                return supportedLocale;
+              if (supportedLocale.languageCode == currentLocale.languageCode) {
+                debugPrint('Using provider locale: $currentLocale');
+                return currentLocale;
               }
             }
-          }
 
-          debugPrint('Using default locale: ${supportedLocales.first}');
-          return supportedLocales.first;
-        },
+            // Fallback to device locale if supported
+            if (locale != null) {
+              for (var supportedLocale in supportedLocales) {
+                if (supportedLocale.languageCode == locale.languageCode) {
+                  return supportedLocale;
+                }
+              }
+            }
+
+            debugPrint('Using default locale: ${supportedLocales.first}');
+            return supportedLocales.first;
+          },
+        ),
       ),
     );
   }

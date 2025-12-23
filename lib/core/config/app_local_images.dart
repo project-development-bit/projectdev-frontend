@@ -93,12 +93,11 @@ class AppLocalImages {
       "assets/images/rewards/ptc_ad_discount@2x.png";
   static const String statusRewardBg =
       "assets/images/rewards/status_rewards_bg.png";
-  static const String bronze = "assets/images/rewards/bronze_level.png";
-  static const String silver = "assets/images/rewards/sliver.png";
-  static const String gold = "assets/images/rewards/gold.png";
-  static const String diamond = "assets/images/rewards/diamond.png";
-  static const String legend = "assets/images/rewards/legend.png";
-
+  static const String bronze = "assets/images/rewards/bronze.webp";
+  static const String silver = "assets/images/rewards/silver.webp";
+  static const String gold = "assets/images/rewards/gold.webp";
+  static const String diamond = "assets/images/rewards/diamond.webp";
+  static const String legend = "assets/images/rewards/legend.svg";
   static String levelStatusImage(String status) {
     // return "assets/images/levels/$status.png";
 
@@ -167,9 +166,20 @@ class AppLocalImages {
       "assets/images/spinning_inner_wheel.png";
   static const String outerWheel = "assets/images/outer_wheel.png";
   static const String wheelCenterPath = "assets/images/wheel_center_path.png";
+  static const String spinNotRemainBg = "assets/images/spin_not_remain_bg.png";
+  static const String spinNotRemainBgMobile =
+      "assets/images/spin_not_remain_bg_mobile.png";
+  static const String spinWheelIcon = "assets/images/spin_wheel_icon.png";
+  static const String outOfSpins = "assets/images/out_of_spins.png";
+
   // Faucet Images
   static const String nextFaucetBg = "assets/images/bg/next_faucet_bg.png";
 
   // Logo Images
   static const String googleLogo = "assets/images/logos/google.svg";
+  static const String splashLogo = "assets/images/giga_faucet_text_logo.png";
+  static const String splashBackground = "assets/images/splash_background.png";
+  static const String splashBackgroundMobile =
+      "assets/images/splash_background_mobile.png";
+  static const String twoFABackground = "assets/images/bg/2fa_background.png";
 }

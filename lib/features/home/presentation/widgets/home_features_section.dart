@@ -7,7 +7,7 @@ import 'package:gigafaucet/features/faucet/presentation/widgets/dialog/your_fauc
 import 'package:gigafaucet/features/home/presentation/widgets/home_section_container.dart';
 import 'package:flutter/material.dart';
 
-import 'fortune_wheel_widget.dart';
+import '../../../fortune_wheel/presentation/widgets/fortune_wheel_widget.dart';
 
 class HomeFeaturesSection extends StatelessWidget {
   const HomeFeaturesSection({super.key});

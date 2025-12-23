@@ -783,5 +783,12 @@
   "login_required": "Login လိုအပ်ပါသည်",
   "you_must_login_to_continue": "သင့်အကောင့်သို့ ဝင်ရောက်ရန် လိုအပ်ပါသည်။ ဆက်လက်လုပ်ဆောင်ရန် အကောင့်သို့ ဝင်ရောက်ပါ။",
   "you_need_to_resolve_captcha_to_claim_your_faucet": "Faucet ကို ယူရန် Captcha ဖြေရှင်းရန် လိုအပ်ပါသည်။",
-  "login": "Login"
+  "login": "Login",
+  "come_back_later_for_more": "နောက်မှ ပြန်လာ၍ ပိုမိုရယူပါ",
+  "login_to_spin": "လှည့်ရန် အကောင့်သို့ ဝင်ပါ",
+  "spin_success_message": "ဂုဏ်ပြုပါသည်! သင် {0} ရရှိခဲ့ပါသည်။",
+  "congratulations": "ဂုဏ်ပြုပါသည်!",
+  "spin_wheel_error_message": "လှည့်စက်ကို လှည့်၍ မရပါ။ ကျေးဇူးပြု၍ ထပ်မံကြိုးစားပါ။",
+  "enter_2fa_code_caption": "login ဝင်ရန်အတွက် သင့်အက်ပ်(Authenticator)မှ ထုတ်ပေးသော ၆ လုံးပါ ကုဒ်ကို ရိုက်ထည့်ပါ။",
+  "sign_to_a_different_account": "အကောင့်အမျိုးမျိုးသို့ လော့ဂ်အင်ဝင်ရန်"
 }

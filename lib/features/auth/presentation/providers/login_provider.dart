@@ -67,6 +67,21 @@ class LoginNotifier extends StateNotifier<LoginState> {
   final Ref _ref;
   final DeviceInfo _deviceInfo;
 
+  Future<void> _refreshTurnstileForRetry() async {
+    try {
+      final notifier = _ref
+          .read(turnstileNotifierProvider(TurnstileActionEnum.login).notifier);
+
+      if (!notifier.isControllerReady) {
+        await notifier.initializeController();
+      }
+
+      await notifier.refreshToken();
+    } catch (e) {
+      debugPrint('⚠️ Failed to refresh Turnstile token: $e');
+    }
+  }
+
   /// Login with email and password
   Future<void> login({
     required String email,
@@ -135,6 +150,11 @@ class LoginNotifier extends StateNotifier<LoginState> {
                 failure.toString().contains('connection'),
             errorModel: failure.errorModel,
           );
+
+          // On any login error (wrong password, server error, etc.), refresh
+          // Turnstile so the next attempt has a fresh token.
+          _refreshTurnstileForRetry();
+
           onError?.call(failure.message ?? 'Login failed');
           debugPrint('🔄 State set to LoginError');
         },
@@ -197,6 +217,10 @@ class LoginNotifier extends StateNotifier<LoginState> {
             ? 'Login timeout: Please check your connection and try again'
             : 'An unexpected error occurred during login. Please try again.',
       );
+
+      // If the request threw, refresh Turnstile for a clean retry.
+      _refreshTurnstileForRetry();
+
       debugPrint('🔄 State set to LoginError (catch block)');
     }
 
