@@ -248,13 +248,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
       final loginUseCase = _ref.read(googleSignInUseCaseProvider);
 
       // Add timeout to prevent infinite loading
-      final result = await loginUseCase(loginRequest).timeout(
-        const Duration(seconds: 30),
-        onTimeout: () {
-          throw Exception(
-              'Login timeout: Please check your internet connection and try again');
-        },
-      );
+      final result = await loginUseCase(loginRequest);
 
       result.fold(
         (failure) {
@@ -383,13 +377,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
       final loginUseCase = _ref.read(googleSignUpUseCaseProvider);
 
       // Add timeout to prevent infinite loading
-      final result = await loginUseCase(loginRequest).timeout(
-        const Duration(seconds: 30),
-        onTimeout: () {
-          throw Exception(
-              'Login timeout: Please check your internet connection and try again');
-        },
-      );
+      final result = await loginUseCase(loginRequest);
 
       result.fold(
         (failure) {
