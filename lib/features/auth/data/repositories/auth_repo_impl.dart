@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:gigafaucet/core/error/error_model.dart';
 import 'package:gigafaucet/features/auth/data/datasources/remote/google_auth_service.dart';
+import 'package:gigafaucet/features/auth/data/datasources/remote/google_web_auth.dart';
 import 'package:gigafaucet/features/auth/data/models/request/google_login_request.dart';
 import 'package:gigafaucet/features/auth/data/models/request/google_register_request.dart';
 import 'package:gigafaucet/features/auth/data/models/verify_code_forgot_password_response.dart';
@@ -37,9 +39,11 @@ import '../datasources/remote/auth_remote.dart';
 /// Provider for the authentication repository
 final authRepositoryProvider = Provider<AuthRepository>(
   (ref) => AuthRepositoryImpl(
-      ref.watch(authRemoteDataSourceProvider),
-      ref.watch(secureStorageServiceProvider),
-      ref.watch(googleAuthServiceProvider)),
+    ref.watch(authRemoteDataSourceProvider),
+    ref.watch(secureStorageServiceProvider),
+    ref.watch(googleAuthServiceProvider),
+    ref.watch(googleWebAuthServiceProvider),
+  ),
 );
 
 /// Implementation of [AuthRepository]
@@ -54,9 +58,11 @@ class AuthRepositoryImpl implements AuthRepository {
 
   final GoogleAuthService googleAuthService;
 
+  final GoogleWebAuthService googleWebService;
+
   /// Creates an instance of [AuthRepositoryImpl]
-  const AuthRepositoryImpl(
-      this.remoteDataSource, this.secureStorage, this.googleAuthService);
+  const AuthRepositoryImpl(this.remoteDataSource, this.secureStorage,
+      this.googleAuthService, this.googleWebService);
 
   @override
   Future<Either<Failure, void>> register(RegisterRequest request) async {
@@ -439,19 +445,41 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Either<Failure, LoginResponseModel>> googleSignIn(
       GoogleLoginRequest request) async {
     try {
-      final userModel = await googleAuthService.getGoogleIdToken();
-      if (userModel == null) {
-        return Left(ServerFailure(message: 'User cancelled Google sign-in'));
+      // 1. Resolve ID Token (If not already present in request)
+      String? idToken = request.idToken;
+
+      if (idToken == null) {
+        // Reuse the helper to handle Web vs Native logic automatically
+        idToken = await _getPlatformSpecificIdToken();
+
+        // Guard Clause: Handle cancellation
+        if (idToken == null) {
+          debugPrint("Testing Google Sign-In : User cancelled Google sign-in.");
+          return Left(ServerFailure(message: 'User cancelled Google sign-in'));
+        }
       }
-      request = request.copyWith(
-        idToken: userModel,
-      );
-      final response = await remoteDataSource.googleLogin(request);
-      // Store tokens in secure storage
+
+      // 2. Prepare the final request object
+      final updatedRequest = request.copyWith(idToken: idToken);
+
+      // 3. Perform API Call
+      final response = await remoteDataSource.googleLogin(updatedRequest);
+
+      // 4. Success Side Effects (Storage)
       await _storeTokens(response);
+
       return Right(response);
+    } on DioException catch (e) {
+      // Handle Dio-specific network errors with cleanup
+      await _handleErrorCleanup();
+      return Left(ServerFailure(
+        message: e.message ?? 'Network error occurred',
+        statusCode: e.response?.statusCode,
+      ));
     } catch (e) {
-      await googleAuthService.signOut();
+      // Handle generic errors
+      debugPrint("Testing Google Sign-In : Unexpected Error: $e");
+      await _handleErrorCleanup();
       return Left(ServerFailure(message: e.toString()));
     }
   }
@@ -460,37 +488,58 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Either<Failure, LoginResponseModel>> googleRegister(
       GoogleRegisterRequest request) async {
     try {
-      if (request.idToken == null) {
-        try {
-          final userModel = await googleAuthService.getGoogleIdToken();
-          if (userModel == null) {
-            print("Testing Google Sign-In : User cancelled Google sign-up.");
-            return Left(
-                ServerFailure(message: 'User cancelled Google sign-up'));
-          }
-          request = request.copyWith(
-            idToken: userModel,
-          );
-        } catch (e) {
-          print("Testing Google Sign-In : Error Repo: $e");
-          await googleAuthService.signOut();
-          return Left(ServerFailure(message: e.toString()));
+      // 1. Resolve ID Token (If not already present in request)
+      String? idToken = request.idToken;
+
+      if (idToken == null) {
+        idToken = await _getPlatformSpecificIdToken();
+
+        // Guard Clause: Handle cancellation immediately
+        if (idToken == null) {
+          debugPrint("Testing Google Sign-In : User cancelled Google sign-up.");
+          return Left(ServerFailure(message: 'User cancelled Google sign-up'));
         }
       }
-      final response = await remoteDataSource.googleRegister(request);
-      // Store tokens in secure storage
+
+      // 2. Prepare the final request object
+      final updatedRequest = request.copyWith(idToken: idToken);
+
+      // 3. Perform API Call
+      final response = await remoteDataSource.googleRegister(updatedRequest);
+
+      // 4. Success Side Effects (Storage)
       await _storeTokens(response);
+
       return Right(response);
     } on DioException catch (e) {
-      await googleAuthService.signOut();
+      await _handleErrorCleanup();
       return Left(ServerFailure(
-        message: e.message,
+        message: e.message ?? 'Network error occurred',
         statusCode: e.response?.statusCode,
       ));
     } catch (e) {
-      print("Testing Google Sign-In : Error Repo: $e");
-      await googleAuthService.signOut();
+      debugPrint("Testing Google Sign-In : Unexpected Error: $e");
+      await _handleErrorCleanup();
       return Left(ServerFailure(message: e.toString()));
     }
+  }
+
+  /// Helper: Abstracts the Web vs Native logic away from the main flow
+  Future<String?> _getPlatformSpecificIdToken() async {
+    try {
+      if (kIsWeb) {
+        return await googleWebService.getGoogleIdToken();
+      } else {
+        return await googleAuthService.getGoogleIdToken();
+      }
+    } catch (e) {
+      debugPrint("Testing Google Sign-In : Token Retrieval Error: $e");
+      rethrow;
+    }
+  }
+
+  /// Helper: Centralizes cleanup logic
+  Future<void> _handleErrorCleanup() async {
+    await googleAuthService.signOut();
   }
 }

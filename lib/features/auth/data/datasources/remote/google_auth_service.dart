@@ -146,6 +146,7 @@ class GoogleAuthService {
       return;
     }
     await _googleSignIn.signOut();
+    await _googleSignIn.disconnect();
     // await _firebaseAuth.signOut();
   }
 }

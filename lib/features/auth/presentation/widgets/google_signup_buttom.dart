@@ -80,17 +80,6 @@ class _GoogleSignupButtonState extends ConsumerState<GoogleSignupButton> {
       textColor: Color(0xFF333333),
       height: 48,
     );
-    // return WebGoogleSignInButton(
-    //   onIdToken: (idToken) {
-    //     _handleGoogleSignUp(idToken: idToken);
-    //   },
-    //   onError: (error) {
-    //     context.showSnackBar(
-    //       message: 'Google Sign-In failed: $error',
-    //       backgroundColor: Theme.of(context).colorScheme.error,
-    //     );
-    //   },
-    // );
   }
 
   Future<void> _handleGoogleSignUp({String? idToken}) async {

@@ -7,7 +7,6 @@ import 'package:gigafaucet/features/auth/presentation/providers/login_provider.d
 import 'package:gigafaucet/features/auth/presentation/providers/selected_country_provider.dart';
 import 'package:gigafaucet/features/auth/presentation/widgets/google_signup_buttom.dart';
 import 'package:gigafaucet/features/auth/presentation/widgets/onboarding_background.dart';
-import 'package:gigafaucet/features/auth/presentation/widgets/web_google_signin_button.dart';
 import 'package:gigafaucet/features/terms_privacy/presentation/services/terms_privacy_navigation_service.dart';
 import 'package:gigafaucet/features/auth/presentation/providers/ip_country_provider.dart';
 import 'package:gigafaucet/features/user_profile/domain/entities/country.dart';
