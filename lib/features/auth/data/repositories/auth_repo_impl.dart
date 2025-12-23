@@ -460,13 +460,23 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Either<Failure, LoginResponseModel>> googleRegister(
       GoogleRegisterRequest request) async {
     try {
-      final userModel = await googleAuthService.getGoogleIdToken();
-      if (userModel == null) {
-        return Left(ServerFailure(message: 'User cancelled Google sign-up'));
+      if (request.idToken == null) {
+        try {
+          final userModel = await googleAuthService.getGoogleIdToken();
+          if (userModel == null) {
+            print("Testing Google Sign-In : User cancelled Google sign-up.");
+            return Left(
+                ServerFailure(message: 'User cancelled Google sign-up'));
+          }
+          request = request.copyWith(
+            idToken: userModel,
+          );
+        } catch (e) {
+          print("Testing Google Sign-In : Error Repo: $e");
+          await googleAuthService.signOut();
+          return Left(ServerFailure(message: e.toString()));
+        }
       }
-      request = request.copyWith(
-        idToken: userModel,
-      );
       final response = await remoteDataSource.googleRegister(request);
       // Store tokens in secure storage
       await _storeTokens(response);
@@ -478,6 +488,7 @@ class AuthRepositoryImpl implements AuthRepository {
         statusCode: e.response?.statusCode,
       ));
     } catch (e) {
+      print("Testing Google Sign-In : Error Repo: $e");
       await googleAuthService.signOut();
       return Left(ServerFailure(message: e.toString()));
     }

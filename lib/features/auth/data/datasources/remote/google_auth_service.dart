@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:google_sign_in_platform_interface/google_sign_in_platform_interface.dart';
 
 final googleAuthServiceProvider = Provider((ref) => GoogleAuthService());
 
@@ -22,23 +23,52 @@ class GoogleAuthService {
         return null;
       }
 
-      debugPrint('Google ID Token: ${googleAuth.idToken}');
-      debugPrint('Google Access Token: ${googleAuth.accessToken}');
-      debugPrint('Google Sign-In serverAuthCode: ${googleAuth.serverAuthCode}');
+      debugPrint('Google ID Token: $googleAuth');
+      // debugPrint('Google Access Token: ${googleAuth.accessToken}');
+      // debugPrint('Google Sign-In serverAuthCode: ${googleAuth.serverAuthCode}');
       debugPrint('Google Sign-In successful.');
 
       // Step 3: If successful, update and return the request object.
       debugPrint('Successfully signed in with Google and Firebase.');
-      return googleAuth.idToken;
+      return googleAuth;
     } catch (error) {
       debugPrint("An error occurred during the Google sign-in process: $error");
-      return null;
+      throw Exception("Google sign-in failed: $error");
     }
   }
 
   /// Handles the Google Sign-In flow and retrieves the authentication tokens.
   /// Includes the necessary workaround for Flutter Web.
-  Future<GoogleSignInAuthentication?> _getGoogleAuthDetails() async {
+  Future<String?> _getGoogleAuthDetails() async {
+    if (kIsWeb) {
+      try {
+        debugPrint(
+            "Testing Google Sign-In : Running on web platform, using web-specific token retrieval.");
+        final tokenData = await GoogleSignInPlatform.instance.signIn();
+        if (tokenData?.idToken?.isEmpty ?? true && tokenData?.email != null) {
+          debugPrint(
+              "Testing Google Sign-In : idToken is empty, attempting to get tokens via email. tokenData.email: ${tokenData!.email}");
+          final idToken = (await GoogleSignInPlatform.instance
+                  .getTokens(email: tokenData.email))
+              .idToken;
+          debugPrint(
+              "Testing Google Sign-In : Retrieved idToken via email method. idToken is null: ${idToken == null}");
+          if (idToken == null) {
+            return await signInSilently();
+          }
+
+          return idToken;
+        }
+        if (tokenData != null) {
+          return tokenData.idToken;
+        }
+        return await signInSilently();
+      } catch (e) {
+        debugPrint(
+            "Testing Google Sign-In : Error during web Google Sign-In: $e");
+        throw Exception("Web Google Sign-In failed: $e");
+      }
+    }
     GoogleSignInAccount? account = await _googleSignIn.signIn();
     if (account == null) {
       debugPrint("Google Sign-In aborted by user.");
@@ -63,7 +93,30 @@ class GoogleAuthService {
     debugPrint("idToken is present: ${auth.idToken != null}");
     debugPrint("accessToken is present: ${auth.accessToken != null}");
 
-    return auth;
+    return auth.idToken;
+  }
+
+  Future<String> signInSilently() async {
+    final GoogleSignInAccount? account = await _googleSignIn.signInSilently(
+        reAuthenticate: true, suppressErrors: true);
+
+    debugPrint(
+        "Testing Google Sign-In : Silent sign-in attempt completed. Account is null: ${account == null}");
+    if (account == null) {
+      debugPrint(
+          "Testing Google Sign-In : No Google account is currently signed in.");
+      throw Exception("No Google account is currently signed in.");
+    }
+    final GoogleSignInAuthentication auth = await account.authentication;
+    if (auth.idToken == null) {
+      debugPrint(
+          "Testing Google Sign-In : idToken is null after silent sign-in.");
+      throw Exception(
+          "Failed to retrieve idToken from silently signed-in user.");
+    }
+    debugPrint(
+        "Testing Google Sign-In : Successfully retrieved idToken via silent sign-in.");
+    return auth.idToken!;
   }
 
   /// Signs into Firebase using the provided Google authentication details.

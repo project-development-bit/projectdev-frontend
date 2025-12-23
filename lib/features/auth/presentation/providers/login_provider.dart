@@ -14,6 +14,7 @@ import '../../domain/entities/user.dart';
 import '../../domain/entities/login_response.dart';
 import '../../data/models/login_request.dart';
 import 'auth_providers.dart';
+import 'package:google_sign_in_platform_interface/google_sign_in_platform_interface.dart';
 
 // =============================================================================
 // LOGIN STATE CLASSES
@@ -354,6 +355,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
 
   Future<void> googleSignUp({
     required String countryCode,
+    String? idToken,
     UserRole role = UserRole.normalUser,
     String? referralCode,
     VoidCallback? onSuccess,
@@ -388,6 +390,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
       }
 
       final loginRequest = GoogleRegisterRequest(
+        idToken: idToken,
         role: role,
         referralCode: referralCode,
         countryCode: countryCode,
@@ -406,6 +409,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
       result.fold(
         (failure) {
           debugPrint('❌ Google sign-up failed: ${failure.message}');
+          GoogleSignInPlatform.instance.signOut();
           state = LoginError(
             email: '',
             message: failure.message ?? 'Google sign-up failed',

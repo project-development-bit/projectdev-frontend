@@ -10,6 +10,7 @@ import 'package:gigafaucet/core/providers/turnstile_provider.dart';
 import 'package:gigafaucet/core/theme/app_colors.dart';
 import 'package:gigafaucet/features/auth/presentation/providers/login_provider.dart';
 import 'package:gigafaucet/features/auth/presentation/providers/selected_country_provider.dart';
+// import 'package:gigafaucet/features/auth/presentation/widgets/web_google_signin_button.dart';
 import 'package:gigafaucet/features/localization/data/helpers/app_localizations.dart';
 import 'package:gigafaucet/features/user_profile/presentation/providers/current_user_provider.dart';
 import 'package:gigafaucet/features/user_profile/presentation/providers/get_profile_notifier.dart';
@@ -42,6 +43,7 @@ class _GoogleSignupButtonState extends ConsumerState<GoogleSignupButton> {
               backgroundColor: AppColors.success);
           break;
         case LoginError():
+
           // Show error message
           context.showSnackBar(
               message: next.message,
@@ -78,9 +80,20 @@ class _GoogleSignupButtonState extends ConsumerState<GoogleSignupButton> {
       textColor: Color(0xFF333333),
       height: 48,
     );
+    // return WebGoogleSignInButton(
+    //   onIdToken: (idToken) {
+    //     _handleGoogleSignUp(idToken: idToken);
+    //   },
+    //   onError: (error) {
+    //     context.showSnackBar(
+    //       message: 'Google Sign-In failed: $error',
+    //       backgroundColor: Theme.of(context).colorScheme.error,
+    //     );
+    //   },
+    // );
   }
 
-  Future<void> _handleGoogleSignUp() async {
+  Future<void> _handleGoogleSignUp({String? idToken}) async {
     if (!widget.agreeToTerms) {
       final localizations = AppLocalizations.of(context);
       context.showSnackBar(
@@ -108,6 +121,7 @@ class _GoogleSignupButtonState extends ConsumerState<GoogleSignupButton> {
     authActions.resetAllStates();
 
     await authActions.googleSignUp(
+      idToken: idToken,
       countryCode: ref.read(selectedCountryProvider)?.code ?? '',
       role: UserRole.normalUser,
       referralCode: widget.referralCode,

@@ -246,6 +246,7 @@ class AuthActions {
 
   Future<void> googleSignUp({
     required String countryCode,
+    String? idToken,
     VoidCallback? onSuccess,
     UserRole? role,
     String? referralCode,
@@ -253,7 +254,10 @@ class AuthActions {
   }) async {
     final loginNotifier = _ref.read(loginNotifierProvider.notifier);
     await loginNotifier.googleSignUp(
-        countryCode: countryCode, onError: onError, onSuccess: onSuccess);
+        idToken: idToken,
+        countryCode: countryCode,
+        onError: onError,
+        onSuccess: onSuccess);
   }
 
   /// Logout current user

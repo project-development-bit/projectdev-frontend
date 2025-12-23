@@ -97,7 +97,10 @@ dependencies:
   web: ^1.0.0
   lottie: ^3.3.2
   wndr_flutter_confetti: ^0.3.0
-  
+  google_sign_in_web: ^0.12.4+4
+  google_sign_in_platform_interface: ^2.5.0
+  # google_sign_in_all_platforms: ^2.0.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
