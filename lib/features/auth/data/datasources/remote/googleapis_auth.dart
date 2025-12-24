@@ -28,25 +28,25 @@ class GoogleApisAuthService {
 
   // Function to obtain credentials
   Future<AccessCredentials> obtainClient() async {
-    // if (!kIsWeb) {
-    throw UnimplementedError(
-        'obtainClient is not implemented for dart:io platform.');
-    // }
+    if (!kIsWeb) {
+      throw UnimplementedError(
+          'obtainClient is not implemented for dart:io platform.');
+    }
 
-    // try {
-    //   final credentials = await requestAccessCredentials(
-    //     clientId: _clientId,
-    //     scopes: scopes,
-    //   );
+    try {
+      final credentials = await requestAccessCredentials(
+        clientId: _clientId,
+        scopes: scopes,
+      );
 
-    //   debugPrint(
-    //       'Testing Google Sign-In: Obtained Google OAuth2 credentials successfully.');
-    //   debugPrint('Testing Google Sign-In: idToken: ${credentials.idToken}');
-    //   return credentials;
-    // } catch (e) {
-    //   debugPrint('Error obtaining credentials: $e');
-    //   rethrow;
-    // }
+      debugPrint(
+          'Testing Google Sign-In: Obtained Google OAuth2 credentials successfully.');
+      debugPrint('Testing Google Sign-In: idToken: ${credentials.idToken}');
+      return credentials;
+    } catch (e) {
+      debugPrint('Error obtaining credentials: $e');
+      rethrow;
+    }
   }
 
   // Function to obtain the Google credentials (including ID token)
