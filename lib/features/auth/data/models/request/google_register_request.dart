@@ -10,7 +10,7 @@ class GoogleRegisterRequest extends Equatable {
     required this.userAgent,
     required this.deviceFingerprint,
     required this.role,
-    this.idToken,
+    this.accessToken,
     this.referralCode,
   });
 
@@ -33,7 +33,7 @@ class GoogleRegisterRequest extends Equatable {
 
   final UserRole role;
 
-  final String? idToken;
+  final String? accessToken;
 
   /// Convert to JSON for API request
   Future<Map<String, dynamic>> toJson() async {
@@ -41,7 +41,7 @@ class GoogleRegisterRequest extends Equatable {
       'country_code': countryCode,
       'userAgent': userAgent,
       'device_fingerprint': deviceFingerprint,
-      'idToken': idToken ?? '',
+      'accessToken': accessToken ?? '',
       'avatar': avatar ?? '',
       'role': role.toString(),
       'referralCode': referralCode,
@@ -58,7 +58,7 @@ class GoogleRegisterRequest extends Equatable {
   /// Create a copy with updated values
   GoogleRegisterRequest copyWith({
     String? avatar,
-    String? idToken,
+    String? accessToken,
     String? recaptchaToken,
     String? countryCode,
     String? userAgent,
@@ -73,14 +73,14 @@ class GoogleRegisterRequest extends Equatable {
       deviceFingerprint: deviceFingerprint ?? this.deviceFingerprint,
       role: role ?? this.role,
       referralCode: referralCode ?? this.referralCode,
-      idToken: idToken ?? this.idToken,
+      accessToken: accessToken ?? this.accessToken,
     );
   }
 
   @override
   List<Object?> get props => [
         avatar,
-        idToken,
+        accessToken,
         recaptchaToken,
         countryCode,
         userAgent,
@@ -89,7 +89,8 @@ class GoogleRegisterRequest extends Equatable {
         referralCode
       ];
   @override
-  String toString() => 'GoogleLoginRequest(avatar: $avatar, idToken: $idToken, '
+  String toString() =>
+      'GoogleLoginRequest(avatar: $avatar, accessToken: $accessToken, '
       'recaptchaToken: $recaptchaToken, countryCode: $countryCode, '
       'userAgent: $userAgent, deviceFingerprint: $deviceFingerprint, '
       'role: $role, referralCode: $referralCode)';

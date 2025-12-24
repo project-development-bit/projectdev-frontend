@@ -230,7 +230,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
 
   Future<void> googleSignIn({
     required String countryCode,
-    String? idToken,
+    String? accessToken,
     VoidCallback? onSuccess,
     Function(String)? onError,
   }) async {
@@ -263,7 +263,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
       }
 
       final loginRequest = GoogleLoginRequest(
-        idToken: idToken,
+        accessToken: accessToken,
         countryCode: countryCode,
         recaptchaToken: turnstileToken,
         deviceFingerprint: await _deviceInfo.getUniqueIdentifier() ?? '',
@@ -357,7 +357,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
 
   Future<void> googleSignUp({
     required String countryCode,
-    String? idToken,
+    String? accessToken,
     UserRole role = UserRole.normalUser,
     String? referralCode,
     VoidCallback? onSuccess,
@@ -392,7 +392,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
       }
 
       final loginRequest = GoogleRegisterRequest(
-        idToken: idToken,
+        accessToken: accessToken,
         role: role,
         referralCode: referralCode,
         countryCode: countryCode,

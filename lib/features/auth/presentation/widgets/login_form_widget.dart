@@ -241,7 +241,7 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
     }
   }
 
-  void _handleGoogleLoginWithToken({String? idToken}) async {
+  void _handleGoogleLoginWithToken({String? accessToken}) async {
     // Check Turnstile verification
     final turnstileCanAttempt =
         ref.read(turnstileNotifierProvider(TurnstileActionEnum.login))
@@ -280,7 +280,7 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
     final ipState = ref.read(getIpCountryNotifierProvider);
 
     await authActions.googleLogin(
-        idToken: idToken,
+        accessToken: accessToken,
         countryCode: ipState.country?.code ?? "Unknown",
         onSuccess: () async {
           widget.onLoginSuccess?.call();
