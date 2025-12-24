@@ -788,7 +788,7 @@
   "login": "Login",
   "come_back_later_for_more": "Come back later for more!",
   "login_to_spin": "Login to Spin & Earn",
-  "spin_success_message": "Spin successful! You earned {0}",
+  "spin_success_message": "You have won {0}.",
   "congratulations": "Congratulations!",
   "spin_wheel_error_message": "Failed to spin the wheel. Please try again.",
   "enter_2fa_code_caption": "Enter the 6-digit code from your authenticator app to complete your login.",

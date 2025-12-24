@@ -1,5 +1,12 @@
+<<<<<<< HEAD
 import 'package:gigafaucet/core/core.dart';
 import 'package:gigafaucet/routing/routing.dart';
+=======
+import 'dart:math' as math;
+
+import 'package:cointiply_app/core/core.dart';
+import 'package:cointiply_app/routing/routing.dart';
+>>>>>>> main
 import 'package:flutter/material.dart';
 import 'package:webview_all/webview_all.dart';
 
@@ -20,11 +27,29 @@ class WebViewWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool isMobile = context.isMobile;
+    final webviewChild = LayoutBuilder(
+      builder: (context, constraints) {
+        final mediaSize = MediaQuery.of(context).size;
+
+        final double width = constraints.hasBoundedWidth
+            ? math.min(constraints.maxWidth, mediaSize.width)
+            : mediaSize.width;
+        final double height = constraints.hasBoundedHeight
+            ? math.min(constraints.maxHeight, mediaSize.height)
+            : mediaSize.height;
+
+        return SizedBox(
+          width: width,
+          height: height,
+          child: Webview(url: url),
+        );
+      },
+    );
     final webview = ResponsiveSection(
       maxWidth: isMobile ? null : MediaQuery.of(context).size.width * 0.9,
       padding: EdgeInsets.zero,
       fullWidthOnMobile: true,
-      child: Webview(url: url),
+      child: webviewChild,
     );
 
     if (!useScaffold) {

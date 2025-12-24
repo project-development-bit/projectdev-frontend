@@ -42,20 +42,18 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             debugPrint('🔐 2FA required for user: ${loginResponse.userId}');
             // Show 2FA verification dialog
             if (mounted) {
-              final result = await context.show2FALoginVerificationDialog(
-                userId: loginResponse.userId!,
-                onSuccess: () {
-                  // Navigate to home after successful 2FA verification
-                  if (mounted) {
-                    _afterLoginSuccess();
-                  }
-                },
-              );
-
-              // If user cancelled the dialog, reset login state
-              if (result == false && mounted) {
-                ref.read(loginNotifierProvider.notifier).reset();
-              }
+              await context.show2FALoginVerificationDialog(
+                  userId: loginResponse.userId!,
+                  onSuccess: () {
+                    // Navigate to home after successful 2FA verification
+                    if (mounted) {
+                      _afterLoginSuccess();
+                    }
+                  },
+                  onClosed: () {
+                    // Only close the 2FA dialog (do NOT pop the login page).
+                    Navigator.of(context, rootNavigator: true).pop();
+                  });
             }
           } else {
             // No 2FA required, proceed with normal login

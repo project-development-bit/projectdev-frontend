@@ -88,7 +88,8 @@ class OnboardingBackground extends StatelessWidget {
                                 const Color(0xFF00131E).withValues(alpha: 0.4),
                             borderRadius: BorderRadius.circular(20),
                             border: Border.all(
-                              color: const Color(0xFFFFFFFF),
+                              color: const Color(0xFFFFFFFF)
+                                  .withValues(alpha: 0.2),
                             ),
                           ),
                           child: child,
