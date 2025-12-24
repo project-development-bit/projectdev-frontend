@@ -33,7 +33,7 @@
           object-src 'none';
           base-uri 'self';
         "> -->
-
+  <meta name='impact-site-verification' value='9f37a7eb-8587-48b9-ba38-e9e243e6255a' />
   <meta http-equiv="Content-Security-Policy" content="
       default-src 'self' data: blob:;
       script-src 'self' 'unsafe-eval' 'unsafe-inline'
@@ -489,13 +489,13 @@
         }
       };
 
-      // Fallback: Remove splash screen after 10 seconds if Flutter doesn't call it
-      setTimeout(() => {
-        if (document.getElementById("splash")) {
-          console.log('Splash: Fallback removal after 10 seconds');
-          window.removeSplashFromWeb();
-        }
-      }, 10000);
+    // Fallback: Remove splash screen after 10 seconds if Flutter doesn't call it
+    setTimeout(() => {
+      if (document.getElementById("splash")) {
+        console.log('Splash: Fallback removal after 10 seconds');
+        window.removeSplashFromWeb();
+      }
+    }, 10000);
   </script>
 </head>
 
