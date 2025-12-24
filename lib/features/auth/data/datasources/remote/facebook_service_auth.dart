@@ -7,37 +7,47 @@ final facebookAuthServiceProvider = Provider((ref) => FacebookAuthService());
 class FacebookAuthService {
   /// Handles the Facebook Sign-In flow and retrieves the authentication tokens.
   Future<String?> getFacebookAccessToken() async {
+    debugPrint(
+        "Testing Facebook Login : Starting Facebook sign-in to get access token...");
     try {
       final result = await _getFacebookAuthDetails();
       if (result == null) {
         return null;
       }
 
-      debugPrint('Facebook Access Token: ${result.accessToken}');
-      debugPrint('Facebook message: ${result.message}');
-      debugPrint('Facebook Login Status: ${result.status.name}');
-      debugPrint('Facebook Sign-In successful.');
+      debugPrint(
+          'Testing Facebook Login :  Facebook Access Token: ${result.accessToken}');
+      debugPrint(
+          'Testing Facebook Login : Facebook message: ${result.message}');
+      debugPrint(
+          'Testing Facebook Login : Facebook Login Status: ${result.status.name}');
+      debugPrint('Testing Facebook Login : Facebook Sign-In successful.');
 
       return result.accessToken?.tokenString;
     } catch (error) {
       debugPrint(
-          "An error occurred during the Facebook sign-in process: $error");
+          "Testing Facebook Login :  An error occurred during the Facebook sign-in process: $error");
       return null;
     }
   }
 
   /// Handles the Facebook Sign-In process.
   Future<LoginResult?> _getFacebookAuthDetails() async {
+    debugPrint(
+        "Testing Facebook Login : Initiating Facebook sign-in process...");
     final result = await FacebookAuth.instance.login();
 
     if (result.status == LoginStatus.success) {
-      debugPrint("Successfully signed in with Facebook.");
+      debugPrint(
+          "Testing Facebook Login :  Successfully signed in with Facebook.");
       return result;
     } else if (result.status == LoginStatus.cancelled) {
-      debugPrint("Facebook login was cancelled by the user.");
+      debugPrint(
+          "Testing Facebook Login : Facebook login was cancelled by the user.");
       return null;
     } else if (result.status == LoginStatus.failed) {
-      debugPrint("Facebook login failed: ${result.message}");
+      debugPrint(
+          "Testing Facebook Login : Facebook login failed: ${result.message}");
       return null;
     }
 

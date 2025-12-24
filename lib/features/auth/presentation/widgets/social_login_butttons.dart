@@ -19,24 +19,25 @@ class SocialLoginButtons extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Flex(
-      direction: context.isMobile ? Axis.vertical : Axis.horizontal,
+      direction: Axis.horizontal,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         _buildButtonWrapper(
-          isMobile: context.isMobile,
+          isMobile: false,
           child: CommonButton(
             text: 'Google',
+            backgroundColor: Color(0xFF333333),
             onPressed: () {
               _handleGoogleLoginWithToken(ref, context);
             },
             icon: CommonImage(
               imageUrl: AppLocalImages.googleLogo,
-              width: 30,
-              height: 30,
+              width: 24,
+              height: 24,
               fit: BoxFit.contain,
             ),
-            isOutlined: true,
-            textColor: Color(0xFF333333),
+            isOutlined: false, fontSize: 14,
+            // textColor: ,
             height: 56,
           ),
         ),
@@ -45,9 +46,10 @@ class SocialLoginButtons extends ConsumerWidget {
           height: 8,
         ),
         _buildButtonWrapper(
-          isMobile: context.isMobile,
+          isMobile: false,
           child: CommonButton(
             text: 'Facebook',
+            backgroundColor: Color(0xFF333333),
             onPressed: () {
               _handleFacebookLoginWithToken(ref, context);
             },
@@ -57,8 +59,9 @@ class SocialLoginButtons extends ConsumerWidget {
               height: 30,
               fit: BoxFit.contain,
             ),
-            isOutlined: true,
-            textColor: Color(0xFF333333),
+            isOutlined: false,
+
+            // textColor: Color(0xFF333333),
             height: 56,
           ),
         )
