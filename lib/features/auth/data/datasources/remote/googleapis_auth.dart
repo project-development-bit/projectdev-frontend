@@ -51,29 +51,33 @@ class GoogleApisAuthService {
             'Testing Google Sign-In : Google API Authenticated Client obtained successfully.');
         return credentials.idToken; // Return the id_token
       } else {
-        final credential = GoogleAuthProvider.credential(
-          accessToken: credentials.accessToken.data,
-          idToken: credentials.idToken,
-        );
-        if (credential.idToken != null) {
-          debugPrint(
-              'Testing Google Sign-In : Fallback Google ID Token from Credential obtained successfully.');
-          return credential.idToken;
-        }
-        UserCredential userCredential =
-            await FirebaseAuth.instance.signInWithCredential(credential);
-        String? idToken = await userCredential.user?.getIdToken(true);
         debugPrint(
-            'Testing Google Sign-In : Retrieved idToken from Firebase User. idToken is null: ${idToken == null}');
-        debugPrint('Testing Google Sign-In :idToken: $idToken');
-        if (idToken == null) {
-          debugPrint(
-              'Testing Google Sign-In : Failed to retrieve idToken from Firebase User.');
-          debugPrint(
-              'Testing Google Sign-In : Falling back to access token as idToken.');
-          return credentials.accessToken.data;
-        }
-        return idToken;
+            'Testing Google Sign-In : idToken is null. Falling back to access token as idToken.');
+        return credentials.accessToken.data;
+
+        // final credential = GoogleAuthProvider.credential(
+        //   accessToken: credentials.accessToken.data,
+        //   idToken: credentials.idToken,
+        // );
+        // if (credential.idToken != null) {
+        //   debugPrint(
+        //       'Testing Google Sign-In : Fallback Google ID Token from Credential obtained successfully.');
+        //   return credential.idToken;
+        // }
+        // UserCredential userCredential =
+        //     await FirebaseAuth.instance.signInWithCredential(credential);
+        // String? idToken = await userCredential.user?.getIdToken(true);
+        // debugPrint(
+        //     'Testing Google Sign-In : Retrieved idToken from Firebase User. idToken is null: ${idToken == null}');
+        // debugPrint('Testing Google Sign-In :idToken: $idToken');
+        // if (idToken == null) {
+        //   debugPrint(
+        //       'Testing Google Sign-In : Failed to retrieve idToken from Firebase User.');
+        //   debugPrint(
+        //       'Testing Google Sign-In : Falling back to access token as idToken.');
+        //   return credentials.accessToken.data;
+        // }
+        // return idToken;
       }
     } catch (e) {
       debugPrint('Testing Google Sign-In : Error obtaining client: $e');
