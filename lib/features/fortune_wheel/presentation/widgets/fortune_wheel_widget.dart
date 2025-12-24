@@ -246,6 +246,7 @@ class _FortuneWheelWidgetState extends ConsumerState<FortuneWheelWidget> {
 
       await celebrationSound();
       // Wait for animation to complete
+      await Future.delayed(Duration(seconds: 1));
       if (context.mounted) {
         ref.read(currentUserProvider.notifier).refreshUser();
         context.pop();
