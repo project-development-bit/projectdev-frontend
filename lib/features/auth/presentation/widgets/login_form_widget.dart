@@ -5,6 +5,7 @@ import 'package:gigafaucet/core/theme/app_colors.dart';
 import 'package:gigafaucet/core/widgets/cloudflare_turnstille_widgte.dart';
 import 'package:gigafaucet/core/providers/turnstile_provider.dart';
 import 'package:gigafaucet/features/auth/presentation/providers/google_id_token_provider.dart';
+import 'package:gigafaucet/features/auth/presentation/widgets/or_divider_widget.dart';
 import 'package:gigafaucet/features/auth/presentation/widgets/remember_me_widget.dart';
 import 'package:gigafaucet/features/auth/presentation/providers/ip_country_provider.dart';
 import 'package:flutter/material.dart';
@@ -414,31 +415,7 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
             // Social Login Section
 
             const SizedBox(height: 12),
-
-            // Divider with OR
-            Row(
-              children: [
-                Expanded(
-                  child: Divider(
-                    color: context.outline.withAlpha(15),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: CommonText.bodySmall(
-                    localizations?.translate('or') ?? 'OR',
-                    color: context.onSurfaceVariant,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Expanded(
-                  child: Divider(
-                    color: context.outline.withAlpha(15),
-                  ),
-                ),
-              ],
-            ),
-
+            OrDividerWidget(),
             const SizedBox(height: 12),
             CommonButton(
               text: 'Google',

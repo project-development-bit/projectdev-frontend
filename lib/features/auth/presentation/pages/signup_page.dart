@@ -7,6 +7,7 @@ import 'package:gigafaucet/features/auth/presentation/providers/login_provider.d
 import 'package:gigafaucet/features/auth/presentation/providers/selected_country_provider.dart';
 import 'package:gigafaucet/features/auth/presentation/widgets/google_signup_buttom.dart';
 import 'package:gigafaucet/features/auth/presentation/widgets/onboarding_background.dart';
+import 'package:gigafaucet/features/auth/presentation/widgets/or_divider_widget.dart';
 import 'package:gigafaucet/features/terms_privacy/presentation/services/terms_privacy_navigation_service.dart';
 import 'package:gigafaucet/features/auth/presentation/providers/ip_country_provider.dart';
 import 'package:gigafaucet/features/user_profile/domain/entities/country.dart';
@@ -500,32 +501,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
               borderRadius: 12,
               fontSize: 14,
             ),
-            const SizedBox(height: 12),
-
-            Row(
-              children: [
-                Expanded(
-                  child: Divider(
-                    color: context.outline.withAlpha(15),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: CommonText.bodySmall(
-                    localizations?.translate('or') ?? 'OR',
-                    color: context.onSurfaceVariant,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Expanded(
-                  child: Divider(
-                    color: context.outline.withAlpha(15),
-                  ),
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 12),
+            OrDividerWidget(),
             GoogleSignupButton(
               referralCode: widget.referralCode,
               agreeToTerms: _agreeToTerms,
