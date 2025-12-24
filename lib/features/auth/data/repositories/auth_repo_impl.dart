@@ -1,8 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:gigafaucet/core/error/error_model.dart';
+import 'package:gigafaucet/features/auth/data/datasources/remote/facebook_service_auth.dart';
 import 'package:gigafaucet/features/auth/data/datasources/remote/google_auth_service.dart';
 import 'package:gigafaucet/features/auth/data/datasources/remote/google_web_auth.dart';
 import 'package:gigafaucet/features/auth/data/datasources/remote/googleapis_auth.dart';
+import 'package:gigafaucet/features/auth/data/models/request/facebook_login_request.dart';
 import 'package:gigafaucet/features/auth/data/models/request/google_login_request.dart';
 import 'package:gigafaucet/features/auth/data/models/request/google_register_request.dart';
 import 'package:gigafaucet/features/auth/data/models/verify_code_forgot_password_response.dart';
@@ -40,11 +42,13 @@ import '../datasources/remote/auth_remote.dart';
 /// Provider for the authentication repository
 final authRepositoryProvider = Provider<AuthRepository>(
   (ref) => AuthRepositoryImpl(
-      ref.watch(authRemoteDataSourceProvider),
-      ref.watch(secureStorageServiceProvider),
-      ref.watch(googleAuthServiceProvider),
-      ref.watch(googleWebAuthServiceProvider),
-      ref.watch(googleApiAuthServiceProvider)),
+    ref.watch(authRemoteDataSourceProvider),
+    ref.watch(secureStorageServiceProvider),
+    ref.watch(googleAuthServiceProvider),
+    ref.watch(googleWebAuthServiceProvider),
+    ref.watch(googleApiAuthServiceProvider),
+    ref.watch(facebookAuthServiceProvider),
+  ),
 );
 
 /// Implementation of [AuthRepository]
@@ -63,9 +67,16 @@ class AuthRepositoryImpl implements AuthRepository {
 
   final GoogleApisAuthService googleApiAuthService;
 
+  final FacebookAuthService facebookAuthService;
+
   /// Creates an instance of [AuthRepositoryImpl]
-  const AuthRepositoryImpl(this.remoteDataSource, this.secureStorage,
-      this.googleAuthService, this.googleWebService, this.googleApiAuthService);
+  const AuthRepositoryImpl(
+      this.remoteDataSource,
+      this.secureStorage,
+      this.googleAuthService,
+      this.googleWebService,
+      this.googleApiAuthService,
+      this.facebookAuthService);
 
   @override
   Future<Either<Failure, void>> register(RegisterRequest request) async {
@@ -565,5 +576,43 @@ class AuthRepositoryImpl implements AuthRepository {
   /// Helper: Centralizes cleanup logic
   Future<void> _handleErrorCleanup() async {
     await googleAuthService.signOut();
+  }
+
+  @override
+  Future<Either<Failure, LoginResponseModel>> facebookLogin(
+      FacebookLoginRequest request) async {
+    try {
+      final accessToken = await facebookAuthService.getFacebookAccessToken();
+      if (accessToken == null) {
+        return Left(ServerFailure(message: 'User cancelled Facebook login'));
+      }
+      request = request.copyWith(accessToken: accessToken);
+      final response = await remoteDataSource.facebookLogin(request);
+      // Store tokens in secure storage
+      await _storeTokens(response);
+      return Right(response);
+    } catch (e) {
+      await facebookAuthService.signOut();
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, LoginResponseModel>> facebookRegister(
+      FacebookRegisterRequest request) async {
+    try {
+      final accessToken = await facebookAuthService.getFacebookAccessToken();
+      if (accessToken == null) {
+        return Left(ServerFailure(message: 'User cancelled Facebook sign-up'));
+      }
+      request = request.copyWith(accessToken: accessToken);
+      final response = await remoteDataSource.facebookRegister(request);
+      // Store tokens in secure storage
+      await _storeTokens(response);
+      return Right(response);
+    } catch (e) {
+      await facebookAuthService.signOut();
+      return Left(ServerFailure(message: e.toString()));
+    }
   }
 }

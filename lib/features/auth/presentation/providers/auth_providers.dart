@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gigafaucet/features/auth/data/datasources/remote/facebook_service_auth.dart';
 import 'package:gigafaucet/features/auth/data/datasources/remote/google_auth_service.dart';
 import 'package:gigafaucet/features/auth/data/datasources/remote/google_web_auth.dart';
 import 'package:gigafaucet/features/auth/data/datasources/remote/googleapis_auth.dart';
@@ -25,8 +26,9 @@ final authRepositoryProvider = Provider<AuthRepository>((ref) {
   final googleAuthService = ref.read(googleAuthServiceProvider);
   final googleWebAuthService = ref.read(googleWebAuthServiceProvider);
   final googleApiAuthService = ref.read(googleApiAuthServiceProvider);
+  final facebookAuthService = ref.read(facebookAuthServiceProvider);
   return AuthRepositoryImpl(remoteDataSource, secureStorage, googleAuthService,
-      googleWebAuthService, googleApiAuthService);
+      googleWebAuthService, googleApiAuthService, facebookAuthService);
 });
 
 // =============================================================================

@@ -102,6 +102,7 @@ dependencies:
   flutter_web_auth_2: ^4.1.0
   # google_sign_in_all_platforms: ^2.0.2
   googleapis_auth: ^2.0.0
+  flutter_facebook_auth: ^7.1.2
 
 dev_dependencies:
   flutter_test:
