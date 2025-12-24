@@ -248,6 +248,20 @@ class AuthActions {
         onSuccess: onSuccess);
   }
 
+  Future<void> facebookSignIn({
+    required String countryCode,
+    String? accessToken,
+    VoidCallback? onSuccess,
+    Function(String)? onError,
+  }) async {
+    final loginNotifier = _ref.read(loginNotifierProvider.notifier);
+    await loginNotifier.facebookSignIn(
+        accessToken: accessToken,
+        countryCode: countryCode,
+        onError: onError,
+        onSuccess: onSuccess);
+  }
+
   Future<void> googleSignUp({
     required String countryCode,
     String? idToken,

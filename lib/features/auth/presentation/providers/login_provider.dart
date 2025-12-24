@@ -492,7 +492,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
 
   Future<void> facebookSignIn({
     required String countryCode,
-    required String accessToken,
+    String? accessToken,
     VoidCallback? onSuccess,
     Function(String)? onError,
   }) async {

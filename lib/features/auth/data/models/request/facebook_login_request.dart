@@ -2,14 +2,14 @@ import 'package:equatable/equatable.dart';
 import 'package:gigafaucet/core/enum/user_role.dart';
 
 class FacebookLoginRequest extends Equatable {
-  final String accessToken;
+  final String? accessToken;
   final String? recaptchaToken;
   final String countryCode;
   final String userAgent;
   final String deviceFingerprint;
 
   const FacebookLoginRequest({
-    required this.accessToken,
+    this.accessToken,
     this.recaptchaToken,
     required this.countryCode,
     required this.userAgent,
@@ -35,7 +35,7 @@ class FacebookLoginRequest extends Equatable {
       [accessToken, recaptchaToken, countryCode, userAgent, deviceFingerprint];
 
   Future<Map<String, dynamic>> toJson() async {
-    if (accessToken.isEmpty) {
+    if (accessToken?.isEmpty ?? true) {
       throw Exception('Access Token is required to create JSON payload.');
     }
     final json = {
