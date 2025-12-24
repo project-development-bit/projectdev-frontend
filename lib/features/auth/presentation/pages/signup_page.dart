@@ -500,7 +500,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
               borderRadius: 12,
               fontSize: 14,
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 12),
 
             Row(
               children: [
@@ -525,7 +525,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
               ],
             ),
 
-            const SizedBox(height: 24),
+            const SizedBox(height: 12),
             GoogleSignupButton(
               referralCode: widget.referralCode,
               agreeToTerms: _agreeToTerms,

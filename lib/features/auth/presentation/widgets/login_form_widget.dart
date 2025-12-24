@@ -413,7 +413,7 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
 
             // Social Login Section
 
-            const SizedBox(height: 24),
+            const SizedBox(height: 12),
 
             // Divider with OR
             Row(
@@ -439,7 +439,7 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
               ],
             ),
 
-            const SizedBox(height: 24),
+            const SizedBox(height: 12),
             CommonButton(
               text: 'Google',
               onPressed: () {
