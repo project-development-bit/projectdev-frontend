@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:gigafaucet/core/error/error_model.dart';
 import 'package:gigafaucet/features/auth/data/datasources/remote/google_auth_service.dart';
 import 'package:gigafaucet/features/auth/data/datasources/remote/google_web_auth.dart';
+import 'package:gigafaucet/features/auth/data/datasources/remote/googleapis_auth.dart';
 import 'package:gigafaucet/features/auth/data/models/request/google_login_request.dart';
 import 'package:gigafaucet/features/auth/data/models/request/google_register_request.dart';
 import 'package:gigafaucet/features/auth/data/models/verify_code_forgot_password_response.dart';
@@ -39,11 +40,11 @@ import '../datasources/remote/auth_remote.dart';
 /// Provider for the authentication repository
 final authRepositoryProvider = Provider<AuthRepository>(
   (ref) => AuthRepositoryImpl(
-    ref.watch(authRemoteDataSourceProvider),
-    ref.watch(secureStorageServiceProvider),
-    ref.watch(googleAuthServiceProvider),
-    ref.watch(googleWebAuthServiceProvider),
-  ),
+      ref.watch(authRemoteDataSourceProvider),
+      ref.watch(secureStorageServiceProvider),
+      ref.watch(googleAuthServiceProvider),
+      ref.watch(googleWebAuthServiceProvider),
+      ref.watch(googleApiAuthServiceProvider)),
 );
 
 /// Implementation of [AuthRepository]
@@ -60,9 +61,11 @@ class AuthRepositoryImpl implements AuthRepository {
 
   final GoogleWebAuthService googleWebService;
 
+  final GoogleApisAuthService googleApiAuthService;
+
   /// Creates an instance of [AuthRepositoryImpl]
   const AuthRepositoryImpl(this.remoteDataSource, this.secureStorage,
-      this.googleAuthService, this.googleWebService);
+      this.googleAuthService, this.googleWebService, this.googleApiAuthService);
 
   @override
   Future<Either<Failure, void>> register(RegisterRequest request) async {
@@ -470,6 +473,7 @@ class AuthRepositoryImpl implements AuthRepository {
 
       return Right(response);
     } on DioException catch (e) {
+      debugPrint("Testing Google Sign-In : Dio Exception: ${e.message}");
       // Handle Dio-specific network errors with cleanup
       await _handleErrorCleanup();
       return Left(ServerFailure(
@@ -527,13 +531,18 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Either<Failure, String?>> getGooglePlatformSpecificIdToken() async {
     try {
-      var token = await _getGooglePlatformSpecificIdToken();
-      if (token == null) {
-        debugPrint(
-            "Testing Google Sign-In : User cancelled ID token retrieval.");
-        return Right(null);
+      try {
+        var token = await _getGooglePlatformSpecificIdToken();
+        if (token == null) {
+          debugPrint(
+              "Testing Google Sign-In : User cancelled ID token retrieval.");
+          return Right(null);
+        }
+        return Right(token);
+      } catch (e) {
+        debugPrint("Testing Google Sign-In : Error obtaining ID token: $e");
+        return Left(ServerFailure(message: e.toString()));
       }
-      return Right(token);
     } catch (e) {
       debugPrint("Testing Google Sign-In : Token Retrieval Error: $e");
       rethrow;
@@ -543,7 +552,7 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<String?> _getGooglePlatformSpecificIdToken() async {
     try {
       if (kIsWeb) {
-        return await googleWebService.getGoogleIdToken();
+        return await googleApiAuthService.getGoogleIdToken();
       } else {
         return await googleAuthService.getGoogleIdToken();
       }
