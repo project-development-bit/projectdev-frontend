@@ -118,6 +118,7 @@ class MyApp extends ConsumerStatefulWidget {
 class _MyAppState extends ConsumerState<MyApp>
     with SingleTickerProviderStateMixin {
   bool _splashImageLoaded = false;
+  bool _hasStartedAnimation = false;
   late AnimationController _fadeController;
   late Animation<double> _fadeAnimation;
 
@@ -125,15 +126,15 @@ class _MyAppState extends ConsumerState<MyApp>
   void initState() {
     super.initState();
 
-    // Initialize fade animation
+    // Initialize fade animation with optimized timing
     _fadeController = AnimationController(
-      duration: const Duration(milliseconds: 800),
+      duration: const Duration(milliseconds: 100),
       vsync: this,
     );
 
     _fadeAnimation = CurvedAnimation(
       parent: _fadeController,
-      curve: Curves.easeIn,
+      curve: Curves.easeInOut,
     );
 
     // Load app settings theme from server on app start
@@ -190,7 +191,7 @@ class _MyAppState extends ConsumerState<MyApp>
   void _startFadeIn() {
     _fadeController.forward().then((_) {
       // Remove native splash after fade-in completes
-      Future.delayed(const Duration(milliseconds: 300), _removeSplash);
+      _removeSplash();
     });
   }
 
@@ -222,8 +223,12 @@ class _MyAppState extends ConsumerState<MyApp>
       );
     }
 
-    // Start fade-in when theme is loaded
-    if (!_fadeController.isAnimating && _fadeController.value == 0) {
+    // Start fade-in when theme is loaded and images are ready
+    if (!_hasStartedAnimation &&
+        _splashImageLoaded &&
+        !_fadeController.isAnimating &&
+        _fadeController.value == 0) {
+      _hasStartedAnimation = true;
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _startFadeIn();
       });

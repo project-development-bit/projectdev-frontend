@@ -477,18 +477,17 @@
       window.removeSplashFromWeb = function () {
         const splash = document.getElementById("splash");
         const splashStyle = document.getElementById("splash-screen-style");
+        const splashScript = document.getElementById("splash-screen-script");
 
         if (splash) {
-          splash.style.transition = "opacity 0.3s ease-out";
-          splash.style.opacity = "0";
-          setTimeout(() => {
-            splash.remove();
-            document.getElementById("splash-branding")?.remove();
+          // Immediate removal for smooth transition - Flutter handles the fade
+          splash.remove();
+          document.getElementById("splash-branding")?.remove();
           splashStyle?.remove();
+          splashScript?.remove();
           document.body.style.background = "transparent";
-        }, 300);
-      }
-    };
+        }
+      };
 
       // Fallback: Remove splash screen after 10 seconds if Flutter doesn't call it
       setTimeout(() => {
