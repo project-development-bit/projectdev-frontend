@@ -103,7 +103,6 @@ class _CommonImageState extends State<CommonImage> {
     if (widget.imageUrl.isEmpty) {
       imageWidget = defaultErrorWidget;
     } else if (widget.imageUrl.startsWith('http')) {
-<<<<<<< HEAD
       if (widget.imageUrl.endsWith('.svg')) {
         // Handle SVG images
         imageWidget = SizedBox(
@@ -116,30 +115,6 @@ class _CommonImageState extends State<CommonImage> {
             fit: widget.fit,
             placeholderBuilder: widget.placeholder != null
                 ? (context) {
-=======
-      imageWidget = CachedNetworkImage(
-        imageUrl: widget.imageUrl,
-        width: widget.width,
-        height: widget.height,
-        fit: widget.fit,
-        alignment: alignment,
-        filterQuality: widget.filterQuality ?? FilterQuality.high,
-        // imageRenderMethodForWeb: ImageRenderMethodForWeb.HtmlImage,
-        placeholder: widget.placeholder != null
-            ? (context, url) {
-                if (!mounted) return const SizedBox.shrink();
-                return widget.placeholder!;
-              }
-            : null,
-        errorWidget: (context, url, error) {
-          if (!mounted) return const SizedBox.shrink();
-          return defaultErrorWidget;
-        },
-        progressIndicatorBuilder: widget.placeholder != null
-            ? null
-            : widget.loadingWidget != null
-                ? (context, url, progress) {
->>>>>>> main
                     if (!mounted) return const SizedBox.shrink();
                     return widget.placeholder!;
                   }
@@ -183,7 +158,6 @@ class _CommonImageState extends State<CommonImage> {
       imageWidget = SizedBox(
         width: widget.width,
         height: widget.height,
-<<<<<<< HEAD
         child: SvgPicture.asset(
           widget.imageUrl,
           width: widget.width,
@@ -197,17 +171,6 @@ class _CommonImageState extends State<CommonImage> {
               : null,
           colorFilter: null,
         ),
-=======
-        fit: widget.fit,
-        alignment: alignment,
-        placeholderBuilder: widget.placeholder != null
-            ? (context) {
-                if (!mounted) return const SizedBox.shrink();
-                return widget.placeholder!;
-              }
-            : null,
-        colorFilter: null,
->>>>>>> main
       );
     } else {
       // Handle asset images
