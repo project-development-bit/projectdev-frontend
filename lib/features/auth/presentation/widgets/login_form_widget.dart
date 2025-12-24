@@ -4,6 +4,7 @@ import 'package:gigafaucet/core/config/app_local_images.dart';
 import 'package:gigafaucet/core/theme/app_colors.dart';
 import 'package:gigafaucet/core/widgets/cloudflare_turnstille_widgte.dart';
 import 'package:gigafaucet/core/providers/turnstile_provider.dart';
+import 'package:gigafaucet/features/auth/presentation/providers/google_id_token_provider.dart';
 import 'package:gigafaucet/features/auth/presentation/widgets/remember_me_widget.dart';
 import 'package:gigafaucet/features/auth/presentation/providers/ip_country_provider.dart';
 import 'package:flutter/material.dart';
@@ -88,6 +89,25 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
           break;
       }
     });
+
+    ref.listenManual<GoogleIdTokenState>(
+      googleIdTokenNotifierProvider,
+      (previous, next) {
+        if (next.status == GetGoogleIdTokenStatus.loading) {
+          debugPrint("Loading Google ID Token...");
+        } else if (next.status == GetGoogleIdTokenStatus.success) {
+          final idToken = next.token;
+          if (idToken != null &&
+              next.signInMethod == GoogleSignInMethod.googleSignIn) {
+            _handleGoogleLoginWithToken(idToken: idToken);
+          }
+        } else if (next.status == GetGoogleIdTokenStatus.error) {
+          context.showErrorSnackBar(
+            message: next.error ?? 'Failed to get Google ID token',
+          );
+        }
+      },
+    );
   }
 
   @override
@@ -221,7 +241,7 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
     }
   }
 
-  void _handleGoogleLogin() async {
+  void _handleGoogleLoginWithToken({String? idToken}) async {
     // Check Turnstile verification
     final turnstileCanAttempt =
         ref.read(turnstileNotifierProvider(TurnstileActionEnum.login))
@@ -260,6 +280,7 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
     final ipState = ref.read(getIpCountryNotifierProvider);
 
     await authActions.googleLogin(
+        idToken: idToken,
         countryCode: ipState.country?.code ?? "Unknown",
         onSuccess: () async {
           widget.onLoginSuccess?.call();
@@ -422,7 +443,10 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
             CommonButton(
               text: 'Google',
               onPressed: () {
-                _handleGoogleLogin();
+                ref
+                    .read(googleIdTokenNotifierProvider.notifier)
+                    .getGoogleIdToken(
+                        signInMethod: GoogleSignInMethod.googleSignIn);
               },
               icon: CommonImage(
                 imageUrl: AppLocalImages.googleLogo,

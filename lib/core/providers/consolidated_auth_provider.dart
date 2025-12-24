@@ -236,12 +236,16 @@ class AuthActions {
 
   Future<void> googleLogin({
     required String countryCode,
+    String? idToken,
     VoidCallback? onSuccess,
     Function(String)? onError,
   }) async {
     final loginNotifier = _ref.read(loginNotifierProvider.notifier);
     await loginNotifier.googleSignIn(
-        countryCode: countryCode, onError: onError, onSuccess: onSuccess);
+        idToken: idToken,
+        countryCode: countryCode,
+        onError: onError,
+        onSuccess: onSuccess);
   }
 
   Future<void> googleSignUp({

@@ -16,6 +16,8 @@ class GoogleWebAuthService {
 
   // Ensure this matches your setup (http vs https)
   final String _redirectUri = 'http://localhost:8000/auth.html';
+  final callbackUrlScheme =
+      'com.googleusercontent.apps.645002434672-nji58g0s1sdqfpu679h3h7cc3v9diaue';
 
   Future<String?> getGoogleIdToken() async {
     final String nonce = _generateNonce();
@@ -33,7 +35,8 @@ class GoogleWebAuthService {
       final result = await FlutterWebAuth2.authenticate(
         url: url.toString(),
         // IMPORTANT: Scheme must match your redirectUri (http or https)
-        callbackUrlScheme: 'http',
+        callbackUrlScheme: callbackUrlScheme,
+        options: FlutterWebAuth2Options(),
       );
 
       debugPrint('FlutterWebAuth2 Result: $result');

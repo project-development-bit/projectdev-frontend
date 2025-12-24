@@ -102,4 +102,6 @@ abstract class AuthRepository {
       GoogleLoginRequest request);
   Future<Either<Failure, LoginResponseModel>> googleRegister(
       GoogleRegisterRequest request);
+
+  Future<Either<Failure, String?>> getGooglePlatformSpecificIdToken();
 }

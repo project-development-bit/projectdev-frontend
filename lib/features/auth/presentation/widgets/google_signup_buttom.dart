@@ -8,6 +8,7 @@ import 'package:gigafaucet/core/extensions/context_extensions.dart';
 import 'package:gigafaucet/core/providers/consolidated_auth_provider.dart';
 import 'package:gigafaucet/core/providers/turnstile_provider.dart';
 import 'package:gigafaucet/core/theme/app_colors.dart';
+import 'package:gigafaucet/features/auth/presentation/providers/google_id_token_provider.dart';
 import 'package:gigafaucet/features/auth/presentation/providers/login_provider.dart';
 import 'package:gigafaucet/features/auth/presentation/providers/selected_country_provider.dart';
 // import 'package:gigafaucet/features/auth/presentation/widgets/web_google_signin_button.dart';
@@ -53,6 +54,24 @@ class _GoogleSignupButtonState extends ConsumerState<GoogleSignupButton> {
           break;
       }
     });
+    ref.listenManual<GoogleIdTokenState>(
+      googleIdTokenNotifierProvider,
+      (previous, next) {
+        if (next.status == GetGoogleIdTokenStatus.loading) {
+          debugPrint("Loading Google ID Token...");
+        } else if (next.status == GetGoogleIdTokenStatus.success) {
+          final idToken = next.token;
+          if (idToken != null &&
+              next.signInMethod == GoogleSignInMethod.googleSignUp) {
+            _handleGoogleSignUp(idToken: idToken);
+          }
+        } else if (next.status == GetGoogleIdTokenStatus.error) {
+          context.showErrorSnackBar(
+            message: next.error ?? 'Failed to get Google ID token',
+          );
+        }
+      },
+    );
   }
 
   void _afterLoginSuccess() {
@@ -68,7 +87,10 @@ class _GoogleSignupButtonState extends ConsumerState<GoogleSignupButton> {
     return CommonButton(
       text: 'Google',
       onPressed: () {
-        _handleGoogleSignUp();
+        // _handleGoogleSignUp();
+        ref
+            .read(googleIdTokenNotifierProvider.notifier)
+            .getGoogleIdToken(signInMethod: GoogleSignInMethod.googleSignUp);
       },
       icon: CommonImage(
         imageUrl: AppLocalImages.googleLogo,

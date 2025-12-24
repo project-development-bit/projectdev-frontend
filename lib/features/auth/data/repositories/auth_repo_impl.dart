@@ -450,7 +450,7 @@ class AuthRepositoryImpl implements AuthRepository {
 
       if (idToken == null) {
         // Reuse the helper to handle Web vs Native logic automatically
-        idToken = await _getPlatformSpecificIdToken();
+        idToken = await _getGooglePlatformSpecificIdToken();
 
         // Guard Clause: Handle cancellation
         if (idToken == null) {
@@ -492,7 +492,7 @@ class AuthRepositoryImpl implements AuthRepository {
       String? idToken = request.idToken;
 
       if (idToken == null) {
-        idToken = await _getPlatformSpecificIdToken();
+        idToken = await _getGooglePlatformSpecificIdToken();
 
         // Guard Clause: Handle cancellation immediately
         if (idToken == null) {
@@ -524,8 +524,23 @@ class AuthRepositoryImpl implements AuthRepository {
     }
   }
 
-  /// Helper: Abstracts the Web vs Native logic away from the main flow
-  Future<String?> _getPlatformSpecificIdToken() async {
+  @override
+  Future<Either<Failure, String?>> getGooglePlatformSpecificIdToken() async {
+    try {
+      var token = await _getGooglePlatformSpecificIdToken();
+      if (token == null) {
+        debugPrint(
+            "Testing Google Sign-In : User cancelled ID token retrieval.");
+        return Right(null);
+      }
+      return Right(token);
+    } catch (e) {
+      debugPrint("Testing Google Sign-In : Token Retrieval Error: $e");
+      rethrow;
+    }
+  }
+
+  Future<String?> _getGooglePlatformSpecificIdToken() async {
     try {
       if (kIsWeb) {
         return await googleWebService.getGoogleIdToken();

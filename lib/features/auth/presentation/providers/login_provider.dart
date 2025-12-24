@@ -230,6 +230,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
 
   Future<void> googleSignIn({
     required String countryCode,
+    String? idToken,
     VoidCallback? onSuccess,
     Function(String)? onError,
   }) async {
@@ -262,6 +263,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
       }
 
       final loginRequest = GoogleLoginRequest(
+        idToken: idToken,
         countryCode: countryCode,
         recaptchaToken: turnstileToken,
         deviceFingerprint: await _deviceInfo.getUniqueIdentifier() ?? '',
