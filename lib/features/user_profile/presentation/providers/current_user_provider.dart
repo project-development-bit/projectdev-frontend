@@ -44,8 +44,8 @@ class CurrentUserNotifier extends StateNotifier<CurrentUserState> {
       : super(const CurrentUserState());
 
   /// Get current user from API (whoami)
-  Future<void> getCurrentUser() async {
-    state = state.copyWith(isLoading: true, error: null);
+  Future<void> getCurrentUser({bool isLoading = true}) async {
+    state = state.copyWith(isLoading: isLoading, error: null);
 
     final result = await _getCurrentUserUseCase();
 
@@ -106,7 +106,7 @@ class CurrentUserNotifier extends StateNotifier<CurrentUserState> {
   /// Refresh user data from API
   Future<void> refreshUser() async {
     debugPrint('Refreshing current user data...');
-    await getCurrentUser();
+    await getCurrentUser(isLoading: false);
   }
 
   /// Clear user data (for logout)

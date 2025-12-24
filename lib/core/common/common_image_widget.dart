@@ -17,6 +17,7 @@ class CommonImage extends StatefulWidget {
     this.loadingWidget,
     this.loaingImageUrl,
     this.filterQuality,
+    this.alignment,
   });
 
   final String imageUrl;
@@ -29,6 +30,7 @@ class CommonImage extends StatefulWidget {
   final Widget? loadingWidget;
   final String? loaingImageUrl;
   final FilterQuality? filterQuality;
+  final Alignment? alignment;
   @override
   State<CommonImage> createState() => _CommonImageState();
 }
@@ -37,6 +39,8 @@ class _CommonImageState extends State<CommonImage> {
   @override
   Widget build(BuildContext context) {
     if (!mounted) return const SizedBox.shrink();
+
+    final alignment = widget.alignment ?? Alignment.center;
 
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final colorScheme = Theme.of(context).colorScheme;
@@ -72,6 +76,7 @@ class _CommonImageState extends State<CommonImage> {
                 height: widget.height,
                 filterQuality: widget.filterQuality ?? FilterQuality.high,
                 fit: widget.fit,
+                alignment: alignment,
                 errorBuilder: (context, error, stackTrace) {
                   if (!mounted) return const SizedBox.shrink();
                   return defaultErrorWidget;
@@ -103,6 +108,7 @@ class _CommonImageState extends State<CommonImage> {
         width: widget.width,
         height: widget.height,
         fit: widget.fit,
+        alignment: alignment,
         filterQuality: widget.filterQuality ?? FilterQuality.high,
         // imageRenderMethodForWeb: ImageRenderMethodForWeb.HtmlImage,
         placeholder: widget.placeholder != null
@@ -133,6 +139,7 @@ class _CommonImageState extends State<CommonImage> {
         width: widget.width,
         height: widget.height,
         fit: widget.fit,
+        alignment: alignment,
         placeholderBuilder: widget.placeholder != null
             ? (context) {
                 if (!mounted) return const SizedBox.shrink();
@@ -148,6 +155,7 @@ class _CommonImageState extends State<CommonImage> {
         width: widget.width,
         height: widget.height,
         fit: widget.fit,
+        alignment: alignment,
         filterQuality: widget.filterQuality ?? FilterQuality.high,
         errorBuilder: (context, error, stackTrace) {
           if (!mounted) return const SizedBox.shrink();
@@ -175,12 +183,14 @@ class CommonAvatar extends StatelessWidget {
     this.radius = 20,
     this.backgroundColor,
     this.placeholderText,
+    this.alignment = Alignment.center,
   });
 
   final String imageUrl;
   final double radius;
   final Color? backgroundColor;
   final String? placeholderText;
+  final Alignment alignment;
 
   @override
   Widget build(BuildContext context) {
@@ -198,22 +208,23 @@ class CommonAvatar extends StatelessWidget {
       );
     }
 
-    return CircleAvatar(
-      radius: radius,
-      backgroundColor: backgroundColor ?? context.primaryContainer,
-      backgroundImage: imageUrl.startsWith('http')
-          ? CachedNetworkImageProvider(imageUrl)
-          : AssetImage(imageUrl) as ImageProvider,
-      onBackgroundImageError: (exception, stackTrace) {},
-      child: imageUrl.isEmpty
-          ? Text(
-              placeholderText ?? '?',
-              style: context.bodyMedium?.copyWith(
-                color: context.onPrimaryContainer,
-                fontWeight: FontWeight.w600,
-              ),
-            )
-          : null,
+    final imageProvider = imageUrl.startsWith('http')
+        ? CachedNetworkImageProvider(imageUrl)
+        : AssetImage(imageUrl) as ImageProvider;
+
+    return Container(
+      width: radius * 2,
+      height: radius * 2,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: backgroundColor ?? context.primaryContainer,
+        image: DecorationImage(
+          image: imageProvider,
+          fit: BoxFit.cover,
+          alignment: alignment,
+          onError: (exception, stackTrace) {},
+        ),
+      ),
     );
   }
 }
