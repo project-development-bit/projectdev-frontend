@@ -11,12 +11,14 @@ import UIKit
   ) -> Bool {
     GeneratedPluginRegistrant.register(with: self)
 
+    let didFinish = super.application(application, didFinishLaunchingWithOptions: launchOptions)
+
     if let flutterViewController = window?.rootViewController as? FlutterViewController {
       installSplashOverlay(on: flutterViewController)
       registerSplashChannel(with: flutterViewController)
     }
 
-    return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+    return didFinish
   }
 
   private func registerSplashChannel(with flutterViewController: FlutterViewController) {
@@ -35,21 +37,12 @@ import UIKit
   private func installSplashOverlay(on flutterViewController: FlutterViewController) {
     guard splashOverlay == nil else { return }
 
-    let overlay = UIView(frame: flutterViewController.view.bounds)
+    // Use the iOS launch screen directly so the debug overlay always matches
+    // `LaunchScreen.storyboard` and can't go blank due to asset lookup.
+    let launchStoryboard = UIStoryboard(name: "LaunchScreen", bundle: nil)
+    let launchViewController = launchStoryboard.instantiateInitialViewController()
+    let overlay = launchViewController?.view ?? UIView(frame: flutterViewController.view.bounds)
     overlay.translatesAutoresizingMaskIntoConstraints = false
-
-    // Background image (matches LaunchScreen.storyboard: LaunchBackground)
-    let bg = UIImageView(image: UIImage(named: "LaunchBackground"))
-    bg.translatesAutoresizingMaskIntoConstraints = false
-    bg.contentMode = .scaleToFill
-
-    // Center logo (matches LaunchScreen.storyboard: LaunchImage)
-    let logo = UIImageView(image: UIImage(named: "LaunchImage"))
-    logo.translatesAutoresizingMaskIntoConstraints = false
-    logo.contentMode = .center
-
-    overlay.addSubview(bg)
-    overlay.addSubview(logo)
 
     flutterViewController.view.addSubview(overlay)
     NSLayoutConstraint.activate([
@@ -57,16 +50,6 @@ import UIKit
       overlay.trailingAnchor.constraint(equalTo: flutterViewController.view.trailingAnchor),
       overlay.topAnchor.constraint(equalTo: flutterViewController.view.topAnchor),
       overlay.bottomAnchor.constraint(equalTo: flutterViewController.view.bottomAnchor),
-
-      bg.leadingAnchor.constraint(equalTo: overlay.leadingAnchor),
-      bg.trailingAnchor.constraint(equalTo: overlay.trailingAnchor),
-      bg.topAnchor.constraint(equalTo: overlay.topAnchor),
-      bg.bottomAnchor.constraint(equalTo: overlay.bottomAnchor),
-
-      logo.leadingAnchor.constraint(equalTo: overlay.leadingAnchor),
-      logo.trailingAnchor.constraint(equalTo: overlay.trailingAnchor),
-      logo.topAnchor.constraint(equalTo: overlay.topAnchor),
-      logo.bottomAnchor.constraint(equalTo: overlay.bottomAnchor),
     ])
 
     splashOverlay = overlay
