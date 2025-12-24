@@ -460,21 +460,20 @@ class AuthRepositoryImpl implements AuthRepository {
       GoogleLoginRequest request) async {
     try {
       // 1. Resolve ID Token (If not already present in request)
-      String? idToken = request.idToken;
+      String? accessToken = request.accessToken;
 
-      if (idToken == null) {
+      if (accessToken == null) {
         // Reuse the helper to handle Web vs Native logic automatically
-        idToken = await _getGooglePlatformSpecificIdToken();
-
+        accessToken = await _getGooglePlatformSpecificIdToken();
         // Guard Clause: Handle cancellation
-        if (idToken == null) {
+        if (accessToken == null) {
           debugPrint("Testing Google Sign-In : User cancelled Google sign-in.");
           return Left(ServerFailure(message: 'User cancelled Google sign-in'));
         }
       }
 
       // 2. Prepare the final request object
-      final updatedRequest = request.copyWith(idToken: idToken);
+      final updatedRequest = request.copyWith(accessToken: accessToken);
 
       // 3. Perform API Call
       final response = await remoteDataSource.googleLogin(updatedRequest);
@@ -504,20 +503,20 @@ class AuthRepositoryImpl implements AuthRepository {
       GoogleRegisterRequest request) async {
     try {
       // 1. Resolve ID Token (If not already present in request)
-      String? idToken = request.idToken;
+      String? accessToken = request.accessToken;
 
-      if (idToken == null) {
-        idToken = await _getGooglePlatformSpecificIdToken();
+      if (accessToken == null) {
+        accessToken = await _getGooglePlatformSpecificIdToken();
 
         // Guard Clause: Handle cancellation immediately
-        if (idToken == null) {
+        if (accessToken == null) {
           debugPrint("Testing Google Sign-In : User cancelled Google sign-up.");
           return Left(ServerFailure(message: 'User cancelled Google sign-up'));
         }
       }
 
       // 2. Prepare the final request object
-      final updatedRequest = request.copyWith(idToken: idToken);
+      final updatedRequest = request.copyWith(accessToken: accessToken);
 
       // 3. Perform API Call
       final response = await remoteDataSource.googleRegister(updatedRequest);

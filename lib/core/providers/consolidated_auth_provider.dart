@@ -236,13 +236,13 @@ class AuthActions {
 
   Future<void> googleLogin({
     required String countryCode,
-    String? idToken,
+    String? accessToken,
     VoidCallback? onSuccess,
     Function(String)? onError,
   }) async {
     final loginNotifier = _ref.read(loginNotifierProvider.notifier);
     await loginNotifier.googleSignIn(
-        idToken: idToken,
+        accessToken: accessToken,
         countryCode: countryCode,
         onError: onError,
         onSuccess: onSuccess);
@@ -264,7 +264,7 @@ class AuthActions {
 
   Future<void> googleSignUp({
     required String countryCode,
-    String? idToken,
+    String? accessToken,
     VoidCallback? onSuccess,
     UserRole? role,
     String? referralCode,
@@ -272,7 +272,7 @@ class AuthActions {
   }) async {
     final loginNotifier = _ref.read(loginNotifierProvider.notifier);
     await loginNotifier.googleSignUp(
-        idToken: idToken,
+        accessToken: accessToken,
         countryCode: countryCode,
         onError: onError,
         onSuccess: onSuccess);

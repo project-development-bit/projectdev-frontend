@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 /// Login request model for API calls
 class GoogleLoginRequest extends Equatable {
   const GoogleLoginRequest({
-    this.idToken,
+    this.accessToken,
     this.avatar,
     required this.recaptchaToken,
     required this.countryCode,
@@ -11,7 +11,7 @@ class GoogleLoginRequest extends Equatable {
     required this.deviceFingerprint,
   });
 
-  final String? idToken;
+  final String? accessToken;
   final String? avatar;
 
   /// reCAPTCHA token for verification (optional, will be null in debug mode)
@@ -28,14 +28,14 @@ class GoogleLoginRequest extends Equatable {
 
   /// Convert to JSON for API request
   Future<Map<String, dynamic>> toJson() async {
-    if (idToken == null) {
+    if (accessToken == null) {
       throw Exception('ID Token is required to create JSON payload.');
     }
     final json = {
       'country_code': countryCode,
       'userAgent': userAgent,
       'device_fingerprint': deviceFingerprint,
-      'idToken': idToken ?? '',
+      'accessToken': accessToken ?? '',
       // 'avatar': avatar ?? '',
     };
 
@@ -49,7 +49,7 @@ class GoogleLoginRequest extends Equatable {
 
   /// Create a copy with updated values
   GoogleLoginRequest copyWith({
-    String? idToken,
+    String? accessToken,
     String? avatar,
     String? recaptchaToken,
     String? countryCode,
@@ -57,7 +57,7 @@ class GoogleLoginRequest extends Equatable {
     String? deviceFingerprint,
   }) {
     return GoogleLoginRequest(
-      idToken: idToken ?? this.idToken,
+      accessToken: accessToken ?? this.accessToken,
       avatar: avatar ?? this.avatar,
       recaptchaToken: recaptchaToken ?? this.recaptchaToken,
       countryCode: countryCode ?? this.countryCode,
@@ -68,7 +68,7 @@ class GoogleLoginRequest extends Equatable {
 
   @override
   List<Object?> get props => [
-        idToken,
+        accessToken,
         avatar,
         recaptchaToken,
         countryCode,
@@ -77,5 +77,5 @@ class GoogleLoginRequest extends Equatable {
       ];
   @override
   String toString() =>
-      'GoogleLoginRequest(idToken: $idToken, avatar: $avatar, recaptchaToken: $recaptchaToken, countryCode: $countryCode, userAgent: $userAgent, deviceFingerprint: $deviceFingerprint)';
+      'GoogleLoginRequest(accessToken: $accessToken, avatar: $avatar, recaptchaToken: $recaptchaToken, countryCode: $countryCode, userAgent: $userAgent, deviceFingerprint: $deviceFingerprint)';
 }

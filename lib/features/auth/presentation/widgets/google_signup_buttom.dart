@@ -103,7 +103,7 @@ class _GoogleSignupButtonState extends ConsumerState<GoogleSignupButton> {
     );
   }
 
-  Future<void> _handleGoogleSignUp({String? idToken}) async {
+  Future<void> _handleGoogleSignUp({String? accessToken}) async {
     if (!widget.agreeToTerms) {
       final localizations = AppLocalizations.of(context);
       context.showSnackBar(
@@ -131,7 +131,7 @@ class _GoogleSignupButtonState extends ConsumerState<GoogleSignupButton> {
     authActions.resetAllStates();
 
     await authActions.googleSignUp(
-      idToken: idToken,
+      accessToken: accessToken,
       countryCode: ref.read(selectedCountryProvider)?.code ?? '',
       role: UserRole.normalUser,
       referralCode: widget.referralCode,

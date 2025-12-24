@@ -70,7 +70,7 @@ class SocialLoginButtons extends ConsumerWidget {
   }
 
   void _handleGoogleLoginWithToken(WidgetRef ref, BuildContext context,
-      {String? idToken}) async {
+      {String? accessToken}) async {
     // Check Turnstile verification
     final turnstileCanAttempt =
         ref.read(turnstileNotifierProvider(TurnstileActionEnum.login))
@@ -109,7 +109,7 @@ class SocialLoginButtons extends ConsumerWidget {
     final ipState = ref.read(getIpCountryNotifierProvider);
 
     await authActions.googleLogin(
-        idToken: idToken,
+        accessToken: accessToken,
         countryCode: ipState.country?.code ?? "Unknown",
         onSuccess: () async {
           onLoginSuccess?.call();

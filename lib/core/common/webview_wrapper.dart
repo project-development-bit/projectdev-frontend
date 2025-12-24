@@ -1,12 +1,7 @@
-<<<<<<< HEAD
-import 'package:gigafaucet/core/core.dart';
-import 'package:gigafaucet/routing/routing.dart';
-=======
 import 'dart:math' as math;
 
-import 'package:cointiply_app/core/core.dart';
-import 'package:cointiply_app/routing/routing.dart';
->>>>>>> main
+import 'package:gigafaucet/core/core.dart';
+import 'package:gigafaucet/routing/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_all/webview_all.dart';
 

@@ -1,17 +1,8 @@
-<<<<<<< HEAD
+import 'package:gigafaucet/core/common/close_square_button.dart';
 import 'package:gigafaucet/core/common/common_image_widget.dart';
 import 'package:gigafaucet/core/common/common_text.dart';
-import 'package:gigafaucet/core/common/custom_buttom_widget.dart';
 import 'package:gigafaucet/core/config/app_local_images.dart';
 import 'package:gigafaucet/core/extensions/context_extensions.dart';
-import 'package:gigafaucet/routing/app_router.dart';
-=======
-import 'package:cointiply_app/core/common/close_square_button.dart';
-import 'package:cointiply_app/core/common/common_image_widget.dart';
-import 'package:cointiply_app/core/common/common_text.dart';
-import 'package:cointiply_app/core/config/app_local_images.dart';
-import 'package:cointiply_app/core/extensions/context_extensions.dart';
->>>>>>> main
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -52,80 +43,6 @@ class SuccessSpinDialogWidget extends StatelessWidget {
             : isTablet
                 ? 650
                 : 696,
-<<<<<<< HEAD
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-          image: DecorationImage(
-            image: AssetImage(isMobile
-                ? AppLocalImages.spinNotRemainBgMobile
-                : isTablet
-                    ? AppLocalImages.spinNotRemainBgMobile
-                    : AppLocalImages.spinNotRemainBg),
-            fit: BoxFit.cover,
-          ),
-        ),
-        alignment: Alignment.center,
-        child: FittedBox(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CommonText.titleLarge(context.translate("congratulations"),
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white,
-                  fontSize: isMobile
-                      ? 24
-                      : isTablet
-                          ? 30
-                          : 36),
-              SizedBox(
-                  height: isMobile
-                      ? 10
-                      : isTablet
-                          ? 15
-                          : 20),
-              CommonImage(
-                imageUrl: rewardImageUrl,
-                fit: BoxFit.contain,
-                width: isMobile
-                    ? 120
-                    : isTablet
-                        ? 180
-                        : 200,
-                height: isMobile
-                    ? 120
-                    : isTablet
-                        ? 180
-                        : 200,
-              ),
-              SizedBox(
-                  height: isMobile
-                      ? 10
-                      : isTablet
-                          ? 15
-                          : 20),
-              CommonText.bodyLarge(
-                rewardLabel,
-                textAlign: TextAlign.center,
-                fontWeight: FontWeight.w500,
-                color: Colors.white,
-                fontSize: isMobile ? 16 : 20,
-              ),
-              SizedBox(
-                  height: isMobile
-                      ? 10
-                      : isTablet
-                          ? 15
-                          : 20),
-              CustomUnderLineButtonWidget(
-                  width: isMobile ? 150 : 350,
-                  title: context.translate("okay"),
-                  fontSize: 14,
-                  onTap: () {
-                    context.pop();
-                  })
-            ],
-          ),
-=======
         child: Stack(
           children: [
             Container(
@@ -144,7 +61,6 @@ class SuccessSpinDialogWidget extends StatelessWidget {
                   : null,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
-                
                 image: DecorationImage(
                   image: AssetImage(isMobile
                       ? AppLocalImages.spinNotRemainBgMobile
@@ -207,7 +123,6 @@ class SuccessSpinDialogWidget extends StatelessWidget {
                   context.pop();
                 }))
           ],
->>>>>>> main
         ),
       ),
     );
