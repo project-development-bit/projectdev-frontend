@@ -15,7 +15,9 @@ class GoogleWebAuthService {
       '645002434672-nji58g0s1sdqfpu679h3h7cc3v9diaue.apps.googleusercontent.com';
 
   // Ensure this matches your setup (http vs https)
-  final String _redirectUri = 'http://localhost:8000/auth.html';
+  final String _redirectUri = kDebugMode
+      ? "http://localhost:8080/auth.html"
+      : "https://staging.gigafaucet.com/auth.html";
   final callbackUrlScheme =
       'com.googleusercontent.apps.645002434672-nji58g0s1sdqfpu679h3h7cc3v9diaue';
 

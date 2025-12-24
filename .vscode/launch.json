@@ -12,7 +12,7 @@
       "program": "lib/main_dev.dart",
       "args": [
         "--web-port",
-        "8000"
+        "8080"
       ]
     },
     {
@@ -23,7 +23,7 @@
       "flutterMode": "profile",
       "args": [
         "--web-port",
-        "8000"
+        "8080"
       ]
     },
     // 🟠 Staging Flavor Configurations
@@ -34,7 +34,7 @@
       "program": "lib/main_staging.dart",
       "args": [
         "--web-port",
-        "8000"
+        "8080"
       ]
     },
     {
@@ -45,7 +45,7 @@
       "flutterMode": "profile",
       "args": [
         "--web-port",
-        "8000"
+        "8080"
       ]
     },
     // 🔴 Production Flavor Configurations
@@ -56,7 +56,7 @@
       "program": "lib/main_prod.dart",
       "args": [
         "--web-port",
-        "8000"
+        "8080"
       ]
     },
     {
@@ -67,7 +67,7 @@
       "flutterMode": "profile",
       "args": [
         "--web-port",
-        "8000"
+        "8080"
       ]
     },
     {
@@ -78,7 +78,7 @@
       "flutterMode": "release",
       "args": [
         "--web-port",
-        "8000"
+        "8080"
       ]
     },
     // 📱 Platform-Specific Configurations
@@ -101,7 +101,7 @@
       "program": "lib/main_dev.dart",
       "args": [
         "--web-port",
-        "8000"
+        "8080"
       ]
     },
     // 🎯 Default Configuration (Dev)
@@ -112,7 +112,7 @@
       "program": "lib/main.dart",
       "args": [
         "--web-port",
-        "8000"
+        "8080"
       ]
     }
   ]
