@@ -59,23 +59,15 @@ class HomeBannerSectionState extends ConsumerState<HomeBannerSection> {
                 fallbackImage: fallbackImage,
               );
             },
-            // items: [
-            //   for (final banner in banners)
-            //     BannerSlide(
-            //       banner: banner,
-            //       height: bannerHeight,
-            //       fallbackImage: fallbackImage,
-            //     ),
-            // ],
             options: CarouselOptions(
               height: bannerHeight,
               viewportFraction: 1.0,
               autoPlay: banners.length > 1,
-              autoPlayInterval: const Duration(seconds: 5),
+              autoPlayInterval: const Duration(seconds: 10),
               autoPlayAnimationDuration: const Duration(
-                seconds: 2,
+                seconds: 5,
               ),
-              autoPlayCurve: Curves.easeInOut,
+              autoPlayCurve: Curves.linear,
               enableInfiniteScroll: banners.length > 1,
               onPageChanged: (index, reason) {
                 ref.read(currentBannerIndexProvider.notifier).state = index;
