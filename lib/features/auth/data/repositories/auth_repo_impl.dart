@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:gigafaucet/core/error/error_model.dart';
 import 'package:gigafaucet/features/auth/data/datasources/remote/google_auth_service.dart';
-import 'package:gigafaucet/features/auth/data/datasources/remote/google_web_auth.dart';
 import 'package:gigafaucet/features/auth/data/datasources/remote/googleapis_auth.dart';
 import 'package:gigafaucet/features/auth/data/models/request/google_login_request.dart';
 import 'package:gigafaucet/features/auth/data/models/request/google_register_request.dart';
@@ -43,7 +42,6 @@ final authRepositoryProvider = Provider<AuthRepository>(
       ref.watch(authRemoteDataSourceProvider),
       ref.watch(secureStorageServiceProvider),
       ref.watch(googleAuthServiceProvider),
-      ref.watch(googleWebAuthServiceProvider),
       ref.watch(googleApiAuthServiceProvider)),
 );
 
@@ -59,13 +57,11 @@ class AuthRepositoryImpl implements AuthRepository {
 
   final GoogleAuthService googleAuthService;
 
-  final GoogleWebAuthService googleWebService;
-
   final GoogleApisAuthService googleApiAuthService;
 
   /// Creates an instance of [AuthRepositoryImpl]
   const AuthRepositoryImpl(this.remoteDataSource, this.secureStorage,
-      this.googleAuthService, this.googleWebService, this.googleApiAuthService);
+      this.googleAuthService, this.googleApiAuthService);
 
   @override
   Future<Either<Failure, void>> register(RegisterRequest request) async {
