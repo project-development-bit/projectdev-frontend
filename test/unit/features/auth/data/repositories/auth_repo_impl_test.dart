@@ -1,5 +1,6 @@
 import 'package:gigafaucet/core/error/failures.dart';
 import 'package:gigafaucet/core/services/secure_storage_service.dart';
+import 'package:gigafaucet/features/auth/data/datasources/remote/facebook_service_auth.dart';
 import 'package:gigafaucet/features/auth/data/datasources/remote/google_auth_service.dart';
 import 'package:gigafaucet/features/auth/data/datasources/remote/google_web_auth.dart';
 import 'package:gigafaucet/features/auth/data/datasources/remote/googleapis_auth.dart';
@@ -31,6 +32,8 @@ class MockGoogleWebAuthService extends Mock implements GoogleWebAuthService {}
 
 class MockGoogleApisAuthService extends Mock implements GoogleApisAuthService {}
 
+class MockFacebookAuthService extends Mock implements FacebookAuthService {}
+
 void main() {
   group('AuthRepositoryImpl', () {
     late AuthRepositoryImpl authRepository;
@@ -57,7 +60,8 @@ void main() {
           mockSecureStorage,
           MockGoogleAuthService(),
           MockGoogleWebAuthService(),
-          MockGoogleApisAuthService());
+          MockGoogleApisAuthService(),
+          MockFacebookAuthService());
     });
 
     group('login', () {
