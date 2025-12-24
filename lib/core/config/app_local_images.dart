@@ -182,4 +182,10 @@ class AppLocalImages {
   static const String splashBackgroundMobile =
       "assets/images/splash_background_mobile.png";
   static const String twoFABackground = "assets/images/bg/2fa_background.png";
+
+  static const String fortuneWheelGirlCong =
+      'assets/images/fortune_wheel_girl_cong.png';
+  static const String congratsLabel = 'assets/images/congrats_label.png';
+  static const String successSpingDialogBg = 'assets/images/success_spin_dialog_bg.png';
+  static const String successSpingDialogBgMobile = 'assets/images/success_spin_dialog_bg_mobile.png';
 }

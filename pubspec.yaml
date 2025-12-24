@@ -186,7 +186,7 @@ flutter:
 flutter_native_splash:
   # Background color of the splash screen (hex color)
   
-  image: assets/images/splash_logo.png
+  image:
   background_image:      assets/images/splash_background.png
   background_image_dark: assets/images/splash_background.png
   background_image_android:      assets/images/splash_background_mobile.png
@@ -204,7 +204,7 @@ flutter_native_splash:
   # branding_mode: light
   
   # Enable web splash screen
-  web: true
+  web: false
   
   # Enable Android splash screen
   android: true
@@ -234,19 +234,18 @@ flutter_native_splash:
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/images/app_logo.jpeg"
+  image_path: "assets/images/logo.png"
   min_sdk_android: 21 # android min sdk min:16, default 21
   web:
     generate: true
-    image_path: "assets/images/app_logo.jpeg"
+    image_path: "assets/images/logo.png"
     background_color: "#E8631C"
     theme_color: "#CF7A11"
   windows:
     generate: true
-    image_path: "assets/images/app_logo.jpeg"
+    image_path: "assets/images/logo.png"
     icon_size: 48 # min:48, max:256, default: 48
   macos:
     generate: true
-    image_path: "assets/images/app_logo.jpeg"
-
+    image_path: "assets/images/logo.png"
 

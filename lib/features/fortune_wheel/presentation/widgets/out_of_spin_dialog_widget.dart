@@ -48,6 +48,7 @@ class OutOfSpinDialogWidget extends StatelessWidget {
         ),
         alignment: Alignment.center,
         child: FittedBox(
+<<<<<<< HEAD
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -104,6 +105,72 @@ class OutOfSpinDialogWidget extends StatelessWidget {
                     context.pop();
                   })
             ],
+=======
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+                vertical: isMobile
+                    ? 20
+                    : isTablet
+                        ? 30
+                        : 40),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  AppLocalImages.outOfSpins,
+                  width: isMobile
+                      ? 260
+                      : isTablet
+                          ? 360
+                          : 400,
+                  height: isMobile
+                      ? 120
+                      : isTablet
+                          ? 180
+                          : 200,
+                ),
+                Image.asset(
+                  AppLocalImages.spinWheelIcon,
+                  width: isMobile
+                      ? 120
+                      : isTablet
+                          ? 180
+                          : 200,
+                  height: isMobile
+                      ? 120
+                      : isTablet
+                          ? 180
+                          : 200,
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      vertical: isMobile
+                          ? 20
+                          : isTablet
+                              ? 30
+                              : 40),
+                  child: CommonText.bodyMedium(
+                    context.translate('come_back_later_for_more'),
+                    textAlign: TextAlign.center,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white,
+                    fontSize: isMobile
+                        ? 16
+                        : isTablet
+                            ? 20
+                            : 24,
+                  ),
+                ),
+                CustomUnderLineButtonWidget(
+                    width: isMobile ? 150 : 350,
+                    title: context.translate("okay"),
+                    fontSize: 14,
+                    onTap: () {
+                      context.pop();
+                    })
+              ],
+            ),
+>>>>>>> main
           ),
         ),
       ),

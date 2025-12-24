@@ -23,11 +23,13 @@ import '../providers/verify_login_2fa_provider.dart';
 class TwoFactorLoginVerificationDialog extends ConsumerStatefulWidget {
   final int userId;
   final VoidCallback? onSuccess;
+  final VoidCallback? onClosed;
 
   const TwoFactorLoginVerificationDialog({
     super.key,
     required this.userId,
     this.onSuccess,
+    this.onClosed,
   });
 
   @override
@@ -90,7 +92,7 @@ class _TwoFactorLoginVerificationDialogState
               );
 
               // Close dialog
-              context.pop(true);
+              context.pop();
 
               // Call success callback
               widget.onSuccess?.call();
@@ -166,21 +168,23 @@ class _TwoFactorLoginVerificationDialogState
                 ? _getDialogHeight()
                 : null,
         title: context.translate('2fa_login_verification_title'),
-        body: Container(
-          width: isMobile ? double.infinity : 396,
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                  alignment: Alignment.bottomCenter,
-                  image: AssetImage(AppLocalImages.twoFABackground))),
-          padding: EdgeInsets.symmetric(horizontal: isMobile ? 12 : 0),
-          child: SingleChildScrollView(
+        body: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(
+              vertical: isMobile ? 20 : 32, horizontal: isMobile ? 12 : 0),
+          child: Container(
+            width: isMobile ? double.infinity : 396,
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    alignment: Alignment.bottomCenter,
+                    image: AssetImage(AppLocalImages.twoFABackground))),
+            padding: EdgeInsets.symmetric(horizontal: isMobile ? 12 : 0),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 // App Logo/Name
-
+            
                 SizedBox(height: isMobile ? 12 : 32),
-
+            
                 // Title
                 CommonText.bodyMedium(
                   context.translate('profile_2fa_description'),
@@ -189,7 +193,7 @@ class _TwoFactorLoginVerificationDialogState
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: isMobile ? 20 : 32),
-
+            
                 // Subtitle
                 CommonText.bodyMedium(
                   context.translate('enter_2fa_code_caption'),
@@ -199,7 +203,7 @@ class _TwoFactorLoginVerificationDialogState
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 14),
-
+            
                 // Code Input Field
                 CommonTextField(
                   controller: _codeController,
@@ -259,7 +263,7 @@ class _TwoFactorLoginVerificationDialogState
                     }
                   },
                 ),
-
+            
                 // Error Text
                 if (_errorText != null) ...[
                   const SizedBox(height: 8),
@@ -270,7 +274,7 @@ class _TwoFactorLoginVerificationDialogState
                     textAlign: TextAlign.center,
                   ),
                 ],
-
+            
                 SizedBox(height: isMobile ? 20 : 32),
                 CustomUnderLineButtonWidget(
                   title: context.translate("continue"),
@@ -285,14 +289,18 @@ class _TwoFactorLoginVerificationDialogState
                       ? () {}
                       : () {
                           // Close dialog and return false to indicate not successful
-                          context.pop(false);
+                          // Navigator.of(context).pop();
+
+                          if (widget.onClosed != null) {
+                            widget.onClosed!();
+                          } 
                         },
                   fontSize: 14,
                   width: double.infinity,
                   isDark: true,
                 ),
                 SizedBox(height: isMobile ? 20 : 32),
-
+            
                 // Support Link
                 RichText(
                   textAlign: TextAlign.center,
@@ -348,12 +356,14 @@ extension TwoFactorLoginDialogExtension on BuildContext {
   Future<bool?> show2FALoginVerificationDialog({
     required int userId,
     VoidCallback? onSuccess,
+    VoidCallback? onClosed,
   }) {
     return showManagePopup<bool>(
       barrierDismissible: false,
       child: TwoFactorLoginVerificationDialog(
         userId: userId,
         onSuccess: onSuccess,
+        onClosed: onClosed,
       ),
     );
     // return showDialog<bool>(

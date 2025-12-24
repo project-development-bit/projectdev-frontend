@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:audioplayers/audioplayers.dart';
+<<<<<<< HEAD
 import 'package:gigafaucet/core/common/common_image_widget.dart';
 import 'package:gigafaucet/core/common/common_loading_widget.dart';
 import 'package:gigafaucet/core/common/common_text.dart';
@@ -13,6 +14,20 @@ import 'package:gigafaucet/features/fortune_wheel/domain/entities/fortune_wheel_
 import 'package:gigafaucet/features/fortune_wheel/presentation/providers/fortune_wheel_provider.dart';
 import 'package:gigafaucet/features/fortune_wheel/presentation/widgets/out_of_spin_dialog_widget.dart';
 import 'package:gigafaucet/routing/app_router.dart';
+=======
+import 'package:cointiply_app/core/common/common_image_widget.dart';
+import 'package:cointiply_app/core/common/common_loading_widget.dart';
+import 'package:cointiply_app/core/common/common_text.dart';
+import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
+import 'package:cointiply_app/core/config/app_local_images.dart';
+import 'package:cointiply_app/core/extensions/context_extensions.dart';
+import 'package:cointiply_app/core/providers/auth_provider.dart';
+import 'package:cointiply_app/features/fortune_wheel/domain/entities/fortune_wheel_reward.dart';
+import 'package:cointiply_app/features/fortune_wheel/presentation/providers/fortune_wheel_provider.dart';
+import 'package:cointiply_app/features/fortune_wheel/presentation/widgets/out_of_spin_dialog_widget.dart';
+import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
+import 'package:cointiply_app/routing/app_router.dart';
+>>>>>>> main
 import 'package:flutter/material.dart';
 import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -198,6 +213,7 @@ class _FortuneWheelWidgetState extends ConsumerState<FortuneWheelWidget> {
                   return;
                 }
                 if ((!canSpin)) {
+                  context.pop();
                   showOutofSpinDialog(context);
                   return;
                 }
@@ -244,7 +260,10 @@ class _FortuneWheelWidgetState extends ConsumerState<FortuneWheelWidget> {
 
       await celebrationSound();
       // Wait for animation to complete
+      await Future.delayed(Duration(seconds: 1));
       if (context.mounted) {
+        ref.read(currentUserProvider.notifier).refreshUser();
+        context.pop();
         showSuccessSpinDialog(context,
             rewardImageUrl: reward.iconUrl,
             rewardLabel: context.translate("spin_success_message", args: [
