@@ -786,7 +786,7 @@
   "login": "Login",
   "come_back_later_for_more": "နောက်မှ ပြန်လာ၍ ပိုမိုရယူပါ",
   "login_to_spin": "လှည့်ရန် အကောင့်သို့ ဝင်ပါ",
-  "spin_success_message": "ဂုဏ်ပြုပါသည်! သင် {0} ရရှိခဲ့ပါသည်။",
+  "spin_success_message": " သင် {0} ရရှိခဲ့ပါသည်။",
   "congratulations": "ဂုဏ်ပြုပါသည်!",
   "spin_wheel_error_message": "လှည့်စက်ကို လှည့်၍ မရပါ။ ကျေးဇူးပြု၍ ထပ်မံကြိုးစားပါ။",
   "enter_2fa_code_caption": "login ဝင်ရန်အတွက် သင့်အက်ပ်(Authenticator)မှ ထုတ်ပေးသော ၆ လုံးပါ ကုဒ်ကို ရိုက်ထည့်ပါ။",

@@ -321,9 +321,9 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
             const SizedBox(height: 24),
 
             // Cloudflare Turnstile Security Widget
-            IgnorePointer(
-              ignoring: true,
-              child: CloudflareTurnstileWidget(debugMode: false),
+            const CloudflareTurnstileWidget(
+              debugMode: false,
+              action: TurnstileActionEnum.login,
             ),
 
             const SizedBox(height: 24),
