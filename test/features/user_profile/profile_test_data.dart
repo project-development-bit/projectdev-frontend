@@ -1,6 +1,6 @@
-// import 'package:cointiply_app/features/user_profile/domain/entities/user_profile.dart';
-// import 'package:cointiply_app/features/user_profile/data/models/response/user_profile_stats_model.dart';
-// import 'package:cointiply_app/features/user_profile/presentation/providers/profile_state_notifier.dart';
+// import 'package:gigafaucet/features/user_profile/domain/entities/user_profile.dart';
+// import 'package:gigafaucet/features/user_profile/data/models/response/user_profile_stats_model.dart';
+// import 'package:gigafaucet/features/user_profile/presentation/providers/profile_state_notifier.dart';
 
 // /// Test data factory for creating user profile test objects
 // class ProfileTestData {

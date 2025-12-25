@@ -192,6 +192,7 @@ enum TurnstileActionEnum {
   contactUs(name: 'contact_us'),
   tutorial(name: 'tutorial'),
   faucetClaim(name: 'faucet_claim'),
+
   other(name: 'other');
 
   final String name;

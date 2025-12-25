@@ -1,5 +1,5 @@
-import 'package:cointiply_app/core/core.dart';
-import 'package:cointiply_app/core/theme/app_typography.dart';
+import 'package:gigafaucet/core/core.dart';
+import 'package:gigafaucet/core/theme/app_typography.dart';
 import 'package:flutter/material.dart';
 
 class CommonRichTextWithIcon extends StatelessWidget {

@@ -1,7 +1,7 @@
-import 'package:cointiply_app/features/affiliate_program/data/models/referral_link_response_model.dart';
-import 'package:cointiply_app/features/affiliate_program/data/models/referral_stats_response_model.dart';
-import 'package:cointiply_app/features/affiliate_program/data/models/referred_users_response_model.dart';
-import 'package:cointiply_app/features/affiliate_program/data/models/request/referred_users_request.dart';
+import 'package:gigafaucet/features/affiliate_program/data/models/referral_link_response_model.dart';
+import 'package:gigafaucet/features/affiliate_program/data/models/referral_stats_response_model.dart';
+import 'package:gigafaucet/features/affiliate_program/data/models/referred_users_response_model.dart';
+import 'package:gigafaucet/features/affiliate_program/data/models/request/referred_users_request.dart';
 
 /// Remote data source interface for affiliate program
 abstract class AffiliateProgramRemoteDataSource {

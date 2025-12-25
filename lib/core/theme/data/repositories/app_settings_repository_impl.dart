@@ -1,5 +1,5 @@
-import 'package:cointiply_app/core/network/base_dio_client.dart';
-import 'package:cointiply_app/core/theme/presentation/providers/app_setting_providers.dart';
+import 'package:gigafaucet/core/network/base_dio_client.dart';
+import 'package:gigafaucet/core/theme/presentation/providers/app_setting_providers.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../error/failures.dart';

@@ -1,4 +1,4 @@
-import 'package:cointiply_app/features/wallet/domain/entity/payment_history.dart';
+import 'package:gigafaucet/features/wallet/domain/entity/payment_history.dart';
 
 class PaymentHistoryModel extends PaymentHistory {
   const PaymentHistoryModel({

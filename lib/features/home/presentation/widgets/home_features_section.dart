@@ -1,10 +1,10 @@
-import 'package:cointiply_app/core/common/common_text.dart';
-import 'package:cointiply_app/core/config/app_local_images.dart';
-import 'package:cointiply_app/core/extensions/context_extensions.dart';
-import 'package:cointiply_app/features/faucet/presentation/widgets/claim_faucet.dart';
-import 'package:cointiply_app/features/faucet/presentation/widgets/dialog/claim_your_faucet_dialog.dart';
-import 'package:cointiply_app/features/faucet/presentation/widgets/dialog/your_faucet_dialog.dart';
-import 'package:cointiply_app/features/home/presentation/widgets/home_section_container.dart';
+import 'package:gigafaucet/core/common/common_text.dart';
+import 'package:gigafaucet/core/config/app_local_images.dart';
+import 'package:gigafaucet/core/extensions/context_extensions.dart';
+import 'package:gigafaucet/features/faucet/presentation/widgets/claim_faucet.dart';
+import 'package:gigafaucet/features/faucet/presentation/widgets/dialog/claim_your_faucet_dialog.dart';
+import 'package:gigafaucet/features/faucet/presentation/widgets/dialog/your_faucet_dialog.dart';
+import 'package:gigafaucet/features/home/presentation/widgets/home_section_container.dart';
 import 'package:flutter/material.dart';
 
 import '../../../fortune_wheel/presentation/widgets/fortune_wheel_widget.dart';

@@ -1,5 +1,5 @@
-import 'package:cointiply_app/features/faucet/domain/entity/daily_reset.dart';
-import 'package:cointiply_app/features/faucet/domain/entity/faucet_streak.dart';
+import 'package:gigafaucet/features/faucet/domain/entity/daily_reset.dart';
+import 'package:gigafaucet/features/faucet/domain/entity/faucet_streak.dart';
 import 'package:equatable/equatable.dart';
 
 class ActualFaucetStatus extends Equatable {

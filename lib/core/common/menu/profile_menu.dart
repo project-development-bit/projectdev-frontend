@@ -1,16 +1,16 @@
-import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
-import 'package:cointiply_app/core/common/doted_line_divider.dart';
-import 'package:cointiply_app/core/extensions/context_extensions.dart';
-import 'package:cointiply_app/features/affiliate_program/presentation/widgets/affiliate_program_dialog.dart';
-import 'package:cointiply_app/features/auth/presentation/providers/logout_provider.dart';
-import 'package:cointiply_app/features/auth/presentation/widgets/logout_dialog_widget.dart';
-import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/dialog_scaffold_widget.dart';
-import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/profile_dialog.dart';
-import 'package:cointiply_app/features/reward/presentation/widgets/dialog/reward_dialog.dart';
-import 'package:cointiply_app/features/wallet/presentation/widgets/dialogs/wallet_dialog.dart';
+import 'package:gigafaucet/core/common/custom_buttom_widget.dart';
+import 'package:gigafaucet/core/common/doted_line_divider.dart';
+import 'package:gigafaucet/core/extensions/context_extensions.dart';
+import 'package:gigafaucet/features/affiliate_program/presentation/widgets/affiliate_program_dialog.dart';
+import 'package:gigafaucet/features/auth/presentation/providers/logout_provider.dart';
+import 'package:gigafaucet/features/auth/presentation/widgets/logout_dialog_widget.dart';
+import 'package:gigafaucet/features/user_profile/presentation/widgets/dialogs/dialog_scaffold_widget.dart';
+import 'package:gigafaucet/features/user_profile/presentation/widgets/dialogs/profile_dialog.dart';
+import 'package:gigafaucet/features/reward/presentation/widgets/dialog/reward_dialog.dart';
+import 'package:gigafaucet/features/wallet/presentation/widgets/dialogs/wallet_dialog.dart';
 import 'package:flutter/material.dart';
 
-import 'package:cointiply_app/core/common/common_text.dart';
+import 'package:gigafaucet/core/common/common_text.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../features/user_profile/presentation/widgets/dialogs/manage_profile/manage_profile_dialog.dart';

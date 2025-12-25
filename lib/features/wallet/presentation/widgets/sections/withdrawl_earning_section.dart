@@ -1,8 +1,8 @@
-import 'package:cointiply_app/features/wallet/domain/entity/withdrawal_option.dart';
-import 'package:cointiply_app/features/wallet/presentation/providers/get_withdrawal_options_notifier_provider.dart';
-import 'package:cointiply_app/features/wallet/presentation/providers/withdrawal_option_state.dart';
-import 'package:cointiply_app/features/wallet/presentation/widgets/sub_widgets/interest_notification_widget.dart';
-import 'package:cointiply_app/features/wallet/presentation/widgets/sub_widgets/withdrawal_earning_methods_widget.dart';
+import 'package:gigafaucet/features/wallet/domain/entity/withdrawal_option.dart';
+import 'package:gigafaucet/features/wallet/presentation/providers/get_withdrawal_options_notifier_provider.dart';
+import 'package:gigafaucet/features/wallet/presentation/providers/withdrawal_option_state.dart';
+import 'package:gigafaucet/features/wallet/presentation/widgets/sub_widgets/interest_notification_widget.dart';
+import 'package:gigafaucet/features/wallet/presentation/widgets/sub_widgets/withdrawal_earning_methods_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

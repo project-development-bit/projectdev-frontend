@@ -1,9 +1,9 @@
-import 'package:cointiply_app/core/common/table/models/table_column.dart';
-import 'package:cointiply_app/core/common/table/table_footer.dart';
-import 'package:cointiply_app/core/common/table/table_header_widget.dart';
-import 'package:cointiply_app/core/common/table/table_row_widget.dart';
+import 'package:gigafaucet/core/common/table/models/table_column.dart';
+import 'package:gigafaucet/core/common/table/table_footer.dart';
+import 'package:gigafaucet/core/common/table/table_header_widget.dart';
+import 'package:gigafaucet/core/common/table/table_row_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:cointiply_app/core/core.dart';
+import 'package:gigafaucet/core/core.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class CommonTableWidget extends StatelessWidget {

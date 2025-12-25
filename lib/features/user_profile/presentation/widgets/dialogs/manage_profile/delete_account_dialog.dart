@@ -1,12 +1,12 @@
-import 'package:cointiply_app/core/common/common_text.dart';
-import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
-import 'package:cointiply_app/core/common/dialog_bg_widget.dart';
-import 'package:cointiply_app/core/config/app_local_images.dart';
-import 'package:cointiply_app/core/extensions/context_extensions.dart';
-import 'package:cointiply_app/features/user_profile/presentation/providers/delete_account_notifier.dart';
-import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
-import 'package:cointiply_app/features/user_profile/presentation/widgets/dialogs/manage_profile/verify_delete_account_dialog.dart';
-import 'package:cointiply_app/routing/routing.dart';
+import 'package:gigafaucet/core/common/common_text.dart';
+import 'package:gigafaucet/core/common/custom_buttom_widget.dart';
+import 'package:gigafaucet/core/common/dialog_bg_widget.dart';
+import 'package:gigafaucet/core/config/app_local_images.dart';
+import 'package:gigafaucet/core/extensions/context_extensions.dart';
+import 'package:gigafaucet/features/user_profile/presentation/providers/delete_account_notifier.dart';
+import 'package:gigafaucet/features/user_profile/presentation/providers/current_user_provider.dart';
+import 'package:gigafaucet/features/user_profile/presentation/widgets/dialogs/manage_profile/verify_delete_account_dialog.dart';
+import 'package:gigafaucet/routing/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

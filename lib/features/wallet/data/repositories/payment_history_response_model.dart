@@ -1,6 +1,6 @@
-import 'package:cointiply_app/core/common/model/pagination_model.dart';
-import 'package:cointiply_app/features/wallet/data/models/response/payment_history_model.dart';
-import 'package:cointiply_app/features/wallet/domain/entity/payment_history_response_model.dart';
+import 'package:gigafaucet/core/common/model/pagination_model.dart';
+import 'package:gigafaucet/features/wallet/data/models/response/payment_history_model.dart';
+import 'package:gigafaucet/features/wallet/domain/entity/payment_history_response_model.dart';
 
 class PaymentHistoryResponseModel extends PaymentHistoryResponse {
   const PaymentHistoryResponseModel({

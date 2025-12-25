@@ -1,6 +1,6 @@
-import 'package:cointiply_app/core/error/error_model.dart';
-import 'package:cointiply_app/core/error/failures.dart';
-import 'package:cointiply_app/features/auth/data/datasources/remote/ip_country_remote_datasource.dart';
+import 'package:gigafaucet/core/error/error_model.dart';
+import 'package:gigafaucet/core/error/failures.dart';
+import 'package:gigafaucet/features/auth/data/datasources/remote/ip_country_remote_datasource.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

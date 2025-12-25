@@ -1,4 +1,4 @@
-import 'package:cointiply_app/features/legal/data/models/request/contact_us_request.dart';
+import 'package:gigafaucet/features/legal/data/models/request/contact_us_request.dart';
 import 'package:dartz/dartz.dart';
 import '../../../../core/error/failures.dart';
 import '../entities/legal_document.dart';

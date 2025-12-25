@@ -1,9 +1,12 @@
-import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
-import 'package:cointiply_app/core/theme/app_colors.dart';
-import 'package:cointiply_app/core/widgets/cloudflare_turnstille_widgte.dart';
-import 'package:cointiply_app/core/providers/turnstile_provider.dart';
-import 'package:cointiply_app/features/auth/presentation/widgets/remember_me_widget.dart';
-import 'package:cointiply_app/features/auth/presentation/providers/ip_country_provider.dart';
+import 'package:gigafaucet/core/common/common_image_widget.dart';
+import 'package:gigafaucet/core/common/custom_buttom_widget.dart';
+import 'package:gigafaucet/core/config/app_local_images.dart';
+import 'package:gigafaucet/core/theme/app_colors.dart';
+import 'package:gigafaucet/core/widgets/cloudflare_turnstille_widgte.dart';
+import 'package:gigafaucet/core/providers/turnstile_provider.dart';
+import 'package:gigafaucet/features/auth/presentation/widgets/or_divider_widget.dart';
+import 'package:gigafaucet/features/auth/presentation/widgets/remember_me_widget.dart';
+import 'package:gigafaucet/features/auth/presentation/providers/ip_country_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/common/common_textfield.dart';
@@ -86,6 +89,25 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
           break;
       }
     });
+
+    // ref.listenManual<GoogleIdTokenState>(
+    //   googleIdTokenNotifierProvider,
+    //   (previous, next) {
+    //     if (next.status == GetGoogleIdTokenStatus.loading) {
+    //       debugPrint("Loading Google ID Token...");
+    //     } else if (next.status == GetGoogleIdTokenStatus.success) {
+    //       final idToken = next.token;
+    //       if (idToken != null &&
+    //           next.signInMethod == GoogleSignInMethod.googleSignIn) {
+    //         _handleGoogleLoginWithToken(idToken: idToken);
+    //       }
+    //     } else if (next.status == GetGoogleIdTokenStatus.error) {
+    //       context.showErrorSnackBar(
+    //         message: next.error ?? 'Failed to get Google ID token',
+    //       );
+    //     }
+    //   },
+    // );
   }
 
   @override
@@ -219,6 +241,56 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
     }
   }
 
+  void _handleGoogleLoginWithToken({String? accessToken}) async {
+    // Check Turnstile verification
+    final turnstileCanAttempt =
+        ref.read(turnstileNotifierProvider(TurnstileActionEnum.login))
+            is TurnstileSuccess;
+
+    if (!turnstileCanAttempt) {
+      final localizations = AppLocalizations.of(context);
+      context.showErrorSnackBar(
+        message: localizations?.translate('turnstile_required') ??
+            'Please complete the security verification',
+      );
+      return;
+    }
+
+    // Get the Turnstile token
+    final turnstileToken = turnstileCanAttempt
+        ? (ref.read(turnstileNotifierProvider(TurnstileActionEnum.login))
+                as TurnstileSuccess)
+            .token
+        : null;
+
+    if (turnstileToken == null) {
+      final localizations = AppLocalizations.of(context);
+      context.showErrorSnackBar(
+        message: localizations?.translate('turnstile_token_missing') ??
+            'Security verification token is missing. Please try again.',
+      );
+      return;
+    }
+
+    // Use consolidated auth actions for login
+    final authActions = ref.read(authActionsProvider);
+
+    // Reset previous states
+    authActions.resetAllStates();
+    final ipState = ref.read(getIpCountryNotifierProvider);
+
+    await authActions.googleLogin(
+        accessToken: accessToken,
+        countryCode: ipState.country?.code ?? "Unknown",
+        onSuccess: () async {
+          widget.onLoginSuccess?.call();
+        },
+        onError: (v) {
+          context.showSnackBar(
+              message: v, backgroundColor: Theme.of(context).colorScheme.error);
+        });
+  }
+
   void _handleForgotPassword() {
     widget.onForgotPassword?.call();
   }
@@ -338,76 +410,47 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
             ),
 
             // Social Login Section
-            if (isReadyScocial) ...[
-              const SizedBox(height: 24),
 
-              // Divider with OR
-              Row(
-                children: [
-                  Expanded(
-                    child: Divider(
-                      color: context.outline.withAlpha(15),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: CommonText.bodySmall(
-                      localizations?.translate('or') ?? 'OR',
-                      color: context.onSurfaceVariant,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  Expanded(
-                    child: Divider(
-                      color: context.outline.withAlpha(15),
-                    ),
-                  ),
-                ],
+            OrDividerWidget(),
+            CommonButton(
+              text: 'Google',
+              onPressed: () {
+                // ref
+                //     .read(googleIdTokenNotifierProvider.notifier)
+                //     .getGoogleIdToken(
+                //         signInMethod: GoogleSignInMethod.googleSignIn);
+                _handleGoogleLoginWithToken();
+              },
+              icon: CommonImage(
+                imageUrl: AppLocalImages.googleLogo,
+                width: 30,
+                height: 30,
+                fit: BoxFit.contain,
               ),
-
-              const SizedBox(height: 24),
-
-              // Social Login Buttons
-              Row(
-                children: [
-                  Expanded(
-                    child: CommonButton(
-                      text: localizations?.translate('google') ?? 'Google',
-                      onPressed: () {
-                        // TODO: Implement Google login
-                        context.showErrorSnackBar(
-                          message: localizations
-                                  ?.translate('google_login_coming_soon') ??
-                              'Google login coming soon!',
-                        );
-                      },
-                      icon: const Icon(Icons.g_mobiledata, size: 24),
-                      isOutlined: true,
-                      backgroundColor: AppColors.transparent,
-                      textColor: context.onSurface,
-                      height: 48,
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: CommonButton(
-                      text: localizations?.translate('facebook') ?? 'Facebook',
-                      onPressed: () {
-                        // TODO: Implement Facebook login
-                        context.showErrorSnackBar(
-                          message: localizations
-                                  ?.translate('facebook_login_coming_soon') ??
-                              'Facebook login coming soon!',
-                        );
-                      },
-                      icon: const Icon(Icons.facebook, size: 24),
-                      isOutlined: true,
-                      backgroundColor: AppColors.transparent,
-                      textColor: context.onSurface,
-                      height: 48,
-                    ),
-                  ),
-                ],
+              isOutlined: true,
+              textColor: Color(0xFF333333),
+              height: 48,
+            ),
+            // Social Login Buttons
+            if (isReadyFacebookLogin) ...[
+              const SizedBox(width: 16),
+              Expanded(
+                child: CommonButton(
+                  text: localizations?.translate('facebook') ?? 'Facebook',
+                  onPressed: () {
+                    // TODO: Implement Facebook login
+                    context.showErrorSnackBar(
+                      message: localizations
+                              ?.translate('facebook_login_coming_soon') ??
+                          'Facebook login coming soon!',
+                    );
+                  },
+                  icon: const Icon(Icons.facebook, size: 24),
+                  isOutlined: true,
+                  backgroundColor: AppColors.transparent,
+                  textColor: context.onSurface,
+                  height: 48,
+                ),
               ),
             ],
 

@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:cointiply_app/features/auth/data/models/login_request.dart';
+import 'package:gigafaucet/features/auth/data/models/login_request.dart';
 
 void main() {
   group('LoginRequest', () {

@@ -1,4 +1,4 @@
-import 'package:cointiply_app/core/common/widgets/custom_pointer_interceptor.dart';
+import 'package:gigafaucet/core/common/widgets/custom_pointer_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/theme_provider.dart';
@@ -37,7 +37,7 @@ class ThemeSwitchWidget extends ConsumerWidget {
       itemBuilder: (BuildContext context) {
         return AppThemeMode.values.map((AppThemeMode themeMode) {
           final isSelected = themeMode == currentThemeMode;
-    
+
           return PopupMenuItem<AppThemeMode>(
             value: themeMode,
             child: CustomPointerInterceptor(

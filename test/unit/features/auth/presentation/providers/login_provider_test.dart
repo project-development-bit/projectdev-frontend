@@ -1,15 +1,15 @@
-import 'package:cointiply_app/features/user_profile/data/enum/user_level.dart';
+import 'package:gigafaucet/features/user_profile/data/enum/user_level.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:dartz/dartz.dart';
 
-import 'package:cointiply_app/features/auth/domain/usecases/login_usecase.dart';
-import 'package:cointiply_app/features/auth/data/models/login_request.dart';
-import 'package:cointiply_app/features/auth/domain/entities/login_response.dart';
-import 'package:cointiply_app/features/auth/domain/entities/user.dart';
-import 'package:cointiply_app/features/auth/domain/entities/auth_tokens.dart';
-import 'package:cointiply_app/core/error/failures.dart';
-import 'package:cointiply_app/core/enum/user_role.dart';
+import 'package:gigafaucet/features/auth/domain/usecases/login_usecase.dart';
+import 'package:gigafaucet/features/auth/data/models/login_request.dart';
+import 'package:gigafaucet/features/auth/domain/entities/login_response.dart';
+import 'package:gigafaucet/features/auth/domain/entities/user.dart';
+import 'package:gigafaucet/features/auth/domain/entities/auth_tokens.dart';
+import 'package:gigafaucet/core/error/failures.dart';
+import 'package:gigafaucet/core/enum/user_role.dart';
 
 // Mock classes
 class MockLoginUseCase extends Mock implements LoginUseCase {}

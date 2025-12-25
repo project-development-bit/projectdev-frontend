@@ -1,8 +1,8 @@
-import 'package:cointiply_app/core/error/failures.dart';
-import 'package:cointiply_app/features/affiliate_program/data/models/request/referred_users_request.dart';
-import 'package:cointiply_app/features/affiliate_program/domain/entities/referral_link_result.dart';
-import 'package:cointiply_app/features/affiliate_program/domain/entities/referral_stats_result.dart';
-import 'package:cointiply_app/features/affiliate_program/domain/entities/referred_users_result.dart';
+import 'package:gigafaucet/core/error/failures.dart';
+import 'package:gigafaucet/features/affiliate_program/data/models/request/referred_users_request.dart';
+import 'package:gigafaucet/features/affiliate_program/domain/entities/referral_link_result.dart';
+import 'package:gigafaucet/features/affiliate_program/domain/entities/referral_stats_result.dart';
+import 'package:gigafaucet/features/affiliate_program/domain/entities/referred_users_result.dart';
 import 'package:dartz/dartz.dart';
 
 /// Repository interface for affiliate program operations

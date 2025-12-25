@@ -1,9 +1,12 @@
-import 'package:cointiply_app/core/error/error_model.dart';
-import 'package:cointiply_app/features/auth/data/models/verify_code_forgot_password_response.dart';
+import 'package:flutter/foundation.dart';
+import 'package:gigafaucet/core/error/error_model.dart';
+import 'package:gigafaucet/features/auth/data/datasources/remote/google_auth_remote.dart';
+import 'package:gigafaucet/features/auth/data/models/request/google_login_request.dart';
+import 'package:gigafaucet/features/auth/data/models/request/google_register_request.dart';
+import 'package:gigafaucet/features/auth/data/models/verify_code_forgot_password_response.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../../../../core/error/failures.dart';
 import '../../../../core/services/secure_storage_service.dart';
 import '../../domain/repositories/auth_repository.dart';
@@ -37,6 +40,7 @@ final authRepositoryProvider = Provider<AuthRepository>(
   (ref) => AuthRepositoryImpl(
     ref.watch(authRemoteDataSourceProvider),
     ref.watch(secureStorageServiceProvider),
+    ref.watch(googleAuthRemoteProvider),
   ),
 );
 
@@ -50,8 +54,11 @@ class AuthRepositoryImpl implements AuthRepository {
   /// Secure storage service for token management
   final SecureStorageService secureStorage;
 
+  final GoogleAuthRemote googleAuthRemote;
+
   /// Creates an instance of [AuthRepositoryImpl]
-  const AuthRepositoryImpl(this.remoteDataSource, this.secureStorage);
+  const AuthRepositoryImpl(
+      this.remoteDataSource, this.secureStorage, this.googleAuthRemote);
 
   @override
   Future<Either<Failure, void>> register(RegisterRequest request) async {
@@ -157,6 +164,7 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Either<Failure, void>> logout() async {
     try {
       // Clear all stored authentication data
+      await googleAuthRemote.signOut();
       await secureStorage.clearAllAuthData();
       return const Right(null);
     } catch (e) {
@@ -427,5 +435,123 @@ class AuthRepositoryImpl implements AuthRepository {
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));
     }
+  }
+
+  @override
+  Future<Either<Failure, LoginResponseModel>> googleSignIn(
+      GoogleLoginRequest request) async {
+    try {
+      // 1. Resolve ID Token (If not already present in request)
+      String? accessToken = request.accessToken;
+
+      if (accessToken == null) {
+        // Reuse the helper to handle Web vs Native logic automatically
+        accessToken = await _getGooglePlatformSpecificIdToken();
+        // Guard Clause: Handle cancellation
+        if (accessToken == null) {
+          debugPrint("Testing Google Sign-In : User cancelled Google sign-in.");
+          return Left(ServerFailure(message: 'User cancelled Google sign-in'));
+        }
+      }
+
+      // 2. Prepare the final request object
+      final updatedRequest = request.copyWith(accessToken: accessToken);
+
+      // 3. Perform API Call
+      final response = await remoteDataSource.googleLogin(updatedRequest);
+
+      // 4. Success Side Effects (Storage)
+      await _storeTokens(response);
+
+      return Right(response);
+    } on DioException catch (e) {
+      debugPrint("Testing Google Sign-In : Dio Exception: ${e.message}");
+      // Handle Dio-specific network errors with cleanup
+      await _handleErrorCleanup();
+      return Left(ServerFailure(
+        message: e.message ?? 'Network error occurred',
+        statusCode: e.response?.statusCode,
+      ));
+    } catch (e) {
+      // Handle generic errors
+      debugPrint("Testing Google Sign-In : Unexpected Error: $e");
+      await _handleErrorCleanup();
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, LoginResponseModel>> googleRegister(
+      GoogleRegisterRequest request) async {
+    try {
+      // 1. Resolve ID Token (If not already present in request)
+      String? accessToken = request.accessToken;
+
+      if (accessToken == null) {
+        accessToken = await _getGooglePlatformSpecificIdToken();
+
+        // Guard Clause: Handle cancellation immediately
+        if (accessToken == null) {
+          debugPrint("Testing Google Sign-In : User cancelled Google sign-up.");
+          return Left(ServerFailure(message: 'User cancelled Google sign-up'));
+        }
+      }
+
+      // 2. Prepare the final request object
+      final updatedRequest = request.copyWith(accessToken: accessToken);
+
+      // 3. Perform API Call
+      final response = await remoteDataSource.googleRegister(updatedRequest);
+
+      // 4. Success Side Effects (Storage)
+      await _storeTokens(response);
+
+      return Right(response);
+    } on DioException catch (e) {
+      await _handleErrorCleanup();
+      return Left(ServerFailure(
+        message: e.message ?? 'Network error occurred',
+        statusCode: e.response?.statusCode,
+      ));
+    } catch (e) {
+      debugPrint("Testing Google Sign-In : Unexpected Error: $e");
+      await _handleErrorCleanup();
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, String?>> getGooglePlatformSpecificIdToken() async {
+    try {
+      try {
+        var token = await _getGooglePlatformSpecificIdToken();
+        if (token == null) {
+          debugPrint(
+              "Testing Google Sign-In : User cancelled ID token retrieval.");
+          return Right(null);
+        }
+        return Right(token);
+      } catch (e) {
+        debugPrint("Testing Google Sign-In : Error obtaining ID token: $e");
+        return Left(ServerFailure(message: e.toString()));
+      }
+    } catch (e) {
+      debugPrint("Testing Google Sign-In : Token Retrieval Error: $e");
+      rethrow;
+    }
+  }
+
+  Future<String?> _getGooglePlatformSpecificIdToken() async {
+    try {
+      return await googleAuthRemote.getGoogleIdToken();
+    } catch (e) {
+      debugPrint("Testing Google Sign-In : Token Retrieval Error: $e");
+      rethrow;
+    }
+  }
+
+  /// Helper: Centralizes cleanup logic
+  Future<void> _handleErrorCleanup() async {
+    await googleAuthRemote.signOut();
   }
 }

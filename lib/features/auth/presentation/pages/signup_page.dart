@@ -1,14 +1,17 @@
-import 'package:cointiply_app/core/common/common_dropdown_field_with_icon.dart';
-import 'package:cointiply_app/core/common/common_text.dart';
-import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
-import 'package:cointiply_app/core/theme/app_colors.dart';
-import 'package:cointiply_app/features/auth/presentation/providers/ip_country_state.dart';
-import 'package:cointiply_app/features/auth/presentation/providers/selected_country_provider.dart';
-import 'package:cointiply_app/features/auth/presentation/widgets/onboarding_background.dart';
-import 'package:cointiply_app/features/terms_privacy/presentation/services/terms_privacy_navigation_service.dart';
-import 'package:cointiply_app/features/auth/presentation/providers/ip_country_provider.dart';
-import 'package:cointiply_app/features/user_profile/domain/entities/country.dart';
-import 'package:cointiply_app/features/user_profile/presentation/providers/get_countries_state.dart';
+import 'package:gigafaucet/core/common/common_dropdown_field_with_icon.dart';
+import 'package:gigafaucet/core/common/common_text.dart';
+import 'package:gigafaucet/core/common/custom_buttom_widget.dart';
+import 'package:gigafaucet/core/theme/app_colors.dart';
+import 'package:gigafaucet/features/auth/presentation/providers/ip_country_state.dart';
+import 'package:gigafaucet/features/auth/presentation/providers/login_provider.dart';
+import 'package:gigafaucet/features/auth/presentation/providers/selected_country_provider.dart';
+import 'package:gigafaucet/features/auth/presentation/widgets/google_signup_buttom.dart';
+import 'package:gigafaucet/features/auth/presentation/widgets/onboarding_background.dart';
+import 'package:gigafaucet/features/auth/presentation/widgets/or_divider_widget.dart';
+import 'package:gigafaucet/features/terms_privacy/presentation/services/terms_privacy_navigation_service.dart';
+import 'package:gigafaucet/features/auth/presentation/providers/ip_country_provider.dart';
+import 'package:gigafaucet/features/user_profile/domain/entities/country.dart';
+import 'package:gigafaucet/features/user_profile/presentation/providers/get_countries_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/common/common_textfield.dart';
@@ -100,7 +103,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
           // Show error message
           context.showSnackBar(
               message: next.message,
-              backgroundColor: Theme.of(context).colorScheme.error);  
+              backgroundColor: Theme.of(context).colorScheme.error);
           break;
         default:
           break;
@@ -201,7 +204,9 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final localizations = AppLocalizations.of(context);
-    final isLoading = ref.watch(isRegisterLoadingProvider);
+    final loginState = ref.watch(loginNotifierProvider);
+    final isLoading =
+        ref.watch(isRegisterLoadingProvider) || loginState is LoginLoading;
     final countriesState = ref.watch(getCountriesNotifierProvider);
 
     return OnboardingBackground(
@@ -495,6 +500,11 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
               height: 56,
               borderRadius: 12,
               fontSize: 14,
+            ),
+            OrDividerWidget(),
+            GoogleSignupButton(
+              referralCode: widget.referralCode,
+              agreeToTerms: _agreeToTerms,
             ),
 
             const SizedBox(height: 32),

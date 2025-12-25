@@ -1,20 +1,28 @@
-import 'package:cointiply_app/core/config/app_local_images.dart';
-import 'package:cointiply_app/core/core.dart';
-import 'package:cointiply_app/core/theme/presentation/providers/app_setting_providers.dart';
-import 'package:cointiply_app/core/theme/presentation/providers/app_settings_norifier.dart';
-import 'package:cointiply_app/features/localization/presentation/providers/get_languages_state.dart';
-import 'package:cointiply_app/features/localization/presentation/providers/localization_notifier_provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:gigafaucet/core/config/app_local_images.dart';
+import 'package:gigafaucet/core/theme/presentation/providers/app_setting_providers.dart';
+import 'package:gigafaucet/core/theme/presentation/providers/app_settings_norifier.dart';
+import 'package:gigafaucet/features/localization/presentation/providers/get_languages_state.dart';
+import 'package:gigafaucet/features/localization/presentation/providers/localization_notifier_provider.dart';
 import 'package:croppy/croppy.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/foundation.dart';
+import 'package:gigafaucet/firebase_options.dart';
 import 'package:url_strategy/url_strategy.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:gigafaucet/core/services/database_service.dart';
+import 'package:gigafaucet/features/localization/data/helpers/app_localizations.dart';
+import 'core/providers/theme_provider.dart';
+import 'core/theme/app_theme.dart';
+import 'core/config/app_flavor.dart';
+import 'core/config/flavor_manager.dart';
+import 'core/widgets/flavor_banner.dart';
 import 'core/services/platform_recaptcha_service.dart';
 import 'routing/app_router.dart';
-import 'package:cointiply_app/core/utils/web_helpers.dart'
-    if (dart.library.io) 'package:cointiply_app/core/utils/web_helpers_stub.dart';
+import 'package:gigafaucet/core/utils/web_helpers.dart'
+    if (dart.library.io) 'package:gigafaucet/core/utils/web_helpers_stub.dart';
 
 // Global key for ScaffoldMessenger to show snackbars above dialogs
 final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey =
@@ -22,6 +30,10 @@ final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey =
 
 /// Common app initialization function for all flavors
 Future<void> runAppWithFlavor(AppFlavor flavor) async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true);
+  // Set the flavor first so configuration is available
   FlavorManager.setFlavor(flavor);
   // Initialize reCAPTCHA for all platforms
   final recaptchaSiteKey = FlavorManager.recaptchaSiteKey;

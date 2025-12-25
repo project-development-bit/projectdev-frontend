@@ -1,8 +1,8 @@
-import 'package:cointiply_app/core/error/failures.dart';
-import 'package:cointiply_app/features/auth/data/models/verify_code_request.dart';
-import 'package:cointiply_app/features/auth/data/models/verify_code_response.dart';
-import 'package:cointiply_app/features/auth/domain/repositories/auth_repository.dart';
-import 'package:cointiply_app/features/auth/domain/usecases/verify_code_usecase.dart';
+import 'package:gigafaucet/core/error/failures.dart';
+import 'package:gigafaucet/features/auth/data/models/verify_code_request.dart';
+import 'package:gigafaucet/features/auth/data/models/verify_code_response.dart';
+import 'package:gigafaucet/features/auth/domain/repositories/auth_repository.dart';
+import 'package:gigafaucet/features/auth/domain/usecases/verify_code_usecase.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';

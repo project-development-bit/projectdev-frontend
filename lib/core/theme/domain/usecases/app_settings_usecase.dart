@@ -1,6 +1,6 @@
-import 'package:cointiply_app/core/error/failures.dart';
-import 'package:cointiply_app/core/theme/data/repositories/app_settings_repository_impl.dart';
-import 'package:cointiply_app/core/usecases/usecase.dart';
+import 'package:gigafaucet/core/error/failures.dart';
+import 'package:gigafaucet/core/theme/data/repositories/app_settings_repository_impl.dart';
+import 'package:gigafaucet/core/usecases/usecase.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

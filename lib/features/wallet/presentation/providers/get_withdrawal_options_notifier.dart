@@ -1,7 +1,7 @@
-import 'package:cointiply_app/core/usecases/usecase.dart';
-import 'package:cointiply_app/features/wallet/domain/entity/withdrawal_option.dart';
-import 'package:cointiply_app/features/wallet/domain/usecases/get_withdrawal_options_usecase.dart';
-import 'package:cointiply_app/features/wallet/presentation/providers/withdrawal_option_state.dart';
+import 'package:gigafaucet/core/usecases/usecase.dart';
+import 'package:gigafaucet/features/wallet/domain/entity/withdrawal_option.dart';
+import 'package:gigafaucet/features/wallet/domain/usecases/get_withdrawal_options_usecase.dart';
+import 'package:gigafaucet/features/wallet/presentation/providers/withdrawal_option_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class GetWithdrawalOptionNotifier extends StateNotifier<WithdrawalOptionState> {

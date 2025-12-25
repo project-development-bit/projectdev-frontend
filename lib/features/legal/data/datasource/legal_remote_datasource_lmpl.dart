@@ -1,6 +1,6 @@
-import 'package:cointiply_app/core/network/base_dio_client.dart';
-import 'package:cointiply_app/features/legal/data/datasource/legal_remote_data_source.dart';
-import 'package:cointiply_app/features/legal/data/models/request/contact_us_request.dart';
+import 'package:gigafaucet/core/network/base_dio_client.dart';
+import 'package:gigafaucet/features/legal/data/datasource/legal_remote_data_source.dart';
+import 'package:gigafaucet/features/legal/data/models/request/contact_us_request.dart';
 
 class LegalRemoteDataSourceImpl implements LegalRemoteDataSource {
   final DioClient _dio;

@@ -1,4 +1,4 @@
-import 'package:cointiply_app/core/services/secure_storage_service.dart';
+import 'package:gigafaucet/core/services/secure_storage_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../../data/repositories/auth_repo_impl.dart';

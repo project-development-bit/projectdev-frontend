@@ -174,6 +174,9 @@ class AppLocalImages {
 
   // Faucet Images
   static const String nextFaucetBg = "assets/images/bg/next_faucet_bg.png";
+
+  // Logo Images
+  static const String googleLogo = "assets/images/logos/google.svg";
   static const String splashLogo = "assets/images/giga_faucet_text_logo.png";
   static const String splashBackground = "assets/images/splash_background.png";
   static const String splashBackgroundMobile =

@@ -1,6 +1,6 @@
-import 'package:cointiply_app/core/extensions/context_extensions.dart';
-import 'package:cointiply_app/features/wallet/presentation/providers/payment_history_notifier_provider.dart';
-import 'package:cointiply_app/features/wallet/presentation/widgets/sub_widgets/transactions_table.dart';
+import 'package:gigafaucet/core/extensions/context_extensions.dart';
+import 'package:gigafaucet/features/wallet/presentation/providers/payment_history_notifier_provider.dart';
+import 'package:gigafaucet/features/wallet/presentation/widgets/sub_widgets/transactions_table.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

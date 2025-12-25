@@ -1,8 +1,8 @@
-import 'package:cointiply_app/core/error/error_model.dart';
-import 'package:cointiply_app/core/error/failures.dart';
-import 'package:cointiply_app/features/reward/data/datasource/reward_remote_datasource.dart';
-import 'package:cointiply_app/features/reward/data/models/response/reward_data_model.dart';
-import 'package:cointiply_app/features/reward/domain/repositories/reward_repository.dart';
+import 'package:gigafaucet/core/error/error_model.dart';
+import 'package:gigafaucet/core/error/failures.dart';
+import 'package:gigafaucet/features/reward/data/datasource/reward_remote_datasource.dart';
+import 'package:gigafaucet/features/reward/data/models/response/reward_data_model.dart';
+import 'package:gigafaucet/features/reward/domain/repositories/reward_repository.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 

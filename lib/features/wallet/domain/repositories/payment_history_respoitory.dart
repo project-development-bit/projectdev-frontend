@@ -1,6 +1,6 @@
-import 'package:cointiply_app/core/error/failures.dart';
-import 'package:cointiply_app/features/wallet/data/models/request/payment_history_request.dart';
-import 'package:cointiply_app/features/wallet/data/repositories/payment_history_response_model.dart';
+import 'package:gigafaucet/core/error/failures.dart';
+import 'package:gigafaucet/features/wallet/data/models/request/payment_history_request.dart';
+import 'package:gigafaucet/features/wallet/data/repositories/payment_history_response_model.dart';
 import 'package:dartz/dartz.dart';
 
 abstract class PaymentHistoryRespoitory {

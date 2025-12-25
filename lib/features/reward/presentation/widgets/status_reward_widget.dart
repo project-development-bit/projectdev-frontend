@@ -1,7 +1,7 @@
-import 'package:cointiply_app/core/config/app_local_images.dart';
-import 'package:cointiply_app/core/core.dart';
-import 'package:cointiply_app/features/reward/domain/entities/reward_level.dart';
-import 'package:cointiply_app/features/user_profile/data/enum/user_level.dart';
+import 'package:gigafaucet/core/config/app_local_images.dart';
+import 'package:gigafaucet/core/core.dart';
+import 'package:gigafaucet/features/reward/domain/entities/reward_level.dart';
+import 'package:gigafaucet/features/user_profile/data/enum/user_level.dart';
 import 'package:flutter/material.dart';
 
 class StatusRewardsWidget extends StatelessWidget {

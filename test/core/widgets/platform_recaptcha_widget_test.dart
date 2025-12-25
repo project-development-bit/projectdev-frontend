@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:cointiply_app/core/widgets/recaptcha_widget.dart';
-import 'package:cointiply_app/core/providers/recaptcha_provider.dart';
-import 'package:cointiply_app/core/services/platform_recaptcha_service.dart';
-import 'package:cointiply_app/core/config/flavor_manager.dart';
-import 'package:cointiply_app/core/config/app_flavor.dart';
+import 'package:gigafaucet/core/widgets/recaptcha_widget.dart';
+import 'package:gigafaucet/core/providers/recaptcha_provider.dart';
+import 'package:gigafaucet/core/services/platform_recaptcha_service.dart';
+import 'package:gigafaucet/core/config/flavor_manager.dart';
+import 'package:gigafaucet/core/config/app_flavor.dart';
 
 void main() {
   group('Platform-Aware reCAPTCHA Tests', () {

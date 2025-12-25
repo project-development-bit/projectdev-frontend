@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cointiply_app/core/common/common_text.dart';
+import 'package:gigafaucet/core/common/common_text.dart';
 
 class FooterSection extends StatelessWidget {
   final String title;

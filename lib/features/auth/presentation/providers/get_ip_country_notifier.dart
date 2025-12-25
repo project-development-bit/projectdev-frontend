@@ -1,5 +1,5 @@
-import 'package:cointiply_app/core/error/failures.dart';
-import 'package:cointiply_app/features/auth/domain/usecases/get_ip_country_usecase.dart';
+import 'package:gigafaucet/core/error/failures.dart';
+import 'package:gigafaucet/features/auth/domain/usecases/get_ip_country_usecase.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'ip_country_state.dart';

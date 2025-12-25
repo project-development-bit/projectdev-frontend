@@ -1,4 +1,4 @@
-import 'package:cointiply_app/core/core.dart';
+import 'package:gigafaucet/core/core.dart';
 import 'package:flutter/material.dart';
 
 class AffiliateDatePickerButton extends StatelessWidget {
@@ -25,11 +25,13 @@ class AffiliateDatePickerButton extends StatelessWidget {
             isMobile
                 ? CommonText.bodySmall(
                     title,
-                    color: const Color(0xFF98989A), //TODO: use from color scheme
+                    color:
+                        const Color(0xFF98989A), //TODO: use from color scheme
                   )
                 : CommonText.bodyMedium(
                     title,
-                    color: const Color(0xFF98989A), //TODO: use from color scheme
+                    color:
+                        const Color(0xFF98989A), //TODO: use from color scheme
                   ),
             const SizedBox(width: 6),
             Icon(Icons.keyboard_arrow_down_rounded,

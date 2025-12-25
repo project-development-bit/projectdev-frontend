@@ -1,4 +1,4 @@
-import 'package:cointiply_app/features/localization/data/helpers/app_localizations.dart';
+import 'package:gigafaucet/features/localization/data/helpers/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 extension TimeAgoExtension on DateTime {

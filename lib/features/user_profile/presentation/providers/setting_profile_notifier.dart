@@ -1,6 +1,6 @@
-import 'package:cointiply_app/features/user_profile/data/models/request/user_update_request.dart';
-import 'package:cointiply_app/features/user_profile/domain/usecases/update_user_profile.dart';
-import 'package:cointiply_app/features/user_profile/presentation/providers/profile_providers.dart';
+import 'package:gigafaucet/features/user_profile/data/models/request/user_update_request.dart';
+import 'package:gigafaucet/features/user_profile/domain/usecases/update_user_profile.dart';
+import 'package:gigafaucet/features/user_profile/presentation/providers/profile_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 enum SettingProfileStatus {
@@ -168,4 +168,3 @@ class SettingProfileNotifier extends StateNotifier<SettingProfileState> {
     );
   }
 }
-

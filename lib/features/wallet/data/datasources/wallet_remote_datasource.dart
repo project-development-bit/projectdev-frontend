@@ -1,8 +1,8 @@
-import 'package:cointiply_app/core/network/base_dio_client.dart';
-import 'package:cointiply_app/features/wallet/data/models/request/payment_history_request.dart';
-import 'package:cointiply_app/features/wallet/data/models/response/balance_response_model.dart';
-import 'package:cointiply_app/features/wallet/data/models/response/withdrawal_option_model.dart';
-import 'package:cointiply_app/features/wallet/data/repositories/payment_history_response_model.dart';
+import 'package:gigafaucet/core/network/base_dio_client.dart';
+import 'package:gigafaucet/features/wallet/data/models/request/payment_history_request.dart';
+import 'package:gigafaucet/features/wallet/data/models/response/balance_response_model.dart';
+import 'package:gigafaucet/features/wallet/data/models/response/withdrawal_option_model.dart';
+import 'package:gigafaucet/features/wallet/data/repositories/payment_history_response_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

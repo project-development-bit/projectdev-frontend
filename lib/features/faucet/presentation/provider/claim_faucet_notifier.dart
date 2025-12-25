@@ -1,9 +1,9 @@
-import 'package:cointiply_app/core/providers/turnstile_provider.dart';
-import 'package:cointiply_app/core/services/device_info.dart';
-import 'package:cointiply_app/features/faucet/data/request/claim_faucet_request_model.dart';
-import 'package:cointiply_app/features/faucet/domain/usecases/claim_faucet_usecase.dart';
-import 'package:cointiply_app/features/faucet/presentation/provider/faucet_notifier_provider.dart';
-import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
+import 'package:gigafaucet/core/providers/turnstile_provider.dart';
+import 'package:gigafaucet/core/services/device_info.dart';
+import 'package:gigafaucet/features/faucet/data/request/claim_faucet_request_model.dart';
+import 'package:gigafaucet/features/faucet/domain/usecases/claim_faucet_usecase.dart';
+import 'package:gigafaucet/features/faucet/presentation/provider/faucet_notifier_provider.dart';
+import 'package:gigafaucet/features/user_profile/presentation/providers/current_user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

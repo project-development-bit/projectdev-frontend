@@ -1,5 +1,5 @@
-import 'package:cointiply_app/features/user_profile/data/models/request/user_update_request.dart';
-import 'package:cointiply_app/features/user_profile/data/models/response/user_update_respons.dart';
+import 'package:gigafaucet/features/user_profile/data/models/request/user_update_request.dart';
+import 'package:gigafaucet/features/user_profile/data/models/response/user_update_respons.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import '../../../../core/error/failures.dart';

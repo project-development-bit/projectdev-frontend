@@ -1,5 +1,4 @@
-import 'package:cointiply_app/features/auth/data/models/user_model.dart';
-
+import 'package:gigafaucet/features/auth/data/models/user_model.dart';
 
 /// Abstract class for profile local data source
 ///

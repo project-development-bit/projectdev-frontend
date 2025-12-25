@@ -1,16 +1,16 @@
 import 'dart:developer' show log;
 import 'dart:typed_data';
 
-import 'package:cointiply_app/core/common/common_text.dart';
-import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
-import 'package:cointiply_app/core/common/dialog_bg_widget.dart';
-import 'package:cointiply_app/core/extensions/context_extensions.dart';
-import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
-import 'package:cointiply_app/features/user_profile/presentation/providers/get_profile_notifier.dart';
-import 'package:cointiply_app/features/user_profile/presentation/providers/upload_profile_avatar_provider.dart';
-import 'package:cointiply_app/features/user_profile/presentation/providers/image_picker_provider.dart';
-import 'package:cointiply_app/features/user_profile/presentation/providers/image_cropper_provider.dart';
-import 'package:cointiply_app/features/user_profile/presentation/widgets/user_profile_image_widget.dart';
+import 'package:gigafaucet/core/common/common_text.dart';
+import 'package:gigafaucet/core/common/custom_buttom_widget.dart';
+import 'package:gigafaucet/core/common/dialog_bg_widget.dart';
+import 'package:gigafaucet/core/extensions/context_extensions.dart';
+import 'package:gigafaucet/features/user_profile/presentation/providers/current_user_provider.dart';
+import 'package:gigafaucet/features/user_profile/presentation/providers/get_profile_notifier.dart';
+import 'package:gigafaucet/features/user_profile/presentation/providers/upload_profile_avatar_provider.dart';
+import 'package:gigafaucet/features/user_profile/presentation/providers/image_picker_provider.dart';
+import 'package:gigafaucet/features/user_profile/presentation/providers/image_cropper_provider.dart';
+import 'package:gigafaucet/features/user_profile/presentation/widgets/user_profile_image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:custom_image_crop/custom_image_crop.dart';
@@ -279,7 +279,6 @@ class _UploadAvatarDialogState extends ConsumerState<UploadAvatarDialog> {
                       context.showErrorSnackBar(
                           message: context.translate("failed_to_crop_image"));
                     }
-                    
                   } finally {
                     ref.read(imageCropperProvider.notifier).setLoading(false);
                   }

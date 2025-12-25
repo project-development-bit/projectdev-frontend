@@ -1,4 +1,4 @@
-import 'package:cointiply_app/features/wallet/domain/entity/balance.dart';
+import 'package:gigafaucet/features/wallet/domain/entity/balance.dart';
 
 enum GetBalanceStatus {
   initial,

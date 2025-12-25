@@ -1,8 +1,8 @@
-import 'package:cointiply_app/core/common/table/table_filter_dropdown.dart';
-import 'package:cointiply_app/core/config/app_local_images.dart';
-import 'package:cointiply_app/core/extensions/context_extensions.dart';
-import 'package:cointiply_app/features/wallet/presentation/providers/payment_history_notifier_provider.dart';
-import 'package:cointiply_app/features/wallet/presentation/widgets/sub_widgets/transaction_filter_button.dart';
+import 'package:gigafaucet/core/common/table/table_filter_dropdown.dart';
+import 'package:gigafaucet/core/config/app_local_images.dart';
+import 'package:gigafaucet/core/extensions/context_extensions.dart';
+import 'package:gigafaucet/features/wallet/presentation/providers/payment_history_notifier_provider.dart';
+import 'package:gigafaucet/features/wallet/presentation/widgets/sub_widgets/transaction_filter_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';

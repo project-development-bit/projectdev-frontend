@@ -57,7 +57,6 @@ class ThemeRepositoryImpl implements ThemeRepository {
     }
   }
 
-
   @override
   Future<Either<Failure, void>> clearCache() async {
     try {
@@ -222,5 +221,4 @@ class ThemeRepositoryImpl implements ThemeRepository {
   //     ),
   //   );
   // }
-
 }

@@ -1,16 +1,16 @@
-import 'package:cointiply_app/features/auth/data/models/user_model.dart';
-import 'package:cointiply_app/features/user_profile/data/enum/user_level.dart';
+import 'package:gigafaucet/features/auth/data/models/user_model.dart';
+import 'package:gigafaucet/features/user_profile/data/enum/user_level.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:dartz/dartz.dart';
-import 'package:cointiply_app/features/auth/presentation/providers/reset_password_provider.dart';
-import 'package:cointiply_app/features/auth/domain/repositories/auth_repository.dart';
+import 'package:gigafaucet/features/auth/presentation/providers/reset_password_provider.dart';
+import 'package:gigafaucet/features/auth/domain/repositories/auth_repository.dart';
 
-import 'package:cointiply_app/features/auth/domain/entities/login_response.dart';
-import 'package:cointiply_app/features/auth/domain/entities/auth_tokens.dart';
-import 'package:cointiply_app/core/error/failures.dart';
-import 'package:cointiply_app/core/enum/user_role.dart';
+import 'package:gigafaucet/features/auth/domain/entities/login_response.dart';
+import 'package:gigafaucet/features/auth/domain/entities/auth_tokens.dart';
+import 'package:gigafaucet/core/error/failures.dart';
+import 'package:gigafaucet/core/enum/user_role.dart';
 
 class MockAuthRepository extends Mock implements AuthRepository {}
 

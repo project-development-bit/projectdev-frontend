@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'package:cointiply_app/core/theme/presentation/providers/app_setting_providers.dart';
-import 'package:cointiply_app/features/localization/data/model/response/localization_model.dart';
+import 'package:gigafaucet/core/theme/presentation/providers/app_setting_providers.dart';
+import 'package:gigafaucet/features/localization/data/model/response/localization_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

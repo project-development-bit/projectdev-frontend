@@ -1,11 +1,11 @@
-import 'package:cointiply_app/features/localization/data/model/request/get_localization_request.dart';
-import 'package:cointiply_app/features/user_profile/presentation/providers/change_language_notifier.dart';
+import 'package:gigafaucet/features/localization/data/model/request/get_localization_request.dart';
+import 'package:gigafaucet/features/user_profile/presentation/providers/change_language_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:cointiply_app/features/localization/domain/usecases/get_localization_use_case.dart';
-import 'package:cointiply_app/features/localization/presentation/providers/localization_state.dart';
+import 'package:gigafaucet/features/localization/domain/usecases/get_localization_use_case.dart';
+import 'package:gigafaucet/features/localization/presentation/providers/localization_state.dart';
 
 class LocalizationController extends StateNotifier<LocalizationState> {
   final GetLocalizationUseCase _useCase;

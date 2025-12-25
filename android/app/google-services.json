@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "645002434672",
+    "project_id": "gigafaucet-dev",
+    "storage_bucket": "gigafaucet-dev.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:645002434672:android:7aebe7d704f45a63a2fcb5",
+        "android_client_info": {
+          "package_name": "com.burgereat.gigafaucet.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "645002434672-ds5lvknbedq2duci3iplhcii5qbvo3ca.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.burgereat.gigafaucet.dev",
+            "certificate_hash": "203d67b71ef96a54373c42483d438952e80b8a6b"
+          }
+        },
+        {
+          "client_id": "645002434672-nji58g0s1sdqfpu679h3h7cc3v9diaue.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjrNhTkizyKefk7fZhPeWZPIrEmQR2hyI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "645002434672-nji58g0s1sdqfpu679h3h7cc3v9diaue.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "645002434672-c3ln8ahjr6qgcuubaj3su6lnt5f8fqap.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.burgereat.gigafaucet.dev"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

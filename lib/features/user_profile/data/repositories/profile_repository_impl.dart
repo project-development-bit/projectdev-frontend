@@ -1,10 +1,10 @@
-import 'package:cointiply_app/features/user_profile/data/models/request/user_update_request.dart';
-import 'package:cointiply_app/features/user_profile/data/models/response/upload_profile_avatar_response_model.dart';
-import 'package:cointiply_app/features/user_profile/data/models/response/user_update_respons.dart';
-import 'package:cointiply_app/features/user_profile/domain/entities/country.dart';
-import 'package:cointiply_app/features/localization/domain/entities/language.dart';
-import 'package:cointiply_app/features/user_profile/domain/entities/profile_detail.dart';
-import 'package:cointiply_app/features/user_profile/domain/entities/verify_delete_account_result.dart';
+import 'package:gigafaucet/features/user_profile/data/models/request/user_update_request.dart';
+import 'package:gigafaucet/features/user_profile/data/models/response/upload_profile_avatar_response_model.dart';
+import 'package:gigafaucet/features/user_profile/data/models/response/user_update_respons.dart';
+import 'package:gigafaucet/features/user_profile/domain/entities/country.dart';
+import 'package:gigafaucet/features/localization/domain/entities/language.dart';
+import 'package:gigafaucet/features/user_profile/domain/entities/profile_detail.dart';
+import 'package:gigafaucet/features/user_profile/domain/entities/verify_delete_account_result.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';

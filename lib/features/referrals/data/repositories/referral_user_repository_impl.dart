@@ -1,6 +1,6 @@
-import 'package:cointiply_app/features/referrals/data/datasources/referral_user_remote_service.dart';
-import 'package:cointiply_app/features/referrals/domain/entity/referred_user_entity.dart';
-import 'package:cointiply_app/features/referrals/domain/repository/referral_users_repository.dart';
+import 'package:gigafaucet/features/referrals/data/datasources/referral_user_remote_service.dart';
+import 'package:gigafaucet/features/referrals/domain/entity/referred_user_entity.dart';
+import 'package:gigafaucet/features/referrals/domain/repository/referral_users_repository.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';

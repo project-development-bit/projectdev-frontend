@@ -1,5 +1,5 @@
-import 'package:cointiply_app/core/network/base_dio_client.dart';
-import 'package:cointiply_app/features/auth/data/models/ip_country_model.dart';
+import 'package:gigafaucet/core/network/base_dio_client.dart';
+import 'package:gigafaucet/features/auth/data/models/ip_country_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

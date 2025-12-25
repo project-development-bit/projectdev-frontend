@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'package:cointiply_app/core/config/app_assets.dart';
-import 'package:cointiply_app/core/theme/data/models/app_settings_model.dart';
+import 'package:gigafaucet/core/config/app_assets.dart';
+import 'package:gigafaucet/core/theme/data/models/app_settings_model.dart';
 import 'package:flutter/services.dart';
 
 /// Data source for loading theme from asset files

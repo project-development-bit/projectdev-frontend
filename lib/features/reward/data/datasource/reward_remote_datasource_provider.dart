@@ -1,5 +1,5 @@
-import 'package:cointiply_app/core/network/base_dio_client.dart';
-import 'package:cointiply_app/features/reward/data/datasource/reward_remote_datasource.dart';
+import 'package:gigafaucet/core/network/base_dio_client.dart';
+import 'package:gigafaucet/features/reward/data/datasource/reward_remote_datasource.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final rewardRemoteDataSourceProvider = Provider<RewardRemoteDataSource>(

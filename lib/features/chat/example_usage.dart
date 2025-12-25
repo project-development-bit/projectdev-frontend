@@ -1,6 +1,6 @@
-import 'package:cointiply_app/core/common/common_text.dart';
-import 'package:cointiply_app/features/chat/presentation/pages/right_chat_overlay.dart';
-import 'package:cointiply_app/features/chat/presentation/provider/right_chat_overlay_provider.dart';
+import 'package:gigafaucet/core/common/common_text.dart';
+import 'package:gigafaucet/features/chat/presentation/pages/right_chat_overlay.dart';
+import 'package:gigafaucet/features/chat/presentation/provider/right_chat_overlay_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

@@ -1,4 +1,4 @@
-import 'package:cointiply_app/features/wallet/domain/entity/rates.dart';
+import 'package:gigafaucet/features/wallet/domain/entity/rates.dart';
 import 'package:equatable/equatable.dart';
 
 class BalanceMetaInfo extends Equatable {

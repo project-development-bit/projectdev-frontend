@@ -1,8 +1,8 @@
-import 'package:cointiply_app/core/error/error_model.dart';
-import 'package:cointiply_app/core/error/failures.dart';
-import 'package:cointiply_app/features/wallet/data/datasources/wallet_remote_datasource.dart';
-import 'package:cointiply_app/features/wallet/domain/entity/balance.dart';
-import 'package:cointiply_app/features/wallet/domain/repositories/balance_repository.dart';
+import 'package:gigafaucet/core/error/error_model.dart';
+import 'package:gigafaucet/core/error/failures.dart';
+import 'package:gigafaucet/features/wallet/data/datasources/wallet_remote_datasource.dart';
+import 'package:gigafaucet/features/wallet/domain/entity/balance.dart';
+import 'package:gigafaucet/features/wallet/domain/repositories/balance_repository.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 

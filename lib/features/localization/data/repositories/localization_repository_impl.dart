@@ -1,9 +1,9 @@
-import 'package:cointiply_app/core/error/failures.dart';
-import 'package:cointiply_app/features/localization/data/datasource/local/localization_local_data_source.dart';
-import 'package:cointiply_app/features/localization/data/datasource/remote/localization_remote_data_source.dart';
-import 'package:cointiply_app/features/localization/data/model/request/get_localization_request.dart';
-import 'package:cointiply_app/features/localization/data/model/response/localization_model.dart';
-import 'package:cointiply_app/features/localization/domain/entities/localization_entity.dart';
+import 'package:gigafaucet/core/error/failures.dart';
+import 'package:gigafaucet/features/localization/data/datasource/local/localization_local_data_source.dart';
+import 'package:gigafaucet/features/localization/data/datasource/remote/localization_remote_data_source.dart';
+import 'package:gigafaucet/features/localization/data/model/request/get_localization_request.dart';
+import 'package:gigafaucet/features/localization/data/model/response/localization_model.dart';
+import 'package:gigafaucet/features/localization/domain/entities/localization_entity.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/widgets.dart';
