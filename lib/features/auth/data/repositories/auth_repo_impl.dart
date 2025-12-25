@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:gigafaucet/core/error/error_model.dart';
 import 'package:gigafaucet/features/auth/data/datasources/remote/facebook_service_auth.dart';
 import 'package:gigafaucet/features/auth/data/datasources/remote/google_auth_service.dart';
-import 'package:gigafaucet/features/auth/data/datasources/remote/google_web_auth.dart';
 import 'package:gigafaucet/features/auth/data/datasources/remote/googleapis_auth.dart';
 import 'package:gigafaucet/features/auth/data/models/request/facebook_login_request.dart';
 import 'package:gigafaucet/features/auth/data/models/request/google_login_request.dart';
@@ -45,7 +44,6 @@ final authRepositoryProvider = Provider<AuthRepository>(
     ref.watch(authRemoteDataSourceProvider),
     ref.watch(secureStorageServiceProvider),
     ref.watch(googleAuthServiceProvider),
-    ref.watch(googleWebAuthServiceProvider),
     ref.watch(googleApiAuthServiceProvider),
     ref.watch(facebookAuthServiceProvider),
   ),
@@ -63,8 +61,6 @@ class AuthRepositoryImpl implements AuthRepository {
 
   final GoogleAuthService googleAuthService;
 
-  final GoogleWebAuthService googleWebService;
-
   final GoogleApisAuthService googleApiAuthService;
 
   final FacebookAuthService facebookAuthService;
@@ -74,7 +70,6 @@ class AuthRepositoryImpl implements AuthRepository {
       this.remoteDataSource,
       this.secureStorage,
       this.googleAuthService,
-      this.googleWebService,
       this.googleApiAuthService,
       this.facebookAuthService);
 

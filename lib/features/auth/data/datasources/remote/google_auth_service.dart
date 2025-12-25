@@ -93,7 +93,7 @@ class GoogleAuthService {
     debugPrint("idToken is present: ${auth.idToken != null}");
     debugPrint("accessToken is present: ${auth.accessToken != null}");
 
-    return auth.idToken;
+    return auth.accessToken;
   }
 
   Future<String> signInSilently() async {
