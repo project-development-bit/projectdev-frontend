@@ -338,6 +338,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.19.1"
+  confetti:
+    dependency: "direct main"
+    description:
+      name: confetti
+      sha256: "79376a99648efbc3f23582f5784ced0fe239922bd1a0fb41f582051eba750751"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.8.0"
   conventional_commit:
     dependency: transitive
     description:
@@ -639,14 +647,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.4.1"
-  flutter_confetti:
-    dependency: transitive
-    description:
-      name: flutter_confetti
-      sha256: "27964ee6b02dd88a752017fa6441d297b65b4b150a67ed0685412fcc2c355eb6"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.4.0"
   flutter_driver:
     dependency: transitive
     description: flutter
@@ -2049,14 +2049,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.0"
-  wndr_flutter_confetti:
-    dependency: "direct main"
-    description:
-      name: wndr_flutter_confetti
-      sha256: e65cf3a287f8ba51235720eb80235c23f68b50aec5fdbd10b95767479b83aa49
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.3.0"
   xdg_directories:
     dependency: transitive
     description:

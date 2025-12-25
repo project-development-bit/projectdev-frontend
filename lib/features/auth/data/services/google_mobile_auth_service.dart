@@ -1,9 +1,6 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:google_sign_in_platform_interface/google_sign_in_platform_interface.dart';
-
-final googleAuthServiceProvider = Provider((ref) => GoogleAuthService());
 
 class GoogleAuthService {
   final GoogleSignIn _googleSignIn = GoogleSignIn(
@@ -118,28 +115,6 @@ class GoogleAuthService {
         "Testing Google Sign-In : Successfully retrieved idToken via silent sign-in.");
     return auth.idToken!;
   }
-
-  /// Signs into Firebase using the provided Google authentication details.
-  // Future<User?> _signInToFirebaseWithGoogle(
-  //     GoogleSignInAuthentication googleAuth) async {
-  //   // CRITICAL FIX: Provide both accessToken and idToken to the credential.
-  //   // This is the most robust way to authenticate with Firebase.
-  //   final AuthCredential credential = GoogleAuthProvider.credential(
-  //     accessToken: googleAuth.accessToken,
-  //     idToken: googleAuth.idToken,
-  //   );
-
-  //   final userCredential =
-  //       await FirebaseAuth.instance.signInWithCredential(credential);
-  //   final firebaseUser = userCredential.user;
-
-  //   if (firebaseUser != null) {
-  //     debugPrint(
-  //         'Firebase Sign-In Successful. UID: ${firebaseUser.uid}, Email: ${firebaseUser.email}');
-  //   }
-
-  //   return firebaseUser;
-  // }
 
   Future<void> signOut() async {
     if (_googleSignIn.currentUser == null) {
