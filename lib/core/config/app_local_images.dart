@@ -55,7 +55,7 @@ class AppLocalImages {
 
   //Home
   static const String shopDiscount = 'assets/images/rewards/shop_discount.png';
-  static const String shieldIcon = 'assets/images/rewards/shield_icon.png';
+  // static const String shieldIcon = 'assets/images/rewards/shield_icon.png';
   static const String offerBoostReward =
       'assets/images/rewards/offer_boast@3x.png';
 
@@ -188,6 +188,11 @@ class AppLocalImages {
   static const String fortuneWheelGirlCong =
       'assets/images/fortune_wheel_girl_cong.png';
   static const String congratsLabel = 'assets/images/congrats_label.png';
-  static const String successSpingDialogBg = 'assets/images/success_spin_dialog_bg.png';
-  static const String successSpingDialogBgMobile = 'assets/images/success_spin_dialog_bg_mobile.png';
+  static const String successSpingDialogBg =
+      'assets/images/success_spin_dialog_bg.png';
+  static const String successSpingDialogBgMobile =
+      'assets/images/success_spin_dialog_bg_mobile.png';
+
+  static String homeCoinBackgroundSection2Desktop =
+      "assets/images/bg/home_coin_section_2_desktop@2x.png";
 }
