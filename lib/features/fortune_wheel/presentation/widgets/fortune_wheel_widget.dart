@@ -17,7 +17,7 @@ import 'package:gigafaucet/routing/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wndr_flutter_confetti/wndr_flutter_confetti.dart';
+// import 'package:wndr_flutter_confetti/wndr_flutter_confetti.dart';
 
 import 'success_spin_dialog.dart';
 
@@ -264,7 +264,6 @@ class _FortuneWheelWidgetState extends ConsumerState<FortuneWheelWidget> {
                                   ? ' USD'
                                   : '')
             ]));
-        await runConfetti(context);
 
         // Refresh status after spin
         ref.read(fortuneWheelStatusProvider.notifier).fetchFortuneWheelStatus();
@@ -276,23 +275,6 @@ class _FortuneWheelWidgetState extends ConsumerState<FortuneWheelWidget> {
     final audioPlayer = AudioPlayer();
     await audioPlayer.setSource(AssetSource('sound/celebration_sound.mp3'));
     await audioPlayer.resume();
-  }
-
-  Future<void> runConfetti(
-    BuildContext context,
-  ) async {
-    await WunderFlutterConfetti.startConfettiWithImageAsset(
-      context,
-      AppLocalImages.coin,
-      params: ConfettiParams(
-          particleCount: 25,
-          spread: 40,
-          angleLeft: 40,
-          particleHeight: 30,
-          particleWidth: 30,
-          angleRight: 140,
-          startVelocity: 70),
-    );
   }
 
   FortuneItem _fortuneWheelItem(FortuneWheelReward reward) {
