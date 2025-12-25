@@ -1,7 +1,6 @@
 import 'package:gigafaucet/core/error/failures.dart';
 import 'package:gigafaucet/core/services/secure_storage_service.dart';
-import 'package:gigafaucet/features/auth/data/datasources/remote/google_auth_service.dart';
-import 'package:gigafaucet/features/auth/data/datasources/remote/googleapis_auth.dart';
+import 'package:gigafaucet/features/auth/data/datasources/remote/google_auth_remote.dart';
 import 'package:gigafaucet/features/auth/data/repositories/auth_repo_impl.dart';
 import 'package:gigafaucet/features/auth/data/datasources/remote/auth_remote.dart';
 import 'package:gigafaucet/features/auth/data/models/login_request.dart';
@@ -24,9 +23,7 @@ class MockAuthRemoteDataSource extends Mock implements AuthRemoteDataSource {}
 
 class MockSecureStorageService extends Mock implements SecureStorageService {}
 
-class MockGoogleAuthService extends Mock implements GoogleAuthService {}
-
-class MockGoogleApisAuthService extends Mock implements GoogleApisAuthService {}
+class MockGoogleAuthRemote extends Mock implements GoogleAuthRemote {}
 
 void main() {
   group('AuthRepositoryImpl', () {
@@ -50,10 +47,7 @@ void main() {
       mockRemoteDataSource = MockAuthRemoteDataSource();
       mockSecureStorage = MockSecureStorageService();
       authRepository = AuthRepositoryImpl(
-          mockRemoteDataSource,
-          mockSecureStorage,
-          MockGoogleAuthService(),
-          MockGoogleApisAuthService());
+          mockRemoteDataSource, mockSecureStorage, MockGoogleAuthRemote());
     });
 
     group('login', () {

@@ -1,20 +1,9 @@
 import 'dart:async';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:googleapis_auth/googleapis_auth.dart' show AccessCredentials;
-
-import 'package:googleapis_auth/auth_browser.dart'
-    if (dart.library.io) 'package:googleapis_auth/googleapis_auth.dart';
-// import 'package:googleapis_auth/auth_browser.dart';
-
-// Define the Provider
-final googleApiAuthServiceProvider = Provider<GoogleApisAuthService>((ref) {
-  return GoogleApisAuthService();
-});
+import 'package:googleapis_auth/auth_browser.dart';
 
 // Service Class
-class GoogleApisAuthService {
+class GoogleAuthService {
   final String _clientId =
       '645002434672-nji58g0s1sdqfpu679h3h7cc3v9diaue.apps.googleusercontent.com';
 
@@ -101,9 +90,14 @@ class GoogleApisAuthService {
     }
   }
 
-  Future<UserCredential> signInWithGoogle(String accessToken) async {
-    final AuthCredential credential =
-        GoogleAuthProvider.credential(accessToken: accessToken);
-    return await FirebaseAuth.instance.signInWithCredential(credential);
+  // Future<UserCredential> signInWithGoogle(String accessToken) async {
+  //   final AuthCredential credential =
+  //       GoogleAuthProvider.credential(accessToken: accessToken);
+  //   return await FirebaseAuth.instance.signInWithCredential(credential);
+  // }
+
+  Future<void> signOut() async {
+    // await FirebaseAuth.instance.signOut();
+    // debugPrint('Testing Google Sign-In : User signed out from Firebase.');
   }
 }

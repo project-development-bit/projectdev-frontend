@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:gigafaucet/core/error/error_model.dart';
-import 'package:gigafaucet/features/auth/data/datasources/remote/google_auth_service.dart';
-import 'package:gigafaucet/features/auth/data/datasources/remote/googleapis_auth.dart';
+import 'package:gigafaucet/features/auth/data/datasources/remote/google_auth_remote.dart';
 import 'package:gigafaucet/features/auth/data/models/request/google_login_request.dart';
 import 'package:gigafaucet/features/auth/data/models/request/google_register_request.dart';
 import 'package:gigafaucet/features/auth/data/models/verify_code_forgot_password_response.dart';
@@ -39,10 +38,10 @@ import '../datasources/remote/auth_remote.dart';
 /// Provider for the authentication repository
 final authRepositoryProvider = Provider<AuthRepository>(
   (ref) => AuthRepositoryImpl(
-      ref.watch(authRemoteDataSourceProvider),
-      ref.watch(secureStorageServiceProvider),
-      ref.watch(googleAuthServiceProvider),
-      ref.watch(googleApiAuthServiceProvider)),
+    ref.watch(authRemoteDataSourceProvider),
+    ref.watch(secureStorageServiceProvider),
+    ref.watch(googleAuthRemoteProvider),
+  ),
 );
 
 /// Implementation of [AuthRepository]
@@ -55,13 +54,11 @@ class AuthRepositoryImpl implements AuthRepository {
   /// Secure storage service for token management
   final SecureStorageService secureStorage;
 
-  final GoogleAuthService googleAuthService;
-
-  final GoogleApisAuthService googleApiAuthService;
+  final GoogleAuthRemote googleAuthRemote;
 
   /// Creates an instance of [AuthRepositoryImpl]
-  const AuthRepositoryImpl(this.remoteDataSource, this.secureStorage,
-      this.googleAuthService, this.googleApiAuthService);
+  const AuthRepositoryImpl(
+      this.remoteDataSource, this.secureStorage, this.googleAuthRemote);
 
   @override
   Future<Either<Failure, void>> register(RegisterRequest request) async {
@@ -167,7 +164,7 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Either<Failure, void>> logout() async {
     try {
       // Clear all stored authentication data
-      await googleAuthService.signOut();
+      await googleAuthRemote.signOut();
       await secureStorage.clearAllAuthData();
       return const Right(null);
     } catch (e) {
@@ -546,11 +543,7 @@ class AuthRepositoryImpl implements AuthRepository {
 
   Future<String?> _getGooglePlatformSpecificIdToken() async {
     try {
-      if (kIsWeb) {
-        return await googleApiAuthService.getGoogleIdToken();
-      } else {
-        return await googleAuthService.getGoogleIdToken();
-      }
+      return await googleAuthRemote.getGoogleIdToken();
     } catch (e) {
       debugPrint("Testing Google Sign-In : Token Retrieval Error: $e");
       rethrow;
@@ -559,6 +552,6 @@ class AuthRepositoryImpl implements AuthRepository {
 
   /// Helper: Centralizes cleanup logic
   Future<void> _handleErrorCleanup() async {
-    await googleAuthService.signOut();
+    await googleAuthRemote.signOut();
   }
 }

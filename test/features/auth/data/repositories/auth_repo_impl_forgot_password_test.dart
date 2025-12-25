@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:gigafaucet/features/auth/data/datasources/remote/google_auth_service.dart';
-import 'package:gigafaucet/features/auth/data/datasources/remote/googleapis_auth.dart';
+import 'package:gigafaucet/features/auth/data/datasources/remote/google_auth_remote.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
@@ -15,9 +14,7 @@ class MockAuthRemoteDataSource extends Mock implements AuthRemoteDataSource {}
 
 class MockSecureStorageService extends Mock implements SecureStorageService {}
 
-class MockGoogleAuthService extends Mock implements GoogleAuthService {}
-
-class MockGoogleApisAuthService extends Mock implements GoogleApisAuthService {}
+class MockGoogleAuthService extends Mock implements GoogleAuthRemote {}
 
 void main() {
   group('AuthRepositoryImpl - Forgot Password', () {
@@ -37,7 +34,6 @@ void main() {
         mockRemoteDataSource,
         mockSecureStorage,
         MockGoogleAuthService(),
-        MockGoogleApisAuthService(),
       );
     });
 
