@@ -67,7 +67,6 @@ class HomeFeaturesSection extends StatelessWidget {
       decoration: BoxDecoration(
         image: DecorationImage(
           fit: context.isDesktop ? BoxFit.contain : BoxFit.fitWidth,
-          alignment: Alignment(0, -0.5),
           filterQuality: FilterQuality.high,
           image: AssetImage(
             context.isMobile

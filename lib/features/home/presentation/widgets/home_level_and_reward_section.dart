@@ -22,7 +22,11 @@ class HomeLevelAndRewardSection extends StatelessWidget {
                 image:
                     AssetImage(AppLocalImages.homeCoinBackgroundSection2Mobile),
               )
-            : null,
+            : DecorationImage(
+                fit: BoxFit.contain,
+                image: AssetImage(
+                    AppLocalImages.homeCoinBackgroundSection2Desktop),
+              ),
       ),
       child: Center(
         child: Container(
@@ -46,7 +50,7 @@ class HomeLevelAndRewardSection extends StatelessWidget {
                 ),
                 SizedBox(height: isSmallSize ? 16 : 42),
                 SizedBox(
-                  height: isSmallSize ? null : 300,
+                  height: isSmallSize ? null : 325,
                   child: Flex(
                     direction: isSmallSize ? Axis.vertical : Axis.horizontal,
                     mainAxisSize: MainAxisSize.min,

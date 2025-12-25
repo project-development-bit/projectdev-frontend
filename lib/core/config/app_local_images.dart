@@ -188,4 +188,7 @@ class AppLocalImages {
   static const String congratsLabel = 'assets/images/congrats_label.png';
   static const String successSpingDialogBg = 'assets/images/success_spin_dialog_bg.png';
   static const String successSpingDialogBgMobile = 'assets/images/success_spin_dialog_bg_mobile.png';
+
+  static String homeCoinBackgroundSection2Desktop =
+      "assets/images/bg/home_coin_section_2_desktop@2x.png";
 }
