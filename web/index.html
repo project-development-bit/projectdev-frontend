@@ -87,8 +87,6 @@
 
   <!-- Preload splash screen images for instant display -->
   <!-- Use compressed webp format for faster loading -->
-  <link rel="preload" as="image" href="splash_background.webp" type="image/webp">
-  <link rel="preload" as="image" href="splash_background_mobile.webp" media="(max-width: 600px)" type="image/webp">
   <!-- Fallback to PNG if webp not available -->
   <link rel="preload" as="image" href="splash_background.png">
   <link rel="preload" as="image" href="splash_background_mobile.png" media="(max-width: 600px)">
@@ -369,12 +367,7 @@
     .web_container {
       width: 100vw;
       height: 100vh;
-      background-color: #1E005E;
-      /* Instant gradient placeholder that mimics the splash design */
-      background-image: 
-        linear-gradient(to bottom, #1E005E 0%, #2D008C 50%, #1E005E 100%),
-        url('splash_background.png'),
-        url('splash_background.png');
+      background-image: url('splash_background.png');
       background-size: cover;
       background-position: bottom;
       background-repeat: no-repeat;
@@ -495,11 +488,7 @@
     /* Mobile Devices (≤600px) */
     @media (max-width: 600px) {
       .web_container {
-        background-color: #1E005E;
-        background-image: 
-          linear-gradient(to bottom, #1E005E 0%, #2D008C 50%, #1E005E 100%),
-          url('splash_background_mobile.webp'),
-          url('splash_background_mobile.png');
+        background-image: url('splash_background_mobile.png');
         background-position: 50% 90%;
       }
 
@@ -545,9 +534,7 @@
 
 <body>
   <!-- Splash Screen -->
-  <div id="splash" class="center">
-    <div class="web_container">
-    </div>
+  <div class="web_container">
   </div>
   <script>
     // This script helps browsers detect password/email fields in Flutter Web
