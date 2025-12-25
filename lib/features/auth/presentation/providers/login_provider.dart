@@ -1,7 +1,12 @@
-import 'package:cointiply_app/core/error/error_model.dart';
-import 'package:cointiply_app/core/services/device_info.dart';
+import 'package:gigafaucet/core/enum/user_role.dart';
+import 'package:gigafaucet/core/error/error_model.dart';
+import 'package:gigafaucet/core/services/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gigafaucet/features/auth/data/models/request/google_login_request.dart';
+import 'package:gigafaucet/features/auth/data/models/request/google_register_request.dart';
+import 'package:gigafaucet/features/auth/domain/usecases/google_siginup_usecase.dart';
+import 'package:gigafaucet/features/auth/domain/usecases/google_signin_usecase.dart';
 import '../../../../core/services/database_service.dart';
 import '../../../../core/services/secure_storage_service.dart';
 import '../../../../core/providers/turnstile_provider.dart';
@@ -9,6 +14,7 @@ import '../../domain/entities/user.dart';
 import '../../domain/entities/login_response.dart';
 import '../../data/models/login_request.dart';
 import 'auth_providers.dart';
+import 'package:google_sign_in_platform_interface/google_sign_in_platform_interface.dart';
 
 // =============================================================================
 // LOGIN STATE CLASSES
@@ -220,6 +226,265 @@ class LoginNotifier extends StateNotifier<LoginState> {
     }
 
     debugPrint('🔄 Login process completed. Final state: ${state.runtimeType}');
+  }
+
+  Future<void> googleSignIn({
+    required String countryCode,
+    String? accessToken,
+    VoidCallback? onSuccess,
+    Function(String)? onError,
+  }) async {
+    debugPrint('🔄 Starting login process for: google Login');
+    debugPrint('🔄 Current state before login: ${state.runtimeType}');
+
+    // Ensure we start with loading state and clear any previous state
+    state = const LoginLoading();
+    debugPrint('🔄 State set to LoginLoading');
+
+    try {
+      // Get Turnstile token (replaces reCAPTCHA)
+      String? turnstileToken;
+
+      debugPrint('🔐 Checking Turnstile verification...');
+      final turnstileState =
+          _ref.read(turnstileNotifierProvider(TurnstileActionEnum.login));
+
+      if (turnstileState is TurnstileSuccess) {
+        turnstileToken = turnstileState.token;
+        debugPrint('✅ Turnstile token obtained successfully');
+      } else {
+        debugPrint('❌ Turnstile verification incomplete');
+        state = LoginError(
+          email: '',
+          message:
+              'Security verification required. Please complete the verification and try again.',
+        );
+        return;
+      }
+
+      final loginRequest = GoogleLoginRequest(
+        accessToken: accessToken,
+        countryCode: countryCode,
+        recaptchaToken: turnstileToken,
+        deviceFingerprint: await _deviceInfo.getUniqueIdentifier() ?? '',
+        userAgent: await _deviceInfo.getUserAgent(),
+      );
+
+      debugPrint('📤 Sending login request with Turnstile token');
+
+      final loginUseCase = _ref.read(googleSignInUseCaseProvider);
+
+      // Add timeout to prevent infinite loading
+      final result = await loginUseCase(loginRequest);
+
+      result.fold(
+        (failure) {
+          debugPrint('❌ Login failed: ${failure.message}');
+          state = LoginError(
+            email: '',
+            message: failure.message ?? 'Login failed',
+            isNetworkError: failure.toString().contains('network') ||
+                failure.toString().contains('connection'),
+            errorModel: failure.errorModel,
+          );
+          onError?.call(failure.message ?? 'Login failed');
+          debugPrint('🔄 State set to LoginError');
+        },
+        (loginResponse) async {
+          debugPrint('✅ Login successful for: google Login');
+
+          // Check if this is a 2FA required response (user and tokens are null)
+          if (loginResponse.user == null || loginResponse.tokens == null) {
+            debugPrint('🔐 2FA required - userId: ${loginResponse.userId}');
+            // Set state to LoginSuccess with the response containing userId
+            state = LoginSuccess(
+              user: null,
+              loginResponse: loginResponse,
+            );
+            debugPrint('🔄 State set to LoginSuccess (2FA required)');
+            onSuccess?.call();
+            return;
+          }
+
+          debugPrint(
+              '✅ Access token length: ${loginResponse.tokens!.accessToken.length}');
+          debugPrint(
+              '✅ Refresh token length: ${loginResponse.tokens!.refreshToken.length}');
+
+          // Store user data in local database
+          try {
+            await DatabaseService.saveUser(loginResponse.user!);
+            debugPrint('✅ User data saved to database');
+          } catch (dbError) {
+            debugPrint('⚠️ Failed to save user to database: $dbError');
+            // Don't fail the login process if database save fails
+          }
+
+          // Ensure state is set after all async operations
+          await Future.delayed(const Duration(milliseconds: 50));
+
+          state = LoginSuccess(
+            user: loginResponse.user,
+            loginResponse: loginResponse,
+          );
+          debugPrint('🔄 State set to LoginSuccess');
+
+          // Verify tokens were stored properly
+          try {
+            final secureStorage = _ref.read(secureStorageServiceProvider);
+            final storedToken = await secureStorage.getAuthToken();
+            debugPrint(
+                '✅ Token verification - stored token length: ${storedToken?.length ?? 0}');
+          } catch (e) {
+            debugPrint('⚠️ Token verification failed: $e');
+          }
+          onSuccess?.call();
+        },
+      );
+    } catch (e) {
+      debugPrint('❌ Unexpected login error: $e');
+      state = LoginError(
+        email: '',
+        message: e.toString().contains('timeout')
+            ? 'Google Login timeout: Please check your connection and try again'
+            : 'An unexpected error occurred during Google login. Please try again.',
+      );
+      debugPrint('🔄 State set to Google LoginError (catch block)');
+    }
+
+    debugPrint('🔄 Login process completed. Final state: ${state.runtimeType}');
+  }
+
+  Future<void> googleSignUp({
+    required String countryCode,
+    String? accessToken,
+    UserRole role = UserRole.normalUser,
+    String? referralCode,
+    VoidCallback? onSuccess,
+    Function(String)? onError,
+  }) async {
+    debugPrint('🔄 Starting google sign-up process');
+    debugPrint('🔄 Current state before Google sign-up: ${state.runtimeType}');
+
+    // Ensure we start with loading state and clear any previous state
+    state = const LoginLoading();
+    debugPrint('🔄 State set to GoogleSignUpLoading');
+
+    try {
+      // Get Turnstile token (replaces reCAPTCHA)
+      String? turnstileToken;
+
+      debugPrint('🔐 Checking Turnstile verification...');
+      final turnstileState =
+          _ref.read(turnstileNotifierProvider(TurnstileActionEnum.register));
+
+      if (turnstileState is TurnstileSuccess) {
+        turnstileToken = turnstileState.token;
+        debugPrint('✅ Turnstile token obtained successfully');
+      } else {
+        debugPrint('❌ Turnstile verification incomplete');
+        state = LoginError(
+          email: '',
+          message:
+              'Security verification required. Please complete the verification and try again.',
+        );
+        return;
+      }
+
+      final loginRequest = GoogleRegisterRequest(
+        accessToken: accessToken,
+        role: role,
+        referralCode: referralCode,
+        countryCode: countryCode,
+        recaptchaToken: turnstileToken,
+        deviceFingerprint: await _deviceInfo.getUniqueIdentifier() ?? '',
+        userAgent: await _deviceInfo.getUserAgent(),
+      );
+
+      debugPrint('📤 Sending login request with Turnstile token');
+
+      final loginUseCase = _ref.read(googleSignUpUseCaseProvider);
+
+      // Add timeout to prevent infinite loading
+      final result = await loginUseCase(loginRequest);
+
+      result.fold(
+        (failure) {
+          debugPrint('❌ Google sign-up failed: ${failure.message}');
+          GoogleSignInPlatform.instance.signOut();
+          state = LoginError(
+            email: '',
+            message: failure.message ?? 'Google sign-up failed',
+            isNetworkError: failure.toString().contains('network') ||
+                failure.toString().contains('connection'),
+            errorModel: failure.errorModel,
+          );
+          onError?.call(failure.message ?? 'Google sign-up failed');
+          debugPrint('🔄 State set to GoogleSignUpError');
+        },
+        (loginResponse) async {
+          debugPrint('✅ Google sign-up successful');
+          // Check if this is a 2FA required response (user and tokens are null)
+          if (loginResponse.user == null || loginResponse.tokens == null) {
+            debugPrint('🔐 2FA required - userId: ${loginResponse.userId}');
+            // Set state to LoginSuccess with the response containing userId
+            state = LoginSuccess(
+              user: null,
+              loginResponse: loginResponse,
+            );
+            debugPrint('🔄 State set to LoginSuccess (2FA required)');
+            onSuccess?.call();
+            return;
+          }
+
+          debugPrint(
+              '✅ Access token length: ${loginResponse.tokens!.accessToken.length}');
+          debugPrint(
+              '✅ Refresh token length: ${loginResponse.tokens!.refreshToken.length}');
+
+          // Store user data in local database
+          try {
+            await DatabaseService.saveUser(loginResponse.user!);
+            debugPrint('✅ User data saved to database');
+          } catch (dbError) {
+            debugPrint('⚠️ Failed to save user to database: $dbError');
+            // Don't fail the login process if database save fails
+          }
+
+          // Ensure state is set after all async operations
+          await Future.delayed(const Duration(milliseconds: 50));
+
+          state = LoginSuccess(
+            user: loginResponse.user,
+            loginResponse: loginResponse,
+          );
+          debugPrint('🔄 State set to LoginSuccess');
+
+          // Verify tokens were stored properly
+          try {
+            final secureStorage = _ref.read(secureStorageServiceProvider);
+            final storedToken = await secureStorage.getAuthToken();
+            debugPrint(
+                '✅ Token verification - stored token length: ${storedToken?.length ?? 0}');
+          } catch (e) {
+            debugPrint('⚠️ Token verification failed: $e');
+          }
+          onSuccess?.call();
+        },
+      );
+    } catch (e) {
+      debugPrint('❌ Unexpected login error: $e');
+      state = LoginError(
+        email: '',
+        message: e.toString().contains('timeout')
+            ? 'Google sign-up timeout: Please check your connection and try again'
+            : 'An unexpected error occurred during Google sign-up. Please try again.',
+      );
+      debugPrint('🔄 State set to GoogleSignUpError (catch block)');
+    }
+
+    debugPrint(
+        '🔄 Google sign-up process completed. Final state: ${state.runtimeType}');
   }
 
   /// Clear error state

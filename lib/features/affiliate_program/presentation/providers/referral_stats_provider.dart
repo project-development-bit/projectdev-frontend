@@ -1,7 +1,7 @@
-import 'package:cointiply_app/core/error/failures.dart';
-import 'package:cointiply_app/features/affiliate_program/domain/entities/referral_stats_result.dart';
-import 'package:cointiply_app/features/affiliate_program/domain/usecases/get_referral_stats_usecase.dart';
-import 'package:cointiply_app/features/affiliate_program/presentation/providers/referral_link_provider.dart';
+import 'package:gigafaucet/core/error/failures.dart';
+import 'package:gigafaucet/features/affiliate_program/domain/entities/referral_stats_result.dart';
+import 'package:gigafaucet/features/affiliate_program/domain/usecases/get_referral_stats_usecase.dart';
+import 'package:gigafaucet/features/affiliate_program/presentation/providers/referral_link_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -106,8 +106,8 @@ final getReferralStatsUseCaseProvider = Provider((ref) {
 });
 
 /// Referral stats provider
-final referralStatsProvider =
-    StateNotifierProvider.autoDispose<ReferralStatsNotifier, ReferralStatsState>((ref) {
+final referralStatsProvider = StateNotifierProvider.autoDispose<
+    ReferralStatsNotifier, ReferralStatsState>((ref) {
   final useCase = ref.watch(getReferralStatsUseCaseProvider);
   return ReferralStatsNotifier(getReferralStatsUseCase: useCase);
 });

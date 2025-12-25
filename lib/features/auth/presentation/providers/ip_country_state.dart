@@ -1,4 +1,4 @@
-import 'package:cointiply_app/features/auth/domain/entities/ip_country.dart';
+import 'package:gigafaucet/features/auth/domain/entities/ip_country.dart';
 
 enum GetIpCountryStatus {
   initial,

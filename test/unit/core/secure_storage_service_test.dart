@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:cointiply_app/core/services/secure_storage_service.dart';
+import 'package:gigafaucet/core/services/secure_storage_service.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

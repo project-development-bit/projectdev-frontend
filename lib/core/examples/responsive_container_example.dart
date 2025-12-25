@@ -1,4 +1,4 @@
-import 'package:cointiply_app/core/theme/app_colors.dart';
+import 'package:gigafaucet/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import '../widgets/responsive_container.dart';
 

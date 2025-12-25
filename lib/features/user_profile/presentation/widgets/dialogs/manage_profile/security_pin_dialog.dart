@@ -1,11 +1,11 @@
-import 'package:cointiply_app/core/common/common_text.dart';
-import 'package:cointiply_app/core/common/common_textfield.dart';
-import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
-import 'package:cointiply_app/core/common/dialog_bg_widget.dart';
-import 'package:cointiply_app/core/extensions/extensions.dart';
-import 'package:cointiply_app/features/user_profile/presentation/providers/profile_providers.dart';
-import 'package:cointiply_app/features/user_profile/presentation/providers/set_security_pin_notifier.dart';
-import 'package:cointiply_app/features/user_profile/presentation/providers/get_profile_notifier.dart';
+import 'package:gigafaucet/core/common/common_text.dart';
+import 'package:gigafaucet/core/common/common_textfield.dart';
+import 'package:gigafaucet/core/common/custom_buttom_widget.dart';
+import 'package:gigafaucet/core/common/dialog_bg_widget.dart';
+import 'package:gigafaucet/core/extensions/extensions.dart';
+import 'package:gigafaucet/features/user_profile/presentation/providers/profile_providers.dart';
+import 'package:gigafaucet/features/user_profile/presentation/providers/set_security_pin_notifier.dart';
+import 'package:gigafaucet/features/user_profile/presentation/providers/get_profile_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -50,9 +50,8 @@ class _SecurityPinDialogState extends ConsumerState<SecurityPinDialog> {
         if (next.isSuccess) {
           if (mounted && context.mounted) {
             context.showSuccessSnackBar(
-              message: next.successMessage ??
-                    context.translate("security_pin_enabled_successfully")
-            );
+                message: next.successMessage ??
+                    context.translate("security_pin_enabled_successfully"));
 
             // Refresh profile to get updated security pin status
             ref
@@ -60,7 +59,7 @@ class _SecurityPinDialogState extends ConsumerState<SecurityPinDialog> {
                 .fetchProfile(isLoading: false);
 
             // Close dialog
-        
+
             if (mounted) {
               context.pop();
             }

@@ -1,4 +1,7 @@
-import 'package:cointiply_app/features/auth/data/models/verify_code_forgot_password_response.dart';
+import 'package:gigafaucet/features/auth/data/models/login_response_model.dart';
+import 'package:gigafaucet/features/auth/data/models/request/google_login_request.dart';
+import 'package:gigafaucet/features/auth/data/models/request/google_register_request.dart';
+import 'package:gigafaucet/features/auth/data/models/verify_code_forgot_password_response.dart';
 import 'package:dartz/dartz.dart';
 import '../../../../core/error/failures.dart';
 import '../entities/login_response.dart';
@@ -94,4 +97,11 @@ abstract class AuthRepository {
   /// Disable 2FA for the authenticated user
   Future<Either<Failure, Disable2FAResponse>> disable2FA(
       Disable2FARequest request);
+
+  Future<Either<Failure, LoginResponseModel>> googleSignIn(
+      GoogleLoginRequest request);
+  Future<Either<Failure, LoginResponseModel>> googleRegister(
+      GoogleRegisterRequest request);
+
+  Future<Either<Failure, String?>> getGooglePlatformSpecificIdToken();
 }

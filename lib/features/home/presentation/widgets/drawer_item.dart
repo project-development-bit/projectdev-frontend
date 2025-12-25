@@ -1,4 +1,4 @@
-import 'package:cointiply_app/core/common/common_text.dart';
+import 'package:gigafaucet/core/common/common_text.dart';
 import 'package:flutter/material.dart';
 
 class ParentItemWidget extends StatefulWidget {

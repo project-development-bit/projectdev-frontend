@@ -1,8 +1,8 @@
-import 'package:cointiply_app/core/common/common_loading_widget.dart';
-import 'package:cointiply_app/core/config/app_local_images.dart';
-import 'package:cointiply_app/features/wallet/domain/entity/withdrawal_option.dart';
+import 'package:gigafaucet/core/common/common_loading_widget.dart';
+import 'package:gigafaucet/core/config/app_local_images.dart';
+import 'package:gigafaucet/features/wallet/domain/entity/withdrawal_option.dart';
 import 'package:flutter/material.dart';
-import 'package:cointiply_app/core/core.dart';
+import 'package:gigafaucet/core/core.dart';
 
 class WithdrawalEarningMethodsWidget extends StatelessWidget {
   final List<WithdrawalOption> methods;

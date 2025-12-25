@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:cointiply_app/core/common/common_textfield.dart';
+import 'package:gigafaucet/core/common/common_textfield.dart';
 import '../test_helpers/test_app_wrapper.dart';
 
 void main() {

@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:cointiply_app/features/localization/domain/entities/localization_entity.dart';
+import 'package:gigafaucet/features/localization/domain/entities/localization_entity.dart';
 
 enum LocalizationStatus {
   initial,

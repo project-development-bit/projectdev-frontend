@@ -2,12 +2,12 @@
 // import 'package:flutter/material.dart';
 // import 'package:flutter_test/flutter_test.dart';
 // import 'package:mocktail/mocktail.dart';
-// import 'package:cointiply_app/core/error/failures.dart';
-// import 'package:cointiply_app/core/theme/data/repositories/theme_repository_impl.dart';
-// import 'package:cointiply_app/core/theme/data/datasources/theme_remote_data_source.dart';
-// import 'package:cointiply_app/core/theme/data/datasources/theme_database_source.dart';
-// import 'package:cointiply_app/core/theme/data/datasources/theme_asset_data_source.dart';
-// import 'package:cointiply_app/core/theme/data/models/theme_config_model.dart';
+// import 'package:gigafaucet/core/error/failures.dart';
+// import 'package:gigafaucet/core/theme/data/repositories/theme_repository_impl.dart';
+// import 'package:gigafaucet/core/theme/data/datasources/theme_remote_data_source.dart';
+// import 'package:gigafaucet/core/theme/data/datasources/theme_database_source.dart';
+// import 'package:gigafaucet/core/theme/data/datasources/theme_asset_data_source.dart';
+// import 'package:gigafaucet/core/theme/data/models/theme_config_model.dart';
 
 // class MockThemeRemoteDataSource extends Mock implements ThemeRemoteDataSource {}
 

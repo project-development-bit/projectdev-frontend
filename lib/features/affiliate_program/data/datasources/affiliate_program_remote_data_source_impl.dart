@@ -1,10 +1,10 @@
-import 'package:cointiply_app/core/error/failures.dart';
-import 'package:cointiply_app/core/network/base_dio_client.dart';
-import 'package:cointiply_app/features/affiliate_program/data/datasources/affiliate_program_remote_data_source.dart';
-import 'package:cointiply_app/features/affiliate_program/data/models/referral_link_response_model.dart';
-import 'package:cointiply_app/features/affiliate_program/data/models/referral_stats_response_model.dart';
-import 'package:cointiply_app/features/affiliate_program/data/models/referred_users_response_model.dart';
-import 'package:cointiply_app/features/affiliate_program/data/models/request/referred_users_request.dart';
+import 'package:gigafaucet/core/error/failures.dart';
+import 'package:gigafaucet/core/network/base_dio_client.dart';
+import 'package:gigafaucet/features/affiliate_program/data/datasources/affiliate_program_remote_data_source.dart';
+import 'package:gigafaucet/features/affiliate_program/data/models/referral_link_response_model.dart';
+import 'package:gigafaucet/features/affiliate_program/data/models/referral_stats_response_model.dart';
+import 'package:gigafaucet/features/affiliate_program/data/models/referred_users_response_model.dart';
+import 'package:gigafaucet/features/affiliate_program/data/models/request/referred_users_request.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 

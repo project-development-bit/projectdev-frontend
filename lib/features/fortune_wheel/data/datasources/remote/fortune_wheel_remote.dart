@@ -1,8 +1,8 @@
-import 'package:cointiply_app/core/config/api_endpoints.dart';
-import 'package:cointiply_app/core/network/base_dio_client.dart';
-import 'package:cointiply_app/features/fortune_wheel/data/models/fortune_wheel_reward_model.dart';
-import 'package:cointiply_app/features/fortune_wheel/data/models/fortune_wheel_spin_response_model.dart';
-import 'package:cointiply_app/features/fortune_wheel/data/models/fortune_wheel_status_model.dart';
+import 'package:gigafaucet/core/config/api_endpoints.dart';
+import 'package:gigafaucet/core/network/base_dio_client.dart';
+import 'package:gigafaucet/features/fortune_wheel/data/models/fortune_wheel_reward_model.dart';
+import 'package:gigafaucet/features/fortune_wheel/data/models/fortune_wheel_spin_response_model.dart';
+import 'package:gigafaucet/features/fortune_wheel/data/models/fortune_wheel_status_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -56,8 +56,8 @@ class FortuneWheelRemoteDataSourceImpl implements FortuneWheelRemoteDataSource {
             final dataList = data['data'] as List<dynamic>? ?? [];
 
             final rewards = dataList
-                .map((json) =>
-                    FortuneWheelRewardModel.fromJson(json as Map<String, dynamic>))
+                .map((json) => FortuneWheelRewardModel.fromJson(
+                    json as Map<String, dynamic>))
                 .toList();
 
             debugPrint('🎡 Successfully parsed ${rewards.length} rewards');

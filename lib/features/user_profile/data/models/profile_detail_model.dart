@@ -1,4 +1,4 @@
-import 'package:cointiply_app/features/user_profile/data/models/country_model.dart';
+import 'package:gigafaucet/features/user_profile/data/models/country_model.dart';
 
 import '../../domain/entities/profile_detail.dart';
 

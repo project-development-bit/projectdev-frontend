@@ -1,7 +1,7 @@
-import 'package:cointiply_app/core/error/failures.dart';
-import 'package:cointiply_app/features/earnings/data/model/request/earnings_statistics_request.dart';
-import 'package:cointiply_app/features/earnings/domain/usecases/get_earnings_statistics_use_case.dart';
-import 'package:cointiply_app/features/earnings/presentation/provider/earnings_statistics_state.dart';
+import 'package:gigafaucet/core/error/failures.dart';
+import 'package:gigafaucet/features/earnings/data/model/request/earnings_statistics_request.dart';
+import 'package:gigafaucet/features/earnings/domain/usecases/get_earnings_statistics_use_case.dart';
+import 'package:gigafaucet/features/earnings/presentation/provider/earnings_statistics_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class GetEarningsStatisticsNotifier

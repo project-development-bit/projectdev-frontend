@@ -1,5 +1,5 @@
-import 'package:cointiply_app/core/common/model/pagination_model.dart';
-import 'package:cointiply_app/features/wallet/domain/entity/payment_history.dart';
+import 'package:gigafaucet/core/common/model/pagination_model.dart';
+import 'package:gigafaucet/features/wallet/domain/entity/payment_history.dart';
 
 enum GetPaymentHistoryStatus {
   initial,

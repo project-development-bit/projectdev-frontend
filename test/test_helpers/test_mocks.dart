@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:cointiply_app/core/config/app_flavor.dart';
-import 'package:cointiply_app/core/config/app_config.dart';
+import 'package:gigafaucet/core/config/app_flavor.dart';
+import 'package:gigafaucet/core/config/app_config.dart';
 
 /// Test providers for testing
 class TestProviders {

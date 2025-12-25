@@ -1,4 +1,4 @@
-import 'package:cointiply_app/features/earnings/domain/entity/earnings_pagination.dart';
+import 'package:gigafaucet/features/earnings/domain/entity/earnings_pagination.dart';
 
 class EarningsPaginationModel extends EarningsPagination {
   const EarningsPaginationModel({

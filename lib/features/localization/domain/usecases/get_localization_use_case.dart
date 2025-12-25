@@ -1,8 +1,8 @@
 // domain/usecases/get_localization.dart
-import 'package:cointiply_app/core/error/failures.dart';
-import 'package:cointiply_app/core/usecases/usecase.dart';
-import 'package:cointiply_app/features/localization/data/model/request/get_localization_request.dart';
-import 'package:cointiply_app/features/localization/domain/entities/localization_entity.dart';
+import 'package:gigafaucet/core/error/failures.dart';
+import 'package:gigafaucet/core/usecases/usecase.dart';
+import 'package:gigafaucet/features/localization/data/model/request/get_localization_request.dart';
+import 'package:gigafaucet/features/localization/domain/entities/localization_entity.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

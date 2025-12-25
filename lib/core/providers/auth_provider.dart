@@ -1,4 +1,4 @@
-import 'package:cointiply_app/core/services/secure_storage_service.dart';
+import 'package:gigafaucet/core/services/secure_storage_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../features/auth/presentation/providers/auth_providers.dart';
 import '../../features/auth/presentation/providers/login_provider.dart';
@@ -12,7 +12,7 @@ class AuthProvider extends StateNotifier<AuthState> {
   AuthProvider(this._ref) : super(const AuthStateUnauthenticated()) {
     // Initialize auth state by checking stored tokens
     _initializeAuthState();
-    
+
     // Listen to login state changes to keep auth state in sync
     _ref.listen<LoginState>(loginNotifierProvider, (previous, next) {
       if (next is LoginSuccess) {
@@ -38,9 +38,11 @@ class AuthProvider extends StateNotifier<AuthState> {
       final secureStorage = _ref.read(secureStorageServiceProvider);
       final accessToken = await secureStorage.getAuthToken();
       final userId = await secureStorage.getUserId();
-      
-      if (accessToken != null && accessToken.isNotEmpty && 
-          userId != null && userId.isNotEmpty) {
+
+      if (accessToken != null &&
+          accessToken.isNotEmpty &&
+          userId != null &&
+          userId.isNotEmpty) {
         state = const AuthStateAuthenticated();
       } else {
         state = const AuthStateUnauthenticated();
@@ -215,8 +217,10 @@ final isAuthenticatedWithTokenProvider = FutureProvider<bool>((ref) async {
     final secureStorage = ref.watch(secureStorageServiceProvider);
     final accessToken = await secureStorage.getAuthToken();
     final userId = await secureStorage.getUserId();
-    return accessToken != null && accessToken.isNotEmpty && 
-           userId != null && userId.isNotEmpty;
+    return accessToken != null &&
+        accessToken.isNotEmpty &&
+        userId != null &&
+        userId.isNotEmpty;
   } catch (e) {
     return false;
   }

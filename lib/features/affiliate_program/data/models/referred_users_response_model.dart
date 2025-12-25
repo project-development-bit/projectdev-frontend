@@ -1,5 +1,5 @@
-import 'package:cointiply_app/core/common/model/pagination_model.dart';
-import 'package:cointiply_app/features/affiliate_program/data/models/referred_user_model.dart';
+import 'package:gigafaucet/core/common/model/pagination_model.dart';
+import 'package:gigafaucet/features/affiliate_program/data/models/referred_user_model.dart';
 
 /// Data model for referred users response
 class ReferredUsersResponseModel {
@@ -20,7 +20,8 @@ class ReferredUsersResponseModel {
       success: json['success'] as bool? ?? false,
       message: json['message'] as String? ?? '',
       data: (json['data'] as List<dynamic>?)
-              ?.map((e) => ReferredUserModel.fromJson(e as Map<String, dynamic>))
+              ?.map(
+                  (e) => ReferredUserModel.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
       pagination: PaginationModel.fromJson(

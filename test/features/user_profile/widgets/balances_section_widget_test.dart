@@ -15,8 +15,8 @@ void main() {
 // ===== OLD COMMENTED OUT TESTS =====
 // import 'package:flutter/material.dart';
 // import 'package:flutter_test/flutter_test.dart';
-// import 'package:cointiply_app/features/user_profile/presentation/widgets/balances_section_widget.dart';
-// import 'package:cointiply_app/features/user_profile/domain/entities/user_profile.dart';
+// import 'package:gigafaucet/features/user_profile/presentation/widgets/balances_section_widget.dart';
+// import 'package:gigafaucet/features/user_profile/domain/entities/user_profile.dart';
 // import '../../../test_helpers/test_app_wrapper.dart';
 // import '../profile_test_data.dart';
 
@@ -35,7 +35,6 @@ void main() {
 //         ),
 //       );
 //     }
-
 
 //     group('Widget Structure', () {
 //       testWidgets('renders main container correctly', (tester) async {

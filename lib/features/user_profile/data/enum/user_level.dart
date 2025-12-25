@@ -1,5 +1,5 @@
-import 'package:cointiply_app/core/config/app_local_images.dart';
-import 'package:cointiply_app/features/localization/data/helpers/app_localizations.dart';
+import 'package:gigafaucet/core/config/app_local_images.dart';
+import 'package:gigafaucet/features/localization/data/helpers/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 enum UserLevel {

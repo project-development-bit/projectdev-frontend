@@ -1,6 +1,6 @@
-import 'package:cointiply_app/core/common/custom_buttom_widget.dart';
-import 'package:cointiply_app/core/theme/app_colors.dart';
-import 'package:cointiply_app/features/auth/presentation/widgets/onboarding_background.dart';
+import 'package:gigafaucet/core/common/custom_buttom_widget.dart';
+import 'package:gigafaucet/core/theme/app_colors.dart';
+import 'package:gigafaucet/features/auth/presentation/widgets/onboarding_background.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/common/common_textfield.dart';
@@ -153,7 +153,7 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
                 title: localizations?.translate('send_reset_email') ??
                     'Send Reset Email',
                 onTap: _handleSendResetEmail,
-               
+
                 height: 56,
                 isActive: true,
 

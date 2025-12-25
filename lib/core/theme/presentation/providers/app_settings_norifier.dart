@@ -1,9 +1,9 @@
-import 'package:cointiply_app/core/theme/domain/usecases/app_settings_usecase.dart';
-import 'package:cointiply_app/core/theme/domain/usecases/asset_theme_usecase.dart';
-import 'package:cointiply_app/core/usecases/usecase.dart';
+import 'package:gigafaucet/core/theme/domain/usecases/app_settings_usecase.dart';
+import 'package:gigafaucet/core/usecases/usecase.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/models/app_settings_model.dart';
+import '../../domain/usecases/asset_theme_usecase.dart';
 import '../../dynamic_app_theme.dart';
 
 /// State class for app settings theme
@@ -51,9 +51,10 @@ class AppSettingsState {
 class AppSettingsNotifier extends StateNotifier<AppSettingsState> {
   final GetRemoteAppSettingsUseCase getRemoteAppSettingsUseCase;
   final GetLocalAppSettingsUseCase getLocalAppSettingsUseCase;
+
   /// get the fallback theme from assets
   final GetAssetThemeUsecase getAssetThemeUsecase;
-  
+
   AppSettingsNotifier({
     required this.getRemoteAppSettingsUseCase,
     required this.getLocalAppSettingsUseCase,
@@ -124,8 +125,6 @@ class AppSettingsNotifier extends StateNotifier<AppSettingsState> {
               darkTheme: DynamicAppTheme.buildDarkTheme(assetTheme.configData),
             );
           });
-          
-
         },
         (config) {
           debugPrint(

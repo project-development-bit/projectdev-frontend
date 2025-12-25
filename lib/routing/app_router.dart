@@ -1,11 +1,12 @@
 // 📦 Package imports
-import 'package:cointiply_app/features/auth/presentation/examples/two_factor_auth_example.dart';
-import 'package:cointiply_app/features/auth/presentation/widgets/internal_verification_overlay.dart';
-import 'package:cointiply_app/features/home/presentation/widgets/dialog/tutorial_overlay.dart';
-import 'package:cointiply_app/features/chat/presentation/pages/chat_page.dart';
-import 'package:cointiply_app/features/chat/presentation/pages/right_chat_overlay.dart';
-import 'package:cointiply_app/features/terms_privacy/presentation/screens/privacy_screen.dart';
-import 'package:cointiply_app/features/terms_privacy/presentation/screens/terms_screen.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:gigafaucet/features/auth/presentation/examples/two_factor_auth_example.dart';
+import 'package:gigafaucet/features/auth/presentation/widgets/internal_verification_overlay.dart';
+import 'package:gigafaucet/features/home/presentation/widgets/dialog/tutorial_overlay.dart';
+import 'package:gigafaucet/features/chat/presentation/pages/chat_page.dart';
+import 'package:gigafaucet/features/chat/presentation/pages/right_chat_overlay.dart';
+import 'package:gigafaucet/features/terms_privacy/presentation/screens/privacy_screen.dart';
+import 'package:gigafaucet/features/terms_privacy/presentation/screens/terms_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -71,6 +72,10 @@ class BurgerEatsAppRoutes {
   static final _rootNavigatorKey = GlobalKey<NavigatorState>();
   static final _shellNavigatorKey = GlobalKey<NavigatorState>();
   //--------------Navigator Keys--------------//
+  static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+
+  static FirebaseAnalyticsObserver observer =
+      FirebaseAnalyticsObserver(analytics: analytics);
 
   static const _initialPath = '/';
 
@@ -78,7 +83,9 @@ class BurgerEatsAppRoutes {
         navigatorKey: _rootNavigatorKey,
         initialLocation: _initialPath,
         debugLogDiagnostics: true,
-
+        observers: <NavigatorObserver>[
+          observer,
+        ],
         routes: [
           // Landing Route Handler
           GoRoute(
@@ -245,7 +252,7 @@ class BurgerEatsAppRoutes {
               // Legal Routes - Public access
               GoRoute(
                 path: AppRoutes.contactUs,
-                name:  AppRoutes.contactUs,
+                name: AppRoutes.contactUs,
                 pageBuilder: (context, state) => const NoTransitionPage(
                   child: ContactUsPage(),
                 ),

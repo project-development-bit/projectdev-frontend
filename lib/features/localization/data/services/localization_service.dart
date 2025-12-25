@@ -1,7 +1,7 @@
 import 'dart:convert';
-import 'package:cointiply_app/core/config/app_assets.dart';
-import 'package:cointiply_app/features/localization/data/datasource/local/localization_local_data_source.dart';
-import 'package:cointiply_app/features/localization/data/model/response/localization_model.dart';
+import 'package:gigafaucet/core/config/app_assets.dart';
+import 'package:gigafaucet/features/localization/data/datasource/local/localization_local_data_source.dart';
+import 'package:gigafaucet/features/localization/data/model/response/localization_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

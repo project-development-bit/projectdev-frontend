@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:developer' as logger show log;
-import 'package:cointiply_app/core/config/flavor_manager.dart';
-import 'package:cointiply_app/core/services/secure_storage_service.dart';
-import 'package:cointiply_app/core/services/platform_recaptcha_service.dart';
+import 'package:gigafaucet/core/config/flavor_manager.dart';
+import 'package:gigafaucet/core/services/secure_storage_service.dart';
+import 'package:gigafaucet/core/services/platform_recaptcha_service.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
@@ -123,7 +123,9 @@ class TokenInterceptor extends Interceptor {
 
     bool isPublicRoute = options.path.contains('/api/v1/contact') ||
         options.path.contains('/contact') ||
-        options.path.contains('ipapi.co');
+        options.path.contains('ipapi.co') ||
+        options.path.contains('/users/google/signup/') ||
+        options.path.contains('/users/google/login/');
     debugPrint(
         "isTokenRequired for PATH: ${options.path} => ${!isPublicRoute}");
     return !isPublicRoute; // For all other routes, no token is added

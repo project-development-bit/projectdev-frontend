@@ -1,5 +1,5 @@
-import 'package:cointiply_app/features/user_profile/data/models/request/user_update_request.dart';
-import 'package:cointiply_app/features/user_profile/presentation/providers/update_profile_provider.dart';
+import 'package:gigafaucet/features/user_profile/data/models/request/user_update_request.dart';
+import 'package:gigafaucet/features/user_profile/presentation/providers/update_profile_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:cointiply_app/features/auth/presentation/pages/forgot_password_page.dart';
-import 'package:cointiply_app/features/auth/presentation/providers/forgot_password_provider.dart';
+import 'package:gigafaucet/features/auth/presentation/pages/forgot_password_page.dart';
+import 'package:gigafaucet/features/auth/presentation/providers/forgot_password_provider.dart';
 
 void main() {
   group('ForgotPasswordPage Widget Tests', () {

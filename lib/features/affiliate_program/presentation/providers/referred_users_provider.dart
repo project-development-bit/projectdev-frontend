@@ -1,9 +1,9 @@
-import 'package:cointiply_app/core/common/model/pagination_model.dart';
-import 'package:cointiply_app/core/error/failures.dart';
-import 'package:cointiply_app/features/affiliate_program/data/models/referred_user_model.dart';
-import 'package:cointiply_app/features/affiliate_program/data/models/request/referred_users_request.dart';
-import 'package:cointiply_app/features/affiliate_program/domain/usecases/get_referred_users_usecase.dart';
-import 'package:cointiply_app/features/affiliate_program/presentation/providers/referral_link_provider.dart';
+import 'package:gigafaucet/core/common/model/pagination_model.dart';
+import 'package:gigafaucet/core/error/failures.dart';
+import 'package:gigafaucet/features/affiliate_program/data/models/referred_user_model.dart';
+import 'package:gigafaucet/features/affiliate_program/data/models/request/referred_users_request.dart';
+import 'package:gigafaucet/features/affiliate_program/domain/usecases/get_referred_users_usecase.dart';
+import 'package:gigafaucet/features/affiliate_program/presentation/providers/referral_link_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';

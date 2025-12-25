@@ -1,4 +1,4 @@
-import 'package:cointiply_app/core/core.dart';
+import 'package:gigafaucet/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'lib/features/auth/presentation/providers/verification_provider.dart';

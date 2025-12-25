@@ -1,4 +1,4 @@
-import 'package:cointiply_app/core/error/error_model.dart';
+import 'package:gigafaucet/core/error/error_model.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -27,13 +27,14 @@ class FortuneWheelRepositoryImpl implements FortuneWheelRepository {
   const FortuneWheelRepositoryImpl(this.remoteDataSource);
 
   @override
-  Future<Either<Failure, List<FortuneWheelReward>>> getFortuneWheelRewards() async {
+  Future<Either<Failure, List<FortuneWheelReward>>>
+      getFortuneWheelRewards() async {
     try {
       final rewardModels = await remoteDataSource.getFortuneWheelRewards();
-      
+
       // Convert models to entities
       final rewards = rewardModels.map((model) => model.toEntity()).toList();
-      
+
       return Right(rewards);
     } on DioException catch (e) {
       ErrorModel? errorModel;
@@ -44,7 +45,7 @@ class FortuneWheelRepositoryImpl implements FortuneWheelRepository {
           // If error parsing fails, continue without errorModel
         }
       }
-      
+
       return Left(ServerFailure(
         message: e.message ?? 'Failed to fetch fortune wheel rewards',
         statusCode: e.response?.statusCode,

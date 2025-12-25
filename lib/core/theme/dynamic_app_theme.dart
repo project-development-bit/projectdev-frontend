@@ -54,9 +54,8 @@ class DynamicAppTheme {
         foregroundColor: themeColors.paragraph.firstColor,
         elevation: 0,
         scrolledUnderElevation: 1,
-        systemOverlayStyle: isDark
-            ? SystemUiOverlayStyle.light
-            : SystemUiOverlayStyle.dark,
+        systemOverlayStyle:
+            isDark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
         titleTextStyle: textTheme.titleLarge?.copyWith(
           color: themeColors.heading.firstColor,
           fontWeight: FontWeight.w600,
@@ -231,145 +230,156 @@ class DynamicAppTheme {
     return TextTheme(
       // Display styles (H1)
       displayLarge: headingFont?.copyWith(
-        fontSize: typography.h1.fontSizeValue,
-        fontWeight: typography.h1.fontWeightValue,
-        color: colors.heading.firstColor,
-        height: 1.2,
-      ) ?? TextStyle(
-        fontFamily: fonts.heading,
-        fontSize: typography.h1.fontSizeValue,
-        fontWeight: typography.h1.fontWeightValue,
-        color: colors.heading.firstColor,
-        height: 1.2,
-      ),
-      
+            fontSize: typography.h1.fontSizeValue,
+            fontWeight: typography.h1.fontWeightValue,
+            color: colors.heading.firstColor,
+            height: 1.2,
+          ) ??
+          TextStyle(
+            fontFamily: fonts.heading,
+            fontSize: typography.h1.fontSizeValue,
+            fontWeight: typography.h1.fontWeightValue,
+            color: colors.heading.firstColor,
+            height: 1.2,
+          ),
+
       // Headline styles (H2)
       headlineLarge: headingFont?.copyWith(
-        fontSize: typography.h2.fontSizeValue,
-        fontWeight: typography.h2.fontWeightValue,
-        color: colors.heading.secondColor,
-        height: 1.3,
-      ) ?? TextStyle(
-        fontFamily: fonts.heading,
-        fontSize: typography.h2.fontSizeValue,
-        fontWeight: typography.h2.fontWeightValue,
-        color: colors.heading.secondColor,
-        height: 1.3,
-      ),
+            fontSize: typography.h2.fontSizeValue,
+            fontWeight: typography.h2.fontWeightValue,
+            color: colors.heading.secondColor,
+            height: 1.3,
+          ) ??
+          TextStyle(
+            fontFamily: fonts.heading,
+            fontSize: typography.h2.fontSizeValue,
+            fontWeight: typography.h2.fontWeightValue,
+            color: colors.heading.secondColor,
+            height: 1.3,
+          ),
 
       headlineMedium: headingFont?.copyWith(
-        fontSize: typography.h2.fontSizeValue * 0.875,
-        fontWeight: typography.h2.fontWeightValue,
-        color: colors.heading.secondColor,
-        height: 1.3,
-      ) ?? TextStyle(
-        fontFamily: fonts.heading,
-        fontSize: typography.h2.fontSizeValue * 0.875,
-        fontWeight: typography.h2.fontWeightValue,
-        color: colors.heading.secondColor,
-        height: 1.3,
-      ),
+            fontSize: typography.h2.fontSizeValue * 0.875,
+            fontWeight: typography.h2.fontWeightValue,
+            color: colors.heading.secondColor,
+            height: 1.3,
+          ) ??
+          TextStyle(
+            fontFamily: fonts.heading,
+            fontSize: typography.h2.fontSizeValue * 0.875,
+            fontWeight: typography.h2.fontWeightValue,
+            color: colors.heading.secondColor,
+            height: 1.3,
+          ),
 
       // Title styles (H3)
       titleLarge: headingFont?.copyWith(
-        fontSize: typography.h3.fontSizeValue,
-        fontWeight: typography.h3.fontWeightValue,
-        color: colors.heading.firstColor,
-        height: 1.4,
-      ) ?? TextStyle(
-        fontFamily: fonts.heading,
-        fontSize: typography.h3.fontSizeValue,
-        fontWeight: typography.h3.fontWeightValue,
-        color: colors.heading.firstColor,
-        height: 1.4,
-      ),
+            fontSize: typography.h3.fontSizeValue,
+            fontWeight: typography.h3.fontWeightValue,
+            color: colors.heading.firstColor,
+            height: 1.4,
+          ) ??
+          TextStyle(
+            fontFamily: fonts.heading,
+            fontSize: typography.h3.fontSizeValue,
+            fontWeight: typography.h3.fontWeightValue,
+            color: colors.heading.firstColor,
+            height: 1.4,
+          ),
 
       titleMedium: headingFont?.copyWith(
-        fontSize: typography.h3.fontSizeValue * 0.875,
-        fontWeight: typography.h3.fontWeightValue,
-        color: colors.heading.thirdColor,
-        height: 1.4,
-      ) ?? TextStyle(
-        fontFamily: fonts.heading,
-        fontSize: typography.h3.fontSizeValue * 0.875,
-        fontWeight: typography.h3.fontWeightValue,
-        color: colors.heading.thirdColor,
-        height: 1.4,
-      ),
+            fontSize: typography.h3.fontSizeValue * 0.875,
+            fontWeight: typography.h3.fontWeightValue,
+            color: colors.heading.thirdColor,
+            height: 1.4,
+          ) ??
+          TextStyle(
+            fontFamily: fonts.heading,
+            fontSize: typography.h3.fontSizeValue * 0.875,
+            fontWeight: typography.h3.fontWeightValue,
+            color: colors.heading.thirdColor,
+            height: 1.4,
+          ),
 
       // Body styles
       bodyLarge: bodyFont?.copyWith(
-        fontSize: typography.body.fontSizeValue * 1.125,
-        fontWeight: typography.body.fontWeightValue,
-        color: colors.paragraph.firstColor,
-        height: 1.5,
-      ) ?? TextStyle(
-        fontFamily: fonts.body,
-        fontSize: typography.body.fontSizeValue * 1.125,
-        fontWeight: typography.body.fontWeightValue,
-        color: colors.paragraph.firstColor,
-        height: 1.5,
-      ),
+            fontSize: typography.body.fontSizeValue * 1.125,
+            fontWeight: typography.body.fontWeightValue,
+            color: colors.paragraph.firstColor,
+            height: 1.5,
+          ) ??
+          TextStyle(
+            fontFamily: fonts.body,
+            fontSize: typography.body.fontSizeValue * 1.125,
+            fontWeight: typography.body.fontWeightValue,
+            color: colors.paragraph.firstColor,
+            height: 1.5,
+          ),
 
       bodyMedium: bodyFont?.copyWith(
-        fontSize: typography.body.fontSizeValue,
-        fontWeight: typography.body.fontWeightValue,
-        color: colors.paragraph.firstColor,
-        height: 1.5,
-      ) ?? TextStyle(
-        fontFamily: fonts.body,
-        fontSize: typography.body.fontSizeValue,
-        fontWeight: typography.body.fontWeightValue,
-        color: colors.paragraph.firstColor,
-        height: 1.5,
-      ),
+            fontSize: typography.body.fontSizeValue,
+            fontWeight: typography.body.fontWeightValue,
+            color: colors.paragraph.firstColor,
+            height: 1.5,
+          ) ??
+          TextStyle(
+            fontFamily: fonts.body,
+            fontSize: typography.body.fontSizeValue,
+            fontWeight: typography.body.fontWeightValue,
+            color: colors.paragraph.firstColor,
+            height: 1.5,
+          ),
 
       bodySmall: bodyFont?.copyWith(
-        fontSize: typography.body.fontSizeValue * 0.875,
-        fontWeight: typography.body.fontWeightValue,
-        color: colors.paragraph.secondColor,
-        height: 1.5,
-      ) ?? TextStyle(
-        fontFamily: fonts.body,
-        fontSize: typography.body.fontSizeValue * 0.875,
-        fontWeight: typography.body.fontWeightValue,
-        color: colors.paragraph.secondColor,
-        height: 1.5,
-      ),
+            fontSize: typography.body.fontSizeValue * 0.875,
+            fontWeight: typography.body.fontWeightValue,
+            color: colors.paragraph.secondColor,
+            height: 1.5,
+          ) ??
+          TextStyle(
+            fontFamily: fonts.body,
+            fontSize: typography.body.fontSizeValue * 0.875,
+            fontWeight: typography.body.fontWeightValue,
+            color: colors.paragraph.secondColor,
+            height: 1.5,
+          ),
 
       // Label styles
       labelLarge: bodyFont?.copyWith(
-        fontSize: typography.body.fontSizeValue,
-        fontWeight: FontWeight.w600,
-        color: colors.paragraph.firstColor,
-      ) ?? TextStyle(
-        fontFamily: fonts.body,
-        fontSize: typography.body.fontSizeValue,
-        fontWeight: FontWeight.w600,
-        color: colors.paragraph.firstColor,
-      ),
+            fontSize: typography.body.fontSizeValue,
+            fontWeight: FontWeight.w600,
+            color: colors.paragraph.firstColor,
+          ) ??
+          TextStyle(
+            fontFamily: fonts.body,
+            fontSize: typography.body.fontSizeValue,
+            fontWeight: FontWeight.w600,
+            color: colors.paragraph.firstColor,
+          ),
 
       labelMedium: bodyFont?.copyWith(
-        fontSize: typography.body.fontSizeValue * 0.875,
-        fontWeight: FontWeight.w500,
-        color: colors.paragraph.secondColor,
-      ) ?? TextStyle(
-        fontFamily: fonts.body,
-        fontSize: typography.body.fontSizeValue * 0.875,
-        fontWeight: FontWeight.w500,
-        color: colors.paragraph.secondColor,
-      ),
+            fontSize: typography.body.fontSizeValue * 0.875,
+            fontWeight: FontWeight.w500,
+            color: colors.paragraph.secondColor,
+          ) ??
+          TextStyle(
+            fontFamily: fonts.body,
+            fontSize: typography.body.fontSizeValue * 0.875,
+            fontWeight: FontWeight.w500,
+            color: colors.paragraph.secondColor,
+          ),
 
       labelSmall: bodyFont?.copyWith(
-        fontSize: typography.body.fontSizeValue * 0.75,
-        fontWeight: FontWeight.w500,
-        color: colors.paragraph.thirdColor,
-      ) ?? TextStyle(
-        fontFamily: fonts.body,
-        fontSize: typography.body.fontSizeValue * 0.75,
-        fontWeight: FontWeight.w500,
-        color: colors.paragraph.thirdColor,
-      ),
+            fontSize: typography.body.fontSizeValue * 0.75,
+            fontWeight: FontWeight.w500,
+            color: colors.paragraph.thirdColor,
+          ) ??
+          TextStyle(
+            fontFamily: fonts.body,
+            fontSize: typography.body.fontSizeValue * 0.75,
+            fontWeight: FontWeight.w500,
+            color: colors.paragraph.thirdColor,
+          ),
     );
   }
 

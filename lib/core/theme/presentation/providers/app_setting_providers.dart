@@ -1,10 +1,10 @@
-import 'package:cointiply_app/core/theme/domain/usecases/asset_theme_usecase.dart';
+import 'package:gigafaucet/core/theme/domain/usecases/asset_theme_usecase.dart';
 
 import '../../../providers/theme_provider.dart' as theme_provider;
 
-import 'package:cointiply_app/core/theme/data/models/app_settings_model.dart';
-import 'package:cointiply_app/core/theme/domain/usecases/app_settings_usecase.dart';
-import 'package:cointiply_app/core/theme/presentation/providers/app_settings_norifier.dart';
+import 'package:gigafaucet/core/theme/data/models/app_settings_model.dart';
+import 'package:gigafaucet/core/theme/domain/usecases/app_settings_usecase.dart';
+import 'package:gigafaucet/core/theme/presentation/providers/app_settings_norifier.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

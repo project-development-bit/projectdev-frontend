@@ -1,7 +1,7 @@
-import 'package:cointiply_app/core/common/close_square_button.dart';
-import 'package:cointiply_app/core/common/common_loading_widget.dart';
-import 'package:cointiply_app/core/common/common_text.dart';
-import 'package:cointiply_app/core/extensions/context_extensions.dart';
+import 'package:gigafaucet/core/common/close_square_button.dart';
+import 'package:gigafaucet/core/common/common_loading_widget.dart';
+import 'package:gigafaucet/core/common/common_text.dart';
+import 'package:gigafaucet/core/extensions/context_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 

@@ -1,5 +1,5 @@
-import 'package:cointiply_app/features/faucet/data/model/daily_reset_model.dart';
-import 'package:cointiply_app/features/faucet/domain/entity/actual_faucet_status.dart';
+import 'package:gigafaucet/features/faucet/data/model/daily_reset_model.dart';
+import 'package:gigafaucet/features/faucet/domain/entity/actual_faucet_status.dart';
 import 'faucet_streak_model.dart';
 
 class ActualFaucetStatusModel extends ActualFaucetStatus {

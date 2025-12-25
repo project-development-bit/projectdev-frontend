@@ -1,4 +1,4 @@
-import 'package:cointiply_app/core/network/base_dio_client.dart';
+import 'package:gigafaucet/core/network/base_dio_client.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../config/profile_config.dart';

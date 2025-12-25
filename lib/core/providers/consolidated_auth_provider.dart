@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gigafaucet/core/enum/user_role.dart';
 import '../../features/auth/presentation/providers/login_provider.dart';
 import '../../features/auth/presentation/providers/logout_provider.dart';
 import '../../features/auth/presentation/providers/register_provider.dart';
@@ -233,6 +234,36 @@ class AuthActions {
         onSuccess: onSuccess);
   }
 
+  Future<void> googleLogin({
+    required String countryCode,
+    String? accessToken,
+    VoidCallback? onSuccess,
+    Function(String)? onError,
+  }) async {
+    final loginNotifier = _ref.read(loginNotifierProvider.notifier);
+    await loginNotifier.googleSignIn(
+        accessToken: accessToken,
+        countryCode: countryCode,
+        onError: onError,
+        onSuccess: onSuccess);
+  }
+
+  Future<void> googleSignUp({
+    required String countryCode,
+    String? accessToken,
+    VoidCallback? onSuccess,
+    UserRole? role,
+    String? referralCode,
+    Function(String)? onError,
+  }) async {
+    final loginNotifier = _ref.read(loginNotifierProvider.notifier);
+    await loginNotifier.googleSignUp(
+        accessToken: accessToken,
+        countryCode: countryCode,
+        onError: onError,
+        onSuccess: onSuccess);
+  }
+
   /// Logout current user
   Future<void> logout() async {
     final logoutNotifier = _ref.read(logoutNotifierProvider.notifier);
@@ -297,6 +328,7 @@ class AuthActions {
 
   /// Reset all auth states
   void resetAllStates() {
+    debugPrint('🔄 AuthActions: Resetting all auth states');
     _ref.read(loginNotifierProvider.notifier).reset();
     // Note: LogoutNotifier doesn't have a reset method
     _ref.read(recaptchaNotifierProvider.notifier).reset();

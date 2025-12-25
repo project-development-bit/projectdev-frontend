@@ -1,18 +1,19 @@
-import 'package:cointiply_app/core/error/failures.dart';
-import 'package:cointiply_app/core/services/secure_storage_service.dart';
-import 'package:cointiply_app/features/auth/data/repositories/auth_repo_impl.dart';
-import 'package:cointiply_app/features/auth/data/datasources/remote/auth_remote.dart';
-import 'package:cointiply_app/features/auth/data/models/login_request.dart';
-import 'package:cointiply_app/features/auth/data/models/login_response_model.dart';
-import 'package:cointiply_app/features/auth/data/models/user_model.dart';
-import 'package:cointiply_app/features/auth/data/models/auth_tokens_model.dart';
-import 'package:cointiply_app/features/auth/data/models/resend_code_request.dart';
-import 'package:cointiply_app/features/auth/data/models/resend_code_response.dart';
-import 'package:cointiply_app/features/auth/data/models/verify_code_request.dart';
-import 'package:cointiply_app/features/auth/data/models/verify_code_response.dart';
-import 'package:cointiply_app/features/auth/domain/entities/login_response.dart';
-import 'package:cointiply_app/core/enum/user_role.dart';
-import 'package:cointiply_app/features/user_profile/data/enum/user_level.dart';
+import 'package:gigafaucet/core/error/failures.dart';
+import 'package:gigafaucet/core/services/secure_storage_service.dart';
+import 'package:gigafaucet/features/auth/data/datasources/remote/google_auth_remote.dart';
+import 'package:gigafaucet/features/auth/data/repositories/auth_repo_impl.dart';
+import 'package:gigafaucet/features/auth/data/datasources/remote/auth_remote.dart';
+import 'package:gigafaucet/features/auth/data/models/login_request.dart';
+import 'package:gigafaucet/features/auth/data/models/login_response_model.dart';
+import 'package:gigafaucet/features/auth/data/models/user_model.dart';
+import 'package:gigafaucet/features/auth/data/models/auth_tokens_model.dart';
+import 'package:gigafaucet/features/auth/data/models/resend_code_request.dart';
+import 'package:gigafaucet/features/auth/data/models/resend_code_response.dart';
+import 'package:gigafaucet/features/auth/data/models/verify_code_request.dart';
+import 'package:gigafaucet/features/auth/data/models/verify_code_response.dart';
+import 'package:gigafaucet/features/auth/domain/entities/login_response.dart';
+import 'package:gigafaucet/core/enum/user_role.dart';
+import 'package:gigafaucet/features/user_profile/data/enum/user_level.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -21,6 +22,8 @@ import 'package:mocktail/mocktail.dart';
 class MockAuthRemoteDataSource extends Mock implements AuthRemoteDataSource {}
 
 class MockSecureStorageService extends Mock implements SecureStorageService {}
+
+class MockGoogleAuthRemote extends Mock implements GoogleAuthRemote {}
 
 void main() {
   group('AuthRepositoryImpl', () {
@@ -43,8 +46,8 @@ void main() {
     setUp(() {
       mockRemoteDataSource = MockAuthRemoteDataSource();
       mockSecureStorage = MockSecureStorageService();
-      authRepository =
-          AuthRepositoryImpl(mockRemoteDataSource, mockSecureStorage);
+      authRepository = AuthRepositoryImpl(
+          mockRemoteDataSource, mockSecureStorage, MockGoogleAuthRemote());
     });
 
     group('login', () {

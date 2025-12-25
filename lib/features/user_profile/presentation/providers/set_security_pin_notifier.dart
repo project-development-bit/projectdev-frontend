@@ -1,4 +1,4 @@
-import 'package:cointiply_app/features/user_profile/domain/usecases/set_security_pin_usecase.dart';
+import 'package:gigafaucet/features/user_profile/domain/usecases/set_security_pin_usecase.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 enum SetSecurityPinStatus { initial, loading, success, failure }
@@ -44,7 +44,8 @@ class SetSecurityPinNotifier extends StateNotifier<SetSecurityPinState> {
       (failure) {
         state = SetSecurityPinState(
           status: SetSecurityPinStatus.failure,
-          errorMessage: failure.message ?? 'Failed to set security PIN. Please try again.',
+          errorMessage: failure.message ??
+              'Failed to set security PIN. Please try again.',
         );
       },
       (response) {

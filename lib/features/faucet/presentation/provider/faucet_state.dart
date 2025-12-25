@@ -1,4 +1,4 @@
-import 'package:cointiply_app/features/faucet/domain/entity/actual_faucet_status.dart';
+import 'package:gigafaucet/features/faucet/domain/entity/actual_faucet_status.dart';
 
 enum GetFaucetStatusState {
   initial,

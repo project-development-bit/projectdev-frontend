@@ -1,4 +1,4 @@
-import 'package:cointiply_app/features/legal/domain/entities/contact_submission.dart';
+import 'package:gigafaucet/features/legal/domain/entities/contact_submission.dart';
 
 class ContactUsRequest {
   final String name;

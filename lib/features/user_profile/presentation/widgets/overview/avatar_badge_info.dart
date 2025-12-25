@@ -1,7 +1,7 @@
-import 'package:cointiply_app/core/common/common_text.dart';
-import 'package:cointiply_app/core/config/app_local_images.dart';
-import 'package:cointiply_app/core/extensions/context_extensions.dart';
-import 'package:cointiply_app/features/user_profile/presentation/widgets/user_profile_image_widget.dart';
+import 'package:gigafaucet/core/common/common_text.dart';
+import 'package:gigafaucet/core/config/app_local_images.dart';
+import 'package:gigafaucet/core/extensions/context_extensions.dart';
+import 'package:gigafaucet/features/user_profile/presentation/widgets/user_profile_image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 

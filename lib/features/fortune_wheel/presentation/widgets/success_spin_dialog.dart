@@ -1,11 +1,11 @@
 import 'dart:math' as math;
 import 'dart:ui' as ui;
 
-import 'package:cointiply_app/core/common/close_square_button.dart';
-import 'package:cointiply_app/core/common/common_image_widget.dart';
-import 'package:cointiply_app/core/common/common_text.dart';
-import 'package:cointiply_app/core/config/app_local_images.dart';
-import 'package:cointiply_app/core/extensions/context_extensions.dart';
+import 'package:gigafaucet/core/common/close_square_button.dart';
+import 'package:gigafaucet/core/common/common_image_widget.dart';
+import 'package:gigafaucet/core/common/common_text.dart';
+import 'package:gigafaucet/core/config/app_local_images.dart';
+import 'package:gigafaucet/core/extensions/context_extensions.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';

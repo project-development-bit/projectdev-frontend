@@ -1,4 +1,4 @@
-import 'package:cointiply_app/core/error/error_model.dart';
+import 'package:gigafaucet/core/error/error_model.dart';
 import 'package:equatable/equatable.dart';
 
 /// Base class for all failures in the application

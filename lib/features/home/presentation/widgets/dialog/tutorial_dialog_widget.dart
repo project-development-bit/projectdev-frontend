@@ -1,11 +1,11 @@
-import 'package:cointiply_app/core/common/close_square_button.dart';
-import 'package:cointiply_app/core/common/common_text.dart';
-import 'package:cointiply_app/core/config/app_local_images.dart';
-import 'package:cointiply_app/core/extensions/context_extensions.dart';
-import 'package:cointiply_app/core/providers/turnstile_provider.dart';
-import 'package:cointiply_app/core/theme/app_colors.dart';
-import 'package:cointiply_app/core/widgets/cloudflare_turnstille_widgte.dart';
-import 'package:cointiply_app/features/home/presentation/providers/tutorial_provider.dart';
+import 'package:gigafaucet/core/common/close_square_button.dart';
+import 'package:gigafaucet/core/common/common_text.dart';
+import 'package:gigafaucet/core/config/app_local_images.dart';
+import 'package:gigafaucet/core/extensions/context_extensions.dart';
+import 'package:gigafaucet/core/providers/turnstile_provider.dart';
+import 'package:gigafaucet/core/theme/app_colors.dart';
+import 'package:gigafaucet/core/widgets/cloudflare_turnstille_widgte.dart';
+import 'package:gigafaucet/features/home/presentation/providers/tutorial_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

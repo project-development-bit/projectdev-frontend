@@ -1,7 +1,7 @@
-import 'package:cointiply_app/core/core.dart';
-import 'package:cointiply_app/features/auth/presentation/providers/verification_provider.dart';
-import 'package:cointiply_app/features/auth/presentation/widgets/onboarding_background.dart';
-import 'package:cointiply_app/features/auth/presentation/widgets/verification_form_widget.dart';
+import 'package:gigafaucet/core/core.dart';
+import 'package:gigafaucet/features/auth/presentation/providers/verification_provider.dart';
+import 'package:gigafaucet/features/auth/presentation/widgets/onboarding_background.dart';
+import 'package:gigafaucet/features/auth/presentation/widgets/verification_form_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 

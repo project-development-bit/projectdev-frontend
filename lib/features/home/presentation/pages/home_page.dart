@@ -1,8 +1,8 @@
-import 'package:cointiply_app/core/config/app_local_images.dart';
-import 'package:cointiply_app/features/faucet/presentation/provider/faucet_notifier_provider.dart';
-import 'package:cointiply_app/features/home/presentation/widgets/event/home_event_section.dart';
-import 'package:cointiply_app/features/home/presentation/widgets/home_features_section.dart';
-import 'package:cointiply_app/features/user_profile/presentation/providers/current_user_provider.dart';
+import 'package:gigafaucet/core/config/app_local_images.dart';
+import 'package:gigafaucet/features/faucet/presentation/provider/faucet_notifier_provider.dart';
+import 'package:gigafaucet/features/home/presentation/widgets/event/home_event_section.dart';
+import 'package:gigafaucet/features/home/presentation/widgets/home_features_section.dart';
+import 'package:gigafaucet/features/user_profile/presentation/providers/current_user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/extensions/context_extensions.dart';

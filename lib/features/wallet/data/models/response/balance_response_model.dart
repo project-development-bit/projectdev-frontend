@@ -1,6 +1,6 @@
-import 'package:cointiply_app/features/wallet/data/models/response/balance_meta_nfo_model.dart';
-import 'package:cointiply_app/features/wallet/data/models/response/interest_info_model.dart';
-import 'package:cointiply_app/features/wallet/domain/entity/balance.dart';
+import 'package:gigafaucet/features/wallet/data/models/response/balance_meta_nfo_model.dart';
+import 'package:gigafaucet/features/wallet/data/models/response/interest_info_model.dart';
+import 'package:gigafaucet/features/wallet/domain/entity/balance.dart';
 
 class BalanceResponseModel extends BalanceResponse {
   const BalanceResponseModel({

@@ -1,6 +1,6 @@
-import 'package:cointiply_app/core/core.dart';
-import 'package:cointiply_app/features/user_profile/data/models/request/user_update_request.dart';
-import 'package:cointiply_app/features/user_profile/user_profile.dart';
+import 'package:gigafaucet/core/core.dart';
+import 'package:gigafaucet/features/user_profile/data/models/request/user_update_request.dart';
+import 'package:gigafaucet/features/user_profile/user_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

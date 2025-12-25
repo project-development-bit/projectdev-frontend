@@ -1,4 +1,4 @@
-import 'package:cointiply_app/core/services/device_info.dart';
+import 'package:gigafaucet/core/services/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/enum/user_role.dart';
@@ -29,6 +29,13 @@ class RegisterLoading extends RegisterState {
 /// Registration successful
 class RegisterSuccess extends RegisterState {
   const RegisterSuccess({required this.message, required this.email});
+
+  final String message;
+  final String email;
+}
+
+class GoogleRegisterSuccess extends RegisterState {
+  const GoogleRegisterSuccess({required this.message, required this.email});
 
   final String message;
   final String email;

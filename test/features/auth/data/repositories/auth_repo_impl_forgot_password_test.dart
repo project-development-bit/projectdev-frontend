@@ -1,17 +1,20 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:gigafaucet/features/auth/data/datasources/remote/google_auth_remote.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:cointiply_app/core/error/failures.dart';
-import 'package:cointiply_app/core/services/secure_storage_service.dart';
-import 'package:cointiply_app/features/auth/data/repositories/auth_repo_impl.dart';
-import 'package:cointiply_app/features/auth/data/datasources/remote/auth_remote.dart';
-import 'package:cointiply_app/features/auth/data/models/forgot_password_request.dart';
-import 'package:cointiply_app/features/auth/data/models/forgot_password_response.dart';
+import 'package:gigafaucet/core/error/failures.dart';
+import 'package:gigafaucet/core/services/secure_storage_service.dart';
+import 'package:gigafaucet/features/auth/data/repositories/auth_repo_impl.dart';
+import 'package:gigafaucet/features/auth/data/datasources/remote/auth_remote.dart';
+import 'package:gigafaucet/features/auth/data/models/forgot_password_request.dart';
+import 'package:gigafaucet/features/auth/data/models/forgot_password_response.dart';
 
 class MockAuthRemoteDataSource extends Mock implements AuthRemoteDataSource {}
 
 class MockSecureStorageService extends Mock implements SecureStorageService {}
+
+class MockGoogleAuthService extends Mock implements GoogleAuthRemote {}
 
 void main() {
   group('AuthRepositoryImpl - Forgot Password', () {
@@ -26,7 +29,12 @@ void main() {
     setUp(() {
       mockRemoteDataSource = MockAuthRemoteDataSource();
       mockSecureStorage = MockSecureStorageService();
-      repository = AuthRepositoryImpl(mockRemoteDataSource, mockSecureStorage);
+
+      repository = AuthRepositoryImpl(
+        mockRemoteDataSource,
+        mockSecureStorage,
+        MockGoogleAuthService(),
+      );
     });
 
     const testEmail = 'test@example.com';

@@ -13,7 +13,7 @@
 		<key>CFBundleInfoDictionaryVersion</key>
 		<string>6.0</string>
 		<key>CFBundleName</key>
-		<string>cointiply_app</string>
+		<string>com.burgereat.gigafaucet.dev</string>
 		<key>CFBundlePackageType</key>
 		<string>APPL</string>
 		<key>CFBundleShortVersionString</key>
@@ -55,5 +55,21 @@
 		<true/>
 		<key>UIViewControllerBasedStatusBarAppearance</key>
 		<false/>
+		<!-- Correct placement of CFBundleURLTypes -->
+		<key>CFBundleURLTypes</key>
+		<array>
+			<dict>
+				<key>CFBundleURLSchemes</key>
+				<array>
+					<string>com.googleusercontent.apps.645002434672-c3ln8ahjr6qgcuubaj3su6lnt5f8fqap</string> 
+				</array>
+			</dict>
+		</array>
+		<!-- Correct placement of GIDSignIn -->
+		<key>GIDSignIn</key>
+		<dict>
+			<key>ClientID</key>
+			<string>645002434672-c3ln8ahjr6qgcuubaj3su6lnt5f8fqap.apps.googleusercontent.com</string>  
+		</dict>
 	</dict>
 </plist>

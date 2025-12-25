@@ -1,4 +1,4 @@
-import 'package:cointiply_app/features/wallet/domain/entity/withdrawal_option.dart';
+import 'package:gigafaucet/features/wallet/domain/entity/withdrawal_option.dart';
 
 class WithdrawalOptionModel extends WithdrawalOption {
   const WithdrawalOptionModel({

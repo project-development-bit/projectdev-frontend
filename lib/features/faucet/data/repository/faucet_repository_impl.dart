@@ -1,9 +1,9 @@
-import 'package:cointiply_app/core/error/error_model.dart';
-import 'package:cointiply_app/core/error/failures.dart';
-import 'package:cointiply_app/features/faucet/data/datasources/faucet_remote_data_source.dart';
-import 'package:cointiply_app/features/faucet/data/model/actual_faucet_status_model.dart';
-import 'package:cointiply_app/features/faucet/data/request/claim_faucet_request_model.dart';
-import 'package:cointiply_app/features/faucet/domain/repository/faucet_repository.dart';
+import 'package:gigafaucet/core/error/error_model.dart';
+import 'package:gigafaucet/core/error/failures.dart';
+import 'package:gigafaucet/features/faucet/data/datasources/faucet_remote_data_source.dart';
+import 'package:gigafaucet/features/faucet/data/model/actual_faucet_status_model.dart';
+import 'package:gigafaucet/features/faucet/data/request/claim_faucet_request_model.dart';
+import 'package:gigafaucet/features/faucet/domain/repository/faucet_repository.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 
