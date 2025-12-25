@@ -1,3 +1,4 @@
+import 'package:gigafaucet/core/common/common_image_widget.dart';
 import 'package:gigafaucet/core/common/common_text.dart';
 import 'package:gigafaucet/core/common/custom_buttom_widget.dart';
 import 'package:gigafaucet/core/config/app_local_images.dart';
@@ -226,8 +227,8 @@ class HomeLevelAndRewardSection extends StatelessWidget {
           Row(
             spacing: 20.0,
             children: [
-              Image.asset(
-                AppLocalImages.shieldIcon,
+              CommonImage(
+                imageUrl: AppLocalImages.bronze,
                 width: 32,
               ),
               Flexible(
