@@ -473,22 +473,21 @@
     }
   </style>
   <script id="splash-screen-script">
-    // Function to remove splash - will be called from Flutter after fade-in
-    window.removeSplashFromWeb = function () {
-      const splash = document.getElementById("splash");
-      const splashStyle = document.getElementById("splash-screen-style");
+      // Function to remove splash - will be called from Flutter after fade-in
+      window.removeSplashFromWeb = function () {
+        const splash = document.getElementById("splash");
+        const splashStyle = document.getElementById("splash-screen-style");
+        const splashScript = document.getElementById("splash-screen-script");
 
-      if (splash) {
-        splash.style.transition = "opacity 0.3s ease-out";
-        splash.style.opacity = "0";
-        setTimeout(() => {
+        if (splash) {
+          // Immediate removal for smooth transition - Flutter handles the fade
           splash.remove();
           document.getElementById("splash-branding")?.remove();
           splashStyle?.remove();
+          splashScript?.remove();
           document.body.style.background = "transparent";
-        }, 300);
-      }
-    };
+        }
+      };
 
     // Fallback: Remove splash screen after 10 seconds if Flutter doesn't call it
     setTimeout(() => {
@@ -504,8 +503,6 @@
   <!-- Splash Screen -->
   <div id="splash" class="center">
     <div class="web_container">
-      <img class="splash-logo" src="splash_logo.png" alt="splash_logo.png">
-
     </div>
   </div>
   <script>
