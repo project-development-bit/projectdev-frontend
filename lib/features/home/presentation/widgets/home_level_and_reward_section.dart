@@ -1,3 +1,4 @@
+import 'package:gigafaucet/core/common/common_image_widget.dart';
 import 'package:gigafaucet/core/common/common_text.dart';
 import 'package:gigafaucet/core/common/custom_buttom_widget.dart';
 import 'package:gigafaucet/core/config/app_local_images.dart';
@@ -22,7 +23,11 @@ class HomeLevelAndRewardSection extends StatelessWidget {
                 image:
                     AssetImage(AppLocalImages.homeCoinBackgroundSection2Mobile),
               )
-            : null,
+            : DecorationImage(
+                fit: BoxFit.contain,
+                image: AssetImage(
+                    AppLocalImages.homeCoinBackgroundSection2Desktop),
+              ),
       ),
       child: Center(
         child: Container(
@@ -46,7 +51,7 @@ class HomeLevelAndRewardSection extends StatelessWidget {
                 ),
                 SizedBox(height: isSmallSize ? 16 : 42),
                 SizedBox(
-                  height: isSmallSize ? null : 300,
+                  height: isSmallSize ? null : 325,
                   child: Flex(
                     direction: isSmallSize ? Axis.vertical : Axis.horizontal,
                     mainAxisSize: MainAxisSize.min,
@@ -222,8 +227,8 @@ class HomeLevelAndRewardSection extends StatelessWidget {
           Row(
             spacing: 20.0,
             children: [
-              Image.asset(
-                AppLocalImages.shieldIcon,
+              CommonImage(
+                imageUrl: AppLocalImages.bronze,
                 width: 32,
               ),
               Flexible(
