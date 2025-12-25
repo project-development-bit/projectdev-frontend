@@ -399,7 +399,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<LoginResponseModel> facebookLogin(FacebookLoginRequest request) async {
     try {
       final response = await dioClient.post(
-        googleLoginEndpoints,
+        facebookLoginEndpoints,
         data: await request.toJson(),
       );
 

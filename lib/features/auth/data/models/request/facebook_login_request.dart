@@ -55,7 +55,7 @@ class FacebookLoginRequest extends Equatable {
 }
 
 class FacebookRegisterRequest extends Equatable {
-  final String accessToken;
+  final String? accessToken;
   final String? recaptchaToken;
 
   /// Country code for the user's location
@@ -72,7 +72,7 @@ class FacebookRegisterRequest extends Equatable {
   final UserRole role;
 
   const FacebookRegisterRequest({
-    required this.accessToken,
+    this.accessToken,
     this.recaptchaToken,
     required this.countryCode,
     required this.userAgent,

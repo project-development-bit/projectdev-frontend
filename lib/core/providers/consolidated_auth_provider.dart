@@ -278,6 +278,22 @@ class AuthActions {
         onSuccess: onSuccess);
   }
 
+  Future<void> facebookSignUp({
+    required String countryCode,
+    String? accessToken,
+    VoidCallback? onSuccess,
+    UserRole? role,
+    String? referralCode,
+    Function(String)? onError,
+  }) async {
+    final loginNotifier = _ref.read(loginNotifierProvider.notifier);
+    await loginNotifier.facebookSignUp(
+        accessToken: accessToken,
+        countryCode: countryCode,
+        onError: onError,
+        onSuccess: onSuccess);
+  }
+
   /// Logout current user
   Future<void> logout() async {
     final logoutNotifier = _ref.read(logoutNotifierProvider.notifier);

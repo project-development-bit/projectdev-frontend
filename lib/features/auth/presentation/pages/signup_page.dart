@@ -5,9 +5,9 @@ import 'package:gigafaucet/core/theme/app_colors.dart';
 import 'package:gigafaucet/features/auth/presentation/providers/ip_country_state.dart';
 import 'package:gigafaucet/features/auth/presentation/providers/login_provider.dart';
 import 'package:gigafaucet/features/auth/presentation/providers/selected_country_provider.dart';
-import 'package:gigafaucet/features/auth/presentation/widgets/google_signup_buttom.dart';
 import 'package:gigafaucet/features/auth/presentation/widgets/onboarding_background.dart';
 import 'package:gigafaucet/features/auth/presentation/widgets/or_divider_widget.dart';
+import 'package:gigafaucet/features/auth/presentation/widgets/social_signup_butttons.dart';
 import 'package:gigafaucet/features/terms_privacy/presentation/services/terms_privacy_navigation_service.dart';
 import 'package:gigafaucet/features/auth/presentation/providers/ip_country_provider.dart';
 import 'package:gigafaucet/features/user_profile/domain/entities/country.dart';
@@ -502,7 +502,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
               fontSize: 14,
             ),
             OrDividerWidget(),
-            GoogleSignupButton(
+            SocialSignupButtons(
               referralCode: widget.referralCode,
               agreeToTerms: _agreeToTerms,
             ),

@@ -618,7 +618,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
 
   Future<void> facebookSignUp({
     required String countryCode,
-    required String idToken,
+    String? accessToken,
     UserRole role = UserRole.normalUser,
     String? referralCode,
     VoidCallback? onSuccess,
@@ -654,7 +654,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
       }
 
       final loginRequest = FacebookRegisterRequest(
-        accessToken: idToken,
+        accessToken: accessToken,
         role: role,
         referralCode: referralCode,
         countryCode: countryCode,
