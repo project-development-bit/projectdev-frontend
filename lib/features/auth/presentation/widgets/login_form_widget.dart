@@ -1,9 +1,11 @@
+import 'package:flutter/foundation.dart';
 import 'package:gigafaucet/core/common/common_image_widget.dart';
 import 'package:gigafaucet/core/common/custom_buttom_widget.dart';
 import 'package:gigafaucet/core/config/app_local_images.dart';
 import 'package:gigafaucet/core/theme/app_colors.dart';
 import 'package:gigafaucet/core/widgets/cloudflare_turnstille_widgte.dart';
 import 'package:gigafaucet/core/providers/turnstile_provider.dart';
+import 'package:gigafaucet/features/auth/presentation/widgets/login_form/html_login_view.dart';
 import 'package:gigafaucet/features/auth/presentation/widgets/or_divider_widget.dart';
 import 'package:gigafaucet/features/auth/presentation/widgets/remember_me_widget.dart';
 import 'package:gigafaucet/features/auth/presentation/providers/ip_country_provider.dart';
@@ -17,7 +19,6 @@ import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/config/app_constant.dart';
 import '../../../../core/providers/consolidated_auth_provider.dart';
 import '../../../../core/services/secure_storage_service.dart';
-import '../providers/login_provider.dart';
 
 /// Reusable login form widget that can be used in both login page and popup
 class LoginFormWidget extends ConsumerStatefulWidget {
@@ -69,45 +70,6 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
       _emailController.addListener(_handleAutoFillBehavior);
       _passwordController.addListener(_handleAutoFillBehavior);
     });
-
-    // Listen to login state changes
-    ref.listenManual<LoginState>(loginNotifierProvider, (previous, next) async {
-      if (!mounted) return;
-
-      switch (next) {
-        case LoginSuccess():
-          // Call success callback if provided
-
-          // Show success message
-
-          break;
-        case LoginError():
-          // Show error message
-
-          break;
-        default:
-          break;
-      }
-    });
-
-    // ref.listenManual<GoogleIdTokenState>(
-    //   googleIdTokenNotifierProvider,
-    //   (previous, next) {
-    //     if (next.status == GetGoogleIdTokenStatus.loading) {
-    //       debugPrint("Loading Google ID Token...");
-    //     } else if (next.status == GetGoogleIdTokenStatus.success) {
-    //       final idToken = next.token;
-    //       if (idToken != null &&
-    //           next.signInMethod == GoogleSignInMethod.googleSignIn) {
-    //         _handleGoogleLoginWithToken(idToken: idToken);
-    //       }
-    //     } else if (next.status == GetGoogleIdTokenStatus.error) {
-    //       context.showErrorSnackBar(
-    //         message: next.error ?? 'Failed to get Google ID token',
-    //       );
-    //     }
-    //   },
-    // );
   }
 
   @override
@@ -174,71 +136,109 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
     }
   }
 
-  void _handleLogin() async {
-    if (_formKey.currentState!.validate()) {
-      // Check Turnstile verification
-      final turnstileCanAttempt =
-          ref.read(turnstileNotifierProvider(TurnstileActionEnum.login))
-              is TurnstileSuccess;
+  void _handleLoginFromHtml(String email, String password) {
+    String? emailError;
+    String? passwordError;
 
-      if (!turnstileCanAttempt) {
-        final localizations = AppLocalizations.of(context);
-        context.showErrorSnackBar(
-          message: localizations?.translate('turnstile_required') ??
-              'Please complete the security verification',
-        );
-        return;
-      }
-
-      // Get the Turnstile token
-      final turnstileToken = turnstileCanAttempt
-          ? (ref.read(turnstileNotifierProvider(TurnstileActionEnum.login))
-                  as TurnstileSuccess)
-              .token
-          : null;
-
-      if (turnstileToken == null) {
-        final localizations = AppLocalizations.of(context);
-        context.showErrorSnackBar(
-          message: localizations?.translate('turnstile_token_missing') ??
-              'Security verification token is missing. Please try again.',
-        );
-        return;
-      }
-
-      // Use consolidated auth actions for login
-      final authActions = ref.read(authActionsProvider);
-
-      // Reset previous states
-      authActions.resetAllStates();
-      final ipState = ref.read(getIpCountryNotifierProvider);
-
-      await authActions.login(
-          email: _emailController.text.trim(),
-          password: _passwordController.text.trim(),
-          countryCode: ipState.country?.code ?? "Unknown",
-          onSuccess: () async {
-            // Save credentials if remember me is checked
-            await _saveCredentialsIfNeeded();
-
-            widget.onLoginSuccess?.call();
-            // if (mounted) {
-            //   final localizations = AppLocalizations.of(context);
-            //   ScaffoldMessenger.of(context).showSnackBar(
-            //     SnackBar(
-            //       content: Text(localizations?.translate('login_successful') ??
-            //           'Login successful!'),
-            //       backgroundColor: AppColors.success,
-            //     ),
-            //   );
-            // }
-          },
-          onError: (v) {
-            context.showSnackBar(
-                message: v,
-                backgroundColor: Theme.of(context).colorScheme.error);
-          });
+    if (email.isEmpty) {
+      emailError = 'Email is required';
+    } else if (!email.contains('@')) {
+      emailError = 'Invalid email';
     }
+
+    if (password.isEmpty) {
+      passwordError = 'Password is required';
+    } else if (password.length < 6) {
+      passwordError = 'Min 6 characters';
+    }
+
+    // ❌ INVALID → show errors
+    if (emailError != null || passwordError != null) {
+      sendErrorsToHtml(emailError: emailError, passwordError: passwordError);
+      return;
+    }
+
+    // ✅ VALID → clear errors
+    clearErrorsInHtml();
+
+    debugPrint('✅ Login OK → $email / $password');
+    _handleLogin(email: email, password: password);
+
+    // continue login API call here
+  }
+
+  void _handleLogin({String? email, String? password}) async {
+    if (email == null && password == null) {
+      debugPrint('🔐 Handling login for: $email');
+      if (!_formKey.currentState!.validate()) {
+        return;
+      }
+    }
+    // if (_formKey.currentState!.validate()) {
+    // Check Turnstile verification
+    final turnstileCanAttempt =
+        ref.read(turnstileNotifierProvider(TurnstileActionEnum.login))
+            is TurnstileSuccess;
+
+    if (!turnstileCanAttempt) {
+      final localizations = AppLocalizations.of(context);
+      context.showErrorSnackBar(
+        message: localizations?.translate('turnstile_required') ??
+            'Please complete the security verification',
+      );
+      return;
+    }
+
+    // Get the Turnstile token
+    final turnstileToken = turnstileCanAttempt
+        ? (ref.read(turnstileNotifierProvider(TurnstileActionEnum.login))
+                as TurnstileSuccess)
+            .token
+        : null;
+
+    if (turnstileToken == null) {
+      final localizations = AppLocalizations.of(context);
+      context.showErrorSnackBar(
+        message: localizations?.translate('turnstile_token_missing') ??
+            'Security verification token is missing. Please try again.',
+      );
+      return;
+    }
+
+    // Use consolidated auth actions for login
+    final authActions = ref.read(authActionsProvider);
+
+    // Reset previous states
+    authActions.resetAllStates();
+    final ipState = ref.read(getIpCountryNotifierProvider);
+
+    await authActions.login(
+        // email: _emailController.text.trim(),
+        // password: _passwordController.text.trim(),
+        email: email ?? _emailController.text.trim(),
+        password: password ?? _passwordController.text.trim(),
+        countryCode: ipState.country?.code ?? "Unknown",
+        onSuccess: () async {
+          // Save credentials if remember me is checked
+          await _saveCredentialsIfNeeded();
+
+          widget.onLoginSuccess?.call();
+          // if (mounted) {
+          //   final localizations = AppLocalizations.of(context);
+          //   ScaffoldMessenger.of(context).showSnackBar(
+          //     SnackBar(
+          //       content: Text(localizations?.translate('login_successful') ??
+          //           'Login successful!'),
+          //       backgroundColor: AppColors.success,
+          //     ),
+          //   );
+          // }
+        },
+        onError: (v) {
+          context.showSnackBar(
+              message: v, backgroundColor: Theme.of(context).colorScheme.error);
+        });
+    // }
   }
 
   void _handleGoogleLoginWithToken({String? accessToken}) async {
@@ -339,52 +339,66 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
               textAlign: TextAlign.center,
             ),
 
-            const SizedBox(height: 32),
-            // Email Field
-            CommonTextField(
-              fillColor: Color(0xFF1A1A1A),
-              key: const ValueKey('emailField'),
-              controller: _emailController,
-              focusNode: _emailFocusNode,
-              hintText:
-                  localizations?.translate('email_hint') ?? 'Enter your email',
-              labelText: localizations?.translate('email') ?? 'Email',
-              keyboardType: TextInputType.emailAddress,
-              textInputAction: TextInputAction.next,
-              prefixIcon: const Icon(Icons.email_outlined),
-              validator: (value) => TextFieldValidators.email(value, context),
-              onSubmitted: (_) => _passwordFocusNode.requestFocus(),
-              autofillHints: const [
-                AutofillHints.email,
-                AutofillHints.username
-              ],
-            ),
-
-            const SizedBox(height: 16),
-
-            // Password Field
-            CommonTextField(
-              fillColor: Color(0xFF1A1A1A),
-              key: const ValueKey('passwordField'),
-              controller: _passwordController,
-              focusNode: _passwordFocusNode,
-              hintText: localizations?.translate('password_hint') ??
-                  'Enter your password',
-              labelText: localizations?.translate('password') ?? 'Password',
-              obscureText: true,
-              textInputAction: TextInputAction.done,
-              prefixIcon: const Icon(Icons.lock_outlined),
-              validator: (value) => TextFieldValidators.minLength(
-                value,
-                6,
-                context,
-                fieldName: localizations?.translate('password') ?? 'Password',
+            if (kIsWeb)
+              SizedBox(
+                width: 600,
+                height: 200,
+                child: buildEmailPasswordView(
+                  onLogin: (email, password) {
+                    _handleLoginFromHtml(email, password);
+                  },
+                ),
               ),
-              onSubmitted: (_) => _handleLogin(),
-              enableSuggestions: false,
-              autofillHints: const [AutofillHints.password],
-            ),
-            const SizedBox(height: 24),
+
+            if (!kIsWeb) ...[
+              const SizedBox(height: 32),
+
+              // Email Field
+              CommonTextField(
+                fillColor: Color(0xFF1A1A1A),
+                key: const ValueKey('emailField'),
+                controller: _emailController,
+                focusNode: _emailFocusNode,
+                hintText: localizations?.translate('email_hint') ??
+                    'Enter your email',
+                labelText: localizations?.translate('email') ?? 'Email',
+                keyboardType: TextInputType.emailAddress,
+                textInputAction: TextInputAction.next,
+                prefixIcon: const Icon(Icons.email_outlined),
+                validator: (value) => TextFieldValidators.email(value, context),
+                onSubmitted: (_) => _passwordFocusNode.requestFocus(),
+                autofillHints: const [
+                  AutofillHints.email,
+                  AutofillHints.username
+                ],
+              ),
+
+              const SizedBox(height: 16),
+
+              // Password Field
+              CommonTextField(
+                fillColor: Color(0xFF1A1A1A),
+                key: const ValueKey('passwordField'),
+                controller: _passwordController,
+                focusNode: _passwordFocusNode,
+                hintText: localizations?.translate('password_hint') ??
+                    'Enter your password',
+                labelText: localizations?.translate('password') ?? 'Password',
+                obscureText: true,
+                textInputAction: TextInputAction.done,
+                prefixIcon: const Icon(Icons.lock_outlined),
+                validator: (value) => TextFieldValidators.minLength(
+                  value,
+                  6,
+                  context,
+                  fieldName: localizations?.translate('password') ?? 'Password',
+                ),
+                onSubmitted: (_) => _handleLogin(),
+                enableSuggestions: false,
+                autofillHints: const [AutofillHints.password],
+              ),
+              const SizedBox(height: 24),
+            ],
 
             // Remember Me & Forgot Password Row
             if (widget.showRememberMe || widget.onForgotPassword != null)
@@ -403,7 +417,7 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
             // Login Button
             CustomUnderLineButtonWidget(
               title: localizations?.translate('sign_in') ?? 'Sign In',
-              onTap: _handleLogin,
+              onTap: requestLoginDataFromHtml,
               height: 56,
               borderRadius: 12,
               fontSize: 14,

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <!-- <title>Login</title> -->
+
+  <!-- Orbitron font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="login-style.css" />
+</head>
+
+<body>
+  <div class="login-wrapper">
+
+    <!-- EMAIL -->
+    <div class="input-group" id="email-group">
+      <img src="icons/email.svg" class="icon" alt="email" />
+      <input id="email" type="email" placeholder="Email" autocomplete="username" />
+    </div>
+    <div class="error-text" id="email-error"></div>
+    <!-- PASSWORD -->
+    <div class="input-group" id="password-group">
+      <img src="icons/lock.svg" class="icon" alt="lock" />
+      <input id="password" type="password" placeholder="Password" autocomplete="current-password" />
+      <img src="icons/eye-open.svg" class="eye" id="toggleEye" onclick="togglePassword()" alt="toggle password" />
+    </div>
+    <div class="error-text" id="password-error"></div>
+
+  </div>
+
+  <script>
+    function togglePassword() {
+      const input = document.getElementById("password");
+      const eye = document.getElementById("toggleEye");
+
+      if (input.type === "password") {
+        input.type = "text";
+        eye.src = "icons/eye-close.svg";
+      } else {
+        input.type = "password";
+        eye.src = "icons/eye-open.svg";
+      }
+    }
+
+    window.addEventListener("message", function (event) {
+      const data = event.data;
+
+      if (data?.type === "REQUEST_LOGIN_DATA") {
+        window.parent.postMessage(
+          JSON.stringify({
+            type: "LOGIN_DATA",
+            email: document.getElementById("email").value,
+            password: document.getElementById("password").value,
+          }),
+          "*"
+        );
+      }
+
+      if (data?.type === "SHOW_ERRORS") {
+        setError("email", data.emailError);
+        setError("password", data.passwordError);
+      }
+    });
+
+    function setError(field, message) {
+      const group = document.getElementById(`${field}-group`);
+      const error = document.getElementById(`${field}-error`);
+
+      if (message) {
+        group.classList.add("error");
+        error.textContent = message;
+      } else {
+        group.classList.remove("error");
+        error.textContent = "";
+      }
+    }
+  </script>
+</body>
+
+</html>
