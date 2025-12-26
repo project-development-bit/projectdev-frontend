@@ -139,17 +139,12 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
     String? emailError;
     String? passwordError;
 
-    if (email.isEmpty) {
-      emailError = 'Email is required';
-    } else if (!email.contains('@')) {
-      emailError = 'Invalid email';
-    }
-
-    if (password.isEmpty) {
-      passwordError = 'Password is required';
-    } else if (password.length < 6) {
-      passwordError = 'Min 6 characters';
-    }
+    // Validate inputs
+    emailError = TextFieldValidators.email(email, context);
+    passwordError = TextFieldValidators.password(
+      password,
+      context,
+    );
 
     setState(() {
       _hasEmailError = emailError != null;
@@ -360,11 +355,9 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
                 obscureText: true,
                 textInputAction: TextInputAction.done,
                 prefixIcon: const Icon(Icons.lock_outlined),
-                validator: (value) => TextFieldValidators.minLength(
+                validator: (value) => TextFieldValidators.password(
                   value,
-                  6,
                   context,
-                  fieldName: localizations?.translate('password') ?? 'Password',
                 ),
                 onSubmitted: (_) => _handleLogin(),
                 enableSuggestions: false,
