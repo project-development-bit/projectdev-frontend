@@ -3,12 +3,11 @@
 
 <head>
   <meta charset="UTF-8" />
-  <!-- <title>Login</title> -->
 
   <!-- Orbitron font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="login-style.css" />
 </head>
@@ -22,62 +21,96 @@
       <input id="email" type="email" placeholder="Email" autocomplete="username" />
     </div>
     <div class="error-text" id="email-error"></div>
+
     <!-- PASSWORD -->
     <div class="input-group" id="password-group">
       <img src="icons/lock.svg" class="icon" alt="lock" />
       <input id="password" type="password" placeholder="Password" autocomplete="current-password" />
-      <img src="icons/eye-open.svg" class="eye" id="toggleEye" onclick="togglePassword()" alt="toggle password" />
+      <img src="icons/eye-open.svg" class="eye" id="toggleEye" alt="toggle password" />
     </div>
     <div class="error-text" id="password-error"></div>
 
   </div>
 
   <script>
-    function togglePassword() {
-      const input = document.getElementById("password");
-      const eye = document.getElementById("toggleEye");
+    document.addEventListener("DOMContentLoaded", () => {
+      const emailInput = document.getElementById("email");
+      const passwordInput = document.getElementById("password");
+      const toggleEye = document.getElementById("toggleEye");
 
-      if (input.type === "password") {
-        input.type = "text";
-        eye.src = "icons/eye-close.svg";
-      } else {
-        input.type = "password";
-        eye.src = "icons/eye-open.svg";
-      }
-    }
+      // Autofocus email
+      emailInput.focus();
 
-    window.addEventListener("message", function (event) {
-      const data = event.data;
+      // Enter on email → focus password
+      emailInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          passwordInput.focus();
+        }
+      });
 
-      if (data?.type === "REQUEST_LOGIN_DATA") {
+      // Enter on password → submit to Flutter
+      passwordInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          submitLogin();
+        }
+      });
+
+      // Toggle password visibility
+      toggleEye.addEventListener("click", () => {
+        if (passwordInput.type === "password") {
+          passwordInput.type = "text";
+          toggleEye.src = "icons/eye-close.svg";
+        } else {
+          passwordInput.type = "password";
+          toggleEye.src = "icons/eye-open.svg";
+        }
+      });
+
+      // Receive messages from Flutter
+      window.addEventListener("message", (event) => {
+        const data = event.data;
+
+        if (data?.type === "REQUEST_LOGIN_DATA") {
+          submitLogin();
+        }
+
+        if (data?.type === "SHOW_ERRORS") {
+          setError("email", data.emailError);
+          setError("password", data.passwordError);
+        }
+
+        if (data?.type === "CLEAR_ERRORS") {
+          setError("email", null);
+          setError("password", null);
+        }
+      });
+
+      function submitLogin() {
         window.parent.postMessage(
           JSON.stringify({
             type: "LOGIN_DATA",
-            email: document.getElementById("email").value,
-            password: document.getElementById("password").value,
+            email: emailInput.value,
+            password: passwordInput.value,
           }),
           "*"
         );
       }
 
-      if (data?.type === "SHOW_ERRORS") {
-        setError("email", data.emailError);
-        setError("password", data.passwordError);
+      function setError(field, message) {
+        const group = document.getElementById(`${field}-group`);
+        const error = document.getElementById(`${field}-error`);
+
+        if (message) {
+          group.classList.add("error");
+          error.textContent = message;
+        } else {
+          group.classList.remove("error");
+          error.textContent = "";
+        }
       }
     });
-
-    function setError(field, message) {
-      const group = document.getElementById(`${field}-group`);
-      const error = document.getElementById(`${field}-error`);
-
-      if (message) {
-        group.classList.add("error");
-        error.textContent = message;
-      } else {
-        group.classList.remove("error");
-        error.textContent = "";
-      }
-    }
   </script>
 </body>
 
