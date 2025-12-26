@@ -28,6 +28,26 @@ html_content = html_content.replace(
     f"background-image: url('data:image/png;base64,{splash_mobile_base64}');"
 )
 
+# Also replace already-embedded base64 (useful when index.html was previously patched)
+pattern = re.compile(
+    r"background-image:\s*url\('data:image/png;base64,([A-Za-z0-9+/=]{1000,})'\);"
+)
+
+match_index = 0
+
+def _replace_embedded(match: re.Match[str]) -> str:
+    global match_index
+    replacement = splash_base64 if match_index == 0 else splash_mobile_base64
+    match_index += 1
+    return f"background-image: url('data:image/png;base64,{replacement}');"
+
+html_content, replaced = pattern.subn(_replace_embedded, html_content)
+
+if replaced not in (0, 2):
+    print(
+        f"⚠️ Warning: expected to replace 0 or 2 embedded base64 splash images, but replaced {replaced}."
+    )
+
 # Write updated file
 with open('index.html', 'w') as f:
     f.write(html_content)
