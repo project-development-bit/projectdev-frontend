@@ -119,6 +119,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
           message:
               'Security verification required. Please complete the verification and try again.',
         );
+        _refreshTurnstileForRetry();
         return;
       }
 
@@ -262,6 +263,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
           message:
               'Security verification required. Please complete the verification and try again.',
         );
+        _refreshTurnstileForRetry();
         return;
       }
 
@@ -290,6 +292,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
                 failure.toString().contains('connection'),
             errorModel: failure.errorModel,
           );
+          _refreshTurnstileForRetry();
           onError?.call(failure.message ?? 'Login failed');
           debugPrint('🔄 State set to LoginError');
         },
@@ -352,6 +355,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
             ? 'Google Login timeout: Please check your connection and try again'
             : 'An unexpected error occurred during Google login. Please try again.',
       );
+      _refreshTurnstileForRetry();
       debugPrint('🔄 State set to Google LoginError (catch block)');
     }
 
@@ -391,6 +395,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
           message:
               'Security verification required. Please complete the verification and try again.',
         );
+        _refreshTurnstileForRetry();
         return;
       }
 
@@ -423,6 +428,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
             errorModel: failure.errorModel,
           );
           onError?.call(failure.message ?? 'Google sign-up failed');
+          _refreshTurnstileForRetry();
           debugPrint('🔄 State set to GoogleSignUpError');
         },
         (loginResponse) async {
@@ -483,6 +489,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
             ? 'Google sign-up timeout: Please check your connection and try again'
             : 'An unexpected error occurred during Google sign-up. Please try again.',
       );
+      _refreshTurnstileForRetry();
       debugPrint('🔄 State set to GoogleSignUpError (catch block)');
     }
 
@@ -521,6 +528,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
           message:
               'Security verification required. Please complete the verification and try again.',
         );
+        _refreshTurnstileForRetry();
         return;
       }
 
@@ -549,6 +557,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
             errorModel: failure.errorModel,
           );
           onError?.call(failure.message ?? 'Login failed');
+          _refreshTurnstileForRetry();
           debugPrint('🔄 State set to LoginError');
         },
         (loginResponse) async {
@@ -610,6 +619,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
             ? 'Facebook Login timeout: Please check your connection and try again'
             : 'An unexpected error occurred during Facebook login. Please try again.',
       );
+      _refreshTurnstileForRetry();
       debugPrint('🔄 State set to Facebook LoginError (catch block)');
     }
 
@@ -651,6 +661,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
           message:
               'Security verification required. Please complete the verification and try again.',
         );
+        _refreshTurnstileForRetry();
         return;
       }
 
@@ -683,6 +694,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
             errorModel: failure.errorModel,
           );
           onError?.call(failure.message ?? 'Facebook sign-up failed');
+          _refreshTurnstileForRetry();
           debugPrint('🔄 State set to FacebookSignUpError');
         },
         (loginResponse) async {
@@ -743,6 +755,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
             ? 'Google sign-up timeout: Please check your connection and try again'
             : 'An unexpected error occurred during Google sign-up. Please try again.',
       );
+      _refreshTurnstileForRetry();
       debugPrint('🔄 State set to GoogleSignUpError (catch block)');
     }
 

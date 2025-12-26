@@ -7,8 +7,7 @@ import 'package:googleapis_auth/auth_browser.dart';
 class GoogleAuthService {
   final String _clientId = FlavorManager.currentConfig.googleClientId;
 
-  final callbackUrlScheme =
-      'com.googleusercontent.apps.645002434672-nji58g0s1sdqfpu679h3h7cc3v9diaue';
+  final callbackUrlScheme = FlavorManager.currentConfig.googleCallbackUrlScheme;
   final scopes = [
     "openid",
     "https://www.googleapis.com/auth/userinfo.profile",
@@ -23,6 +22,7 @@ class GoogleAuthService {
     }
 
     try {
+      debugPrint('Testing Google Sign-In: client Id: $_clientId');
       final credentials = await requestAccessCredentials(
         clientId: _clientId,
         scopes: scopes,
