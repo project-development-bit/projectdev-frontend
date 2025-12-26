@@ -2,9 +2,9 @@ import 'package:gigafaucet/features/auth/presentation/widgets/internal_verificat
 import 'package:gigafaucet/features/home/presentation/providers/tutorial_provider.dart';
 import 'package:gigafaucet/features/home/presentation/widgets/dialog/tutorial_dialog_widget.dart';
 import 'package:gigafaucet/core/providers/auth_provider.dart';
-import 'package:gigafaucet/features/auth/presentation/providers/login_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:gigafaucet/features/user_profile/presentation/providers/current_user_provider.dart';
 
 class TutorialOverlay extends ConsumerStatefulWidget {
   final Widget child;
@@ -21,12 +21,13 @@ class _TutorialOverlayState extends ConsumerState<TutorialOverlay> {
     final authState = ref.watch(authProvider);
 
     final isVerified = ref.watch(internalVerificationProvider);
-    final currentUserState = ref.watch(loggedInUserProvider);
+    final currentUserState = ref.watch(currentUserProvider);
     debugPrint(
-        'Tutorial Overlay - shown: $tutorialShown | !auth: ${!authState.isAuthenticated} showOnboarding : ${currentUserState != null ? !currentUserState.shouldShowOnboarding : 'N/A'}');
+        'Tutorial Overlay - shown: $tutorialShown | !auth: ${!authState.isAuthenticated} showOnboarding : ${currentUserState.user != null ? !currentUserState.user!.shouldShowOnboarding : 'N/A'} isVerified: ${!isVerified} overAll: ${tutorialShown || !authState.isAuthenticated || (currentUserState.user != null && !currentUserState.user!.shouldShowOnboarding) || !isVerified}');
     if (tutorialShown ||
         !authState.isAuthenticated ||
-        (currentUserState != null && !currentUserState.shouldShowOnboarding) ||
+        (currentUserState.user != null &&
+            !currentUserState.user!.shouldShowOnboarding) ||
         !isVerified) {
       return widget.child;
     }

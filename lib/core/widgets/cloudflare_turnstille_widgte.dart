@@ -372,6 +372,7 @@ class _CloudflareTurnstileWidgetState
     switch (state) {
       case TurnstileLoading():
         return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const SizedBox(
               width: 22,
@@ -389,6 +390,7 @@ class _CloudflareTurnstileWidgetState
 
       case TurnstileSuccess():
         return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Icon(Icons.check_circle, size: 22, color: AppColors.success),
             const SizedBox(width: 6),
@@ -402,6 +404,7 @@ class _CloudflareTurnstileWidgetState
 
       case TurnstileError(message: final message):
         return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(Icons.error, size: 22, color: colorScheme.error),
             const SizedBox(width: 6),
@@ -416,6 +419,7 @@ class _CloudflareTurnstileWidgetState
 
       case TurnstileExpired():
         return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(Icons.access_time, size: 16, color: colorScheme.primary),
             const SizedBox(width: 8),
@@ -428,6 +432,7 @@ class _CloudflareTurnstileWidgetState
 
       default:
         return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(Icons.security, size: 16, color: AppColors.info),
             const SizedBox(width: 8),
