@@ -79,8 +79,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
   void _afterLoginSuccess() {
     GoRouter.of(context).go(AppRoutes.home);
-    ref.read(getProfileNotifierProvider.notifier).fetchProfile();
-    ref.read(currentUserProvider.notifier).getCurrentUser();
   }
 
   void _handleForgotPassword() {

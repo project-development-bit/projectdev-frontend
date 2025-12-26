@@ -12,8 +12,6 @@ import 'package:gigafaucet/features/auth/presentation/providers/ip_country_provi
 import 'package:gigafaucet/features/auth/presentation/providers/login_provider.dart';
 import 'package:gigafaucet/features/auth/presentation/providers/selected_country_provider.dart';
 import 'package:gigafaucet/features/localization/data/helpers/app_localizations.dart';
-import 'package:gigafaucet/features/user_profile/presentation/providers/current_user_provider.dart';
-import 'package:gigafaucet/features/user_profile/presentation/providers/get_profile_notifier.dart';
 import 'package:gigafaucet/routing/app_router.dart';
 import 'package:go_router/go_router.dart';
 
@@ -110,8 +108,6 @@ class _SocialSignupButtonsState extends ConsumerState<SocialSignupButtons> {
 
   void _afterLoginSuccess() {
     GoRouter.of(context).go(AppRoutes.home);
-    ref.read(getProfileNotifierProvider.notifier).fetchProfile();
-    ref.read(currentUserProvider.notifier).getCurrentUser();
   }
 
   Future<void> _handleGoogleSignUp({String? accessToken}) async {
