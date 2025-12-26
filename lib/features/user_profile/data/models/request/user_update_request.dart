@@ -16,7 +16,7 @@ class UserUpdateRequest extends Equatable {
   final bool? notificationsEnabled;
   final bool? showStatsEnabled;
   final bool? anonymousInContests;
-  final bool? securityPinEnabled;
+  final bool? securityPinRequired;
   final bool? interestEnable;
 
   const UserUpdateRequest({
@@ -34,7 +34,7 @@ class UserUpdateRequest extends Equatable {
     this.notificationsEnabled,
     this.showStatsEnabled,
     this.anonymousInContests,
-    this.securityPinEnabled,
+    this.securityPinRequired,
     this.interestEnable,
   });
 
@@ -55,7 +55,7 @@ class UserUpdateRequest extends Equatable {
         notificationsEnabled: json['notifications_enabled'] as bool?,
         showStatsEnabled: json['show_stats_enabled'] as bool?,
         anonymousInContests: json['anonymous_in_contests'] as bool?,
-        securityPinEnabled: json['security_pin_enabled'] as bool?,
+        securityPinRequired: json['security_pin_enabled'] as bool?,
         interestEnable: json['interest_enable'] as bool?);
   }
 
@@ -76,8 +76,8 @@ class UserUpdateRequest extends Equatable {
           "show_stats_enabled": (showStatsEnabled ?? false) ? 1 : 0,
         if (anonymousInContests != null)
           "anonymous_in_contests": (anonymousInContests ?? false) ? 1 : 0,
-        if (securityPinEnabled != null)
-          "security_pin_enabled": securityPinEnabled,
+        if (securityPinRequired != null)
+          "security_pin_enabled": securityPinRequired,
         if (interestEnable != null) "interest_enable": interestEnable,
       };
 
@@ -96,7 +96,7 @@ class UserUpdateRequest extends Equatable {
     bool? notificationsEnabled,
     bool? showStatsEnabled,
     bool? anonymousInContests,
-    bool? securityPinEnabled,
+    bool? securityPinRequired,
     bool? interestEnable,
   }) {
     return UserUpdateRequest(
@@ -113,7 +113,7 @@ class UserUpdateRequest extends Equatable {
       notificationsEnabled: notificationsEnabled ?? this.notificationsEnabled,
       showStatsEnabled: showStatsEnabled ?? this.showStatsEnabled,
       anonymousInContests: anonymousInContests ?? this.anonymousInContests,
-      securityPinEnabled: securityPinEnabled ?? this.securityPinEnabled,
+      securityPinRequired: securityPinRequired ?? this.securityPinRequired,
       interestEnable: interestEnable ?? this.interestEnable,
     );
   }
@@ -132,7 +132,7 @@ class UserUpdateRequest extends Equatable {
         notificationsEnabled,
         showStatsEnabled,
         anonymousInContests,
-        securityPinEnabled,
+        securityPinRequired,
         interestEnable,
       ];
 }

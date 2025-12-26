@@ -1,10 +1,14 @@
 import 'package:gigafaucet/core/config/api_endpoints.dart';
+import 'package:gigafaucet/core/error/failures.dart';
 import 'package:gigafaucet/core/network/base_dio_client.dart';
 import 'package:gigafaucet/features/auth/data/models/register_request.dart';
 import 'package:gigafaucet/features/auth/data/models/login_request.dart';
 import 'package:gigafaucet/features/auth/data/models/login_response_model.dart';
 import 'package:gigafaucet/features/auth/data/models/request/google_login_request.dart';
 import 'package:gigafaucet/features/auth/data/models/request/google_register_request.dart';
+import 'package:gigafaucet/features/auth/data/models/request/verify_security_pin_request_model.dart';
+import 'package:gigafaucet/features/auth/data/models/response/set_security_pin_response_model.dart';
+import 'package:gigafaucet/features/auth/data/models/response/verify_security_pin_response_model.dart';
 import 'package:gigafaucet/features/auth/data/models/user_model.dart';
 import 'package:gigafaucet/features/auth/data/models/resend_code_request.dart';
 import 'package:gigafaucet/features/auth/data/models/resend_code_response.dart';
@@ -29,6 +33,7 @@ import 'package:gigafaucet/features/auth/data/models/reset_password_request.dart
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gigafaucet/features/auth/data/models/request/set_security_pin_request_model.dart';
 
 /// Provider for the authentication remote data source
 final authRemoteDataSourceProvider = Provider<AuthRemoteDataSource>(
@@ -87,6 +92,16 @@ abstract class AuthRemoteDataSource {
 
   /// Disable 2FA for the authenticated user
   Future<Disable2FAResponse> disable2FA(Disable2FARequest request);
+
+  /// Set or update security PIN
+  Future<SetSecurityPinResponseModel> setSecurityPin({
+    required int securityPin,
+    required bool enable,
+  });
+
+  Future<VerifySecurityPinResponseModel> verifySecurityPin({
+    required int securityPin,
+  });
 }
 
 /// Implementation of [AuthRemoteDataSource] that handles HTTP requests
@@ -805,6 +820,85 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     } catch (e) {
       // Handle any other unexpected exceptions
       throw Exception('Unexpected error during verification: $e');
+    }
+  }
+
+  @override
+  Future<SetSecurityPinResponseModel> setSecurityPin({
+    required int securityPin,
+    required bool enable,
+  }) async {
+    try {
+      debugPrint('🔐 Setting security PIN (enable: $enable)');
+
+      final requestModel = SetSecurityPinRequestModel(
+        securityPin: securityPin,
+        enable: enable,
+      );
+
+      final response = await dioClient.post(
+        '/users/security-pin',
+        data: requestModel.toJson(),
+      );
+
+      debugPrint('✅ Security PIN set successfully: ${response.statusCode}');
+
+      if ((response.statusCode ?? 0) >= 200 &&
+          (response.statusCode ?? 0) < 300) {
+        return SetSecurityPinResponseModel.fromJson(
+            response.data as Map<String, dynamic>);
+      } else {
+        final message = response.data is Map ? response.data['message'] : null;
+        throw ServerFailure(message: message ?? 'Failed to set security PIN');
+      }
+    } on DioException catch (e) {
+      debugPrint('❌ Set security PIN DioException: ${e.message}');
+      debugPrint('❌ Response status: ${e.response?.statusCode}');
+      debugPrint('❌ Response data: ${e.response?.data}');
+
+      final message = e.response?.data?['message'] ?? e.message;
+      throw ServerFailure(message: message ?? 'Failed to set security PIN');
+    } catch (e) {
+      debugPrint('❌ Unexpected error setting security PIN: $e');
+      throw ServerFailure(message: 'Unexpected error setting security PIN: $e');
+    }
+  }
+
+  @override
+  Future<VerifySecurityPinResponseModel> verifySecurityPin({
+    required int securityPin,
+  }) async {
+    try {
+      final requestModel = VerifySecurityPinRequestModel(
+        securityPin: securityPin,
+      );
+
+      final response = await dioClient.post(
+        '/users/verify-security-pin',
+        data: requestModel.toJson(),
+      );
+
+      debugPrint('✅ Security PIN Verify successfully: ${response.statusCode}');
+
+      if ((response.statusCode ?? 0) >= 200 &&
+          (response.statusCode ?? 0) < 300) {
+        return VerifySecurityPinResponseModel.fromJson(
+            response.data as Map<String, dynamic>);
+      } else {
+        final message = response.data is Map ? response.data['message'] : null;
+        throw ServerFailure(message: message ?? 'Failed to set security PIN');
+      }
+    } on DioException catch (e) {
+      debugPrint('❌ Verify security PIN DioException: ${e.message}');
+      debugPrint('❌ Response status: ${e.response?.statusCode}');
+      debugPrint('❌ Response data: ${e.response?.data}');
+
+      final message = e.response?.data?['message'] ?? e.message;
+      throw ServerFailure(message: message ?? 'Failed to set security PIN');
+    } catch (e) {
+      debugPrint('❌ Unexpected error setting Verify security PIN: $e');
+      throw ServerFailure(
+          message: 'Unexpected error Verify       setting security PIN: $e');
     }
   }
 }

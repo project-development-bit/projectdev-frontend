@@ -7,6 +7,8 @@ import 'package:gigafaucet/features/auth/data/models/verify_code_forgot_password
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gigafaucet/features/auth/domain/entities/set_security_pin_result.dart';
+import 'package:gigafaucet/features/auth/domain/entities/verify_security_pin_result.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/services/secure_storage_service.dart';
 import '../../domain/repositories/auth_repository.dart';
@@ -553,5 +555,95 @@ class AuthRepositoryImpl implements AuthRepository {
   /// Helper: Centralizes cleanup logic
   Future<void> _handleErrorCleanup() async {
     await googleAuthRemote.signOut();
+  }
+
+  @override
+  Future<Either<Failure, SetSecurityPinResult>> setSecurityPin({
+    required int securityPin,
+    required bool enable,
+  }) async {
+    try {
+      debugPrint('🔄 Repository: Setting security PIN (enable: $enable)...');
+      final responseModel = await remoteDataSource.setSecurityPin(
+        securityPin: securityPin,
+        enable: enable,
+      );
+
+      final result = SetSecurityPinResult(
+        success: responseModel.success,
+        message: responseModel.message,
+        securityPinRequired: responseModel.securityPinRequired,
+      );
+
+      return Right(result);
+    } on ServerFailure catch (e) {
+      debugPrint('❌ Repository: ServerFailure - ${e.message}');
+      return Left(e);
+    } on DioException catch (e) {
+      debugPrint('❌ Repository: DioException - ${e.message}');
+      ErrorModel? errorModel;
+      if (e.response?.data != null) {
+        errorModel = ErrorModel.fromJson(e.response!.data);
+      }
+      return Left(ServerFailure(
+        message: e.response?.data?['message'] ??
+            e.message ??
+            'Failed to set security PIN',
+        statusCode: e.response?.statusCode,
+        errorModel: errorModel,
+      ));
+    } catch (e) {
+      debugPrint('❌ Repository: Unexpected error - $e');
+      String errorMessage = 'Failed to set security PIN';
+      if (e is FormatException) {
+        errorMessage = 'Invalid response format from server';
+      } else if (e is TypeError) {
+        errorMessage = 'Data type error in server response';
+      }
+      return Left(ServerFailure(message: errorMessage));
+    }
+  }
+
+  @override
+  Future<Either<Failure, VerifySecurityPinResult>> verifySecurityPin({
+    required int securityPin,
+  }) async {
+    try {
+      debugPrint('🔄 Repository: Setting security PIN Verify');
+      final responseModel = await remoteDataSource.verifySecurityPin(
+        securityPin: securityPin,
+      );
+      final result = VerifySecurityPinResult(
+        success: responseModel.success,
+        message: responseModel.message,
+        verified: responseModel.verified,
+      );
+      return Right(result);
+    } on ServerFailure catch (e) {
+      debugPrint('❌ Repository: ServerFailure - ${e.message}');
+      return Left(e);
+    } on DioException catch (e) {
+      debugPrint('❌ Repository: DioException - ${e.message}');
+      ErrorModel? errorModel;
+      if (e.response?.data != null) {
+        errorModel = ErrorModel.fromJson(e.response!.data);
+      }
+      return Left(ServerFailure(
+        message: e.response?.data?['message'] ??
+            e.message ??
+            'Failed to Verify security PIN',
+        statusCode: e.response?.statusCode,
+        errorModel: errorModel,
+      ));
+    } catch (e) {
+      debugPrint('❌ Repository: Unexpected error - $e');
+      String errorMessage = 'Failed to Verify security PIN';
+      if (e is FormatException) {
+        errorMessage = 'Invalid response format from server';
+      } else if (e is TypeError) {
+        errorMessage = 'Data type error in server response';
+      }
+      return Left(ServerFailure(message: errorMessage));
+    }
   }
 }

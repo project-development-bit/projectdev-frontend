@@ -3,6 +3,8 @@ import 'package:gigafaucet/features/auth/data/models/request/google_login_reques
 import 'package:gigafaucet/features/auth/data/models/request/google_register_request.dart';
 import 'package:gigafaucet/features/auth/data/models/verify_code_forgot_password_response.dart';
 import 'package:dartz/dartz.dart';
+import 'package:gigafaucet/features/auth/domain/entities/set_security_pin_result.dart';
+import 'package:gigafaucet/features/auth/domain/entities/verify_security_pin_result.dart';
 import '../../../../core/error/failures.dart';
 import '../entities/login_response.dart';
 import '../entities/user.dart' as auth_entities;
@@ -104,4 +106,18 @@ abstract class AuthRepository {
       GoogleRegisterRequest request);
 
   Future<Either<Failure, String?>> getGooglePlatformSpecificIdToken();
+
+  /// Set or update security PIN
+  ///
+  /// [securityPin] - The 4-digit security PIN
+  /// [enable] - True to enable, false to disable
+  /// Returns [SetSecurityPinResult] on success or [Failure] on error
+  Future<Either<Failure, SetSecurityPinResult>> setSecurityPin({
+    required int securityPin,
+    required bool enable,
+  });
+
+  Future<Either<Failure, VerifySecurityPinResult>> verifySecurityPin({
+    required int securityPin,
+  });
 }
