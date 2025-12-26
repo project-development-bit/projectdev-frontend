@@ -73,6 +73,7 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
 
   @override
   void dispose() {
+    disposeHtmlLoginRegistry();
     _emailController.dispose();
     _passwordController.dispose();
     _emailFocusNode.dispose();
@@ -139,6 +140,11 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
   }
 
   void _handleLoginFromHtml(String email, String password) {
+    if (!mounted) {
+      debugPrint('⚠️ Login callback ignored — widget unmounted');
+      return;
+    }
+
     String? emailError;
     String? passwordError;
 
@@ -190,6 +196,7 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
 
     if (!turnstileCanAttempt) {
       final localizations = AppLocalizations.of(context);
+
       context.showErrorSnackBar(
         message: localizations?.translate('turnstile_required') ??
             'Please complete the security verification',

@@ -10,4 +10,5 @@ class HtmlLoginRegistry {
   static void showErrors({String? emailError, String? passwordError}) {}
 
   static void clearErrors() {}
+  static void dispose() {}
 }

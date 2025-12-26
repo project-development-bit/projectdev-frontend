@@ -21,3 +21,5 @@ void sendErrorsToHtml({String? emailError, String? passwordError}) =>
 void clearErrorsInHtml() => HtmlLoginRegistry.clearErrors();
 
 void restoreDataToHtml() => HtmlLoginRegistry.restore();
+
+void disposeHtmlLoginRegistry() => HtmlLoginRegistry.dispose();

@@ -4,6 +4,8 @@ import 'dart:html' as html;
 import 'dart:ui_web' as ui;
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
+
 late html.IFrameElement _iframe;
 
 class HtmlLoginRegistry {
@@ -15,7 +17,11 @@ class HtmlLoginRegistry {
   static void init({
     required void Function(String email, String password) onLogin,
   }) {
-    if (_initialized) return;
+    debugPrint('Testing HtmlLoginRegistry : Initializing for web.');
+    if (_initialized) {
+      debugPrint('Testing HtmlLoginRegistry :  already initialized.');
+      return;
+    }
     _initialized = true;
 
     ui.platformViewRegistry.registerViewFactory('html-login', (int viewId) {
@@ -86,5 +92,10 @@ class HtmlLoginRegistry {
       jsonEncode({'type': 'CLEAR_ERRORS'}),
       '*',
     );
+  }
+
+  static void dispose() {
+    debugPrint("Testing HtmlLoginRegistry : Disposing HtmlLoginRegistry.");
+    _initialized = false;
   }
 }
