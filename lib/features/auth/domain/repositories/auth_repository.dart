@@ -1,4 +1,5 @@
 import 'package:gigafaucet/features/auth/data/models/login_response_model.dart';
+import 'package:gigafaucet/features/auth/data/models/request/facebook_login_request.dart';
 import 'package:gigafaucet/features/auth/data/models/request/google_login_request.dart';
 import 'package:gigafaucet/features/auth/data/models/request/google_register_request.dart';
 import 'package:gigafaucet/features/auth/data/models/verify_code_forgot_password_response.dart';
@@ -104,4 +105,9 @@ abstract class AuthRepository {
       GoogleRegisterRequest request);
 
   Future<Either<Failure, String?>> getGooglePlatformSpecificIdToken();
+
+  Future<Either<Failure, LoginResponseModel>> facebookRegister(
+      FacebookRegisterRequest request);
+  Future<Either<Failure, LoginResponseModel>> facebookLogin(
+      FacebookLoginRequest request);
 }
