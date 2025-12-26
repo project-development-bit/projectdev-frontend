@@ -372,7 +372,7 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
                   height: _htmlLoginHeight,
                   child: buildEmailPasswordView(
                     onLogin: (email, password) {
-                      print('🌐 Web login requested: $email');
+                      debugPrint('🌐 Web login requested: $email');
                       _handleLoginFromHtml(email, password);
                     },
                   ),
