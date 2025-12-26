@@ -5,6 +5,7 @@ import 'package:gigafaucet/core/common/dialog_bg_widget.dart';
 import 'package:gigafaucet/core/extensions/extensions.dart';
 import 'package:gigafaucet/features/auth/presentation/providers/security_pin/security_pin_providers.dart';
 import 'package:gigafaucet/features/auth/presentation/providers/security_pin/set_security_pin_notifier.dart';
+import 'package:gigafaucet/features/user_profile/presentation/providers/current_user_provider.dart';
 import 'package:gigafaucet/features/user_profile/presentation/providers/get_profile_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -59,6 +60,7 @@ class _SecurityPinDialogState extends ConsumerState<EnableSecurityPinDialog> {
             ref
                 .read(getProfileNotifierProvider.notifier)
                 .fetchProfile(isLoading: false);
+            ref.read(currentUserProvider.notifier).getCurrentUser();
 
             // Close dialog
 
