@@ -3,12 +3,13 @@
 
 <head>
   <meta charset="UTF-8" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="login-style.css" />
 </head>
-
 
 <body>
   <div class="login-wrapper">
@@ -18,8 +19,8 @@
       <input id="email" type="email" placeholder="Email" autocomplete="username" />
     </div>
     <div class="error-text" id="email-error"></div>
-    <div style="padding: 0 0 16px 0;">
-    </div>
+
+    <div class="spacer"></div>
 
     <!-- PASSWORD -->
     <div class="input-group" id="password-group">
@@ -28,103 +29,136 @@
       <img src="icons/eye-open.svg" class="eye" id="toggleEye" alt="toggle password" />
     </div>
     <div class="error-text" id="password-error"></div>
-
   </div>
 
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const emailInput = document.getElementById("email");
-      const passwordInput = document.getElementById("password");
-      const toggleEye = document.getElementById("toggleEye");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const toggleEye = document.getElementById("toggleEye");
 
-      let isSubmitting = false; // 🔒 LOCK
+    let submitting = false;
 
-      function submitLogin() {
-        if (isSubmitting) return; // ⛔ prevent double submit
-        isSubmitting = true;
+    /* -------------------------------
+       HELPERS
+    -------------------------------- */
+    function post(type, payload = {}) {
+      window.parent.postMessage(
+        JSON.stringify({ type, ...payload }),
+        "*"
+      );
+    }
 
-        window.parent.postMessage(
-          JSON.stringify({
-            type: "LOGIN_DATA",
-            email: emailInput.value,
-            password: passwordInput.value,
-          }),
-          "*"
-        );
+    function setError(field, message) {
+      const group = document.getElementById(`${field}-group`);
+      const error = document.getElementById(`${field}-error`);
 
-        // Release lock after short delay
-        setTimeout(() => {
-          isSubmitting = false;
-        }, 500);
+      if (message) {
+        group.classList.add("error");
+        error.textContent = message;
+        error.classList.add("active");
+      } else {
+        group.classList.remove("error");
+        error.textContent = "";
+        error.classList.remove("active");
       }
+    }
 
-      emailInput.focus();
+    function cacheValues() {
+      post("CACHE_VALUES", {
+        email: emailInput.value,
+        password: passwordInput.value,
+      });
+    }
 
-      emailInput.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") {
-          e.preventDefault();
-          passwordInput.focus();
-        }
+    function submitLogin() {
+      if (submitting) return;
+      submitting = true;
+
+      post("LOGIN_DATA", {
+        email: emailInput.value,
+        password: passwordInput.value,
       });
 
-      passwordInput.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") {
-          e.preventDefault();
-          submitLogin();
-        }
-      });
+      setTimeout(() => (submitting = false), 400);
+    }
 
-      toggleEye.addEventListener("click", () => {
-        if (passwordInput.type === "password") {
-          passwordInput.type = "text";
-          toggleEye.src = "icons/eye-close.svg";
-        } else {
-          passwordInput.type = "password";
-          toggleEye.src = "icons/eye-open.svg";
-        }
-      });
+    /* -------------------------------
+       EVENTS
+    -------------------------------- */
 
-      window.addEventListener("message", (event) => {
-        let data;
-        try {
-          data = typeof event.data === "string"
-            ? JSON.parse(event.data)
-            : event.data;
-        } catch (_) {
-          return;
-        }
+    emailInput.addEventListener("input", cacheValues);
+    passwordInput.addEventListener("input", cacheValues);
 
-        if (data?.type === "REQUEST_LOGIN_DATA") {
-          submitLogin();
-        }
-
-        if (data?.type === "SHOW_ERRORS") {
-          setError("email", data.emailError);
-          setError("password", data.passwordError);
-        }
-
-        if (data?.type === "CLEAR_ERRORS") {
-          setError("email", null);
-          setError("password", null);
-        }
-      });
-
-      function setError(field, message) {
-        const group = document.getElementById(`${field}-group`);
-        const error = document.getElementById(`${field}-error`);
-
-        if (message) {
-          group.classList.add("error");
-          error.classList.add("active");
-          error.textContent = message;
-        } else {
-          group.classList.remove("error");
-          error.classList.remove("active");
-          error.textContent = "";
-        }
+    emailInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        passwordInput.focus();
       }
     });
 
+    passwordInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        submitLogin();
+      }
+    });
+
+    toggleEye.addEventListener("click", () => {
+      const isHidden = passwordInput.type === "password";
+      passwordInput.type = isHidden ? "text" : "password";
+      toggleEye.src = isHidden
+        ? "icons/eye-close.svg"
+        : "icons/eye-open.svg";
+    });
+
+    /* -------------------------------
+       MESSAGE FROM FLUTTER
+    -------------------------------- */
+    window.addEventListener("message", (event) => {
+      let data;
+      try {
+        data =
+          typeof event.data === "string"
+            ? JSON.parse(event.data)
+            : event.data;
+      } catch {
+        return;
+      }
+
+      switch (data?.type) {
+        case "REQUEST_LOGIN_DATA":
+          submitLogin();
+          break;
+
+        case "SHOW_ERRORS":
+          setError("email", data.emailError);
+          setError("password", data.passwordError);
+          break;
+
+        case "CLEAR_ERRORS":
+          setError("email", null);
+          setError("password", null);
+          break;
+
+        case "RESTORE_VALUES":
+          if (typeof data.email === "string")
+            emailInput.value = data.email;
+          if (typeof data.password === "string")
+            passwordInput.value = data.password;
+          break;
+      }
+    });
+
+    /* -------------------------------
+       READY SIGNAL (CRITICAL)
+    -------------------------------- */
+    window.parent.postMessage(
+      JSON.stringify({ type: "HTML_READY" }),
+      "*"
+    );
+
+    // Autofocus email on load
+    emailInput.focus();
   </script>
 </body>
 

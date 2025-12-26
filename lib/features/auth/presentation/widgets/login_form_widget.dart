@@ -1,14 +1,15 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gigafaucet/features/auth/presentation/widgets/login_form/html_login_view.dart';
+
 import 'package:gigafaucet/core/common/custom_buttom_widget.dart';
 import 'package:gigafaucet/core/widgets/cloudflare_turnstille_widgte.dart';
 import 'package:gigafaucet/core/providers/turnstile_provider.dart';
 import 'package:gigafaucet/features/auth/presentation/providers/login_provider.dart';
-import 'package:gigafaucet/features/auth/presentation/widgets/login_form/html_login_view.dart';
 import 'package:gigafaucet/features/auth/presentation/widgets/or_divider_widget.dart';
 import 'package:gigafaucet/features/auth/presentation/widgets/remember_me_widget.dart';
 import 'package:gigafaucet/features/auth/presentation/providers/ip_country_provider.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gigafaucet/features/auth/presentation/widgets/socials/social_login_butttons.dart';
 import '../../../../core/common/common_textfield.dart';
 import '../../../../core/common/common_text.dart';
@@ -17,7 +18,6 @@ import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/providers/consolidated_auth_provider.dart';
 import '../../../../core/services/secure_storage_service.dart';
 
-/// Reusable login form widget that can be used in both login page and popup
 class LoginFormWidget extends ConsumerStatefulWidget {
   const LoginFormWidget({
     super.key,
@@ -110,6 +110,9 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
           debugPrint('✅ Email controller text: ${_emailController.text}');
           debugPrint(
               '✅ Password controller text length: ${_passwordController.text.length}');
+          if (kIsWeb) {
+            restoreDataToHtml();
+          }
         } else {
           debugPrint('⚠️ No saved credentials found or widget not mounted');
         }
@@ -139,12 +142,12 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
     String? emailError;
     String? passwordError;
 
-    // Validate inputs
+    // Ensure controllers are synced before validation
+    _emailController.text = email;
+    _passwordController.text = password;
+
     emailError = TextFieldValidators.email(email, context);
-    passwordError = TextFieldValidators.password(
-      password,
-      context,
-    );
+    passwordError = TextFieldValidators.password(password, context);
 
     setState(() {
       _hasEmailError = emailError != null;
@@ -175,12 +178,11 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
     }
 
     if (email == null && password == null) {
-      debugPrint('🔐 Handling login for: $email');
       if (!_formKey.currentState!.validate()) {
         return;
       }
     }
-    // if (_formKey.currentState!.validate()) {
+
     // Check Turnstile verification
     final turnstileCanAttempt =
         ref.read(turnstileNotifierProvider(TurnstileActionEnum.login))
@@ -241,20 +243,6 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
           context.showSnackBar(
               message: v, backgroundColor: Theme.of(context).colorScheme.error);
         });
-    // }
-  }
-
-  void _handleForgotPassword() {
-    widget.onForgotPassword?.call();
-  }
-
-  void _handleSignUp() {
-    widget.onSignUp?.call();
-  }
-
-  bool _isValidEmail(String email) {
-    final regex = RegExp(r'^[^@]+@[^@]+\.[a-zA-Z]{3,}$');
-    return regex.hasMatch(email.trim());
   }
 
   void _handleAutoFillBehavior() {
@@ -262,32 +250,29 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
     final validEmail = _isValidEmail(email);
     final passwordFilled = _passwordController.text.isNotEmpty;
 
-    // 1 Email autofilled + VALID + password empty → focus password
-    if (validEmail && !passwordFilled) {
-      if (!_passwordFocusNode.hasFocus) {
-        _passwordFocusNode.requestFocus();
-      }
+    if (validEmail && !passwordFilled && !_passwordFocusNode.hasFocus) {
+      _passwordFocusNode.requestFocus();
     }
-
-    // 2 Both valid email + password autofilled → enable login button
     if (validEmail && passwordFilled) {
       setState(() {});
     }
   }
 
+  bool _isValidEmail(String email) {
+    final regex = RegExp(r'^[^@]+@[^@]+\.[a-zA-Z]{3,}$');
+    return regex.hasMatch(email.trim());
+  }
+
   double get _htmlLoginHeight {
-    if (_hasEmailError && _hasPasswordError) {
-      return 190;
-    }
-    if (_hasEmailError || _hasPasswordError) {
-      return 165;
-    }
+    if (_hasEmailError && _hasPasswordError) return 190;
+    if (_hasEmailError || _hasPasswordError) return 165;
     return 130;
   }
 
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context);
+
     return AutofillGroup(
       child: Form(
         key: _formKey,
@@ -302,28 +287,19 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 32),
-
             if (kIsWeb)
-              AnimatedSize(
-                duration: const Duration(milliseconds: 200),
-                curve: Curves.easeInOut,
-                alignment: Alignment.topCenter,
-                child: SizedBox(
-                  width: 600,
-                  height: _htmlLoginHeight,
-                  child: buildEmailPasswordView(
-                    onLogin: (email, password) {
-                      debugPrint('🌐 Web login requested: $email');
-                      _handleLoginFromHtml(email, password);
-                    },
-                  ),
+              SizedBox(
+                width: 600,
+                height: _htmlLoginHeight,
+                child: buildHtmlLoginView(
+                  onLogin: _handleLoginFromHtml,
                 ),
               ),
 
+            // --- MOBILE NATIVE FIELDS ---
             if (!kIsWeb) ...[
-              // Email Field
               CommonTextField(
-                fillColor: Color(0xFF1A1A1A),
+                fillColor: const Color(0xFF1A1A1A),
                 key: const ValueKey('emailField'),
                 controller: _emailController,
                 focusNode: _emailFocusNode,
@@ -340,12 +316,9 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
                   AutofillHints.username
                 ],
               ),
-
               const SizedBox(height: 16),
-
-              // Password Field
               CommonTextField(
-                fillColor: Color(0xFF1A1A1A),
+                fillColor: const Color(0xFF1A1A1A),
                 key: const ValueKey('passwordField'),
                 controller: _passwordController,
                 focusNode: _passwordFocusNode,
@@ -355,10 +328,8 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
                 obscureText: true,
                 textInputAction: TextInputAction.done,
                 prefixIcon: const Icon(Icons.lock_outlined),
-                validator: (value) => TextFieldValidators.password(
-                  value,
-                  context,
-                ),
+                validator: (value) =>
+                    TextFieldValidators.password(value, context),
                 onSubmitted: (_) => _handleLogin(),
                 enableSuggestions: false,
                 autofillHints: const [AutofillHints.password],
@@ -380,24 +351,17 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
 
             const SizedBox(height: 24),
 
-            // Login Button
             CustomUnderLineButtonWidget(
               title: localizations?.translate('sign_in') ?? 'Sign In',
-              onTap: (kIsWeb)
-                  ? () {
-                      requestLoginDataFromHtml();
-                    }
-                  : () {
-                      _handleLogin();
-                    },
+              onTap: kIsWeb
+                  ? () => requestLoginDataFromHtml()
+                  : () => _handleLogin(),
               height: 56,
               borderRadius: 12,
               fontSize: 14,
             ),
-            OrDividerWidget(),
-            SocialLoginButtons(
-              onLoginSuccess: widget.onLoginSuccess,
-            ),
+            const OrDividerWidget(),
+            SocialLoginButtons(onLoginSuccess: widget.onLoginSuccess),
 
             // Sign Up Link
             if (widget.showSignUpLink && widget.onSignUp != null) ...[
@@ -411,7 +375,7 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
                     color: context.onSurfaceVariant,
                   ),
                   TextButton(
-                    onPressed: _handleSignUp,
+                    onPressed: widget.onSignUp,
                     style: TextButton.styleFrom(
                       padding: EdgeInsets.zero,
                       minimumSize: Size.zero,
@@ -451,7 +415,7 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
 
     final forgotPasswordWidget = widget.onForgotPassword != null
         ? TextButton(
-            onPressed: _handleForgotPassword,
+            onPressed: widget.onForgotPassword,
             child: CommonText.bodyMedium(
               localizations?.translate('forgot_password') ?? 'Forgot Password?',
               overflow: TextOverflow.ellipsis,
