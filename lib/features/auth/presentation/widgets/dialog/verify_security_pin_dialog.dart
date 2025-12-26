@@ -117,10 +117,11 @@ class _SecurityPinDialogState extends ConsumerState<VerifySecurityPinDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final isLoading = ref.watch(setSecurityPinNotifierProvider).isLoaing;
+    final isLoading = ref.watch(verifySecurityPinNotifierProvider).isLoaing;
     final isMobile = context.isMobile;
     return DialogBgWidget(
       isOverlayLoading: isLoading,
+      isInitLoading: false,
       titleFontSize: 32,
       dialogWidth: isMobile ? context.screenWidth * 0.9 : 630,
       isShowingCloseButton: true,
