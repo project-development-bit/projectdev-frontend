@@ -12,7 +12,6 @@ import '../entities/verify_email_change_result.dart';
 import '../entities/change_password_result.dart';
 import '../entities/delete_account_result.dart';
 import '../entities/verify_delete_account_result.dart';
-import '../entities/set_security_pin_result.dart';
 
 /// Abstract repository interface for profile operations
 ///
@@ -81,14 +80,4 @@ abstract class ProfileRepository {
   /// Returns [VerifyDeleteAccountResult] on success or [Failure] on error
   Future<Either<Failure, VerifyDeleteAccountResult>> verifyDeleteAccount(
       String code);
-
-  /// Set or update security PIN
-  ///
-  /// [securityPin] - The 4-digit security PIN
-  /// [enable] - True to enable, false to disable
-  /// Returns [SetSecurityPinResult] on success or [Failure] on error
-  Future<Either<Failure, SetSecurityPinResult>> setSecurityPin({
-    required int securityPin,
-    required bool enable,
-  });
 }

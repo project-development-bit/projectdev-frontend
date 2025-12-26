@@ -10,8 +10,6 @@ import 'package:gigafaucet/features/user_profile/data/models/response/verify_ema
 import 'package:gigafaucet/features/user_profile/data/models/response/change_password_response_model.dart';
 import 'package:gigafaucet/features/user_profile/data/models/response/delete_account_response_model.dart';
 import 'package:gigafaucet/features/user_profile/data/models/response/verify_delete_account_response_model.dart';
-import 'package:gigafaucet/features/user_profile/data/models/response/set_security_pin_response_model.dart';
-import 'package:gigafaucet/features/user_profile/data/models/request/set_security_pin_request_model.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -399,47 +397,6 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
       debugPrint('❌ Unexpected error verifying account deletion: $e');
       throw ServerFailure(
           message: 'Unexpected error verifying account deletion: $e');
-    }
-  }
-
-  @override
-  Future<SetSecurityPinResponseModel> setSecurityPin({
-    required int securityPin,
-    required bool enable,
-  }) async {
-    try {
-      debugPrint('🔐 Setting security PIN (enable: $enable)');
-
-      final requestModel = SetSecurityPinRequestModel(
-        securityPin: securityPin,
-        enable: enable,
-      );
-
-      final response = await _dio.post(
-        '/users/security-pin',
-        data: requestModel.toJson(),
-      );
-
-      debugPrint('✅ Security PIN set successfully: ${response.statusCode}');
-
-      if ((response.statusCode ?? 0) >= 200 &&
-          (response.statusCode ?? 0) < 300) {
-        return SetSecurityPinResponseModel.fromJson(
-            response.data as Map<String, dynamic>);
-      } else {
-        final message = response.data is Map ? response.data['message'] : null;
-        throw ServerFailure(message: message ?? 'Failed to set security PIN');
-      }
-    } on DioException catch (e) {
-      debugPrint('❌ Set security PIN DioException: ${e.message}');
-      debugPrint('❌ Response status: ${e.response?.statusCode}');
-      debugPrint('❌ Response data: ${e.response?.data}');
-
-      final message = e.response?.data?['message'] ?? e.message;
-      throw ServerFailure(message: message ?? 'Failed to set security PIN');
-    } catch (e) {
-      debugPrint('❌ Unexpected error setting security PIN: $e');
-      throw ServerFailure(message: 'Unexpected error setting security PIN: $e');
     }
   }
 

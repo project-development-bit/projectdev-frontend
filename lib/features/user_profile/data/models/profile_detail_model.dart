@@ -104,14 +104,14 @@ class AccountInfoModel extends AccountInfo {
 class SecuritySettingsModel extends SecuritySettings {
   const SecuritySettingsModel({
     required super.twofaEnabled,
-    required super.securityPinEnabled,
+    required super.securityPinRequired,
   });
 
   /// Create SecuritySettingsModel from JSON
   factory SecuritySettingsModel.fromJson(Map<String, dynamic> json) {
     return SecuritySettingsModel(
       twofaEnabled: _parseBool(json['twofa_enabled']),
-      securityPinEnabled: _parseBool(json['security_pin_enabled']),
+      securityPinRequired: _parseBool(json['security_pin_enabled']),
     );
   }
 
@@ -130,7 +130,7 @@ class SecuritySettingsModel extends SecuritySettings {
   Map<String, dynamic> toJson() {
     return {
       'twofa_enabled': twofaEnabled,
-      'security_pin_enabled': securityPinEnabled,
+      'security_pin_enabled': securityPinRequired,
     };
   }
 }

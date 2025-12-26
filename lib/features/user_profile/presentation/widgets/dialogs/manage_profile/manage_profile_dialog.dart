@@ -3,6 +3,8 @@ import 'package:gigafaucet/core/common/common_image_widget.dart';
 import 'package:gigafaucet/core/common/custom_buttom_widget.dart';
 import 'package:gigafaucet/core/common/dialog_bg_widget.dart';
 import 'package:gigafaucet/core/extensions/context_extensions.dart';
+import 'package:gigafaucet/features/auth/domain/entities/user.dart';
+import 'package:gigafaucet/features/auth/presentation/widgets/dialog/verify_security_pin_dialog.dart';
 import 'package:gigafaucet/features/auth/presentation/widgets/disable_2fa_confirmation_dialog.dart';
 import 'package:gigafaucet/features/auth/presentation/widgets/two_factor_auth_dialog.dart';
 import 'package:gigafaucet/features/localization/domain/entities/language.dart';
@@ -10,7 +12,7 @@ import 'package:gigafaucet/features/localization/presentation/providers/get_lang
 import 'package:gigafaucet/features/user_profile/presentation/providers/current_user_provider.dart';
 import 'package:gigafaucet/features/user_profile/presentation/providers/get_profile_notifier.dart';
 import 'package:gigafaucet/features/user_profile/presentation/providers/setting_profile_notifier.dart';
-import 'package:gigafaucet/features/user_profile/presentation/widgets/dialogs/manage_profile/security_pin_dialog.dart';
+import 'package:gigafaucet/features/auth/presentation/widgets/dialog/enable_security_pin_dialog.dart';
 import 'package:gigafaucet/features/user_profile/presentation/widgets/dialogs/manage_profile/upload_avatar_dialog.dart';
 import 'package:gigafaucet/routing/routing.dart';
 import 'package:flutter/material.dart';

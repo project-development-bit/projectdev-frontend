@@ -16,7 +16,7 @@ class User extends Equatable {
     required this.securityCode,
     required this.twofaEnabled,
     required this.twofaSecret,
-    required this.securityPinEnabled,
+    required this.securityPinRequired,
     required this.isBanned,
     required this.isVerified,
     required this.avatarUrl,
@@ -60,7 +60,7 @@ class User extends Equatable {
   final String twofaSecret;
 
   /// Whether security PIN is enabled (0 = disabled, 1 = enabled)
-  final int securityPinEnabled;
+  final int securityPinRequired;
 
   /// Whether user is banned (0 = not banned, 1 = banned)
   final int isBanned;
@@ -118,7 +118,7 @@ class User extends Equatable {
   bool get is2FAEnabled => twofaEnabled == 1;
 
   /// Helper getter to check if security PIN is enabled
-  bool get isSecurityPinEnabled => securityPinEnabled == 1;
+  bool get issecurityPinRequired => securityPinRequired == 1;
 
   /// Helper getter to check if interest is enabled
   bool get isInterestEnabled => interestEnable == 1;
@@ -147,7 +147,7 @@ class User extends Equatable {
     String? securityCode,
     int? twofaEnabled,
     String? twofaSecret,
-    int? securityPinEnabled,
+    int? securityPinRequired,
     int? isBanned,
     int? isVerified,
     String? avatarUrl,
@@ -174,7 +174,7 @@ class User extends Equatable {
       securityCode: securityCode ?? this.securityCode,
       twofaEnabled: twofaEnabled ?? this.twofaEnabled,
       twofaSecret: twofaSecret ?? this.twofaSecret,
-      securityPinEnabled: securityPinEnabled ?? this.securityPinEnabled,
+      securityPinRequired: securityPinRequired ?? this.securityPinRequired,
       isBanned: isBanned ?? this.isBanned,
       isVerified: isVerified ?? this.isVerified,
       avatarUrl: avatarUrl ?? this.avatarUrl,
@@ -204,7 +204,7 @@ class User extends Equatable {
         securityCode,
         twofaEnabled,
         twofaSecret,
-        securityPinEnabled,
+        securityPinRequired,
         isBanned,
         isVerified,
         avatarUrl,

@@ -35,7 +35,9 @@ class ProfileTabContent extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final email = ref.watch(profileCurrentUserProvider)?.email ?? '';
+    final User? user = ref.watch(profileCurrentUserProvider);
+    final email = user?.email ?? '';
+    final issecurityPinRequired = user?.issecurityPinRequired ?? false;
     final account = ref.watch(getProfileNotifierProvider).profile?.account;
     final name = ref.watch(profileCurrentUserProvider)?.name ?? '';
     final offerToken =
@@ -88,7 +90,13 @@ class ProfileTabContent extends ConsumerWidget {
           btnTitle: context.translate("change_your_email"),
           onPressed: () {
             context.pop();
-            showChangeEmailDialog(context);
+            if (issecurityPinRequired) {
+              showVerifySecurityPinDialog(context, onPinVerified: (ctx) {
+                showChangeEmailDialog(ctx);
+              });
+            } else {
+              showChangeEmailDialog(context);
+            }
           },
           isMobile: isMobile,
         ),
@@ -137,14 +145,24 @@ class ProfileTabContent extends ConsumerWidget {
           btnTitle: context.translate(
               showOfferToken ? "hide_offer_token" : "show_offer_token"),
           onPressed: () {
-            
-            if (offerToken.isEmpty) {
-              context.showSnackBar(
-                  message: context.translate("no_offer_token"));
-              return;
-            }
             context.pop();
-            showOfferTokenDialog(context, offerToken: offerToken);
+            if (issecurityPinRequired) {
+              if (offerToken.isEmpty) {
+                context.showSnackBar(
+                    message: context.translate("no_offer_token"));
+                return;
+              }
+              showVerifySecurityPinDialog(context, onPinVerified: (ctx) {
+                showOfferTokenDialog(ctx, offerToken: offerToken);
+              });
+            } else {
+              if (offerToken.isEmpty) {
+                context.showSnackBar(
+                    message: context.translate("no_offer_token"));
+                return;
+              }
+              showOfferTokenDialog(context, offerToken: offerToken);
+            }
           },
           isMobile: isMobile,
         ),

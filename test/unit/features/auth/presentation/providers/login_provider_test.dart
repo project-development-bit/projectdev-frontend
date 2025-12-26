@@ -31,7 +31,7 @@ void main() {
       showOnboarding: 0,
       twofaEnabled: 0,
       twofaSecret: 'test_2fa_secret',
-      securityPinEnabled: 0,
+      securityPinRequired: 0,
       avatarUrl: 'http://example.com/avatar.png',
       interestEnable: 1,
       notificationsEnabled: 1,

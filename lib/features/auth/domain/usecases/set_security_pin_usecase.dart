@@ -1,16 +1,16 @@
-import 'package:gigafaucet/features/user_profile/domain/entities/set_security_pin_result.dart';
+import 'package:gigafaucet/features/auth/domain/entities/set_security_pin_result.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
+import 'package:gigafaucet/features/auth/domain/repositories/auth_repository.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/usecases/usecase.dart';
-import '../repositories/profile_repository.dart';
 
 /// Use case for setting or updating security PIN
 class SetSecurityPinUsecase
     implements UseCase<SetSecurityPinResult, SetSecurityPinParams> {
   const SetSecurityPinUsecase(this.repository);
 
-  final ProfileRepository repository;
+  final AuthRepository repository;
 
   @override
   Future<Either<Failure, SetSecurityPinResult>> call(
