@@ -193,4 +193,8 @@ class AppLocalImages {
 
   static String homeCoinBackgroundSection2Desktop =
       "assets/images/bg/home_coin_section_2_desktop@2x.png";
+
+  // Pirate Treasure Hunt
+  static const String pirateTreasureHuntProcessBg =
+      "assets/images/pirate_treasure_hunt/hunt_progress_bg.png";
 }

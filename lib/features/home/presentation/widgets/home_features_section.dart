@@ -6,6 +6,7 @@ import 'package:gigafaucet/features/faucet/presentation/widgets/dialog/claim_you
 import 'package:gigafaucet/features/faucet/presentation/widgets/dialog/your_faucet_dialog.dart';
 import 'package:gigafaucet/features/home/presentation/widgets/home_section_container.dart';
 import 'package:flutter/material.dart';
+import 'package:gigafaucet/features/pirate_treasure_hunt/presentation/widgets/dialogs/pirate_treasure_hunt_dialog.dart';
 
 import '../../../fortune_wheel/presentation/widgets/fortune_wheel_widget.dart';
 
@@ -103,13 +104,15 @@ class HomeFeaturesSection extends StatelessWidget {
                       if (feature['title'] == 'fortune Wheel') {
                         showFortuneWheelDialog(context);
                         return;
-                      }
-                      if (feature['title'] == 'Claim Faucet') {
+                      } else if (feature['title'] == 'Claim Faucet') {
                         // Show faucet dialog
                         // Assuming showYourFaucetDialog is defined elsewhere
                         showYourFaucetDialog(context, () {
                           showClaimYourFaucetDialog(context);
                         });
+                      } else if (feature['title'] == 'Pirate Treasure Hunt') {
+                        // Show Pirate Treasure Hunt dialog
+                        showPirateTreasureHuntDialog(context);
                       }
                     });
                   }).toList(),
