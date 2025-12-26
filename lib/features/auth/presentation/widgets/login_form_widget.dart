@@ -5,6 +5,7 @@ import 'package:gigafaucet/core/config/app_local_images.dart';
 import 'package:gigafaucet/core/theme/app_colors.dart';
 import 'package:gigafaucet/core/widgets/cloudflare_turnstille_widgte.dart';
 import 'package:gigafaucet/core/providers/turnstile_provider.dart';
+import 'package:gigafaucet/features/auth/presentation/providers/login_provider.dart';
 import 'package:gigafaucet/features/auth/presentation/widgets/login_form/html_login_view.dart';
 import 'package:gigafaucet/features/auth/presentation/widgets/or_divider_widget.dart';
 import 'package:gigafaucet/features/auth/presentation/widgets/remember_me_widget.dart';
@@ -58,6 +59,8 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
   final _passwordFocusNode = FocusNode();
 
   bool _rememberMe = false;
+  bool _hasEmailError = false;
+  bool _hasPasswordError = false;
 
   @override
   void initState() {
@@ -152,22 +155,34 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
       passwordError = 'Min 6 characters';
     }
 
-    // ❌ INVALID → show errors
+    setState(() {
+      _hasEmailError = emailError != null;
+      _hasPasswordError = passwordError != null;
+    });
+
+    // ❌ Invalid → send errors to HTML
     if (emailError != null || passwordError != null) {
-      sendErrorsToHtml(emailError: emailError, passwordError: passwordError);
+      sendErrorsToHtml(
+        emailError: emailError,
+        passwordError: passwordError,
+      );
       return;
     }
 
-    // ✅ VALID → clear errors
+    // ✅ Valid → clear errors
     clearErrorsInHtml();
 
-    debugPrint('✅ Login OK → $email / $password');
     _handleLogin(email: email, password: password);
-
-    // continue login API call here
   }
 
   void _handleLogin({String? email, String? password}) async {
+    final loginNotifier = ref.read(loginNotifierProvider);
+    if (loginNotifier is LoginLoading) {
+      debugPrint(
+          ' Web login requested ⏳ Login already in progress, ignoring duplicate request');
+      return;
+    }
+
     if (email == null && password == null) {
       debugPrint('🔐 Handling login for: $email');
       if (!_formKey.currentState!.validate()) {
@@ -213,13 +228,10 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
     final ipState = ref.read(getIpCountryNotifierProvider);
 
     await authActions.login(
-        // email: _emailController.text.trim(),
-        // password: _passwordController.text.trim(),
         email: email ?? _emailController.text.trim(),
         password: password ?? _passwordController.text.trim(),
         countryCode: ipState.country?.code ?? "Unknown",
         onSuccess: () async {
-          // Save credentials if remember me is checked
           await _saveCredentialsIfNeeded();
 
           widget.onLoginSuccess?.call();
@@ -322,6 +334,16 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
     }
   }
 
+  double get _htmlLoginHeight {
+    if (_hasEmailError && _hasPasswordError) {
+      return 190;
+    }
+    if (_hasEmailError || _hasPasswordError) {
+      return 165;
+    }
+    return 130;
+  }
+
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context);
@@ -338,21 +360,26 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
               color: context.onSurface,
               textAlign: TextAlign.center,
             ),
+            const SizedBox(height: 32),
 
             if (kIsWeb)
-              SizedBox(
-                width: 600,
-                height: 200,
-                child: buildEmailPasswordView(
-                  onLogin: (email, password) {
-                    _handleLoginFromHtml(email, password);
-                  },
+              AnimatedSize(
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeInOut,
+                alignment: Alignment.topCenter,
+                child: SizedBox(
+                  width: 600,
+                  height: _htmlLoginHeight,
+                  child: buildEmailPasswordView(
+                    onLogin: (email, password) {
+                      print('🌐 Web login requested: $email');
+                      _handleLoginFromHtml(email, password);
+                    },
+                  ),
                 ),
               ),
 
             if (!kIsWeb) ...[
-              const SizedBox(height: 32),
-
               // Email Field
               CommonTextField(
                 fillColor: Color(0xFF1A1A1A),
@@ -397,8 +424,8 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
                 enableSuggestions: false,
                 autofillHints: const [AutofillHints.password],
               ),
-              const SizedBox(height: 24),
             ],
+            const SizedBox(height: 24),
 
             // Remember Me & Forgot Password Row
             if (widget.showRememberMe || widget.onForgotPassword != null)
@@ -417,7 +444,13 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
             // Login Button
             CustomUnderLineButtonWidget(
               title: localizations?.translate('sign_in') ?? 'Sign In',
-              onTap: requestLoginDataFromHtml,
+              onTap: (kIsWeb)
+                  ? () {
+                      requestLoginDataFromHtml();
+                    }
+                  : () {
+                      _handleLogin();
+                    },
               height: 56,
               borderRadius: 12,
               fontSize: 14,

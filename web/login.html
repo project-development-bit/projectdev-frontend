@@ -14,13 +14,14 @@
 
 <body>
   <div class="login-wrapper">
-
     <!-- EMAIL -->
     <div class="input-group" id="email-group">
       <img src="icons/email.svg" class="icon" alt="email" />
       <input id="email" type="email" placeholder="Email" autocomplete="username" />
     </div>
     <div class="error-text" id="email-error"></div>
+    <div style="padding: 0 0 16px 0;">
+    </div>
 
     <!-- PASSWORD -->
     <div class="input-group" id="password-group">
@@ -38,10 +39,29 @@
       const passwordInput = document.getElementById("password");
       const toggleEye = document.getElementById("toggleEye");
 
-      // Autofocus email
+      let isSubmitting = false; // 🔒 LOCK
+
+      function submitLogin() {
+        if (isSubmitting) return; // ⛔ prevent double submit
+        isSubmitting = true;
+
+        window.parent.postMessage(
+          JSON.stringify({
+            type: "LOGIN_DATA",
+            email: emailInput.value,
+            password: passwordInput.value,
+          }),
+          "*"
+        );
+
+        // Release lock after short delay
+        setTimeout(() => {
+          isSubmitting = false;
+        }, 500);
+      }
+
       emailInput.focus();
 
-      // Enter on email → focus password
       emailInput.addEventListener("keydown", (e) => {
         if (e.key === "Enter") {
           e.preventDefault();
@@ -49,7 +69,6 @@
         }
       });
 
-      // Enter on password → submit to Flutter
       passwordInput.addEventListener("keydown", (e) => {
         if (e.key === "Enter") {
           e.preventDefault();
@@ -57,7 +76,6 @@
         }
       });
 
-      // Toggle password visibility
       toggleEye.addEventListener("click", () => {
         if (passwordInput.type === "password") {
           passwordInput.type = "text";
@@ -68,9 +86,15 @@
         }
       });
 
-      // Receive messages from Flutter
       window.addEventListener("message", (event) => {
-        const data = event.data;
+        let data;
+        try {
+          data = typeof event.data === "string"
+            ? JSON.parse(event.data)
+            : event.data;
+        } catch (_) {
+          return;
+        }
 
         if (data?.type === "REQUEST_LOGIN_DATA") {
           submitLogin();
@@ -87,30 +111,22 @@
         }
       });
 
-      function submitLogin() {
-        window.parent.postMessage(
-          JSON.stringify({
-            type: "LOGIN_DATA",
-            email: emailInput.value,
-            password: passwordInput.value,
-          }),
-          "*"
-        );
-      }
-
       function setError(field, message) {
         const group = document.getElementById(`${field}-group`);
         const error = document.getElementById(`${field}-error`);
 
         if (message) {
           group.classList.add("error");
+          error.classList.add("active");
           error.textContent = message;
         } else {
           group.classList.remove("error");
+          error.classList.remove("active");
           error.textContent = "";
         }
       }
     });
+
   </script>
 </body>
 
