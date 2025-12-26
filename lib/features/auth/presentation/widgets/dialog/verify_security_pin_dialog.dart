@@ -224,11 +224,7 @@ class _SecurityPinDialogState extends ConsumerState<VerifySecurityPinDialog> {
 
               CustomUnderLineButtonWidget(
                 title: context.translate("verify_pin"),
-                onTap: isLoading
-                    ? () {
-                        print("Loading...");
-                      }
-                    : () => _validateAndSubmit(),
+                onTap: isLoading ? () {} : () => _validateAndSubmit(),
                 fontSize: 14,
                 width: double.infinity,
               ),
