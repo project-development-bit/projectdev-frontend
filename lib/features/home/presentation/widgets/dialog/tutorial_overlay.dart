@@ -25,7 +25,7 @@ class _TutorialOverlayState extends ConsumerState<TutorialOverlay> {
     debugPrint(
         'Tutorial Overlay - shown: $tutorialShown | !auth: ${!authState.isAuthenticated} showOnboarding : ${currentUserState.user != null ? !currentUserState.user!.shouldShowOnboarding : 'N/A'} isVerified: ${!isVerified} overAll: ${tutorialShown || !authState.isAuthenticated || (currentUserState.user != null && !currentUserState.user!.shouldShowOnboarding) || !isVerified}');
     if (tutorialShown ||
-        currentUserState.isLoading || // ✅ added here
+        currentUserState.isLoading ||
         !authState.isAuthenticated ||
         (currentUserState.user != null &&
             !currentUserState.user!.shouldShowOnboarding) ||
