@@ -40,8 +40,10 @@ body {
    ========================================================= */
 
 .input-group {
+  position: relative;
   display: flex;
   align-items: center;
+  width: 100%;
   background: #313144;
   border-radius: 14px;
   padding: 14px 16px;
@@ -54,7 +56,7 @@ body {
   border-color: #E6A030;
 }
 
-/* ERROR STATE (ALWAYS OVERRIDES FOCUS) */
+/* ERROR STATE (OVERRIDES FOCUS) */
 .input-group.error,
 .input-group.error:focus-within {
   border-color: #ff4d4f;
@@ -69,14 +71,22 @@ body {
   height: 20px;
   margin-right: 12px;
   opacity: 0.9;
+  flex-shrink: 0;
 }
 
+/* PASSWORD TOGGLE EYE (FIXED) */
 .eye {
+  position: absolute;
+  right: 14px;
   width: 22px;
   height: 22px;
-  margin-left: 12px;
   cursor: pointer;
   opacity: 0.85;
+  flex-shrink: 0;
+}
+
+.eye:hover {
+  opacity: 1;
 }
 
 /* =========================================================
@@ -85,12 +95,16 @@ body {
 
 .input-group input {
   flex: 1;
+  width: 100%;
   background: transparent;
   border: none;
   outline: none;
   color: #ffffff;
   font-size: 14px;
   letter-spacing: 0.3px;
+
+  /* CRITICAL: reserve space for eye icon */
+  padding-right: 36px;
 }
 
 /* PLACEHOLDER */
@@ -114,4 +128,31 @@ body {
 .error-text.active {
   display: block;
   min-height: 16px;
+}
+
+/* =========================================================
+   SMALL SCREEN SAFETY
+   ========================================================= */
+
+@media (max-width: 360px) {
+  .input-group {
+    padding: 12px 14px;
+  }
+
+  .input-group input {
+    font-size: 13px;
+    padding-right: 32px;
+  }
+
+  .eye {
+    width: 18px;
+    height: 18px;
+    right: 10px;
+  }
+
+  .icon {
+    width: 18px;
+    height: 18px;
+    margin-right: 10px;
+  }
 }
