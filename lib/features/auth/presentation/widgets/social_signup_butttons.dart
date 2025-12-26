@@ -37,7 +37,7 @@ class _SocialSignupButtonsState extends ConsumerState<SocialSignupButtons> {
       if (!mounted) return;
       switch (next) {
         case LoginSuccess():
-          _afterLoginSuccess();
+          _afterSocialSignupSuccess();
           context.showSnackBar(
               message: 'Registration successful!',
               backgroundColor: AppColors.success);
@@ -106,7 +106,7 @@ class _SocialSignupButtonsState extends ConsumerState<SocialSignupButtons> {
     );
   }
 
-  void _afterLoginSuccess() {
+  void _afterSocialSignupSuccess() {
     GoRouter.of(context).go(AppRoutes.home);
   }
 
@@ -205,7 +205,7 @@ class _SocialSignupButtonsState extends ConsumerState<SocialSignupButtons> {
         referralCode: widget.referralCode,
         countryCode: ipState.country?.code ?? "Unknown",
         onSuccess: () async {
-          _afterLoginSuccess();
+          _afterSocialSignupSuccess();
         },
         onError: (v) {
           context.showSnackBar(
