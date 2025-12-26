@@ -47,7 +47,8 @@
     https://challenges.cloudflare.com
     https://apis.google.com
     https://accounts.google.com
-    https://accounts.google.com/gsi/client;
+    https://accounts.google.com/gsi/client
+    https://connect.facebook.net;
   style-src 'self' 'unsafe-inline'
     https://fonts.googleapis.com
     https://accounts.google.com/gsi/style;
@@ -69,7 +70,8 @@
     https://accounts.google.com
     https://apis.google.com
     https://oauth2.googleapis.com
-    https://www.googleapis.com;
+    https://www.googleapis.com
+    https://connect.facebook.net;
   object-src 'none';
   base-uri 'self';
 ">
@@ -101,6 +103,28 @@
     href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&amp;display=swap"
     rel="stylesheet">
   <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script async defer src="https://connect.facebook.net/en_US/sdk.js"></script>
+
+  <script>
+    window.fbAsyncInit = function () {
+      FB.init({
+        appId: '2571210046580943',
+        cookie: true,
+        xfbml: true,
+        version: "v15.0",
+      });
+      FB.AppEvents.logPageView();
+    };
+    (function (d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "connect.facebook.net";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+  </script>
+
+
 
   <script src="https://apis.google.com/js/api.js"></script>
 

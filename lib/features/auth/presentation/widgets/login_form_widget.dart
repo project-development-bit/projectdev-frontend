@@ -1,7 +1,4 @@
-import 'package:gigafaucet/core/common/common_image_widget.dart';
 import 'package:gigafaucet/core/common/custom_buttom_widget.dart';
-import 'package:gigafaucet/core/config/app_local_images.dart';
-import 'package:gigafaucet/core/theme/app_colors.dart';
 import 'package:gigafaucet/core/widgets/cloudflare_turnstille_widgte.dart';
 import 'package:gigafaucet/core/providers/turnstile_provider.dart';
 import 'package:gigafaucet/features/auth/presentation/widgets/or_divider_widget.dart';
@@ -9,12 +6,11 @@ import 'package:gigafaucet/features/auth/presentation/widgets/remember_me_widget
 import 'package:gigafaucet/features/auth/presentation/providers/ip_country_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gigafaucet/features/auth/presentation/widgets/socials/social_login_butttons.dart';
 import '../../../../core/common/common_textfield.dart';
 import '../../../../core/common/common_text.dart';
-import '../../../../core/common/common_button.dart';
 import '../../../localization/data/helpers/app_localizations.dart';
 import '../../../../core/extensions/context_extensions.dart';
-import '../../../../core/config/app_constant.dart';
 import '../../../../core/providers/consolidated_auth_provider.dart';
 import '../../../../core/services/secure_storage_service.dart';
 import '../providers/login_provider.dart';
@@ -241,56 +237,6 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
     }
   }
 
-  void _handleGoogleLoginWithToken({String? accessToken}) async {
-    // Check Turnstile verification
-    final turnstileCanAttempt =
-        ref.read(turnstileNotifierProvider(TurnstileActionEnum.login))
-            is TurnstileSuccess;
-
-    if (!turnstileCanAttempt) {
-      final localizations = AppLocalizations.of(context);
-      context.showErrorSnackBar(
-        message: localizations?.translate('turnstile_required') ??
-            'Please complete the security verification',
-      );
-      return;
-    }
-
-    // Get the Turnstile token
-    final turnstileToken = turnstileCanAttempt
-        ? (ref.read(turnstileNotifierProvider(TurnstileActionEnum.login))
-                as TurnstileSuccess)
-            .token
-        : null;
-
-    if (turnstileToken == null) {
-      final localizations = AppLocalizations.of(context);
-      context.showErrorSnackBar(
-        message: localizations?.translate('turnstile_token_missing') ??
-            'Security verification token is missing. Please try again.',
-      );
-      return;
-    }
-
-    // Use consolidated auth actions for login
-    final authActions = ref.read(authActionsProvider);
-
-    // Reset previous states
-    authActions.resetAllStates();
-    final ipState = ref.read(getIpCountryNotifierProvider);
-
-    await authActions.googleLogin(
-        accessToken: accessToken,
-        countryCode: ipState.country?.code ?? "Unknown",
-        onSuccess: () async {
-          widget.onLoginSuccess?.call();
-        },
-        onError: (v) {
-          context.showSnackBar(
-              message: v, backgroundColor: Theme.of(context).colorScheme.error);
-        });
-  }
-
   void _handleForgotPassword() {
     widget.onForgotPassword?.call();
   }
@@ -408,51 +354,10 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
               borderRadius: 12,
               fontSize: 14,
             ),
-
-            // Social Login Section
-
             OrDividerWidget(),
-            CommonButton(
-              text: 'Google',
-              onPressed: () {
-                // ref
-                //     .read(googleIdTokenNotifierProvider.notifier)
-                //     .getGoogleIdToken(
-                //         signInMethod: GoogleSignInMethod.googleSignIn);
-                _handleGoogleLoginWithToken();
-              },
-              icon: CommonImage(
-                imageUrl: AppLocalImages.googleLogo,
-                width: 30,
-                height: 30,
-                fit: BoxFit.contain,
-              ),
-              isOutlined: true,
-              textColor: Color(0xFF333333),
-              height: 48,
+            SocialLoginButtons(
+              onLoginSuccess: widget.onLoginSuccess,
             ),
-            // Social Login Buttons
-            if (isReadyFacebookLogin) ...[
-              const SizedBox(width: 16),
-              Expanded(
-                child: CommonButton(
-                  text: localizations?.translate('facebook') ?? 'Facebook',
-                  onPressed: () {
-                    // TODO: Implement Facebook login
-                    context.showErrorSnackBar(
-                      message: localizations
-                              ?.translate('facebook_login_coming_soon') ??
-                          'Facebook login coming soon!',
-                    );
-                  },
-                  icon: const Icon(Icons.facebook, size: 24),
-                  isOutlined: true,
-                  backgroundColor: AppColors.transparent,
-                  textColor: context.onSurface,
-                  height: 48,
-                ),
-              ),
-            ],
 
             // Sign Up Link
             if (widget.showSignUpLink && widget.onSignUp != null) ...[

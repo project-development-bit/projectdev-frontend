@@ -1,4 +1,4 @@
-package com.be.gigafaucet
+package com.burgereat.gigafaucet
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
