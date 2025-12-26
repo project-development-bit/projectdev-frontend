@@ -1,6 +1,7 @@
 import 'package:gigafaucet/core/config/app_local_images.dart';
 import 'package:gigafaucet/core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:gigafaucet/core/theme/app_typography.dart';
 
 class PirateTreasureHuntProcessWidget extends StatelessWidget {
   const PirateTreasureHuntProcessWidget({
@@ -11,18 +12,12 @@ class PirateTreasureHuntProcessWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
     final isMobile = context.isMobile;
-    final isTablet = context.isTablet;
     final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(
-        horizontal: isMobile || isTablet ? 4 : 26,
-        vertical: isMobile ? 8 : 21,
-      ),
-      margin: EdgeInsets.only(
-        top: isMobile ? 26 : 40,
-        bottom: isMobile ? 26 : 32,
+        vertical: isMobile ? 8 : 30,
       ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
@@ -43,7 +38,12 @@ class PirateTreasureHuntProcessWidget extends StatelessWidget {
             textAlign: isMobile ? TextAlign.center : TextAlign.start,
             color: colorScheme.primary,
           ),
-          const SizedBox(height: 18),
+          const SizedBox(height: 23),
+          _StepProgressIndicator(
+            totalSteps: 3,
+            currentStep: 1,
+          ),
+          const SizedBox(height: 10),
           StatusBadge(
             label: t?.translate("Status") ?? "Status",
             statusText: t?.translate("Ready") ?? "Ready",
@@ -83,24 +83,114 @@ class StatusBadge extends StatelessWidget {
       ),
       child: RichText(
         text: TextSpan(
+          style: AppTypography.titleMedium.copyWith(
+            fontWeight: FontWeight.w500,
+          ),
           children: [
             TextSpan(
               text: '$label : ',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: context.onSurface,
-                    fontWeight: FontWeight.w500,
-                  ),
+              style: TextStyle(
+                color: context.onSurface,
+              ),
             ),
             TextSpan(
               text: statusText,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: statusColor,
-                    fontWeight: FontWeight.w600,
-                  ),
+              style: TextStyle(
+                color: statusColor,
+              ),
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class _StepProgressIndicator extends StatelessWidget {
+  final int totalSteps;
+  final int currentStep;
+
+  const _StepProgressIndicator({
+    required this.totalSteps,
+    required this.currentStep,
+  });
+
+  static const Color activeColor = Color(0xFFFFCC00);
+  static const Color inactiveColor = Color(0xFF262626);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(totalSteps * 2 - 1, (index) {
+        // Step circle
+        if (index.isEven) {
+          final step = index ~/ 2 + 1;
+          final isActive = step <= currentStep;
+
+          return _StepCircle(
+            number: step,
+            isActive: isActive,
+          );
+        }
+        return _StepLine(
+          isActive: (index ~/ 2 + 1) < currentStep,
+        );
+      }),
+    );
+  }
+}
+
+/* ------------------ Step Circle ------------------ */
+
+class _StepCircle extends StatelessWidget {
+  final int number;
+  final bool isActive;
+
+  const _StepCircle({
+    required this.number,
+    required this.isActive,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 48,
+      height: 48,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: isActive
+            ? _StepProgressIndicator.activeColor
+            : _StepProgressIndicator.inactiveColor,
+        border: Border.all(
+          color: _StepProgressIndicator.activeColor,
+          width: 2,
+        ),
+      ),
+      child: Text(
+        number.toString(),
+        style: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.w600,
+          color: isActive ? Colors.black : _StepProgressIndicator.activeColor,
+        ),
+      ),
+    );
+  }
+}
+
+class _StepLine extends StatelessWidget {
+  final bool isActive;
+
+  const _StepLine({required this.isActive});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 60,
+      height: 2,
+      color: _StepProgressIndicator.activeColor,
     );
   }
 }
