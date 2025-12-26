@@ -603,17 +603,18 @@ class LoginNotifier extends StateNotifier<LoginState> {
         },
       );
     } catch (e) {
-      debugPrint('❌ Unexpected login error: $e');
+      debugPrint('❌ Unexpected Facebook Login error: $e');
       state = LoginError(
         email: '',
         message: e.toString().contains('timeout')
-            ? 'Google Login timeout: Please check your connection and try again'
-            : 'An unexpected error occurred during Google login. Please try again.',
+            ? 'Facebook Login timeout: Please check your connection and try again'
+            : 'An unexpected error occurred during Facebook login. Please try again.',
       );
-      debugPrint('🔄 State set to Google LoginError (catch block)');
+      debugPrint('🔄 State set to Facebook LoginError (catch block)');
     }
 
-    debugPrint('🔄 Login process completed. Final state: ${state.runtimeType}');
+    debugPrint(
+        '🔄 Facebook Login process completed. Final state: ${state.runtimeType}');
   }
 
   Future<void> facebookSignUp({

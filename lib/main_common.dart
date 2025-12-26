@@ -36,13 +36,15 @@ Future<void> runAppWithFlavor(AppFlavor flavor) async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   // FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true);
   // Set the flavor first so configuration is available
+  FlavorManager.setFlavor(flavor);
+
   debugPrint('Initializing app for flavor: ${flavor.displayName}');
   if (kIsWeb) {
     try {
       debugPrint('Initializing Facebook SDK for web platform...');
       // initialize the facebook javascript SDK
       FacebookAuth.i.webAndDesktopInitialize(
-        appId: "2571210046580943",
+        appId: FlavorManager.currentConfig.facebookAppId,
         cookie: true,
         xfbml: true,
         version: "v15.0",
@@ -52,7 +54,6 @@ Future<void> runAppWithFlavor(AppFlavor flavor) async {
     }
   }
   debugPrint('Facebook SDK initialized for web platform.');
-  FlavorManager.setFlavor(flavor);
   // Initialize reCAPTCHA for all platforms
   final recaptchaSiteKey = FlavorManager.recaptchaSiteKey;
   if (!kIsWeb) {

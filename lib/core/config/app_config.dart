@@ -26,6 +26,9 @@ class AppConfig {
   // Legacy web support (for backward compatibility)
   final String? webRecaptchaSiteKey;
 
+  final String facebookAppId;
+  final String googleClientId;
+
   const AppConfig({
     required this.flavor,
     required this.appName,
@@ -41,6 +44,8 @@ class AppConfig {
     this.androidRecaptchaSiteKey,
     this.iosRecaptchaSiteKey,
     this.webRecaptchaSiteKey,
+   required this.facebookAppId,
+   required this.googleClientId,
   });
 
   /// Get the appropriate reCAPTCHA site key for the current platform
@@ -106,6 +111,8 @@ class AppConfig {
       'enableMockData': true,
       'enableFeatureFlags': true,
     },
+    facebookAppId: "2571210046580943",
+    googleClientId: "645002434672-nji58g0s1sdqfpu679h3h7cc3v9diaue.apps.googleusercontent.com",
   );
 
   /// Staging configuration
@@ -136,6 +143,8 @@ class AppConfig {
       'enableMockData': false,
       'enableFeatureFlags': true,
     },
+    facebookAppId: "2571210046580943",
+    googleClientId: "645002434672-nji58g0s1sdqfpu679h3h7cc3v9diaue.apps.googleusercontent.com",
   );
 
   /// Production configuration
@@ -166,6 +175,8 @@ class AppConfig {
       'enableMockData': false,
       'enableFeatureFlags': false,
     },
+    facebookAppId: "2571210046580943",
+    googleClientId: "645002434672-nji58g0s1sdqfpu679h3h7cc3v9diaue.apps.googleusercontent.com",
   );
 
   /// Get configuration based on flavor

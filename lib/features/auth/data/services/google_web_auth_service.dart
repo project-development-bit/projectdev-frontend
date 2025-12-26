@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
+import 'package:gigafaucet/core/config/flavor_manager.dart';
 import 'package:googleapis_auth/auth_browser.dart';
 
 // Service Class
 class GoogleAuthService {
-  final String _clientId =
-      '645002434672-nji58g0s1sdqfpu679h3h7cc3v9diaue.apps.googleusercontent.com';
+  final String _clientId = FlavorManager.currentConfig.googleClientId;
 
   final callbackUrlScheme =
       'com.googleusercontent.apps.645002434672-nji58g0s1sdqfpu679h3h7cc3v9diaue';
