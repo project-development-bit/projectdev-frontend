@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gigafaucet/core/common/common_button.dart';
-import 'package:gigafaucet/core/common/common_image_widget.dart';
-import 'package:gigafaucet/core/config/app_local_images.dart';
 import 'package:gigafaucet/core/enum/user_role.dart';
 import 'package:gigafaucet/core/extensions/context_extensions.dart';
 import 'package:gigafaucet/core/providers/consolidated_auth_provider.dart';
@@ -11,6 +8,8 @@ import 'package:gigafaucet/core/theme/app_colors.dart';
 import 'package:gigafaucet/features/auth/presentation/providers/ip_country_provider.dart';
 import 'package:gigafaucet/features/auth/presentation/providers/login_provider.dart';
 import 'package:gigafaucet/features/auth/presentation/providers/selected_country_provider.dart';
+import 'package:gigafaucet/features/auth/presentation/widgets/socials/social_facebook_button.dart';
+import 'package:gigafaucet/features/auth/presentation/widgets/socials/social_google_button.dart';
 import 'package:gigafaucet/features/localization/data/helpers/app_localizations.dart';
 import 'package:gigafaucet/routing/app_router.dart';
 import 'package:go_router/go_router.dart';
@@ -64,20 +63,10 @@ class _SocialSignupButtonsState extends ConsumerState<SocialSignupButtons> {
       children: [
         _buildButtonWrapper(
           isMobile: false,
-          child: CommonButton(
-            text: 'Google',
+          child: SocialGoogleButton(
             onPressed: () {
               _handleGoogleSignUp();
             },
-            backgroundColor: Color(0xFF333333),
-            icon: CommonImage(
-              imageUrl: AppLocalImages.googleLogo,
-              width: 30,
-              height: 30,
-              fit: BoxFit.contain,
-            ),
-            isOutlined: false,
-            height: 56,
           ),
         ),
         SizedBox(
@@ -86,20 +75,10 @@ class _SocialSignupButtonsState extends ConsumerState<SocialSignupButtons> {
         ),
         _buildButtonWrapper(
           isMobile: false,
-          child: CommonButton(
-            text: 'Facebook',
-            backgroundColor: Color(0xFF333333),
+          child: SocialFacebookButton(
             onPressed: () {
               _handleFacebookLoginWithToken(ref, context);
             },
-            icon: CommonImage(
-              imageUrl: AppLocalImages.facebookLogo,
-              width: 30,
-              height: 30,
-              fit: BoxFit.contain,
-            ),
-            isOutlined: false,
-            height: 56,
           ),
         )
       ],

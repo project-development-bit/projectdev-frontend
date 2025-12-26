@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gigafaucet/core/common/common_button.dart';
-import 'package:gigafaucet/core/common/common_image_widget.dart';
-import 'package:gigafaucet/core/config/app_local_images.dart';
 import 'package:gigafaucet/core/extensions/context_extensions.dart';
 import 'package:gigafaucet/core/providers/consolidated_auth_provider.dart';
 import 'package:gigafaucet/core/providers/turnstile_provider.dart';
 import 'package:gigafaucet/features/auth/presentation/providers/ip_country_provider.dart';
+import 'package:gigafaucet/features/auth/presentation/widgets/socials/social_facebook_button.dart';
+import 'package:gigafaucet/features/auth/presentation/widgets/socials/social_google_button.dart';
 import 'package:gigafaucet/features/localization/data/helpers/app_localizations.dart';
 
 class SocialLoginButtons extends ConsumerWidget {
@@ -24,21 +23,10 @@ class SocialLoginButtons extends ConsumerWidget {
       children: [
         _buildButtonWrapper(
           isMobile: false,
-          child: CommonButton(
-            text: 'Google',
-            backgroundColor: Color(0xFF333333),
+          child: SocialGoogleButton(
             onPressed: () {
               _handleGoogleLoginWithToken(ref, context);
             },
-            icon: CommonImage(
-              imageUrl: AppLocalImages.googleLogo,
-              width: 24,
-              height: 24,
-              fit: BoxFit.contain,
-            ),
-            isOutlined: false, fontSize: 14,
-            // textColor: ,
-            height: 56,
           ),
         ),
         SizedBox(
@@ -47,22 +35,10 @@ class SocialLoginButtons extends ConsumerWidget {
         ),
         _buildButtonWrapper(
           isMobile: false,
-          child: CommonButton(
-            text: 'Facebook',
-            backgroundColor: Color(0xFF333333),
+          child: SocialFacebookButton(
             onPressed: () {
               _handleFacebookLoginWithToken(ref, context);
             },
-            icon: CommonImage(
-              imageUrl: AppLocalImages.facebookLogo,
-              width: 30,
-              height: 30,
-              fit: BoxFit.contain,
-            ),
-            isOutlined: false,
-
-            // textColor: Color(0xFF333333),
-            height: 56,
           ),
         )
       ],

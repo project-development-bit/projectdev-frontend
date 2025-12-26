@@ -6,7 +6,7 @@ import 'package:gigafaucet/features/auth/presentation/widgets/remember_me_widget
 import 'package:gigafaucet/features/auth/presentation/providers/ip_country_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gigafaucet/features/auth/presentation/widgets/social_login_butttons.dart';
+import 'package:gigafaucet/features/auth/presentation/widgets/socials/social_login_butttons.dart';
 import '../../../../core/common/common_textfield.dart';
 import '../../../../core/common/common_text.dart';
 import '../../../localization/data/helpers/app_localizations.dart';
