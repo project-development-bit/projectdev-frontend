@@ -210,7 +210,7 @@ class _SecurityPinDialogState extends ConsumerState<VerifySecurityPinDialog> {
                   FilteringTextInputFormatter.digitsOnly,
                   LengthLimitingTextInputFormatter(6),
                 ],
-                onSubmitted: isLoading ? null : (_) => () {},
+                onSubmitted: isLoading ? null : (_) => _validateAndSubmit(),
                 onChanged: (_) {
                   // Clear error when user starts typing
                   if (_errorText != null) {
@@ -265,37 +265,6 @@ class _SecurityPinDialogState extends ConsumerState<VerifySecurityPinDialog> {
           ),
         ),
       ),
-    );
-  }
-
-  CommonTextField pinCodeField(
-    TextEditingController controller, {
-    String? errorText,
-    bool isConfirmField = false,
-  }) {
-    return CommonTextField(
-      controller: controller,
-      maxLength: 4,
-      keyboardType: TextInputType.number,
-      inputFormatters: [
-        FilteringTextInputFormatter.digitsOnly,
-      ],
-      fillColor: Color(0xff1A1A1A),
-      obscureText: false,
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return context.translate("security_pin_empty_error");
-        }
-        if (value.length != 4) {
-          return context.translate("security_pin_length_error");
-        }
-        if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
-          return context.translate("security_pin_must_be_numeric");
-        }
-        return errorText;
-      },
-      onSubmitted: (_) => _validateAndSubmit(),
-      hintText: context.translate("enter_security_pin_hint"),
     );
   }
 
