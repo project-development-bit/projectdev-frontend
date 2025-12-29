@@ -532,6 +532,13 @@
         splashStyle?.remove();
         splashScript?.remove();
         document.body.style.background = "transparent";
+        setTimeout(() => {
+          const bgColor = "#000";
+          document.documentElement.style.backgroundColor = bgColor;
+          document.body.style.backgroundColor = bgColor;
+          document.body.style.backgroundImage = "none";
+        }, 3000);
+
       }
     };
 
