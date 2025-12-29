@@ -11,7 +11,7 @@ class LoginResponse extends Equatable {
     required this.message,
     this.user,
     this.tokens,
-    this.userId, 
+    this.userId,
   });
 
   /// Whether the login was successful
@@ -26,7 +26,7 @@ class LoginResponse extends Equatable {
   /// Authentication tokens (nullable when 2FA is required)
   final AuthTokens? tokens;
 
-  /// if userID is not empty, we can say this user is enabled for 2FA 
+  /// if userID is not empty, we can say this user is enabled for 2FA
   final int? userId;
 
   /// Create a copy of this LoginResponse with updated values

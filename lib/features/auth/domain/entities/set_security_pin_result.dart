@@ -5,13 +5,13 @@ class SetSecurityPinResult extends Equatable {
   const SetSecurityPinResult({
     required this.success,
     required this.message,
-    required this.securityPinEnabled,
+    required this.securityPinRequired,
   });
 
   final bool success;
   final String message;
-  final bool securityPinEnabled;
+  final bool securityPinRequired;
 
   @override
-  List<Object?> get props => [success, message, securityPinEnabled];
+  List<Object?> get props => [success, message, securityPinRequired];
 }

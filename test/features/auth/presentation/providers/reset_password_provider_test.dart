@@ -47,7 +47,7 @@ void main() {
       refreshToken: 'refresh_token',
       twofaEnabled: 0,
       twofaSecret: 'twofa_secret',
-      securityPinEnabled: 0,
+      securityPinRequired: 0,
       avatarUrl: 'http://example.com/avatar.png',
       interestEnable: 1,
       notificationsEnabled: 1,

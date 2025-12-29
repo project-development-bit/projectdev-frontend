@@ -89,7 +89,7 @@ void main() {
             updatedAt: DateTime.now(),
             twofaSecret: '',
             twofaEnabled: 0,
-            securityPinEnabled: 0,
+            securityPinRequired: 0,
             avatarUrl: '',
             interestEnable: 0,
             notificationsEnabled: 0,
