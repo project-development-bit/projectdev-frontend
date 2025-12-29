@@ -1,42 +1,62 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:gigafaucet/core/config/app_local_images.dart';
-import 'package:gigafaucet/core/core.dart';
+import 'package:gigafaucet/features/pirate_treasure_hunt/domain/entity/treasure_map_entry.dart';
 import 'package:gigafaucet/features/pirate_treasure_hunt/domain/entity/treasure_map_item.dart';
+import 'package:gigafaucet/features/pirate_treasure_hunt/presentation/widgets/teasure_hunt_map_item_widget.dart';
 
-class PirateTreasureHuntMapWidget extends StatelessWidget {
+class PirateTreasureHuntMapWidget extends StatefulWidget {
   const PirateTreasureHuntMapWidget({super.key});
 
+  @override
+  State<PirateTreasureHuntMapWidget> createState() =>
+      _PirateTreasureHuntMapWidgetState();
+}
+
+class _PirateTreasureHuntMapWidgetState
+    extends State<PirateTreasureHuntMapWidget> {
   static const double mapWidth = 550;
   static const double mapHeight = 450;
+  static const int itemsPerPage = 8;
+
+  late final ScrollController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final List<TreasureMapItem> mapItems = [
+    final List<TreasureMapItem> foundItems = [
       TreasureMapItem(
         islandIndex: 1,
         type: MapItemType.girl,
-        x: 0.27,
-        y: 0.38,
         isUnlocked: true,
-        width: 100,
-        height: 67,
+        isCurrent: false,
+        width: 120,
+        height: 74,
       ),
       TreasureMapItem(
         islandIndex: 2,
         type: MapItemType.girl,
         isUnlocked: true,
         isCurrent: true,
-        x: 0.3,
-        y: 0.55,
-        width: 60,
-        height: 72,
+        width: 64,
+        height: 80,
       ),
       TreasureMapItem(
         islandIndex: 3,
         type: MapItemType.question,
         isUnlocked: true,
-        x: 0.15,
-        y: 0.72,
+        isCurrent: false,
         width: 65,
         height: 55,
       ),
@@ -44,8 +64,7 @@ class PirateTreasureHuntMapWidget extends StatelessWidget {
         islandIndex: 4,
         type: MapItemType.question,
         isUnlocked: true,
-        x: 0.50,
-        y: 0.36,
+        isCurrent: false,
         width: 69,
         height: 43.37,
       ),
@@ -53,8 +72,7 @@ class PirateTreasureHuntMapWidget extends StatelessWidget {
         islandIndex: 5,
         type: MapItemType.question,
         isUnlocked: true,
-        x: 0.56,
-        y: 0.54,
+        isCurrent: false,
         width: 95,
         height: 77,
       ),
@@ -62,113 +80,162 @@ class PirateTreasureHuntMapWidget extends StatelessWidget {
         islandIndex: 6,
         type: MapItemType.question,
         isUnlocked: true,
-        x: 0.45,
-        y: 0.72,
+        isCurrent: false,
         width: 97.24,
         height: 56.67,
       ),
       TreasureMapItem(
         islandIndex: 7,
         type: MapItemType.question,
-        isCurrent: true,
-        x: 0.74,
-        y: 0.40,
+        isUnlocked: true,
+        isCurrent: false,
         width: 95,
         height: 45,
       ),
       TreasureMapItem(
         islandIndex: 8,
         type: MapItemType.question,
-        x: 0.80,
-        y: 0.55,
+        isUnlocked: true,
+        isCurrent: false,
         width: 56,
         height: 42,
       ),
+      TreasureMapItem(
+        islandIndex: 1,
+        type: MapItemType.girl,
+        isUnlocked: true,
+        isCurrent: false,
+        width: 120,
+        height: 74,
+      ),
     ];
 
-    return SizedBox(
-      width: mapWidth,
-      height: mapHeight,
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child: Image.asset(
-              AppLocalImages.pirateTreasureHuntMap,
-              fit: BoxFit.fill,
-            ),
+    final pageCount = _calculatePageCount(foundItems.length);
+    final visibleItems = _buildVisibleItems(foundItems, pageCount);
+
+    final mapRouteWidth = mapWidth - 125;
+    final mapRouteHeight = mapHeight - 180;
+
+    final totalWidth = pageCount * mapRouteWidth;
+
+    return Builder(builder: (context) {
+      return Center(
+          child: FittedBox(
+        fit: BoxFit.contain,
+        alignment: Alignment.center,
+        child: SizedBox(
+          width: mapWidth,
+          height: mapHeight,
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: Image.asset(
+                  AppLocalImages.pirateTreasureHuntMap,
+                  fit: BoxFit.fill,
+                  repeat: ImageRepeat.repeatX,
+                  alignment: Alignment.centerLeft,
+                ),
+              ),
+              Positioned(
+                left: 65,
+                top: 100,
+                child: SizedBox(
+                  width: mapRouteWidth,
+                  height: mapRouteHeight,
+                  child: Scrollbar(
+                    controller: _controller,
+                    thumbVisibility: true,
+                    child: SingleChildScrollView(
+                      controller: _controller,
+                      scrollDirection: Axis.horizontal,
+                      child: SizedBox(
+                        width: totalWidth,
+                        height: mapRouteHeight,
+                        child: Stack(
+                          children: [
+                            Positioned.fill(
+                              child: Image.asset(
+                                AppLocalImages.pirateTreasureHuntMapRoute,
+                                width: mapRouteWidth,
+                                height: mapRouteHeight,
+                                repeat: ImageRepeat.repeatX,
+                                alignment: Alignment.centerLeft,
+                              ),
+                            ),
+                            for (final entry in visibleItems)
+                              TeasureHuntMapItemWidget(
+                                item: entry.item,
+                                pageIndex: entry.pageIndex,
+                                slotIndex: entry.slotIndex,
+                                pageWidth: mapRouteWidth,
+                                pageHeight: mapRouteHeight,
+                              ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-          for (final item in mapItems) _buildMapItem(item),
-        ],
-      ),
+        ),
+      ));
+    });
+  }
+
+  int _calculatePageCount(int foundCount) {
+    int pageCount = math.max(1, (foundCount / itemsPerPage).ceil());
+    if (foundCount > 0 && foundCount % itemsPerPage == 0) {
+      pageCount += 1;
+    }
+    return pageCount;
+  }
+
+  List<TreasureMapEntry> _buildVisibleItems(
+    List<TreasureMapItem> foundItems,
+    int pageCount,
+  ) {
+    final List<TreasureMapEntry> out = [];
+
+    for (int pageIndex = 0; pageIndex < pageCount; pageIndex++) {
+      for (int slotIndex = 0; slotIndex < itemsPerPage; slotIndex++) {
+        final globalIndex = pageIndex * itemsPerPage + slotIndex;
+
+        if (globalIndex < foundItems.length) {
+          out.add(TreasureMapEntry(
+            item: foundItems[globalIndex],
+            pageIndex: pageIndex,
+            slotIndex: slotIndex,
+          ));
+        } else {
+          final isFirstPlaceholder = globalIndex == foundItems.length;
+
+          out.add(TreasureMapEntry(
+            item: _questionPlaceholder(
+              islandIndex: globalIndex + 1,
+              isCurrent: isFirstPlaceholder,
+            ),
+            pageIndex: pageIndex,
+            slotIndex: slotIndex,
+          ));
+        }
+      }
+    }
+    return out;
+  }
+
+  TreasureMapItem _questionPlaceholder({
+    required int islandIndex,
+    bool isCurrent = false,
+  }) {
+    return TreasureMapItem(
+      islandIndex: islandIndex,
+      type: MapItemType.question,
+      isUnlocked: false,
+      isCurrent: isCurrent,
+      width: 40,
+      height: 40,
     );
-  }
-
-  // ---------------------------
-  // Map Item Builder
-  // ---------------------------
-
-  Widget _buildMapItem(TreasureMapItem item) {
-    final bool isLockedGirl =
-        (item.type == MapItemType.girl || item.isCurrent) && !item.isUnlocked;
-
-    final String asset = _resolveAsset(item, isLockedGirl);
-    final Size size = _resolveSize(item, isLockedGirl);
-
-    return Positioned(
-      left: item.x * mapWidth - size.width / 2,
-      top: item.y * mapHeight - size.height / 2,
-      child: CommonImage(
-        imageUrl: asset,
-        width: size.width,
-        height: size.height,
-        fit: BoxFit.fill,
-      ),
-    );
-  }
-
-  // ---------------------------
-  // Asset Resolver
-  // ---------------------------
-
-  String _resolveAsset(TreasureMapItem item, bool isLockedGirl) {
-    if (isLockedGirl) {
-      return AppLocalImages.pirateTreasureHuntMapGirl;
-    }
-
-    if (!item.isUnlocked) {
-      return _getLockedIcon(item.type);
-    }
-
-    return item.getIslandImage();
-  }
-
-  // ---------------------------
-  // Size Resolver
-  // ---------------------------
-
-  Size _resolveSize(TreasureMapItem item, bool isLockedGirl) {
-    if (isLockedGirl) {
-      return const Size(39, 82);
-    }
-
-    if (!item.isUnlocked) {
-      return const Size(40, 40);
-    }
-
-    return Size(item.width, item.height);
-  }
-
-  // ---------------------------
-  // Locked Icon Resolver
-  // ---------------------------
-
-  String _getLockedIcon(MapItemType type) {
-    switch (type) {
-      case MapItemType.question:
-        return AppLocalImages.questionMark;
-      case MapItemType.girl:
-      default:
-        return AppLocalImages.pirateTreasureHuntMapGirl;
-    }
   }
 }

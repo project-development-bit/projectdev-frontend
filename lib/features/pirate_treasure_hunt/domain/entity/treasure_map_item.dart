@@ -10,8 +10,6 @@ enum MapItemType {
 class TreasureMapItem {
   final MapItemType type;
   final int islandIndex;
-  final double x;
-  final double y;
   final double width;
   final double height;
   final bool isUnlocked;
@@ -20,8 +18,6 @@ class TreasureMapItem {
   const TreasureMapItem({
     required this.type,
     this.islandIndex = 1,
-    required this.x,
-    required this.y,
     this.width = 40,
     this.height = 40,
     this.isUnlocked = false,
