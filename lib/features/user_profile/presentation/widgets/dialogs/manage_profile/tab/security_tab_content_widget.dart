@@ -60,7 +60,7 @@ class _SecurityTabContentWidgetState
                       },
                     );
                   } else {
-                    show2FADialog(context, email: email, onSuccess: () {
+                    show2FADialog(ctx, email: email, onSuccess: () {
                       // Refresh profile data after enabling 2FA
                       ref
                           .read(getProfileNotifierProvider.notifier)
