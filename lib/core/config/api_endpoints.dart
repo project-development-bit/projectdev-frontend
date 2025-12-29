@@ -26,3 +26,9 @@ const fortuneWheelSpinEndpoint =
     'fortune-wheel/spin'; // POST spin fortune wheel
 const fortuneWheelStatusEndpoint =
     'fortune-wheel/rewards/status'; // GET fortune wheel status
+
+// Treasure Chest Endpoints
+const treasureChestStatusEndpoint =
+    'treasure-chest/status'; // GET treasure chest status
+const treasureChestOpenEndpoint =
+    'treasure-chest/open'; // POST open treasure chest

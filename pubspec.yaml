@@ -154,6 +154,8 @@ flutter:
     - assets/images/coins/
     - assets/images/logos/
     - assets/sound/
+    - assets/animation/
+    - assets/images/treasure_chest/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 

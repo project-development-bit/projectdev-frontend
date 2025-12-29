@@ -195,4 +195,17 @@ class AppLocalImages {
 
   static String homeCoinBackgroundSection2Desktop =
       "assets/images/bg/home_coin_section_2_desktop@2x.png";
+
+  static String lottieTreasureChest = 'assets/animation/treasure_chest.json';
+  static String treasureChestTitle = 'assets/images/treasure_chest_title.png';
+  static String treasureChestCoinReward =
+      'assets/images/treasure_chest/coin_reward.png';
+  static String treasureChestMoneyReward =
+      'assets/images/treasure_chest/money_reward.png';
+  static String treasureChestBonusSpinReward =
+      'assets/images/treasure_chest/spinwheel_reward.png';
+  static String treasureChestOffetBoost =
+      'assets/images/treasure_chest/offer_boost.png';
+  static String treasureChestPTCDiscount =
+      'assets/images/treasure_chest/ptc_discont_reward.png';
 }
