@@ -1,5 +1,6 @@
 import 'package:gigafaucet/core/error/failures.dart';
 import 'package:gigafaucet/core/services/secure_storage_service.dart';
+import 'package:gigafaucet/features/auth/data/datasources/remote/facebook_service_auth.dart';
 import 'package:gigafaucet/features/auth/data/datasources/remote/google_auth_remote.dart';
 import 'package:gigafaucet/features/auth/data/repositories/auth_repo_impl.dart';
 import 'package:gigafaucet/features/auth/data/datasources/remote/auth_remote.dart';
@@ -25,6 +26,8 @@ class MockSecureStorageService extends Mock implements SecureStorageService {}
 
 class MockGoogleAuthRemote extends Mock implements GoogleAuthRemote {}
 
+class MockFacebookAuthService extends Mock implements FacebookAuthService {}
+
 void main() {
   group('AuthRepositoryImpl', () {
     late AuthRepositoryImpl authRepository;
@@ -47,7 +50,11 @@ void main() {
       mockRemoteDataSource = MockAuthRemoteDataSource();
       mockSecureStorage = MockSecureStorageService();
       authRepository = AuthRepositoryImpl(
-          mockRemoteDataSource, mockSecureStorage, MockGoogleAuthRemote());
+        mockRemoteDataSource,
+        mockSecureStorage,
+        MockGoogleAuthRemote(),
+        MockFacebookAuthService(),
+      );
     });
 
     group('login', () {
@@ -82,7 +89,7 @@ void main() {
             updatedAt: DateTime.now(),
             twofaSecret: '',
             twofaEnabled: 0,
-            securityPinEnabled: 0,
+            securityPinRequired: 0,
             avatarUrl: '',
             interestEnable: 0,
             notificationsEnabled: 0,

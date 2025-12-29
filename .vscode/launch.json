@@ -89,6 +89,15 @@
       "program": "lib/main_dev.dart"
     },
     {
+      "name": "🟢 Gigafaucet (Prod - Android)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_prod.dart",
+      "args": [
+        "--flavor prod"
+      ]
+    },
+    {
       "name": "🟢 Gigafaucet (Dev - iOS)",
       "request": "launch",
       "type": "dart",

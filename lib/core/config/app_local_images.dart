@@ -177,6 +177,8 @@ class AppLocalImages {
 
   // Logo Images
   static const String googleLogo = "assets/images/logos/google.svg";
+  static const String facebookLogo = "assets/images/logos/facebook.svg";
+
   static const String splashLogo = "assets/images/giga_faucet_text_logo.png";
   static const String splashBackground = "assets/images/splash_background.png";
   static const String splashBackgroundMobile =

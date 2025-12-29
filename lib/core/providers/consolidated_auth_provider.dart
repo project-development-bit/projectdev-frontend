@@ -248,6 +248,20 @@ class AuthActions {
         onSuccess: onSuccess);
   }
 
+  Future<void> facebookSignIn({
+    required String countryCode,
+    String? accessToken,
+    VoidCallback? onSuccess,
+    Function(String)? onError,
+  }) async {
+    final loginNotifier = _ref.read(loginNotifierProvider.notifier);
+    await loginNotifier.facebookSignIn(
+        accessToken: accessToken,
+        countryCode: countryCode,
+        onError: onError,
+        onSuccess: onSuccess);
+  }
+
   Future<void> googleSignUp({
     required String countryCode,
     String? accessToken,
@@ -258,6 +272,22 @@ class AuthActions {
   }) async {
     final loginNotifier = _ref.read(loginNotifierProvider.notifier);
     await loginNotifier.googleSignUp(
+        accessToken: accessToken,
+        countryCode: countryCode,
+        onError: onError,
+        onSuccess: onSuccess);
+  }
+
+  Future<void> facebookSignUp({
+    required String countryCode,
+    String? accessToken,
+    VoidCallback? onSuccess,
+    UserRole? role,
+    String? referralCode,
+    Function(String)? onError,
+  }) async {
+    final loginNotifier = _ref.read(loginNotifierProvider.notifier);
+    await loginNotifier.facebookSignUp(
         accessToken: accessToken,
         countryCode: countryCode,
         onError: onError,

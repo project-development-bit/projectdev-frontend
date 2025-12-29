@@ -3,34 +3,37 @@ import 'package:gigafaucet/core/common/common_textfield.dart';
 import 'package:gigafaucet/core/common/custom_buttom_widget.dart';
 import 'package:gigafaucet/core/common/dialog_bg_widget.dart';
 import 'package:gigafaucet/core/extensions/extensions.dart';
-import 'package:gigafaucet/features/user_profile/presentation/providers/profile_providers.dart';
-import 'package:gigafaucet/features/user_profile/presentation/providers/set_security_pin_notifier.dart';
+import 'package:gigafaucet/features/auth/presentation/providers/security_pin/security_pin_providers.dart';
+import 'package:gigafaucet/features/auth/presentation/providers/security_pin/set_security_pin_notifier.dart';
+import 'package:gigafaucet/features/user_profile/presentation/providers/current_user_provider.dart';
 import 'package:gigafaucet/features/user_profile/presentation/providers/get_profile_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-void showSecurityPinDialog(BuildContext context, {bool isPinEnabled = false}) {
+void showEnableSecurityPinDialog(BuildContext context,
+    {bool isPinEnabled = false}) {
   context.showManagePopup(
     barrierDismissible: true,
     // height: context.isDesktop ? 400 : context.screenHeight * 0.9,
-    child: SecurityPinDialog(isPinEnabled: isPinEnabled),
+    child: EnableSecurityPinDialog(isPinEnabled: isPinEnabled),
     // title: context.translate(
     //     isPinEnabled ? "disable_security_pin" : "enable_security_pin_title")
   );
 }
 
-class SecurityPinDialog extends ConsumerStatefulWidget {
+class EnableSecurityPinDialog extends ConsumerStatefulWidget {
   final bool isPinEnabled;
 
-  const SecurityPinDialog({super.key, this.isPinEnabled = false});
+  const EnableSecurityPinDialog({super.key, this.isPinEnabled = false});
 
   @override
-  ConsumerState<SecurityPinDialog> createState() => _SecurityPinDialogState();
+  ConsumerState<EnableSecurityPinDialog> createState() =>
+      _SecurityPinDialogState();
 }
 
-class _SecurityPinDialogState extends ConsumerState<SecurityPinDialog> {
+class _SecurityPinDialogState extends ConsumerState<EnableSecurityPinDialog> {
   final _formKey = GlobalKey<FormState>();
   final pinCodeController = TextEditingController();
   final confirmPinCodeController = TextEditingController();
@@ -45,7 +48,7 @@ class _SecurityPinDialogState extends ConsumerState<SecurityPinDialog> {
     ref.listenManual<SetSecurityPinState>(
       setSecurityPinNotifierProvider,
       (previous, next) async {
-        if (next.isSetting) return;
+        if (next.isLoaing) return;
 
         if (next.isSuccess) {
           if (mounted && context.mounted) {
@@ -57,6 +60,7 @@ class _SecurityPinDialogState extends ConsumerState<SecurityPinDialog> {
             ref
                 .read(getProfileNotifierProvider.notifier)
                 .fetchProfile(isLoading: false);
+            ref.read(currentUserProvider.notifier).getCurrentUser();
 
             // Close dialog
 
@@ -123,7 +127,7 @@ class _SecurityPinDialogState extends ConsumerState<SecurityPinDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final isLoading = ref.watch(setSecurityPinNotifierProvider).isSetting;
+    final isLoading = ref.watch(setSecurityPinNotifierProvider).isLoaing;
 
     return DialogBgWidget(
       isOverlayLoading: isLoading,

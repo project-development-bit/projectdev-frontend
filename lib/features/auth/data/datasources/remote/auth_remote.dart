@@ -1,10 +1,15 @@
 import 'package:gigafaucet/core/config/api_endpoints.dart';
+import 'package:gigafaucet/core/error/failures.dart';
 import 'package:gigafaucet/core/network/base_dio_client.dart';
 import 'package:gigafaucet/features/auth/data/models/register_request.dart';
 import 'package:gigafaucet/features/auth/data/models/login_request.dart';
 import 'package:gigafaucet/features/auth/data/models/login_response_model.dart';
+import 'package:gigafaucet/features/auth/data/models/request/facebook_login_request.dart';
 import 'package:gigafaucet/features/auth/data/models/request/google_login_request.dart';
 import 'package:gigafaucet/features/auth/data/models/request/google_register_request.dart';
+import 'package:gigafaucet/features/auth/data/models/request/verify_security_pin_request_model.dart';
+import 'package:gigafaucet/features/auth/data/models/response/set_security_pin_response_model.dart';
+import 'package:gigafaucet/features/auth/data/models/response/verify_security_pin_response_model.dart';
 import 'package:gigafaucet/features/auth/data/models/user_model.dart';
 import 'package:gigafaucet/features/auth/data/models/resend_code_request.dart';
 import 'package:gigafaucet/features/auth/data/models/resend_code_response.dart';
@@ -29,6 +34,7 @@ import 'package:gigafaucet/features/auth/data/models/reset_password_request.dart
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gigafaucet/features/auth/data/models/request/set_security_pin_request_model.dart';
 
 /// Provider for the authentication remote data source
 final authRemoteDataSourceProvider = Provider<AuthRemoteDataSource>(
@@ -42,10 +48,12 @@ abstract class AuthRemoteDataSource {
   /// Register a new user with the provided request data
   Future<void> register(RegisterRequest request);
   Future<LoginResponseModel> googleRegister(GoogleRegisterRequest request);
+  Future<LoginResponseModel> facebookRegister(FacebookRegisterRequest request);
 
   /// Login user with email and password
   Future<LoginResponseModel> login(LoginRequest request);
   Future<LoginResponseModel> googleLogin(GoogleLoginRequest request);
+  Future<LoginResponseModel> facebookLogin(FacebookLoginRequest request);
 
   /// Get current user information from server
   Future<UserModel> whoami();
@@ -87,6 +95,16 @@ abstract class AuthRemoteDataSource {
 
   /// Disable 2FA for the authenticated user
   Future<Disable2FAResponse> disable2FA(Disable2FARequest request);
+
+  /// Set or update security PIN
+  Future<SetSecurityPinResponseModel> setSecurityPin({
+    required int securityPin,
+    required bool enable,
+  });
+
+  Future<VerifySecurityPinResponseModel> verifySecurityPin({
+    required int securityPin,
+  });
 }
 
 /// Implementation of [AuthRemoteDataSource] that handles HTTP requests
@@ -129,6 +147,33 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     try {
       final response = await dioClient.post(
         googleRegisterEndpoints,
+        data: await request.toJson(),
+      );
+      return LoginResponseModel.fromJson(response.data as Map<String, dynamic>);
+      // Successful responses (200-299) don't need explicit handling
+      // Dio automatically throws for non-2xx responses
+    } on DioException catch (e) {
+      // Extract server error message from response data
+      final serverMessage = _extractServerErrorMessage(e.response?.data);
+
+      // Create new DioException with server message or appropriate fallback
+      throw DioException(
+        requestOptions: e.requestOptions,
+        response: e.response,
+        message: serverMessage ?? _getFallbackMessage(e),
+      );
+    } catch (e) {
+      // Handle any other unexpected exceptions
+      throw Exception('Unexpected error during code verification: $e');
+    }
+  }
+
+  @override
+  Future<LoginResponseModel> facebookRegister(
+      FacebookRegisterRequest request) async {
+    try {
+      final response = await dioClient.post(
+        facebookRegisterEndpoints,
         data: await request.toJson(),
       );
       return LoginResponseModel.fromJson(response.data as Map<String, dynamic>);
@@ -331,6 +376,45 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     try {
       final response = await dioClient.post(
         googleLoginEndpoints,
+        data: await request.toJson(),
+      );
+
+      return LoginResponseModel.fromJson(response.data as Map<String, dynamic>);
+    } on DioException catch (e) {
+      debugPrint('❌ Login DioException: ${e.message}');
+      debugPrint('❌ Request URL: ${e.requestOptions.uri}');
+      debugPrint('❌ Response status: ${e.response?.statusCode}');
+      debugPrint('❌ Response data: ${e.response?.data}');
+
+      // Check for the specific "Client error" message
+      if (e.response?.data?.toString().contains('Client error') == true ||
+          e.message?.contains('Client error') == true) {
+        debugPrint('🚨 FOUND "CLIENT ERROR" MESSAGE IN LOGIN!');
+        debugPrint('🚨 Full response: ${e.response?.data}');
+        debugPrint('🚨 Full message: ${e.message}');
+        debugPrint('🚨 This error is likely from the API server!');
+      }
+
+      // Extract server error message from response data
+      final serverMessage = _extractServerErrorMessage(e.response?.data);
+
+      // Create new DioException with server message or appropriate fallback
+      throw DioException(
+        requestOptions: e.requestOptions,
+        response: e.response,
+        message: serverMessage ?? _getFallbackMessage(e),
+      );
+    } catch (e) {
+      // Handle any other unexpected exceptions
+      throw Exception('Unexpected error during login: $e');
+    }
+  }
+
+  @override
+  Future<LoginResponseModel> facebookLogin(FacebookLoginRequest request) async {
+    try {
+      final response = await dioClient.post(
+        facebookLoginEndpoints,
         data: await request.toJson(),
       );
 
@@ -805,6 +889,85 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     } catch (e) {
       // Handle any other unexpected exceptions
       throw Exception('Unexpected error during verification: $e');
+    }
+  }
+
+  @override
+  Future<SetSecurityPinResponseModel> setSecurityPin({
+    required int securityPin,
+    required bool enable,
+  }) async {
+    try {
+      debugPrint('🔐 Setting security PIN (enable: $enable)');
+
+      final requestModel = SetSecurityPinRequestModel(
+        securityPin: securityPin,
+        enable: enable,
+      );
+
+      final response = await dioClient.post(
+        '/users/security-pin',
+        data: requestModel.toJson(),
+      );
+
+      debugPrint('✅ Security PIN set successfully: ${response.statusCode}');
+
+      if ((response.statusCode ?? 0) >= 200 &&
+          (response.statusCode ?? 0) < 300) {
+        return SetSecurityPinResponseModel.fromJson(
+            response.data as Map<String, dynamic>);
+      } else {
+        final message = response.data is Map ? response.data['message'] : null;
+        throw ServerFailure(message: message ?? 'Failed to set security PIN');
+      }
+    } on DioException catch (e) {
+      debugPrint('❌ Set security PIN DioException: ${e.message}');
+      debugPrint('❌ Response status: ${e.response?.statusCode}');
+      debugPrint('❌ Response data: ${e.response?.data}');
+
+      final message = e.response?.data?['message'] ?? e.message;
+      throw ServerFailure(message: message ?? 'Failed to set security PIN');
+    } catch (e) {
+      debugPrint('❌ Unexpected error setting security PIN: $e');
+      throw ServerFailure(message: 'Unexpected error setting security PIN: $e');
+    }
+  }
+
+  @override
+  Future<VerifySecurityPinResponseModel> verifySecurityPin({
+    required int securityPin,
+  }) async {
+    try {
+      final requestModel = VerifySecurityPinRequestModel(
+        securityPin: securityPin,
+      );
+
+      final response = await dioClient.post(
+        '/users/verify-security-pin',
+        data: requestModel.toJson(),
+      );
+
+      debugPrint('✅ Security PIN Verify successfully: ${response.statusCode}');
+
+      if ((response.statusCode ?? 0) >= 200 &&
+          (response.statusCode ?? 0) < 300) {
+        return VerifySecurityPinResponseModel.fromJson(
+            response.data as Map<String, dynamic>);
+      } else {
+        final message = response.data is Map ? response.data['message'] : null;
+        throw ServerFailure(message: message ?? 'Failed to set security PIN');
+      }
+    } on DioException catch (e) {
+      debugPrint('❌ Verify security PIN DioException: ${e.message}');
+      debugPrint('❌ Response status: ${e.response?.statusCode}');
+      debugPrint('❌ Response data: ${e.response?.data}');
+
+      final message = e.response?.data?['message'] ?? e.message;
+      throw ServerFailure(message: message ?? 'Failed to set security PIN');
+    } catch (e) {
+      debugPrint('❌ Unexpected error setting Verify security PIN: $e');
+      throw ServerFailure(
+          message: 'Unexpected error Verify       setting security PIN: $e');
     }
   }
 }

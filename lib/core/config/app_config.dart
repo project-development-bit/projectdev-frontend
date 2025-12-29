@@ -26,6 +26,10 @@ class AppConfig {
   // Legacy web support (for backward compatibility)
   final String? webRecaptchaSiteKey;
 
+  final String facebookAppId;
+  final String googleClientId;
+  final String googleCallbackUrlScheme;
+
   const AppConfig({
     required this.flavor,
     required this.appName,
@@ -41,6 +45,9 @@ class AppConfig {
     this.androidRecaptchaSiteKey,
     this.iosRecaptchaSiteKey,
     this.webRecaptchaSiteKey,
+   required this.facebookAppId,
+   required this.googleClientId,
+  required this.googleCallbackUrlScheme,
   });
 
   /// Get the appropriate reCAPTCHA site key for the current platform
@@ -106,6 +113,9 @@ class AppConfig {
       'enableMockData': true,
       'enableFeatureFlags': true,
     },
+    facebookAppId: "2571210046580943",
+    googleClientId: "645002434672-nji58g0s1sdqfpu679h3h7cc3v9diaue.apps.googleusercontent.com",
+    googleCallbackUrlScheme: 'com.googleusercontent.apps.645002434672-nji58g0s1sdqfpu679h3h7cc3v9diaue'
   );
 
   /// Staging configuration
@@ -136,6 +146,9 @@ class AppConfig {
       'enableMockData': false,
       'enableFeatureFlags': true,
     },
+    facebookAppId: "2571210046580943",
+    googleClientId: "645002434672-nji58g0s1sdqfpu679h3h7cc3v9diaue.apps.googleusercontent.com",
+    googleCallbackUrlScheme: 'com.googleusercontent.apps.645002434672-nji58g0s1sdqfpu679h3h7cc3v9diaue'
   );
 
   /// Production configuration
@@ -166,6 +179,9 @@ class AppConfig {
       'enableMockData': false,
       'enableFeatureFlags': false,
     },
+    facebookAppId: "2571210046580943",
+    googleClientId: "645002434672-nji58g0s1sdqfpu679h3h7cc3v9diaue.apps.googleusercontent.com",
+    googleCallbackUrlScheme: 'com.googleusercontent.apps.645002434672-nji58g0s1sdqfpu679h3h7cc3v9diaue'
   );
 
   /// Get configuration based on flavor
