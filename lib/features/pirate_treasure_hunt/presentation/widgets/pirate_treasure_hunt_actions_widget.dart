@@ -22,13 +22,14 @@ class PirateTreasureHuntActionsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
       decoration: const BoxDecoration(),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: items
             .map(
-              (item) => Expanded(
+              (item) => SizedBox(
+                width: 130,
+                height: 119,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 6),
                   child: ActionCard(item: item),
