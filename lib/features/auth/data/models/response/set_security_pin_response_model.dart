@@ -5,18 +5,20 @@ class SetSecurityPinResponseModel {
   const SetSecurityPinResponseModel({
     required this.success,
     required this.message,
-    required this.securityPinEnabled,
+    required this.securityPinRequired,
   });
 
   final bool success;
   final String message;
-  final bool securityPinEnabled;
+  final bool securityPinRequired;
 
   factory SetSecurityPinResponseModel.fromJson(Map<String, dynamic> json) {
     return SetSecurityPinResponseModel(
       success: json['success'] as bool? ?? false,
       message: json['message'] as String? ?? '',
-      securityPinEnabled: (json['data'] as Map<String, dynamic>?)?['security_pin_enabled'] as bool? ?? false,
+      securityPinRequired: (json['data']
+              as Map<String, dynamic>?)?['security_pin_enabled'] as bool? ??
+          false,
     );
   }
 
@@ -25,7 +27,7 @@ class SetSecurityPinResponseModel {
       'success': success,
       'message': message,
       'data': {
-        'security_pin_enabled': securityPinEnabled,
+        'security_pin_enabled': securityPinRequired,
       },
     };
   }

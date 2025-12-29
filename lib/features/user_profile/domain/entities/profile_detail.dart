@@ -68,17 +68,17 @@ class AccountInfo extends Equatable {
 class SecuritySettings extends Equatable {
   const SecuritySettings({
     required this.twofaEnabled,
-    required this.securityPinEnabled,
+    required this.securityPinRequired,
   });
 
   /// Whether 2FA is enabled
   final bool twofaEnabled;
 
   /// Whether security PIN is enabled
-  final bool securityPinEnabled;
+  final bool securityPinRequired;
 
   @override
-  List<Object> get props => [twofaEnabled, securityPinEnabled];
+  List<Object> get props => [twofaEnabled, securityPinRequired];
 }
 
 /// User Settings Entity
