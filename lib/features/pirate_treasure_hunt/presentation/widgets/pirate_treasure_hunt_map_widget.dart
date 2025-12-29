@@ -118,7 +118,63 @@ class _PirateTreasureHuntMapWidgetState
 
     final totalWidth = pageCount * mapRouteWidth;
 
-    return Builder(builder: (context) {
+    return FutureBuilder(future: () async {
+      precacheImage(
+        AssetImage(AppLocalImages.pirateTreasureHuntMap),
+        context,
+      );
+      precacheImage(
+        AssetImage(AppLocalImages.pirateTreasureHuntMapRoute),
+        context,
+      );
+      precacheImage(
+        AssetImage('assets/images/pirate_treasure_hunt/islands/island1.svg'),
+        context,
+      );
+      precacheImage(
+        AssetImage(
+            'assets/images/pirate_treasure_hunt/islands/treasure-ship.svg'),
+        context,
+      );
+      precacheImage(
+        AssetImage('assets/images/pirate_treasure_hunt/islands/island3.svg'),
+        context,
+      );
+      precacheImage(
+        AssetImage('assets/images/pirate_treasure_hunt/islands/island4.png'),
+        context,
+      );
+      precacheImage(
+        AssetImage('assets/images/pirate_treasure_hunt/islands/island5.svg'),
+        context,
+      );
+      precacheImage(
+        AssetImage('assets/images/pirate_treasure_hunt/islands/island6.svg'),
+        context,
+      );
+      precacheImage(
+        AssetImage('assets/images/pirate_treasure_hunt/islands/island7.svg'),
+        context,
+      );
+      precacheImage(
+        AssetImage('assets/images/pirate_treasure_hunt/islands/island8.svg'),
+        context,
+      );
+    }(), builder: (context, snapshot) {
+      if (snapshot.connectionState != ConnectionState.done) {
+        return Center(
+            child: FittedBox(
+          fit: BoxFit.contain,
+          alignment: Alignment.center,
+          child: SizedBox(
+            width: mapWidth,
+            height: mapHeight,
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          ),
+        ));
+      }
       return Center(
           child: FittedBox(
         fit: BoxFit.contain,

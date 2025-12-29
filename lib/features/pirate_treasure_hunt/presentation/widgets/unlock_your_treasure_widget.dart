@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:gigafaucet/core/common/common_text.dart';
 import 'package:gigafaucet/core/common/custom_buttom_widget.dart';
 import 'package:gigafaucet/features/localization/data/helpers/localization_helper.dart';
+import 'package:gigafaucet/features/pirate_treasure_hunt/presentation/widgets/dialogs/pirate_tresure_found_dialog.dart';
 import 'package:gigafaucet/features/pirate_treasure_hunt/presentation/widgets/pirate_treasure_hunt_actions_widget.dart';
+import 'package:gigafaucet/routing/app_router.dart';
 
 class UnlockYourTreasureWidget extends StatelessWidget {
   const UnlockYourTreasureWidget({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(
+    BuildContext context,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -30,7 +34,10 @@ class UnlockYourTreasureWidget extends StatelessWidget {
         SizedBox(height: 32),
         CustomUnderLineButtonWidget(
           isDark: true,
-          onTap: () {},
+          onTap: () {
+            context.pop();
+            showPirateTresureFoundDialog(context);
+          },
           fontSize: 14,
           fontWeight: FontWeight.w700,
           title: context.translate("Start Treasure Hunt"),

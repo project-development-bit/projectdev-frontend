@@ -207,4 +207,11 @@ class AppLocalImages {
       "assets/images/pirate_treasure_hunt/map-items/gigafaucet-girl.png";
   static const String questionMark =
       "assets/images/pirate_treasure_hunt/map-items/question-mark.svg";
+
+  static const String treasureFoundBg =
+      "assets/images/pirate_treasure_hunt/treasure-found-bg.png";
+  static const String treasureFoundTitle =
+      "assets/images/pirate_treasure_hunt/treasure-found-title@2x.png";
+  static const String treasureFoundBoard =
+      "assets/images/pirate_treasure_hunt/treasure-board@2x.png";
 }
