@@ -54,11 +54,18 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
   final _emailFocusNode = FocusNode();
   final _passwordFocusNode = FocusNode();
 
+  bool _isInialized = false;
+
   bool _rememberMe = false;
-  bool get _hasEmailError =>
-      TextFieldValidators.email(_emailController.text, context) != null;
-  bool get _hasPasswordError =>
-      TextFieldValidators.password(_passwordController.text, context) != null;
+  bool get _hasEmailError => _isInialized
+      ? TextFieldValidators.email(_emailController.text, context) != null
+      : _emailController.text.isNotEmpty &&
+          TextFieldValidators.email(_emailController.text, context) != null;
+  bool get _hasPasswordError => _isInialized
+      ? TextFieldValidators.email(_passwordController.text, context) != null
+      : _passwordController.text.isNotEmpty &&
+          TextFieldValidators.password(_passwordController.text, context) !=
+              null;
 
   @override
   void initState() {
@@ -283,6 +290,11 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context);
+    if (_isInialized == false) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _isInialized = true;
+      });
+    }
 
     return AutofillGroup(
       child: Form(
