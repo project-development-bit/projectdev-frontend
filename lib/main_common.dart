@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:gigafaucet/core/theme/presentation/providers/app_setting_providers.dart';
 import 'package:gigafaucet/core/theme/presentation/providers/app_settings_norifier.dart';
 import 'package:gigafaucet/features/localization/presentation/providers/get_languages_state.dart';
@@ -29,11 +30,29 @@ final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey =
 
 /// Common app initialization function for all flavors
 Future<void> runAppWithFlavor(AppFlavor flavor) async {
+  debugPrint('Starting app initialization for flavor: ${flavor.displayName}');
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   // FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true);
   // Set the flavor first so configuration is available
   FlavorManager.setFlavor(flavor);
+
+  debugPrint('Initializing app for flavor: ${flavor.displayName}');
+  if (kIsWeb) {
+    try {
+      debugPrint('Initializing Facebook SDK for web platform...');
+      // initialize the facebook javascript SDK
+      FacebookAuth.i.webAndDesktopInitialize(
+        appId: FlavorManager.currentConfig.facebookAppId,
+        cookie: true,
+        xfbml: true,
+        version: "v15.0",
+      );
+    } catch (e) {
+      debugPrint('Error initializing Facebook SDK for web: $e');
+    }
+  }
+  debugPrint('Facebook SDK initialized for web platform.');
   // Initialize reCAPTCHA for all platforms
   final recaptchaSiteKey = FlavorManager.recaptchaSiteKey;
   if (!kIsWeb) {

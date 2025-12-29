@@ -21,9 +21,10 @@ class _SecurityTabContentWidgetState
         ref.watch(getProfileNotifierProvider).profile?.security;
 
     final is2FAEnabled = securityData?.twofaEnabled ?? false;
-    final isPinEnabled = securityData?.securityPinEnabled ?? false;
-    final email = ref.watch(profileCurrentUserProvider)?.email ?? '';
-
+    final isPinEnabled = securityData?.securityPinRequired ?? false;
+    final User? user = ref.watch(profileCurrentUserProvider);
+    final email = user?.email ?? '';
+    final issecurityPinRequired = user?.issecurityPinRequired ?? false;
     return Column(
       mainAxisSize: MainAxisSize.min,
       spacing: 32.0,
@@ -34,29 +35,58 @@ class _SecurityTabContentWidgetState
             isPrimaryColor: false,
             onPressed: () {
               context.pop();
-              showChangePasswordDialog(context);
+              if (issecurityPinRequired) {
+                showVerifySecurityPinDialog(context, onPinVerified: (ctx) {
+                  showChangePasswordDialog(ctx);
+                });
+              } else {
+                showChangePasswordDialog(context);
+              }
             }),
         _securityMenuItem(
             title: context.translate("twofa_authenticator_app"),
             onPressed: () {
               context.pop();
-              if (is2FAEnabled) {
-                showDisable2FAConfirmationDialog(
-                  context,
-                  onDisabled: () {
-                    // Refresh profile data after disabling 2FA
+              if (issecurityPinRequired) {
+                showVerifySecurityPinDialog(context, onPinVerified: (ctx) {
+                  if (is2FAEnabled) {
+                    showDisable2FAConfirmationDialog(
+                      ctx,
+                      onDisabled: () {
+                        // Refresh profile data after disabling 2FA
+                        ref
+                            .read(getProfileNotifierProvider.notifier)
+                            .fetchProfile(isLoading: false);
+                      },
+                    );
+                  } else {
+                    show2FADialog(ctx, email: email, onSuccess: () {
+                      // Refresh profile data after enabling 2FA
+                      ref
+                          .read(getProfileNotifierProvider.notifier)
+                          .fetchProfile(isLoading: false);
+                    });
+                  }
+                });
+              } else {
+                if (is2FAEnabled) {
+                  showDisable2FAConfirmationDialog(
+                    context,
+                    onDisabled: () {
+                      // Refresh profile data after disabling 2FA
+                      ref
+                          .read(getProfileNotifierProvider.notifier)
+                          .fetchProfile(isLoading: false);
+                    },
+                  );
+                } else {
+                  show2FADialog(context, email: email, onSuccess: () {
+                    // Refresh profile data after enabling 2FA
                     ref
                         .read(getProfileNotifierProvider.notifier)
                         .fetchProfile(isLoading: false);
-                  },
-                );
-              } else {
-                show2FADialog(context, email: email, onSuccess: () {
-                  // Refresh profile data after enabling 2FA
-                  ref
-                      .read(getProfileNotifierProvider.notifier)
-                      .fetchProfile(isLoading: false);
-                });
+                  });
+                }
               }
             },
             isDanger: is2FAEnabled,
@@ -72,7 +102,7 @@ class _SecurityTabContentWidgetState
                 : context.translate("enable_security_pin_btn"),
             onPressed: () {
               context.pop();
-              showSecurityPinDialog(context, isPinEnabled: isPinEnabled);
+              showEnableSecurityPinDialog(context, isPinEnabled: isPinEnabled);
             },
             description: context.translate("security_pin_description")),
       ],

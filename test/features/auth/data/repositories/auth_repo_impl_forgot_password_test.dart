@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:gigafaucet/features/auth/data/datasources/remote/facebook_service_auth.dart';
 import 'package:gigafaucet/features/auth/data/datasources/remote/google_auth_remote.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:dartz/dartz.dart';
@@ -14,7 +15,9 @@ class MockAuthRemoteDataSource extends Mock implements AuthRemoteDataSource {}
 
 class MockSecureStorageService extends Mock implements SecureStorageService {}
 
-class MockGoogleAuthService extends Mock implements GoogleAuthRemote {}
+class MockGoogleAuthRemote extends Mock implements GoogleAuthRemote {}
+
+class MockFacebookAuthService extends Mock implements FacebookAuthService {}
 
 void main() {
   group('AuthRepositoryImpl - Forgot Password', () {
@@ -33,7 +36,8 @@ void main() {
       repository = AuthRepositoryImpl(
         mockRemoteDataSource,
         mockSecureStorage,
-        MockGoogleAuthService(),
+        MockGoogleAuthRemote(),
+        MockFacebookAuthService(),
       );
     });
 

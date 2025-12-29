@@ -1,4 +1,4 @@
-import 'package:gigafaucet/features/user_profile/domain/usecases/set_security_pin_usecase.dart';
+import 'package:gigafaucet/features/auth/domain/usecases/set_security_pin_usecase.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 enum SetSecurityPinStatus { initial, loading, success, failure }
@@ -7,9 +7,9 @@ class SetSecurityPinState {
   final SetSecurityPinStatus status;
   final String? errorMessage;
   final String? successMessage;
-  final bool? securityPinEnabled;
+  final bool? securityPinRequired;
 
-  bool get isSetting => status == SetSecurityPinStatus.loading;
+  bool get isLoaing => status == SetSecurityPinStatus.loading;
   bool get hasError => status == SetSecurityPinStatus.failure;
   bool get isSuccess => status == SetSecurityPinStatus.success;
 
@@ -17,7 +17,7 @@ class SetSecurityPinState {
     this.status = SetSecurityPinStatus.initial,
     this.errorMessage,
     this.successMessage,
-    this.securityPinEnabled,
+    this.securityPinRequired,
   });
 }
 
@@ -52,7 +52,7 @@ class SetSecurityPinNotifier extends StateNotifier<SetSecurityPinState> {
         state = SetSecurityPinState(
           status: SetSecurityPinStatus.success,
           successMessage: response.message,
-          securityPinEnabled: response.securityPinEnabled,
+          securityPinRequired: response.securityPinRequired,
         );
       },
     );

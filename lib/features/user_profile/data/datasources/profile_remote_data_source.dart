@@ -8,7 +8,6 @@ import 'package:gigafaucet/features/user_profile/data/models/response/verify_ema
 import 'package:gigafaucet/features/user_profile/data/models/response/change_password_response_model.dart';
 import 'package:gigafaucet/features/user_profile/data/models/response/delete_account_response_model.dart';
 import 'package:gigafaucet/features/user_profile/data/models/response/verify_delete_account_response_model.dart';
-import 'package:gigafaucet/features/user_profile/data/models/response/set_security_pin_response_model.dart';
 import 'package:file_picker/file_picker.dart';
 
 /// Abstract class for profile remote data source
@@ -61,10 +60,4 @@ abstract class ProfileRemoteDataSource {
 
   /// Verify account deletion with code
   Future<VerifyDeleteAccountResponseModel> verifyDeleteAccount(String code);
-
-  /// Set or update security PIN
-  Future<SetSecurityPinResponseModel> setSecurityPin({
-    required int securityPin,
-    required bool enable,
-  });
 }

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="login-style.css" />
+</head>
+
+<body>
+  <div class="login-wrapper">
+    <!-- EMAIL -->
+    <div class="input-group" id="email-group">
+      <img src="icons/email.svg" class="icon" alt="email" />
+      <input id="email" type="email" placeholder="Email" autocomplete="username" />
+    </div>
+    <div class="error-text" id="email-error"></div>
+
+    <div class="spacer"></div>
+
+    <!-- PASSWORD -->
+    <div class="input-group" id="password-group">
+      <img src="icons/lock.svg" class="icon" alt="lock" />
+      <input id="password" type="password" placeholder="Password" autocomplete="current-password" />
+      <img src="icons/eye-open.svg" class="eye" id="toggleEye" alt="toggle password" />
+    </div>
+    <div class="error-text" id="password-error"></div>
+  </div>
+
+  <script>
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const toggleEye = document.getElementById("toggleEye");
+
+    let submitting = false;
+
+    /* -------------------------------
+       HELPERS
+    -------------------------------- */
+    function post(type, payload = {}) {
+      window.parent.postMessage(
+        JSON.stringify({ type, ...payload }),
+        "*"
+      );
+    }
+
+    function setError(field, message) {
+      const group = document.getElementById(`${field}-group`);
+      const error = document.getElementById(`${field}-error`);
+
+      if (message) {
+        group.classList.add("error");
+        error.textContent = message;
+        error.classList.add("active");
+      } else {
+        group.classList.remove("error");
+        error.textContent = "";
+        error.classList.remove("active");
+      }
+    }
+
+    function cacheValues() {
+      post("CACHE_VALUES", {
+        email: emailInput.value,
+        password: passwordInput.value,
+      });
+    }
+
+    function submitLogin() {
+      if (submitting) return;
+      submitting = true;
+
+      post("LOGIN_DATA", {
+        email: emailInput.value,
+        password: passwordInput.value,
+      });
+
+      setTimeout(() => (submitting = false), 400);
+    }
+
+    /* -------------------------------
+       EVENTS
+    -------------------------------- */
+
+    emailInput.addEventListener("input", cacheValues);
+    passwordInput.addEventListener("input", cacheValues);
+
+    emailInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        passwordInput.focus();
+      }
+    });
+
+    passwordInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        submitLogin();
+      }
+    });
+
+    toggleEye.addEventListener("click", () => {
+      const isHidden = passwordInput.type === "password";
+      passwordInput.type = isHidden ? "text" : "password";
+      toggleEye.src = isHidden
+        ? "icons/eye-close.svg"
+        : "icons/eye-open.svg";
+    });
+
+    /* -------------------------------
+       MESSAGE FROM FLUTTER
+    -------------------------------- */
+    window.addEventListener("message", (event) => {
+      let data;
+      try {
+        data =
+          typeof event.data === "string"
+            ? JSON.parse(event.data)
+            : event.data;
+      } catch {
+        return;
+      }
+
+      switch (data?.type) {
+        case "REQUEST_LOGIN_DATA":
+          submitLogin();
+          break;
+
+        case "SHOW_ERRORS":
+          setError("email", data.emailError);
+          setError("password", data.passwordError);
+          break;
+
+        case "CLEAR_ERRORS":
+          setError("email", null);
+          setError("password", null);
+          break;
+
+        case "RESTORE_VALUES":
+          if (typeof data.email === "string")
+            emailInput.value = data.email;
+          if (typeof data.password === "string")
+            passwordInput.value = data.password;
+          break;
+      }
+    });
+
+    /* -------------------------------
+       READY SIGNAL (CRITICAL)
+    -------------------------------- */
+    window.parent.postMessage(
+      JSON.stringify({ type: "HTML_READY" }),
+      "*"
+    );
+
+    // Autofocus email on load
+    emailInput.focus();
+  </script>
+</body>
+
+</html>

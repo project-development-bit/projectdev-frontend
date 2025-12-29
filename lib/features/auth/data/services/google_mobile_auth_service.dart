@@ -1,11 +1,11 @@
 import 'package:flutter/foundation.dart';
+import 'package:gigafaucet/core/config/flavor_manager.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:google_sign_in_platform_interface/google_sign_in_platform_interface.dart';
 
 class GoogleAuthService {
   final GoogleSignIn _googleSignIn = GoogleSignIn(
-    clientId:
-        '645002434672-nji58g0s1sdqfpu679h3h7cc3v9diaue.apps.googleusercontent.com',
+    clientId: FlavorManager.currentConfig.googleClientId,
     scopes: [
       'email',
       'profile',
