@@ -13,6 +13,8 @@ class HtmlLoginRegistry {
 
   static String email = '';
   static String password = '';
+  static String? _emailError;
+  static String? _passwordError;
 
   static void init({
     required void Function(String email, String password) onLogin,
@@ -66,6 +68,7 @@ class HtmlLoginRegistry {
   }
 
   static void restore() {
+    restoreErrors();
     _iframe.contentWindow?.postMessage(
       jsonEncode({
         'type': 'RESTORE_VALUES',
@@ -77,6 +80,9 @@ class HtmlLoginRegistry {
   }
 
   static void showErrors({String? emailError, String? passwordError}) {
+    _emailError = emailError;
+    _passwordError = passwordError;
+
     _iframe.contentWindow?.postMessage(
       jsonEncode({
         'type': 'SHOW_ERRORS',
@@ -87,7 +93,23 @@ class HtmlLoginRegistry {
     );
   }
 
+  static void restoreErrors() {
+    if (_emailError == null && _passwordError == null) return;
+
+    _iframe.contentWindow?.postMessage(
+      jsonEncode({
+        'type': 'SHOW_ERRORS',
+        'emailError': _emailError,
+        'passwordError': _passwordError,
+      }),
+      '*',
+    );
+  }
+
   static void clearErrors() {
+    _emailError = null;
+    _passwordError = null;
+
     _iframe.contentWindow?.postMessage(
       jsonEncode({'type': 'CLEAR_ERRORS'}),
       '*',

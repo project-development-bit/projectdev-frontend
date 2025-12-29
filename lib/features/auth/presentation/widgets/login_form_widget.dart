@@ -55,8 +55,10 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
   final _passwordFocusNode = FocusNode();
 
   bool _rememberMe = false;
-  bool _hasEmailError = false;
-  bool _hasPasswordError = false;
+  bool get _hasEmailError =>
+      TextFieldValidators.email(_emailController.text, context) != null;
+  bool get _hasPasswordError =>
+      TextFieldValidators.password(_passwordController.text, context) != null;
 
   @override
   void initState() {
@@ -155,10 +157,8 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
     emailError = TextFieldValidators.email(email, context);
     passwordError = TextFieldValidators.password(password, context);
 
-    setState(() {
-      _hasEmailError = emailError != null;
-      _hasPasswordError = passwordError != null;
-    });
+    //  Update error state getters
+    setState(() {});
 
     // ❌ Invalid → send errors to HTML
     if (emailError != null || passwordError != null) {
