@@ -792,5 +792,9 @@
   "congratulations": "Congratulations!",
   "spin_wheel_error_message": "Failed to spin the wheel. Please try again.",
   "enter_2fa_code_caption": "Enter the 6-digit code from your authenticator app to complete your login.",
-  "sign_to_a_different_account": "Sign in to a different account"
+  "sign_to_a_different_account": "Sign in to a different account",
+  "verify_security_pin": "Verify Security Pin",
+  "enter_your_4_digit_pin": "Enter your 4-digit PIN code",
+  "verify_pin_description": "Please enter your security PIN to verify your identity and continue. This step helps keep your account safe.",
+  "verify_pin": "Verify PIN"
 }

@@ -182,9 +182,9 @@ class _TwoFactorLoginVerificationDialogState
               mainAxisSize: MainAxisSize.min,
               children: [
                 // App Logo/Name
-            
+
                 SizedBox(height: isMobile ? 12 : 32),
-            
+
                 // Title
                 CommonText.bodyMedium(
                   context.translate('profile_2fa_description'),
@@ -193,7 +193,7 @@ class _TwoFactorLoginVerificationDialogState
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: isMobile ? 20 : 32),
-            
+
                 // Subtitle
                 CommonText.bodyMedium(
                   context.translate('enter_2fa_code_caption'),
@@ -203,7 +203,7 @@ class _TwoFactorLoginVerificationDialogState
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 14),
-            
+
                 // Code Input Field
                 CommonTextField(
                   controller: _codeController,
@@ -263,7 +263,7 @@ class _TwoFactorLoginVerificationDialogState
                     }
                   },
                 ),
-            
+
                 // Error Text
                 if (_errorText != null) ...[
                   const SizedBox(height: 8),
@@ -274,7 +274,7 @@ class _TwoFactorLoginVerificationDialogState
                     textAlign: TextAlign.center,
                   ),
                 ],
-            
+
                 SizedBox(height: isMobile ? 20 : 32),
                 CustomUnderLineButtonWidget(
                   title: context.translate("continue"),
@@ -293,14 +293,14 @@ class _TwoFactorLoginVerificationDialogState
 
                           if (widget.onClosed != null) {
                             widget.onClosed!();
-                          } 
+                          }
                         },
                   fontSize: 14,
                   width: double.infinity,
                   isDark: true,
                 ),
                 SizedBox(height: isMobile ? 20 : 32),
-            
+
                 // Support Link
                 RichText(
                   textAlign: TextAlign.center,

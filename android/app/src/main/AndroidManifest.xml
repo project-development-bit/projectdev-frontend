@@ -3,8 +3,26 @@
         android:label="${appName}"
         android:name="${applicationName}"
         android:icon="${appIcon}"
-        android:requestLegacyExternalStorage="true" 
-        >
+        android:requestLegacyExternalStorage="true" >
+
+        <!-- Facebook SDK -->
+        <meta-data
+        android:name="com.facebook.sdk.ApplicationId"
+        android:value="@string/facebook_app_id"/>
+
+        <meta-data
+            android:name="com.facebook.sdk.ClientToken"
+            android:value="@string/facebook_client_token"/>
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges=
+                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="${appName}" />
+        <provider
+            android:name="com.facebook.FacebookContentProvider"
+            android:authorities="com.facebook.app.FacebookContentProvider2571210046580943"
+            android:exported="true" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

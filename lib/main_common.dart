@@ -1,5 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:gigafaucet/core/config/app_local_images.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:gigafaucet/core/theme/presentation/providers/app_setting_providers.dart';
 import 'package:gigafaucet/core/theme/presentation/providers/app_settings_norifier.dart';
 import 'package:gigafaucet/features/localization/presentation/providers/get_languages_state.dart';
@@ -30,11 +30,29 @@ final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey =
 
 /// Common app initialization function for all flavors
 Future<void> runAppWithFlavor(AppFlavor flavor) async {
+  debugPrint('Starting app initialization for flavor: ${flavor.displayName}');
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   // FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true);
   // Set the flavor first so configuration is available
   FlavorManager.setFlavor(flavor);
+
+  debugPrint('Initializing app for flavor: ${flavor.displayName}');
+  if (kIsWeb) {
+    try {
+      debugPrint('Initializing Facebook SDK for web platform...');
+      // initialize the facebook javascript SDK
+      FacebookAuth.i.webAndDesktopInitialize(
+        appId: FlavorManager.currentConfig.facebookAppId,
+        cookie: true,
+        xfbml: true,
+        version: "v15.0",
+      );
+    } catch (e) {
+      debugPrint('Error initializing Facebook SDK for web: $e');
+    }
+  }
+  debugPrint('Facebook SDK initialized for web platform.');
   // Initialize reCAPTCHA for all platforms
   final recaptchaSiteKey = FlavorManager.recaptchaSiteKey;
   if (!kIsWeb) {
@@ -129,25 +147,9 @@ class MyApp extends ConsumerStatefulWidget {
 
 class _MyAppState extends ConsumerState<MyApp>
     with SingleTickerProviderStateMixin {
-  bool _splashImageLoaded = false;
-  bool _hasStartedAnimation = false;
-  late AnimationController _fadeController;
-  late Animation<double> _fadeAnimation;
-
   @override
   void initState() {
     super.initState();
-
-    // Initialize fade animation with optimized timing
-    _fadeController = AnimationController(
-      duration: const Duration(milliseconds: 100),
-      vsync: this,
-    );
-
-    _fadeAnimation = CurvedAnimation(
-      parent: _fadeController,
-      curve: Curves.easeInOut,
-    );
 
     // Load app settings theme from server on app start
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -167,44 +169,13 @@ class _MyAppState extends ConsumerState<MyApp>
                 languageVersion: newVersion,
               );
         }
+        if (next.isLoading == false ||
+            next.error != null ||
+            next.config != null) {
+        removeSplashFromWeb();
+        }
       },
     );
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (!_splashImageLoaded) {
-      Future.wait([
-        precacheImage(AssetImage(AppLocalImages.splashLogo), context),
-        precacheImage(AssetImage(AppLocalImages.splashBackground), context),
-        precacheImage(
-            AssetImage(AppLocalImages.splashBackgroundMobile), context),
-      ]).then((_) {
-        if (mounted) {
-          setState(() {
-            _splashImageLoaded = true;
-          });
-        }
-      });
-    }
-  }
-
-  @override
-  void dispose() {
-    _fadeController.dispose();
-    super.dispose();
-  }
-
-  void _removeSplash() {
-    removeSplashFromWeb();
-  }
-
-  void _startFadeIn() {
-    _fadeController.forward().then((_) {
-      // Remove native splash after fade-in completes
-      _removeSplash();
-    });
   }
 
   @override
@@ -235,73 +206,59 @@ class _MyAppState extends ConsumerState<MyApp>
       );
     }
 
-    // Start fade-in when theme is loaded and images are ready
-    if (!_hasStartedAnimation &&
-        _splashImageLoaded &&
-        !_fadeController.isAnimating &&
-        _fadeController.value == 0) {
-      _hasStartedAnimation = true;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _startFadeIn();
-      });
-    }
+    return FlavorBanner(
+      child: MaterialApp.router(
+        scaffoldMessengerKey: rootScaffoldMessengerKey,
+        debugShowCheckedModeBanner:
+            !FlavorManager.isProd, // Hide debug banner in production
+        routerConfig: ref.read(goRouterProvider), // Using persistent router
+        locale: currentLocale,
+        title: FlavorManager.appName, // Use flavor-specific app name
 
-    return FadeTransition(
-      opacity: _fadeAnimation,
-      child: FlavorBanner(
-        child: MaterialApp.router(
-          scaffoldMessengerKey: rootScaffoldMessengerKey,
-          debugShowCheckedModeBanner:
-              !FlavorManager.isProd, // Hide debug banner in production
-          routerConfig: ref.read(goRouterProvider), // Using persistent router
-          locale: currentLocale,
-          title: FlavorManager.appName, // Use flavor-specific app name
+        // Theme configuration - Use app settings theme from server, fallback to default theme
 
-          // Theme configuration - Use app settings theme from server, fallback to default theme
-
-          theme: appSettingsThemeState.lightTheme ?? AppTheme.lightTheme,
-          darkTheme: appSettingsThemeState.darkTheme ?? AppTheme.darkTheme,
-          themeMode: themeNotifier.getEffectiveThemeMode(
-            MediaQuery.platformBrightnessOf(context),
-          ),
-          supportedLocales: languageState.localeList.isNotEmpty
-              ? languageState.localeList
-              : const [
-                  Locale('en', 'US'),
-                  Locale('my', 'MM'),
-                ],
-          localizationsDelegates: [
-            AppLocalizationsDelegate(ref),
-            CroppyLocalizations.delegate, // <- This here
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          localeResolutionCallback: (locale, supportedLocales) {
-            debugPrint(
-                'Locale resolution - device: $locale, current: $currentLocale');
-
-            // First check if the current locale from provider is supported
-            for (var supportedLocale in supportedLocales) {
-              if (supportedLocale.languageCode == currentLocale.languageCode) {
-                debugPrint('Using provider locale: $currentLocale');
-                return currentLocale;
-              }
-            }
-
-            // Fallback to device locale if supported
-            if (locale != null) {
-              for (var supportedLocale in supportedLocales) {
-                if (supportedLocale.languageCode == locale.languageCode) {
-                  return supportedLocale;
-                }
-              }
-            }
-
-            debugPrint('Using default locale: ${supportedLocales.first}');
-            return supportedLocales.first;
-          },
+        theme: appSettingsThemeState.lightTheme ?? AppTheme.lightTheme,
+        darkTheme: appSettingsThemeState.darkTheme ?? AppTheme.darkTheme,
+        themeMode: themeNotifier.getEffectiveThemeMode(
+          MediaQuery.platformBrightnessOf(context),
         ),
+        supportedLocales: languageState.localeList.isNotEmpty
+            ? languageState.localeList
+            : const [
+                Locale('en', 'US'),
+                Locale('my', 'MM'),
+              ],
+        localizationsDelegates: [
+          AppLocalizationsDelegate(ref),
+          CroppyLocalizations.delegate, // <- This here
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        localeResolutionCallback: (locale, supportedLocales) {
+          debugPrint(
+              'Locale resolution - device: $locale, current: $currentLocale');
+
+          // First check if the current locale from provider is supported
+          for (var supportedLocale in supportedLocales) {
+            if (supportedLocale.languageCode == currentLocale.languageCode) {
+              debugPrint('Using provider locale: $currentLocale');
+              return currentLocale;
+            }
+          }
+
+          // Fallback to device locale if supported
+          if (locale != null) {
+            for (var supportedLocale in supportedLocales) {
+              if (supportedLocale.languageCode == locale.languageCode) {
+                return supportedLocale;
+              }
+            }
+          }
+
+          debugPrint('Using default locale: ${supportedLocales.first}');
+          return supportedLocales.first;
+        },
       ),
     );
   }

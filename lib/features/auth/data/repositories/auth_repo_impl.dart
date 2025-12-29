@@ -1,5 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:gigafaucet/core/error/error_model.dart';
+import 'package:gigafaucet/features/auth/data/datasources/remote/facebook_service_auth.dart';
+
+import 'package:gigafaucet/features/auth/data/models/request/facebook_login_request.dart';
 import 'package:gigafaucet/features/auth/data/datasources/remote/google_auth_remote.dart';
 import 'package:gigafaucet/features/auth/data/models/request/google_login_request.dart';
 import 'package:gigafaucet/features/auth/data/models/request/google_register_request.dart';
@@ -7,6 +10,8 @@ import 'package:gigafaucet/features/auth/data/models/verify_code_forgot_password
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gigafaucet/features/auth/domain/entities/set_security_pin_result.dart';
+import 'package:gigafaucet/features/auth/domain/entities/verify_security_pin_result.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/services/secure_storage_service.dart';
 import '../../domain/repositories/auth_repository.dart';
@@ -41,6 +46,7 @@ final authRepositoryProvider = Provider<AuthRepository>(
     ref.watch(authRemoteDataSourceProvider),
     ref.watch(secureStorageServiceProvider),
     ref.watch(googleAuthRemoteProvider),
+    ref.watch(facebookAuthServiceProvider),
   ),
 );
 
@@ -56,9 +62,11 @@ class AuthRepositoryImpl implements AuthRepository {
 
   final GoogleAuthRemote googleAuthRemote;
 
+  final FacebookAuthService facebookAuthService;
+
   /// Creates an instance of [AuthRepositoryImpl]
-  const AuthRepositoryImpl(
-      this.remoteDataSource, this.secureStorage, this.googleAuthRemote);
+  const AuthRepositoryImpl(this.remoteDataSource, this.secureStorage,
+      this.googleAuthRemote, this.facebookAuthService);
 
   @override
   Future<Either<Failure, void>> register(RegisterRequest request) async {
@@ -553,5 +561,133 @@ class AuthRepositoryImpl implements AuthRepository {
   /// Helper: Centralizes cleanup logic
   Future<void> _handleErrorCleanup() async {
     await googleAuthRemote.signOut();
+  }
+
+  @override
+  Future<Either<Failure, SetSecurityPinResult>> setSecurityPin({
+    required int securityPin,
+    required bool enable,
+  }) async {
+    try {
+      debugPrint('🔄 Repository: Setting security PIN (enable: $enable)...');
+      final responseModel = await remoteDataSource.setSecurityPin(
+        securityPin: securityPin,
+        enable: enable,
+      );
+
+      final result = SetSecurityPinResult(
+        success: responseModel.success,
+        message: responseModel.message,
+        securityPinRequired: responseModel.securityPinRequired,
+      );
+
+      return Right(result);
+    } on ServerFailure catch (e) {
+      debugPrint('❌ Repository: ServerFailure - ${e.message}');
+      return Left(e);
+    } on DioException catch (e) {
+      debugPrint('❌ Repository: DioException - ${e.message}');
+      ErrorModel? errorModel;
+      if (e.response?.data != null) {
+        errorModel = ErrorModel.fromJson(e.response!.data);
+      }
+      return Left(ServerFailure(
+        message: e.response?.data?['message'] ??
+            e.message ??
+            'Failed to set security PIN',
+        statusCode: e.response?.statusCode,
+        errorModel: errorModel,
+      ));
+    } catch (e) {
+      debugPrint('❌ Repository: Unexpected error - $e');
+      String errorMessage = 'Failed to set security PIN';
+      if (e is FormatException) {
+        errorMessage = 'Invalid response format from server';
+      } else if (e is TypeError) {
+        errorMessage = 'Data type error in server response';
+      }
+      return Left(ServerFailure(message: errorMessage));    }
+  }
+
+  @override
+  Future<Either<Failure, VerifySecurityPinResult>> verifySecurityPin({
+    required int securityPin,
+  }) async {
+    try {
+      debugPrint('🔄 Repository: Setting security PIN Verify');
+      final responseModel = await remoteDataSource.verifySecurityPin(
+        securityPin: securityPin,
+      );
+      final result = VerifySecurityPinResult(
+        success: responseModel.success,
+        message: responseModel.message,
+        verified: responseModel.verified,
+      );
+      return Right(result);
+    } on ServerFailure catch (e) {
+      debugPrint('❌ Repository: ServerFailure - ${e.message}');
+      return Left(e);
+    } on DioException catch (e) {
+      debugPrint('❌ Repository: DioException - ${e.message}');
+      ErrorModel? errorModel;
+      if (e.response?.data != null) {
+        errorModel = ErrorModel.fromJson(e.response!.data);
+      }
+      return Left(ServerFailure(
+        message: e.response?.data?['message'] ??
+            e.message ??
+            'Failed to Verify security PIN',
+        statusCode: e.response?.statusCode,
+        errorModel: errorModel,
+      ));
+    } catch (e) {
+      debugPrint('❌ Repository: Unexpected error - $e');
+      String errorMessage = 'Failed to Verify security PIN';
+      if (e is FormatException) {
+        errorMessage = 'Invalid response format from server';
+      } else if (e is TypeError) {
+        errorMessage = 'Data type error in server response';
+      }
+      return Left(ServerFailure(message: errorMessage));
+
+    }}
+
+  @override
+  Future<Either<Failure, LoginResponseModel>> facebookLogin(
+      FacebookLoginRequest request) async {
+    try {
+      final accessToken = await facebookAuthService.getFacebookAccessToken();
+      if (accessToken == null) {
+        return Left(ServerFailure(message: 'User cancelled Facebook login'));
+      }
+      request = request.copyWith(accessToken: accessToken);
+      final response = await remoteDataSource.facebookLogin(request);
+      // Store tokens in secure storage
+      await _storeTokens(response);
+      return Right(response);
+    } catch (e) {
+      await facebookAuthService.signOut();
+      return Left(ServerFailure(message: e.toString()));
+
+    }
+  } 
+
+  @override
+  Future<Either<Failure, LoginResponseModel>> facebookRegister(
+      FacebookRegisterRequest request) async {
+    try {
+      final accessToken = await facebookAuthService.getFacebookAccessToken();
+      if (accessToken == null) {
+        return Left(ServerFailure(message: 'User cancelled Facebook sign-up'));
+      }
+      request = request.copyWith(accessToken: accessToken);
+      final response = await remoteDataSource.facebookRegister(request);
+      // Store tokens in secure storage
+      await _storeTokens(response);
+      return Right(response);
+    } catch (e) {
+      await facebookAuthService.signOut();
+      return Left(ServerFailure(message: e.toString()));
+    }
   }
 }
