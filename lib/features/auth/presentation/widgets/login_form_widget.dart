@@ -271,9 +271,13 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
   }
 
   double get _htmlLoginHeight {
-    if (_hasEmailError && _hasPasswordError) return 190;
-    if (_hasEmailError || _hasPasswordError) return 165;
-    return 130;
+    if (_hasEmailError && _hasPasswordError) {
+      return context.isMobile ? 145 : 150;
+    }
+    if (_hasEmailError || _hasPasswordError) {
+      return 125;
+    }
+    return 100;
   }
 
   @override
