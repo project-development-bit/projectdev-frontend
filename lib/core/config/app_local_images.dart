@@ -199,4 +199,10 @@ class AppLocalImages {
   // Pirate Treasure Hunt
   static const String pirateTreasureHuntProcessBg =
       "assets/images/pirate_treasure_hunt/hunt_progress_bg.png";
+  static const String pirateTreasureHuntMap =
+      "assets/images/pirate_treasure_hunt/treasure-map@2x.png";
+  static const String pirateTreasureHuntMapGirl =
+      "assets/images/pirate_treasure_hunt/map-items/gigafaucet-girl.png";
+  static const String questionMark =
+      "assets/images/pirate_treasure_hunt/map-items/question-mark.svg";
 }
