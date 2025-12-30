@@ -808,5 +808,9 @@
   "hunt_progress_title": "ရှာဖွေမှု တိုးတက်မှု",
   "hunt_status_label": "အခြေအနေ",
   "hunt_status_ready": "အသင့်ဖြစ်ပါပြီ",
-  "loading_treasure_hunt_map": "ရတနာမြေပုံကို ဖတ်နေပါသည်..."
+  "loading_treasure_hunt_map": "ရတနာမြေပုံကို ဖတ်နေပါသည်...",
+  "treasure_hunt_completed": "ဤရတနာရှာဖွေမှုကို ပြီးစီးပြီးပါပြီ။",
+  "next_hunt_unlocks_in": "နောက်ထပ် ရတနာရှာဖွေမှုကို [{0}] အတွင်း ဖွင့်နိုင်ပါမည်",
+  "collect_reward": "ဆုလာဘ်ကို ရယူပါ",
+  "captcha_required_to_claim": "ဆုလာဘ်ကို ရယူရန် captcha ကို ဖြေရှင်းရန် လိုအပ်ပါသည်"
 }

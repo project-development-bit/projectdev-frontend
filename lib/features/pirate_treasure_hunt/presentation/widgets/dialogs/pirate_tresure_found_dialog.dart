@@ -79,7 +79,7 @@ class _DialogContent extends ConsumerWidget {
               ),
               const SizedBox(height: 26),
               CommonText.bodyMedium(
-                "You’ve completed this hunt.",
+                "treasure_hunt_completed",
                 fontWeight: FontWeight.w500,
                 textAlign: TextAlign.center,
               ),
@@ -87,26 +87,24 @@ class _DialogContent extends ConsumerWidget {
               TreasureFoundBoardWidget(),
               const SizedBox(height: 26),
               CommonText.titleMedium(
-                context.translate(
-                  'Next Hunt Unlocks In - [3 Days 12 hours]',
-                ),
+                context.translate('next_hunt_unlocks_in',
+                    args: ['3 Days 12 hours']),
                 fontWeight: FontWeight.w700,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 32),
               CloudflareTurnstileWidget(
-                action: TurnstileActionEnum.faucetClaim,
+                action: TurnstileActionEnum.treasureHunt,
                 debugMode: false,
               ),
               const SizedBox(height: 24),
               CustomUnderLineButtonWidget(
                 onTap: () {
                   final turnstileState = ref.read(turnstileNotifierProvider(
-                      TurnstileActionEnum.faucetClaim));
+                      TurnstileActionEnum.treasureHunt));
                   if (turnstileState is! TurnstileSuccess) {
                     context.showErrorSnackBar(
-                      message: context.translate(
-                          'you_need_to_resolve_captcha_to_claim_your_faucet'),
+                      message: context.translate('captcha_required_to_claim'),
                     );
                     return;
                   }
@@ -114,7 +112,7 @@ class _DialogContent extends ConsumerWidget {
                 },
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
-                title: context.translate("Collect Reward"),
+                title: context.translate("collect_reward"),
               ),
               const SizedBox(height: 57),
             ],
