@@ -6,6 +6,7 @@ import 'package:gigafaucet/features/pirate_treasure_hunt/domain/usecases/uncover
 import 'package:gigafaucet/features/pirate_treasure_hunt/presentation/providers/start_treasure_hunt_notifier.dart';
 import 'package:gigafaucet/features/pirate_treasure_hunt/presentation/providers/start_treasure_hunt_notifier_state.dart';
 import 'package:gigafaucet/features/pirate_treasure_hunt/presentation/providers/treasure_hunt_history_notifier.dart';
+import 'package:gigafaucet/features/pirate_treasure_hunt/presentation/providers/treasure_hunt_history_state.dart';
 import 'package:gigafaucet/features/pirate_treasure_hunt/presentation/providers/treasure_hunt_state.dart';
 import 'package:gigafaucet/features/pirate_treasure_hunt/presentation/providers/treasure_hunt_status_notifier.dart';
 import 'package:gigafaucet/features/pirate_treasure_hunt/presentation/providers/treasure_hunt_status_state.dart';
@@ -40,7 +41,7 @@ final uncoverTreasureNotifierProvider = StateNotifierProvider.autoDispose<
 
 // HISTORY
 final treasureHuntHistoryNotifierProvider = StateNotifierProvider.autoDispose<
-    TreasureHuntHistoryNotifier, TreasureHuntState>(
+    TreasureHuntHistoryNotifier, TreasureHuntHistoryState>(
   (ref) {
     final usecase = ref.read(getTreasureHuntHistoryUseCaseProvider);
     return TreasureHuntHistoryNotifier(usecase);

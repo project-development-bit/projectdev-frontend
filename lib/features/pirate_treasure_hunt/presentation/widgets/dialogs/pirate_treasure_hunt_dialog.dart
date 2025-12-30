@@ -28,10 +28,10 @@ class PirateTreasureHuntDialog extends ConsumerStatefulWidget {
 
   @override
   ConsumerState<PirateTreasureHuntDialog> createState() =>
-      _Disable2FAConfirmationDialogState();
+      _PirateTreasureHuntDialogState();
 }
 
-class _Disable2FAConfirmationDialogState
+class _PirateTreasureHuntDialogState
     extends ConsumerState<PirateTreasureHuntDialog> {
   final svgPaths = {
     AppLocalImages.island2,
@@ -91,6 +91,7 @@ class _Disable2FAConfirmationDialogState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(treasureHuntStatusNotifierProvider.notifier).fetchStatus();
+      ref.read(treasureHuntHistoryNotifierProvider.notifier).fetchHistory();
     });
     ref.listenManual<StartTreasureHuntNotifierState>(
       startTreasureHuntNotifierProvider,

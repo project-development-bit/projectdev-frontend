@@ -1,27 +1,33 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gigafaucet/features/pirate_treasure_hunt/data/model/request/treasure_hunt_history_request_model.dart';
 import 'package:gigafaucet/features/pirate_treasure_hunt/domain/usecases/get_treasure_hunt_history_usecase.dart';
-import 'treasure_hunt_state.dart';
+import 'package:gigafaucet/features/pirate_treasure_hunt/presentation/providers/treasure_hunt_history_state.dart';
 
-class TreasureHuntHistoryNotifier extends StateNotifier<TreasureHuntState> {
+class TreasureHuntHistoryNotifier
+    extends StateNotifier<TreasureHuntHistoryState> {
   final GetTreasureHuntHistoryUseCase _useCase;
 
-  TreasureHuntHistoryNotifier(this._useCase) : super(const TreasureHuntState());
+  TreasureHuntHistoryNotifier(this._useCase)
+      : super(const TreasureHuntHistoryState());
 
-  Future<void> fetchHistory(
-    TreasureHuntHistoryRequestModel request,
-  ) async {
-    state = state.copyWith(status: TreasureHuntStatus.loading);
+  Future<void> fetchHistory({
+    int limit = 8,
+    int page = 1,
+  }) async {
+    state = state.copyWith(status: TreasureHuntHistoryStatus.loading);
 
-    final result = await _useCase.call(request);
+    final result = await _useCase.call(TreasureHuntHistoryRequestModel(
+      limit: limit,
+      page: page,
+    ));
 
     result.fold(
       (failure) => state = state.copyWith(
-        status: TreasureHuntStatus.error,
+        status: TreasureHuntHistoryStatus.error,
         error: failure.message,
       ),
       (data) => state = state.copyWith(
-        status: TreasureHuntStatus.success,
+        status: TreasureHuntHistoryStatus.success,
         data: data,
       ),
     );
