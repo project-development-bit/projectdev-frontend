@@ -33,4 +33,15 @@ class TreasureHuntStatusState {
   bool get isLoading => status == TreasureHuntStateStatus.loading;
   bool get isSuccess => status == TreasureHuntStateStatus.success;
   bool get isError => status == TreasureHuntStateStatus.error;
+
+  bool get isUncoverTreasureReady {
+    if (data == null) return false;
+    return data!.requiredTasks == data!.completedTasks &&
+        data!.currentStep == 3;
+  }
+
+  bool get isInProgress {
+    if (data == null) return false;
+    return data!.status == "in_progress" || data!.currentStep < 3;
+  }
 }

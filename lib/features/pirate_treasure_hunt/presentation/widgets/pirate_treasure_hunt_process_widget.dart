@@ -40,7 +40,7 @@ class PirateTreasureHuntProcessWidget extends ConsumerWidget {
       child: Column(
         children: [
           CommonText.headlineSmall(
-            context.translate("Hunt Progress"),
+            context.translate("hunt_progress_title"),
             fontWeight: FontWeight.w700,
             textAlign: isMobile ? TextAlign.center : TextAlign.start,
             color: colorScheme.primary,
@@ -52,16 +52,17 @@ class PirateTreasureHuntProcessWidget extends ConsumerWidget {
           ),
           const SizedBox(height: 10),
           StatusBadge(
-            label: context.translate("Status"),
-            statusText: context.translate("Ready"),
+            label: context.translate("hunt_status_label"),
+            statusText: context.translate("hunt_status_ready"),
             statusColor: const Color(0xFF22C55E),
           ),
           if (!(treasureHuntStatus.data?.canStart ?? true) &&
               (treasureHuntStatus.data?.status != "in_progress")) ...[
             const SizedBox(height: 10),
             CommonText.titleMedium(
-              context.translate(
-                  'Next Hunt Unlocks In - [${treasureHuntStatus.data?.cooldownUntil}]'),
+              context.translate('next_hunt_unlocks_in', args: [
+                treasureHuntStatus.data?.cooldownUntil.toString() ?? ''
+              ]),
               fontWeight: FontWeight.w700,
               textAlign: TextAlign.center,
             ),

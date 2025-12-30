@@ -110,7 +110,7 @@ class _PirateTreasureHuntDialogState
             ref.read(treasureHuntStatusNotifierProvider.notifier).fetchStatus();
             context.showSuccessSnackBar(
               message: next.data?.message ??
-                  context.translate('Treasure hunt started'),
+                  context.translate('treasure_hunt_started_success'),
             );
 
             break;
@@ -119,8 +119,8 @@ class _PirateTreasureHuntDialogState
             debugPrint('❌ Failed to start treasure hunt');
 
             context.showErrorSnackBar(
-              message: next.error ??
-                  context.translate('Failed to start treasure hunt'),
+              message:
+                  next.error ?? context.translate('treasure_hunt_start_failed'),
             );
             break;
 
@@ -140,7 +140,7 @@ class _PirateTreasureHuntDialogState
           : context.isTablet
               ? 500
               : 610,
-      title: context.translate("Pirate Treasure Hunt"),
+      title: context.translate("pirate_treasure_hunt_title"),
       body: SingleChildScrollView(
         child: Padding(
           padding: context.isMobile || context.isTablet
@@ -153,7 +153,7 @@ class _PirateTreasureHuntDialogState
               Container(
                 alignment: Alignment.centerLeft,
                 child: CommonText.bodyMedium(
-                  context.translate('Find hidden treasure by completing tasks'),
+                  context.translate('pirate_treasure_hunt_subtitle'),
                   color: Color(0xFF98989A),
                   fontWeight: FontWeight.w500,
                   textAlign: TextAlign.start,
