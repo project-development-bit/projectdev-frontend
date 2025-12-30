@@ -58,9 +58,6 @@ class _PirateTreasureHuntMapWidgetState
   }
 
   // =====================
-  // Asset Preload (Raster ONLY)
-  // =====================
-// =====================
   // Asset Preload
   // =====================
   Future<void> _precacheAssets() async {
