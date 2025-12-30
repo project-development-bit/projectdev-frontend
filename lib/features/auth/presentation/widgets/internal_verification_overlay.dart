@@ -14,7 +14,7 @@ final internalVerificationProvider =
 
 /// State notifier for internal verification
 class InternalVerificationNotifier extends StateNotifier<bool> {
-  InternalVerificationNotifier() : super(false);
+  InternalVerificationNotifier() : super(true);
 
   /// Check if verification has been completed in this session
   bool get isVerified => state;
