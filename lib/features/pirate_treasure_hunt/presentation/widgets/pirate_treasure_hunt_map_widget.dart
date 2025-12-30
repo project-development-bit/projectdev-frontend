@@ -29,6 +29,9 @@ class _PirateTreasureHuntMapWidgetState
 
   late final ScrollController _controller;
 
+  double _dragStartX = 0;
+  double _scrollStartX = 0;
+
   // =====================
   // Lifecycle
   // =====================
@@ -96,38 +99,51 @@ class _PirateTreasureHuntMapWidgetState
               child: SizedBox(
                 width: routeWidth,
                 height: routeHeight,
-                child: Scrollbar(
-                  controller: _controller,
-                  thumbVisibility: true,
-                  child: SingleChildScrollView(
-                    controller: _controller,
-                    scrollDirection: Axis.horizontal,
-                    physics: const BouncingScrollPhysics(),
-                    child: SizedBox(
-                      width: totalWidth,
-                      height: routeHeight,
-                      child: Stack(
-                        children: [
-                          // Route image
-                          Positioned.fill(
-                            child: Image.asset(
-                              AppLocalImages.pirateTreasureHuntMapRoute,
-                              repeat: ImageRepeat.repeatX,
-                              alignment: Alignment.centerLeft,
-                              gaplessPlayback: true,
-                            ),
-                          ),
+                child: MouseRegion(
+                  cursor: SystemMouseCursors.grab,
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onHorizontalDragStart: (details) {
+                      _dragStartX = details.globalPosition.dx;
+                      _scrollStartX = _controller.offset;
+                    },
+                    onHorizontalDragUpdate: (details) {
+                      final delta = _dragStartX - details.globalPosition.dx;
+                      final newOffset = (_scrollStartX + delta)
+                          .clamp(0.0, _controller.position.maxScrollExtent);
 
-                          // Items
-                          for (final entry in entries)
-                            TeasureHuntMapItemWidget(
-                              item: entry.item,
-                              pageIndex: entry.pageIndex,
-                              slotIndex: entry.slotIndex,
-                              pageWidth: routeWidth,
-                              pageHeight: routeHeight,
+                      _controller.jumpTo(newOffset);
+                    },
+                    child: SingleChildScrollView(
+                      controller: _controller,
+                      scrollDirection: Axis.horizontal,
+                      physics: const NeverScrollableScrollPhysics(),
+                      child: SizedBox(
+                        width: totalWidth,
+                        height: routeHeight,
+                        child: Stack(
+                          children: [
+                            // Route image
+                            Positioned.fill(
+                              child: Image.asset(
+                                AppLocalImages.pirateTreasureHuntMapRoute,
+                                repeat: ImageRepeat.repeatX,
+                                alignment: Alignment.centerLeft,
+                                gaplessPlayback: true,
+                              ),
                             ),
-                        ],
+
+                            // Items
+                            for (final entry in entries)
+                              TeasureHuntMapItemWidget(
+                                item: entry.item,
+                                pageIndex: entry.pageIndex,
+                                slotIndex: entry.slotIndex,
+                                pageWidth: routeWidth,
+                                pageHeight: routeHeight,
+                              ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
