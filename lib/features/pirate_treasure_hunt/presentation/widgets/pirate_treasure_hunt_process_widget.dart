@@ -1,18 +1,25 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gigafaucet/core/common/common_text.dart' show CommonText;
 import 'package:gigafaucet/core/config/app_local_images.dart';
-import 'package:gigafaucet/core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:gigafaucet/core/extensions/context_extensions.dart'
+    show MediaQueryExtension, ColorSchemeExtension;
 import 'package:gigafaucet/core/theme/app_typography.dart';
+import 'package:gigafaucet/features/localization/data/helpers/localization_helper.dart'
+    show LocalizationHelper;
+import 'package:gigafaucet/features/pirate_treasure_hunt/presentation/providers/treasure_hunt_notifier_providers.dart';
 
-class PirateTreasureHuntProcessWidget extends StatelessWidget {
+class PirateTreasureHuntProcessWidget extends ConsumerWidget {
   const PirateTreasureHuntProcessWidget({
     super.key,
   });
 
   @override
-  Widget build(BuildContext context) {
-    final t = AppLocalizations.of(context);
+  Widget build(BuildContext context, WidgetRef ref) {
     final isMobile = context.isMobile;
     final colorScheme = Theme.of(context).colorScheme;
+
+    final treasureHuntStatus = ref.watch(treasureHuntStatusNotifierProvider);
 
     return Container(
       width: double.infinity,
@@ -33,7 +40,7 @@ class PirateTreasureHuntProcessWidget extends StatelessWidget {
       child: Column(
         children: [
           CommonText.headlineSmall(
-            t?.translate("Hunt Progress") ?? "Hunt Progress",
+            context.translate("Hunt Progress"),
             fontWeight: FontWeight.w700,
             textAlign: isMobile ? TextAlign.center : TextAlign.start,
             color: colorScheme.primary,
@@ -41,14 +48,24 @@ class PirateTreasureHuntProcessWidget extends StatelessWidget {
           const SizedBox(height: 23),
           _StepProgressIndicator(
             totalSteps: 3,
-            currentStep: 1,
+            currentStep: treasureHuntStatus.data?.currentStep ?? 1,
           ),
           const SizedBox(height: 10),
           StatusBadge(
-            label: t?.translate("Status") ?? "Status",
-            statusText: t?.translate("Ready") ?? "Ready",
+            label: context.translate("Status"),
+            statusText: context.translate("Ready"),
             statusColor: const Color(0xFF22C55E),
           ),
+          if (!(treasureHuntStatus.data?.canStart ?? true) &&
+              (treasureHuntStatus.data?.status != "in_progress")) ...[
+            const SizedBox(height: 10),
+            CommonText.titleMedium(
+              context.translate(
+                  'Next Hunt Unlocks In - [${treasureHuntStatus.data?.cooldownUntil}]'),
+              fontWeight: FontWeight.w700,
+              textAlign: TextAlign.center,
+            ),
+          ]
         ],
       ),
     );

@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gigafaucet/core/common/common_text.dart';
 import 'package:gigafaucet/core/common/custom_buttom_widget.dart';
 import 'package:gigafaucet/features/localization/data/helpers/localization_helper.dart';
-import 'package:gigafaucet/features/pirate_treasure_hunt/presentation/widgets/dialogs/pirate_tresure_found_dialog.dart';
+import 'package:gigafaucet/features/pirate_treasure_hunt/presentation/providers/treasure_hunt_notifier_providers.dart';
 import 'package:gigafaucet/features/pirate_treasure_hunt/presentation/widgets/pirate_treasure_hunt_actions_widget.dart';
 import 'package:gigafaucet/routing/app_router.dart';
 
-class UnlockYourTreasureWidget extends StatelessWidget {
+class UnlockYourTreasureWidget extends ConsumerWidget {
   const UnlockYourTreasureWidget({super.key});
 
   @override
   Widget build(
     BuildContext context,
+    WidgetRef ref,
   ) {
+    final treasureHuntStatus = ref.watch(treasureHuntStatusNotifierProvider);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -35,12 +39,17 @@ class UnlockYourTreasureWidget extends StatelessWidget {
         CustomUnderLineButtonWidget(
           isDark: true,
           onTap: () {
-            context.pop();
-            showPirateTresureFoundDialog(context);
+            if (treasureHuntStatus.data?.status == "in_progress") {
+              context.pop();
+            } else {
+              ref.read(startTreasureHuntNotifierProvider.notifier).start();
+            }
           },
           fontSize: 14,
           fontWeight: FontWeight.w700,
-          title: context.translate("Start Treasure Hunt"),
+          title: (treasureHuntStatus.data?.status == "in_progress")
+              ? context.translate("Continue Hunt")
+              : context.translate("Start Treasure Hunt"),
         )
       ],
     );

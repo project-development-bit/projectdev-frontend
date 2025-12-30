@@ -1,31 +1,49 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gigafaucet/features/pirate_treasure_hunt/domain/entity/pirate_treasure_hunt_action_item.dart';
+import 'package:gigafaucet/features/pirate_treasure_hunt/presentation/providers/treasure_hunt_notifier_providers.dart';
 
-class PirateTreasureHuntActionsWidget extends StatelessWidget {
+class PirateTreasureHuntActionsWidget extends ConsumerWidget {
   PirateTreasureHuntActionsWidget({super.key});
 
   final List<PirateTreasureHuntActionItem> items = [
     PirateTreasureHuntActionItem(
-        title: "Survey",
-        iconPath: "assets/images/pirate_treasure_hunt/survey3x.png"),
+      title: "Survey",
+      iconPath: "assets/images/pirate_treasure_hunt/survey3x.png",
+      taskKey: "survey",
+    ),
     PirateTreasureHuntActionItem(
-        title: "Offer\nBoost",
-        iconPath: "assets/images/rewards/offer_boast@3x.png"),
+      title: "Offer\nBoost",
+      iconPath: "assets/images/rewards/offer_boast@3x.png",
+      taskKey: "offer",
+    ),
     PirateTreasureHuntActionItem(
-        title: "Visit\nWebsites",
-        iconPath: "assets/images/pirate_treasure_hunt/visit-websites.png"),
+      title: "Visit\nWebsites",
+      iconPath: "assets/images/pirate_treasure_hunt/visit-websites.png",
+      taskKey: "website",
+    ),
     PirateTreasureHuntActionItem(
-        title: "Play Game\nApps",
-        iconPath: "assets/images/pirate_treasure_hunt/play-games.png"),
+      title: "Play Game\nApps",
+      iconPath: "assets/images/pirate_treasure_hunt/play-games.png",
+      taskKey: "game",
+    ),
   ];
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final treasureHuntStatus = ref.watch(treasureHuntStatusNotifierProvider);
+
+    final availableTasks =
+        treasureHuntStatus.data?.availableTasks ?? const <String>[];
+
+    final availableItems =
+        items.where((item) => availableTasks.contains(item.taskKey)).toList();
+
     return Container(
       decoration: const BoxDecoration(),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: items
+        children: availableItems
             .map(
               (item) => SizedBox(
                 width: 130,

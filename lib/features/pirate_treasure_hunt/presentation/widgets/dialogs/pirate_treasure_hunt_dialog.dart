@@ -6,6 +6,8 @@ import 'package:gigafaucet/core/config/app_local_images.dart';
 import 'package:gigafaucet/core/extensions/context_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gigafaucet/features/pirate_treasure_hunt/presentation/providers/start_treasure_hunt_notifier_state.dart';
+import 'package:gigafaucet/features/pirate_treasure_hunt/presentation/providers/treasure_hunt_notifier_providers.dart';
 import 'package:gigafaucet/features/pirate_treasure_hunt/presentation/widgets/pirate_treasure_hunt_map_widget.dart';
 import 'package:gigafaucet/features/pirate_treasure_hunt/presentation/widgets/pirate_treasure_hunt_process_widget.dart';
 import 'package:gigafaucet/features/pirate_treasure_hunt/presentation/widgets/unlock_your_treasure_widget.dart';
@@ -85,6 +87,51 @@ class _Disable2FAConfirmationDialogState
   }
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(treasureHuntStatusNotifierProvider.notifier).fetchStatus();
+    });
+    ref.listenManual<StartTreasureHuntNotifierState>(
+      startTreasureHuntNotifierProvider,
+      (previous, next) {
+        if (!mounted) return;
+
+        if (previous?.status == next.status) return;
+
+        switch (next.status) {
+          case StartTreasureHuntNotifierStatus.loading:
+            debugPrint('⏳ Starting treasure hunt...');
+            break;
+
+          case StartTreasureHuntNotifierStatus.success:
+            debugPrint('🏴‍☠️ Treasure hunt started successfully');
+            ref.read(treasureHuntStatusNotifierProvider.notifier).fetchStatus();
+            context.showSuccessSnackBar(
+              message: next.data?.message ??
+                  context.translate('Treasure hunt started'),
+            );
+
+            break;
+
+          case StartTreasureHuntNotifierStatus.error:
+            debugPrint('❌ Failed to start treasure hunt');
+
+            context.showErrorSnackBar(
+              message: next.error ??
+                  context.translate('Failed to start treasure hunt'),
+            );
+            break;
+
+          case StartTreasureHuntNotifierStatus.initial:
+            // Do nothing
+            break;
+        }
+      },
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return DialogBgWidget(
       dialogHeight: context.isDesktop
@@ -128,8 +175,6 @@ class _Disable2FAConfirmationDialogState
                   return const PirateTreasureHuntMapWidget();
                 },
               ),
-
-              // PirateTreasureHuntMapWidget(),
               const SizedBox(height: 16),
               UnlockYourTreasureWidget(),
             ],

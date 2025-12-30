@@ -16,9 +16,13 @@ class TreasureHuntStatus extends Equatable {
     required this.startedAt,
     required this.userStatus,
     required this.userLevel,
+    required this.canStart,
+    required this.cooldownUntil,
   });
 
   final bool active;
+  final bool canStart;
+  final DateTime? cooldownUntil;
   final int huntId;
   final int currentStep;
   final String stepName;
@@ -43,6 +47,8 @@ class TreasureHuntStatus extends Equatable {
 
   TreasureHuntStatus copyWith({
     bool? active,
+    bool? canStart,
+    DateTime? cooldownUntil,
     int? huntId,
     int? currentStep,
     String? stepName,
@@ -59,6 +65,8 @@ class TreasureHuntStatus extends Equatable {
   }) {
     return TreasureHuntStatus(
       active: active ?? this.active,
+      canStart: canStart ?? this.canStart,
+      cooldownUntil: cooldownUntil ?? this.cooldownUntil,
       huntId: huntId ?? this.huntId,
       currentStep: currentStep ?? this.currentStep,
       stepName: stepName ?? this.stepName,

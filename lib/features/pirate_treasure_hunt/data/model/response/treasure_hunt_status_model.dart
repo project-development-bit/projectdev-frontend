@@ -3,6 +3,8 @@ import 'package:gigafaucet/features/pirate_treasure_hunt/domain/entity/treasure_
 class TreasureHuntStatusModel extends TreasureHuntStatus {
   const TreasureHuntStatusModel({
     required super.active,
+    required super.canStart,
+    required super.cooldownUntil,
     required super.huntId,
     required super.currentStep,
     required super.stepName,
@@ -21,8 +23,12 @@ class TreasureHuntStatusModel extends TreasureHuntStatus {
   factory TreasureHuntStatusModel.fromJson(Map<String, dynamic> json) {
     return TreasureHuntStatusModel(
       active: json['active'] ?? false,
+      canStart: json['can_start'] ?? false,
+      cooldownUntil: DateTime.tryParse(
+        json['cooldown_until'] ?? '',
+      ),
       huntId: json['hunt_id'] ?? 0,
-      currentStep: json['current_step'] ?? 0,
+      currentStep: json['current_step'] ?? 1,
       stepName: json['step_name'] ?? '',
       stepDescription: json['step_description'] ?? '',
       stepProgress: json['step_progress'] ?? '0/0',
