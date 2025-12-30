@@ -40,7 +40,7 @@ final uncoverTreasureNotifierProvider = StateNotifierProvider.autoDispose<
 );
 
 // HISTORY
-final treasureHuntHistoryNotifierProvider = StateNotifierProvider.autoDispose<
+final treasureHuntHistoryNotifierProvider = StateNotifierProvider<
     TreasureHuntHistoryNotifier, TreasureHuntHistoryState>(
   (ref) {
     final usecase = ref.read(getTreasureHuntHistoryUseCaseProvider);

@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:gigafaucet/core/network/base_dio_client.dart';
 import 'package:gigafaucet/features/pirate_treasure_hunt/data/model/request/treasure_hunt_history_request_model.dart';
 import 'package:gigafaucet/features/pirate_treasure_hunt/data/model/request/uncover_treasure_request_model.dart';
+import 'package:gigafaucet/features/pirate_treasure_hunt/data/model/response/treasure_hunt_history_item_model.dart';
 import 'package:gigafaucet/features/pirate_treasure_hunt/data/model/response/treasure_hunt_history_model.dart';
+import 'package:gigafaucet/features/pirate_treasure_hunt/data/model/response/treasure_hunt_pagination_model.dart';
+import 'package:gigafaucet/features/pirate_treasure_hunt/data/model/response/treasure_hunt_reward_model.dart';
 import 'package:gigafaucet/features/pirate_treasure_hunt/data/model/response/treasure_hunt_start_model.dart';
 import 'package:gigafaucet/features/pirate_treasure_hunt/data/model/response/treasure_hunt_status_model.dart';
 import 'package:gigafaucet/features/pirate_treasure_hunt/data/model/response/treasure_hunt_uncover_model.dart';
@@ -97,16 +100,48 @@ class TreasureHuntRemoteDataSourceImpl implements TreasureHuntRemoteDataSource {
   ) async {
     try {
       debugPrint('📤 GET /treasure-hunt/history');
-      debugPrint('📤 Params: ${request.toJson()}');
+      // debugPrint('📤 Params: ${request.toJson()}');
 
-      final response = await dioClient.get(
-        '/treasure-hunt/history',
-        queryParameters: request.toJson(),
-      );
+      // final response = await dioClient.get(
+      //   '/treasure-hunt/history',
+      //   queryParameters: request.toJson(),
+      // );
 
-      debugPrint('📥 History response: ${response.data}');
+      // debugPrint('📥 History response: ${response.data}');
 
-      return TreasureHuntHistoryModel.fromJson(response.data);
+      // return TreasureHuntHistoryModel.fromJson(response.data);
+
+      return TreasureHuntHistoryModel(
+          message: 'Success',
+          success: true,
+          pagination: TreasureHuntPaginationModel(
+            currentPage: 1,
+            limit: 1,
+            totalPages: 1,
+            total: 1,
+            hasNextPage: false,
+            hasPrevPage: false,
+          ),
+          items: [
+            for (int i = 1; i < 15; i++)
+              TreasureHuntHistoryItemModel(
+                id: i,
+                eventType: 'reward_granted',
+                stepNumber: i,
+                reward: TreasureHuntRewardModel(
+                    type: 'coins',
+                    label: '+100 Coins',
+                    baseValue: 100,
+                    multiplier: 1,
+                    finalValue: 100,
+                    value: 30),
+                userLevel: i,
+                userStatus: 'bronze',
+                statusMultiplier: '1.0',
+                createdAt: DateTime.now(),
+                rewardLabel: '+100 Coins',
+              ),
+          ]);
     } on DioException catch (e) {
       _logDioError('getHistory', e);
       throw _mapDioException(e);
