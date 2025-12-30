@@ -42,6 +42,7 @@ class FortuneWheelWidget extends ConsumerStatefulWidget {
 class _FortuneWheelWidgetState extends ConsumerState<FortuneWheelWidget> {
   StreamController<FortuneReward> selected =
       StreamController<FortuneReward>.broadcast();
+  AudioPlayer? _audioPlayer;
 
   @override
   void initState() {
@@ -191,38 +192,60 @@ class _FortuneWheelWidgetState extends ConsumerState<FortuneWheelWidget> {
               padding: EdgeInsets.symmetric(horizontal: 40, vertical: 5),
               onTap: () async {
                 if (!isAuth) {
-                  context.pop();
-                  context.goNamedLogin();
+                  Navigator.of(context).pop();
+                  await Future.delayed(Duration(milliseconds: 100));
+                  if (context.mounted) {
+                    context.goNamedLogin();
+                  }
                   return;
                 }
                 if (isSpinning) {
                   return;
                 }
                 if ((!canSpin)) {
-                  context.pop();
-                  showOutofSpinDialog(context);
+                  // Store the root context before popping
+                  final rootContext =
+                      Navigator.of(context, rootNavigator: true).context;
+                  Navigator.of(context, rootNavigator: true).pop();
+
+                  // Use SchedulerBinding to ensure the pop completes before showing new dialog
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    if (rootContext.mounted) {
+                      showOutofSpinDialog(rootContext);
+                    }
+                  });
                   return;
                 }
-                selected.add(
-                    FortuneReward(id: 0, status: FortuneWheelStatus.animating));
+                if (!selected.isClosed) {
+                  selected.add(FortuneReward(
+                      id: 0, status: FortuneWheelStatus.animating));
+                }
                 // Call the spin API
                 ref.read(fortuneWheelProvider.notifier).spinFortuneWheel(
                   onSpinResult: (winningIndex) {
                     // The API returned the winning index, now spin to that position
                     debugPrint('🎡 Spinning to index: $winningIndex');
-                    selected.add(FortuneReward(
-                        id: winningIndex,
-                        status: FortuneWheelStatus.completed));
+                    if (!selected.isClosed && mounted) {
+                      selected.add(FortuneReward(
+                          id: winningIndex,
+                          status: FortuneWheelStatus.completed));
+                    }
                   },
                   onSuccess: (v) async {
-                    await spinMethod(ref, context);
+                    if (mounted) {
+                      await spinMethod(ref, context);
+                    }
                   },
                   onError: (message) async {
-                    selected.add(FortuneReward(
-                        id: 0, status: FortuneWheelStatus.completed));
+                    if (!selected.isClosed && mounted) {
+                      selected.add(FortuneReward(
+                          id: 0, status: FortuneWheelStatus.completed));
+                    }
 
                     debugPrint('🎡 Spin error: $message');
-                    context.showSnackBar(message: message);
+                    if (mounted && context.mounted) {
+                      context.showSnackBar(message: message);
+                    }
                   },
                 );
               },
@@ -241,8 +264,29 @@ class _FortuneWheelWidgetState extends ConsumerState<FortuneWheelWidget> {
     if (currentState is FortuneWheelSpinSuccess) {
       final spinResponse = currentState.spinResponse;
 
+      // Validate rewards list is not empty
+      if (currentState.rewards.isEmpty) {
+        debugPrint('🎡 Error: Rewards list is empty');
+        if (context.mounted) {
+          context.pop();
+          context.showSnackBar(
+            message: context.translate("spin_wheel_error_message"),
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+          );
+        }
+        return;
+      }
+
+      // Find the reward with proper error handling
       final reward = currentState.rewards.firstWhere(
-          (element) => element.wheelIndex == spinResponse.wheelIndex);
+        (element) => element.wheelIndex == spinResponse.wheelIndex,
+        orElse: () {
+          debugPrint(
+              '🎡 Warning: No reward found for wheelIndex ${spinResponse.wheelIndex}, using first reward');
+          return currentState.rewards.first;
+        },
+      );
 
       await celebrationSound();
       // Wait for animation to complete
@@ -272,9 +316,10 @@ class _FortuneWheelWidgetState extends ConsumerState<FortuneWheelWidget> {
   }
 
   Future<void> celebrationSound() async {
-    final audioPlayer = AudioPlayer();
-    await audioPlayer.setSource(AssetSource('sound/celebration_sound.mp3'));
-    await audioPlayer.resume();
+    _audioPlayer?.dispose();
+    _audioPlayer = AudioPlayer();
+    await _audioPlayer!.setSource(AssetSource('sound/celebration_sound.mp3'));
+    await _audioPlayer!.resume();
   }
 
   FortuneItem _fortuneWheelItem(FortuneWheelReward reward) {
@@ -309,6 +354,7 @@ class _FortuneWheelWidgetState extends ConsumerState<FortuneWheelWidget> {
   @override
   void dispose() {
     selected.close();
+    _audioPlayer?.dispose();
     super.dispose();
   }
 }

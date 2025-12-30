@@ -6,18 +6,22 @@ import '../../domain/entities/fortune_wheel_status.dart';
 class FortuneWheelStatusModel extends FortuneWheelStatus {
   const FortuneWheelStatusModel({
     required super.canSpin,
-    required super.todaySpins,
+    required super.spins,
     required super.dailyLimit,
-    required super.remainingSpins,
   });
 
   /// Create FortuneWheelStatusModel from JSON response
   factory FortuneWheelStatusModel.fromJson(Map<String, dynamic> json) {
+    final spinsData = json['spins'] as Map<String, dynamic>? ?? {};
+
     return FortuneWheelStatusModel(
       canSpin: _parseBool(json['canSpin']),
-      todaySpins: _parseInt(json['todaySpins']),
+      spins: SpinCounts(
+        base: _parseInt(spinsData['base']),
+        bonus: _parseInt(spinsData['bonus']),
+        total: _parseInt(spinsData['total']),
+      ),
       dailyLimit: _parseInt(json['dailyLimit']),
-      remainingSpins: _parseInt(json['remainingSpins']),
     );
   }
 
@@ -25,9 +29,12 @@ class FortuneWheelStatusModel extends FortuneWheelStatus {
   Map<String, dynamic> toJson() {
     return {
       'canSpin': canSpin,
-      'todaySpins': todaySpins,
+      'spins': {
+        'base': spins.base,
+        'bonus': spins.bonus,
+        'total': spins.total,
+      },
       'dailyLimit': dailyLimit,
-      'remainingSpins': remainingSpins,
     };
   }
 
@@ -35,9 +42,8 @@ class FortuneWheelStatusModel extends FortuneWheelStatus {
   FortuneWheelStatus toEntity() {
     return FortuneWheelStatus(
       canSpin: canSpin,
-      todaySpins: todaySpins,
+      spins: spins,
       dailyLimit: dailyLimit,
-      remainingSpins: remainingSpins,
     );
   }
 

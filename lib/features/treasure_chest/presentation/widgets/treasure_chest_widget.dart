@@ -1,9 +1,11 @@
 import 'package:gigafaucet/core/config/app_local_images.dart';
 import 'package:gigafaucet/core/core.dart';
 import 'package:gigafaucet/core/extensions/context_extensions.dart';
+import 'package:gigafaucet/features/treasure_chest/domain/entities/treasure_chest_open_response.dart';
 import 'package:gigafaucet/features/treasure_chest/presentation/providers/treasure_chest_opening_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gigafaucet/features/user_profile/presentation/providers/current_user_provider.dart';
 import 'package:lottie/lottie.dart';
 import 'package:confetti/confetti.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -29,6 +31,7 @@ class _TreasureChestWidgetState extends ConsumerState<TreasureChestWidget>
   late Animation<double> _rewardFadeAnimation;
   late Animation<Offset> _rewardSlideAnimation;
   late ConfettiController _confettiController;
+  AudioPlayer? _audioPlayer;
 
   bool _isHovering = false;
   bool _isPlayingFullAnimation = false;
@@ -96,11 +99,10 @@ class _TreasureChestWidgetState extends ConsumerState<TreasureChestWidget>
           debugPrint('🎁 Treasure chest status loaded successfully');
           // Start idle animation only if chest is available
           final state = ref.read(treasureChestProvider);
-          if (state is TreasureChestLoaded &&
-              state.status.status == 'chest_available') {
+          if (state is TreasureChestLoaded) {
             _startIdleAnimation();
-          } else {
-            debugPrint('🎁 No idle animation - chest not available');
+            // } else {
+            //   debugPrint('🎁 No idle animation - chest not available');
           }
         },
         onError: (message) {
@@ -123,6 +125,7 @@ class _TreasureChestWidgetState extends ConsumerState<TreasureChestWidget>
     _rotationController.dispose();
     _rewardAnimationController.dispose();
     _confettiController.dispose();
+    _audioPlayer?.dispose();
     super.dispose();
   }
 
@@ -132,8 +135,7 @@ class _TreasureChestWidgetState extends ConsumerState<TreasureChestWidget>
 
     // Check if chest is available before starting animation
     final state = ref.read(treasureChestProvider);
-    if (state is! TreasureChestLoaded ||
-        state.status.status != 'chest_available') {
+    if (state is! TreasureChestLoaded) {
       debugPrint('🎁 Idle animation blocked - chest not available');
       return;
     }
@@ -163,8 +165,7 @@ class _TreasureChestWidgetState extends ConsumerState<TreasureChestWidget>
   void _startHoverAnimation() {
     // Check if chest is available before allowing hover animation
     final state = ref.read(treasureChestProvider);
-    if (state is! TreasureChestLoaded ||
-        state.status.status != 'chest_available') {
+    if (state is! TreasureChestLoaded) {
       return;
     }
 
@@ -266,6 +267,9 @@ class _TreasureChestWidgetState extends ConsumerState<TreasureChestWidget>
   }
 
   void _onTap() {
+    successAnimationRun("Success");
+    return;
+
     final isAuth = ref.read(isAuthenticatedObservableProvider);
     if (!isAuth) {
       context.showErrorSnackBar(
@@ -288,7 +292,7 @@ class _TreasureChestWidgetState extends ConsumerState<TreasureChestWidget>
     }
 
     // Check if status allows opening
-    if (state.status.status != 'chest_available') {
+    if (state.status.status != 'available') {
       debugPrint('🎁 Cannot open chest - status: ${state.status.status}');
 
       // Show appropriate message based on status
@@ -296,11 +300,11 @@ class _TreasureChestWidgetState extends ConsumerState<TreasureChestWidget>
           'No chests available to open';
 
       if (state.status.cooldown.active) {
-        final cooldownMsg =
-            context.l10n?.translate('treasure_chest_cooldown_message') ??
-                'You must wait {0} hours before opening another chest.';
-        message = cooldownMsg.replaceAll(
-            '{0}', state.status.cooldown.remainingHours.toString());
+        final cooldownMsg = context.l10n?.translate(
+                'treasure_chest_cooldown_message',
+                args: [state.status.cooldown.remainingHours.toString()]) ??
+            'You must wait ${state.status.cooldown.remainingHours.toString()} hours before opening another chest.';
+        message = cooldownMsg;
       } else if (state.status.chests.total == 0) {
         message = context.l10n?.translate('no_chest_available') ??
             'No chests available to open';
@@ -315,47 +319,7 @@ class _TreasureChestWidgetState extends ConsumerState<TreasureChestWidget>
     // Call API to open treasure chest using the opening notifier
     ref.read(treasureChestOpeningProvider.notifier).openTreasureChest(
       onSuccess: (response) async {
-        debugPrint('🎁 Treasure chest opened: ${response.reward.label}');
-        _isHovering = false;
-        _isPlayingFullAnimation = true;
-
-        // Play sound effect
-        final audioPlayer = AudioPlayer();
-         audioPlayer.setSource(AssetSource('sound/treasure_chest.wav'));
-         audioPlayer.resume();
-
-        // Stop all animations
-        _rotationController.stop();
-        _rotationController.value = 0.5; // Reset to center
-        _animationController.stop();
-
-        // Show reward animation after chest opens
-        Future.delayed(
-            const Duration(seconds: 3),
-            () => _showRewardAnimation(
-                  response.reward.type,
-                  response.reward.label,
-                ));
-
-        // Play full Lottie animation
-        _animationController.duration = const Duration(seconds: 5);
-        _animationController.forward(from: 0.0).then((_) {
-          // After animation completes, chest stays at final frame
-          // Wait 5 seconds, then call reset animation
-          if (mounted) {
-            Future.delayed(const Duration(seconds: 5), () {
-              if (mounted && !_isHovering) {
-                _resetAnimation();
-              }
-            });
-            context.showSnackBar(
-              message: response.message,
-              backgroundColor: Colors.green,
-              textColor: Colors.white,
-            );
-          }
-        });
-
+        _successHandler(response);
         // Show success message
       },
       onError: (message) {
@@ -376,6 +340,59 @@ class _TreasureChestWidgetState extends ConsumerState<TreasureChestWidget>
         return;
       },
     );
+  }
+
+  void _successHandler(TreasureChestOpenResponse response) {
+    successAnimationRun(response.message);
+
+    // Show reward animation after chest opens
+    Future.delayed(
+        const Duration(seconds: 3),
+        () => _showRewardAnimation(
+              response.reward.type,
+              response.reward.label,
+            ));
+
+    ref
+        .read(treasureChestProvider.notifier)
+        .fetchTreasureChestStatus(isLoading: false);
+    ref.read(currentUserProvider.notifier).getCurrentUser(isLoading: false);
+    // Show success message
+  }
+
+  void successAnimationRun(String message) async {
+    debugPrint('🎁 Treasure chest opened: $message');
+    _isHovering = false;
+    _isPlayingFullAnimation = true;
+
+    // Play sound effect
+    _audioPlayer?.dispose();
+    _audioPlayer = AudioPlayer();
+    await _audioPlayer!.play(AssetSource('sound/treasure_chest.wav'));
+
+    // Stop all animations
+    _rotationController.stop();
+    _rotationController.value = 0.5; // Reset to center
+    _animationController.stop();
+
+    // Play full Lottie animation
+    _animationController.duration = const Duration(seconds: 5);
+    _animationController.forward(from: 0.0).then((_) {
+      // After animation completes, chest stays at final frame
+      // Wait 5 seconds, then call reset animation
+      if (mounted) {
+        Future.delayed(const Duration(seconds: 5), () {
+          if (mounted && !_isHovering) {
+            _resetAnimation();
+          }
+        });
+        context.showSnackBar(
+          message: message,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+        );
+      }
+    });
   }
 
   @override

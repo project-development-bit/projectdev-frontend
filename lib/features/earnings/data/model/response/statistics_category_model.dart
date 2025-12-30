@@ -6,7 +6,10 @@ class StatisticsCategoryModel extends StatisticsCategory {
     required super.totalEarned,
   });
 
-  factory StatisticsCategoryModel.fromJson(Map<String, dynamic> json) {
+  factory StatisticsCategoryModel.fromJson(Map<String, dynamic>? json) {
+    if (json == null) {
+      return const StatisticsCategoryModel(count: 0, totalEarned: 0);
+    }
     return StatisticsCategoryModel(
       count: json['count'] ?? 0,
       totalEarned: json['totalEarned'] ?? 0,

@@ -12,11 +12,14 @@ class StatisticsDataModel extends StatisticsData {
 
   factory StatisticsDataModel.fromJson(Map<String, dynamic> json) {
     return StatisticsDataModel(
-      surveys: StatisticsCategoryModel.fromJson(json['surveys']),
-      gameApps: StatisticsCategoryModel.fromJson(json['gameApps']),
-      offerwalls: StatisticsCategoryModel.fromJson(json['offerwalls']),
-      totalEarned: json['totalEarned'],
-      period: json['period'],
+      surveys: StatisticsCategoryModel.fromJson(
+          json['surveys'] as Map<String, dynamic>? ?? {}),
+      gameApps: StatisticsCategoryModel.fromJson(
+          json['gameApps'] as Map<String, dynamic>? ?? {}),
+      offerwalls: StatisticsCategoryModel.fromJson(
+          json['offerwalls'] as Map<String, dynamic>? ?? {}),
+      totalEarned: json['totalEarned'] ?? 0,
+      period: json['period'] ?? '',
     );
   }
 

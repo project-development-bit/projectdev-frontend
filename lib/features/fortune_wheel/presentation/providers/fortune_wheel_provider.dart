@@ -283,9 +283,10 @@ class FortuneWheelStatusNotifier
         (status) {
           debugPrint('🎡 Successfully fetched status');
           debugPrint('🎡 Can Spin: ${status.canSpin}');
-          debugPrint('🎡 Today Spins: ${status.todaySpins}');
+          debugPrint('🎡 Base Spins: ${status.spins.base}');
+          debugPrint('🎡 Bonus Spins: ${status.spins.bonus}');
+          debugPrint('🎡 Total Spins: ${status.spins.total}');
           debugPrint('🎡 Daily Limit: ${status.dailyLimit}');
-          debugPrint('🎡 Remaining Spins: ${status.remainingSpins}');
 
           state = FortuneWheelStatusLoaded(status);
           onStatusFetched?.call(status);

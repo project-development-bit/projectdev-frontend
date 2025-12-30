@@ -56,13 +56,15 @@ class TreasureChestNotifier extends StateNotifier<TreasureChestState> {
 
   /// Fetch treasure chest status
   Future<void> fetchTreasureChestStatus({
+    bool isLoading = true,
     VoidCallback? onSuccess,
     Function(String)? onError,
   }) async {
     debugPrint('🎁 Starting fetch treasure chest status');
     debugPrint('🎁 Current state: ${state.runtimeType}');
-
-    state = const TreasureChestLoading();
+    if (isLoading) {
+      state = const TreasureChestLoading();
+    }
 
     try {
       final useCase = GetTreasureChestStatusUseCase(
