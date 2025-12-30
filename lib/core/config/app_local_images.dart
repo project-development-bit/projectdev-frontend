@@ -214,4 +214,20 @@ class AppLocalImages {
       "assets/images/pirate_treasure_hunt/treasure-found-title@2x.png";
   static const String treasureFoundBoard =
       "assets/images/pirate_treasure_hunt/treasure-board@2x.png";
+  static const String island1 =
+      'assets/images/pirate_treasure_hunt/islands/island1.svg';
+  static const String island2 =
+      'assets/images/pirate_treasure_hunt/islands/treasure-ship.svg';
+  static const String island3 =
+      'assets/images/pirate_treasure_hunt/islands/island3.svg';
+  static const String island4 =
+      "assets/images/pirate_treasure_hunt/islands/island4.png";
+  static const String island5 =
+      'assets/images/pirate_treasure_hunt/islands/island5.svg';
+  static const String island6 =
+      'assets/images/pirate_treasure_hunt/islands/island6.svg';
+  static const String island7 =
+      'assets/images/pirate_treasure_hunt/islands/island7.svg';
+  static const String island8 =
+      'assets/images/pirate_treasure_hunt/islands/island8.svg';
 }

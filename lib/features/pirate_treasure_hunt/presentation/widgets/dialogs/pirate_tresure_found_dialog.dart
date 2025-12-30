@@ -34,7 +34,7 @@ class PirateTresureFoundDialog extends StatelessWidget {
     final isMobile = context.isMobile;
     return Container(
       width: designWidth,
-      height: isMobile ? 500 : null,
+      height: isMobile ? 500 : designHeight,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         image: DecorationImage(

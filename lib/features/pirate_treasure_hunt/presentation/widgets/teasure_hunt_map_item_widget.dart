@@ -49,6 +49,13 @@ class TeasureHuntMapItemWidget extends StatelessWidget {
         width: size.width,
         height: size.height,
         fit: BoxFit.fill,
+        placeholder: SizedBox(
+          width: size.width,
+          height: size.height,
+          child: const Center(
+            child: CircularProgressIndicator(strokeWidth: 2),
+          ),
+        ),
       ),
     );
   }

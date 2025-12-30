@@ -1,3 +1,5 @@
+import 'package:gigafaucet/core/config/app_local_images.dart';
+
 enum MapItemType {
   girl,
   question,
@@ -27,23 +29,23 @@ class TreasureMapItem {
   String getIslandImage() {
     switch (islandIndex) {
       case 1:
-        return 'assets/images/pirate_treasure_hunt/islands/island1.svg';
+        return AppLocalImages.island1;
       case 2:
-        return 'assets/images/pirate_treasure_hunt/islands/treasure-ship.svg';
+        return AppLocalImages.island2;
       case 3:
-        return 'assets/images/pirate_treasure_hunt/islands/island3.svg';
+        return AppLocalImages.island3;
       case 4:
-        return 'assets/images/pirate_treasure_hunt/islands/island4.png';
+        return AppLocalImages.island4;
       case 5:
-        return 'assets/images/pirate_treasure_hunt/islands/island5.svg';
+        return AppLocalImages.island5;
       case 6:
-        return 'assets/images/pirate_treasure_hunt/islands/island6.svg';
+        return AppLocalImages.island6;
       case 7:
-        return 'assets/images/pirate_treasure_hunt/islands/island7.svg';
+        return AppLocalImages.island7;
       case 8:
-        return 'assets/images/pirate_treasure_hunt/islands/island8.svg';
+        return AppLocalImages.island8;
       default:
-        return 'assets/images/pirate_treasure_hunt/island_1.svg';
+        return AppLocalImages.island1;
     }
   }
 }
