@@ -1,6 +1,5 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:gigafaucet/core/config/app_local_images.dart';
 import 'package:gigafaucet/features/pirate_treasure_hunt/domain/entity/treasure_map_entry.dart';
 import 'package:gigafaucet/features/pirate_treasure_hunt/domain/entity/treasure_map_item.dart';
@@ -29,7 +28,6 @@ class _PirateTreasureHuntMapWidgetState
   static const double routeHeightOffset = 180;
 
   late final ScrollController _controller;
-  late final Future<void> _precacheFuture;
 
   // =====================
   // Lifecycle
@@ -40,17 +38,6 @@ class _PirateTreasureHuntMapWidgetState
     _controller = ScrollController();
   }
 
-  bool _isInit = false;
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    if (!_isInit) {
-      _precacheFuture = _precacheAssets();
-      _isInit = true;
-    }
-  }
-
   @override
   void dispose() {
     _controller.dispose();
@@ -58,75 +45,19 @@ class _PirateTreasureHuntMapWidgetState
   }
 
   // =====================
-  // Asset Preload
-  // =====================
-  Future<void> _precacheAssets() async {
-    try {
-      final rasterPaths = {
-        AppLocalImages.pirateTreasureHuntMap,
-        AppLocalImages.pirateTreasureHuntMapRoute,
-        AppLocalImages.pirateTreasureHuntMapGirl,
-        AppLocalImages.questionMark,
-        AppLocalImages.island4,
-      };
-
-      final svgPaths = {
-        AppLocalImages.island1,
-        AppLocalImages.island2,
-        AppLocalImages.island3,
-        AppLocalImages.island5,
-        AppLocalImages.island6,
-        AppLocalImages.island7,
-        AppLocalImages.island8,
-      };
-
-      await Future.wait([
-        ...rasterPaths.map((path) => precacheImage(AssetImage(path), context)),
-        ...svgPaths.map((path) => _precacheSvg(path)),
-      ]);
-    } catch (e) {
-      debugPrint('Error precaching assets: $e');
-    }
-  }
-
-  Future<void> _precacheSvg(String assetPath) async {
-    final loader = SvgAssetLoader(assetPath);
-    await svg.cache.putIfAbsent(
-      loader.cacheKey(null),
-      () => loader.loadBytes(null),
-    );
-  }
-
-  // =====================
   // Build
   // =====================
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<void>(
-      future: _precacheFuture,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState != ConnectionState.done) {
-          return SizedBox(
-            width: mapWidth,
-            height: mapHeight,
-            child: const Center(
-                child: CircularProgressIndicator(
-              color: Colors.white,
-            )),
-          );
-        }
-
-        return Center(
-          child: FittedBox(
-            fit: BoxFit.contain,
-            child: SizedBox(
-              width: mapWidth,
-              height: mapHeight,
-              child: _buildMap(),
-            ),
-          ),
-        );
-      },
+    return Center(
+      child: FittedBox(
+        fit: BoxFit.contain,
+        child: SizedBox(
+          width: mapWidth,
+          height: mapHeight,
+          child: _buildMap(),
+        ),
+      ),
     );
   }
 

@@ -153,6 +153,16 @@ class _MyAppState extends ConsumerState<MyApp>
   late AnimationController _fadeController;
   late Animation<double> _fadeAnimation;
 
+  final rasterPaths = {
+    "assets/images/dialog_background.png",
+  };
+
+  Future<void> _precacheAssets() async {
+    await Future.wait([
+      ...rasterPaths.map((path) => precacheImage(AssetImage(path), context)),
+    ]);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -173,6 +183,7 @@ class _MyAppState extends ConsumerState<MyApp>
       ref.read(appSettingsThemeProvider.notifier).loadConfig();
       ref.read(getLanguagesNotifierProvider.notifier).fetchLanguages();
       ref.read(localizationNotifierProvider.notifier).init();
+      _precacheAssets();
     });
 
     ref.listenManual<AppSettingsState>(
