@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:gigafaucet/core/network/base_dio_client.dart';
 import 'package:gigafaucet/features/pirate_treasure_hunt/data/model/request/treasure_hunt_history_request_model.dart';
+import 'package:gigafaucet/features/pirate_treasure_hunt/data/model/request/uncover_treasure_request_model.dart';
 import 'package:gigafaucet/features/pirate_treasure_hunt/data/model/response/treasure_hunt_history_model.dart';
 import 'package:gigafaucet/features/pirate_treasure_hunt/data/model/response/treasure_hunt_start_model.dart';
 import 'package:gigafaucet/features/pirate_treasure_hunt/data/model/response/treasure_hunt_status_model.dart';
@@ -12,7 +13,7 @@ abstract class TreasureHuntRemoteDataSource {
   Future<TreasureHuntStatusModel> getStatus();
 
   /// POST /treasure-hunt/uncover
-  Future<TreasureHuntUncoverModel> uncover();
+  Future<TreasureHuntUncoverModel> uncover(UncoverTreasureRequestModel request);
 
   /// POST /treasure-hunt/start
   Future<TreasureHuntStartModel> start();
@@ -53,14 +54,12 @@ class TreasureHuntRemoteDataSourceImpl implements TreasureHuntRemoteDataSource {
   // UNCOVER
   // ------------------------------------------------------------
   @override
-  Future<TreasureHuntUncoverModel> uncover() async {
+  Future<TreasureHuntUncoverModel> uncover(
+      UncoverTreasureRequestModel request) async {
     try {
       debugPrint('📤 POST /treasure-hunt/uncover');
-
       final response = await dioClient.post('/treasure-hunt/uncover');
-
       debugPrint('📥 Uncover response: ${response.data}');
-
       return TreasureHuntUncoverModel.fromJson(response.data);
     } on DioException catch (e) {
       _logDioError('uncover', e);
