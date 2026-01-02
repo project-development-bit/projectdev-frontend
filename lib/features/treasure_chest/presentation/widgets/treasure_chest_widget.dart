@@ -1,6 +1,5 @@
 import 'package:gigafaucet/core/config/app_local_images.dart';
 import 'package:gigafaucet/core/core.dart';
-import 'package:gigafaucet/core/extensions/context_extensions.dart';
 import 'package:gigafaucet/features/treasure_chest/domain/entities/treasure_chest_open_response.dart';
 import 'package:gigafaucet/features/treasure_chest/presentation/providers/treasure_chest_opening_notifier.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +33,11 @@ class _TreasureChestWidgetState extends ConsumerState<TreasureChestWidget>
   late Animation<Offset> _entranceSlideAnimation;
   late Animation<double> _entranceScaleAnimation;
   late ConfettiController _confettiController;
-  AudioPlayer? _audioPlayer;
+  AudioPlayer? _successAudioPlayer;
+  AudioPlayer? _hoverAudioPlayer;
+  AudioPlayer? _entranceAudioPlayer;
+  AudioPlayer? _rejectionAudioPlayer;
+  AudioPlayer? _boxOpeningAudioPlayer;
 
   bool _isHovering = false;
   bool _isPlayingFullAnimation = false;
@@ -116,6 +119,9 @@ class _TreasureChestWidgetState extends ConsumerState<TreasureChestWidget>
     // Start entrance animation
     _entranceAnimationController.forward();
 
+    // Play entrance drop sound
+    _playEntranceSound();
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final isAuth = ref.read(isAuthenticatedObservableProvider);
       if (!isAuth) {
@@ -140,6 +146,7 @@ class _TreasureChestWidgetState extends ConsumerState<TreasureChestWidget>
               message: message,
               backgroundColor: Colors.red,
               textColor: Colors.white,
+              duration: Duration(seconds: 3),
             );
           }
         },
@@ -154,7 +161,9 @@ class _TreasureChestWidgetState extends ConsumerState<TreasureChestWidget>
     _rewardAnimationController.dispose();
     _entranceAnimationController.dispose();
     _confettiController.dispose();
-    _audioPlayer?.dispose();
+    _successAudioPlayer?.dispose();
+    _hoverAudioPlayer?.dispose();
+    _entranceAudioPlayer?.dispose();
     super.dispose();
   }
 
@@ -212,12 +221,21 @@ class _TreasureChestWidgetState extends ConsumerState<TreasureChestWidget>
         max: 0.14, // Loop first 1 second (20% of the 5-second total animation)
         reverse: true,
       );
+
+      // Play hover sound on loop
+      _playHoverSound();
     }
   }
 
-  void _stopHoverAnimation() {
+  void _stopHoverAnimation({bool isStopSound = true}) {
     if (_isHovering) {
       _isHovering = false;
+
+      // Stop hover sound
+      if (isStopSound) {
+        _stopHoverSound();
+      }
+
       // Stop animation and return to idle wiggle state
       _animationController.stop();
       _animationController
@@ -273,6 +291,8 @@ class _TreasureChestWidgetState extends ConsumerState<TreasureChestWidget>
   }
 
   void _showRewardAnimation(String rewardType, String rewardLabel) {
+    _stopHoverSound();
+    _playSuccessSound();
     setState(() {
       _rewardImage = _getRewardImage(rewardType);
     });
@@ -285,25 +305,28 @@ class _TreasureChestWidgetState extends ConsumerState<TreasureChestWidget>
       // Keep reward visible for a moment
       Future.delayed(const Duration(seconds: 5), () {
         if (mounted) {
-          _rewardAnimationController.reverse().then((_) {
-            setState(() {
-              _rewardImage = null;
-            });
+          // _rewardAnimationController.reverse().then((_) {
+          setState(() {
+            _rewardImage = null;
+            _isPlayingFullAnimation = false;
           });
+          // });
         }
       });
     });
   }
 
   void _onTap() {
-    successAnimationRun("Success");
-    Future.delayed(
-        const Duration(seconds: 2),
-        () => _showRewardAnimation(
-              "coins",
-              "1000 Coins",
-            ));
-    return;
+    // if (_isPlayingFullAnimation) return;
+    // successAnimationRun("Success");
+    // Future.delayed(
+    //     const Duration(seconds: 2),
+    //     () => _showRewardAnimation(
+    //           "coins",
+    //           "1000 Coins",
+    //         ));
+
+    // return;
 
     final isAuth = ref.read(isAuthenticatedObservableProvider);
     if (!isAuth) {
@@ -328,6 +351,8 @@ class _TreasureChestWidgetState extends ConsumerState<TreasureChestWidget>
 
     // Check if status allows opening
     if (state.status.status != 'available') {
+      _playFullLottieAnimation();
+
       debugPrint('🎁 Cannot open chest - status: ${state.status.status}');
 
       // Show appropriate message based on status
@@ -344,10 +369,19 @@ class _TreasureChestWidgetState extends ConsumerState<TreasureChestWidget>
         message = context.l10n?.translate('no_chest_available') ??
             'No chests available to open';
       }
+      // Play rejection sound
+      Future.delayed(const Duration(seconds: 3), () {
+        _playRejectionSound();
+        if (mounted) {
+          context.showErrorSnackBar(message: message);
+        }
+      });
 
-      context.showErrorSnackBar(message: message);
+      //
+
       return;
     }
+    // return;
 
     debugPrint('🎁 Opening chest - status: ${state.status.status}');
 
@@ -360,12 +394,16 @@ class _TreasureChestWidgetState extends ConsumerState<TreasureChestWidget>
       onError: (message) {
         debugPrint('🎁 Error opening chest: $message');
 
+        // Play rejection sound
+        _playRejectionSound();
+
         // Show error message
         if (mounted) {
           context.showSnackBar(
             message: message,
             backgroundColor: Colors.red,
             textColor: Colors.white,
+            duration: Duration(seconds: 3),
           );
         }
 
@@ -378,15 +416,23 @@ class _TreasureChestWidgetState extends ConsumerState<TreasureChestWidget>
   }
 
   void _successHandler(TreasureChestOpenResponse response) {
-    successAnimationRun(response.message);
+    _playFullLottieAnimation();
 
     // Show reward animation after chest opens
-    Future.delayed(
-        const Duration(seconds: 2),
-        () => _showRewardAnimation(
-              response.reward.type,
-              response.reward.label,
-            ));
+    Future.delayed(const Duration(seconds: 2), () {
+      if (mounted) {
+        context.showSnackBar(
+          message: response.message,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          duration: Duration(seconds: 3),
+        );
+      }
+      _showRewardAnimation(
+        response.reward.type,
+        response.reward.label,
+      );
+    });
 
     ref
         .read(treasureChestProvider.notifier)
@@ -395,20 +441,20 @@ class _TreasureChestWidgetState extends ConsumerState<TreasureChestWidget>
     // Show success message
   }
 
-  void successAnimationRun(String message) async {
-    debugPrint('🎁 Treasure chest opened: $message');
+  void _playFullLottieAnimation() async {
+    _stopHoverAnimation(isStopSound: true);
     _isHovering = false;
     _isPlayingFullAnimation = true;
 
-    // Play sound effect
-    _audioPlayer?.dispose();
-    _audioPlayer = AudioPlayer();
-    await _audioPlayer!.play(AssetSource('sound/treasure_chest.wav'));
+    // Play success sound effect
 
     // Stop all animations
     _rotationController.stop();
     _rotationController.value = 0.5; // Reset to center
     _animationController.stop();
+
+    /// Play box opening sound
+    _playBoxOpeningSound();
 
     // Play full Lottie animation
     _animationController.duration = const Duration(seconds: 5);
@@ -421,11 +467,6 @@ class _TreasureChestWidgetState extends ConsumerState<TreasureChestWidget>
             _resetAnimation();
           }
         });
-        context.showSnackBar(
-          message: message,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-        );
       }
     });
   }
@@ -535,12 +576,81 @@ class _TreasureChestWidgetState extends ConsumerState<TreasureChestWidget>
     final bool isInsideBox =
         e.dx >= 110 && e.dx <= 330 && e.dy >= 140 && e.dy <= 340;
 
-    if (isInsideBox) {
+    if (isInsideBox && _isPlayingFullAnimation == false) {
       // Start hover animation if cursor is inside box and not already hovering
       _startHoverAnimation();
     } else {
       // Stop hover animation if cursor moves outside box
       _stopHoverAnimation();
+    }
+  }
+
+  // Sound effect helper methods
+  Future<void> _playEntranceSound() async {
+    try {
+      _entranceAudioPlayer?.dispose();
+      _entranceAudioPlayer = AudioPlayer();
+      await _entranceAudioPlayer!
+          .play(AssetSource('sound/intro_box_drop_sound.mp3'));
+    } catch (e) {
+      debugPrint('🎵 Error playing entrance sound: $e');
+    }
+  }
+
+  Future<void> _playHoverSound() async {
+    try {
+      _hoverAudioPlayer?.dispose();
+      _hoverAudioPlayer = AudioPlayer();
+      await _hoverAudioPlayer!.play(
+        AssetSource('sound/box_shaking_sound.mp3'),
+        mode: PlayerMode.lowLatency,
+      );
+      // Set to loop
+      await _hoverAudioPlayer!.setReleaseMode(ReleaseMode.loop);
+    } catch (e) {
+      debugPrint('🎵 Error playing hover sound: $e');
+    }
+  }
+
+  Future<void> _stopHoverSound() async {
+    try {
+      await _hoverAudioPlayer?.stop();
+      await _hoverAudioPlayer?.dispose();
+      _hoverAudioPlayer = null;
+    } catch (e) {
+      debugPrint('🎵 Error stopping hover sound: $e');
+    }
+  }
+
+  Future<void> _playSuccessSound() async {
+    try {
+      _successAudioPlayer?.dispose();
+      _successAudioPlayer = AudioPlayer();
+      await _successAudioPlayer!.play(AssetSource('sound/box_award_sound.mp3'));
+    } catch (e) {
+      debugPrint('🎵 Error playing success sound: $e');
+    }
+  }
+
+  Future<void> _playRejectionSound() async {
+    try {
+      _successAudioPlayer?.dispose();
+      _successAudioPlayer = AudioPlayer();
+      await _successAudioPlayer!
+          .play(AssetSource('sound/box_reject_sound.mp3'));
+    } catch (e) {
+      debugPrint('🎵 Error playing rejection sound: $e');
+    }
+  }
+
+  Future<void> _playBoxOpeningSound() async {
+    try {
+      _boxOpeningAudioPlayer?.dispose();
+      _boxOpeningAudioPlayer = AudioPlayer();
+      await _boxOpeningAudioPlayer!
+          .play(AssetSource('sound/box_opening_sound.mp3'));
+    } catch (e) {
+      debugPrint('🎵 Error playing box opening sound: $e');
     }
   }
 }
