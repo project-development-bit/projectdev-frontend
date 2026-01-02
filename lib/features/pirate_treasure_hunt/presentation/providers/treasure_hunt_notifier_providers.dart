@@ -29,7 +29,7 @@ final collectTreasureHuntNotifierProvider = StateNotifierProvider.autoDispose<
     CollectTreasureHuntNotifier, CollectTreasureHuntNotifierState>(
   (ref) {
     final usecase = ref.read(collectTreasureHuntUseCaseProvider);
-    return CollectTreasureHuntNotifier(usecase);
+    return CollectTreasureHuntNotifier(usecase, ref);
   },
 );
 
