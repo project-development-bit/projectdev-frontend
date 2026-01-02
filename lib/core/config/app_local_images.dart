@@ -230,4 +230,25 @@ class AppLocalImages {
       'assets/images/pirate_treasure_hunt/islands/island7.svg';
   static const String island8 =
       'assets/images/pirate_treasure_hunt/islands/island8.png';
+  // Treasure Images
+  static const String treasurespins =
+      "assets/images/pirate_treasure_hunt/treasure/2spins@2x.png";
+  static const String treasureOffer =
+      "assets/images/pirate_treasure_hunt/treasure/offer@2x.png";
+  static const String treasurePtc =
+      "assets/images/pirate_treasure_hunt/treasure/ptc@2x.png";
+  static const String treasure30Coins =
+      "assets/images/pirate_treasure_hunt/treasure/30coins@2x.png";
+  static const String treasure50Coins =
+      "assets/images/pirate_treasure_hunt/treasure/50coins@2x.png";
+  static const String treasure100Coins =
+      "assets/images/pirate_treasure_hunt/treasure/100coins@2x.png";
+  static const String treasure300Coins =
+      "assets/images/pirate_treasure_hunt/treasure/300coins@2x.png";
+  static const String treasure1000Coins =
+      "assets/images/pirate_treasure_hunt/treasure/1000coins@2x.png";
+  static const String treasure5000Coins =
+      "assets/images/pirate_treasure_hunt/treasure/5000coins@2x.png";
+  static const String treasure20000Coins =
+      "assets/images/pirate_treasure_hunt/treasure/20Kcoins@2x.png";
 }

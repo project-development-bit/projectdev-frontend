@@ -28,6 +28,7 @@ List<TreasureMapEntry> buildMapEntriesFromHistory(
       if (globalIndex < history.length) {
         // ✅ Unlocked reward
         item = TreasureMapItem(
+          treasureImage: history[globalIndex].reward.rewardImage,
           islandIndex: islandIndex,
           type: MapItemType.girl,
           isUnlocked: true,

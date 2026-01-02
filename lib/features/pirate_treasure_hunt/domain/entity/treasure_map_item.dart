@@ -16,9 +16,10 @@ class TreasureMapItem {
   final double height;
   final bool isUnlocked;
   final bool isCurrent;
-
+  final String? treasureImage;
   const TreasureMapItem({
     required this.type,
+    this.treasureImage = "",
     this.islandIndex = 1,
     this.width = 40,
     this.height = 40,

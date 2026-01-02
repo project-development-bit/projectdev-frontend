@@ -28,6 +28,16 @@ class TeasureHuntMapItemWidget extends StatelessWidget {
     Offset(0.85, 0.26),
     Offset(0.88, 0.50),
   ];
+  static const List<Offset> _treasureImageOffset = [
+    Offset(15, 10),
+    Offset(15, 1),
+    Offset(20, 5),
+    Offset(15, 5),
+    Offset(10, 1),
+    Offset(20, 2),
+    Offset(15, 20),
+    Offset(15, 2),
+  ];
   @override
   Widget build(BuildContext context) {
     final slot = _slots[slotIndex];
@@ -41,21 +51,45 @@ class TeasureHuntMapItemWidget extends StatelessWidget {
     final String asset = _resolveAsset(item, isLockedGirl);
     final Size size = _resolveSize(item, isLockedGirl);
 
+    final treasureImageOffset = _treasureImageOffset[slotIndex];
+
     return Positioned(
       left: left - size.width / 2,
       top: top - size.height / 2,
-      child: CommonImage(
-        imageUrl: asset,
-        width: size.width,
-        height: size.height,
-        fit: BoxFit.fill,
-        placeholder: SizedBox(
-          width: size.width,
-          height: size.height,
-          child: const Center(
-            child: CircularProgressIndicator(strokeWidth: 2),
+      child: Stack(
+        children: [
+          CommonImage(
+            imageUrl: asset,
+            width: size.width,
+            height: size.height,
+            fit: BoxFit.fill,
+            placeholder: SizedBox(
+              width: size.width,
+              height: size.height,
+              child: const Center(
+                child: CircularProgressIndicator(strokeWidth: 2),
+              ),
+            ),
           ),
-        ),
+          if (item.isUnlocked && (item.treasureImage?.isNotEmpty ?? false))
+            Positioned(
+              bottom: treasureImageOffset.dy,
+              right: treasureImageOffset.dx,
+              child: CommonImage(
+                imageUrl: item.treasureImage ?? "",
+                width: 25,
+                height: 25,
+                fit: BoxFit.fill,
+                placeholder: SizedBox(
+                  width: size.width,
+                  height: size.height,
+                  child: const Center(
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  ),
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }
