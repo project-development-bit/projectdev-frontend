@@ -40,6 +40,12 @@ class TreasureHuntStatusState {
         data!.currentStep == 3;
   }
 
+  bool get isReady {
+    return (data?.canStart ?? true) ||
+        (data?.status == "in_progress") ||
+        (isUncoverTreasureReady);
+  }
+
   bool get isInProgress {
     if (data == null) return false;
     return data!.status == "in_progress" || data!.currentStep < 3;

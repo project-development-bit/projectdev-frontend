@@ -39,26 +39,27 @@ class UnlockYourTreasureWidget extends ConsumerWidget {
         SizedBox(height: 32),
         PirateTreasureHuntActionsWidget(),
         SizedBox(height: 32),
-        CustomUnderLineButtonWidget(
-          isDark: true,
-          onTap: () {
-            if (treasureHuntStatus.isUncoverTreasureReady) {
-              context.pop();
-              showPirateTresureFoundDialog(context);
-            } else if (treasureHuntStatus.isInProgress) {
-              context.pop();
-            } else {
-              ref.read(startTreasureHuntNotifierProvider.notifier).start();
-            }
-          },
-          fontSize: 14,
-          fontWeight: FontWeight.w700,
-          title: (treasureHuntStatus.isUncoverTreasureReady)
-              ? context.translate("uncover_treasure")
-              : (treasureHuntStatus.isInProgress)
-                  ? context.translate("continue_hunt")
-                  : context.translate("start_treasure_hunt"),
-        )
+        if (treasureHuntStatus.isReady)
+          CustomUnderLineButtonWidget(
+            isDark: true,
+            onTap: () {
+              if (treasureHuntStatus.data?.canStart ?? false) {
+                ref.read(startTreasureHuntNotifierProvider.notifier).start();
+              } else if (treasureHuntStatus.isUncoverTreasureReady) {
+                context.pop();
+                showPirateTresureFoundDialog(context);
+              } else {
+                context.pop();
+              }
+            },
+            fontSize: 14,
+            fontWeight: FontWeight.w700,
+            title: (treasureHuntStatus.data?.canStart ?? false)
+                ? context.translate("start_treasure_hunt")
+                : (treasureHuntStatus.isUncoverTreasureReady)
+                    ? context.translate("uncover_treasure")
+                    : context.translate("continue_hunt"),
+          )
       ],
     );
   }

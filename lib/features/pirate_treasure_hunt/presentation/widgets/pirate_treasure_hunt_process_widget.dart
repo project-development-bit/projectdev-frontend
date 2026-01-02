@@ -51,21 +51,18 @@ class PirateTreasureHuntProcessWidget extends ConsumerWidget {
             currentStep: treasureHuntStatus.data?.currentStep ?? 1,
           ),
           const SizedBox(height: 10),
-          StatusBadge(
-            label: context.translate("hunt_status_label"),
-            statusText: context.translate("hunt_status_ready"),
-            statusColor: const Color(0xFF22C55E),
-          ),
-          if (!(treasureHuntStatus.data?.canStart ?? true) &&
-              (treasureHuntStatus.data?.status != "in_progress")) ...[
-            const SizedBox(height: 10),
-            CommonText.titleMedium(
-              context.translate('next_hunt_unlocks_in',
-                  args: [treasureHuntStatus.countDownUntilNow()]),
-              fontWeight: FontWeight.w700,
-              textAlign: TextAlign.center,
-            ),
-          ]
+          (treasureHuntStatus.isReady)
+              ? StatusBadge(
+                  label: context.translate("hunt_status_label"),
+                  statusText: context.translate("hunt_status_ready"),
+                  statusColor: const Color(0xFF22C55E),
+                )
+              : CommonText.titleMedium(
+                  context.translate('next_hunt_unlocks_in',
+                      args: [treasureHuntStatus.countDownUntilNow()]),
+                  fontWeight: FontWeight.w700,
+                  textAlign: TextAlign.center,
+                ),
         ],
       ),
     );
