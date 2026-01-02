@@ -27,9 +27,12 @@ class _TreasureChestWidgetState extends ConsumerState<TreasureChestWidget>
   late AnimationController _animationController;
   late AnimationController _rotationController;
   late AnimationController _rewardAnimationController;
+  late AnimationController _entranceAnimationController;
   late Animation<double> _rotationAnimation;
   late Animation<double> _rewardFadeAnimation;
   late Animation<Offset> _rewardSlideAnimation;
+  late Animation<Offset> _entranceSlideAnimation;
+  late Animation<double> _entranceScaleAnimation;
   late ConfettiController _confettiController;
   AudioPlayer? _audioPlayer;
 
@@ -88,6 +91,31 @@ class _TreasureChestWidgetState extends ConsumerState<TreasureChestWidget>
       duration: const Duration(seconds: 3),
     );
 
+    // Entrance animation controller
+    _entranceAnimationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    );
+
+    _entranceSlideAnimation = Tween<Offset>(
+      begin: const Offset(0, -1.5),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _entranceAnimationController,
+      curve: Curves.bounceOut,
+    ));
+
+    _entranceScaleAnimation = Tween<double>(
+      begin: 0.5,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _entranceAnimationController,
+      curve: Curves.easeOut,
+    ));
+
+    // Start entrance animation
+    _entranceAnimationController.forward();
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final isAuth = ref.read(isAuthenticatedObservableProvider);
       if (!isAuth) {
@@ -124,6 +152,7 @@ class _TreasureChestWidgetState extends ConsumerState<TreasureChestWidget>
     _animationController.dispose();
     _rotationController.dispose();
     _rewardAnimationController.dispose();
+    _entranceAnimationController.dispose();
     _confettiController.dispose();
     _audioPlayer?.dispose();
     super.dispose();
@@ -249,12 +278,12 @@ class _TreasureChestWidgetState extends ConsumerState<TreasureChestWidget>
     });
 
     // Start confetti
-    _confettiController.play();
+    // _confettiController.play();
 
     // Start reward animation
     _rewardAnimationController.forward(from: 0.0).then((_) {
       // Keep reward visible for a moment
-      Future.delayed(const Duration(seconds: 2), () {
+      Future.delayed(const Duration(seconds: 5), () {
         if (mounted) {
           _rewardAnimationController.reverse().then((_) {
             setState(() {
@@ -268,6 +297,12 @@ class _TreasureChestWidgetState extends ConsumerState<TreasureChestWidget>
 
   void _onTap() {
     successAnimationRun("Success");
+    Future.delayed(
+        const Duration(seconds: 2),
+        () => _showRewardAnimation(
+              "coins",
+              "1000 Coins",
+            ));
     return;
 
     final isAuth = ref.read(isAuthenticatedObservableProvider);
@@ -347,7 +382,7 @@ class _TreasureChestWidgetState extends ConsumerState<TreasureChestWidget>
 
     // Show reward animation after chest opens
     Future.delayed(
-        const Duration(seconds: 3),
+        const Duration(seconds: 2),
         () => _showRewardAnimation(
               response.reward.type,
               response.reward.label,
@@ -381,7 +416,7 @@ class _TreasureChestWidgetState extends ConsumerState<TreasureChestWidget>
       // After animation completes, chest stays at final frame
       // Wait 5 seconds, then call reset animation
       if (mounted) {
-        Future.delayed(const Duration(seconds: 5), () {
+        Future.delayed(const Duration(seconds: 7), () {
           if (mounted && !_isHovering) {
             _resetAnimation();
           }
@@ -408,80 +443,86 @@ class _TreasureChestWidgetState extends ConsumerState<TreasureChestWidget>
           AppLocalImages.treasureChestTitle,
           width: 200,
         ),
-        Stack(
-          alignment: Alignment.center,
-          clipBehavior: Clip.none,
-          children: [
-            Container(
-              width: 400,
-              height: 400,
-              padding: const EdgeInsets.all(16.0),
-              child: MouseRegion(
-                onHover: (e) => _onMouseHover(e.localPosition),
-                onExit: (_) => _stopHoverAnimation(),
-                child: GestureDetector(
-                  onTap: _onTap,
-                  child: AnimatedBuilder(
-                    animation: _rotationAnimation,
-                    builder: (context, child) {
-                      return Transform.rotate(
-                        angle: _rotationAnimation.value,
-                        child: child,
-                      );
-                    },
-                    child: Lottie.asset(
-                      AppLocalImages.lottieTreasureChest,
-                      controller: _animationController,
-                      width: 400,
-                      height: 400,
+        SlideTransition(
+          position: _entranceSlideAnimation,
+          child: ScaleTransition(
+            scale: _entranceScaleAnimation,
+            child: Stack(
+              alignment: Alignment.center,
+              clipBehavior: Clip.none,
+              children: [
+                Container(
+                  width: 400,
+                  height: 400,
+                  padding: const EdgeInsets.all(16.0),
+                  child: MouseRegion(
+                    onHover: (e) => _onMouseHover(e.localPosition),
+                    onExit: (_) => _stopHoverAnimation(),
+                    child: GestureDetector(
+                      onTap: _onTap,
+                      child: AnimatedBuilder(
+                        animation: _rotationAnimation,
+                        builder: (context, child) {
+                          return Transform.rotate(
+                            angle: _rotationAnimation.value,
+                            child: child,
+                          );
+                        },
+                        child: Lottie.asset(
+                          AppLocalImages.lottieTreasureChest,
+                          controller: _animationController,
+                          width: 400,
+                          height: 400,
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ),
+                // Reward animation
+                if (_rewardImage != null)
+                  AnimatedBuilder(
+                    animation: _rewardAnimationController,
+                    builder: (context, child) {
+                      return SlideTransition(
+                        position: _rewardSlideAnimation,
+                        child: FadeTransition(
+                          opacity: _rewardFadeAnimation,
+                          child: Image.asset(
+                            _rewardImage!,
+                            fit: BoxFit.contain,
+                            width: 80,
+                            height: 80,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                // Confetti
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: ConfettiWidget(
+                    confettiController: _confettiController,
+                    blastDirection: pi / 2, // Downward
+                    blastDirectionality: BlastDirectionality.explosive,
+                    particleDrag: 0.05,
+                    emissionFrequency: 0.05,
+                    numberOfParticles: 30,
+                    gravity: 0.3,
+                    shouldLoop: false,
+                    colors: const [
+                      Colors.green,
+                      Colors.blue,
+                      Colors.pink,
+                      Colors.orange,
+                      Colors.purple,
+                      Colors.yellow,
+                      Colors.red,
+                    ],
+                  ),
+                ),
+              ],
             ),
-            // Reward animation
-            if (_rewardImage != null)
-              AnimatedBuilder(
-                animation: _rewardAnimationController,
-                builder: (context, child) {
-                  return SlideTransition(
-                    position: _rewardSlideAnimation,
-                    child: FadeTransition(
-                      opacity: _rewardFadeAnimation,
-                      child: Image.asset(
-                        _rewardImage!,
-                        fit: BoxFit.contain,
-                        width: 80,
-                        height: 80,
-                      ),
-                    ),
-                  );
-                },
-              ),
-            // Confetti
-            Align(
-              alignment: Alignment.topCenter,
-              child: ConfettiWidget(
-                confettiController: _confettiController,
-                blastDirection: pi / 2, // Downward
-                blastDirectionality: BlastDirectionality.explosive,
-                particleDrag: 0.05,
-                emissionFrequency: 0.05,
-                numberOfParticles: 30,
-                gravity: 0.3,
-                shouldLoop: false,
-                colors: const [
-                  Colors.green,
-                  Colors.blue,
-                  Colors.pink,
-                  Colors.orange,
-                  Colors.purple,
-                  Colors.yellow,
-                  Colors.red,
-                ],
-              ),
-            ),
-          ],
+          ),
         ),
       ],
     );
