@@ -70,6 +70,11 @@ class _PirateTresureFoundDialogState
       if (!mounted) return;
       if (next.status == UncoverTreasureStatus.success) {
         celebrationSound();
+      } else if (next.status == UncoverTreasureStatus.error) {
+        // Show error message
+        context.showErrorSnackBar(
+          message: next.error ?? context.translate('something_went_wrong'),
+        );
       }
     });
   }
