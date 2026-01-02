@@ -334,6 +334,7 @@ class _CloudflareTurnstileWidgetState
             _turnstilleNotifier.controller != null) ...[
           const SizedBox(height: 8),
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               if (state is TurnstileError || state is TurnstileExpired)
                 TextButton.icon(

@@ -1,0 +1,24 @@
+import 'package:dartz/dartz.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gigafaucet/core/error/failures.dart';
+import 'package:gigafaucet/core/usecases/usecase.dart';
+import 'package:gigafaucet/features/pirate_treasure_hunt/data/model/response/treasure_hunt_start_model.dart';
+import 'package:gigafaucet/features/pirate_treasure_hunt/domain/repository/treasure_hunt_repository.dart';
+
+final startTreasureHuntUseCaseProvider =
+    Provider<StartTreasureHuntUseCase>((ref) {
+  final repo = ref.read(treasureHuntRepositoryProvider);
+  return StartTreasureHuntUseCase(repo);
+});
+
+class StartTreasureHuntUseCase
+    implements UseCase<TreasureHuntStartModel, NoParams> {
+  final TreasureHuntRepository repository;
+
+  StartTreasureHuntUseCase(this.repository);
+
+  @override
+  Future<Either<Failure, TreasureHuntStartModel>> call(NoParams params) {
+    return repository.start();
+  }
+}

@@ -181,6 +181,7 @@ class _CommonImageState extends State<CommonImage> {
         fit: widget.fit,
         alignment: alignment,
         filterQuality: widget.filterQuality ?? FilterQuality.high,
+        gaplessPlayback: true,
         errorBuilder: (context, error, stackTrace) {
           if (!mounted) return const SizedBox.shrink();
           return defaultErrorWidget;

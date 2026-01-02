@@ -1,15 +1,20 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gigafaucet/core/common/common_text.dart';
 import 'package:gigafaucet/core/config/app_local_images.dart';
 import 'package:gigafaucet/core/extensions/context_extensions.dart';
+import 'package:gigafaucet/core/providers/auth_provider.dart';
+import 'package:gigafaucet/features/auth/presentation/widgets/dialog/login_required_dialog.dart';
 import 'package:gigafaucet/features/faucet/presentation/widgets/claim_faucet.dart';
 import 'package:gigafaucet/features/faucet/presentation/widgets/dialog/claim_your_faucet_dialog.dart';
 import 'package:gigafaucet/features/faucet/presentation/widgets/dialog/your_faucet_dialog.dart';
 import 'package:gigafaucet/features/home/presentation/widgets/home_section_container.dart';
 import 'package:flutter/material.dart';
+import 'package:gigafaucet/features/pirate_treasure_hunt/presentation/widgets/dialogs/pirate_treasure_hunt_dialog.dart';
+import 'package:gigafaucet/routing/app_router.dart';
 
 import '../../../fortune_wheel/presentation/widgets/fortune_wheel_widget.dart';
 
-class HomeFeaturesSection extends StatelessWidget {
+class HomeFeaturesSection extends ConsumerWidget {
   const HomeFeaturesSection({super.key});
 
   List<dynamic> get _featureItemsData {
@@ -61,7 +66,9 @@ class HomeFeaturesSection extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isAuthenticated = ref.watch(isAuthenticatedObservableProvider);
+
     return HomeSectionContainer(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -103,13 +110,21 @@ class HomeFeaturesSection extends StatelessWidget {
                       if (feature['title'] == 'fortune Wheel') {
                         showFortuneWheelDialog(context);
                         return;
-                      }
-                      if (feature['title'] == 'Claim Faucet') {
+                      } else if (feature['title'] == 'Claim Faucet') {
                         // Show faucet dialog
                         // Assuming showYourFaucetDialog is defined elsewhere
                         showYourFaucetDialog(context, () {
                           showClaimYourFaucetDialog(context);
                         });
+                      } else if (feature['title'] == 'Pirate Treasure Hunt') {
+                        // Show Pirate Treasure Hunt dialog
+                        if (isAuthenticated) {
+                          showPirateTreasureHuntDialog(context);
+                        } else {
+                          showLoginRequiredDialog(context, onGoToLogin: () {
+                            context.go('/auth/login');
+                          });
+                        }
                       }
                     });
                   }).toList(),

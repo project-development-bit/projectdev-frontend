@@ -56,13 +56,6 @@ class DialogBgWidget extends StatelessWidget {
     return Container(
       width: width,
       height: isInitLoading || isOverlayLoading ? dialogHeight : null,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage('assets/images/dialog_background.png'),
-          fit: BoxFit.cover,
-          alignment: Alignment.topCenter,
-        ),
-      ),
       constraints: BoxConstraints(
         maxHeight: context.isMobile
             ? context.screenHeight * 0.8
@@ -70,6 +63,15 @@ class DialogBgWidget extends StatelessWidget {
       ),
       child: Stack(
         children: [
+          Positioned.fill(
+            child: Image.asset(
+              'assets/images/dialog_background.png',
+              fit: BoxFit.cover,
+              // repeat: ImageRepeat.repeatX,
+              alignment: Alignment.topCenter,
+              gaplessPlayback: true,
+            ),
+          ),
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [

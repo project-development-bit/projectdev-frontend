@@ -147,6 +147,16 @@ class MyApp extends ConsumerStatefulWidget {
 
 class _MyAppState extends ConsumerState<MyApp>
     with SingleTickerProviderStateMixin {
+  final rasterPaths = {
+    "assets/images/dialog_background.png",
+  };
+
+  Future<void> _precacheAssets() async {
+    await Future.wait([
+      ...rasterPaths.map((path) => precacheImage(AssetImage(path), context)),
+    ]);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -156,6 +166,7 @@ class _MyAppState extends ConsumerState<MyApp>
       ref.read(appSettingsThemeProvider.notifier).loadConfig();
       ref.read(getLanguagesNotifierProvider.notifier).fetchLanguages();
       ref.read(localizationNotifierProvider.notifier).init();
+      _precacheAssets();
     });
 
     ref.listenManual<AppSettingsState>(
@@ -172,7 +183,7 @@ class _MyAppState extends ConsumerState<MyApp>
         if (next.isLoading == false ||
             next.error != null ||
             next.config != null) {
-        removeSplashFromWeb();
+          removeSplashFromWeb();
         }
       },
     );

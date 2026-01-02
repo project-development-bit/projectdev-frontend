@@ -154,6 +154,10 @@ flutter:
     - assets/images/coins/
     - assets/images/logos/
     - assets/sound/
+    - assets/images/pirate_treasure_hunt/
+    - assets/images/pirate_treasure_hunt/map-items/
+    - assets/images/pirate_treasure_hunt/islands/
+    - assets/images/pirate_treasure_hunt/treasure/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 

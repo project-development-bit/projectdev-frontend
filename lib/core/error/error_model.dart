@@ -18,7 +18,7 @@ class ErrorModel {
   factory ErrorModel.fromJson(Map<String, dynamic> json) {
     return ErrorModel(
       type: json['type'] as String? ?? 'error',
-      status: json['status'] as int? ?? 500,
+      status: json['status'] is int ? json['status'] as int : 500,
       message: json['message'] as String? ?? 'Unknown error',
       code: json['code'] != null && json['code'] is String
           ? ErrorCode.fromString(json['code'] as String)
