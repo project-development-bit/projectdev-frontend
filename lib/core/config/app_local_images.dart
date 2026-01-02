@@ -236,7 +236,7 @@ class AppLocalImages {
   static const String treasureOffer =
       "assets/images/pirate_treasure_hunt/treasure/offer@2x.png";
   static const String treasurePtc =
-      "assets/images/pirate_treasure_hunt/treasure/ptc@2x.png";
+      "assets/images/pirate_treasure_hunt/treasure/PTC@2x.png";
   static const String treasure30Coins =
       "assets/images/pirate_treasure_hunt/treasure/30coins@2x.png";
   static const String treasure50Coins =
