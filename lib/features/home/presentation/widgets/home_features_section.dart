@@ -1,15 +1,18 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gigafaucet/core/common/common_text.dart';
 import 'package:gigafaucet/core/config/app_local_images.dart';
 import 'package:gigafaucet/core/extensions/context_extensions.dart';
+import 'package:gigafaucet/core/providers/auth_provider.dart';
 import 'package:gigafaucet/features/faucet/presentation/widgets/claim_faucet.dart';
 import 'package:gigafaucet/features/faucet/presentation/widgets/dialog/claim_your_faucet_dialog.dart';
 import 'package:gigafaucet/features/faucet/presentation/widgets/dialog/your_faucet_dialog.dart';
 import 'package:gigafaucet/features/home/presentation/widgets/home_section_container.dart';
 import 'package:flutter/material.dart';
+import 'package:gigafaucet/features/treasure_chest/presentation/widgets/treasure_chest_widget.dart';
 
 import '../../../fortune_wheel/presentation/widgets/fortune_wheel_widget.dart';
 
-class HomeFeaturesSection extends StatelessWidget {
+class HomeFeaturesSection extends ConsumerWidget {
   const HomeFeaturesSection({super.key});
 
   List<dynamic> get _featureItemsData {
@@ -61,7 +64,7 @@ class HomeFeaturesSection extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return HomeSectionContainer(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -110,6 +113,23 @@ class HomeFeaturesSection extends StatelessWidget {
                         showYourFaucetDialog(context, () {
                           showClaimYourFaucetDialog(context);
                         });
+                        return;
+                      }
+
+                      if (feature['title'] == 'Treasure Chest') {
+                        final isAuth =
+                            ref.read(isAuthenticatedObservableProvider);
+                        if (!isAuth) {
+                          context.showErrorSnackBar(
+                            message: context.l10n
+                                    ?.translate('please_login_to_continue') ??
+                                'Please log in to continue.',
+                          );
+                          return;
+                        }
+                        // Show treasure chest dialog
+                        showTreasureChestDialog(context);
+                        return;
                       }
                     });
                   }).toList(),

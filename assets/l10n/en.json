@@ -796,5 +796,9 @@
   "verify_security_pin": "Verify Security Pin",
   "enter_your_4_digit_pin": "Enter your 4-digit PIN code",
   "verify_pin_description": "Please enter your security PIN to verify your identity and continue. This step helps keep your account safe.",
-  "verify_pin": "Verify PIN"
+  "verify_pin": "Verify PIN",
+  "treasure_chest": "Treasure Chest",
+  "loading_treasure_chest": "Loading treasure chest...",
+  "no_chest_available": "No chests available to open",
+  "treasure_chest_cooldown_message": "You must wait {0} hours before opening another chest."
 }

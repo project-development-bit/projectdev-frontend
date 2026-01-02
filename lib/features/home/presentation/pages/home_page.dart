@@ -5,6 +5,7 @@ import 'package:gigafaucet/features/home/presentation/widgets/home_features_sect
 import 'package:gigafaucet/features/user_profile/presentation/providers/current_user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lottie/lottie.dart';
 import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/providers/auth_provider.dart';
 import '../widgets/home_banner_section.dart';

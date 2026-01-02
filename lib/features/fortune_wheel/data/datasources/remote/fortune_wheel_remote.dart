@@ -191,7 +191,7 @@ class FortuneWheelRemoteDataSourceImpl implements FortuneWheelRemoteDataSource {
             final status = FortuneWheelStatusModel.fromJson(statusData);
 
             debugPrint('🎡 Status fetched - Can Spin: ${status.canSpin}');
-            debugPrint('🎡 Remaining Spins: ${status.remainingSpins}');
+            debugPrint('🎡 Total Spins: ${status.spins.total}');
             return status;
           } else {
             debugPrint('🎡 API returned success: false');
