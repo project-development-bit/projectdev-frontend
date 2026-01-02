@@ -39,22 +39,25 @@ class PirateTreasureHuntActionsWidget extends ConsumerWidget {
     final availableItems =
         items.where((item) => availableTasks.contains(item.taskKey)).toList();
 
-    return Container(
-      decoration: const BoxDecoration(),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: availableItems
-            .map(
-              (item) => SizedBox(
-                width: 130,
-                height: 119,
-                child: Padding(
+    return SizedBox(
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        physics: const BouncingScrollPhysics(),
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        child: Row(
+          children: availableItems
+              .map(
+                (item) => Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 6),
-                  child: ActionCard(item: item),
+                  child: SizedBox(
+                    width: 130,
+                    height: 119,
+                    child: ActionCard(item: item),
+                  ),
                 ),
-              ),
-            )
-            .toList(),
+              )
+              .toList(),
+        ),
       ),
     );
   }
@@ -68,7 +71,7 @@ class ActionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 140,
+      height: 119,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(18),
         border: Border.all(
