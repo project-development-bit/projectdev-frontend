@@ -149,4 +149,23 @@ class ReferredUsersNotifier extends StateNotifier<ReferredUsersState> {
       dateTo: dateFormat.format(dateTo),
     ));
   }
+
+  void changeDateRange(DateTime startDate, DateTime endDate) {
+    DateFormat dateFormat = DateFormat('yyyy-MM-dd');
+    getReferredUsers(ReferredUsersRequest(
+      page: 1,
+      limit: 10,
+      dateFrom: dateFormat.format(startDate),
+      dateTo: dateFormat.format(endDate),
+    ));
+  }
+
+  void clearDateFilter() {
+    if (state.currentRequest != null) {
+      getReferredUsers(state.currentRequest!.copyWith(
+        dateFrom: null,
+        dateTo: null,
+      ));
+    }
+  }
 }

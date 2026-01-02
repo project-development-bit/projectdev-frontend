@@ -184,7 +184,7 @@ class _AffiliateProgramDialogState
         log('Cannot launch $platform');
         throw Exception('Cannot launch $platform');
       }
-        } catch (e) {
+    } catch (e) {
       log('Error sharing on $platform: $e');
       // Fallback: copy to clipboard
       await Clipboard.setData(ClipboardData(text: url));
@@ -372,6 +372,7 @@ class _AffiliateProgramDialogState
     final stats = statsState.data;
 
     final isMobile = context.isMobile;
+    final isTablet = context.screenWidth >= 425 && context.screenWidth < 768;
 
     return GridView(
       physics: NeverScrollableScrollPhysics(),
@@ -379,7 +380,11 @@ class _AffiliateProgramDialogState
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisSpacing: 10,
           mainAxisSpacing: 10,
-          crossAxisCount: isMobile ? 2 : 4),
+          crossAxisCount: isTablet
+              ? 3
+              : isMobile
+                  ? 2
+                  : 4),
       children: [
         _infoItem(
           assetPath: AppLocalImages.moneyBag,
@@ -485,6 +490,7 @@ class _AffiliateProgramDialogState
         border: Border.all(color: Color(0xff333333)),
         borderRadius: BorderRadius.circular(12),
       ),
+      padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -496,10 +502,12 @@ class _AffiliateProgramDialogState
           SizedBox(height: 10),
           value,
           const SizedBox(height: 8),
-          CommonText.bodyMedium(
-            label,
-            fontWeight: FontWeight.w500,
-            color: Colors.white,
+          FittedBox(
+            child: CommonText.bodyMedium(
+              label,
+              fontWeight: FontWeight.w500,
+              color: Colors.white,
+            ),
           ),
         ],
       ),

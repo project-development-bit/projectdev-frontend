@@ -39,10 +39,10 @@ class DialogBgWidget extends StatelessWidget {
 
   double _getDialogWidth(BuildContext context) {
     if (context.isMobile) {
-      return MediaQuery.of(context).size.width; // Mobile → full width
+      return context.screenWidth; // Mobile → full width
     }
     if (context.isTablet) {
-      return MediaQuery.of(context).size.width * 0.8; // Tablet → 80%
+      return context.screenWidth * 0.8; // Tablet → 80%
     }
     return dialogWidth ?? 650; //Fixed width for desktop
   }
