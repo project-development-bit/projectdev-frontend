@@ -23,12 +23,13 @@ class _TutorialOverlayState extends ConsumerState<TutorialOverlay> {
     final isVerified = ref.watch(internalVerificationProvider);
     final currentUserState = ref.watch(currentUserProvider);
     debugPrint(
-        'Tutorial Overlay - shown: $tutorialShown | !auth: ${!authState.isAuthenticated} showOnboarding : ${currentUserState.user != null ? !currentUserState.user!.shouldShowOnboarding : 'N/A'} isVerified: ${!isVerified} overAll: ${tutorialShown || !authState.isAuthenticated || (currentUserState.user != null && !currentUserState.user!.shouldShowOnboarding) || !isVerified}');
+        'Tutorial Overlay - shown: $tutorialShown | !auth: ${!authState.isAuthenticated} showOnboarding : ${currentUserState.user != null ? !currentUserState.user!.shouldShowOnboarding : 'N/A Default True'} isVerified: ${!isVerified} overAll: ${tutorialShown || !authState.isAuthenticated || (currentUserState.user != null && !currentUserState.user!.shouldShowOnboarding) || !isVerified}');
     if (tutorialShown ||
         currentUserState.isLoading ||
         !authState.isAuthenticated ||
-        (currentUserState.user != null &&
-            !currentUserState.user!.shouldShowOnboarding) ||
+        (currentUserState.user != null
+            ? !currentUserState.user!.shouldShowOnboarding
+            : true) ||
         !isVerified) {
       return widget.child;
     }

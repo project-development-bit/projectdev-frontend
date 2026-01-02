@@ -14,7 +14,7 @@ class StatisticsResponseModel extends StatisticsResponse {
       success: json['success'] ?? false,
       message: json['message'] ?? '',
       data: json['data'] != null
-          ? StatisticsDataModel.fromJson(json['data'])
+          ? StatisticsDataModel.fromJson(json['data'] ?? {})
           : null,
     );
   }
