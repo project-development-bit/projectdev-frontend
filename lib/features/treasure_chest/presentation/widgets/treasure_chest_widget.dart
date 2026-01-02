@@ -348,7 +348,9 @@ class _TreasureChestWidgetState extends ConsumerState<TreasureChestWidget>
       );
       return;
     }
-
+    setState(() {
+      _isPlayingFullAnimation = true;
+    });
     // Check if status allows opening
     if (state.status.status != 'available') {
       _playFullLottieAnimation();
@@ -413,6 +415,9 @@ class _TreasureChestWidgetState extends ConsumerState<TreasureChestWidget>
         return;
       },
     );
+    setState(() {
+      _isPlayingFullAnimation = false;
+    });
   }
 
   void _successHandler(TreasureChestOpenResponse response) {
