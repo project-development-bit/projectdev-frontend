@@ -4,6 +4,7 @@ import 'package:gigafaucet/core/common/dialog_bg_widget.dart';
 import 'package:gigafaucet/core/common/table/common_table_widget.dart';
 import 'package:gigafaucet/core/common/table/models/table_column.dart';
 import 'package:gigafaucet/core/config/app_local_images.dart';
+import 'package:gigafaucet/core/config/flavor_manager.dart';
 import 'package:gigafaucet/core/extensions/extensions.dart';
 import 'package:gigafaucet/features/affiliate_program/data/models/request/referred_users_request.dart';
 import 'package:gigafaucet/features/affiliate_program/presentation/providers/referral_link_provider.dart';
@@ -15,6 +16,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'affiliate_filter_bar_widget.dart';
 
@@ -117,6 +119,81 @@ class _AffiliateProgramDialogState
 
     // For Android and iOS platforms
     return 'https://staging.gigafaucet.com/r/$referralCode';
+  }
+
+  Future<void> _shareOnPlatform(String platform, String url) async {
+    if (url.isEmpty) {
+      context.showSnackBar(
+        message: 'Referral link not available',
+        backgroundColor: context.error,
+      );
+      return;
+    }
+
+    final shareMessage =
+        'Join me on GigaFaucet and start earning rewards! Use my referral link: $url';
+    final encodedUrl = Uri.encodeComponent(url);
+    final encodedMessage = Uri.encodeComponent(shareMessage);
+
+    String? appUrl;
+
+    switch (platform.toLowerCase()) {
+      case 'whatsapp':
+        appUrl = kIsWeb
+            ? 'https://wa.me/?text=$encodedMessage'
+            : 'whatsapp://send?text=$encodedMessage';
+        break;
+      case 'facebook':
+        appUrl =
+            'https://www.facebook.com/sharer.php?app_id=${FlavorManager.facebookAppId}&u=$encodedUrl';
+        break;
+      case 'twitter':
+        appUrl = 'https://twitter.com/intent/tweet?text=$encodedMessage';
+        break;
+      case 'telegram':
+        appUrl = kIsWeb
+            ? 'https://t.me/share/url?url=$encodedUrl&text=$encodedMessage'
+            : 'tg://msg_url?url=$encodedUrl&text=$encodedMessage';
+        break;
+      case 'linkedin':
+        appUrl =
+            'https://www.linkedin.com/sharing/share-offsite/?url=$encodedUrl';
+        break;
+      case 'gmail':
+        appUrl =
+            'mailto:?subject=${Uri.encodeComponent("Join GigaFaucet!")}&body=$encodedMessage';
+        break;
+      default:
+        log('Unknown platform: $platform');
+        return;
+    }
+
+    try {
+      final uri = Uri.parse(appUrl);
+      final canLaunch = await canLaunchUrl(uri);
+
+      if (canLaunch) {
+        await launchUrl(
+          uri,
+          mode: kIsWeb
+              ? LaunchMode.platformDefault
+              : LaunchMode.externalApplication,
+        );
+        log('Launched $platform successfully');
+      } else {
+        log('Cannot launch $platform');
+        throw Exception('Cannot launch $platform');
+      }
+        } catch (e) {
+      log('Error sharing on $platform: $e');
+      // Fallback: copy to clipboard
+      await Clipboard.setData(ClipboardData(text: url));
+      if (mounted) {
+        context.showSnackBar(
+          message: 'Link copied to clipboard!',
+        );
+      }
+    }
   }
 
   @override
@@ -258,6 +335,7 @@ class _AffiliateProgramDialogState
                       iconPath: socialIcon['iconPath']!,
                       onTap: () {
                         log('${socialIcon['name']} icon tapped');
+                        _shareOnPlatform(socialIcon['name']!, referralUrl);
                       }),
               ])
         ],

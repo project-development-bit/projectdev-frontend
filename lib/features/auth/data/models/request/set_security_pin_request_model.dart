@@ -7,7 +7,7 @@ class SetSecurityPinRequestModel {
     required this.enable,
   });
 
-  final int securityPin;
+  final String securityPin;
   final bool enable;
 
   Map<String, dynamic> toJson() {

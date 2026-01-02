@@ -64,6 +64,8 @@ class FlavorManager {
   /// Check if analytics is enabled
   static bool get isAnalyticsEnabled => _currentConfig.enableAnalytics;
 
+  static String get facebookAppId => _currentConfig.facebookAppId;
+
   /// Get a configuration value
   static T? getConfigValue<T>(String key) =>
       _currentConfig.getConfigValue<T>(key);

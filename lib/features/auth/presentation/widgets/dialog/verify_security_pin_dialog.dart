@@ -107,7 +107,7 @@ class _SecurityPinDialogState extends ConsumerState<VerifySecurityPinDialog> {
 
     // 5️⃣ Submit
     ref.read(verifySecurityPinNotifierProvider.notifier).verifySecurityPin(
-          securityPin: pin,
+          securityPin: pinText,
           onVerified: () {
             context.pop();
             widget.onPinVerified?.call(context);

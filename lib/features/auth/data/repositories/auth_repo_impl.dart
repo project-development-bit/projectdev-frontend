@@ -565,7 +565,7 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<Either<Failure, SetSecurityPinResult>> setSecurityPin({
-    required int securityPin,
+    required String securityPin,
     required bool enable,
   }) async {
     try {
@@ -611,7 +611,7 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<Either<Failure, VerifySecurityPinResult>> verifySecurityPin({
-    required int securityPin,
+    required String securityPin,
   }) async {
     try {
       debugPrint('🔄 Repository: Setting security PIN Verify');

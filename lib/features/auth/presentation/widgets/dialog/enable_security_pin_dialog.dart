@@ -120,7 +120,7 @@ class _SecurityPinDialogState extends ConsumerState<EnableSecurityPinDialog> {
 
     // Call API to set security PIN
     ref.read(setSecurityPinNotifierProvider.notifier).setSecurityPin(
-          securityPin: pin,
+          securityPin: pinCodeController.text,
           enable: !widget.isPinEnabled, // Toggle enable/disable
         );
   }

@@ -28,7 +28,7 @@ class SetSecurityPinNotifier extends StateNotifier<SetSecurityPinState> {
       : super(SetSecurityPinState());
 
   Future<void> setSecurityPin({
-    required int securityPin,
+    required String securityPin,
     required bool enable,
   }) async {
     state = SetSecurityPinState(status: SetSecurityPinStatus.loading);

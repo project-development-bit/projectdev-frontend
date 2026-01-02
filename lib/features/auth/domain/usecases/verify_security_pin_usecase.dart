@@ -27,7 +27,7 @@ class VerifySecurityPinParams extends Equatable {
     required this.securityPin,
   });
 
-  final int securityPin;
+  final String securityPin;
 
   @override
   List<Object> get props => [

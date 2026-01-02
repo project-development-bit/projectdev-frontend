@@ -28,7 +28,7 @@ class VerifySecurityPinNotifier extends StateNotifier<VerifySecurityPinState> {
       : super(VerifySecurityPinState());
 
   Future<void> verifySecurityPin({
-    required int securityPin,
+    required String securityPin,
     Function()? onVerified,
   }) async {
     state = VerifySecurityPinState(status: VerifySecurityPinStatus.loading);

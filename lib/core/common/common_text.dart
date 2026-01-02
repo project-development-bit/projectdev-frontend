@@ -485,4 +485,5 @@ enum TextStyleEnum {
   cryptoDisplay, // Crypto display text style
   cryptoAmount, // Crypto amount text style
   button, // Button text style
+
 }

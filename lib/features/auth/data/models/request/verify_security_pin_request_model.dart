@@ -3,7 +3,7 @@ class VerifySecurityPinRequestModel {
     required this.securityPin,
   });
 
-  final int securityPin;
+  final String securityPin;
 
   Map<String, dynamic> toJson() {
     return {

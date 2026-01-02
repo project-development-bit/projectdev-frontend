@@ -114,12 +114,12 @@ abstract class AuthRepository {
   /// [enable] - True to enable, false to disable
   /// Returns [SetSecurityPinResult] on success or [Failure] on error
   Future<Either<Failure, SetSecurityPinResult>> setSecurityPin({
-    required int securityPin,
+    required String securityPin,
     required bool enable,
   });
 
   Future<Either<Failure, VerifySecurityPinResult>> verifySecurityPin({
-    required int securityPin,
+    required String securityPin,
   });
   Future<Either<Failure, LoginResponseModel>> facebookRegister(
       FacebookRegisterRequest request);

@@ -29,7 +29,7 @@ class SetSecurityPinParams extends Equatable {
     required this.enable,
   });
 
-  final int securityPin;
+  final String securityPin;
   final bool enable;
 
   @override

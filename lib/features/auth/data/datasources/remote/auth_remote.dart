@@ -98,12 +98,12 @@ abstract class AuthRemoteDataSource {
 
   /// Set or update security PIN
   Future<SetSecurityPinResponseModel> setSecurityPin({
-    required int securityPin,
+    required String securityPin,
     required bool enable,
   });
 
   Future<VerifySecurityPinResponseModel> verifySecurityPin({
-    required int securityPin,
+    required String securityPin,
   });
 }
 
@@ -894,7 +894,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<SetSecurityPinResponseModel> setSecurityPin({
-    required int securityPin,
+    required String securityPin,
     required bool enable,
   }) async {
     try {
@@ -935,7 +935,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<VerifySecurityPinResponseModel> verifySecurityPin({
-    required int securityPin,
+    required String securityPin,
   }) async {
     try {
       final requestModel = VerifySecurityPinRequestModel(
