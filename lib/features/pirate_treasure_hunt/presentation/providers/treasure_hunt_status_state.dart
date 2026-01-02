@@ -44,4 +44,27 @@ class TreasureHuntStatusState {
     if (data == null) return false;
     return data!.status == "in_progress" || data!.currentStep < 3;
   }
+
+  String countDownUntilNow() {
+    if (data == null || data!.cooldownUntil == null) return '00:00:00';
+
+    final now = DateTime.now().toUtc();
+    final cooldownUntil = data!.cooldownUntil!;
+
+    final difference = cooldownUntil.difference(now);
+
+    if (difference.isNegative) return '00:00:00';
+
+    final totalSeconds = difference.inSeconds;
+
+    final days = totalSeconds ~/ 86400;
+    final hours = (totalSeconds % 86400) ~/ 3600;
+    final minutes = (totalSeconds % 3600) ~/ 60;
+    final hoursStr = hours.toString().padLeft(2, '0');
+    final minutesStr = minutes.toString().padLeft(2, '0');
+
+    final timeStr = '$hoursStr:$minutesStr';
+
+    return days > 0 ? '$days days $timeStr' : timeStr;
+  }
 }

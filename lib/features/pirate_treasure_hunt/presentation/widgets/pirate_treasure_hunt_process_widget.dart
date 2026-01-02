@@ -60,9 +60,8 @@ class PirateTreasureHuntProcessWidget extends ConsumerWidget {
               (treasureHuntStatus.data?.status != "in_progress")) ...[
             const SizedBox(height: 10),
             CommonText.titleMedium(
-              context.translate('next_hunt_unlocks_in', args: [
-                treasureHuntStatus.data?.cooldownUntil.toString() ?? ''
-              ]),
+              context.translate('next_hunt_unlocks_in',
+                  args: [treasureHuntStatus.countDownUntilNow()]),
               fontWeight: FontWeight.w700,
               textAlign: TextAlign.center,
             ),
