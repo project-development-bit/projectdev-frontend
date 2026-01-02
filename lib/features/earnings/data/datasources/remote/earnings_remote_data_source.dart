@@ -94,7 +94,7 @@ class EarningsRemoteDataSourceImpl implements EarningsRemoteDataSource {
       debugPrint('📥 Data: ${response.data}');
 
       return StatisticsResponseModel.fromJson(
-        response.data as Map<String, dynamic>,
+        response.data as Map<String, dynamic>? ?? {},
       );
     } on DioException catch (e) {
       debugPrint('❌ Statistics DioException: ${e.message}');
