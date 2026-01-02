@@ -810,8 +810,9 @@
   "hunt_progress_title": "Hunt Progress",
   "hunt_status_label": "Status",
   "hunt_status_ready": "Ready",
-  "next_hunt_unlocks_in": "'Next Hunt Unlocks In - [{0}]",
+  "next_hunt_unlocks_in": "Next Hunt Unlocks In - [{0}]",
   "treasure_hunt_completed": "You’ve completed this hunt.",
   "collect_reward": "Collect Reward",
-  "captcha_required_to_claim": "You need to resolve a captcha to claim your reward"
+  "captcha_required_to_claim": "You need to resolve a captcha to claim your reward",
+  "treasure_final_reward": "Final Reward : +{0}"
 }

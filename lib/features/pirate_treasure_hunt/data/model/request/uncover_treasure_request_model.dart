@@ -1,11 +1,5 @@
 class UncoverTreasureRequestModel {
-  final String turnstileToken;
+  const UncoverTreasureRequestModel();
 
-  const UncoverTreasureRequestModel({
-    required this.turnstileToken,
-  });
-
-  Map<String, dynamic> toJson() => {
-        'turnstileToken': turnstileToken,
-      };
+  Map<String, dynamic> toJson() => {};
 }

@@ -1,11 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:gigafaucet/core/network/base_dio_client.dart';
+import 'package:gigafaucet/features/pirate_treasure_hunt/data/model/request/collect_treasure_request_model.dart';
 import 'package:gigafaucet/features/pirate_treasure_hunt/data/model/request/treasure_hunt_history_request_model.dart';
 import 'package:gigafaucet/features/pirate_treasure_hunt/data/model/request/uncover_treasure_request_model.dart';
-import 'package:gigafaucet/features/pirate_treasure_hunt/data/model/response/treasure_hunt_history_item_model.dart';
+import 'package:gigafaucet/features/pirate_treasure_hunt/data/model/response/treasure_hunt_collect_model.dart';
 import 'package:gigafaucet/features/pirate_treasure_hunt/data/model/response/treasure_hunt_history_model.dart';
-import 'package:gigafaucet/features/pirate_treasure_hunt/data/model/response/treasure_hunt_pagination_model.dart';
 import 'package:gigafaucet/features/pirate_treasure_hunt/data/model/response/treasure_hunt_reward_model.dart';
 import 'package:gigafaucet/features/pirate_treasure_hunt/data/model/response/treasure_hunt_start_model.dart';
 import 'package:gigafaucet/features/pirate_treasure_hunt/data/model/response/treasure_hunt_status_model.dart';
@@ -17,6 +17,9 @@ abstract class TreasureHuntRemoteDataSource {
 
   /// POST /treasure-hunt/uncover
   Future<TreasureHuntUncoverModel> uncover(UncoverTreasureRequestModel request);
+
+  /// POST /treasure-hunt/collect
+  Future<TreasureHuntCollectModel> collect(CollectTreasureRequestModel request);
 
   /// POST /treasure-hunt/start
   Future<TreasureHuntStartModel> start();
@@ -60,12 +63,48 @@ class TreasureHuntRemoteDataSourceImpl implements TreasureHuntRemoteDataSource {
   Future<TreasureHuntUncoverModel> uncover(
       UncoverTreasureRequestModel request) async {
     try {
-      debugPrint('📤 POST /treasure-hunt/uncover');
-      final response = await dioClient.post('/treasure-hunt/uncover');
-      debugPrint('📥 Uncover response: ${response.data}');
-      return TreasureHuntUncoverModel.fromJson(response.data);
+      // debugPrint('📤 POST /treasure-hunt/uncover');
+      // final response = await dioClient.post('/treasure-hunt/uncover');
+      // debugPrint('📥 Uncover response: ${response.data}');
+      // return TreasureHuntUncoverModel.fromJson(response.data);
+      return TreasureHuntUncoverModel(
+        success: true,
+        message:
+            'Congratulations! You uncovered 30 coins! (Base: 30, Multiplier: 1x)',
+        status: 'TREASURE_UNCOVERED',
+        reward: TreasureHuntRewardModel(
+          type: 'coins',
+          baseValue: 30,
+          multiplier: 1,
+          finalValue: 30,
+          value: 30,
+          label: '+30 Coins',
+        ),
+        cooldownUntil: DateTime.now().add(const Duration(minutes: 5)),
+      );
     } on DioException catch (e) {
       _logDioError('uncover', e);
+      throw _mapDioException(e);
+    }
+  }
+
+  // ------------------------------------------------------------
+  // collect
+  // ------------------------------------------------------------
+  @override
+  Future<TreasureHuntCollectModel> collect(
+      CollectTreasureRequestModel request) async {
+    try {
+      // debugPrint('📤 POST /treasure-hunt/claim');
+      // final response = await dioClient.post('/treasure-hunt/claim');
+      // debugPrint('📥 Collect response: ${response.data}');
+      // return TreasureHuntCollectModel.fromJson(response.data);
+      return TreasureHuntCollectModel(
+        message: 'Successfully collected treasure hunt rewards',
+        success: true,
+      );
+    } on DioException catch (e) {
+      _logDioError('collect', e);
       throw _mapDioException(e);
     }
   }
@@ -100,48 +139,48 @@ class TreasureHuntRemoteDataSourceImpl implements TreasureHuntRemoteDataSource {
   ) async {
     try {
       debugPrint('📤 GET /treasure-hunt/history');
-      // debugPrint('📤 Params: ${request.toJson()}');
+      debugPrint('📤 Params: ${request.toJson()}');
 
-      // final response = await dioClient.get(
-      //   '/treasure-hunt/history',
-      //   queryParameters: request.toJson(),
-      // );
+      final response = await dioClient.get(
+        '/treasure-hunt/history',
+        queryParameters: request.toJson(),
+      );
 
-      // debugPrint('📥 History response: ${response.data}');
+      debugPrint('📥 History response: ${response.data}');
 
-      // return TreasureHuntHistoryModel.fromJson(response.data);
+      return TreasureHuntHistoryModel.fromJson(response.data);
 
-      return TreasureHuntHistoryModel(
-          message: 'Success',
-          success: true,
-          pagination: TreasureHuntPaginationModel(
-            currentPage: 1,
-            limit: 1,
-            totalPages: 1,
-            total: 1,
-            hasNextPage: false,
-            hasPrevPage: false,
-          ),
-          items: [
-            for (int i = 1; i < 15; i++)
-              TreasureHuntHistoryItemModel(
-                id: i,
-                eventType: 'reward_granted',
-                stepNumber: i,
-                reward: TreasureHuntRewardModel(
-                    type: 'coins',
-                    label: '+100 Coins',
-                    baseValue: 100,
-                    multiplier: 1,
-                    finalValue: 100,
-                    value: 30),
-                userLevel: i,
-                userStatus: 'bronze',
-                statusMultiplier: '1.0',
-                createdAt: DateTime.now(),
-                rewardLabel: '+100 Coins',
-              ),
-          ]);
+      // return TreasureHuntHistoryModel(
+      //     message: 'Success',
+      //     success: true,
+      //     pagination: TreasureHuntPaginationModel(
+      //       currentPage: 1,
+      //       limit: 1,
+      //       totalPages: 1,
+      //       total: 1,
+      //       hasNextPage: false,
+      //       hasPrevPage: false,
+      //     ),
+      //     items: [
+      //       for (int i = 1; i < 15; i++)
+      //         TreasureHuntHistoryItemModel(
+      //           id: i,
+      //           eventType: 'reward_granted',
+      //           stepNumber: i,
+      //           reward: TreasureHuntRewardModel(
+      //               type: 'coins',
+      //               label: '+100 Coins',
+      //               baseValue: 100,
+      //               multiplier: 1,
+      //               finalValue: 100,
+      //               value: 30),
+      //           userLevel: i,
+      //           userStatus: 'bronze',
+      //           statusMultiplier: '1.0',
+      //           createdAt: DateTime.now(),
+      //           rewardLabel: '+100 Coins',
+      //         ),
+      //     ]);
     } on DioException catch (e) {
       _logDioError('getHistory', e);
       throw _mapDioException(e);

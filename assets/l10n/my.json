@@ -812,5 +812,6 @@
   "treasure_hunt_completed": "ဤရတနာရှာဖွေမှုကို ပြီးစီးပြီးပါပြီ။",
   "next_hunt_unlocks_in": "နောက်ထပ် ရတနာရှာဖွေမှုကို [{0}] အတွင်း ဖွင့်နိုင်ပါမည်",
   "collect_reward": "ဆုလာဘ်ကို ရယူပါ",
-  "captcha_required_to_claim": "ဆုလာဘ်ကို ရယူရန် captcha ကို ဖြေရှင်းရန် လိုအပ်ပါသည်"
+  "captcha_required_to_claim": "ဆုလာဘ်ကို ရယူရန် captcha ကို ဖြေရှင်းရန် လိုအပ်ပါသည်",
+  "treasure_final_reward": "နောက်ဆုံး ဆုလာဘ် : +{value}"
 }
