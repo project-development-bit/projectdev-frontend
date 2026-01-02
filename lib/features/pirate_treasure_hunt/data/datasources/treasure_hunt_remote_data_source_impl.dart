@@ -97,14 +97,14 @@ class TreasureHuntRemoteDataSourceImpl implements TreasureHuntRemoteDataSource {
   Future<TreasureHuntCollectModel> collect(
       CollectTreasureRequestModel request) async {
     try {
-      // debugPrint('📤 POST /treasure-hunt/claim');
-      // final response = await dioClient.post('/treasure-hunt/claim');
-      // debugPrint('📥 Collect response: ${response.data}');
-      // return TreasureHuntCollectModel.fromJson(response.data);
-      return TreasureHuntCollectModel(
-        message: 'Successfully collected treasure hunt rewards',
-        success: true,
-      );
+      debugPrint('📤 POST /treasure-hunt/claim');
+      final response = await dioClient.post('/treasure-hunt/claim');
+      debugPrint('📥 Collect response: ${response.data}');
+      return TreasureHuntCollectModel.fromJson(response.data);
+      // return TreasureHuntCollectModel(
+      //   message: 'Successfully collected treasure hunt rewards',
+      //   success: true,
+      // );
     } on DioException catch (e) {
       _logDioError('collect', e);
       throw _mapDioException(e);

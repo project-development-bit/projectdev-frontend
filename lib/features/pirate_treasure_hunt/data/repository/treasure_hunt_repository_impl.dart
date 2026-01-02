@@ -112,7 +112,7 @@ class TreasureHuntRepositoryImpl implements TreasureHuntRepository {
     }
 
     return ServerFailure(
-      message: e.message,
+      message: errorModel?.message ?? e.message,
       statusCode: e.response?.statusCode,
       errorModel: errorModel,
     );
