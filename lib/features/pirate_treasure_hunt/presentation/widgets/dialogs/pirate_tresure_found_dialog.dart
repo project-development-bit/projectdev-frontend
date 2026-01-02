@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gigafaucet/core/common/common_image_widget.dart';
@@ -11,6 +12,7 @@ import 'package:gigafaucet/core/widgets/cloudflare_turnstille_widgte.dart';
 import 'package:gigafaucet/features/localization/data/helpers/localization_helper.dart';
 import 'package:gigafaucet/features/pirate_treasure_hunt/presentation/providers/collect_treasure_hunt_notifier_state.dart';
 import 'package:gigafaucet/features/pirate_treasure_hunt/presentation/providers/treasure_hunt_notifier_providers.dart';
+import 'package:gigafaucet/features/pirate_treasure_hunt/presentation/providers/uncover_treasure_state.dart';
 import 'package:gigafaucet/features/pirate_treasure_hunt/presentation/widgets/treasure_found_board_widget.dart';
 import 'package:gigafaucet/routing/app_router.dart' show GoRouterExtension;
 
@@ -62,6 +64,20 @@ class _PirateTresureFoundDialogState
             backgroundColor: Theme.of(context).colorScheme.error);
       }
     });
+
+    ref.listenManual<UncoverTreasureState>(uncoverTreasureNotifierProvider,
+        (previous, next) {
+      if (!mounted) return;
+      if (next.status == UncoverTreasureStatus.success) {
+        celebrationSound();
+      }
+    });
+  }
+
+  Future<void> celebrationSound() async {
+    final audioPlayer = AudioPlayer();
+    await audioPlayer.setSource(AssetSource('sound/box_award_sound.mp3'));
+    await audioPlayer.resume();
   }
 
   @override
