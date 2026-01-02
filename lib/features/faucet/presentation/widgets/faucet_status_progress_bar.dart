@@ -26,7 +26,9 @@ class FaucetStatusProgressBar extends ConsumerWidget {
                   fontWeight: FontWeight.w700,
                 ),
                 LinearProgressIndicator(
-                  value: 0.5,
+                  value: status?.streak.progressPercent != null
+                      ? (status!.streak.progressPercent / 100)
+                      : 0,
                   minHeight: 12,
                   borderRadius: BorderRadius.circular(20),
                   backgroundColor: Colors.white.withAlpha(50),

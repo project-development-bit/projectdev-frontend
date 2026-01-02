@@ -55,17 +55,16 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
   final _passwordFocusNode = FocusNode();
 
   bool _isInialized = false;
+  bool _hasSubmitted = false;
 
   bool _rememberMe = false;
-  bool get _hasEmailError => _isInialized
-      ? TextFieldValidators.email(_emailController.text, context) != null
-      : _emailController.text.isNotEmpty &&
-          TextFieldValidators.email(_emailController.text, context) != null;
-  bool get _hasPasswordError => _isInialized
-      ? TextFieldValidators.email(_passwordController.text, context) != null
-      : _passwordController.text.isNotEmpty &&
-          TextFieldValidators.password(_passwordController.text, context) !=
-              null;
+  bool get _hasEmailError =>
+      _hasSubmitted &&
+      TextFieldValidators.email(_emailController.text, context) != null;
+
+  bool get _hasPasswordError =>
+      _hasSubmitted &&
+      TextFieldValidators.password(_passwordController.text, context) != null;
 
   @override
   void initState() {
@@ -149,25 +148,18 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
   }
 
   void _handleLoginFromHtml(String email, String password) {
-    if (!mounted) {
-      debugPrint('⚠️ Login callback ignored — widget unmounted');
-      return;
-    }
+    if (!mounted) return;
 
-    String? emailError;
-    String? passwordError;
+    setState(() {
+      _hasSubmitted = true;
+    });
 
-    // Ensure controllers are synced before validation
     _emailController.text = email;
     _passwordController.text = password;
 
-    emailError = TextFieldValidators.email(email, context);
-    passwordError = TextFieldValidators.password(password, context);
+    final emailError = TextFieldValidators.email(email, context);
+    final passwordError = TextFieldValidators.password(password, context);
 
-    //  Update error state getters
-    setState(() {});
-
-    // ❌ Invalid → send errors to HTML
     if (emailError != null || passwordError != null) {
       sendErrorsToHtml(
         emailError: emailError,
@@ -176,13 +168,15 @@ class _LoginFormWidgetState extends ConsumerState<LoginFormWidget> {
       return;
     }
 
-    // ✅ Valid → clear errors
     clearErrorsInHtml();
-
     _handleLogin(email: email, password: password);
   }
 
   void _handleLogin({String? email, String? password}) async {
+    setState(() {
+      _hasSubmitted = true;
+    });
+
     final loginNotifier = ref.read(loginNotifierProvider);
     if (loginNotifier is LoginLoading) {
       debugPrint(
